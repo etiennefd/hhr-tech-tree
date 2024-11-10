@@ -121,6 +121,7 @@ const TechTreeViewer = () => {
     fetch("/api/inventions")
       .then((res) => res.json())
       .then((fetchedData) => {
+        console.log('Fetched data:', fetchedData);
         setData(fetchedData);
         setIsLoading(false);
       })
@@ -142,15 +143,13 @@ const TechTreeViewer = () => {
 
   // Search effect
   useEffect(() => {
-    const filtered = data.nodes.filter(
+    const filtered = data?.nodes?.filter(
       (node) =>
         node.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (node.description || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-    );
+        (node.description || "").toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
     setFilteredNodes(filtered);
-  }, [searchTerm, data.nodes]); // Add data.nodes as dependency
+  }, [searchTerm, data.nodes]);
 
   // Helper functions
   const formatYear = (year: number) => {
@@ -174,30 +173,43 @@ const TechTreeViewer = () => {
     return data.links.map((link, index) => {
       const sourceNode = data.nodes.find((n) => n.id === link.source);
       const targetNode = data.nodes.find((n) => n.id === link.target);
-
+      
       if (!sourceNode || !targetNode) return null;
-
+  
       const x1 = getXPosition(sourceNode.year);
       const x2 = getXPosition(targetNode.year);
       const y1 = 150;
       const y2 = 150;
-
+  
+      // Calculate the angle for proper arrow placement
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const angle = Math.atan2(dy, dx);
+      
+      // Arrow parameters
+      const arrowLength = 10;
+      const arrowWidth = 6;
+      
+      // Calculate arrow points
+      const arrowPoint1X = x2 - arrowLength * Math.cos(angle - Math.PI/6);
+      const arrowPoint1Y = y2 - arrowLength * Math.sin(angle - Math.PI/6);
+      const arrowPoint2X = x2 - arrowLength * Math.cos(angle + Math.PI/6);
+      const arrowPoint2Y = y2 - arrowLength * Math.sin(angle + Math.PI/6);
+  
       return (
         <g key={index}>
+          {/* Connection line */}
           <path
-            d={`M ${x1} ${y1} C ${(x1 + x2) / 2} ${y1}, ${
-              (x1 + x2) / 2
-            } ${y2}, ${x2} ${y2}`}
-            stroke="#888"
-            fill="none"
+            d={`M ${x1} ${y1} L ${x2} ${y2}`}
+            stroke="#666"
             strokeWidth="2"
-            opacity={0.5}
+            fill="none"
           />
+          
+          {/* Arrow head */}
           <path
-            d={`M ${x2 - 5} ${y2 - 5} L ${x2} ${y2} L ${x2 - 5} ${y2 + 5}`}
-            stroke="#888"
-            fill="none"
-            strokeWidth="2"
+            d={`M ${x2} ${y2} L ${arrowPoint1X} ${arrowPoint1Y} L ${arrowPoint2X} ${arrowPoint2Y} Z`}
+            fill="#666"
           />
         </g>
       );

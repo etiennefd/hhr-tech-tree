@@ -1,59 +1,113 @@
-import { NextResponse } from 'next/server';
-import Airtable from 'airtable';
+import { NextResponse } from "next/server";
+import Airtable from "airtable";
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
-  .base(process.env.AIRTABLE_BASE_ID);
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+  process.env.AIRTABLE_BASE_ID
+);
 
 export async function GET() {
   try {
-    const records = await base('Table Name')  // Replace with your table name
+    const records = await base("Innovations") // Replace with your table name
       .select({
-        view: 'Grid view'  // Replace with your view name
+        view: "Grid view",
+        maxRecords: 500,
+        sort: [{ field: "Date", direction: "desc" }],
       })
       .all();
 
-    const nodes = records.map(record => ({
-      id: record.id,
-      title: record.get('Name') as string,
-      tier: record.get('Tier') as string,
-      image: record.get('Image') as string || '/api/placeholder/100/100',
-      year: record.get('Date') as number,
-      dateDetails: record.get('Date details') as string,
-      type: record.get('Type of innovation') as string,
-      fields: (record.get('Field(s)') as string || '').split(',').map(f => f.trim()),
-      inventors: (record.get('Inventor(s)') as string || '').split(',').map(i => i.trim()),
-      organization: record.get('Organization') as string,
-      city: record.get('City') as string,
-      countryHistorical: record.get('Country (historical)') as string,
-      countryModern: record.get('Country (modern borders)') as string,
-      wikipedia: record.get('Wikipedia') as string,
-      firstInstance: record.get('Name of first instance') as string,
-      otherNames: record.get('Other names') as string,
-      details: record.get('Details') as string,
-      serendipity: record.get('Serendipity') as string,
-      connections2: record.get('Connections 2') as string,
-      connectionsFrom: (record.get('From (from Connections 2)') as string || '').split(',').map(c => c.trim()),
-      connections: record.get('Connections') as string,
-      connectionsTo: (record.get('To (from Connections)') as string || '').split(',').map(c => c.trim()),
-      otherLinks: record.get('Other links') as string,
-      notes: record.get('Notes for later') as string
-    }));
+
+    const nodes = records.map((record) => {
+
+      // Return the node object
+      return {
+        id: record.id,
+        title: String(record.get("Name") || ""),
+        tier: String(record.get("Tier") || ""),
+        image: "/api/placeholder/100/100",
+        year: Number(record.get("Date")) || 0,
+        dateDetails: String(record.get("Date details") || ""),
+        type: String(record.get("Type of innovation") || ""),
+        fields: String(record.get("Field(s)") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((f) => f.trim()),
+        inventors: String(record.get("Inventor(s)") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((i) => i.trim()),
+        organization: String(record.get("Organization") || ""),
+        city: String(record.get("City") || ""),
+        countryHistorical: String(record.get("Country (historical)") || ""),
+        countryModern: String(record.get("Country (modern borders)") || ""),
+        wikipedia: String(record.get("Wikipedia") || ""),
+        firstInstance: String(record.get("Name of first instance") || ""),
+        otherNames: String(record.get("Other names") || ""),
+        details: String(record.get("Details") || ""),
+        serendipity: String(record.get("Serendipity") || ""),
+        connections2: String(record.get("Connections 2") || ""),
+        connectionsFrom: String(record.get("From (from Connections 2)") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((c) => c.trim()),
+        connections: String(record.get("Connections") || ""),
+        connectionsTo: String(record.get("To (from Connections)") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((c) => c.trim()),
+        otherLinks: String(record.get("Other links") || ""),
+        notes: String(record.get("Notes for later") || ""),
+      };
+    });
 
     // Process connections
+    // Create a Set of valid node IDs for quick lookup
+    const validNodeIds = new Set(nodes.map((node) => node.id));
+
     const links = records
-      .filter(record => record.get('Connections'))
-      .flatMap(record => {
-        const connections = record.get('Connections') as string;
-        return connections.split(',').map(targetId => ({
-          source: record.id,
-          target: targetId.trim(),
-          description: ''
-        }));
+      .filter(
+        (record) =>
+          record.get("From (from Connections 2)") ||
+          record.get("To (from Connections)")
+      )
+      .flatMap((record) => {
+        const recordId = record.id;
+        const fromConnections = String(
+          record.get("From (from Connections 2)") || ""
+        );
+        const toConnections = String(record.get("To (from Connections)") || "");
+
+        const fromLinks = fromConnections
+          .split(",")
+          .filter(Boolean)
+          .map((id) => id.trim())
+          .filter((targetId) => validNodeIds.has(targetId))
+          .map((targetId) => ({
+            source: targetId,
+            target: recordId,
+            description: "",
+          }));
+
+        const toLinks = toConnections
+          .split(",")
+          .filter(Boolean)
+          .map((id) => id.trim())
+          .filter((targetId) => validNodeIds.has(targetId))
+          .map((targetId) => ({
+            source: recordId,
+            target: targetId,
+            description: "",
+          }));
+
+        const allLinks = [...fromLinks, ...toLinks];
+        return allLinks;
       });
 
     return NextResponse.json({ nodes, links });
   } catch (error) {
-    console.error('Error fetching from Airtable:', error);
-    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+    console.error("Error details:", {
+      message: error.message,
+      statusCode: error.statusCode,
+      error: error,
+    });
   }
 }
