@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
+import CurvedConnections from '../components/connections/CurvedConnections';
 
 const TechTreeViewer = () => {
 
@@ -38,16 +39,13 @@ const TechTreeViewer = () => {
         // Now calculate positions using year range from the data
         const calculateNodePositions = (nodes) => {
           if (!nodes.length) {
-            console.log('No nodes provided to calculateNodePositions');
             return [];
           }
         
           const minYear = Math.min(...nodes.map(n => n.year));
-          console.log('Calculating positions with minYear:', minYear);
           
           const getNodePosition = (year: number) => {
             const position = PADDING + ((year - minYear) * YEAR_WIDTH);
-            console.log('Position calculation:', { year, minYear, position });
             return position;
           };
         
@@ -56,11 +54,6 @@ const TechTreeViewer = () => {
           
           for (const node of sortedNodes) {
             const x = getNodePosition(node.year);
-            console.log('Node position calculated:', { 
-              title: node.title, 
-              year: node.year, 
-              calculatedX: x 
-            });
             
             // Find nearby nodes (within the time threshold)
             const nearbyNodes = positionedNodes.filter(
@@ -144,7 +137,6 @@ const TechTreeViewer = () => {
     const years = data.nodes.map(n => n.year);
     const minYear = Math.min(...years);
     const position = PADDING + ((year - minYear) * YEAR_WIDTH);
-    console.log('Position calculation:', { year, minYear, YEAR_WIDTH, PADDING, position });
     return position;
   };
 
@@ -152,45 +144,36 @@ const TechTreeViewer = () => {
     return data.links.map((link, index) => {
       const sourceNode = data.nodes.find((n) => n.id === link.source);
       const targetNode = data.nodes.find((n) => n.id === link.target);
-
-      if (!sourceNode || !targetNode) return null;
-
-      const x1 = getXPosition(sourceNode.year);
-      const x2 = getXPosition(targetNode.year);
-      const y1 = 150;
-      const y2 = 150;
-
-      // Calculate the angle for proper arrow placement
-      const dx = x2 - x1;
-      const dy = y2 - y1;
-      const angle = Math.atan2(dy, dx);
-
-      // Arrow parameters
-      const arrowLength = 10;
-      const arrowWidth = 6;
-
-      // Calculate arrow points
-      const arrowPoint1X = x2 - arrowLength * Math.cos(angle - Math.PI / 6);
-      const arrowPoint1Y = y2 - arrowLength * Math.sin(angle - Math.PI / 6);
-      const arrowPoint2X = x2 - arrowLength * Math.cos(angle + Math.PI / 6);
-      const arrowPoint2Y = y2 - arrowLength * Math.sin(angle + Math.PI / 6);
-
+  
+      if (!sourceNode || !targetNode) {
+        console.log('Missing node for connection:', { link, sourceNode, targetNode });
+        return null;
+      }
+  
+      // Log for debugging
+      console.log('Rendering connection:', {
+        from: sourceNode.title,
+        to: targetNode.title,
+        type: link.type
+      });
+  
+      // Prepare node positions
+      const sourcePos = {
+        x: getXPosition(sourceNode.year),
+        y: sourceNode.y || 150
+      };
+      const targetPos = {
+        x: getXPosition(targetNode.year),
+        y: targetNode.y || 150
+      };
+  
       return (
-        <g key={index}>
-          {/* Connection line */}
-          <path
-            d={`M ${x1} ${y1} L ${x2} ${y2}`}
-            stroke="#666"
-            strokeWidth="2"
-            fill="none"
-          />
-
-          {/* Arrow head */}
-          <path
-            d={`M ${x2} ${y2} L ${arrowPoint1X} ${arrowPoint1Y} L ${arrowPoint2X} ${arrowPoint2Y} Z`}
-            fill="#666"
-          />
-        </g>
+        <CurvedConnections
+          key={index}
+          sourceNode={sourcePos}
+          targetNode={targetPos}
+          connectionType={link.type}
+        />
       );
     });
   };
