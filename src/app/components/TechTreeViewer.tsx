@@ -7,107 +7,135 @@ import dynamic from 'next/dynamic';
 
 const TechTreeViewer = () => {
   // Move all data outside of the component
-  // Replace the existing sampleData with:
-const sampleData = {
-    nodes: [
-      {
-        id: 1,
-        title: "Logarithm",
-        year: 1614,
-        description: "", // Empty as no details provided in CSV
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 2,
-        title: "Compound microscope",
-        year: 1620,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 3,
-        title: "Slide rule",
-        year: 1622,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 4,
-        title: "Mechanical calculator",
-        year: 1642,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 5,
-        title: "Barometer",
-        year: 1643,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 6,
-        title: "Vacuum pump",
-        year: 1650,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 7,
-        title: "Magdeburg hemispheres",
-        year: 1654,
-        description: "Experiment used to demonstrate the power of atmospheric pressure.",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 8,
-        title: "Alcohol thermometer",
-        year: 1654,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 9,
-        title: "Pendulum clock",
-        year: 1656,
-        description: "First conceptualized by Galileo Galilei in 1637; built by Huygens in 1656",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 10,
-        title: "Boyle's air pump",
-        year: 1658,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 11,
-        title: "Spirit level",
-        year: 1661,
-        description: "",
-        image: "/api/placeholder/100/100"
-      },
-      {
-        id: 12,
-        title: "Friction machine",
-        year: 1663,
-        description: "",
-        image: "/api/placeholder/100/100"
-      }
-    ],
-    links: [
-      { source: 1, target: 3, description: "Logarithms enabled slide rule calculations" },
-      { source: 6, target: 7, description: "Vacuum pump used in Magdeburg hemispheres experiment" },
-      { source: 6, target: 10, description: "Vacuum pump principles used in Boyle's air pump" }
-    ]
-  };
+  // Replace the existing data with:
+// const data = {
+//     nodes: [
+//       {
+//         id: 1,
+//         title: "Logarithm",
+//         year: 1614,
+//         description: "", // Empty as no details provided in CSV
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 2,
+//         title: "Compound microscope",
+//         year: 1620,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 3,
+//         title: "Slide rule",
+//         year: 1622,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 4,
+//         title: "Mechanical calculator",
+//         year: 1642,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 5,
+//         title: "Barometer",
+//         year: 1643,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 6,
+//         title: "Vacuum pump",
+//         year: 1650,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 7,
+//         title: "Magdeburg hemispheres",
+//         year: 1654,
+//         description: "Experiment used to demonstrate the power of atmospheric pressure.",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 8,
+//         title: "Alcohol thermometer",
+//         year: 1654,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 9,
+//         title: "Pendulum clock",
+//         year: 1656,
+//         description: "First conceptualized by Galileo Galilei in 1637; built by Huygens in 1656",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 10,
+//         title: "Boyle's air pump",
+//         year: 1658,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 11,
+//         title: "Spirit level",
+//         year: 1661,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       },
+//       {
+//         id: 12,
+//         title: "Friction machine",
+//         year: 1663,
+//         description: "",
+//         image: "/api/placeholder/100/100"
+//       }
+//     ],
+//     links: [
+//       { source: 1, target: 3, description: "Logarithms enabled slide rule calculations" },
+//       { source: 6, target: 7, description: "Vacuum pump used in Magdeburg hemispheres experiment" },
+//       { source: 6, target: 10, description: "Vacuum pump principles used in Boyle's air pump" }
+//     ]
+//   };
+
+const [data, setData] = useState<{ nodes: any[]; links: any[]; }>({
+    nodes: [],
+    links: []
+  });
+  
+
 
   // All hooks at the top level
+  const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredNode, setHoveredNode] = useState(null);
-  const [filteredNodes, setFilteredNodes] = useState(sampleData.nodes);
+  const [filteredNodes, setFilteredNodes] = useState([]);
+
+  // Add this useEffect for data fetching
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('/api/inventions')
+      .then(res => res.json())
+      .then(fetchedData => {
+        setData(fetchedData);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  // And add a new effect to update filteredNodes when data changes:
+  useEffect(() => {
+    setFilteredNodes(data.nodes);
+  }, [data.nodes]);
 
   // Client-side initialization
   useEffect(() => {
@@ -116,12 +144,12 @@ const sampleData = {
 
   // Search effect
   useEffect(() => {
-    const filtered = sampleData.nodes.filter(node =>
+    const filtered = data.nodes.filter(node =>
       node.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      node.description.toLowerCase().includes(searchTerm.toLowerCase())
+      (node.description || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredNodes(filtered);
-  }, [searchTerm]);
+  }, [searchTerm, data.nodes]); // Add data.nodes as dependency
 
   // Helper functions
   const formatYear = (year: number) => {
@@ -132,17 +160,17 @@ const sampleData = {
   const YEAR_WIDTH = 100;
   const PADDING = 120; // Add this line
 
-  const MIN_YEAR = Math.min(...sampleData.nodes.map(n => n.year));
-  const MAX_YEAR = Math.max(...sampleData.nodes.map(n => n.year));
+  const MIN_YEAR = data?.nodes?.length > 0 ? Math.min(...data.nodes.map(n => n.year)) : 0;
+  const MAX_YEAR = data?.nodes?.length > 0 ? Math.max(...data.nodes.map(n => n.year)) : 0;
 
   const getXPosition = (year: number) => {
     return PADDING + (year - MIN_YEAR) * YEAR_WIDTH;
   };
 
   const renderConnections = () => {
-    return sampleData.links.map((link, index) => {
-      const sourceNode = sampleData.nodes.find(n => n.id === link.source);
-      const targetNode = sampleData.nodes.find(n => n.id === link.target);
+    return data.links.map((link, index) => {
+      const sourceNode = data.nodes.find(n => n.id === link.source);
+      const targetNode = data.nodes.find(n => n.id === link.target);
       
       if (!sourceNode || !targetNode) return null;
 
@@ -171,8 +199,8 @@ const sampleData = {
     });
   };
 
-  if (!isClient) {
-    return null;
+  if (!isClient || isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
