@@ -155,7 +155,7 @@ const TechTreeViewer = () => {
   // Helper functions
   const formatYear = (year: number) => {
     const absYear = Math.abs(year);
-    return year < 0 ? `${absYear} BCE` : `${year} CE`;
+    return year < 0 ? `${absYear} BCE` : `${year}`;
   };
 
   const YEAR_WIDTH = 100;
