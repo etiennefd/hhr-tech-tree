@@ -5,6 +5,32 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID
 );
 
+async function getWikimediaImage(wikipediaUrl: string) {
+  if (!wikipediaUrl) return null;
+
+  // Extract title from URL like https://en.wikipedia.org/wiki/Uranium
+  const title = wikipediaUrl.split("/wiki/")[1];
+
+  try {
+    const response = await fetch(
+      `https://en.wikipedia.org/w/api.php?` +
+        `action=query&prop=pageimages&format=json&pithumbsize=300&titles=${title}&origin=*`
+    );
+
+    const data = await response.json();
+    const page = Object.values(data.query.pages)[0] as any;
+
+    if (page?.thumbnail?.source) {
+      return page.thumbnail.source;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching Wikimedia image:", error);
+    return null;
+  }
+}
+
 export async function GET() {
   try {
     const innovationRecords = await base("Innovations")
@@ -15,18 +41,22 @@ export async function GET() {
       })
       .all();
 
-      const connectionRecords = await base("Connections")
+    const connectionRecords = await base("Connections")
       .select({
         view: "Grid view",
         maxRecords: 500,
       })
       .all();
 
-      const nodes = innovationRecords.map((record) => ({
+    const nodes = await Promise.all(
+      innovationRecords.map(async (record) => ({
         id: record.id,
         title: String(record.get("Name") || ""),
         tier: String(record.get("Tier") || ""),
-        image: "/api/placeholder/100/100",
+        image:
+          String(record.get("Image URL") || "") || // Check custom image first
+          (await getWikimediaImage(String(record.get("Wikipedia") || ""))) ||
+          "/api/placeholder/100/100",
         year: Number(record.get("Date")) || 0,
         dateDetails: String(record.get("Date details") || ""),
         type: String(record.get("Type of innovation") || ""),
@@ -44,7 +74,8 @@ export async function GET() {
         countryModern: String(record.get("Country (modern borders)") || ""),
         wikipedia: String(record.get("Wikipedia") || ""),
         details: String(record.get("Details") || ""),
-      }));
+      }))
+    );
 
     // Create a Set of valid node IDs for quick lookup
     const validNodeIds = new Set(nodes.map((node) => node.id));
@@ -55,10 +86,7 @@ export async function GET() {
         const fromId = record.get("From")?.[0]; // Airtable returns linked records as arrays
         const toId = record.get("To")?.[0];
         return (
-          fromId && 
-          toId && 
-          validNodeIds.has(fromId) && 
-          validNodeIds.has(toId)
+          fromId && toId && validNodeIds.has(fromId) && validNodeIds.has(toId)
         );
       })
       .map((record) => ({
@@ -68,9 +96,12 @@ export async function GET() {
         details: String(record.get("Details") || ""),
       }));
 
-      console.log('Sample connections:', links.slice(0, 5)); // Show first 5 connections
-      console.log('Connection types found:', new Set(links.map(link => link.type))); // Show unique types
-      console.log('Total connections:', links.length);
+    console.log("Sample connections:", links.slice(0, 5)); // Show first 5 connections
+    console.log(
+      "Connection types found:",
+      new Set(links.map((link) => link.type))
+    ); // Show unique types
+    console.log("Total connections:", links.length);
 
     return NextResponse.json({ nodes, links });
   } catch (error) {
