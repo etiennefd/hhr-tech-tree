@@ -5,6 +5,7 @@ import { Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from '../components/connections/CurvedConnections';
+import ConnectionLegend from '../components/connections/ConnectionLegend';
 
 const TechTreeViewer = () => {
 
@@ -15,6 +16,9 @@ const TechTreeViewer = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [hoveredNode, setHoveredNode] = useState(null);
   const [filteredNodes, setFilteredNodes] = useState([]);
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+  const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
+
 
   const NODE_WIDTH = 120;
   const NODE_HEIGHT = 150;
@@ -145,19 +149,8 @@ const TechTreeViewer = () => {
       const sourceNode = data.nodes.find((n) => n.id === link.source);
       const targetNode = data.nodes.find((n) => n.id === link.target);
   
-      if (!sourceNode || !targetNode) {
-        console.log('Missing node for connection:', { link, sourceNode, targetNode });
-        return null;
-      }
+      if (!sourceNode || !targetNode) return null;
   
-      // Log for debugging
-      console.log('Rendering connection:', {
-        from: sourceNode.title,
-        to: targetNode.title,
-        type: link.type
-      });
-  
-      // Prepare node positions
       const sourcePos = {
         x: getXPosition(sourceNode.year),
         y: sourceNode.y || 150
@@ -173,9 +166,21 @@ const TechTreeViewer = () => {
           sourceNode={sourcePos}
           targetNode={targetPos}
           connectionType={link.type}
+          isHighlighted={shouldHighlightLink(link, index)}
+          onMouseEnter={() => setHoveredLinkIndex(index)}
+          onMouseLeave={() => setHoveredLinkIndex(null)}
+          sourceTitle={sourceNode.title}
+          targetTitle={targetNode.title}
+          details={link.details}
         />
       );
     });
+  };
+
+  const shouldHighlightLink = (link: any, index: number) => {
+    if (hoveredLinkIndex === index) return true;
+    if (hoveredNodeId && (link.source === hoveredNodeId || link.target === hoveredNodeId)) return true;
+    return false;
   };
 
   const containerWidth = data.nodes.length ? Math.max(
@@ -217,7 +222,8 @@ const TechTreeViewer = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto border-4 border-green-500"> {/* Added border */}
+      <div className="flex-1 overflow-auto border-4 border-green-500">
+      <ConnectionLegend />
         <div
           style={{
             width: containerWidth,
@@ -242,17 +248,23 @@ const TechTreeViewer = () => {
           {/* Nodes */}
           {filteredNodes.map((node) => (
             <div
-            key={node.id}
-            className="absolute bg-white border rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-            style={{
-              left: `${node.x}px`,  // Add px unit
-              top: `${node.y}px`,   // Add px unit
-              width: "120px",
-              transform: "translate(-60px, -75px)", // Center the node
-            }}
-            onMouseEnter={() => setHoveredNode(node)}
-            onMouseLeave={() => setHoveredNode(null)}
-          >
+              key={node.id}
+              className="absolute bg-white border rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              style={{
+                left: `${node.x}px`,
+                top: `${node.y}px`,
+                width: "120px",
+                transform: "translate(-60px, -75px)",
+              }}
+              onMouseEnter={() => {
+                setHoveredNode(node);
+                setHoveredNodeId(node.id);
+              }}
+              onMouseLeave={() => {
+                setHoveredNode(null);
+                setHoveredNodeId(null);
+              }}
+            >
               <img
                 src={node.image}
                 alt={node.title}
