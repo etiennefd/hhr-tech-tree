@@ -16,6 +16,83 @@ const TechTreeViewer = () => {
   const PADDING = 120;
   const BASE_Y = 600; // Lowered from 600 to give more space above
 
+  const fieldColors = {
+    // Life Sciences - Greens
+    'Biology': '#e0f0e3',         // Sage green
+    'Medicine': '#dcefe7',        // Hospital green
+    'Agriculture': '#e8f4d9',     // Light lime
+    'Animal husbandry': '#eaf2dc', // Soft olive
+    
+    // Physical Sciences - Purples/Blues
+    'Physics': '#e6e1f4',         // Soft purple
+    'Chemistry': '#e9e4f7',       // Light violet
+    'Astronomy': '#e1e5ff',       // Light periwinkle
+    'Geology': '#e8e4f1',         // Dusty purple
+    'Meteorology': '#e1f2f7',     // Sky blue
+    
+    // Engineering/Tech - Yellows/Oranges
+    'Electricity': '#fff4d9',     // Pale yellow
+    'Electronics': '#ffefd4',     // Light orange
+    'Energy': '#ffecd9',          // Peach
+    'Machinery': '#fae6d9',       // Soft orange
+    
+    // Transportation/Movement - Pinks
+    'Transportation': '#fde6e6',  // Light pink
+    'Flying': '#fce8ef',         // Soft rose
+    'Navigation': '#ffeaf1',     // Baby pink
+    
+    // Computing/Math - Grays/Silvers
+    'Computing': '#ebeef2',      // Cool gray
+    'Mathematics': '#e8ecf2',    // Silver blue
+    'Measurement': '#e5e9f0',    // Pale slate
+    
+    // Construction/Materials - Browns/Tans
+    'Construction': '#f2e6d9',   // Light tan
+    'Mining': '#f0e6db',         // Soft beige
+    'Metallurgy': '#efe5d6',     // Pale bronze
+    
+    // Culture/Arts - Soft reds/Pinks
+    'Art': '#ffe6eb',            // Rose pink
+    'Entertainment': '#ffe6e6',  // Light coral
+    'Music': '#ffeaf2',         // Soft pink
+    
+    // Communications/Information - Blues
+    'Communications': '#e1f0f5', // Light cyan
+    'Printing': '#deeaf3',      // Powder blue
+    'Imaging': '#e4f1f6',       // Pale blue
+    
+    // Environmental/Natural - Greens/Blues
+    'Sanitation': '#e0eee8',    // Mint
+    'Hydraulics': '#e0f0f0',    // Aqua
+    'Food': '#e5f2e5',          // Fresh green
+    
+    // Safety/Protection - Red tones
+    'Security': '#ffe6e6',      // Light red
+    'Military': '#ffeae6',      // Pale coral
+    
+    // Other Technical Fields
+    'Surveying': '#e6ecf2',     // Light slate
+    'Optics': '#e8f0f7',        // Pale sky
+    'Space': '#e6e9f7',         // Light space gray
+    'Cartography': '#e9eff5',   // Map blue
+    
+    // Industrial/Craft
+    'Crafts': '#f7e6d9',        // Light clay
+    'Textiles': '#f9e6ef',      // Soft fabric pink
+    
+    // Governance/Systems
+    'Finance': '#e6eaf0',       // Banking gray
+    'Law': '#e9e9f2',           // Justice gray
+    'Governance': '#e6e6f0',    // Official gray
+    
+    // Resource/Nature
+    'Hunting and fishing': '#e5eee5', // Forest green
+    'Lighting': '#fff9e6',      // Warm light yellow
+    
+    // Time
+    'Timekeeping': '#f0f0f5',   // Clock gray
+  };
+
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -268,6 +345,20 @@ const TechTreeViewer = () => {
               />
               <h3 className="text-sm font-medium line-clamp-2">{node.title}</h3>
               <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
+              <div className="flex flex-wrap gap-1">
+                {node.fields.map(field => (
+                  <span
+                    key={field}
+                    className="text-[10px] px-1.5 py-0.5 rounded"
+                    style={{
+                      backgroundColor: fieldColors[field] || '#f0f0f0',
+                      color: '#333'
+                    }}
+                  >
+                    {field}
+                  </span>
+                ))}
+              </div>
 
               {/* Tooltip */}
               {hoveredNode?.id === node.id && (
