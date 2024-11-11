@@ -10,9 +10,13 @@ import ConnectionLegend from '../components/connections/ConnectionLegend';
 function getTimelineSegment(year: number) {
   if (year >= 1700) return year;
   if (year >= 1500) return Math.floor(year / 5) * 5;
-  if (year >= -500) return Math.floor(year / 10) * 10;
-  if (year >= -1500) return Math.floor(year / 50) * 50;
-  return Math.floor(year / 100) * 100;
+  if (year >= -100) return Math.floor(year / 10) * 10;
+  if (year >= -1000) return Math.floor(year / 50) * 50;
+  if (year >= -4000) return Math.floor(year / 100) * 100;
+  if (year >= -10000) return Math.floor(year / 500) * 500;
+  if (year >= -50000) return Math.floor(year / 1000) * 1000;
+  if (year >= -100000) return Math.floor(year / 5000) * 5000;
+  return Math.floor(year / 100000) * 100000;
 }
 
 function getTimelineYears(minYear: number, maxYear: number): number[] {
@@ -24,9 +28,13 @@ function getTimelineYears(minYear: number, maxYear: number): number[] {
     
     if (current >= 1700) current += 1;
     else if (current >= 1500) current += 5;
-    else if (current >= -500) current += 10;
-    else if (current >= -1500) current += 50;
-    else current += 100;
+    else if (current >= -100) current += 10;
+    else if (current >= -1000) current += 50;
+    else if (current >= -4000) current += 100;
+    else if (current >= -10000) current += 500;
+    else if (current >= -50000) current += 1000;
+    else if (current >= -100000) current += 5000;
+    else current += 100000;
   }
   
   return years;
@@ -41,21 +49,25 @@ function calculateXPosition(year: number, minYear: number, PADDING: number, YEAR
   
   while (current < alignedYear) {
     if (current >= 1700) {
-      spaces += 1;
       current += 1;
     } else if (current >= 1500) {
-      spaces += 1;
       current += 5;
-    } else if (current >= -500) {
-      spaces += 1;
+    } else if (current >= -100) {
       current += 10;
-    } else if (current >= -1500) {
-      spaces += 1;
+    } else if (current >= -1000) {
       current += 50;
-    } else {
-      spaces += 1;
+    } else if (current >= -4000) {
       current += 100;
+    } else if (current >= -10000) {
+      current += 500;
+    } else if (current >= -50000) {
+      current += 1000;
+    } else if (current >= -100000) {
+      current += 5000;
+    } else {
+      current += 100000;
     }
+    spaces += 1;
   }
   
   return PADDING + (spaces * YEAR_WIDTH);

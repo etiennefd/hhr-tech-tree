@@ -36,7 +36,7 @@ export async function GET() {
     const innovationRecords = await base("Innovations")
       .select({
         view: "Grid view",
-        maxRecords: 700,
+        // maxRecords: 800,
         sort: [{ field: "Date", direction: "desc" }],
       })
       .all();
@@ -44,7 +44,6 @@ export async function GET() {
     const connectionRecords = await base("Connections")
       .select({
         view: "Grid view",
-        maxRecords: 700,
       })
       .all();
 
