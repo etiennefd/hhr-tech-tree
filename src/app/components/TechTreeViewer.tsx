@@ -9,10 +9,9 @@ import ConnectionLegend from '../components/connections/ConnectionLegend';
 
 const TechTreeViewer = () => {
   // Constants
-  const NODE_WIDTH = 120;
-  const NODE_HEIGHT = 150;
+  const NODE_WIDTH = 160;
   const VERTICAL_SPACING = 160;
-  const YEAR_WIDTH = 140;
+  const YEAR_WIDTH = 170;
   const PADDING = 120;
   const BASE_Y = 600; // Lowered from 600 to give more space above
 
