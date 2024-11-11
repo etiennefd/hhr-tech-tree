@@ -23,7 +23,7 @@ const TechTreeViewer = () => {
   const NODE_WIDTH = 120;
   const NODE_HEIGHT = 150;
   const VERTICAL_SPACING = 160; // Slightly reduced from 180
-  const YEAR_WIDTH = 100;
+  const YEAR_WIDTH = 140;
   const PADDING = 120;
   
 
@@ -65,13 +65,13 @@ const TechTreeViewer = () => {
             );
             
             if (nearbyNodes.length === 0) {
-              positionedNodes.push({ ...node, x, y: 150 });
+              positionedNodes.push({ ...node, x, y: 600 });
               continue;
             }
         
             // Find available vertical positions
             const usedPositions = nearbyNodes.map(n => n.y);
-            const baseY = 150;
+            const baseY = 600;
             const maxLevelsEachDirection = 3; // Limit how far up/down we go
             
             // Check positions above and below baseline
@@ -192,38 +192,46 @@ const TechTreeViewer = () => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div className="fixed inset-0 flex flex-col border-4 border-red-500">
-      <div className="h-16 flex items-center gap-4 p-4 bg-white border-b">
-      <div className="flex items-center gap-4 p-4 bg-white border-b border-4 border-blue-500">
-          <button
-            onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
-            className="p-2 border rounded hover:bg-gray-100"
-          >
-            <Minus size={20} />
-          </button>
-          <span className="w-16 text-center">{(zoom * 100).toFixed(0)}%</span>
-          <button
-            onClick={() => setZoom((z) => Math.min(2, z + 0.1))}
-            className="p-2 border rounded hover:bg-gray-100"
-          >
-            <Plus size={20} />
-          </button>
-        </div>
-        <div className="flex-1 max-w-sm relative">
-          <Input
-            type="text"
-            placeholder="Search technologies..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-        </div>
-      </div>
 
-      <div className="flex-1 overflow-auto border-4 border-green-500">
-      <ConnectionLegend />
+  return (
+    <div className="h-screen overflow-y-auto">
+      {/* Floating controls */}
+      <>
+        <div className="fixed top-4 right-4 flex flex-col gap-4 z-10">
+          <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-lg">
+            <button
+              onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
+              className="p-2 border rounded hover:bg-gray-100"
+            >
+              <Minus size={20} />
+            </button>
+            <span className="w-16 text-center">{(zoom * 100).toFixed(0)}%</span>
+            <button
+              onClick={() => setZoom((z) => Math.min(2, z + 0.1))}
+              className="p-2 border rounded hover:bg-gray-100"
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+          <div className="flex-1 max-w-sm relative bg-white rounded-lg shadow-lg p-4">
+            <Input
+              type="text"
+              placeholder="Search technologies..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+            <Search className="absolute left-3 top-6.5 h-4 w-4 text-gray-400" />
+          </div>
+        </div>
+        <div className="fixed top-40 right-4 bg-white rounded-lg shadow-lg p-4 z-10">
+          <ConnectionLegend />
+        </div>
+      </>
+  
+      {/* Scrollable container */}
+      <div className="overflow-x-auto">
+        {/* Main visualization */}
         <div
           style={{
             width: containerWidth,
@@ -231,89 +239,92 @@ const TechTreeViewer = () => {
             transform: `scale(${zoom})`,
             transformOrigin: "top left",
             position: "relative",
-            border: "4px solid purple", // Added border
-            paddingTop: "120px"
+            marginBottom: "64px"
           }}
         >
-
-      <div className="absolute top-0 left-0 bg-yellow-200 p-2">
-              Container Top
-      </div>
-
-          {/* Connection lines */}
+          {/* SVG connections */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none">
             {renderConnections()}
           </svg>
-
+  
           {/* Nodes */}
           {filteredNodes.map((node) => (
             <div
-              key={node.id}
-              className="absolute bg-white border rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-              style={{
-                left: `${node.x}px`,
-                top: `${node.y}px`,
-                width: "120px",
-                transform: "translate(-60px, -75px)",
-              }}
-              onMouseEnter={() => {
-                setHoveredNode(node);
-                setHoveredNodeId(node.id);
-              }}
-              onMouseLeave={() => {
-                setHoveredNode(null);
-                setHoveredNodeId(null);
-              }}
-            >
-              <img
-                src={node.image}
-                alt={node.title}
-                className="w-full h-20 object-cover rounded mb-2"
-              />
-              <h3 className="text-sm font-medium">{node.title}</h3>
-              <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
+            key={node.id}
+            className="absolute bg-white border rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            style={{
+              left: `${node.x}px`,
+              top: `${node.y}px`,
+              width: "120px",
+              transform: "translate(-60px, -75px)",
+            }}
+            onMouseEnter={() => {
+              setHoveredNode(node);
+              setHoveredNodeId(node.id);
+            }}
+            onMouseLeave={() => {
+              setHoveredNode(null);
+              setHoveredNodeId(null);
+            }}
+          >
+            <img
+              src={node.image}
+              alt={node.title}
+              className="w-full h-20 object-cover rounded mb-2"
+            />
+            <h3 className="text-sm font-medium">{node.title}</h3>
+            <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
 
-              {/* Hover tooltip */}
-              {hoveredNode?.id === node.id && (
-                <div className="absolute z-10 bg-white border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64">
-                  <p className="text-xs mb-1">
-                    <strong>Date:</strong> {formatYear(node.year)}
-                  </p>
-                  {node.description && (
-                    <p className="text-xs">{node.description}</p>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-          {/* Timeline */}
-          <div className="absolute bottom-0 w-full h-8 border-t">
-            {(() => {
-              if (!data.nodes.length) return null;
-              
-              const years = data.nodes.map(n => n.year);
-              const minYear = Math.min(...years);
-              const maxYear = Math.max(...years);
-              
-              const timelineYears = [];
-              for (let year = minYear - 1; year <= maxYear + 1; year++) {
-                timelineYears.push(year);
-              }
-              
-              return timelineYears.map((year) => (
-                <div
-                  key={year}
-                  className="absolute text-sm text-gray-500"
-                  style={{
-                    left: `${getXPosition(year)}px`,  // Add px unit
-                    transform: "translateX(-50%)",
-                  }}
-                >
-                  {formatYear(year)}
-                </div>
-              ));
-            })()}
+            {/* Hover tooltip */}
+            {hoveredNode?.id === node.id && (
+              <div className="absolute z-10 bg-white border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64">
+                <p className="text-xs mb-1">
+                  <strong>Date:</strong> {formatYear(node.year)}
+                </p>
+                {node.description && (
+                  <p className="text-xs">{node.description}</p>
+                )}
+              </div>
+            )}
           </div>
+          ))}
+        </div>
+  
+        {/* Timeline */}
+        <div 
+        className="sticky bottom-0 h-16 bg-white border-t" 
+        style={{ 
+          width: containerWidth,
+          transform: `scale(${zoom})`,
+          transformOrigin: "bottom left",
+          zIndex: 50
+        }}
+      >
+          {(() => {
+            if (!data.nodes.length) return null;
+            
+            const years = data.nodes.map(n => n.year);
+            const minYear = Math.min(...years);
+            const maxYear = Math.max(...years);
+            
+            const timelineYears = [];
+            for (let year = minYear - 1; year <= maxYear + 1; year++) {
+              timelineYears.push(year);
+            }
+            
+            return timelineYears.map((year) => (
+              <div
+                key={year}
+                className="absolute text-sm text-gray-500"
+                style={{
+                  left: `${getXPosition(year)}px`,
+                  transform: "translateX(-50%)",
+                }}
+              >
+                {formatYear(year)}
+              </div>
+            ));
+          })()}
         </div>
       </div>
     </div>
