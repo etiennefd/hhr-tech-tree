@@ -7,16 +7,37 @@ import dynamic from "next/dynamic";
 import CurvedConnections from '../components/connections/CurvedConnections';
 import ConnectionLegend from '../components/connections/ConnectionLegend';
 
+// Timeline scale boundaries
+const YEAR_INDUSTRIAL = 1700;
+const YEAR_EARLY_MODERN = 1500;
+const YEAR_LATE_ANTIQUITY = -100;
+const YEAR_MIDDLE_ANTIQUITY = -1000;
+const YEAR_EARLY_ANTIQUITY = -5000;
+const YEAR_NEOLITHIC = -10000;
+const YEAR_UPPER_PALEOLITHIC = -50000;
+const YEAR_MIDDLE_PALEOLITHIC = -100000;
+
+// Timeline intervals for each period
+const INTERVAL_INDUSTRIAL = 1;
+const INTERVAL_EARLY_MODERN = 5;
+const INTERVAL_LATE_ANTIQUITY = 10;
+const INTERVAL_MIDDLE_ANTIQUITY = 50;
+const INTERVAL_EARLY_ANTIQUITY = 100;
+const INTERVAL_NEOLITHIC = 500;
+const INTERVAL_UPPER_PALEOLITHIC = 1000;
+const INTERVAL_MIDDLE_PALEOLITHIC = 5000;
+const INTERVAL_EARLY_PALEOLITHIC = 100000;
+
 function getTimelineSegment(year: number) {
-  if (year >= 1700) return year;
-  if (year >= 1500) return Math.floor(year / 5) * 5;
-  if (year >= -100) return Math.floor(year / 10) * 10;
-  if (year >= -1000) return Math.floor(year / 50) * 50;
-  if (year >= -4000) return Math.floor(year / 100) * 100;
-  if (year >= -10000) return Math.floor(year / 500) * 500;
-  if (year >= -50000) return Math.floor(year / 1000) * 1000;
-  if (year >= -100000) return Math.floor(year / 5000) * 5000;
-  return Math.floor(year / 100000) * 100000;
+  if (year >= YEAR_INDUSTRIAL) return year;
+  if (year >= YEAR_EARLY_MODERN) return Math.floor(year / INTERVAL_EARLY_MODERN) * INTERVAL_EARLY_MODERN;
+  if (year >= YEAR_LATE_ANTIQUITY) return Math.floor(year / INTERVAL_LATE_ANTIQUITY) * INTERVAL_LATE_ANTIQUITY;
+  if (year >= YEAR_MIDDLE_ANTIQUITY) return Math.floor(year / INTERVAL_MIDDLE_ANTIQUITY) * INTERVAL_MIDDLE_ANTIQUITY;
+  if (year >= YEAR_EARLY_ANTIQUITY) return Math.floor(year / INTERVAL_EARLY_ANTIQUITY) * INTERVAL_EARLY_ANTIQUITY;
+  if (year >= YEAR_NEOLITHIC) return Math.floor(year / INTERVAL_NEOLITHIC) * INTERVAL_NEOLITHIC;
+  if (year >= YEAR_UPPER_PALEOLITHIC) return Math.floor(year / INTERVAL_UPPER_PALEOLITHIC) * INTERVAL_UPPER_PALEOLITHIC;
+  if (year >= YEAR_MIDDLE_PALEOLITHIC) return Math.floor(year / INTERVAL_MIDDLE_PALEOLITHIC) * INTERVAL_MIDDLE_PALEOLITHIC;
+  return Math.floor(year / INTERVAL_EARLY_PALEOLITHIC) * INTERVAL_EARLY_PALEOLITHIC;
 }
 
 function getTimelineYears(minYear: number, maxYear: number): number[] {
@@ -26,15 +47,15 @@ function getTimelineYears(minYear: number, maxYear: number): number[] {
   while (current <= maxYear) {
     years.push(current);
     
-    if (current >= 1700) current += 1;
-    else if (current >= 1500) current += 5;
-    else if (current >= -100) current += 10;
-    else if (current >= -1000) current += 50;
-    else if (current >= -4000) current += 100;
-    else if (current >= -10000) current += 500;
-    else if (current >= -50000) current += 1000;
-    else if (current >= -100000) current += 5000;
-    else current += 100000;
+    if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
+    else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
+    else if (current >= YEAR_LATE_ANTIQUITY) current += INTERVAL_LATE_ANTIQUITY;
+    else if (current >= YEAR_MIDDLE_ANTIQUITY) current += INTERVAL_MIDDLE_ANTIQUITY;
+    else if (current >= YEAR_EARLY_ANTIQUITY) current += INTERVAL_EARLY_ANTIQUITY;
+    else if (current >= YEAR_NEOLITHIC) current += INTERVAL_NEOLITHIC;
+    else if (current >= YEAR_UPPER_PALEOLITHIC) current += INTERVAL_UPPER_PALEOLITHIC;
+    else if (current >= YEAR_MIDDLE_PALEOLITHIC) current += INTERVAL_MIDDLE_PALEOLITHIC;
+    else current += INTERVAL_EARLY_PALEOLITHIC;
   }
   
   return years;
@@ -48,25 +69,15 @@ function calculateXPosition(year: number, minYear: number, PADDING: number, YEAR
   let current = alignedMinYear;
   
   while (current < alignedYear) {
-    if (current >= 1700) {
-      current += 1;
-    } else if (current >= 1500) {
-      current += 5;
-    } else if (current >= -100) {
-      current += 10;
-    } else if (current >= -1000) {
-      current += 50;
-    } else if (current >= -4000) {
-      current += 100;
-    } else if (current >= -10000) {
-      current += 500;
-    } else if (current >= -50000) {
-      current += 1000;
-    } else if (current >= -100000) {
-      current += 5000;
-    } else {
-      current += 100000;
-    }
+    if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
+    else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
+    else if (current >= YEAR_LATE_ANTIQUITY) current += INTERVAL_LATE_ANTIQUITY;
+    else if (current >= YEAR_MIDDLE_ANTIQUITY) current += INTERVAL_MIDDLE_ANTIQUITY;
+    else if (current >= YEAR_EARLY_ANTIQUITY) current += INTERVAL_EARLY_ANTIQUITY;
+    else if (current >= YEAR_NEOLITHIC) current += INTERVAL_NEOLITHIC;
+    else if (current >= YEAR_UPPER_PALEOLITHIC) current += INTERVAL_UPPER_PALEOLITHIC;
+    else if (current >= YEAR_MIDDLE_PALEOLITHIC) current += INTERVAL_MIDDLE_PALEOLITHIC;
+    else current += INTERVAL_EARLY_PALEOLITHIC;
     spaces += 1;
   }
   
