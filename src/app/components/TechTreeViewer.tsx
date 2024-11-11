@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
-import CurvedConnections from '../components/connections/CurvedConnections';
-import ConnectionLegend from '../components/connections/ConnectionLegend';
+import CurvedConnections from "../components/connections/CurvedConnections";
+import ConnectionLegend from "../components/connections/ConnectionLegend";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1700;
@@ -30,58 +30,89 @@ const INTERVAL_EARLY_PALEOLITHIC = 100000;
 
 function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
-  if (year >= YEAR_EARLY_MODERN) return Math.floor(year / INTERVAL_EARLY_MODERN) * INTERVAL_EARLY_MODERN;
-  if (year >= YEAR_LATE_ANTIQUITY) return Math.floor(year / INTERVAL_LATE_ANTIQUITY) * INTERVAL_LATE_ANTIQUITY;
-  if (year >= YEAR_MIDDLE_ANTIQUITY) return Math.floor(year / INTERVAL_MIDDLE_ANTIQUITY) * INTERVAL_MIDDLE_ANTIQUITY;
-  if (year >= YEAR_EARLY_ANTIQUITY) return Math.floor(year / INTERVAL_EARLY_ANTIQUITY) * INTERVAL_EARLY_ANTIQUITY;
-  if (year >= YEAR_NEOLITHIC) return Math.floor(year / INTERVAL_NEOLITHIC) * INTERVAL_NEOLITHIC;
-  if (year >= YEAR_UPPER_PALEOLITHIC) return Math.floor(year / INTERVAL_UPPER_PALEOLITHIC) * INTERVAL_UPPER_PALEOLITHIC;
-  if (year >= YEAR_MIDDLE_PALEOLITHIC) return Math.floor(year / INTERVAL_MIDDLE_PALEOLITHIC) * INTERVAL_MIDDLE_PALEOLITHIC;
-  return Math.floor(year / INTERVAL_EARLY_PALEOLITHIC) * INTERVAL_EARLY_PALEOLITHIC;
+  if (year >= YEAR_EARLY_MODERN)
+    return Math.floor(year / INTERVAL_EARLY_MODERN) * INTERVAL_EARLY_MODERN;
+  if (year >= YEAR_LATE_ANTIQUITY)
+    return Math.floor(year / INTERVAL_LATE_ANTIQUITY) * INTERVAL_LATE_ANTIQUITY;
+  if (year >= YEAR_MIDDLE_ANTIQUITY)
+    return (
+      Math.floor(year / INTERVAL_MIDDLE_ANTIQUITY) * INTERVAL_MIDDLE_ANTIQUITY
+    );
+  if (year >= YEAR_EARLY_ANTIQUITY)
+    return (
+      Math.floor(year / INTERVAL_EARLY_ANTIQUITY) * INTERVAL_EARLY_ANTIQUITY
+    );
+  if (year >= YEAR_NEOLITHIC)
+    return Math.floor(year / INTERVAL_NEOLITHIC) * INTERVAL_NEOLITHIC;
+  if (year >= YEAR_UPPER_PALEOLITHIC)
+    return (
+      Math.floor(year / INTERVAL_UPPER_PALEOLITHIC) * INTERVAL_UPPER_PALEOLITHIC
+    );
+  if (year >= YEAR_MIDDLE_PALEOLITHIC)
+    return (
+      Math.floor(year / INTERVAL_MIDDLE_PALEOLITHIC) *
+      INTERVAL_MIDDLE_PALEOLITHIC
+    );
+  return (
+    Math.floor(year / INTERVAL_EARLY_PALEOLITHIC) * INTERVAL_EARLY_PALEOLITHIC
+  );
 }
 
 function getTimelineYears(minYear: number, maxYear: number): number[] {
   const years: number[] = [];
   let current = getTimelineSegment(minYear);
-  
+
   while (current <= maxYear) {
     years.push(current);
-    
+
     if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
     else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
     else if (current >= YEAR_LATE_ANTIQUITY) current += INTERVAL_LATE_ANTIQUITY;
-    else if (current >= YEAR_MIDDLE_ANTIQUITY) current += INTERVAL_MIDDLE_ANTIQUITY;
-    else if (current >= YEAR_EARLY_ANTIQUITY) current += INTERVAL_EARLY_ANTIQUITY;
+    else if (current >= YEAR_MIDDLE_ANTIQUITY)
+      current += INTERVAL_MIDDLE_ANTIQUITY;
+    else if (current >= YEAR_EARLY_ANTIQUITY)
+      current += INTERVAL_EARLY_ANTIQUITY;
     else if (current >= YEAR_NEOLITHIC) current += INTERVAL_NEOLITHIC;
-    else if (current >= YEAR_UPPER_PALEOLITHIC) current += INTERVAL_UPPER_PALEOLITHIC;
-    else if (current >= YEAR_MIDDLE_PALEOLITHIC) current += INTERVAL_MIDDLE_PALEOLITHIC;
+    else if (current >= YEAR_UPPER_PALEOLITHIC)
+      current += INTERVAL_UPPER_PALEOLITHIC;
+    else if (current >= YEAR_MIDDLE_PALEOLITHIC)
+      current += INTERVAL_MIDDLE_PALEOLITHIC;
     else current += INTERVAL_EARLY_PALEOLITHIC;
   }
-  
+
   return years;
 }
 
-function calculateXPosition(year: number, minYear: number, PADDING: number, YEAR_WIDTH: number) {
+function calculateXPosition(
+  year: number,
+  minYear: number,
+  PADDING: number,
+  YEAR_WIDTH: number
+) {
   const alignedYear = getTimelineSegment(year);
   const alignedMinYear = getTimelineSegment(minYear);
-  
+
   let spaces = 0;
   let current = alignedMinYear;
-  
+
   while (current < alignedYear) {
     if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
     else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
     else if (current >= YEAR_LATE_ANTIQUITY) current += INTERVAL_LATE_ANTIQUITY;
-    else if (current >= YEAR_MIDDLE_ANTIQUITY) current += INTERVAL_MIDDLE_ANTIQUITY;
-    else if (current >= YEAR_EARLY_ANTIQUITY) current += INTERVAL_EARLY_ANTIQUITY;
+    else if (current >= YEAR_MIDDLE_ANTIQUITY)
+      current += INTERVAL_MIDDLE_ANTIQUITY;
+    else if (current >= YEAR_EARLY_ANTIQUITY)
+      current += INTERVAL_EARLY_ANTIQUITY;
     else if (current >= YEAR_NEOLITHIC) current += INTERVAL_NEOLITHIC;
-    else if (current >= YEAR_UPPER_PALEOLITHIC) current += INTERVAL_UPPER_PALEOLITHIC;
-    else if (current >= YEAR_MIDDLE_PALEOLITHIC) current += INTERVAL_MIDDLE_PALEOLITHIC;
+    else if (current >= YEAR_UPPER_PALEOLITHIC)
+      current += INTERVAL_UPPER_PALEOLITHIC;
+    else if (current >= YEAR_MIDDLE_PALEOLITHIC)
+      current += INTERVAL_MIDDLE_PALEOLITHIC;
     else current += INTERVAL_EARLY_PALEOLITHIC;
     spaces += 1;
   }
-  
-  return PADDING + (spaces * YEAR_WIDTH);
+
+  return PADDING + spaces * YEAR_WIDTH;
 }
 
 const TechTreeViewer = () => {
@@ -94,79 +125,79 @@ const TechTreeViewer = () => {
 
   const fieldColors = {
     // Life Sciences - Greens
-    'Biology': '#e0f0e3',         // Sage green
-    'Medicine': '#dcefe7',        // Hospital green
-    'Agriculture': '#e8f4d9',     // Light lime
-    'Animal husbandry': '#eaf2dc', // Soft olive
-    
+    Biology: "#e0f0e3", // Sage green
+    Medicine: "#dcefe7", // Hospital green
+    Agriculture: "#e8f4d9", // Light lime
+    "Animal husbandry": "#eaf2dc", // Soft olive
+
     // Physical Sciences - Purples/Blues
-    'Physics': '#e6e1f4',         // Soft purple
-    'Chemistry': '#e9e4f7',       // Light violet
-    'Astronomy': '#e1e5ff',       // Light periwinkle
-    'Geology': '#e8e4f1',         // Dusty purple
-    'Meteorology': '#e1f2f7',     // Sky blue
-    
+    Physics: "#e6e1f4", // Soft purple
+    Chemistry: "#e9e4f7", // Light violet
+    Astronomy: "#e1e5ff", // Light periwinkle
+    Geology: "#e8e4f1", // Dusty purple
+    Meteorology: "#e1f2f7", // Sky blue
+
     // Engineering/Tech - Yellows/Oranges
-    'Electricity': '#fff4d9',     // Pale yellow
-    'Electronics': '#ffefd4',     // Light orange
-    'Energy': '#ffecd9',          // Peach
-    'Machinery': '#fae6d9',       // Soft orange
-    
+    Electricity: "#fff4d9", // Pale yellow
+    Electronics: "#ffefd4", // Light orange
+    Energy: "#ffecd9", // Peach
+    Machinery: "#fae6d9", // Soft orange
+
     // Transportation/Movement - Pinks
-    'Transportation': '#fde6e6',  // Light pink
-    'Flying': '#fce8ef',         // Soft rose
-    'Navigation': '#ffeaf1',     // Baby pink
-    
+    Transportation: "#fde6e6", // Light pink
+    Flying: "#fce8ef", // Soft rose
+    Navigation: "#ffeaf1", // Baby pink
+
     // Computing/Math - Grays/Silvers
-    'Computing': '#ebeef2',      // Cool gray
-    'Mathematics': '#e8ecf2',    // Silver blue
-    'Measurement': '#e5e9f0',    // Pale slate
-    
+    Computing: "#ebeef2", // Cool gray
+    Mathematics: "#e8ecf2", // Silver blue
+    Measurement: "#e5e9f0", // Pale slate
+
     // Construction/Materials - Browns/Tans
-    'Construction': '#f2e6d9',   // Light tan
-    'Mining': '#f0e6db',         // Soft beige
-    'Metallurgy': '#efe5d6',     // Pale bronze
-    
+    Construction: "#f2e6d9", // Light tan
+    Mining: "#f0e6db", // Soft beige
+    Metallurgy: "#efe5d6", // Pale bronze
+
     // Culture/Arts - Soft reds/Pinks
-    'Art': '#ffe6eb',            // Rose pink
-    'Entertainment': '#ffe6e6',  // Light coral
-    'Music': '#ffeaf2',         // Soft pink
-    
+    Art: "#ffe6eb", // Rose pink
+    Entertainment: "#ffe6e6", // Light coral
+    Music: "#ffeaf2", // Soft pink
+
     // Communications/Information - Blues
-    'Communications': '#e1f0f5', // Light cyan
-    'Printing': '#deeaf3',      // Powder blue
-    'Imaging': '#e4f1f6',       // Pale blue
-    
+    Communications: "#e1f0f5", // Light cyan
+    Printing: "#deeaf3", // Powder blue
+    Imaging: "#e4f1f6", // Pale blue
+
     // Environmental/Natural - Greens/Blues
-    'Sanitation': '#e0eee8',    // Mint
-    'Hydraulics': '#e0f0f0',    // Aqua
-    'Food': '#e5f2e5',          // Fresh green
-    
+    Sanitation: "#e0eee8", // Mint
+    Hydraulics: "#e0f0f0", // Aqua
+    Food: "#e5f2e5", // Fresh green
+
     // Safety/Protection - Red tones
-    'Security': '#ffe6e6',      // Light red
-    'Military': '#ffeae6',      // Pale coral
-    
+    Security: "#ffe6e6", // Light red
+    Military: "#ffeae6", // Pale coral
+
     // Other Technical Fields
-    'Surveying': '#e6ecf2',     // Light slate
-    'Optics': '#e8f0f7',        // Pale sky
-    'Space': '#e6e9f7',         // Light space gray
-    'Cartography': '#e9eff5',   // Map blue
-    
+    Surveying: "#e6ecf2", // Light slate
+    Optics: "#e8f0f7", // Pale sky
+    Space: "#e6e9f7", // Light space gray
+    Cartography: "#e9eff5", // Map blue
+
     // Industrial/Craft
-    'Crafts': '#f7e6d9',        // Light clay
-    'Textiles': '#f9e6ef',      // Soft fabric pink
-    
+    Crafts: "#f7e6d9", // Light clay
+    Textiles: "#f9e6ef", // Soft fabric pink
+
     // Governance/Systems
-    'Finance': '#e6eaf0',       // Banking gray
-    'Law': '#e9e9f2',           // Justice gray
-    'Governance': '#e6e6f0',    // Official gray
-    
+    Finance: "#e6eaf0", // Banking gray
+    Law: "#e9e9f2", // Justice gray
+    Governance: "#e6e6f0", // Official gray
+
     // Resource/Nature
-    'Hunting and fishing': '#e5eee5', // Forest green
-    'Lighting': '#fff9e6',      // Warm light yellow
-    
+    "Hunting and fishing": "#e5eee5", // Forest green
+    Lighting: "#fff9e6", // Warm light yellow
+
     // Time
-    'Timekeeping': '#f0f0f5',   // Clock gray
+    Timekeeping: "#f0f0f5", // Clock gray
   };
 
   // State
@@ -178,50 +209,56 @@ const TechTreeViewer = () => {
   const [filteredNodes, setFilteredNodes] = useState([]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
-  const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+  const [containerDimensions, setContainerDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   const [data, setData] = useState<{ nodes: any[]; links: any[] }>({
     nodes: [],
     links: [],
   });
 
-  const getXPosition = useCallback((year: number) => {
-    if (!data.nodes.length) return 0;
-    const minYear = Math.min(...data.nodes.map(n => n.year));
-    return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-  }, [data.nodes]);
+  const getXPosition = useCallback(
+    (year: number) => {
+      if (!data.nodes.length) return 0;
+      const minYear = Math.min(...data.nodes.map((n) => n.year));
+      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+    },
+    [data.nodes]
+  );
 
   // Calculate node positions with improved vertical distribution
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
-    
-    const minYear = Math.min(...nodes.map(n => n.year));
+
+    const minYear = Math.min(...nodes.map((n) => n.year));
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
     const positionedNodes = [];
     const yearGroups = new Map();
-    
+
     // First pass: group nodes by aligned year
-    sortedNodes.forEach(node => {
+    sortedNodes.forEach((node) => {
       const alignedYear = getTimelineSegment(node.year);
       if (!yearGroups.has(alignedYear)) {
         yearGroups.set(alignedYear, []);
       }
       yearGroups.get(alignedYear).push(node);
     });
-    
+
     // Second pass: position nodes
     yearGroups.forEach((nodesInYear, year) => {
       const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
       const nodeCount = nodesInYear.length;
-      
+
       nodesInYear.forEach((node, index) => {
         const offset = (index - (nodeCount - 1) / 2) * VERTICAL_SPACING;
         const y = BASE_Y + offset;
-        
+
         positionedNodes.push({ ...node, x, y });
       });
     });
-    
+
     return positionedNodes;
   }, []);
 
@@ -236,8 +273,8 @@ const TechTreeViewer = () => {
         setFilteredNodes(positionedNodes);
         setIsLoading(false);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
         setIsLoading(false);
       });
   }, [calculateNodePositions]);
@@ -247,13 +284,13 @@ const TechTreeViewer = () => {
     const handleResize = () => {
       setContainerDimensions({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       });
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Client-side initialization
@@ -267,11 +304,12 @@ const TechTreeViewer = () => {
       setFilteredNodes(data.nodes);
       return;
     }
-    
+
     const searchTermLower = searchTerm.toLowerCase();
-    const filtered = data.nodes.filter(node => 
-      node.title.toLowerCase().includes(searchTermLower) ||
-      (node.description || "").toLowerCase().includes(searchTermLower)
+    const filtered = data.nodes.filter(
+      (node) =>
+        node.title.toLowerCase().includes(searchTermLower) ||
+        (node.description || "").toLowerCase().includes(searchTermLower)
     );
     setFilteredNodes(filtered);
   }, [searchTerm, data.nodes]);
@@ -282,18 +320,30 @@ const TechTreeViewer = () => {
     return year < 0 ? `${absYear} BCE` : `${year}`;
   }, []);
 
-  const shouldHighlightLink = useCallback((link: any, index: number) => {
-    if (hoveredLinkIndex === index) return true;
-    if (hoveredNodeId && (link.source === hoveredNodeId || link.target === hoveredNodeId)) return true;
-    return false;
-  }, [hoveredLinkIndex, hoveredNodeId]);
+  const shouldHighlightLink = useCallback(
+    (link: any, index: number) => {
+      if (hoveredLinkIndex === index) return true;
+      if (
+        hoveredNodeId &&
+        (link.source === hoveredNodeId || link.target === hoveredNodeId)
+      )
+        return true;
+      return false;
+    },
+    [hoveredLinkIndex, hoveredNodeId]
+  );
 
-  const containerWidth = useMemo(() => Math.max(
-    data.nodes.length ? 
-      getXPosition(Math.max(...data.nodes.map(n => n.year)) + 1) + PADDING : 
-      containerDimensions.width,
-    containerDimensions.width
-  ), [data.nodes, getXPosition, containerDimensions.width]);
+  const containerWidth = useMemo(
+    () =>
+      Math.max(
+        data.nodes.length
+          ? getXPosition(Math.max(...data.nodes.map((n) => n.year)) + 1) +
+              PADDING
+          : containerDimensions.width,
+        containerDimensions.width
+      ),
+    [data.nodes, getXPosition, containerDimensions.width]
+  );
 
   if (!isClient || isLoading) {
     return (
@@ -310,7 +360,7 @@ const TechTreeViewer = () => {
         <div className="fixed top-4 right-4 flex flex-col gap-4 z-50">
           <div className="flex items-center gap-4 p-4 bg-white/90 backdrop-blur rounded-lg shadow-lg">
             <button
-              onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}
+              onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
               className="p-2 border rounded hover:bg-gray-100 transition-colors"
             >
               <Minus size={20} />
@@ -319,7 +369,7 @@ const TechTreeViewer = () => {
               {(zoom * 100).toFixed(0)}%
             </span>
             <button
-              onClick={() => setZoom(z => Math.min(2, z + 0.1))}
+              onClick={() => setZoom((z) => Math.min(2, z + 0.1))}
               className="p-2 border rounded hover:bg-gray-100 transition-colors"
             >
               <Plus size={20} />
@@ -340,7 +390,7 @@ const TechTreeViewer = () => {
           <ConnectionLegend />
         </div>
       </>
-  
+
       {/* Scrollable container */}
       <div className="overflow-x-auto">
         {/* Main visualization */}
@@ -351,15 +401,15 @@ const TechTreeViewer = () => {
             transform: `scale(${zoom})`,
             transformOrigin: "top left",
             position: "relative",
-            marginBottom: "64px"
+            marginBottom: "64px",
           }}
         >
           {/* SVG connections */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none">
             {data.links.map((link, index) => {
-              const sourceNode = data.nodes.find(n => n.id === link.source);
-              const targetNode = data.nodes.find(n => n.id === link.target);
-              
+              const sourceNode = data.nodes.find((n) => n.id === link.source);
+              const targetNode = data.nodes.find((n) => n.id === link.target);
+
               if (!sourceNode || !targetNode) return null;
 
               return (
@@ -367,11 +417,11 @@ const TechTreeViewer = () => {
                   key={index}
                   sourceNode={{
                     x: getXPosition(sourceNode.year),
-                    y: sourceNode.y || 150
+                    y: sourceNode.y || 150,
                   }}
                   targetNode={{
                     x: getXPosition(targetNode.year),
-                    y: targetNode.y || 150
+                    y: targetNode.y || 150,
                   }}
                   connectionType={link.type}
                   isHighlighted={shouldHighlightLink(link, index)}
@@ -384,7 +434,7 @@ const TechTreeViewer = () => {
               );
             })}
           </svg>
-  
+
           {/* Nodes */}
           {filteredNodes.map((node) => (
             <div
@@ -395,11 +445,11 @@ const TechTreeViewer = () => {
                 top: `${node.y}px`,
                 width: NODE_WIDTH,
                 transform: "translate(-60px, -75px)",
-                opacity: hoveredNodeId && hoveredNodeId !== node.id ? 0.5 : 1
+                opacity: hoveredNodeId && hoveredNodeId !== node.id ? 0.5 : 1,
               }}
               onClick={() => {
                 if (node.wikipedia) {
-                  window.open(node.wikipedia, '_blank', 'noopener,noreferrer');
+                  window.open(node.wikipedia, "_blank", "noopener,noreferrer");
                 }
               }}
               onMouseEnter={() => {
@@ -419,13 +469,13 @@ const TechTreeViewer = () => {
               <h3 className="text-sm font-medium line-clamp-2">{node.title}</h3>
               <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
               <div className="flex flex-wrap gap-1">
-                {node.fields.map(field => (
+                {node.fields.map((field) => (
                   <span
                     key={field}
                     className="text-[10px] px-1.5 py-0.5 rounded"
                     style={{
-                      backgroundColor: fieldColors[field] || '#f0f0f0',
-                      color: '#333'
+                      backgroundColor: fieldColors[field] || "#f0f0f0",
+                      color: "#333",
                     }}
                   >
                     {field}
@@ -443,7 +493,10 @@ const TechTreeViewer = () => {
                   </p>
                   {node.inventors?.length > 0 && (
                     <p className="text-xs mb-1">
-                      <strong>Inventor{node.inventors.length > 1 ? 's' : ''}:</strong> {node.inventors.join(', ')}
+                      <strong>
+                        Inventor{node.inventors.length > 1 ? "s" : ""}:
+                      </strong>{" "}
+                      {node.inventors.join(", ")}
                     </p>
                   )}
                   {node.organization && (
@@ -453,7 +506,10 @@ const TechTreeViewer = () => {
                   )}
                   {(node.city || node.countryHistorical) && (
                     <p className="text-xs mb-1">
-                      <strong>Location:</strong> {[node.city, node.countryHistorical].filter(Boolean).join(', ')}
+                      <strong>Location:</strong>{" "}
+                      {[node.city, node.countryHistorical]
+                        .filter(Boolean)
+                        .join(", ")}
                     </p>
                   )}
                   {node.details && (
@@ -469,26 +525,26 @@ const TechTreeViewer = () => {
             </div>
           ))}
         </div>
-  
+
         {/* Timeline - keeping original implementation */}
-        <div 
-          className="sticky bottom-0 h-16 bg-white border-t" 
-          style={{ 
+        <div
+          className="sticky bottom-0 h-16 bg-white border-t"
+          style={{
             width: containerWidth,
             transform: `scale(${zoom})`,
             transformOrigin: "bottom left",
-            zIndex: 50
+            zIndex: 50,
           }}
         >
           {(() => {
             if (!data.nodes.length) return null;
-            
-            const years = data.nodes.map(n => n.year);
+
+            const years = data.nodes.map((n) => n.year);
             const minYear = Math.min(...years);
             const maxYear = Math.max(...years);
-            
+
             const timelineYears = getTimelineYears(minYear, maxYear);
-            
+
             return timelineYears.map((year) => (
               <div
                 key={year}
