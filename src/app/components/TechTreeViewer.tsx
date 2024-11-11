@@ -247,6 +247,11 @@ const TechTreeViewer = () => {
                 transform: "translate(-60px, -75px)",
                 opacity: hoveredNodeId && hoveredNodeId !== node.id ? 0.5 : 1
               }}
+              onClick={() => {
+                if (node.wikipedia) {
+                  window.open(node.wikipedia, '_blank', 'noopener,noreferrer');
+                }
+              }}
               onMouseEnter={() => {
                 setHoveredNode(node);
                 setHoveredNodeId(node.id);
@@ -264,13 +269,36 @@ const TechTreeViewer = () => {
               <h3 className="text-sm font-medium line-clamp-2">{node.title}</h3>
               <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
 
+              {/* Tooltip */}
               {hoveredNode?.id === node.id && (
-                <div className="absolute z-10 bg-white/95 backdrop-blur border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64">
+                <div className="absolute z-[1000] bg-white border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64">
+                  {/* Also removed the backdrop-blur and reduced transparency for better readability */}
                   <p className="text-xs mb-1">
                     <strong>Date:</strong> {formatYear(node.year)}
+                    {node.dateDetails && ` (${node.dateDetails})`}
                   </p>
-                  {node.description && (
-                    <p className="text-xs line-clamp-3">{node.description}</p>
+                  {node.inventors?.length > 0 && (
+                    <p className="text-xs mb-1">
+                      <strong>Inventor{node.inventors.length > 1 ? 's' : ''}:</strong> {node.inventors.join(', ')}
+                    </p>
+                  )}
+                  {node.organization && (
+                    <p className="text-xs mb-1">
+                      <strong>Organization:</strong> {node.organization}
+                    </p>
+                  )}
+                  {(node.city || node.countryHistorical) && (
+                    <p className="text-xs mb-1">
+                      <strong>Location:</strong> {[node.city, node.countryHistorical].filter(Boolean).join(', ')}
+                    </p>
+                  )}
+                  {node.details && (
+                    <p className="text-xs line-clamp-3">{node.details}</p>
+                  )}
+                  {node.wikipedia && (
+                    <p className="text-xs mt-1 text-blue-600 hover:underline cursor-pointer">
+                      View on Wikipedia →
+                    </p>
                   )}
                 </div>
               )}
