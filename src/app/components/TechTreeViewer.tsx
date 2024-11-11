@@ -7,6 +7,60 @@ import dynamic from "next/dynamic";
 import CurvedConnections from '../components/connections/CurvedConnections';
 import ConnectionLegend from '../components/connections/ConnectionLegend';
 
+function getTimelineSegment(year: number) {
+  if (year >= 1700) return year;
+  if (year >= 1500) return Math.floor(year / 5) * 5;
+  if (year >= -500) return Math.floor(year / 10) * 10;
+  if (year >= -1500) return Math.floor(year / 50) * 50;
+  return Math.floor(year / 100) * 100;
+}
+
+function getTimelineYears(minYear: number, maxYear: number): number[] {
+  const years: number[] = [];
+  let current = getTimelineSegment(minYear);
+  
+  while (current <= maxYear) {
+    years.push(current);
+    
+    if (current >= 1700) current += 1;
+    else if (current >= 1500) current += 5;
+    else if (current >= -500) current += 10;
+    else if (current >= -1500) current += 50;
+    else current += 100;
+  }
+  
+  return years;
+}
+
+function calculateXPosition(year: number, minYear: number, PADDING: number, YEAR_WIDTH: number) {
+  const alignedYear = getTimelineSegment(year);
+  const alignedMinYear = getTimelineSegment(minYear);
+  
+  let spaces = 0;
+  let current = alignedMinYear;
+  
+  while (current < alignedYear) {
+    if (current >= 1700) {
+      spaces += 1;
+      current += 1;
+    } else if (current >= 1500) {
+      spaces += 1;
+      current += 5;
+    } else if (current >= -500) {
+      spaces += 1;
+      current += 10;
+    } else if (current >= -1500) {
+      spaces += 1;
+      current += 50;
+    } else {
+      spaces += 1;
+      current += 100;
+    }
+  }
+  
+  return PADDING + (spaces * YEAR_WIDTH);
+}
+
 const TechTreeViewer = () => {
   // Constants
   const NODE_WIDTH = 160;
@@ -108,33 +162,36 @@ const TechTreeViewer = () => {
     links: [],
   });
 
+  const getXPosition = useCallback((year: number) => {
+    if (!data.nodes.length) return 0;
+    const minYear = Math.min(...data.nodes.map(n => n.year));
+    return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+  }, [data.nodes]);
+
   // Calculate node positions with improved vertical distribution
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
     
     const minYear = Math.min(...nodes.map(n => n.year));
-    const getNodePosition = (year) => PADDING + ((year - minYear) * YEAR_WIDTH);
-    
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
     const positionedNodes = [];
     const yearGroups = new Map();
     
-    // First pass: group nodes by year
+    // First pass: group nodes by aligned year
     sortedNodes.forEach(node => {
-      const year = node.year;
-      if (!yearGroups.has(year)) {
-        yearGroups.set(year, []);
+      const alignedYear = getTimelineSegment(node.year);
+      if (!yearGroups.has(alignedYear)) {
+        yearGroups.set(alignedYear, []);
       }
-      yearGroups.get(year).push(node);
+      yearGroups.get(alignedYear).push(node);
     });
     
-    // Second pass: position nodes within their year groups
+    // Second pass: position nodes
     yearGroups.forEach((nodesInYear, year) => {
-      const x = getNodePosition(year);
+      const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
       const nodeCount = nodesInYear.length;
       
       nodesInYear.forEach((node, index) => {
-        // Calculate vertical position based on index within year group
         const offset = (index - (nodeCount - 1) / 2) * VERTICAL_SPACING;
         const y = BASE_Y + offset;
         
@@ -201,12 +258,6 @@ const TechTreeViewer = () => {
     const absYear = Math.abs(year);
     return year < 0 ? `${absYear} BCE` : `${year}`;
   }, []);
-
-  const getXPosition = useCallback((year: number) => {
-    if (!data.nodes.length) return 0;
-    const minYear = Math.min(...data.nodes.map(n => n.year));
-    return PADDING + ((year - minYear) * YEAR_WIDTH);
-  }, [data.nodes]);
 
   const shouldHighlightLink = useCallback((link: any, index: number) => {
     if (hoveredLinkIndex === index) return true;
@@ -317,7 +368,7 @@ const TechTreeViewer = () => {
               key={node.id}
               className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer"
               style={{
-                left: `${node.x}px`,
+                left: `${getXPosition(node.year)}px`,
                 top: `${node.y}px`,
                 width: NODE_WIDTH,
                 transform: "translate(-60px, -75px)",
@@ -413,10 +464,7 @@ const TechTreeViewer = () => {
             const minYear = Math.min(...years);
             const maxYear = Math.max(...years);
             
-            const timelineYears = [];
-            for (let year = minYear - 1; year <= maxYear + 1; year++) {
-              timelineYears.push(year);
-            }
+            const timelineYears = getTimelineYears(minYear, maxYear);
             
             return timelineYears.map((year) => (
               <div

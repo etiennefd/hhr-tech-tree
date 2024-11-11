@@ -36,7 +36,7 @@ export async function GET() {
     const innovationRecords = await base("Innovations")
       .select({
         view: "Grid view",
-        maxRecords: 500,
+        maxRecords: 700,
         sort: [{ field: "Date", direction: "desc" }],
       })
       .all();
@@ -44,38 +44,79 @@ export async function GET() {
     const connectionRecords = await base("Connections")
       .select({
         view: "Grid view",
-        maxRecords: 500,
+        maxRecords: 700,
       })
       .all();
 
-    const nodes = await Promise.all(
-      innovationRecords.map(async (record) => ({
-        id: record.id,
-        title: String(record.get("Name") || ""),
-        tier: String(record.get("Tier") || ""),
-        image:
-          String(record.get("Image URL") || "") || // Check custom image first
-          (await getWikimediaImage(String(record.get("Wikipedia") || ""))) ||
-          "/api/placeholder/100/100",
-        year: Number(record.get("Date")) || 0,
-        dateDetails: String(record.get("Date details") || ""),
-        type: String(record.get("Type of innovation") || ""),
-        fields: String(record.get("Field(s)") || "")
-          .split(",")
-          .filter(Boolean)
-          .map((f) => f.trim()),
-        inventors: String(record.get("Inventor(s)") || "")
-          .split(",")
-          .filter(Boolean)
-          .map((i) => i.trim()),
-        organization: String(record.get("Organization") || ""),
-        city: String(record.get("City") || ""),
-        countryHistorical: String(record.get("Country (historical)") || ""),
-        countryModern: String(record.get("Country (modern borders)") || ""),
-        wikipedia: String(record.get("Wikipedia") || ""),
-        details: String(record.get("Details") || ""),
-      }))
-    );
+    console.log("Total records:", innovationRecords.length);
+
+    const nodes = (
+      await Promise.all(
+        innovationRecords
+          .filter((record) => {
+            const dateValue = record.get("Date");
+            if (!dateValue) {
+              console.log(
+                `Skipping node "${record.get("Name")}" - missing date`
+              );
+              return false;
+            }
+            const year = Number(dateValue);
+            if (isNaN(year)) {
+              console.log(
+                `Skipping node "${record.get(
+                  "Name"
+                )}" - invalid date format: ${dateValue}`
+              );
+              return false;
+            }
+            return true;
+          })
+          .map(async (record) => {
+            const year = Number(record.get("Date"));
+            return {
+              id: record.id,
+              title: String(record.get("Name") || ""),
+              tier: String(record.get("Tier") || ""),
+              image:
+                String(record.get("Image URL") || "") || // Check custom image first
+                (await getWikimediaImage(
+                  String(record.get("Wikipedia") || "")
+                )) ||
+                "/api/placeholder/100/100",
+              year,
+              dateDetails: String(record.get("Date details") || ""),
+              type: String(record.get("Type of innovation") || ""),
+              fields: String(record.get("Field(s)") || "")
+                .split(",")
+                .filter(Boolean)
+                .map((f) => f.trim()),
+              inventors: String(record.get("Inventor(s)") || "")
+                .split(",")
+                .filter(Boolean)
+                .map((i) => i.trim()),
+              organization: String(record.get("Organization") || ""),
+              city: String(record.get("City") || ""),
+              countryHistorical: String(
+                record.get("Country (historical)") || ""
+              ),
+              countryModern: String(
+                record.get("Country (modern borders)") || ""
+              ),
+              wikipedia: String(record.get("Wikipedia") || ""),
+              details: String(record.get("Details") || ""),
+            };
+          })
+      )
+    ).filter(Boolean); // Remove null entries
+
+    console.log("Nodes after filtering:", nodes.length);
+    if (nodes.length > 0) {
+      console.log("Date range:", {
+        min: Math.min(...nodes.map(n => n.year)),
+        max: Math.max(...nodes.map(n => n.year))
+      });
+    }
 
     // Create a Set of valid node IDs for quick lookup
     const validNodeIds = new Set(nodes.map((node) => node.id));
