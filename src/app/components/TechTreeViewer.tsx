@@ -10,7 +10,7 @@ import ConnectionLegend from "../components/connections/ConnectionLegend";
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1700;
 const YEAR_EARLY_MODERN = 1500;
-const YEAR_LATE_ANTIQUITY = -100;
+const YEAR_LATE_ANTIQUITY = -200;
 const YEAR_MIDDLE_ANTIQUITY = -1000;
 const YEAR_EARLY_ANTIQUITY = -5000;
 const YEAR_NEOLITHIC = -10000;
