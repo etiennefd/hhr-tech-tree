@@ -146,7 +146,7 @@ const TechTreeViewer = () => {
     // Transportation/Movement - Pinks
     Transportation: "#fde6e6", // Light pink
     Flying: "#fce8ef", // Soft rose
-    Navigation: "#ffeaf1", // Baby pink
+    Sailing: "#e6ecf2", // Light slate
 
     // Computing/Math - Grays/Silvers
     Computing: "#ebeef2", // Cool gray
@@ -178,7 +178,6 @@ const TechTreeViewer = () => {
     Military: "#ffeae6", // Pale coral
 
     // Other Technical Fields
-    Surveying: "#e6ecf2", // Light slate
     Optics: "#e8f0f7", // Pale sky
     Space: "#e6e9f7", // Light space gray
     Cartography: "#e9eff5", // Map blue
