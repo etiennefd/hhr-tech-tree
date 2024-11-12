@@ -32,9 +32,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
       <p className="text-xs mb-1">
         <strong>To:</strong> {targetTitle}
       </p>
-      <p className="text-xs mb-1">
-        <strong>Type:</strong> {type}
-      </p>
       {details && (
         <p className="text-xs">
           <strong>Details:</strong> {details}
