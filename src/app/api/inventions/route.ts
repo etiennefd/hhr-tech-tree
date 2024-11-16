@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import Airtable from "airtable";
+import fs from 'fs/promises';
+import path from 'path';
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID
@@ -8,7 +10,40 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
 // Constants
 const FETCH_TIMEOUT = 5000;
 const MAX_RETRIES = 2;
-const CONCURRENT_REQUESTS = 10; // Process 5 items at a time
+const CONCURRENT_REQUESTS = 10;
+const CACHE_FILE = path.join(process.cwd(), 'wikipedia-image-cache.json');
+const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+// Cache management functions
+async function loadImageCache() {
+  try {
+    const data = await fs.readFile(CACHE_FILE, 'utf8');
+    const cache = JSON.parse(data);
+    
+    // Filter out expired entries
+    const now = Date.now();
+    const validCache: Record<string, { url: string; timestamp: number }> = {};
+    
+    for (const [key, entry] of Object.entries(cache)) {
+      if (now - entry.timestamp < CACHE_DURATION) {
+        validCache[key] = entry;
+      }
+    }
+    
+    return validCache;
+  } catch (error) {
+    // If file doesn't exist or is invalid, return empty cache
+    return {};
+  }
+}
+
+async function saveImageCache(cache: Record<string, { url: string; timestamp: number }>) {
+  try {
+    await fs.writeFile(CACHE_FILE, JSON.stringify(cache, null, 2));
+  } catch (error) {
+    console.error('Error saving cache:', error);
+  }
+}
 
 async function fetchWithTimeout(url: string, timeout: number) {
   const controller = new AbortController();
@@ -29,12 +64,17 @@ async function fetchWithTimeout(url: string, timeout: number) {
   }
 }
 
-async function getWikimediaImage(wikipediaUrl: string, retryCount = 0) {
+async function getWikimediaImage(wikipediaUrl: string, cache: Record<string, { url: string; timestamp: number }>, retryCount = 0) {
   if (!wikipediaUrl) return null;
 
-  // Extract title from URL like https://en.wikipedia.org/wiki/Uranium
+  // Extract title from URL
   const title = wikipediaUrl.split("/wiki/")[1];
   if (!title) return null;
+
+  // Check cache first
+  if (cache[title]) {
+    return cache[title].url;
+  }
 
   try {
     const response = await fetchWithTimeout(
@@ -51,6 +91,11 @@ async function getWikimediaImage(wikipediaUrl: string, retryCount = 0) {
     const page = Object.values(data.query.pages)[0] as any;
 
     if (page?.thumbnail?.source) {
+      // Update cache
+      cache[title] = {
+        url: page.thumbnail.source,
+        timestamp: Date.now()
+      };
       return page.thumbnail.source;
     }
 
@@ -59,12 +104,10 @@ async function getWikimediaImage(wikipediaUrl: string, retryCount = 0) {
   } catch (error) {
     console.error(`Error fetching Wikimedia image for ${title}:`, error);
     
-    // Retry logic
     if (retryCount < MAX_RETRIES) {
       console.log(`Retrying fetch for ${title} (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-      // Exponential backoff: wait longer between each retry
       await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount)));
-      return getWikimediaImage(wikipediaUrl, retryCount + 1);
+      return getWikimediaImage(wikipediaUrl, cache, retryCount + 1);
     }
     
     return null;
@@ -90,50 +133,55 @@ export async function GET() {
   const startTime = Date.now();
   let timeMarkers = {
     airtableFetch: 0,
+    cacheLoad: 0,
     nodeProcessing: 0,
-    connectionProcessing: 0
+    connectionProcessing: 0,
+    cacheSave: 0
   };
 
   try {
+    // Load cache
+    console.log("Loading image cache...");
+    const cacheLoadStart = Date.now();
+    const imageCache = await loadImageCache();
+    timeMarkers.cacheLoad = Date.now() - cacheLoadStart;
+    console.log(`Cache loaded: ${Object.keys(imageCache).length} entries`);
+
     // Fetch records
     console.log("Starting Airtable fetch...");
     const fetchStart = Date.now();
 
-    const innovationRecords = await base("Innovations")
-      .select({
-        view: "Grid view",
-        sort: [{ field: "Date", direction: "desc" }],
-      })
-      .all();
-
-    const connectionRecords = await base("Connections")
-      .select({
-        view: "Grid view",
-      })
-      .all();
+    const [innovationRecords, connectionRecords] = await Promise.all([
+      base("Innovations")
+        .select({
+          view: "Grid view",
+          sort: [{ field: "Date", direction: "desc" }],
+        })
+        .all(),
+      base("Connections")
+        .select({
+          view: "Grid view",
+        })
+        .all()
+    ]);
 
     timeMarkers.airtableFetch = Date.now() - fetchStart;
     console.log(`Airtable fetch complete: ${timeMarkers.airtableFetch}ms`);
-    console.log(`Found ${innovationRecords.length} innovations and ${connectionRecords.length} connections`);
 
-    // Filter valid records first
+    // Filter valid records
     const validRecords = innovationRecords.filter((record) => {
       const dateValue = record.get("Date");
       if (!dateValue) {
-        console.log(`Skipping node "${record.get("Name")}" - missing date`);
         return false;
       }
       const year = Number(dateValue);
       if (isNaN(year)) {
-        console.log(
-          `Skipping node "${record.get("Name")}" - invalid date format: ${dateValue}`
-        );
         return false;
       }
       return true;
     });
 
-    // Process nodes in parallel batches
+    // Process nodes
     console.log("Starting node processing...");
     const nodeStart = Date.now();
 
@@ -147,8 +195,8 @@ export async function GET() {
             title: String(record.get("Name") || ""),
             tier: String(record.get("Tier") || ""),
             image:
-              String(record.get("Image URL") || "") || // Check custom image first
-              (await getWikimediaImage(String(record.get("Wikipedia") || ""))) ||
+              String(record.get("Image URL") || "") || 
+              (await getWikimediaImage(String(record.get("Wikipedia") || ""), imageCache)) ||
               "/placeholder-invention.png",
             year,
             dateDetails: String(record.get("Date details") || ""),
@@ -177,17 +225,20 @@ export async function GET() {
     );
 
     timeMarkers.nodeProcessing = Date.now() - nodeStart;
-    console.log(`Node processing complete: ${timeMarkers.nodeProcessing}ms`);
+
+    // Save updated cache
+    console.log("Saving updated cache...");
+    const cacheSaveStart = Date.now();
+    await saveImageCache(imageCache);
+    timeMarkers.cacheSave = Date.now() - cacheSaveStart;
 
     const validNodes = nodes.filter(Boolean);
-    console.log(`Successfully processed ${validNodes.length} nodes out of ${nodes.length} total`);
 
     // Process connections
-    console.log("Starting connection processing...");
+    console.log("Processing connections...");
     const connectionStart = Date.now();
 
     const validNodeIds = new Set(validNodes.map((node) => node.id));
-
     const links = connectionRecords
       .filter((record) => {
         const fromId = record.get("From")?.[0];
@@ -204,16 +255,17 @@ export async function GET() {
       }));
 
     timeMarkers.connectionProcessing = Date.now() - connectionStart;
-    console.log(`Connection processing complete: ${timeMarkers.connectionProcessing}ms`);
 
     // Log summary
     const totalTime = Date.now() - startTime;
     console.log("\nPerformance Summary:");
     console.log("-------------------");
-    console.log(`Airtable Fetch:      ${timeMarkers.airtableFetch}ms (${(timeMarkers.airtableFetch/totalTime*100).toFixed(1)}%)`);
-    console.log(`Node Processing:     ${timeMarkers.nodeProcessing}ms (${(timeMarkers.nodeProcessing/totalTime*100).toFixed(1)}%)`);
-    console.log(`Connection Process:  ${timeMarkers.connectionProcessing}ms (${(timeMarkers.connectionProcessing/totalTime*100).toFixed(1)}%)`);
-    console.log(`Total Time:          ${totalTime}ms`);
+    console.log(`Cache Load:         ${timeMarkers.cacheLoad}ms (${(timeMarkers.cacheLoad/totalTime*100).toFixed(1)}%)`);
+    console.log(`Airtable Fetch:     ${timeMarkers.airtableFetch}ms (${(timeMarkers.airtableFetch/totalTime*100).toFixed(1)}%)`);
+    console.log(`Node Processing:    ${timeMarkers.nodeProcessing}ms (${(timeMarkers.nodeProcessing/totalTime*100).toFixed(1)}%)`);
+    console.log(`Cache Save:         ${timeMarkers.cacheSave}ms (${(timeMarkers.cacheSave/totalTime*100).toFixed(1)}%)`);
+    console.log(`Connection Process: ${timeMarkers.connectionProcessing}ms (${(timeMarkers.connectionProcessing/totalTime*100).toFixed(1)}%)`);
+    console.log(`Total Time:         ${totalTime}ms`);
     console.log("-------------------");
 
     return NextResponse.json({ 
@@ -227,19 +279,13 @@ export async function GET() {
         counts: {
           totalRecords: innovationRecords.length,
           validNodes: validNodes.length,
-          connections: links.length
+          connections: links.length,
+          cachedImages: Object.keys(imageCache).length
         }
       }
     });
   } catch (error) {
-    console.error("Error details:", {
-      message: error.message,
-      statusCode: error.statusCode,
-      error: error,
-    });
-    return NextResponse.json(
-      { error: 'Internal Server Error' }, 
-      { status: 500 }
-    );
+    console.error("Error details:", error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
