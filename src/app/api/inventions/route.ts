@@ -5,9 +5,10 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID
 );
 
-// Constants for fetch configuration
-const FETCH_TIMEOUT = 5000; // 5 seconds
+// Constants
+const FETCH_TIMEOUT = 5000;
 const MAX_RETRIES = 2;
+const CONCURRENT_REQUESTS = 10; // Process 5 items at a time
 
 async function fetchWithTimeout(url: string, timeout: number) {
   const controller = new AbortController();
@@ -70,6 +71,21 @@ async function getWikimediaImage(wikipediaUrl: string, retryCount = 0) {
   }
 }
 
+// Helper function to process items in parallel with controlled concurrency
+async function processBatch<T, R>(
+  items: T[],
+  processFn: (item: T) => Promise<R>,
+  concurrency: number
+): Promise<R[]> {
+  const results: R[] = [];
+  for (let i = 0; i < items.length; i += concurrency) {
+    const batch = items.slice(i, i + concurrency);
+    const batchResults = await Promise.all(batch.map(processFn));
+    results.push(...batchResults);
+  }
+  return results;
+}
+
 export async function GET() {
   const startTime = Date.now();
   let timeMarkers = {
@@ -100,59 +116,64 @@ export async function GET() {
     console.log(`Airtable fetch complete: ${timeMarkers.airtableFetch}ms`);
     console.log(`Found ${innovationRecords.length} innovations and ${connectionRecords.length} connections`);
 
-    // Process nodes
+    // Filter valid records first
+    const validRecords = innovationRecords.filter((record) => {
+      const dateValue = record.get("Date");
+      if (!dateValue) {
+        console.log(`Skipping node "${record.get("Name")}" - missing date`);
+        return false;
+      }
+      const year = Number(dateValue);
+      if (isNaN(year)) {
+        console.log(
+          `Skipping node "${record.get("Name")}" - invalid date format: ${dateValue}`
+        );
+        return false;
+      }
+      return true;
+    });
+
+    // Process nodes in parallel batches
     console.log("Starting node processing...");
     const nodeStart = Date.now();
 
-    const nodes = await Promise.all(
-      innovationRecords
-        .filter((record) => {
-          const dateValue = record.get("Date");
-          if (!dateValue) {
-            return false;
-          }
-          const year = Number(dateValue);
-          if (isNaN(year)) {
-            return false;
-          }
-          return true;
-        })
-        .map(async (record, index) => {
-          await new Promise(resolve => setTimeout(resolve, index * 100));
-
-          const year = Number(record.get("Date"));
-          try {
-            return {
-              id: record.id,
-              title: String(record.get("Name") || ""),
-              tier: String(record.get("Tier") || ""),
-              image:
-                String(record.get("Image URL") || "") || // Check custom image first
-                (await getWikimediaImage(String(record.get("Wikipedia") || ""))) ||
-                "/placeholder-invention.png",
-              year,
-              dateDetails: String(record.get("Date details") || ""),
-              type: String(record.get("Type of innovation") || ""),
-              fields: String(record.get("Field(s)") || "")
-                .split(",")
-                .filter(Boolean)
-                .map((f) => f.trim()),
-              inventors: String(record.get("Inventor(s)") || "")
-                .split(",")
-                .filter(Boolean)
-                .map((i) => i.trim()),
-              organization: String(record.get("Organization") || ""),
-              city: String(record.get("City") || ""),
-              countryHistorical: String(record.get("Country (historical)") || ""),
-              countryModern: String(record.get("Country (modern borders)") || ""),
-              wikipedia: String(record.get("Wikipedia") || ""),
-              details: String(record.get("Details") || ""),
-            };
-          } catch (error) {
-            console.error(`Error processing node ${record.get("Name")}:`, error);
-            return null;
-          }
-        })
+    const nodes = await processBatch(
+      validRecords,
+      async (record) => {
+        const year = Number(record.get("Date"));
+        try {
+          return {
+            id: record.id,
+            title: String(record.get("Name") || ""),
+            tier: String(record.get("Tier") || ""),
+            image:
+              String(record.get("Image URL") || "") || // Check custom image first
+              (await getWikimediaImage(String(record.get("Wikipedia") || ""))) ||
+              "/placeholder-invention.png",
+            year,
+            dateDetails: String(record.get("Date details") || ""),
+            type: String(record.get("Type of innovation") || ""),
+            fields: String(record.get("Field(s)") || "")
+              .split(",")
+              .filter(Boolean)
+              .map((f) => f.trim()),
+            inventors: String(record.get("Inventor(s)") || "")
+              .split(",")
+              .filter(Boolean)
+              .map((i) => i.trim()),
+            organization: String(record.get("Organization") || ""),
+            city: String(record.get("City") || ""),
+            countryHistorical: String(record.get("Country (historical)") || ""),
+            countryModern: String(record.get("Country (modern borders)") || ""),
+            wikipedia: String(record.get("Wikipedia") || ""),
+            details: String(record.get("Details") || ""),
+          };
+        } catch (error) {
+          console.error(`Error processing node ${record.get("Name")}:`, error);
+          return null;
+        }
+      },
+      CONCURRENT_REQUESTS
     );
 
     timeMarkers.nodeProcessing = Date.now() - nodeStart;
