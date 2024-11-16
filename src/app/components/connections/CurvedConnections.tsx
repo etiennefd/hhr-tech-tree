@@ -24,6 +24,7 @@ interface CurvedConnectionsProps {
   sourceTitle: string;
   targetTitle: string;
   details?: string;
+  opacity?: number;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
@@ -35,7 +36,8 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onMouseLeave,
   sourceTitle,
   targetTitle,
-  details
+  details,
+  opacity = 1
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -84,7 +86,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     // Add opacity based on hover/highlight state
     return {
       ...style,
-      strokeOpacity: isActive ? 1 : 0.3,
+      strokeOpacity: isActive ? opacity : 0.3 * opacity, // Multiply by opacity
       strokeWidth: isActive ? style.strokeWidth + 1 : style.strokeWidth,
       ...(['Speculative', 'Inspiration', 'Independently invented'].includes(type) 
         ? { strokeDasharray: type === 'Independently invented' ? '10,3' : '5,5' }

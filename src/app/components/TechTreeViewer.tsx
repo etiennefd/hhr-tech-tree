@@ -212,11 +212,11 @@ const TechTreeViewer = () => {
     width: 0,
     height: 0,
   });
-
   const [data, setData] = useState<{ nodes: any[]; links: any[] }>({
     nodes: [],
     links: [],
   });
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -313,6 +313,33 @@ const TechTreeViewer = () => {
     setFilteredNodes(filtered);
   }, [searchTerm, data.nodes]);
 
+  // Add handler for clicks outside nodes
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      // Check if click was outside any node or tooltip
+      if (!target.closest(".tech-node") && !target.closest(".node-tooltip")) {
+        setSelectedNodeId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Helper function to check if a node is adjacent to selected node
+  const isAdjacentToSelected = useCallback(
+    (nodeId: string) => {
+      if (!selectedNodeId) return false;
+      return data.links.some(
+        (link) =>
+          (link.source === selectedNodeId && link.target === nodeId) ||
+          (link.target === selectedNodeId && link.source === nodeId)
+      );
+    },
+    [selectedNodeId, data.links]
+  );
+
   // Memoized helper functions
   const formatYear = useCallback((year: number) => {
     const absYear = Math.abs(year);
@@ -321,6 +348,9 @@ const TechTreeViewer = () => {
 
   const shouldHighlightLink = useCallback(
     (link: any, index: number) => {
+      if (selectedNodeId) {
+        return link.source === selectedNodeId || link.target === selectedNodeId;
+      }
       if (hoveredLinkIndex === index) return true;
       if (
         hoveredNodeId &&
@@ -329,7 +359,7 @@ const TechTreeViewer = () => {
         return true;
       return false;
     },
-    [hoveredLinkIndex, hoveredNodeId]
+    [hoveredLinkIndex, hoveredNodeId, selectedNodeId]
   );
 
   const containerWidth = useMemo(
@@ -411,6 +441,8 @@ const TechTreeViewer = () => {
 
               if (!sourceNode || !targetNode) return null;
 
+              const isHighlighted = shouldHighlightLink(link, index);
+
               return (
                 <CurvedConnections
                   key={index}
@@ -423,7 +455,8 @@ const TechTreeViewer = () => {
                     y: targetNode.y || 150,
                   }}
                   connectionType={link.type}
-                  isHighlighted={shouldHighlightLink(link, index)}
+                  isHighlighted={isHighlighted}
+                  opacity={selectedNodeId && !isHighlighted ? 0.2 : 1}
                   onMouseEnter={() => setHoveredLinkIndex(index)}
                   onMouseLeave={() => setHoveredLinkIndex(null)}
                   sourceTitle={sourceNode.title}
@@ -438,17 +471,29 @@ const TechTreeViewer = () => {
           {filteredNodes.map((node) => (
             <div
               key={node.id}
-              className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer"
+              className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer tech-node"
               style={{
                 left: `${getXPosition(node.year)}px`,
                 top: `${node.y}px`,
                 width: NODE_WIDTH,
                 transform: "translate(-60px, -75px)",
-                opacity: hoveredNodeId && hoveredNodeId !== node.id ? 0.5 : 1,
+                opacity: selectedNodeId
+                  ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
+                    ? 1
+                    : 0.2
+                  : hoveredNodeId && hoveredNodeId !== node.id
+                  ? 0.5
+                  : 1,
+                backgroundColor:
+                  node.id === selectedNodeId
+                    ? "#f0f7ff"
+                    : "rgba(255, 255, 255, 0.9)",
               }}
-              onClick={() => {
-                if (node.wikipedia) {
-                  window.open(node.wikipedia, "_blank", "noopener,noreferrer");
+              onClick={(e) => {
+                if (node.id === selectedNodeId) {
+                  setSelectedNodeId(null);
+                } else {
+                  setSelectedNodeId(node.id);
                 }
               }}
               onMouseEnter={() => {
@@ -456,8 +501,10 @@ const TechTreeViewer = () => {
                 setHoveredNodeId(node.id);
               }}
               onMouseLeave={() => {
-                setHoveredNode(null);
-                setHoveredNodeId(null);
+                if (node.id !== selectedNodeId) {
+                  setHoveredNode(null);
+                  setHoveredNodeId(null);
+                }
               }}
             >
               <img
@@ -483,9 +530,20 @@ const TechTreeViewer = () => {
               </div>
 
               {/* Tooltip */}
-              {hoveredNode?.id === node.id && (
-                <div className="absolute z-[1000] bg-white border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64">
-                  {/* Also removed the backdrop-blur and reduced transparency for better readability */}
+              {(hoveredNode?.id === node.id || selectedNodeId === node.id) && (
+                <div
+                  className="absolute z-[1000] bg-white border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64 node-tooltip"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (node.wikipedia) {
+                      window.open(
+                        node.wikipedia,
+                        "_blank",
+                        "noopener,noreferrer"
+                      );
+                    }
+                  }}
+                >
                   <p className="text-xs mb-1">
                     <strong>Date:</strong> {formatYear(node.year)}
                     {node.dateDetails && ` (${node.dateDetails})`}
@@ -523,40 +581,40 @@ const TechTreeViewer = () => {
               )}
             </div>
           ))}
-        </div>
 
-        {/* Timeline - keeping original implementation */}
-        <div
-          className="sticky bottom-0 h-16 bg-white border-t"
-          style={{
-            width: containerWidth,
-            transform: `scale(${zoom})`,
-            transformOrigin: "bottom left",
-            zIndex: 50,
-          }}
-        >
-          {(() => {
-            if (!data.nodes.length) return null;
+          {/* Timeline - keeping original implementation */}
+          <div
+            className="sticky bottom-0 h-16 bg-white border-t"
+            style={{
+              width: containerWidth,
+              transform: `scale(${zoom})`,
+              transformOrigin: "bottom left",
+              zIndex: 50,
+            }}
+          >
+            {(() => {
+              if (!data.nodes.length) return null;
 
-            const years = data.nodes.map((n) => n.year);
-            const minYear = Math.min(...years);
-            const maxYear = Math.max(...years);
+              const years = data.nodes.map((n) => n.year);
+              const minYear = Math.min(...years);
+              const maxYear = Math.max(...years);
 
-            const timelineYears = getTimelineYears(minYear, maxYear);
+              const timelineYears = getTimelineYears(minYear, maxYear);
 
-            return timelineYears.map((year) => (
-              <div
-                key={year}
-                className="absolute text-sm text-gray-500"
-                style={{
-                  left: `${getXPosition(year)}px`,
-                  transform: "translateX(-50%)",
-                }}
-              >
-                {formatYear(year)}
-              </div>
-            ));
-          })()}
+              return timelineYears.map((year) => (
+                <div
+                  key={year}
+                  className="absolute text-sm text-gray-500"
+                  style={{
+                    left: `${getXPosition(year)}px`,
+                    transform: "translateX(-50%)",
+                  }}
+                >
+                  {formatYear(year)}
+                </div>
+              ));
+            })()}
+          </div>
         </div>
       </div>
     </div>
