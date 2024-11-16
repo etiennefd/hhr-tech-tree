@@ -220,6 +220,7 @@ const TechTreeViewer = () => {
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(
     null
   );
+  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -366,16 +367,10 @@ const TechTreeViewer = () => {
       }
       // If a link is being hovered
       if (hoveredLinkIndex === index) return true;
-      // If a node is being hovered
-      if (
-        hoveredNodeId &&
-        (link.source === hoveredNodeId || link.target === hoveredNodeId)
-      )
-        return true;
-      // No selection or hover - link should be fully visible
+      // Remove the hoveredNodeId check
       return false;
     },
-    [hoveredLinkIndex, hoveredNodeId, selectedNodeId, selectedLinkIndex]
+    [hoveredLinkIndex, selectedNodeId, selectedLinkIndex]
   );
 
   const isNodeConnectedToSelectedLink = useCallback(
@@ -482,7 +477,7 @@ const TechTreeViewer = () => {
                   connectionType={link.type}
                   isHighlighted={shouldHighlightLink(link, index)}
                   opacity={
-                    (selectedNodeId || selectedLinkIndex !== null) &&
+                    (selectedNodeId || selectedLinkIndex !== null || hoveredLinkIndex !== null) && 
                     !shouldHighlightLink(link, index)
                       ? 0.2
                       : 1
@@ -506,83 +501,98 @@ const TechTreeViewer = () => {
           </svg>
 
           {/* Nodes */}
-          {filteredNodes.map((node) => (
-            <div
-              key={node.id}
-              className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer tech-node"
-              style={{
-                left: `${getXPosition(node.year)}px`,
-                top: `${node.y}px`,
-                width: NODE_WIDTH,
-                transform: "translate(-60px, -75px)",
-                opacity: selectedNodeId
-                  ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
-                    ? 1
-                    : 0.2
-                  : selectedLinkIndex !== null
-                  ? isNodeConnectedToSelectedLink(node.id)
-                    ? 1
-                    : 0.2
-                  : hoveredNodeId && hoveredNodeId !== node.id
-                  ? 0.5
-                  : 1,
-                backgroundColor:
-                  node.id === selectedNodeId
-                    ? "#f0f7ff"
-                    : "rgba(255, 255, 255, 0.9)",
-              }}
-              onClick={(e) => {
-                if (node.id === selectedNodeId) {
-                  setSelectedNodeId(null);
-                } else {
-                  setSelectedNodeId(node.id);
-                }
-              }}
-              onMouseEnter={() => {
-                setHoveredNode(node);
-                setHoveredNodeId(node.id);
-              }}
-              onMouseLeave={() => {
-                if (node.id !== selectedNodeId) {
-                  setHoveredNode(null);
-                  setHoveredNodeId(null);
-                }
-              }}
-            >
-              <img
-                src={node.image}
-                alt={node.title}
-                className="w-full h-20 object-cover rounded mb-2"
-              />
-              <h3 className="text-sm font-medium line-clamp-2">{node.title}</h3>
-              <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
-              <div className="flex flex-wrap gap-1">
-                {node.fields.map((field) => (
-                  <span
-                    key={field}
-                    className="text-[10px] px-1.5 py-0.5 rounded"
-                    style={{
-                      backgroundColor: fieldColors[field] || "#f0f0f0",
-                      color: "#333",
-                    }}
-                  >
-                    {field}
-                  </span>
-                ))}
+          <div className="relative" style={{ zIndex: 1 }}>
+            {filteredNodes.map((node) => (
+              <div
+                key={node.id}
+                className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer tech-node"
+                style={{
+                  left: `${getXPosition(node.year)}px`,
+                  top: `${node.y}px`,
+                  width: NODE_WIDTH,
+                  transform: "translate(-60px, -75px)",
+                  opacity: selectedNodeId
+                    ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
+                      ? 1
+                      : 0.2
+                    : selectedLinkIndex !== null
+                    ? isNodeConnectedToSelectedLink(node.id)
+                      ? 1
+                      : 0.2
+                    : 1,
+                  backgroundColor:
+                    node.id === selectedNodeId
+                      ? "#f0f7ff"
+                      : "rgba(255, 255, 255, 0.9)",
+                }}
+                onClick={(e) => {
+                  if (node.id === selectedNodeId) {
+                    setSelectedNodeId(null);
+                  } else {
+                    setSelectedNodeId(node.id);
+                  }
+                }}
+                onMouseEnter={() => {
+                  setHoveredNode(node);
+                  setHoveredNodeId(node.id);
+                }}
+                onMouseLeave={() => {
+                  if (!isTooltipHovered && node.id !== selectedNodeId) {
+                    setHoveredNode(null);
+                    setHoveredNodeId(null);
+                  }
+                }}
+              >
+                <img
+                  src={node.image}
+                  alt={node.title}
+                  className="w-full h-20 object-cover rounded mb-2"
+                />
+                <h3 className="text-sm font-medium line-clamp-2">{node.title}</h3>
+                <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
+                <div className="flex flex-wrap gap-1">
+                  {node.fields.map((field) => (
+                    <span
+                      key={field}
+                      className="text-[10px] px-1.5 py-0.5 rounded"
+                      style={{
+                        backgroundColor: fieldColors[field] || "#f0f0f0",
+                        color: "#333",
+                      }}
+                    >
+                      {field}
+                    </span>
+                  ))}
+                </div>
               </div>
-
-              {/* Tooltip */}
-              {(hoveredNode?.id === node.id || selectedNodeId === node.id) && (
+            ))}
+          </div>
+          
+          {/* Tooltips */}
+          <div className="relative" style={{ zIndex: 2 }}>
+            {filteredNodes.map((node) => (
+              (hoveredNode?.id === node.id || selectedNodeId === node.id) && (
                 <div
-                  className="absolute z-[1000] bg-white border rounded-lg p-3 shadow-lg -bottom-24 left-1/2 transform -translate-x-1/2 w-64 node-tooltip"
+                  key={`tooltip-${node.id}`}
+                  className="absolute bg-white border rounded-lg p-3 shadow-lg node-tooltip"
+                  style={{
+                    left: `${getXPosition(node.year)}px`,
+                    top: `${node.y - 75}px`,
+                    transform: "translate(-50%, 100%)",
+                    width: "16rem",
+                  }}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (node.wikipedia) {
-                      window.open(
-                        node.wikipedia,
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
+                      window.open(node.wikipedia, "_blank", "noopener,noreferrer");
+                    }
+                  }}
+                  onMouseEnter={() => setIsTooltipHovered(true)}
+                  onMouseLeave={() => {
+                    setIsTooltipHovered(false);
+                    if (node.id !== selectedNodeId) {
+                      setHoveredNode(null);
+                      setHoveredNodeId(null);
                     }
                   }}
                 >
@@ -620,9 +630,9 @@ const TechTreeViewer = () => {
                     </p>
                   )}
                 </div>
-              )}
-            </div>
-          ))}
+              )
+            ))}
+          </div>
 
           {/* Timeline - keeping original implementation */}
           <div
