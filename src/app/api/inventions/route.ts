@@ -71,7 +71,18 @@ async function getWikimediaImage(wikipediaUrl: string, retryCount = 0) {
 }
 
 export async function GET() {
+  const startTime = Date.now();
+  let timeMarkers = {
+    airtableFetch: 0,
+    nodeProcessing: 0,
+    connectionProcessing: 0
+  };
+
   try {
+    // Fetch records
+    console.log("Starting Airtable fetch...");
+    const fetchStart = Date.now();
+
     const innovationRecords = await base("Innovations")
       .select({
         view: "Grid view",
@@ -85,28 +96,28 @@ export async function GET() {
       })
       .all();
 
-    console.log("Total records:", innovationRecords.length);
+    timeMarkers.airtableFetch = Date.now() - fetchStart;
+    console.log(`Airtable fetch complete: ${timeMarkers.airtableFetch}ms`);
+    console.log(`Found ${innovationRecords.length} innovations and ${connectionRecords.length} connections`);
 
-    // Process nodes with rate limiting
+    // Process nodes
+    console.log("Starting node processing...");
+    const nodeStart = Date.now();
+
     const nodes = await Promise.all(
       innovationRecords
         .filter((record) => {
           const dateValue = record.get("Date");
           if (!dateValue) {
-            console.log(`Skipping node "${record.get("Name")}" - missing date`);
             return false;
           }
           const year = Number(dateValue);
           if (isNaN(year)) {
-            console.log(
-              `Skipping node "${record.get("Name")}" - invalid date format: ${dateValue}`
-            );
             return false;
           }
           return true;
         })
         .map(async (record, index) => {
-          // Add a small delay between requests to avoid overwhelming the API
           await new Promise(resolve => setTimeout(resolve, index * 100));
 
           const year = Number(record.get("Date"));
@@ -144,15 +155,15 @@ export async function GET() {
         })
     );
 
-    // Rest of your code remains the same...
+    timeMarkers.nodeProcessing = Date.now() - nodeStart;
+    console.log(`Node processing complete: ${timeMarkers.nodeProcessing}ms`);
+
     const validNodes = nodes.filter(Boolean);
-    console.log("Nodes after filtering:", validNodes.length);
-    if (validNodes.length > 0) {
-      console.log("Date range:", {
-        min: Math.min(...validNodes.map(n => n.year)),
-        max: Math.max(...validNodes.map(n => n.year))
-      });
-    }
+    console.log(`Successfully processed ${validNodes.length} nodes out of ${nodes.length} total`);
+
+    // Process connections
+    console.log("Starting connection processing...");
+    const connectionStart = Date.now();
 
     const validNodeIds = new Set(validNodes.map((node) => node.id));
 
@@ -171,14 +182,34 @@ export async function GET() {
         details: String(record.get("Details") || ""),
       }));
 
-    console.log("Sample connections:", links.slice(0, 5));
-    console.log(
-      "Connection types found:",
-      new Set(links.map((link) => link.type))
-    );
-    console.log("Total connections:", links.length);
+    timeMarkers.connectionProcessing = Date.now() - connectionStart;
+    console.log(`Connection processing complete: ${timeMarkers.connectionProcessing}ms`);
 
-    return NextResponse.json({ nodes: validNodes, links });
+    // Log summary
+    const totalTime = Date.now() - startTime;
+    console.log("\nPerformance Summary:");
+    console.log("-------------------");
+    console.log(`Airtable Fetch:      ${timeMarkers.airtableFetch}ms (${(timeMarkers.airtableFetch/totalTime*100).toFixed(1)}%)`);
+    console.log(`Node Processing:     ${timeMarkers.nodeProcessing}ms (${(timeMarkers.nodeProcessing/totalTime*100).toFixed(1)}%)`);
+    console.log(`Connection Process:  ${timeMarkers.connectionProcessing}ms (${(timeMarkers.connectionProcessing/totalTime*100).toFixed(1)}%)`);
+    console.log(`Total Time:          ${totalTime}ms`);
+    console.log("-------------------");
+
+    return NextResponse.json({ 
+      nodes: validNodes, 
+      links,
+      _debug: {
+        timing: {
+          ...timeMarkers,
+          total: totalTime
+        },
+        counts: {
+          totalRecords: innovationRecords.length,
+          validNodes: validNodes.length,
+          connections: links.length
+        }
+      }
+    });
   } catch (error) {
     console.error("Error details:", {
       message: error.message,
