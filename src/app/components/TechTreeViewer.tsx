@@ -365,12 +365,15 @@ const TechTreeViewer = () => {
       if (selectedLinkIndex !== null) {
         return index === selectedLinkIndex;
       }
+      // If a node is being hovered
+      if (hoveredNodeId) {
+        return link.source === hoveredNodeId || link.target === hoveredNodeId;
+      }
       // If a link is being hovered
       if (hoveredLinkIndex === index) return true;
-      // Remove the hoveredNodeId check
       return false;
     },
-    [hoveredLinkIndex, selectedNodeId, selectedLinkIndex]
+    [hoveredLinkIndex, hoveredNodeId, selectedNodeId, selectedLinkIndex]
   );
 
   const isNodeConnectedToSelectedLink = useCallback(
@@ -477,8 +480,8 @@ const TechTreeViewer = () => {
                   connectionType={link.type}
                   isHighlighted={shouldHighlightLink(link, index)}
                   opacity={
-                    (selectedNodeId || selectedLinkIndex !== null || hoveredLinkIndex !== null) && 
-                    !shouldHighlightLink(link, index)
+                    // If something is selected, non-highlighted links become transparent
+                    (selectedNodeId || selectedLinkIndex !== null) && !shouldHighlightLink(link, index)
                       ? 0.2
                       : 1
                   }
@@ -537,7 +540,8 @@ const TechTreeViewer = () => {
                   setHoveredNodeId(node.id);
                 }}
                 onMouseLeave={() => {
-                  if (!isTooltipHovered && node.id !== selectedNodeId) {
+                  // Only keep hover if this is the selected node
+                  if (node.id !== selectedNodeId) {
                     setHoveredNode(null);
                     setHoveredNodeId(null);
                   }
@@ -577,8 +581,8 @@ const TechTreeViewer = () => {
                   className="absolute bg-white border rounded-lg p-3 shadow-lg node-tooltip"
                   style={{
                     left: `${getXPosition(node.year)}px`,
-                    top: `${node.y - 75}px`,
-                    transform: "translate(-50%, 100%)",
+                    top: `${node.y + 100}px`,  // Instead of node.y - 75, position it below the node
+                    transform: "translate(-50%, 0)",  // Remove the 100% translation since we're positioning from top
                     width: "16rem",
                   }}
                   onClick={(e) => {
@@ -590,6 +594,7 @@ const TechTreeViewer = () => {
                   onMouseEnter={() => setIsTooltipHovered(true)}
                   onMouseLeave={() => {
                     setIsTooltipHovered(false);
+                    // Only clear hover if this isn't the selected node
                     if (node.id !== selectedNodeId) {
                       setHoveredNode(null);
                       setHoveredNodeId(null);
