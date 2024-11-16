@@ -25,6 +25,7 @@ interface CurvedConnectionsProps {
   targetTitle: string;
   details?: string;
   opacity?: number;
+  onSelect?: () => void;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
@@ -37,7 +38,8 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   sourceTitle,
   targetTitle,
   details,
-  opacity = 1
+  opacity = 1,
+  onSelect
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -137,6 +139,10 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           onMouseLeave?.();
           setMousePos(null);
         }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect?.();
+        }}
         onMouseMove={handleMouseMove}
         style={{ pointerEvents: 'all' }}
       >
@@ -181,9 +187,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
             </div>
             <div className="mb-1">
               <span className="font-semibold">To:</span> {targetTitle}
-            </div>
-            <div className="mb-1">
-              <span className="font-semibold">Type:</span> {connectionType}
             </div>
             {details && (
               <div className="mb-1">

@@ -217,6 +217,9 @@ const TechTreeViewer = () => {
     links: [],
   });
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(
+    null
+  );
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -317,14 +320,19 @@ const TechTreeViewer = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      // Check if click was outside any node or tooltip
-      if (!target.closest(".tech-node") && !target.closest(".node-tooltip")) {
+      if (!target.closest('.tech-node') && 
+          !target.closest('.node-tooltip') && 
+          !target.closest('.connection')) {
         setSelectedNodeId(null);
+        setSelectedLinkIndex(null);
+        setHoveredNode(null);
+        setHoveredNodeId(null);
+        setHoveredLinkIndex(null);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Helper function to check if a node is adjacent to selected node
@@ -348,18 +356,35 @@ const TechTreeViewer = () => {
 
   const shouldHighlightLink = useCallback(
     (link: any, index: number) => {
+      // If a node is selected
       if (selectedNodeId) {
         return link.source === selectedNodeId || link.target === selectedNodeId;
       }
+      // If a link is selected
+      if (selectedLinkIndex !== null) {
+        return index === selectedLinkIndex;
+      }
+      // If a link is being hovered
       if (hoveredLinkIndex === index) return true;
+      // If a node is being hovered
       if (
         hoveredNodeId &&
         (link.source === hoveredNodeId || link.target === hoveredNodeId)
       )
         return true;
+      // No selection or hover - link should be fully visible
       return false;
     },
-    [hoveredLinkIndex, hoveredNodeId, selectedNodeId]
+    [hoveredLinkIndex, hoveredNodeId, selectedNodeId, selectedLinkIndex]
+  );
+
+  const isNodeConnectedToSelectedLink = useCallback(
+    (nodeId: string) => {
+      if (selectedLinkIndex === null) return false;
+      const selectedLink = data.links[selectedLinkIndex];
+      return selectedLink.source === nodeId || selectedLink.target === nodeId;
+    },
+    [selectedLinkIndex, data.links]
   );
 
   const containerWidth = useMemo(
@@ -455,10 +480,23 @@ const TechTreeViewer = () => {
                     y: targetNode.y || 150,
                   }}
                   connectionType={link.type}
-                  isHighlighted={isHighlighted}
-                  opacity={selectedNodeId && !isHighlighted ? 0.2 : 1}
+                  isHighlighted={shouldHighlightLink(link, index)}
+                  opacity={
+                    (selectedNodeId || selectedLinkIndex !== null) &&
+                    !shouldHighlightLink(link, index)
+                      ? 0.2
+                      : 1
+                  }
                   onMouseEnter={() => setHoveredLinkIndex(index)}
                   onMouseLeave={() => setHoveredLinkIndex(null)}
+                  onSelect={() => {
+                    if (selectedLinkIndex === index) {
+                      setSelectedLinkIndex(null);
+                    } else {
+                      setSelectedLinkIndex(index);
+                      setSelectedNodeId(null); // Clear any selected node
+                    }
+                  }}
                   sourceTitle={sourceNode.title}
                   targetTitle={targetNode.title}
                   details={link.details}
@@ -479,6 +517,10 @@ const TechTreeViewer = () => {
                 transform: "translate(-60px, -75px)",
                 opacity: selectedNodeId
                   ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
+                    ? 1
+                    : 0.2
+                  : selectedLinkIndex !== null
+                  ? isNodeConnectedToSelectedLink(node.id)
                     ? 1
                     : 0.2
                   : hoveredNodeId && hoveredNodeId !== node.id
