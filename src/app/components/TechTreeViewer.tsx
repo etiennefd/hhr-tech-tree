@@ -118,8 +118,8 @@ function calculateXPosition(
 const TechTreeViewer = () => {
   // Constants
   const NODE_WIDTH = 160;
-  const VERTICAL_SPACING = 160;
-  const YEAR_WIDTH = 180;
+  const VERTICAL_SPACING = 200;
+  const YEAR_WIDTH = 200;
   const PADDING = 120;
   const BASE_Y = 600; // Lowered from 600 to give more space above
 
