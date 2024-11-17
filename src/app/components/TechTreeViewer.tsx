@@ -124,79 +124,62 @@ const TechTreeViewer = () => {
   const BASE_Y = 600; // Lowered from 600 to give more space above
 
   const fieldColors = {
-    // Life Sciences - Greens
-    Biology: "#e0f0e3", // Sage green
-    Medicine: "#dcefe7", // Hospital green
+    // Food
+    Food: "#e5f2e5", // Fresh green
     Agriculture: "#e8f4d9", // Light lime
     "Animal husbandry": "#eaf2dc", // Soft olive
+    "Hunting and fishing": "#e5eee5", // Forest green
 
-    // Physical Sciences - Purples/Blues
+    // Life Sciences
+    Biology: "#e0f0e3", // Sage green
+    Medicine: "#dcefe7", // Hospital green
+    Sanitation: "#e0eee8", // Mint
+
+    // Physical Sciences
     Physics: "#e6e1f4", // Soft purple
     Chemistry: "#e9e4f7", // Light violet
     Astronomy: "#e1e5ff", // Light periwinkle
     Geology: "#e8e4f1", // Dusty purple
     Meteorology: "#e1f2f7", // Sky blue
-
-    // Engineering/Tech - Yellows/Oranges
+    Optics: "#e8f0f7", // Pale sky
     Electricity: "#fff4d9", // Pale yellow
     Electronics: "#ffefd4", // Light orange
     Energy: "#ffecd9", // Peach
-    Machinery: "#fae6d9", // Soft orange
+    Lighting: "#fff9e6", // Warm light yellow
 
-    // Transportation/Movement - Pinks
-    Transportation: "#fde6e6", // Light pink
-    Flying: "#fce8ef", // Soft rose
-    Sailing: "#e6ecf2", // Light slate
-
-    // Computing/Math - Grays/Silvers
-    Computing: "#ebeef2", // Cool gray
-    Mathematics: "#e8ecf2", // Silver blue
-    Measurement: "#e5e9f0", // Pale slate
-
-    // Construction/Materials - Browns/Tans
+    // Construction/Materials
     Construction: "#f2e6d9", // Light tan
     Mining: "#f0e6db", // Soft beige
     Metallurgy: "#efe5d6", // Pale bronze
-
-    // Culture/Arts - Soft reds/Pinks
-    Art: "#ffe6eb", // Rose pink
-    Entertainment: "#ffe6e6", // Light coral
-    Music: "#ffeaf2", // Soft pink
-
-    // Communications/Information - Blues
-    Communications: "#e1f0f5", // Light cyan
-    Printing: "#deeaf3", // Powder blue
-    Imaging: "#e4f1f6", // Pale blue
-
-    // Environmental/Natural - Greens/Blues
-    Sanitation: "#e0eee8", // Mint
+    Manufacturing: "#f7e6d9", // Light clay
+    Textiles: "#f9e6ef", // Soft fabric pink
     Hydraulics: "#e0f0f0", // Aqua
-    Food: "#e5f2e5", // Fresh green
-
-    // Safety/Protection - Red tones
-    Security: "#ffe6e6", // Light red
-    Military: "#ffeae6", // Pale coral
-
-    // Other Technical Fields
-    Optics: "#e8f0f7", // Pale sky
+   
+    // Transportation/Movement
+    Transportation: "#fde6e6", // Light pink
+    Flying: "#fce8ef", // Soft rose
+    Sailing: "#e6ecf2", // Light slate
     Space: "#e6e9f7", // Light space gray
     Cartography: "#e9eff5", // Map blue
 
-    // Industrial/Craft
-    Crafts: "#f7e6d9", // Light clay
-    Textiles: "#f9e6ef", // Soft fabric pink
+    // Computing/Math
+    Mathematics: "#e8ecf2", // Silver blue
+    Measurement: "#e5e9f0", // Pale slate
+    Timekeeping: "#f0f0f5", // Clock gray
+    Computing: "#ebeef2", // Cool gray
 
-    // Governance/Systems
+    // Safety/Protection/Governance
+    Security: "#ffe6e6", // Light red
+    Military: "#ffeae6", // Pale coral
     Finance: "#e6eaf0", // Banking gray
     Law: "#e9e9f2", // Justice gray
     Governance: "#e6e6f0", // Official gray
 
-    // Resource/Nature
-    "Hunting and fishing": "#e5eee5", // Forest green
-    Lighting: "#fff9e6", // Warm light yellow
-
-    // Time
-    Timekeeping: "#f0f0f5", // Clock gray
+    // Culture 
+    Communication: "#e1f0f5", // Light cyan
+    "Visual media": "#ffe6eb", // Rose pink
+    Entertainment: "#ffe6e6", // Light coral
+    Music: "#ffeaf2", // Soft pink
   };
 
   // State
