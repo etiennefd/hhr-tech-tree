@@ -206,6 +206,7 @@ const TechTreeViewer = () => {
     null
   );
   const [isTooltipHovered, setIsTooltipHovered] = useState(false);
+  const [totalHeight, setTotalHeight] = useState(1000); // Default height
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -219,12 +220,12 @@ const TechTreeViewer = () => {
   // Calculate node positions with improved vertical distribution
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
-
+  
     const minYear = Math.min(...nodes.map((n) => n.year));
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
     const positionedNodes = [];
     const yearGroups = new Map();
-
+  
     // First pass: group nodes by aligned year
     sortedNodes.forEach((node) => {
       const alignedYear = getTimelineSegment(node.year);
@@ -233,20 +234,41 @@ const TechTreeViewer = () => {
       }
       yearGroups.get(alignedYear).push(node);
     });
-
+  
+    // Find the maximum number of nodes in any year group
+    const maxNodesInColumn = Math.max(
+      ...Array.from(yearGroups.values()).map((group) => group.length)
+    );
+  
+    // Calculate total height needed
+    const TOP_PADDING = 150;
+    const BOTTOM_PADDING = 100;
+    const calculatedTotalHeight = (maxNodesInColumn - 1) * VERTICAL_SPACING + TOP_PADDING + BOTTOM_PADDING;
+    
+    // Update the total height state
+    setTotalHeight(calculatedTotalHeight);
+  
     // Second pass: position nodes
     yearGroups.forEach((nodesInYear, year) => {
       const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
       const nodeCount = nodesInYear.length;
-
+      
+      // Calculate available vertical space for this column
+      const availableHeight = calculatedTotalHeight - TOP_PADDING - BOTTOM_PADDING;
+      
+      // If there's only one node, we'll still use the full available height range for positioning
+      // This will be replaced with field-based positioning later
       nodesInYear.forEach((node, index) => {
-        const offset = (index - (nodeCount - 1) / 2) * VERTICAL_SPACING;
-        const y = BASE_Y + offset;
-
+        // For now, distribute nodes evenly within the available height
+        const verticalPosition = nodeCount === 1 
+          ? availableHeight / 2  // Place single node in middle of available space
+          : (availableHeight * index) / (nodeCount - 1); // Distribute multiple nodes evenly
+        
+        const y = TOP_PADDING + verticalPosition;
         positionedNodes.push({ ...node, x, y });
       });
     });
-
+  
     return positionedNodes;
   }, []);
 
@@ -434,7 +456,7 @@ const TechTreeViewer = () => {
         <div
           style={{
             width: containerWidth,
-            minHeight: "1000px",
+            minHeight: `${totalHeight * zoom}px`,
             transform: `scale(${zoom})`,
             transformOrigin: "top left",
             position: "relative",
