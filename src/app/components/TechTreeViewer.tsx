@@ -506,7 +506,7 @@ const TechTreeViewer = () => {
     <div className="h-screen overflow-y-auto">
       {/* Floating controls */}
       <>
-        <div className="fixed top-4 right-4 flex flex-col gap-4 z-50">
+        <div className="fixed top-4 right-4 flex flex-col gap-4" style={{ zIndex: 1000 }}>
           <div className="flex items-center gap-4 p-4 bg-white/90 backdrop-blur rounded-lg shadow-lg">
             <button
               onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
@@ -542,7 +542,6 @@ const TechTreeViewer = () => {
 
       {/* Scrollable container */}
       <div className="overflow-x-auto">
-        {/* Main visualization */}
         <div
           style={{
             width: containerWidth,
@@ -554,7 +553,13 @@ const TechTreeViewer = () => {
           }}
         >
           {/* SVG connections */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none">
+          <svg 
+            className="absolute inset-0 w-full h-full" 
+            style={{ 
+              zIndex: 1,
+              pointerEvents: 'none' // Add this to ensure connections don't interfere with clicks
+            }}
+          >
             {data.links.map((link, index) => {
               const sourceNode = data.nodes.find((n) => n.id === link.source);
               const targetNode = data.nodes.find((n) => n.id === link.target);
@@ -601,7 +606,7 @@ const TechTreeViewer = () => {
           </svg>
 
           {/* Nodes */}
-          <div className="relative" style={{ zIndex: 1 }}>
+          <div className="relative" style={{ zIndex: 10 }}>
             {filteredNodes.map((node) => (
               <div
                 key={node.id}
@@ -670,7 +675,7 @@ const TechTreeViewer = () => {
           </div>
           
           {/* Tooltips */}
-          <div className="relative" style={{ zIndex: 2 }}>
+          <div className="relative" style={{ zIndex: 100 }}>
             {filteredNodes.map((node) => (
               (hoveredNode?.id === node.id || selectedNodeId === node.id) && (
                 <div
@@ -678,9 +683,10 @@ const TechTreeViewer = () => {
                   className="absolute bg-white border rounded-lg p-3 shadow-lg node-tooltip"
                   style={{
                     left: `${getXPosition(node.year)}px`,
-                    top: `${node.y + 100}px`,  // Instead of node.y - 75, position it below the node
-                    transform: "translate(-50%, 0)",  // Remove the 100% translation since we're positioning from top
+                    top: `${node.y + 100}px`,
+                    transform: "translate(-50%, 0)",
                     width: "16rem",
+                    zIndex: 100
                   }}
                   onClick={(e) => {
                     e.stopPropagation();

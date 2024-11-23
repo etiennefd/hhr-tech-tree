@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 
 interface NodePosition {
   x: number;
@@ -129,13 +130,10 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   const lineStyle = getLineStyle(connectionType, isHovered || isHighlighted);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    // Get mouse position relative to the viewport
-    const rect = e.currentTarget.ownerSVGElement?.getBoundingClientRect();
-    if (rect) {
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      setMousePos({ x, y });
-    }
+    // Get mouse position relative to the viewport (not SVG coordinates)
+    const x = e.clientX;
+    const y = e.clientY;
+    setMousePos({ x, y });
   };
 
   return (
@@ -184,32 +182,62 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
         />
       </g>
 
-      {/* Tooltip */}
+      {/* Tooltip Portal */}
       {isHovered && mousePos && (
-        <foreignObject
-          x={mousePos.x + 10}
-          y={mousePos.y + 10}
-          width={240}
-          height={200}
-          style={{ pointerEvents: 'none' }}
-        >
-          <div className="bg-white p-3 rounded-lg shadow-lg border text-sm">
-            <div className="mb-1">
-              <span className="font-semibold">From:</span> {sourceTitle}
+        <Portal>
+          <div 
+            className="fixed bg-white p-3 rounded-lg shadow-lg border text-sm connection-tooltip"
+            style={{
+              left: mousePos.x + 10,
+              top: mousePos.y + 10,
+              zIndex: 9999,
+              pointerEvents: 'none',
+              maxWidth: '240px',
+              transform: 'translateZ(0)',
+              backdropFilter: 'blur(8px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)'
+            }}
+          >
+            <div className="mb-1.5">
+              <span className="font-semibold text-gray-700">From:</span> {sourceTitle}
             </div>
-            <div className="mb-1">
-              <span className="font-semibold">To:</span> {targetTitle}
+            <div className="mb-1.5">
+              <span className="font-semibold text-gray-700">To:</span> {targetTitle}
             </div>
             {details && (
-              <div className="mb-1">
-                <span className="font-semibold">Details:</span> {details}
+              <div className="border-t pt-1.5 mt-1.5">
+                <span className="font-semibold text-gray-700">Details:</span> {details}
               </div>
             )}
           </div>
-        </foreignObject>
+        </Portal>
       )}
     </>
   );
+};
+
+// Create a Portal component for the tooltip
+const Portal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [mounted, setMounted] = React.useState(false);
+  const portalRoot = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    // Create a div to mount the portal
+    portalRoot.current = document.createElement('div');
+    document.body.appendChild(portalRoot.current);
+    setMounted(true);
+
+    // Cleanup
+    return () => {
+      if (portalRoot.current) {
+        document.body.removeChild(portalRoot.current);
+      }
+    };
+  }, []);
+
+  if (!mounted || !portalRoot.current) return null;
+
+  return ReactDOM.createPortal(children, portalRoot.current);
 };
 
 export default CurvedConnections;
