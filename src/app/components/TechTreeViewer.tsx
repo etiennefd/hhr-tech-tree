@@ -503,7 +503,7 @@ const TechTreeViewer = () => {
   }
 
   return (
-    <div className="h-screen overflow-y-auto">
+    <div className="h-screen">
       {/* Floating controls */}
       <>
         <div className="fixed top-4 right-4 flex flex-col gap-4" style={{ zIndex: 1000 }}>
