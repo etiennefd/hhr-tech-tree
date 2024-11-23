@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
@@ -278,6 +278,8 @@ const TechTreeViewer = () => {
     [data.nodes]
   );
 
+  const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
+
   // Calculate node positions with improved vertical distribution
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
@@ -510,6 +512,37 @@ const TechTreeViewer = () => {
     [data.nodes, getXPosition, containerDimensions.width]
   );
 
+  // Add keyboard shortcut handler
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if Command (Mac) or Control (Windows) is pressed
+      const isModifierPressed = event.metaKey || event.ctrlKey;
+      
+      if (!isModifierPressed || !horizontalScrollContainerRef.current) return;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault(); // Prevent default browser behavior
+          horizontalScrollContainerRef.current.scrollTo({
+            left: 0,
+            behavior: 'smooth'
+          });
+          break;
+        
+        case 'ArrowRight':
+          event.preventDefault(); // Prevent default browser behavior
+          horizontalScrollContainerRef.current.scrollTo({
+            left: horizontalScrollContainerRef.current.scrollWidth,
+            behavior: 'smooth'
+          });
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -560,7 +593,10 @@ const TechTreeViewer = () => {
       </>
 
       {/* Horizontal scroll container */}
-      <div className="overflow-x-auto overflow-y-hidden h-screen">
+      <div 
+        ref={horizontalScrollContainerRef}
+        className="overflow-x-auto overflow-y-hidden h-screen"
+      >
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
           <div
