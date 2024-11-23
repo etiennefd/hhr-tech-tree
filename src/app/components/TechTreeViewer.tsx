@@ -118,63 +118,63 @@ function calculateXPosition(
 const DEFAULT_FIELD_POSITION = 0.5;
 const FIELD_POSITIONS = {
   // Food (0.05-0.15)
-  "Food": 0.05,
-  "Agriculture": 0.08,
+  Food: 0.05,
+  Agriculture: 0.08,
   "Animal husbandry": 0.11,
   "Hunting and fishing": 0.14,
 
   // Life Sciences (0.15-0.25)
-  "Biology": 0.17,
-  "Medicine": 0.20,
-  "Sanitation": 0.23,
+  Biology: 0.17,
+  Medicine: 0.2,
+  Sanitation: 0.23,
 
   // Physical Sciences (0.25-0.4)
-  "Physics": 0.25,
-  "Chemistry": 0.28,
-  "Astronomy": 0.31,
-  "Geology": 0.34,
-  "Meteorology": 0.37,
-  "Optics": 0.40,
+  Physics: 0.25,
+  Chemistry: 0.28,
+  Astronomy: 0.31,
+  Geology: 0.34,
+  Meteorology: 0.37,
+  Optics: 0.4,
 
   // Energy & Electronics (0.4-0.5)
-  "Electricity": 0.40,
-  "Electronics": 0.43,
-  "Energy": 0.46,
-  "Lighting": 0.49,
+  Electricity: 0.4,
+  Electronics: 0.43,
+  Energy: 0.46,
+  Lighting: 0.49,
 
   // Construction/Materials (0.5-0.65)
-  "Construction": 0.50,
-  "Mining": 0.53,
-  "Metallurgy": 0.56,
-  "Manufacturing": 0.59,
-  "Textiles": 0.62,
-  "Hydraulics": 0.65,
+  Construction: 0.5,
+  Mining: 0.53,
+  Metallurgy: 0.56,
+  Manufacturing: 0.59,
+  Textiles: 0.62,
+  Hydraulics: 0.65,
 
   // Transportation/Movement (0.65-0.75)
-  "Transportation": 0.65,
-  "Flying": 0.68,
-  "Sailing": 0.71,
-  "Space": 0.74,
-  "Cartography": 0.77,
+  Transportation: 0.65,
+  Flying: 0.68,
+  Sailing: 0.71,
+  Space: 0.74,
+  Cartography: 0.77,
 
   // Computing/Math (0.75-0.85)
-  "Mathematics": 0.75,
-  "Measurement": 0.78,
-  "Timekeeping": 0.81,
-  "Computing": 0.84,
+  Mathematics: 0.75,
+  Measurement: 0.78,
+  Timekeeping: 0.81,
+  Computing: 0.84,
 
   // Safety/Protection/Governance (0.85-0.95)
-  "Security": 0.85,
-  "Military": 0.87,
-  "Finance": 0.89,
-  "Law": 0.91,
-  "Governance": 0.93,
+  Security: 0.85,
+  Military: 0.87,
+  Finance: 0.89,
+  Law: 0.91,
+  Governance: 0.93,
 
   // Culture (0.95-1.0)
-  "Communication": 0.95,
+  Communication: 0.95,
   "Visual media": 0.96,
-  "Entertainment": 0.98,
-  "Music": 0.99
+  Entertainment: 0.98,
+  Music: 0.99,
 };
 
 const TechTreeViewer = () => {
@@ -187,63 +187,63 @@ const TechTreeViewer = () => {
 
   const fieldColors = {
     // Food & Agriculture (Greens)
-    Food: "#e0f4e0",             // Fresh green
-    Agriculture: "#e8f4d9",      // Lime green
+    Food: "#e0f4e0", // Fresh green
+    Agriculture: "#e8f4d9", // Lime green
     "Animal husbandry": "#d5e8d1", // Darker green
     "Hunting and fishing": "#c9e6c9", // Deep forest green
 
     // Life Sciences (Blue-Greens)
-    Biology: "#d1e8e1",          // Sage blue-green
-    Medicine: "#c2e6dd",         // Medical mint
-    Sanitation: "#d8efe6",       // Light mint
+    Biology: "#d1e8e1", // Sage blue-green
+    Medicine: "#c2e6dd", // Medical mint
+    Sanitation: "#d8efe6", // Light mint
 
     // Physical Sciences (Blues & Purples)
-    Physics: "#e6e1f4",          // Soft purple
-    Chemistry: "#e0d9f2",        // Deeper purple
-    Astronomy: "#d9e1ff",        // Periwinkle
-    Geology: "#e8e4f1",          // Dusty purple
-    Meteorology: "#e1e8f7",      // Sky blue
-    Optics: "#dce4f7",           // Light purple-blue
+    Physics: "#e6e1f4", // Soft purple
+    Chemistry: "#e0d9f2", // Deeper purple
+    Astronomy: "#d9e1ff", // Periwinkle
+    Geology: "#e8e4f1", // Dusty purple
+    Meteorology: "#e1e8f7", // Sky blue
+    Optics: "#dce4f7", // Light purple-blue
 
     // Energy & Electronics (Yellows & Oranges)
-    Electricity: "#fff2d1",      // Pale yellow
-    Electronics: "#ffe9cc",      // Light orange
-    Energy: "#ffe4cc",           // Peach
-    Lighting: "#fff4d9",         // Warm yellow
+    Electricity: "#fff2d1", // Pale yellow
+    Electronics: "#ffe9cc", // Light orange
+    Energy: "#ffe4cc", // Peach
+    Lighting: "#fff4d9", // Warm yellow
 
     // Construction/Materials (Browns & Tans)
-    Construction: "#f2e6d9",     // Light tan
-    Mining: "#ede1d4",           // Beige
-    Metallurgy: "#e8dccf",       // Bronze
-    Manufacturing: "#f7e6d9",    // Clay
-    Textiles: "#f9e6ef",        // Soft pink
-    Hydraulics: "#e0e8f0",       // Steel blue
+    Construction: "#f2e6d9", // Light tan
+    Mining: "#ede1d4", // Beige
+    Metallurgy: "#e8dccf", // Bronze
+    Manufacturing: "#f7e6d9", // Clay
+    Textiles: "#f9e6ef", // Soft pink
+    Hydraulics: "#e0e8f0", // Steel blue
 
     // Transportation/Movement (Cool Blues)
-    Transportation: "#e6ecf2",   // Steel blue
-    Flying: "#e1e7f2",          // Sky blue
-    Sailing: "#d9e3f2",         // Ocean blue
-    Space: "#d4dff2",           // Space blue
-    Cartography: "#dee6f2",      // Map blue
+    Transportation: "#e6ecf2", // Steel blue
+    Flying: "#e1e7f2", // Sky blue
+    Sailing: "#d9e3f2", // Ocean blue
+    Space: "#d4dff2", // Space blue
+    Cartography: "#dee6f2", // Map blue
 
     // Computing/Math (Grays & Silver)
-    Mathematics: "#e8ecf2",      // Silver blue
-    Measurement: "#e5e9f0",      // Cool gray
-    Timekeeping: "#e2e6ed",      // Clock gray
-    Computing: "#dfe3ea",        // Tech gray
+    Mathematics: "#e8ecf2", // Silver blue
+    Measurement: "#e5e9f0", // Cool gray
+    Timekeeping: "#e2e6ed", // Clock gray
+    Computing: "#dfe3ea", // Tech gray
 
     // Safety/Protection/Governance (Warm Grays & Reds)
-    Security: "#ffe6e6",         // Light red
-    Military: "#ffeae6",         // Coral
-    Finance: "#e6eaf0",          // Banking gray
-    Law: "#e9e9f2",             // Justice gray
-    Governance: "#e6e6f0",       // Official gray
+    Security: "#ffe6e6", // Light red
+    Military: "#ffeae6", // Coral
+    Finance: "#e6eaf0", // Banking gray
+    Law: "#e9e9f2", // Justice gray
+    Governance: "#e6e6f0", // Official gray
 
     // Culture & Communication (Pinks & Soft Reds)
-    Communication: "#ffe6f0",    // Soft pink
-    "Visual media": "#ffe6eb",   // Rose pink
-    Entertainment: "#ffeae6",    // Light coral
-    Music: "#ffe9f2"            // Musical pink
+    Communication: "#ffe6f0", // Soft pink
+    "Visual media": "#ffe6eb", // Rose pink
+    Entertainment: "#ffeae6", // Light coral
+    Music: "#ffe9f2", // Musical pink
   };
 
   // State
@@ -282,12 +282,12 @@ const TechTreeViewer = () => {
   // Calculate node positions with improved vertical distribution
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
-  
+
     const minYear = Math.min(...nodes.map((n) => n.year));
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
     const positionedNodes = [];
     const yearGroups = new Map();
-  
+
     // First pass: group nodes by aligned year
     sortedNodes.forEach((node) => {
       const alignedYear = getTimelineSegment(node.year);
@@ -296,52 +296,64 @@ const TechTreeViewer = () => {
       }
       yearGroups.get(alignedYear).push(node);
     });
-  
+
     // Find the maximum number of nodes in any year group
     const maxNodesInColumn = Math.max(
       ...Array.from(yearGroups.values()).map((group) => group.length)
     );
-  
+
     // Calculate total height needed
-    const TOP_PADDING = 100; // Reduced from 150
+    const TOP_PADDING = 10; // Reduced from 150
     const BOTTOM_PADDING = 100;
-    const calculatedTotalHeight = (maxNodesInColumn - 1) * VERTICAL_SPACING + TOP_PADDING + BOTTOM_PADDING;
-    
+    const calculatedTotalHeight =
+      (maxNodesInColumn - 1) * VERTICAL_SPACING + TOP_PADDING + BOTTOM_PADDING;
+
     setTotalHeight(calculatedTotalHeight);
-  
+
     // Second pass: position nodes
     yearGroups.forEach((nodesInYear, year) => {
       const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
       const nodeCount = nodesInYear.length;
-      
+
       // Calculate available vertical space for this column
-      const availableHeight = calculatedTotalHeight - TOP_PADDING - BOTTOM_PADDING;
-      
+      const availableHeight =
+        calculatedTotalHeight - TOP_PADDING - BOTTOM_PADDING;
+
       // Sort nodes within the year group by their preferred vertical position
       nodesInYear.sort((a, b) => {
-        const aPosition = a.fields?.length ? 
-          Math.min(...a.fields.map(f => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION)) :
-          DEFAULT_FIELD_POSITION;
-        const bPosition = b.fields?.length ? 
-          Math.min(...b.fields.map(f => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION)) :
-          DEFAULT_FIELD_POSITION;
+        const aPosition = a.fields?.length
+          ? Math.min(
+              ...a.fields.map(
+                (f) => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION
+              )
+            )
+          : DEFAULT_FIELD_POSITION;
+        const bPosition = b.fields?.length
+          ? Math.min(
+              ...b.fields.map(
+                (f) => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION
+              )
+            )
+          : DEFAULT_FIELD_POSITION;
         return aPosition - bPosition;
       });
-  
+
       // Position nodes ensuring minimum spacing
       nodesInYear.forEach((node, index) => {
         // Get preferred position based on fields
-        const fieldPositions = node.fields?.length ?
-          node.fields.map(f => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION) :
-          [DEFAULT_FIELD_POSITION];
-        
+        const fieldPositions = node.fields?.length
+          ? node.fields.map((f) => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION)
+          : [DEFAULT_FIELD_POSITION];
+
         // Calculate base position
-        let verticalPosition = (fieldPositions.reduce((a, b) => a + b, 0) / fieldPositions.length) * availableHeight;
-        
+        let verticalPosition =
+          (fieldPositions.reduce((a, b) => a + b, 0) / fieldPositions.length) *
+          availableHeight;
+
         // Add small randomization
         const randomization = (Math.random() - 0.5) * 0.05 * VERTICAL_SPACING;
         verticalPosition += randomization;
-  
+
         // Adjust position based on previous node to ensure minimum spacing
         if (index > 0) {
           const prevNode = positionedNodes[positionedNodes.length - 1];
@@ -350,15 +362,18 @@ const TechTreeViewer = () => {
             verticalPosition = minY - TOP_PADDING;
           }
         }
-        
+
         // Clamp position within available space
-        verticalPosition = Math.max(0, Math.min(availableHeight, verticalPosition));
-        
+        verticalPosition = Math.max(
+          0,
+          Math.min(availableHeight, verticalPosition)
+        );
+
         const y = TOP_PADDING + verticalPosition;
         positionedNodes.push({ ...node, x, y });
       });
     });
-  
+
     return positionedNodes;
   }, []);
 
@@ -418,9 +433,11 @@ const TechTreeViewer = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.tech-node') && 
-          !target.closest('.node-tooltip') && 
-          !target.closest('.connection')) {
+      if (
+        !target.closest(".tech-node") &&
+        !target.closest(".node-tooltip") &&
+        !target.closest(".connection")
+      ) {
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
         setHoveredNode(null);
@@ -428,9 +445,9 @@ const TechTreeViewer = () => {
         setHoveredLinkIndex(null);
       }
     };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Helper function to check if a node is adjacent to selected node
@@ -506,7 +523,10 @@ const TechTreeViewer = () => {
     <div className="h-screen">
       {/* Floating controls */}
       <>
-        <div className="fixed top-4 right-4 flex flex-col gap-4" style={{ zIndex: 1000 }}>
+        <div
+          className="fixed top-4 right-4 flex flex-col gap-4"
+          style={{ zIndex: 1000 }}
+        >
           <div className="flex items-center gap-4 p-4 bg-white/90 backdrop-blur rounded-lg shadow-lg">
             <button
               onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
@@ -540,225 +560,25 @@ const TechTreeViewer = () => {
         </div>
       </>
 
-      {/* Scrollable container */}
-      <div className="overflow-x-auto">
-        <div
-          style={{
-            width: containerWidth,
-            minHeight: `${totalHeight * zoom}px`,
-            transform: `scale(${zoom})`,
-            transformOrigin: "top left",
-            position: "relative",
-            marginBottom: "64px",
-          }}
-        >
-          {/* SVG connections */}
-          <svg 
-            className="absolute inset-0 w-full h-full" 
-            style={{ 
-              zIndex: 1,
-              pointerEvents: 'none' // Add this to ensure connections don't interfere with clicks
-            }}
-          >
-            {data.links.map((link, index) => {
-              const sourceNode = data.nodes.find((n) => n.id === link.source);
-              const targetNode = data.nodes.find((n) => n.id === link.target);
-
-              if (!sourceNode || !targetNode) return null;
-
-              const isHighlighted = shouldHighlightLink(link, index);
-
-              return (
-                <CurvedConnections
-                  key={index}
-                  sourceNode={{
-                    x: getXPosition(sourceNode.year),
-                    y: sourceNode.y || 150,
-                  }}
-                  targetNode={{
-                    x: getXPosition(targetNode.year),
-                    y: targetNode.y || 150,
-                  }}
-                  connectionType={link.type}
-                  isHighlighted={shouldHighlightLink(link, index)}
-                  opacity={
-                    // If something is selected, non-highlighted links become transparent
-                    (selectedNodeId || selectedLinkIndex !== null) && !shouldHighlightLink(link, index)
-                      ? 0.2
-                      : 1
-                  }
-                  onMouseEnter={() => setHoveredLinkIndex(index)}
-                  onMouseLeave={() => setHoveredLinkIndex(null)}
-                  onSelect={() => {
-                    if (selectedLinkIndex === index) {
-                      setSelectedLinkIndex(null);
-                    } else {
-                      setSelectedLinkIndex(index);
-                      setSelectedNodeId(null); // Clear any selected node
-                    }
-                  }}
-                  sourceTitle={sourceNode.title}
-                  targetTitle={targetNode.title}
-                  details={link.details}
-                />
-              );
-            })}
-          </svg>
-
-          {/* Nodes */}
-          <div className="relative" style={{ zIndex: 10 }}>
-            {filteredNodes.map((node) => (
-              <div
-                key={node.id}
-                className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer tech-node"
-                style={{
-                  left: `${getXPosition(node.year)}px`,
-                  top: `${node.y}px`,
-                  width: NODE_WIDTH,
-                  transform: "translate(-60px, -75px)",
-                  opacity: selectedNodeId
-                    ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
-                      ? 1
-                      : 0.2
-                    : selectedLinkIndex !== null
-                    ? isNodeConnectedToSelectedLink(node.id)
-                      ? 1
-                      : 0.2
-                    : 1,
-                  backgroundColor:
-                    node.id === selectedNodeId
-                      ? "#f0f7ff"
-                      : "rgba(255, 255, 255, 0.9)",
-                }}
-                onClick={(e) => {
-                  if (node.id === selectedNodeId) {
-                    setSelectedNodeId(null);
-                  } else {
-                    setSelectedNodeId(node.id);
-                  }
-                }}
-                onMouseEnter={() => {
-                  setHoveredNode(node);
-                  setHoveredNodeId(node.id);
-                }}
-                onMouseLeave={() => {
-                  // Only keep hover if this is the selected node
-                  if (node.id !== selectedNodeId) {
-                    setHoveredNode(null);
-                    setHoveredNodeId(null);
-                  }
-                }}
-              >
-                <img
-                  src={node.image}
-                  alt={node.title}
-                  className="w-full h-20 object-cover rounded mb-2"
-                />
-                <h3 className="text-sm font-medium line-clamp-2">{node.title}</h3>
-                <p className="text-xs text-gray-500">{formatYear(node.year)}</p>
-                <div className="flex flex-wrap gap-1">
-                  {node.fields.map((field) => (
-                    <span
-                      key={field}
-                      className="text-[10px] px-1.5 py-0.5 rounded"
-                      style={{
-                        backgroundColor: fieldColors[field] || "#f0f0f0",
-                        color: "#333",
-                      }}
-                    >
-                      {field}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Tooltips */}
-          <div className="relative" style={{ zIndex: 100 }}>
-            {filteredNodes.map((node) => (
-              (hoveredNode?.id === node.id || selectedNodeId === node.id) && (
-                <div
-                  key={`tooltip-${node.id}`}
-                  className="absolute bg-white border rounded-lg p-3 shadow-lg node-tooltip"
-                  style={{
-                    left: `${getXPosition(node.year)}px`,
-                    top: `${node.y + 100}px`,
-                    transform: "translate(-50%, 0)",
-                    width: "16rem",
-                    zIndex: 100
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (node.wikipedia) {
-                      window.open(node.wikipedia, "_blank", "noopener,noreferrer");
-                    }
-                  }}
-                  onMouseEnter={() => setIsTooltipHovered(true)}
-                  onMouseLeave={() => {
-                    setIsTooltipHovered(false);
-                    // Only clear hover if this isn't the selected node
-                    if (node.id !== selectedNodeId) {
-                      setHoveredNode(null);
-                      setHoveredNodeId(null);
-                    }
-                  }}
-                >
-                  <p className="text-xs mb-1">
-                    <strong>Date:</strong> {formatYear(node.year)}
-                    {node.dateDetails && ` (${node.dateDetails})`}
-                  </p>
-                  {node.inventors?.length > 0 && (
-                    <p className="text-xs mb-1">
-                      <strong>
-                        Inventor{node.inventors.length > 1 ? "s" : ""}:
-                      </strong>{" "}
-                      {node.inventors.join(", ")}
-                    </p>
-                  )}
-                  {node.organization && (
-                    <p className="text-xs mb-1">
-                      <strong>Organization:</strong> {node.organization}
-                    </p>
-                  )}
-                  {(node.city || node.countryHistorical) && (
-                    <p className="text-xs mb-1">
-                      <strong>Location:</strong>{" "}
-                      {[node.city, node.countryHistorical]
-                        .filter(Boolean)
-                        .join(", ")}
-                    </p>
-                  )}
-                  {node.details && (
-                    <p className="text-xs line-clamp-3">{node.details}</p>
-                  )}
-                  {node.wikipedia && (
-                    <p className="text-xs mt-1 text-blue-600 hover:underline cursor-pointer">
-                      View on Wikipedia →
-                    </p>
-                  )}
-                </div>
-              )
-            ))}
-          </div>
-
-          {/* Timeline - keeping original implementation */}
+      {/* Horizontal scroll container */}
+      <div className="overflow-x-auto overflow-y-hidden h-screen">
+        <div style={{ width: containerWidth }}>
+          {/* Timeline */}
           <div
-            className="sticky bottom-0 h-16 bg-white border-t"
+            className="h-8 bg-white border-b"
             style={{
               width: containerWidth,
               transform: `scale(${zoom})`,
-              transformOrigin: "bottom left",
+              transformOrigin: "top left",
               zIndex: 50,
             }}
           >
+            {/* Timeline content stays the same */}
             {(() => {
               if (!data.nodes.length) return null;
-
               const years = data.nodes.map((n) => n.year);
               const minYear = Math.min(...years);
               const maxYear = Math.max(...years);
-
               const timelineYears = getTimelineYears(minYear, maxYear);
 
               return timelineYears.map((year) => (
@@ -774,6 +594,229 @@ const TechTreeViewer = () => {
                 </div>
               ));
             })()}
+          </div>
+
+          {/* Vertical scroll container */}
+          <div
+            className="overflow-y-auto overflow-x-hidden"
+            style={{ height: "calc(100vh - 32px)" }}
+          >
+            <div
+              style={{
+                width: containerWidth,
+                minHeight: `${totalHeight * zoom}px`,
+                transform: `scale(${zoom})`,
+                transformOrigin: "top left",
+                position: "relative",
+                marginBottom: "64px",
+              }}
+            >
+              {/* SVG connections */}
+              <svg
+                className="absolute inset-0 w-full h-full"
+                style={{
+                  zIndex: 1,
+                  pointerEvents: "none", // Add this to ensure connections don't interfere with clicks
+                }}
+              >
+                {data.links.map((link, index) => {
+                  const sourceNode = data.nodes.find(
+                    (n) => n.id === link.source
+                  );
+                  const targetNode = data.nodes.find(
+                    (n) => n.id === link.target
+                  );
+
+                  if (!sourceNode || !targetNode) return null;
+
+                  const isHighlighted = shouldHighlightLink(link, index);
+
+                  return (
+                    <CurvedConnections
+                      key={index}
+                      sourceNode={{
+                        x: getXPosition(sourceNode.year),
+                        y: sourceNode.y || 150,
+                      }}
+                      targetNode={{
+                        x: getXPosition(targetNode.year),
+                        y: targetNode.y || 150,
+                      }}
+                      connectionType={link.type}
+                      isHighlighted={shouldHighlightLink(link, index)}
+                      opacity={
+                        // If something is selected, non-highlighted links become transparent
+                        (selectedNodeId || selectedLinkIndex !== null) &&
+                        !shouldHighlightLink(link, index)
+                          ? 0.2
+                          : 1
+                      }
+                      onMouseEnter={() => setHoveredLinkIndex(index)}
+                      onMouseLeave={() => setHoveredLinkIndex(null)}
+                      onSelect={() => {
+                        if (selectedLinkIndex === index) {
+                          setSelectedLinkIndex(null);
+                        } else {
+                          setSelectedLinkIndex(index);
+                          setSelectedNodeId(null); // Clear any selected node
+                        }
+                      }}
+                      sourceTitle={sourceNode.title}
+                      targetTitle={targetNode.title}
+                      details={link.details}
+                    />
+                  );
+                })}
+              </svg>
+
+              {/* Nodes */}
+              <div className="relative" style={{ zIndex: 10 }}>
+                {filteredNodes.map((node) => (
+                  <div
+                    key={node.id}
+                    className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer tech-node"
+                    style={{
+                      left: `${getXPosition(node.year)}px`,
+                      top: `${node.y}px`,
+                      width: NODE_WIDTH,
+                      transform: "translate(-60px, -75px)",
+                      opacity: selectedNodeId
+                        ? node.id === selectedNodeId ||
+                          isAdjacentToSelected(node.id)
+                          ? 1
+                          : 0.2
+                        : selectedLinkIndex !== null
+                        ? isNodeConnectedToSelectedLink(node.id)
+                          ? 1
+                          : 0.2
+                        : 1,
+                      backgroundColor:
+                        node.id === selectedNodeId
+                          ? "#f0f7ff"
+                          : "rgba(255, 255, 255, 0.9)",
+                    }}
+                    onClick={(e) => {
+                      if (node.id === selectedNodeId) {
+                        setSelectedNodeId(null);
+                      } else {
+                        setSelectedNodeId(node.id);
+                      }
+                    }}
+                    onMouseEnter={() => {
+                      setHoveredNode(node);
+                      setHoveredNodeId(node.id);
+                    }}
+                    onMouseLeave={() => {
+                      // Only keep hover if this is the selected node
+                      if (node.id !== selectedNodeId) {
+                        setHoveredNode(null);
+                        setHoveredNodeId(null);
+                      }
+                    }}
+                  >
+                    <img
+                      src={node.image}
+                      alt={node.title}
+                      className="w-full h-20 object-cover rounded mb-2"
+                    />
+                    <h3 className="text-sm font-medium line-clamp-2">
+                      {node.title}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {formatYear(node.year)}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {node.fields.map((field) => (
+                        <span
+                          key={field}
+                          className="text-[10px] px-1.5 py-0.5 rounded"
+                          style={{
+                            backgroundColor: fieldColors[field] || "#f0f0f0",
+                            color: "#333",
+                          }}
+                        >
+                          {field}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Tooltips */}
+              <div className="relative" style={{ zIndex: 100 }}>
+                {filteredNodes.map(
+                  (node) =>
+                    (hoveredNode?.id === node.id ||
+                      selectedNodeId === node.id) && (
+                      <div
+                        key={`tooltip-${node.id}`}
+                        className="absolute bg-white border rounded-lg p-3 shadow-lg node-tooltip"
+                        style={{
+                          left: `${getXPosition(node.year)}px`,
+                          top: `${node.y + 100}px`,
+                          transform: "translate(-50%, 0)",
+                          width: "16rem",
+                          zIndex: 100,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (node.wikipedia) {
+                            window.open(
+                              node.wikipedia,
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                          }
+                        }}
+                        onMouseEnter={() => setIsTooltipHovered(true)}
+                        onMouseLeave={() => {
+                          setIsTooltipHovered(false);
+                          // Only clear hover if this isn't the selected node
+                          if (node.id !== selectedNodeId) {
+                            setHoveredNode(null);
+                            setHoveredNodeId(null);
+                          }
+                        }}
+                      >
+                        <p className="text-xs mb-1">
+                          <strong>Date:</strong> {formatYear(node.year)}
+                          {node.dateDetails && ` (${node.dateDetails})`}
+                        </p>
+                        {node.inventors?.length > 0 && (
+                          <p className="text-xs mb-1">
+                            <strong>
+                              Inventor{node.inventors.length > 1 ? "s" : ""}:
+                            </strong>{" "}
+                            {node.inventors.join(", ")}
+                          </p>
+                        )}
+                        {node.organization && (
+                          <p className="text-xs mb-1">
+                            <strong>Organization:</strong> {node.organization}
+                          </p>
+                        )}
+                        {(node.city || node.countryHistorical) && (
+                          <p className="text-xs mb-1">
+                            <strong>Location:</strong>{" "}
+                            {[node.city, node.countryHistorical]
+                              .filter(Boolean)
+                              .join(", ")}
+                          </p>
+                        )}
+                        {node.details && (
+                          <p className="text-xs line-clamp-3">{node.details}</p>
+                        )}
+                        {node.wikipedia && (
+                          <p className="text-xs mt-1 text-blue-600 hover:underline cursor-pointer">
+                            View on Wikipedia →
+                          </p>
+                        )}
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
