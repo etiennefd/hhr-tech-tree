@@ -183,7 +183,6 @@ const TechTreeViewer = () => {
   const VERTICAL_SPACING = 200;
   const YEAR_WIDTH = 200;
   const PADDING = 120;
-  const BASE_Y = 600; // Lowered from 600 to give more space above
 
   const fieldColors = {
     // Food & Agriculture (Greens)
