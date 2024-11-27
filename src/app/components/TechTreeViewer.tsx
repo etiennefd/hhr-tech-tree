@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
@@ -517,30 +523,30 @@ const TechTreeViewer = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Check if Command (Mac) or Control (Windows) is pressed
       const isModifierPressed = event.metaKey || event.ctrlKey;
-      
+
       if (!isModifierPressed || !horizontalScrollContainerRef.current) return;
 
       switch (event.key) {
-        case 'ArrowLeft':
+        case "ArrowLeft":
           event.preventDefault(); // Prevent default browser behavior
           horizontalScrollContainerRef.current.scrollTo({
             left: 0,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
           break;
-        
-        case 'ArrowRight':
+
+        case "ArrowRight":
           event.preventDefault(); // Prevent default browser behavior
           horizontalScrollContainerRef.current.scrollTo({
             left: horizontalScrollContainerRef.current.scrollWidth,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   if (!isClient || isLoading) {
@@ -592,23 +598,23 @@ const TechTreeViewer = () => {
         </div>
       </>
 
-      {/* Horizontal scroll container */}
-      <div 
+      <div
         ref={horizontalScrollContainerRef}
         className="overflow-x-auto overflow-y-hidden h-screen"
       >
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
           <div
-            className="h-8 bg-white border-b"
+            className="h-8 bg-white border-b sticky top-0"
             style={{
               width: containerWidth,
               transform: `scale(${zoom})`,
               transformOrigin: "top left",
-              zIndex: 50,
+              zIndex: 100, // Increased z-index
+              position: "relative", // Added to create new stacking context
             }}
           >
-            {/* Timeline content stays the same */}
+            {/* Timeline content */}
             {(() => {
               if (!data.nodes.length) return null;
               const years = data.nodes.map((n) => n.year);
@@ -634,7 +640,11 @@ const TechTreeViewer = () => {
           {/* Vertical scroll container */}
           <div
             className="overflow-y-auto overflow-x-hidden"
-            style={{ height: "calc(100vh - 32px)" }}
+            style={{
+              height: "calc(100vh - 32px)",
+              overscrollBehaviorY: "contain",
+              position: "relative",
+            }}
           >
             <div
               style={{
