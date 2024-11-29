@@ -454,33 +454,34 @@ const TechTreeViewer = () => {
   }, []);
 
   // Add this after data is loaded (right after setIsLoading(false))
-useEffect(() => {
-  if (!isLoading && data.nodes.length > 0) {
-    // Find the Stone Tools node
-    const stoneToolsNode = data.nodes.find(node => 
-      node.title.toLowerCase().includes("stone tool"));
-    
-    if (stoneToolsNode) {
-      // Get the container element
-      const container = document.querySelector(
-        '.overflow-y-auto'
-      ) as HTMLElement;
-      
-      if (container) {
-        // Calculate the scroll position:
-        // node position - half the viewport height + some offset for the node height
-        const scrollPosition = (stoneToolsNode.y * zoom) - 
-          (container.clientHeight / 2) + 150;
-        
-        // Scroll to position
-        container.scrollTo({
-          top: Math.max(0, scrollPosition),
-          behavior: 'smooth'
-        });
+  useEffect(() => {
+    if (!isLoading && data.nodes.length > 0) {
+      // Find the Stone Tools node
+      const stoneToolsNode = data.nodes.find((node) =>
+        node.title.toLowerCase().includes("stone tool")
+      );
+
+      if (stoneToolsNode) {
+        // Get the container element
+        const container = document.querySelector(
+          ".overflow-y-auto"
+        ) as HTMLElement;
+
+        if (container) {
+          // Calculate the scroll position:
+          // node position - half the viewport height + some offset for the node height
+          const scrollPosition =
+            stoneToolsNode.y * zoom - container.clientHeight / 2 + 150;
+
+          // Scroll to position
+          container.scrollTo({
+            top: Math.max(0, scrollPosition),
+            behavior: "smooth",
+          });
+        }
       }
     }
-  }
-}, [isLoading, data.nodes, zoom]);
+  }, [isLoading, data.nodes, zoom]);
 
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
