@@ -232,13 +232,16 @@ const TechTreeViewer = () => {
     const positionedNodes = [];
     const yearGroups = new Map();
 
+    // Ensure minimum distance from top of viewport
+    const ABSOLUTE_MIN_Y = 150; // Minimum Y position for any node
+
     // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
     const VERTICAL_BANDS = {
       // Food (0-300)
-      Food: 100,
-      Agriculture: 150,
-      "Animal husbandry": 200,
-      "Hunting and fishing": 250,
+      Food: Math.max(100, ABSOLUTE_MIN_Y),
+      Agriculture: Math.max(150, ABSOLUTE_MIN_Y),
+      "Animal husbandry": Math.max(200, ABSOLUTE_MIN_Y),
+      "Hunting and fishing": Math.max(250, ABSOLUTE_MIN_Y),
 
       // Life Sciences (300-500)
       Biology: 300,
@@ -308,7 +311,6 @@ const TechTreeViewer = () => {
       const usedYPositions = [];
       const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
-      // Sort nodes by their band position before placement
       nodesInYear.sort((a, b) => {
         const aPos = a.fields?.[0] ? VERTICAL_BANDS[a.fields[0]] || 1200 : 1200;
         const bPos = b.fields?.[0] ? VERTICAL_BANDS[b.fields[0]] || 1200 : 1200;
@@ -316,10 +318,11 @@ const TechTreeViewer = () => {
       });
 
       nodesInYear.forEach((node) => {
-        // Get base position from primary field
-        const basePosition = node.fields?.[0]
-          ? VERTICAL_BANDS[node.fields[0]] || 1200
-          : 1200;
+        // Get base position from primary field, ensuring minimum Y
+        const basePosition = Math.max(
+          ABSOLUTE_MIN_Y,
+          node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200
+        );
 
         let finalPosition = basePosition;
         let attempts = 0;
@@ -328,6 +331,8 @@ const TechTreeViewer = () => {
         const searchRadius = MIN_VERTICAL_GAP * 2;
 
         const isOverlapping = (testPosition) => {
+          // Add check for minimum Y position
+          if (testPosition < ABSOLUTE_MIN_Y) return true;
           return usedYPositions.some(
             (usedY) => Math.abs(testPosition - usedY) < MIN_VERTICAL_GAP
           );
@@ -342,22 +347,22 @@ const TechTreeViewer = () => {
           } else {
             finalPosition = basePosition + direction * step;
           }
+          // Ensure we don't go below minimum Y
+          finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition);
           attempts++;
         }
 
-        // If we still have overlap, force position above previous node
         if (isOverlapping(finalPosition) && usedYPositions.length > 0) {
           const lastY = usedYPositions[usedYPositions.length - 1];
-          finalPosition = lastY + MIN_VERTICAL_GAP;
+          finalPosition = Math.max(ABSOLUTE_MIN_Y, lastY + MIN_VERTICAL_GAP);
         }
 
-        // Add small random vertical offset (-10 to +10 pixels)
+        // Add random offset while respecting minimum Y
         const randomOffset = (Math.random() - 0.5) * 20;
-        finalPosition += randomOffset;
+        finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition + randomOffset);
 
-        // Make sure the random offset didn't create new overlaps
         while (isOverlapping(finalPosition)) {
-          finalPosition += MIN_VERTICAL_GAP / 4; // Move up in small increments if needed
+          finalPosition += MIN_VERTICAL_GAP / 4;
         }
 
         usedYPositions.push(finalPosition);
@@ -369,9 +374,8 @@ const TechTreeViewer = () => {
       });
     });
 
-    // More precise total height calculation
     const maxY = Math.max(...positionedNodes.map((node) => node.y));
-    setTotalHeight(maxY + 100); // Restored bottom padding to 100
+    setTotalHeight(maxY + 100);
 
     return positionedNodes;
   }, []);
