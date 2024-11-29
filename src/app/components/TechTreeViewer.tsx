@@ -121,68 +121,6 @@ function calculateXPosition(
   return PADDING + spaces * YEAR_WIDTH;
 }
 
-const DEFAULT_FIELD_POSITION = 0.5;
-const FIELD_POSITIONS = {
-  // Food (0.05-0.15)
-  Food: 0.05,
-  Agriculture: 0.08,
-  "Animal husbandry": 0.11,
-  "Hunting and fishing": 0.14,
-
-  // Life Sciences (0.15-0.25)
-  Biology: 0.17,
-  Medicine: 0.2,
-  Sanitation: 0.23,
-
-  // Physical Sciences (0.25-0.4)
-  Physics: 0.25,
-  Chemistry: 0.28,
-  Astronomy: 0.31,
-  Geology: 0.34,
-  Meteorology: 0.37,
-  Optics: 0.4,
-
-  // Energy & Electronics (0.4-0.5)
-  Electricity: 0.4,
-  Electronics: 0.43,
-  Energy: 0.46,
-  Lighting: 0.49,
-
-  // Construction/Materials (0.5-0.65)
-  Construction: 0.5,
-  Mining: 0.53,
-  Metallurgy: 0.56,
-  Manufacturing: 0.59,
-  Textiles: 0.62,
-  Hydraulics: 0.65,
-
-  // Transportation/Movement (0.65-0.75)
-  Transportation: 0.65,
-  Flying: 0.68,
-  Sailing: 0.71,
-  Space: 0.74,
-  Cartography: 0.77,
-
-  // Computing/Math (0.75-0.85)
-  Mathematics: 0.75,
-  Measurement: 0.78,
-  Timekeeping: 0.81,
-  Computing: 0.84,
-
-  // Safety/Protection/Governance (0.85-0.95)
-  Security: 0.85,
-  Military: 0.87,
-  Finance: 0.89,
-  Law: 0.91,
-  Governance: 0.93,
-
-  // Culture (0.95-1.0)
-  Communication: 0.95,
-  "Visual media": 0.96,
-  Entertainment: 0.98,
-  Music: 0.99,
-};
-
 const TechTreeViewer = () => {
   // Constants
   const NODE_WIDTH = 160;
@@ -286,7 +224,6 @@ const TechTreeViewer = () => {
 
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Calculate node positions with improved vertical distribution
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
 
@@ -295,7 +232,69 @@ const TechTreeViewer = () => {
     const positionedNodes = [];
     const yearGroups = new Map();
 
-    // First pass: group nodes by aligned year
+    // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
+    const VERTICAL_BANDS = {
+      // Food (0-300)
+      Food: 100,
+      Agriculture: 150,
+      "Animal husbandry": 200,
+      "Hunting and fishing": 250,
+
+      // Life Sciences (300-500)
+      Biology: 300,
+      Medicine: 350,
+      Sanitation: 400,
+
+      // Physical Sciences (500-800)
+      Physics: 500,
+      Chemistry: 550,
+      Astronomy: 600,
+      Geology: 650,
+      Meteorology: 700,
+      Optics: 750,
+
+      // Energy & Electronics (800-1000)
+      Electricity: 800,
+      Electronics: 850,
+      Energy: 900,
+      Lighting: 950,
+
+      // Construction/Materials (1000-1300)
+      Construction: 1000,
+      Mining: 1050,
+      Metallurgy: 1100,
+      Manufacturing: 1150,
+      Textiles: 1200,
+      Hydraulics: 1250,
+
+      // Transportation/Movement (1300-1600)
+      Transportation: 1300,
+      Flying: 1350,
+      Sailing: 1400,
+      Space: 1450,
+      Cartography: 1500,
+
+      // Computing/Math (1600-1800)
+      Mathematics: 1600,
+      Measurement: 1650,
+      Timekeeping: 1700,
+      Computing: 1750,
+
+      // Safety/Protection/Governance (1800-2100)
+      Security: 1800,
+      Military: 1850,
+      Finance: 1900,
+      Law: 1950,
+      Governance: 2000,
+
+      // Culture (2100-2400)
+      Communication: 2100,
+      "Visual media": 2150,
+      Entertainment: 2200,
+      Music: 2250,
+    };
+
+    // Group nodes by year
     sortedNodes.forEach((node) => {
       const alignedYear = getTimelineSegment(node.year);
       if (!yearGroups.has(alignedYear)) {
@@ -304,82 +303,75 @@ const TechTreeViewer = () => {
       yearGroups.get(alignedYear).push(node);
     });
 
-    // Find the maximum number of nodes in any year group
-    const maxNodesInColumn = Math.max(
-      ...Array.from(yearGroups.values()).map((group) => group.length)
-    );
-
-    // Calculate total height needed
-    const TOP_PADDING = 10; // Reduced from 150
-    const BOTTOM_PADDING = 100;
-    const calculatedTotalHeight =
-      (maxNodesInColumn - 1) * VERTICAL_SPACING + TOP_PADDING + BOTTOM_PADDING;
-
-    setTotalHeight(calculatedTotalHeight);
-
-    // Second pass: position nodes
     yearGroups.forEach((nodesInYear, year) => {
       const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-      const nodeCount = nodesInYear.length;
+      const usedYPositions = [];
+      const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
-      // Calculate available vertical space for this column
-      const availableHeight =
-        calculatedTotalHeight - TOP_PADDING - BOTTOM_PADDING;
-
-      // Sort nodes within the year group by their preferred vertical position
+      // Sort nodes by their band position before placement
       nodesInYear.sort((a, b) => {
-        const aPosition = a.fields?.length
-          ? Math.min(
-              ...a.fields.map(
-                (f) => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION
-              )
-            )
-          : DEFAULT_FIELD_POSITION;
-        const bPosition = b.fields?.length
-          ? Math.min(
-              ...b.fields.map(
-                (f) => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION
-              )
-            )
-          : DEFAULT_FIELD_POSITION;
-        return aPosition - bPosition;
+        const aPos = a.fields?.[0] ? VERTICAL_BANDS[a.fields[0]] || 1200 : 1200;
+        const bPos = b.fields?.[0] ? VERTICAL_BANDS[b.fields[0]] || 1200 : 1200;
+        return aPos - bPos;
       });
 
-      // Position nodes ensuring minimum spacing
-      nodesInYear.forEach((node, index) => {
-        // Get preferred position based on fields
-        const fieldPositions = node.fields?.length
-          ? node.fields.map((f) => FIELD_POSITIONS[f] || DEFAULT_FIELD_POSITION)
-          : [DEFAULT_FIELD_POSITION];
+      nodesInYear.forEach((node) => {
+        // Get base position from primary field
+        const basePosition = node.fields?.[0]
+          ? VERTICAL_BANDS[node.fields[0]] || 1200
+          : 1200;
 
-        // Calculate base position
-        let verticalPosition =
-          (fieldPositions.reduce((a, b) => a + b, 0) / fieldPositions.length) *
-          availableHeight;
+        let finalPosition = basePosition;
+        let attempts = 0;
+        const maxAttempts = 20;
 
-        // Add small randomization
-        const randomization = (Math.random() - 0.5) * 0.05 * VERTICAL_SPACING;
-        verticalPosition += randomization;
+        const searchRadius = MIN_VERTICAL_GAP * 2;
 
-        // Adjust position based on previous node to ensure minimum spacing
-        if (index > 0) {
-          const prevNode = positionedNodes[positionedNodes.length - 1];
-          const minY = prevNode.y + VERTICAL_SPACING;
-          if (verticalPosition + TOP_PADDING < minY) {
-            verticalPosition = minY - TOP_PADDING;
+        const isOverlapping = (testPosition) => {
+          return usedYPositions.some(
+            (usedY) => Math.abs(testPosition - usedY) < MIN_VERTICAL_GAP
+          );
+        };
+
+        while (isOverlapping(finalPosition) && attempts < maxAttempts) {
+          const step = Math.ceil(attempts / 2) * (MIN_VERTICAL_GAP / 2);
+          const direction = attempts % 2 === 0 ? 1 : -1;
+
+          if (step > searchRadius) {
+            finalPosition = basePosition + direction * searchRadius;
+          } else {
+            finalPosition = basePosition + direction * step;
           }
+          attempts++;
         }
 
-        // Clamp position within available space
-        verticalPosition = Math.max(
-          0,
-          Math.min(availableHeight, verticalPosition)
-        );
+        // If we still have overlap, force position above previous node
+        if (isOverlapping(finalPosition) && usedYPositions.length > 0) {
+          const lastY = usedYPositions[usedYPositions.length - 1];
+          finalPosition = lastY + MIN_VERTICAL_GAP;
+        }
 
-        const y = TOP_PADDING + verticalPosition;
-        positionedNodes.push({ ...node, x, y });
+        // Add small random vertical offset (-10 to +10 pixels)
+        const randomOffset = (Math.random() - 0.5) * 20;
+        finalPosition += randomOffset;
+
+        // Make sure the random offset didn't create new overlaps
+        while (isOverlapping(finalPosition)) {
+          finalPosition += MIN_VERTICAL_GAP / 4; // Move up in small increments if needed
+        }
+
+        usedYPositions.push(finalPosition);
+        positionedNodes.push({
+          ...node,
+          x,
+          y: finalPosition,
+        });
       });
     });
+
+    // More precise total height calculation
+    const maxY = Math.max(...positionedNodes.map((node) => node.y));
+    setTotalHeight(maxY + 100); // Restored bottom padding to 100
 
     return positionedNodes;
   }, []);
