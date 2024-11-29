@@ -212,6 +212,7 @@ const TechTreeViewer = () => {
   );
   const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const [totalHeight, setTotalHeight] = useState(1000); // Default height
+  const [isKeyScrolling, setIsKeyScrolling] = useState(false);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -380,6 +381,8 @@ const TechTreeViewer = () => {
     return positionedNodes;
   }, []);
 
+  // EFFECTS
+
   // Fetch data
   useEffect(() => {
     setIsLoading(true);
@@ -543,7 +546,34 @@ const TechTreeViewer = () => {
     [data.nodes, getXPosition, containerDimensions.width]
   );
 
-  // Add keyboard shortcut handler
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      .fast-smooth-scroll {
+        scroll-behavior: smooth;
+        scroll-timeline: none;
+        scroll-behavior-instant-stop: true;
+      }
+  
+      .scrolling .tech-node,
+      .scrolling path,
+      .scrolling .connection,
+      .scrolling g,
+      .scrolling line,
+      .scrolling circle,
+      .scrolling rect,
+      .scrolling text {
+        pointer-events: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  // Keyboard shortcut to left and right ends (cmd+arrows)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Check if Command (Mac) or Control (Windows) is pressed
@@ -572,6 +602,134 @@ const TechTreeViewer = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    let isScrolling = false;
+    let scrollDirection = { x: 0, y: 0 };
+    let animationFrameId: number | null = null;
+
+    const SCROLL_SPEED = 100; // Pixels per frame
+
+    const updateScroll = () => {
+      const horizontalContainer = horizontalScrollContainerRef.current;
+      const verticalContainer = document.querySelector(
+        ".overflow-y-auto"
+      ) as HTMLElement;
+
+      if (!horizontalContainer || !verticalContainer) return;
+
+      if (scrollDirection.x) {
+        horizontalContainer.scrollLeft += scrollDirection.x * SCROLL_SPEED;
+      }
+      if (scrollDirection.y) {
+        verticalContainer.scrollTop += scrollDirection.y * SCROLL_SPEED;
+      }
+
+      if (isScrolling) {
+        animationFrameId = requestAnimationFrame(updateScroll);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Skip if already scrolling in this direction
+      if (isScrolling) return;
+
+      // Set scrolling state when starting scroll
+      if (
+        ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(
+          event.key
+        ) &&
+        !event.metaKey &&
+        !event.ctrlKey
+      ) {
+        setIsKeyScrolling(true);
+      }
+
+      const horizontalContainer = horizontalScrollContainerRef.current;
+      if (!horizontalContainer) return;
+
+      switch (event.key) {
+        case "ArrowLeft":
+          if (event.metaKey || event.ctrlKey) {
+            // Existing behavior for Cmd/Ctrl+Left
+            event.preventDefault();
+            horizontalContainer.scrollTo({
+              left: 0,
+              behavior: "smooth",
+            });
+          } else {
+            event.preventDefault();
+            scrollDirection.x = -1;
+            isScrolling = true;
+            animationFrameId = requestAnimationFrame(updateScroll);
+          }
+          break;
+
+        case "ArrowRight":
+          if (event.metaKey || event.ctrlKey) {
+            // Existing behavior for Cmd/Ctrl+Right
+            event.preventDefault();
+            horizontalContainer.scrollTo({
+              left: horizontalContainer.scrollWidth,
+              behavior: "smooth",
+            });
+          } else {
+            event.preventDefault();
+            scrollDirection.x = 1;
+            isScrolling = true;
+            animationFrameId = requestAnimationFrame(updateScroll);
+          }
+          break;
+
+        case "ArrowUp":
+          event.preventDefault();
+          scrollDirection.y = -1;
+          isScrolling = true;
+          animationFrameId = requestAnimationFrame(updateScroll);
+          break;
+
+        case "ArrowDown":
+          event.preventDefault();
+          scrollDirection.y = 1;
+          isScrolling = true;
+          animationFrameId = requestAnimationFrame(updateScroll);
+          break;
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowLeft":
+        case "ArrowRight":
+          scrollDirection.x = 0;
+          break;
+        case "ArrowUp":
+        case "ArrowDown":
+          scrollDirection.y = 0;
+          break;
+      }
+
+      // If no scrolling in either direction, stop the animation
+      if (scrollDirection.x === 0 && scrollDirection.y === 0) {
+        isScrolling = false;
+        setIsKeyScrolling(false);
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, []);
 
   if (!isClient || isLoading) {
@@ -683,10 +841,9 @@ const TechTreeViewer = () => {
             >
               {/* SVG connections */}
               <svg
-                className="absolute inset-0 w-full h-full"
+                className={`absolute inset-0 w-full h-full ${isKeyScrolling ? "scrolling" : ""}`}
                 style={{
                   zIndex: 1,
-                  pointerEvents: "none", // Add this to ensure connections don't interfere with clicks
                 }}
               >
                 {data.links.map((link, index) => {
@@ -740,7 +897,10 @@ const TechTreeViewer = () => {
               </svg>
 
               {/* Nodes */}
-              <div className="relative" style={{ zIndex: 10 }}>
+              <div
+                className={`relative ${isKeyScrolling ? "scrolling" : ""}`}
+                style={{ zIndex: 10 }}
+              >
                 {filteredNodes.map((node) => (
                   <div
                     key={node.id}
