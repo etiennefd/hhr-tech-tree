@@ -476,7 +476,6 @@ const TechTreeViewer = () => {
           // Scroll to position
           container.scrollTo({
             top: Math.max(0, scrollPosition),
-            behavior: "smooth",
           });
         }
       }
