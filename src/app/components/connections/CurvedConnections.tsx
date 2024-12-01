@@ -60,6 +60,8 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   useEffect(() => {
     if (!isSelected) {
       setSelectedPos(null);
+      setIsHovered(false);
+      setMousePos(null);
     }
   }, [isSelected]);
 
