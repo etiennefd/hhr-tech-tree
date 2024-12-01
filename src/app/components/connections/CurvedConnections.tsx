@@ -48,15 +48,9 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onNodeClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
-    null
-  );
-  const [selectedPos, setSelectedPos] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  const [selectedPos, setSelectedPos] = useState<{ x: number; y: number } | null>(null);
 
-  // Clear selected position when selection state changes
   useEffect(() => {
     if (!isSelected) {
       setSelectedPos(null);
@@ -64,6 +58,27 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
       setMousePos(null);
     }
   }, [isSelected]);
+
+  // Add scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isSelected) {
+        onSelect?.(); // This will trigger deselection
+      }
+    };
+
+    // Add listeners to both scroll containers
+    const verticalContainer = document.querySelector('.overflow-y-auto');
+    const horizontalContainer = document.querySelector('.overflow-x-auto');
+
+    verticalContainer?.addEventListener('scroll', handleScroll);
+    horizontalContainer?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      verticalContainer?.removeEventListener('scroll', handleScroll);
+      horizontalContainer?.removeEventListener('scroll', handleScroll);
+    };
+  }, [isSelected, onSelect]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
