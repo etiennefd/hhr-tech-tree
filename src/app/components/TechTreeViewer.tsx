@@ -456,6 +456,44 @@ const TechTreeViewer = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleNodeClick = (title: string) => {
+    const node = data.nodes.find((n) => n.title === title);
+
+    // Clear states immediately to hide tooltip
+    setSelectedLinkIndex(null);
+    setSelectedNodeId(null);
+    setHoveredLinkIndex(null);
+    setHoveredNode(null);
+    setHoveredNodeId(null);
+
+    const container = document.querySelector(".overflow-y-auto") as HTMLElement;
+
+    const scrollPosition = node.y * zoom - container.clientHeight / 2 + 150;
+
+    Promise.all([
+      new Promise<void>((resolve) => {
+        if (horizontalScrollContainerRef.current) {
+          const horizontalPosition =
+            getXPosition(node.year) * zoom - window.innerWidth / 2;
+          horizontalScrollContainerRef.current.scrollTo({
+            left: horizontalPosition,
+            behavior: "smooth",
+          });
+        }
+        setTimeout(resolve, 100);
+      }),
+      new Promise<void>((resolve) => {
+        container.scrollTo({
+          top: Math.max(0, scrollPosition),
+          behavior: "smooth",
+        });
+        setTimeout(resolve, 100);
+      }),
+    ]).then(() => {
+      setSelectedNodeId(node.id);
+    });
+  };
+
   // Add this after data is loaded (right after setIsLoading(false))
   useEffect(() => {
     if (!isLoading && data.nodes.length > 0) {
@@ -567,7 +605,7 @@ const TechTreeViewer = () => {
       }
     `;
     document.head.appendChild(style);
-  
+
     return () => {
       document.head.removeChild(style);
     };
@@ -841,7 +879,9 @@ const TechTreeViewer = () => {
             >
               {/* SVG connections */}
               <svg
-                className={`absolute inset-0 w-full h-full ${isKeyScrolling ? "scrolling" : ""}`}
+                className={`absolute inset-0 w-full h-full ${
+                  isKeyScrolling ? "scrolling" : ""
+                }`}
                 style={{
                   zIndex: 1,
                 }}
@@ -855,9 +895,6 @@ const TechTreeViewer = () => {
                   );
 
                   if (!sourceNode || !targetNode) return null;
-
-                  const isHighlighted = shouldHighlightLink(link, index);
-
                   return (
                     <CurvedConnections
                       key={index}
@@ -872,25 +909,28 @@ const TechTreeViewer = () => {
                       connectionType={link.type}
                       isHighlighted={shouldHighlightLink(link, index)}
                       opacity={
-                        // If something is selected, non-highlighted links become transparent
                         (selectedNodeId || selectedLinkIndex !== null) &&
                         !shouldHighlightLink(link, index)
                           ? 0.2
                           : 1
                       }
-                      onMouseEnter={() => setHoveredLinkIndex(index)}
-                      onMouseLeave={() => setHoveredLinkIndex(null)}
-                      onSelect={() => {
-                        if (selectedLinkIndex === index) {
-                          setSelectedLinkIndex(null);
-                        } else {
-                          setSelectedLinkIndex(index);
-                          setSelectedNodeId(null); // Clear any selected node
-                        }
+                      onMouseEnter={() => {
+                        setHoveredLinkIndex(index);
                       }}
+                      onMouseLeave={() => setHoveredLinkIndex(null)}
                       sourceTitle={sourceNode.title}
                       targetTitle={targetNode.title}
                       details={link.details}
+                      isSelected={selectedLinkIndex === index}
+                      onSelect={() => {
+                        setSelectedLinkIndex((current) =>
+                          current === index ? null : index
+                        );
+                        setSelectedNodeId(null);
+                      }}
+                      onNodeClick={(title) => {
+                        handleNodeClick(title);
+                      }}
                     />
                   );
                 })}

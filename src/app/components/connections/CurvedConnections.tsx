@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import ConnectionTooltip from "./ConnectionTooltip";
 
 interface NodePosition {
   x: number;
   y: number;
 }
 
-type ConnectionType = 
-  | 'Prerequisite'
-  | 'Improvement'
-  | 'Speculative'
-  | 'Inspiration'
-  | 'Component'
-  | 'Independently invented'
-  | 'default';
+type ConnectionType =
+  | "Prerequisite"
+  | "Improvement"
+  | "Speculative"
+  | "Inspiration"
+  | "Component"
+  | "Independently invented"
+  | "default";
 
 interface CurvedConnectionsProps {
   sourceNode: NodePosition;
@@ -27,12 +28,14 @@ interface CurvedConnectionsProps {
   details?: string;
   opacity?: number;
   onSelect?: () => void;
+  isSelected?: boolean;
+  onNodeClick: (title: string) => void;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   sourceNode,
   targetNode,
-  connectionType = 'default',
+  connectionType = "default",
   isHighlighted = false,
   onMouseEnter,
   onMouseLeave,
@@ -40,82 +43,116 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   targetTitle,
   details,
   opacity = 1,
-  onSelect
+  onSelect,
+  isSelected = false,
+  onNodeClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
+    null
+  );
+  const [selectedPos, setSelectedPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
-  
-  const NODE_WIDTH = 120;
-  const NODE_HEIGHT = 150;
+  // Clear selected position when selection state changes
+  useEffect(() => {
+    if (!isSelected) {
+      setSelectedPos(null);
+    }
+  }, [isSelected]);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newPos = { x: e.clientX, y: e.clientY };
+    setSelectedPos(newPos);
+    onSelect?.();
+  };
+
   const ARROW_OFFSET = 70;
 
   const getControlPoints = (x1: number, y1: number, x2: number, y2: number) => {
     const deltaX = x2 - x1;
     const controlPointOffset = Math.min(Math.abs(deltaX) * 0.5, 200);
-    
+
     return {
       cx1: x1 + controlPointOffset,
       cy1: y1,
       cx2: x2 - controlPointOffset,
-      cy2: y2
+      cy2: y2,
     };
   };
 
-  const getAdjustedEndpoint = (sourceX: number, sourceY: number, targetX: number, targetY: number, isSource: boolean) => {
+  const getAdjustedEndpoint = (
+    sourceX: number,
+    sourceY: number,
+    targetX: number,
+    targetY: number,
+    isSource: boolean
+  ) => {
     const dx = targetX - sourceX;
     const dy = targetY - sourceY;
     const angle = Math.atan2(dy, dx);
-    
+
     if (isSource) {
       return {
-        x: sourceX + (ARROW_OFFSET * Math.cos(angle)),
-        y: sourceY + (ARROW_OFFSET * Math.sin(angle))
+        x: sourceX + ARROW_OFFSET * Math.cos(angle),
+        y: sourceY + ARROW_OFFSET * Math.sin(angle),
       };
     } else {
       return {
-        x: targetX - (ARROW_OFFSET * Math.cos(angle)),
-        y: targetY - (ARROW_OFFSET * Math.sin(angle))
+        x: targetX - ARROW_OFFSET * Math.cos(angle),
+        y: targetY - ARROW_OFFSET * Math.sin(angle),
       };
     }
   };
 
   const getLineStyle = (type: ConnectionType, isActive: boolean) => {
     const baseStyles = {
-      Prerequisite: { stroke: '#FCA5A5', strokeWidth: 3 },
-      Improvement: { stroke: '#93C5FD', strokeWidth: 2 },
-      Speculative: { stroke: '#FCD34D', strokeWidth: 2 },
-      Inspiration: { stroke: '#86EFAC', strokeWidth: 2 },
-      Component: { stroke: '#C4B5FD', strokeWidth: 2 },
-      'Independently invented': { stroke: '#6EE7B7', strokeWidth: 2 },
-      default: { stroke: '#6B7280', strokeWidth: 2 }
+      Prerequisite: { stroke: "#FCA5A5", strokeWidth: 3 },
+      Improvement: { stroke: "#93C5FD", strokeWidth: 2 },
+      Speculative: { stroke: "#FCD34D", strokeWidth: 2 },
+      Inspiration: { stroke: "#86EFAC", strokeWidth: 2 },
+      Component: { stroke: "#C4B5FD", strokeWidth: 2 },
+      "Independently invented": { stroke: "#6EE7B7", strokeWidth: 2 },
+      default: { stroke: "#6B7280", strokeWidth: 2 },
     };
 
     const style = baseStyles[type] || baseStyles.default;
-    
+
     // Add opacity based on hover/highlight state
     return {
       ...style,
       strokeOpacity: isActive ? opacity : 0.3 * opacity, // Multiply by opacity
       strokeWidth: isActive ? style.strokeWidth + 1 : style.strokeWidth,
-      ...(['Speculative', 'Inspiration', 'Independently invented'].includes(type) 
-        ? { strokeDasharray: type === 'Independently invented' ? '10,3' : '5,5' }
-        : {})
+      ...(["Speculative", "Inspiration", "Independently invented"].includes(
+        type
+      )
+        ? {
+            strokeDasharray: type === "Independently invented" ? "10,3" : "5,5",
+          }
+        : {}),
     };
   };
 
   const { x: x1, y: y1 } = sourceNode;
   const { x: x2, y: y2 } = targetNode;
-  
+
   const sourcePoint = getAdjustedEndpoint(x1, y1, x2, y2, true);
   const endPoint = getAdjustedEndpoint(x1, y1, x2, y2, false);
-  
-  const { cx1, cy1, cx2, cy2 } = getControlPoints(sourcePoint.x, sourcePoint.y, endPoint.x, endPoint.y);
-  
+
+  const { cx1, cy1, cx2, cy2 } = getControlPoints(
+    sourcePoint.x,
+    sourcePoint.y,
+    endPoint.x,
+    endPoint.y
+  );
+
   const dx = endPoint.x - cx2;
   const dy = endPoint.y - cy2;
   const angle = Math.atan2(dy, dx);
-  
+
   // First calculate the arrowhead base point (slightly before the endPoint)
   const arrowLength = 10;
   const arrowPoint1X = endPoint.x - arrowLength * Math.cos(angle - Math.PI / 6);
@@ -124,37 +161,33 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   const arrowPoint2Y = endPoint.y - arrowLength * Math.sin(angle + Math.PI / 6);
 
   // Calculate where the line should actually end (at the base of the arrow)
-  const lineEndX = endPoint.x - (arrowLength/2) * Math.cos(angle);
-  const lineEndY = endPoint.y - (arrowLength/2) * Math.sin(angle);
-  
-  const lineStyle = getLineStyle(connectionType, isHovered || isHighlighted);
+  const lineEndX = endPoint.x - (arrowLength / 2) * Math.cos(angle);
+  const lineEndY = endPoint.y - (arrowLength / 2) * Math.sin(angle);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    // Get mouse position relative to the viewport (not SVG coordinates)
-    const x = e.clientX;
-    const y = e.clientY;
-    setMousePos({ x, y });
-  };
+  const lineStyle = getLineStyle(connectionType, isHovered || isHighlighted);
 
   return (
     <>
-      <g 
+      <g
         className="connection"
         onMouseEnter={() => {
           setIsHovered(true);
           onMouseEnter?.();
         }}
         onMouseLeave={() => {
-          setIsHovered(false);
-          onMouseLeave?.();
-          setMousePos(null);
+          if (!isSelected) {
+            setIsHovered(false);
+            onMouseLeave?.();
+            setMousePos(null);
+          }
         }}
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect?.();
+        onClick={handleClick}
+        onMouseMove={(e) => {
+          if (!isSelected) {
+            setMousePos({ x: e.clientX, y: e.clientY });
+          }
         }}
-        onMouseMove={handleMouseMove}
-        style={{ pointerEvents: 'all' }}
+        style={{ pointerEvents: "all" }}
       >
         {/* Hit area */}
         <path
@@ -162,54 +195,43 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           stroke="transparent"
           strokeWidth={20}
           fill="none"
-          style={{ pointerEvents: 'stroke' }}
+          style={{ pointerEvents: "stroke" }}
         />
-        
+
         {/* Visible path */}
         <path
           d={`M ${sourcePoint.x} ${sourcePoint.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${lineEndX} ${lineEndY}`}
           fill="none"
           {...lineStyle}
-          style={{ pointerEvents: 'none' }}
+          style={{ pointerEvents: "none" }}
         />
-          
+
         {/* Arrow */}
         <path
           d={`M ${endPoint.x} ${endPoint.y} L ${arrowPoint1X} ${arrowPoint1Y} L ${arrowPoint2X} ${arrowPoint2Y} Z`}
           fill={lineStyle.stroke}
           opacity={lineStyle.strokeOpacity}
-          style={{ pointerEvents: 'none' }}
+          style={{ pointerEvents: "none" }}
         />
       </g>
 
       {/* Tooltip Portal */}
-      {isHovered && mousePos && (
+      {((isHovered && mousePos) || (isSelected && selectedPos)) && (
         <Portal>
-          <div 
-            className="fixed bg-white p-3 rounded-lg shadow-lg border text-sm connection-tooltip"
-            style={{
-              left: mousePos.x + 10,
-              top: mousePos.y + 10,
-              zIndex: 9999,
-              pointerEvents: 'none',
-              maxWidth: '240px',
-              transform: 'translateZ(0)',
-              backdropFilter: 'blur(8px)',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)'
+          <ConnectionTooltip
+            x={isSelected ? selectedPos?.x || 0 : mousePos?.x || 0}
+            y={isSelected ? selectedPos?.y || 0 : mousePos?.y || 0}
+            sourceTitle={sourceTitle}
+            targetTitle={targetTitle}
+            type={connectionType}
+            details={details}
+            isSelected={isSelected}
+            onNodeClick={(title) => {
+              if (onNodeClick) {
+                onNodeClick(title);
+              }
             }}
-          >
-            <div className="mb-1.5">
-              <span className="font-semibold text-gray-700">From:</span> {sourceTitle}
-            </div>
-            <div className="mb-1.5">
-              <span className="font-semibold text-gray-700">To:</span> {targetTitle}
-            </div>
-            {details && (
-              <div className="border-t pt-1.5 mt-1.5">
-                <span className="font-semibold text-gray-700">Details:</span> {details}
-              </div>
-            )}
-          </div>
+          />
         </Portal>
       )}
     </>
@@ -223,7 +245,7 @@ const Portal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   React.useEffect(() => {
     // Create a div to mount the portal
-    portalRoot.current = document.createElement('div');
+    portalRoot.current = document.createElement("div");
     document.body.appendChild(portalRoot.current);
     setMounted(true);
 

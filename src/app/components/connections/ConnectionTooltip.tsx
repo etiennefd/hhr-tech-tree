@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ConnectionTooltipProps {
   x: number;
@@ -7,6 +7,8 @@ interface ConnectionTooltipProps {
   targetTitle: string;
   type: string;
   details?: string;
+  isSelected?: boolean;
+  onNodeClick?: (title: string) => void;
 }
 
 const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
@@ -15,35 +17,56 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   sourceTitle,
   targetTitle,
   type,
-  details
+  details,
+  isSelected,
+  onNodeClick,
 }) => {
   // Calculate if tooltip would go off-screen
-  const isNearRightEdge = x > window.innerWidth - 300; // 300 = tooltip width + padding
-  const isNearBottomEdge = y > window.innerHeight - 150; // 150 = approx max tooltip height
+  const isNearRightEdge = x > window.innerWidth - 300;
+  const isNearBottomEdge = y > window.innerHeight - 150;
+
+  const handleNodeClick = (e: React.MouseEvent, title: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onNodeClick) {
+      onNodeClick(title);
+    }
+  };
 
   return (
-    <div 
-      className="absolute bg-white border rounded-lg p-3 shadow-lg w-64 connection-tooltip"
+    <div
+      className="fixed bg-white border rounded-lg p-3 shadow-lg w-64 z-50"
       style={{
-        left: isNearRightEdge ? x - 274 : x + 10, // 274 = tooltip width + offset
+        left: isNearRightEdge ? x - 274 : x + 10,
         top: isNearBottomEdge ? y - 100 : y + 10,
-        pointerEvents: 'none',
-        zIndex: 9999, // Highest z-index to ensure it's above everything
-        transform: 'translateZ(0)', // Creates a new stacking context
-        backdropFilter: 'blur(8px)',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)'
+        pointerEvents: "all",
       }}
+      onClick={(e) => e.stopPropagation()}
     >
       <div className="relative">
-        <p className="text-xs mb-1.5 font-medium">
-          <strong className="text-gray-700">From:</strong> {sourceTitle}
+        <p className="text-xs mb-1.5">
+          <strong className="text-gray-700">From: </strong>
+          <button
+            onClick={(e) => handleNodeClick(e, sourceTitle)}
+            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+            type="button"
+          >
+            {sourceTitle}
+          </button>
         </p>
-        <p className="text-xs mb-1.5 font-medium">
-          <strong className="text-gray-700">To:</strong> {targetTitle}
+        <p className="text-xs mb-1.5">
+          <strong className="text-gray-700">To: </strong>
+          <button
+            onClick={(e) => handleNodeClick(e, targetTitle)}
+            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+            type="button"
+          >
+            {targetTitle}
+          </button>
         </p>
         {details && (
           <p className="text-xs text-gray-600 border-t pt-1.5 mt-1.5">
-            <strong className="text-gray-700">Details:</strong> {details}
+            {details}
           </p>
         )}
       </div>
