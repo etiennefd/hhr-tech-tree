@@ -144,7 +144,6 @@ const TechTreeViewer = () => {
     Physics: "#e6e1f4", // Soft purple
     Chemistry: "#e0d9f2", // Deeper purple
     Astronomy: "#d9e1ff", // Periwinkle
-    Geology: "#e8e4f1", // Dusty purple
     Meteorology: "#e1e8f7", // Sky blue
     Optics: "#dce4f7", // Light purple-blue
 
@@ -253,7 +252,6 @@ const TechTreeViewer = () => {
       Physics: 500,
       Chemistry: 550,
       Astronomy: 600,
-      Geology: 650,
       Meteorology: 700,
       Optics: 750,
 
