@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import ConnectionLegend from "../components/connections/ConnectionLegend";
+import BrutalistNode from "../components/nodes/BrutalistNode";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1700;
@@ -940,30 +941,13 @@ const TechTreeViewer = () => {
                 style={{ zIndex: 10 }}
               >
                 {filteredNodes.map((node) => (
-                  <div
+                  <BrutalistNode
                     key={node.id}
-                    className="absolute bg-white/90 backdrop-blur border rounded-lg p-2 shadow-sm hover:shadow-md transition-all cursor-pointer tech-node"
-                    style={{
-                      left: `${getXPosition(node.year)}px`,
-                      top: `${node.y}px`,
-                      width: NODE_WIDTH,
-                      transform: "translate(-60px, -75px)",
-                      opacity: selectedNodeId
-                        ? node.id === selectedNodeId ||
-                          isAdjacentToSelected(node.id)
-                          ? 1
-                          : 0.2
-                        : selectedLinkIndex !== null
-                        ? isNodeConnectedToSelectedLink(node.id)
-                          ? 1
-                          : 0.2
-                        : 1,
-                      backgroundColor:
-                        node.id === selectedNodeId
-                          ? "#f0f7ff"
-                          : "rgba(255, 255, 255, 0.9)",
-                    }}
-                    onClick={(e) => {
+                    node={node}
+                    isSelected={node.id === selectedNodeId}
+                    isAdjacent={isAdjacentToSelected(node.id)}
+                    formatYear={formatYear}
+                    onClick={() => {
                       if (node.id === selectedNodeId) {
                         setSelectedNodeId(null);
                       } else {
@@ -975,39 +959,28 @@ const TechTreeViewer = () => {
                       setHoveredNodeId(node.id);
                     }}
                     onMouseLeave={() => {
-                      // Only keep hover if this is the selected node
                       if (node.id !== selectedNodeId) {
                         setHoveredNode(null);
                         setHoveredNodeId(null);
                       }
                     }}
-                  >
-                    <img
-                      src={node.image}
-                      alt={node.title}
-                      className="w-full h-20 object-cover rounded mb-2"
-                    />
-                    <h3 className="text-sm font-medium line-clamp-2">
-                      {node.title}
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      {formatYear(node.year)}
-                    </p>
-                    <div className="flex flex-wrap gap-1">
-                      {node.fields.map((field) => (
-                        <span
-                          key={field}
-                          className="text-[10px] px-1.5 py-0.5 rounded"
-                          style={{
-                            backgroundColor: fieldColors[field] || "#f0f0f0",
-                            color: "#333",
-                          }}
-                        >
-                          {field}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                    width={NODE_WIDTH}
+                    style={{
+                      position: "absolute",
+                      left: `${getXPosition(node.year)}px`,
+                      top: `${node.y}px`,
+                      opacity: selectedNodeId
+                        ? node.id === selectedNodeId ||
+                          isAdjacentToSelected(node.id)
+                          ? 1
+                          : 0.2
+                        : selectedLinkIndex !== null
+                        ? isNodeConnectedToSelectedLink(node.id)
+                          ? 1
+                          : 0.2
+                        : 1,
+                    }}
+                  />
                 ))}
               </div>
 

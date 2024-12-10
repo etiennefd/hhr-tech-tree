@@ -14,6 +14,8 @@ type ConnectionType =
   | "Inspiration"
   | "Component"
   | "Independently invented"
+  | "Link plausible but unclear"
+  | "Concurrent development"
   | "default";
 
 interface CurvedConnectionsProps {
@@ -48,8 +50,13 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onNodeClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
-  const [selectedPos, setSelectedPos] = useState<{ x: number; y: number } | null>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
+    null
+  );
+  const [selectedPos, setSelectedPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   useEffect(() => {
     if (!isSelected) {
@@ -68,15 +75,15 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     };
 
     // Add listeners to both scroll containers
-    const verticalContainer = document.querySelector('.overflow-y-auto');
-    const horizontalContainer = document.querySelector('.overflow-x-auto');
+    const verticalContainer = document.querySelector(".overflow-y-auto");
+    const horizontalContainer = document.querySelector(".overflow-x-auto");
 
-    verticalContainer?.addEventListener('scroll', handleScroll);
-    horizontalContainer?.addEventListener('scroll', handleScroll);
+    verticalContainer?.addEventListener("scroll", handleScroll);
+    horizontalContainer?.addEventListener("scroll", handleScroll);
 
     return () => {
-      verticalContainer?.removeEventListener('scroll', handleScroll);
-      horizontalContainer?.removeEventListener('scroll', handleScroll);
+      verticalContainer?.removeEventListener("scroll", handleScroll);
+      horizontalContainer?.removeEventListener("scroll", handleScroll);
     };
   }, [isSelected, onSelect]);
 
@@ -87,7 +94,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     onSelect?.();
   };
 
-  const ARROW_OFFSET = 70;
+  const ARROW_OFFSET = 85;
 
   const getControlPoints = (x1: number, y1: number, x2: number, y2: number) => {
     const deltaX = x2 - x1;
@@ -126,31 +133,32 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   };
 
   const getLineStyle = (type: ConnectionType, isActive: boolean) => {
-    const baseStyles = {
-      Prerequisite: { stroke: "#FCA5A5", strokeWidth: 3 },
-      Improvement: { stroke: "#93C5FD", strokeWidth: 2 },
-      Speculative: { stroke: "#FCD34D", strokeWidth: 2 },
-      Inspiration: { stroke: "#86EFAC", strokeWidth: 2 },
-      Component: { stroke: "#C4B5FD", strokeWidth: 2 },
-      "Independently invented": { stroke: "#6EE7B7", strokeWidth: 2 },
-      default: { stroke: "#6B7280", strokeWidth: 2 },
+    // Base style for all connections
+    const baseStyle = {
+      stroke: "#333333", // Dark gray for all connections
+      strokeWidth: isActive ? 2 : 1.5,
+      strokeOpacity: isActive ? opacity : 0.3 * opacity,
     };
 
-    const style = baseStyles[type] || baseStyles.default;
-
-    // Add opacity based on hover/highlight state
-    return {
-      ...style,
-      strokeOpacity: isActive ? opacity : 0.3 * opacity, // Multiply by opacity
-      strokeWidth: isActive ? style.strokeWidth + 1 : style.strokeWidth,
-      ...(["Speculative", "Inspiration", "Independently invented"].includes(
+    // Determine dash pattern based on connection type
+    if (["Independently invented", "Concurrent development"].includes(type)) {
+      return {
+        ...baseStyle,
+        strokeDasharray: "10,4", // Longer dashes for independent/concurrent development
+      };
+    } else if (
+      ["Inspiration", "Speculative", "Link plausible but unclear"].includes(
         type
       )
-        ? {
-            strokeDasharray: type === "Independently invented" ? "10,3" : "5,5",
-          }
-        : {}),
-    };
+    ) {
+      return {
+        ...baseStyle,
+        strokeDasharray: "4,4", // Shorter dashes for speculative/inspirational connections
+      };
+    }
+
+    // Default solid line for all other connection types
+    return baseStyle;
   };
 
   const { x: x1, y: y1 } = sourceNode;
