@@ -105,9 +105,11 @@ const BrutalistNode = ({
             <h3 className="text-sm font-bold uppercase leading-tight">
               {node.title}
             </h3>
-            <div className="text-[10px] font-mono text-gray-600 mt-0.5">
-              {node.secondaryName || `TYPE-${node.id.slice(0,3)}`}
-            </div>
+            {node.subtitle && (
+              <div className="text-[10px] font-mono text-gray-600 mt-0.5">
+                {node.subtitle}
+              </div>
+            )}
           </div>
 
           {/* Year */}

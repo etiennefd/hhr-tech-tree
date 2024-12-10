@@ -193,6 +193,7 @@ export async function GET() {
           return {
             id: record.id,
             title: String(record.get("Name") || ""),
+            subtitle: String(record.get("Secondary name") || ""),
             tier: String(record.get("Tier") || ""),
             image:
               String(record.get("Image URL") || "") || 
