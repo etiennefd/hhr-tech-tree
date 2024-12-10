@@ -11,7 +11,6 @@ import { Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
-import ConnectionLegend from "../components/connections/ConnectionLegend";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 
 // Timeline scale boundaries
@@ -812,9 +811,6 @@ const TechTreeViewer = () => {
               className="pl-8"
             />
           </div>
-        </div>
-        <div className="fixed top-40 right-4 bg-white/90 backdrop-blur rounded-lg shadow-lg p-4 z-50">
-          <ConnectionLegend />
         </div>
       </>
 
