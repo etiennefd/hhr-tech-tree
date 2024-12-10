@@ -21,7 +21,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   isSelected,
   onNodeClick,
 }) => {
-  // Calculate if tooltip would go off-screen
   const isNearRightEdge = x > window.innerWidth - 300;
   const isNearBottomEdge = y > window.innerHeight - 150;
 
@@ -30,6 +29,42 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     e.stopPropagation();
     if (onNodeClick) {
       onNodeClick(title);
+    }
+  };
+
+  const renderConnectionContent = () => {
+    const Source = (
+      <button
+        onClick={(e) => handleNodeClick(e, sourceTitle)}
+        className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+        type="button"
+      >
+        {sourceTitle}
+      </button>
+    );
+
+    const Target = (
+      <button
+        onClick={(e) => handleNodeClick(e, targetTitle)}
+        className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+        type="button"
+      >
+        {targetTitle}
+      </button>
+    );
+
+    switch (type) {
+      case "Independently invented":
+        return <>{Source} and {Target} were independently invented</>;
+      case "Concurrent development":
+        return <>{Source} and {Target} were developed concurrently</>;
+      case "Inspiration":
+        return <>{Source} inspired {Target}</>;
+      case "Speculative":
+      case "Link plausible but unclear":
+        return <>{Source} may have led to {Target}</>;
+      default:
+        return <>{Source} led to {Target}</>;
     }
   };
 
@@ -43,33 +78,14 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="relative">
-        <p className="text-xs mb-1.5">
-          <strong className="text-gray-700">From: </strong>
-          <button
-            onClick={(e) => handleNodeClick(e, sourceTitle)}
-            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
-            type="button"
-          >
-            {sourceTitle}
-          </button>
+      <p className="text-xs mb-1.5">
+        {renderConnectionContent()}
+      </p>
+      {details && (
+        <p className="text-xs text-gray-600 border-t pt-1.5 mt-1.5">
+          {details}
         </p>
-        <p className="text-xs mb-1.5">
-          <strong className="text-gray-700">To: </strong>
-          <button
-            onClick={(e) => handleNodeClick(e, targetTitle)}
-            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
-            type="button"
-          >
-            {targetTitle}
-          </button>
-        </p>
-        {details && (
-          <p className="text-xs text-gray-600 border-t pt-1.5 mt-1.5">
-            {details}
-          </p>
-        )}
-      </div>
+      )}
     </div>
   );
 };
