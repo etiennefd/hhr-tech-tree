@@ -223,7 +223,18 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           style={{ pointerEvents: "stroke" }}
         />
 
-        {/* Visible path */}
+        {/* Start marker (square) */}
+        <rect
+          x={sourcePoint.x - 3}
+          y={sourcePoint.y - 3}
+          width={6}
+          height={6}
+          fill={lineStyle.stroke}
+          opacity={lineStyle.strokeOpacity}
+          style={{ pointerEvents: "none" }}
+        />
+
+        {/* Main connection line */}
         <path
           d={`M ${sourcePoint.x} ${sourcePoint.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${lineEndX} ${lineEndY}`}
           fill="none"
@@ -231,13 +242,27 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           style={{ pointerEvents: "none" }}
         />
 
-        {/* Arrow */}
-        <path
-          d={`M ${endPoint.x} ${endPoint.y} L ${arrowPoint1X} ${arrowPoint1Y} L ${arrowPoint2X} ${arrowPoint2Y} Z`}
-          fill={lineStyle.stroke}
-          opacity={lineStyle.strokeOpacity}
-          style={{ pointerEvents: "none" }}
-        />
+        {/* End marker - either square or arrow depending on type */}
+        {["Independently invented", "Concurrent development"].includes(
+          connectionType
+        ) ? (
+          <rect
+            x={endPoint.x - 3}
+            y={endPoint.y - 3}
+            width={6}
+            height={6}
+            fill={lineStyle.stroke}
+            opacity={lineStyle.strokeOpacity}
+            style={{ pointerEvents: "none" }}
+          />
+        ) : (
+          <path
+            d={`M ${endPoint.x} ${endPoint.y} L ${arrowPoint1X} ${arrowPoint1Y} L ${arrowPoint2X} ${arrowPoint2Y} Z`}
+            fill={lineStyle.stroke}
+            opacity={lineStyle.strokeOpacity}
+            style={{ pointerEvents: "none" }}
+          />
+        )}
       </g>
 
       {/* Tooltip Portal */}

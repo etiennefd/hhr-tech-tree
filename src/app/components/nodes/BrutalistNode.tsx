@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const BrutalistNode = ({
   node,
@@ -65,33 +65,35 @@ const BrutalistNode = ({
         transition-transform 
         cursor-pointer 
         tech-node
-        ${isSelected ? 'z-20' : 'z-10'}
+        ${isSelected ? "z-20" : "z-10"}
       `}
       style={{
         ...style,
         width: `${width}px`,
-        transform: `translate(-${width/2}px, -75px)`,
+        transform: `translate(-${width / 2}px, -75px)`,
       }}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {/* Main container */}
-      <div className={`
+      <div
+        className={`
         border border-black
         bg-white
-        ${isSelected ? 'ring-2 ring-black' : ''}
+        ${isSelected ? "ring-2 ring-black" : ""}
         transition-all
-      `}>
+      `}
+      >
         {/* Image section */}
         <div className="border-b border-black p-0">
           <img
             src={node.image}
             alt={node.title}
             className="w-full h-20 object-cover"
-            style={{ 
-              filter: 'grayscale(20%) contrast(110%)',
-              mixBlendMode: 'multiply'
+            style={{
+              filter: "grayscale(20%) contrast(110%)",
+              mixBlendMode: "multiply",
             }}
           />
         </div>
