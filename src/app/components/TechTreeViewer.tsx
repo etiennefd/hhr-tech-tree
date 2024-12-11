@@ -768,6 +768,37 @@ const TechTreeViewer = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Add your existing style element content
+    const style = document.createElement("style");
+    style.textContent = `
+      body {
+        background-color: rgb(254 252 232); /* This is the Tailwind yellow-50 color */
+      }
+      .fast-smooth-scroll {
+        scroll-behavior: smooth;
+        scroll-timeline: none;
+        scroll-behavior-instant-stop: true;
+      }
+    
+      .scrolling .tech-node,
+      .scrolling path,
+      .scrolling .connection,
+      .scrolling g,
+      .scrolling line,
+      .scrolling circle,
+      .scrolling rect,
+      .scrolling text {
+        pointer-events: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
@@ -823,7 +854,7 @@ const TechTreeViewer = () => {
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
           <div
-            className="h-8 bg-white border-b sticky top-0"
+            className="h-8 bg-yellow-50 border-b sticky top-0"
             style={{
               width: containerWidth,
               transform: `scale(${zoom})`,
