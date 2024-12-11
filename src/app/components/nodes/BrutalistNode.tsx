@@ -16,46 +16,63 @@ const BrutalistNode = ({
 
   // Bold, industrial colors for fields
   const fieldColors = {
-    Food: "#2D5A27",
-    Agriculture: "#507D2A",
-    "Animal husbandry": "#45632D",
-    "Hunting and fishing": "#2D4A27",
-    Biology: "#2D5A4F",
-    Medicine: "#2D4A4A",
-    Sanitation: "#2D5A5A",
-    Physics: "#2D2D5A",
-    Chemistry: "#3D2D5A",
-    Astronomy: "#2D3D5A",
-    Meteorology: "#2D4D5A",
-    Optics: "#2D3D4A",
-    Electricity: "#5A5A2D",
-    Electronics: "#5A4D2D",
-    Energy: "#5A3D2D",
-    Lighting: "#5A5A2D",
-    Construction: "#4A3D2D",
-    Mining: "#5A3D2D",
-    Metallurgy: "#4D3D2D",
-    Manufacturing: "#5A3D2D",
-    Textiles: "#5A2D3D",
-    Hydraulics: "#2D3D4A",
-    Transportation: "#2D3D4A",
-    Flying: "#2D4D5A",
-    Sailing: "#2D3D5A",
-    Space: "#2D2D4A",
-    Cartography: "#2D3D4A",
-    Mathematics: "#2D2D3D",
-    Measurement: "#2D2D3D",
-    Timekeeping: "#2D2D3D",
-    Computing: "#2D2D3D",
-    Security: "#5A2D2D",
-    Military: "#5A2D2D",
-    Finance: "#3D3D3D",
-    Law: "#2D2D3D",
-    Governance: "#2D2D3D",
-    Communication: "#5A2D3D",
-    "Visual media": "#5A2D3D",
-    Entertainment: "#5A2D3D",
-    Music: "#5A2D3D",
+    // Food & Agriculture (Vibrant Greens)
+    Food: "#2AAE4A", // Bright grass green
+    Agriculture: "#34B441", // Fresh leaf green
+    "Animal husbandry": "#43A838", // Apple green
+    "Hunting and fishing": "#3EAF49", // Forest green
+
+    // Life Sciences (Teals and Aquas)
+    Biology: "#00A499", // Rich teal
+    Medicine: "#00A5B3", // Medical blue
+    Sanitation: "#0098A6", // Clean aqua
+
+    // Physical Sciences (Deep Purples)
+    Physics: "#7B44BC", // Rich purple
+    Chemistry: "#8E4BC9", // Bright purple
+    Astronomy: "#6B3AAD", // Deep purple
+    Meteorology: "#3C7EBF", // Sky blue
+    Optics: "#5C6BC0", // Bright indigo
+
+    // Energy & Electronics (Circuit Boards and Energy)
+    Electricity: "#FF9F1C", // Electric orange
+    Electronics: "#29A69B", // Circuit board teal
+    Energy: "#FFB627", // Energy yellow
+    Lighting: "#FFB01F", // Bright amber
+
+    // Construction/Materials (Metallics and Earth)
+    Construction: "#C17817", // Rust orange
+    Mining: "#B87D3D", // Copper brown
+    Metallurgy: "#8C8C8C", // Brushed steel
+    Manufacturing: "#D3791E", // Machine orange
+    Textiles: "#D67242", // Terracotta
+    Hydraulics: "#4A90B6", // Industrial blue
+
+    // Transportation/Movement
+    Transportation: "#D35400", // Transportation orange
+    Flying: "#4BA3E3", // Sky blue
+    Sailing: "#1C7CD5", // Ocean blue
+    Space: "#2C1654", // Deep space purple
+    Cartography: "#3A75C5", // Map blue
+
+    // Computing/Math (Modern Grays and Blues)
+    Mathematics: "#6B7B8C", // Slate blue
+    Measurement: "#607D8B", // Steel blue
+    Timekeeping: "#546E7A", // Clock gray
+    Computing: "#435863", // Tech gray
+
+    // Safety/Protection/Governance
+    Security: "#E94F37", // Alert red
+    Military: "#D64933", // Signal red
+    Finance: "#2F4F4F", // Dark sage green
+    Law: "#5C7080", // Justice gray
+    Governance: "#536B78", // Authority gray
+
+    // Culture & Communication (Distinct Pinks)
+    Communication: "#FF69B4", // Hot pink
+    "Visual media": "#DA70D6", // Orchid
+    Entertainment: "#FF1493", // Deep pink
+    Music: "#C71585", // Medium violet red
   };
 
   return (
