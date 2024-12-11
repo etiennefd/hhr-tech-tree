@@ -770,24 +770,24 @@ const TechTreeViewer = () => {
 
   if (!isClient || isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-yellow-50">
         <div className="text-lg">Loading visualization...</div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-yellow-50">
       {/* Floating controls */}
       <>
         <div
           className="fixed top-4 right-4 flex flex-col gap-4"
           style={{ zIndex: 1000 }}
         >
-          <div className="flex items-center gap-4 p-4 bg-white/90 backdrop-blur rounded-lg shadow-lg">
+          <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur border border-black rounded-none shadow-md">
             <button
               onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
-              className="p-2 border rounded hover:bg-gray-100 transition-colors"
+              className="p-2 border border-black rounded-none hover:bg-gray-100 transition-colors"
             >
               <Minus size={20} />
             </button>
@@ -801,14 +801,14 @@ const TechTreeViewer = () => {
               <Plus size={20} />
             </button>
           </div>
-          <div className="relative bg-white/90 backdrop-blur rounded-lg shadow-lg p-4">
+          <div className="relative bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="text"
               placeholder="Search technologies..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8"
+              className="pl-8 border-black rounded-none font-mono"
             />
           </div>
         </div>
@@ -816,8 +816,8 @@ const TechTreeViewer = () => {
 
       <div
         ref={horizontalScrollContainerRef}
-        className="overflow-x-auto overflow-y-hidden h-screen"
-      >
+        className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
+        >
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
           <div
@@ -841,7 +841,7 @@ const TechTreeViewer = () => {
               return timelineYears.map((year) => (
                 <div
                   key={year}
-                  className="absolute text-sm text-gray-500"
+                  className="absolute text-sm text-gray-600 font-mono"
                   style={{
                     left: `${getXPosition(year)}px`,
                     transform: "translateX(-50%)",
@@ -988,7 +988,7 @@ const TechTreeViewer = () => {
                       selectedNodeId === node.id) && (
                       <div
                         key={`tooltip-${node.id}`}
-                        className="absolute bg-white border rounded-lg p-3 shadow-lg node-tooltip"
+                        className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
                         style={{
                           left: `${getXPosition(node.year)}px`,
                           top: `${node.y + 100}px`,
