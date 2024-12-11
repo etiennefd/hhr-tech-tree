@@ -771,7 +771,9 @@ const TechTreeViewer = () => {
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
-        <div className="text-lg">Loading visualization...</div>
+        <div className="text-lg font-mono tracking-wide">
+          Loading visualization...
+        </div>
       </div>
     );
   }
