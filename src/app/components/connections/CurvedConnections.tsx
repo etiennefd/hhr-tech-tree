@@ -133,11 +133,14 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   };
 
   const getLineStyle = (type: ConnectionType, isActive: boolean) => {
+    // Light engineering paper blue
+    const engineeringBlue = "#91B4C5"; // Soft, pale blue matching technical paper
+
     // Base style for all connections
     const baseStyle = {
-      stroke: "#333333", // Dark gray for all connections
+      stroke: engineeringBlue,
       strokeWidth: isActive ? 2 : 1.5,
-      strokeOpacity: isActive ? opacity : 0.3 * opacity,
+      strokeOpacity: isActive ? opacity : 0.7 * opacity, // Higher base opacity since the color is lighter
     };
 
     // Determine dash pattern based on connection type
