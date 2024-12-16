@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Airtable from "airtable";
 import fs from 'fs/promises';
 import path from 'path';
+import { formatLocation, cleanCommaList } from '../../utils/location';
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID
@@ -210,10 +211,15 @@ export async function GET() {
               .split(",")
               .filter(Boolean)
               .map((i) => i.trim()),
-            organization: String(record.get("Organization") || ""),
+            organization: cleanCommaList(String(record.get("Organization") || "")),
             city: String(record.get("City") || ""),
-            countryHistorical: String(record.get("Country (historical)") || ""),
-            countryModern: String(record.get("Country (modern borders)") || ""),
+            countryHistorical: cleanCommaList(String(record.get("Country (historical)") || "")),
+            countryModern: cleanCommaList(String(record.get("Country (modern borders)") || "")),
+            // Add formatted location
+            formattedLocation: formatLocation(
+              String(record.get("City") || ""),
+              String(record.get("Country (historical)") || "")
+            ),
             wikipedia: String(record.get("Wikipedia") || ""),
             details: String(record.get("Details") || ""),
           };

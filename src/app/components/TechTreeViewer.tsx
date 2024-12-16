@@ -793,7 +793,7 @@ const TechTreeViewer = () => {
       }
     `;
     document.head.appendChild(style);
-  
+
     return () => {
       document.head.removeChild(style);
     };
@@ -850,7 +850,7 @@ const TechTreeViewer = () => {
       <div
         ref={horizontalScrollContainerRef}
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
-        >
+      >
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
           <div
@@ -1066,12 +1066,9 @@ const TechTreeViewer = () => {
                             <strong>Organization:</strong> {node.organization}
                           </p>
                         )}
-                        {(node.city || node.countryHistorical) && (
+                        {node.formattedLocation && (
                           <p className="text-xs mb-1">
-                            <strong>Location:</strong>{" "}
-                            {[node.city, node.countryHistorical]
-                              .filter(Boolean)
-                              .join(", ")}
+                            <strong>Location:</strong> {node.formattedLocation}
                           </p>
                         )}
                         {node.details && (
