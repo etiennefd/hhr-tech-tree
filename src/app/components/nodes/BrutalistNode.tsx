@@ -86,6 +86,7 @@ const BrutalistNode = ({
         tech-node
         ${isSelected ? "z-20" : "z-10"}
       `}
+      lang="en"
       style={{
         ...style,
         width: `${width}px`,
@@ -121,7 +122,16 @@ const BrutalistNode = ({
         <div className="px-3 py-2">
           {/* Title and code */}
           <div className="mb-2">
-            <h3 className="text-sm font-bold uppercase leading-tight">
+            <h3
+              className="text-sm font-bold uppercase leading-tight"
+              style={{
+                wordBreak: "break-word",
+                hyphens: "auto",
+                WebkitHyphens: "auto",
+                msHyphens: "auto",
+                hyphenateCharacter: "-",
+              }}
+            >
               {node.title}
             </h3>
             {node.subtitle && (
