@@ -205,66 +205,66 @@ const TechTreeViewer = () => {
 
     // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
     const VERTICAL_BANDS = {
-      // Food & Agriculture (0-150)
-      Food: Math.max(75, ABSOLUTE_MIN_Y),
-      Agriculture: Math.max(100, ABSOLUTE_MIN_Y),
-      "Animal husbandry": Math.max(125, ABSOLUTE_MIN_Y),
-      "Hunting and fishing": Math.max(150, ABSOLUTE_MIN_Y),
+      // Food & Agriculture (0-300)
+      Food: Math.max(150, ABSOLUTE_MIN_Y),
+      Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
+      "Animal husbandry": Math.max(250, ABSOLUTE_MIN_Y),
+      "Hunting and fishing": Math.max(300, ABSOLUTE_MIN_Y),
     
-      // Life Sciences (150-250)
-      Biology: 150,
-      Medicine: 175,
-      Sanitation: 200,
+      // Life Sciences (300-500)
+      Biology: 300,
+      Medicine: 350,
+      Sanitation: 400,
     
-      // Physical Sciences (250-400)
-      Physics: 250,
-      Chemistry: 275,
-      Astronomy: 300,
-      Meteorology: 350,
-      Optics: 375,
+      // Physical Sciences (500-800)
+      Physics: 500,
+      Chemistry: 550,
+      Astronomy: 600,
+      Meteorology: 700,
+      Optics: 750,
     
-      // Energy & Electronics (400-500)
-      Electricity: 400,
-      Electronics: 425,
-      Energy: 450,
-      Lighting: 475,
+      // Energy & Electronics (800-1000)
+      Electricity: 800,
+      Electronics: 850,
+      Energy: 900,
+      Lighting: 950,
     
-      // Construction/Materials (500-650)
-      Construction: 500,
-      Mining: 525,
-      Metallurgy: 550,
-      Manufacturing: 575,
-      Textiles: 600,
-      Hydraulics: 625,
+      // Construction/Materials (1000-1300)
+      Construction: 1000,
+      Mining: 1050,
+      Metallurgy: 1100,
+      Manufacturing: 1150,
+      Textiles: 1200,
+      Hydraulics: 1250,
     
-      // Transportation/Movement (650-800)
-      Transportation: 650,
-      Flying: 675,
-      Sailing: 700,
-      Space: 725,
-      Cartography: 750,
+      // Transportation/Movement (1300-1600)
+      Transportation: 1300,
+      Flying: 1350,
+      Sailing: 1400,
+      Space: 1450,
+      Cartography: 1500,
     
-      // Computing/Math (800-900)
-      Mathematics: 800,
-      Measurement: 825,
-      Timekeeping: 850,
-      Computing: 875,
+      // Computing/Math (1600-1800)
+      Mathematics: 1600,
+      Measurement: 1650,
+      Timekeeping: 1700,
+      Computing: 1750,
     
-      // Safety/Protection/Governance (900-1050)
-      Security: 900,
-      Military: 925,
-      Finance: 950,
-      Law: 975,
-      Governance: 1000,
+      // Safety/Protection/Governance (1800-2100)
+      Security: 1800,
+      Military: 1850,
+      Finance: 1900,
+      Law: 1950,
+      Governance: 2000,
     
-      // Culture (1050-1200)
-      Communication: 1050,
-      "Visual media": 1075,
-      Entertainment: 1100,
-      Music: 1125,
-
+      // Culture (2100-2400)
+      Communication: 2100,
+      "Visual media": 2150,
+      Entertainment: 2200,
+      Music: 2250,
+    
       // Miscellaneous
-      Misc: 1150, 
+      Misc: 2300,
     };
 
     // Group nodes by year
