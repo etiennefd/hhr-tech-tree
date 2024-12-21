@@ -125,7 +125,7 @@ const TechTreeViewer = () => {
   // Constants
   const NODE_WIDTH = 160;
   const VERTICAL_SPACING = 200;
-  const YEAR_WIDTH = 200;
+  const YEAR_WIDTH = 240;
   const PADDING = 120;
 
   // State
