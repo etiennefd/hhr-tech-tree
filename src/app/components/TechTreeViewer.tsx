@@ -260,7 +260,8 @@ const TechTreeViewer = () => {
         // Get base position from primary field, ensuring minimum Y
         const basePosition = Math.max(
           ABSOLUTE_MIN_Y,
-          node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200
+          (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
+            (Math.random() - 0.5) * 100 // Add significant random offset to base position
         );
 
         let finalPosition = basePosition;
@@ -297,7 +298,7 @@ const TechTreeViewer = () => {
         }
 
         // Add random offset while respecting minimum Y
-        const randomOffset = (Math.random() - 0.5) * 20;
+        const randomOffset = (Math.random() - 0.5) * 50;
         finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition + randomOffset);
 
         while (isOverlapping(finalPosition)) {
