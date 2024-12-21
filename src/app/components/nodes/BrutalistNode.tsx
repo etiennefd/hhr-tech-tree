@@ -73,6 +73,8 @@ const BrutalistNode = ({
     "Visual media": "#DA70D6", // Orchid
     Entertainment: "#FF1493", // Deep pink
     Music: "#C71585", // Medium violet red
+
+    Misc: "#2D2D2D", // Dark gray
   };
 
   return (
