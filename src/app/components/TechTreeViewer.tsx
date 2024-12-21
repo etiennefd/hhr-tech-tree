@@ -791,6 +791,7 @@ const TechTreeViewer = () => {
       <div
         ref={horizontalScrollContainerRef}
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
+        style={{ overscrollBehaviorY: "none" }}
       >
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
