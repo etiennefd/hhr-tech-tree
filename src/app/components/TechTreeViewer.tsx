@@ -124,7 +124,7 @@ function calculateXPosition(
 const TechTreeViewer = () => {
   // Constants
   const NODE_WIDTH = 160;
-  const VERTICAL_SPACING = 200;
+  const VERTICAL_SPACING = 50;
   const YEAR_WIDTH = 240;
   const PADDING = 120;
 
@@ -167,73 +167,104 @@ const TechTreeViewer = () => {
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
 
+    function estimateNodeHeight(node) {
+      // Base heights for fixed elements
+      const IMAGE_HEIGHT = 80;  // Image container
+      const PADDING = 24;      // Total vertical padding
+      const BORDERS = 2;       // Top + bottom borders
+      
+      let height = IMAGE_HEIGHT + PADDING + BORDERS;
+      
+      // Title height (assuming ~15 chars per line at current width)
+      const titleLines = Math.ceil(node.title.length / 15);
+      height += titleLines * 24;  // Line height for title text
+      
+      // Subtitle if present
+      if (node.subtitle) {
+        const subtitleLines = Math.ceil(node.subtitle.length / 20);
+        height += subtitleLines * 16;  // Smaller line height for subtitle
+      }
+      
+      // Year display badge
+      height += 28;  // Fixed height for year container
+      
+      // Field tags (assuming 2 tags per line)
+      const fieldLines = Math.ceil(node.fields.length / 2);
+      height += fieldLines * 24;
+      
+      return height;
+    }
+
     const minYear = Math.min(...nodes.map((n) => n.year));
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
     const positionedNodes = [];
     const yearGroups = new Map();
 
     // Ensure minimum distance from top of viewport
-    const ABSOLUTE_MIN_Y = 150; // Minimum Y position for any node
+    const ABSOLUTE_MIN_Y = 150;
 
     // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
     const VERTICAL_BANDS = {
-      // Food (0-300)
-      Food: Math.max(100, ABSOLUTE_MIN_Y),
-      Agriculture: Math.max(150, ABSOLUTE_MIN_Y),
-      "Animal husbandry": Math.max(200, ABSOLUTE_MIN_Y),
-      "Hunting and fishing": Math.max(250, ABSOLUTE_MIN_Y),
+      // Food & Agriculture (0-150)
+      Food: Math.max(75, ABSOLUTE_MIN_Y),
+      Agriculture: Math.max(100, ABSOLUTE_MIN_Y),
+      "Animal husbandry": Math.max(125, ABSOLUTE_MIN_Y),
+      "Hunting and fishing": Math.max(150, ABSOLUTE_MIN_Y),
+    
+      // Life Sciences (150-250)
+      Biology: 150,
+      Medicine: 175,
+      Sanitation: 200,
+    
+      // Physical Sciences (250-400)
+      Physics: 250,
+      Chemistry: 275,
+      Astronomy: 300,
+      Meteorology: 350,
+      Optics: 375,
+    
+      // Energy & Electronics (400-500)
+      Electricity: 400,
+      Electronics: 425,
+      Energy: 450,
+      Lighting: 475,
+    
+      // Construction/Materials (500-650)
+      Construction: 500,
+      Mining: 525,
+      Metallurgy: 550,
+      Manufacturing: 575,
+      Textiles: 600,
+      Hydraulics: 625,
+    
+      // Transportation/Movement (650-800)
+      Transportation: 650,
+      Flying: 675,
+      Sailing: 700,
+      Space: 725,
+      Cartography: 750,
+    
+      // Computing/Math (800-900)
+      Mathematics: 800,
+      Measurement: 825,
+      Timekeeping: 850,
+      Computing: 875,
+    
+      // Safety/Protection/Governance (900-1050)
+      Security: 900,
+      Military: 925,
+      Finance: 950,
+      Law: 975,
+      Governance: 1000,
+    
+      // Culture (1050-1200)
+      Communication: 1050,
+      "Visual media": 1075,
+      Entertainment: 1100,
+      Music: 1125,
 
-      // Life Sciences (300-500)
-      Biology: 300,
-      Medicine: 350,
-      Sanitation: 400,
-
-      // Physical Sciences (500-800)
-      Physics: 500,
-      Chemistry: 550,
-      Astronomy: 600,
-      Meteorology: 700,
-      Optics: 750,
-
-      // Energy & Electronics (800-1000)
-      Electricity: 800,
-      Electronics: 850,
-      Energy: 900,
-      Lighting: 950,
-
-      // Construction/Materials (1000-1300)
-      Construction: 1000,
-      Mining: 1050,
-      Metallurgy: 1100,
-      Manufacturing: 1150,
-      Textiles: 1200,
-      Hydraulics: 1250,
-
-      // Transportation/Movement (1300-1600)
-      Transportation: 1300,
-      Flying: 1350,
-      Sailing: 1400,
-      Space: 1450,
-      Cartography: 1500,
-
-      // Computing/Math (1600-1800)
-      Mathematics: 1600,
-      Measurement: 1650,
-      Timekeeping: 1700,
-      Computing: 1750,
-
-      // Safety/Protection/Governance (1800-2100)
-      Security: 1800,
-      Military: 1850,
-      Finance: 1900,
-      Law: 1950,
-      Governance: 2000,
-
-      // Culture (2100-2400)
-      Communication: 2100,
-      "Visual media": 2150,
-      Entertainment: 2200,
-      Music: 2250,
+      // Miscellaneous
+      Misc: 1150, 
     };
 
     // Group nodes by year
@@ -247,7 +278,7 @@ const TechTreeViewer = () => {
 
     yearGroups.forEach((nodesInYear, year) => {
       const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-      const usedYPositions = [];
+      const usedPositions = []; // Will store {y, height} objects
       const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
       nodesInYear.sort((a, b) => {
@@ -257,26 +288,31 @@ const TechTreeViewer = () => {
       });
 
       nodesInYear.forEach((node) => {
+        const nodeHeight = estimateNodeHeight(node);
+        
         // Get base position from primary field, ensuring minimum Y
         const basePosition = Math.max(
           ABSOLUTE_MIN_Y,
           (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
-            (Math.random() - 0.5) * 100 // Add significant random offset to base position
+            (Math.random() - 0.5) * 100
         );
+
+        const isOverlapping = (testPosition) => {
+          if (testPosition < ABSOLUTE_MIN_Y) return true;
+          
+          const testBottom = testPosition + nodeHeight;
+          
+          return usedPositions.some(({y: usedY, height: usedHeight}) => {
+            const usedBottom = usedY + usedHeight;
+            // Add MIN_VERTICAL_GAP to ensure spacing between nodes
+            return !(testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP);
+          });
+        };
 
         let finalPosition = basePosition;
         let attempts = 0;
         const maxAttempts = 20;
-
         const searchRadius = MIN_VERTICAL_GAP * 2;
-
-        const isOverlapping = (testPosition) => {
-          // Add check for minimum Y position
-          if (testPosition < ABSOLUTE_MIN_Y) return true;
-          return usedYPositions.some(
-            (usedY) => Math.abs(testPosition - usedY) < MIN_VERTICAL_GAP
-          );
-        };
 
         while (isOverlapping(finalPosition) && attempts < maxAttempts) {
           const step = Math.ceil(attempts / 2) * (MIN_VERTICAL_GAP / 2);
@@ -287,14 +323,13 @@ const TechTreeViewer = () => {
           } else {
             finalPosition = basePosition + direction * step;
           }
-          // Ensure we don't go below minimum Y
           finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition);
           attempts++;
         }
 
-        if (isOverlapping(finalPosition) && usedYPositions.length > 0) {
-          const lastY = usedYPositions[usedYPositions.length - 1];
-          finalPosition = Math.max(ABSOLUTE_MIN_Y, lastY + MIN_VERTICAL_GAP);
+        if (isOverlapping(finalPosition) && usedPositions.length > 0) {
+          const lastPosition = usedPositions[usedPositions.length - 1];
+          finalPosition = Math.max(ABSOLUTE_MIN_Y, lastPosition.y + lastPosition.height + MIN_VERTICAL_GAP);
         }
 
         // Add random offset while respecting minimum Y
@@ -302,10 +337,10 @@ const TechTreeViewer = () => {
         finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition + randomOffset);
 
         while (isOverlapping(finalPosition)) {
-          finalPosition += MIN_VERTICAL_GAP / 4;
+          finalPosition += MIN_VERTICAL_GAP / 8;
         }
 
-        usedYPositions.push(finalPosition);
+        usedPositions.push({ y: finalPosition, height: nodeHeight });
         positionedNodes.push({
           ...node,
           x,
@@ -314,7 +349,7 @@ const TechTreeViewer = () => {
       });
     });
 
-    const maxY = Math.max(...positionedNodes.map((node) => node.y));
+    const maxY = Math.max(...positionedNodes.map((node) => node.y + estimateNodeHeight(node)));
     setTotalHeight(maxY + 100);
 
     return positionedNodes;
