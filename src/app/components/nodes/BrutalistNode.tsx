@@ -69,12 +69,12 @@ const BrutalistNode = ({
     Governance: "#536B78", // Authority gray
 
     // Culture & Communication (Distinct Pinks)
-    Communication: "#FF69B4", // Hot pink
+    Communication: "#B07996", // Greyish pink
     "Visual media": "#DA70D6", // Orchid
-    Entertainment: "#FF1493", // Deep pink
+    Entertainment: "#FF69B4", // Hot pink
     Music: "#C71585", // Medium violet red
 
-    Misc: "#2D2D2D", // Dark gray
+    Misc: "#555555", // Medium gray
   };
 
   return (
