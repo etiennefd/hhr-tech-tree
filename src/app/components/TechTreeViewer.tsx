@@ -128,66 +128,6 @@ const TechTreeViewer = () => {
   const YEAR_WIDTH = 200;
   const PADDING = 120;
 
-  const fieldColors = {
-    // Food & Agriculture (Greens)
-    Food: "#e0f4e0", // Fresh green
-    Agriculture: "#e8f4d9", // Lime green
-    "Animal husbandry": "#d5e8d1", // Darker green
-    "Hunting and fishing": "#c9e6c9", // Deep forest green
-
-    // Life Sciences (Blue-Greens)
-    Biology: "#d1e8e1", // Sage blue-green
-    Medicine: "#c2e6dd", // Medical mint
-    Sanitation: "#d8efe6", // Light mint
-
-    // Physical Sciences (Blues & Purples)
-    Physics: "#e6e1f4", // Soft purple
-    Chemistry: "#e0d9f2", // Deeper purple
-    Astronomy: "#d9e1ff", // Periwinkle
-    Meteorology: "#e1e8f7", // Sky blue
-    Optics: "#dce4f7", // Light purple-blue
-
-    // Energy & Electronics (Yellows & Oranges)
-    Electricity: "#fff2d1", // Pale yellow
-    Electronics: "#ffe9cc", // Light orange
-    Energy: "#ffe4cc", // Peach
-    Lighting: "#fff4d9", // Warm yellow
-
-    // Construction/Materials (Browns & Tans)
-    Construction: "#f2e6d9", // Light tan
-    Mining: "#ede1d4", // Beige
-    Metallurgy: "#e8dccf", // Bronze
-    Manufacturing: "#f7e6d9", // Clay
-    Textiles: "#f9e6ef", // Soft pink
-    Hydraulics: "#e0e8f0", // Steel blue
-
-    // Transportation/Movement (Cool Blues)
-    Transportation: "#e6ecf2", // Steel blue
-    Flying: "#e1e7f2", // Sky blue
-    Sailing: "#d9e3f2", // Ocean blue
-    Space: "#d4dff2", // Space blue
-    Cartography: "#dee6f2", // Map blue
-
-    // Computing/Math (Grays & Silver)
-    Mathematics: "#e8ecf2", // Silver blue
-    Measurement: "#e5e9f0", // Cool gray
-    Timekeeping: "#e2e6ed", // Clock gray
-    Computing: "#dfe3ea", // Tech gray
-
-    // Safety/Protection/Governance (Warm Grays & Reds)
-    Security: "#ffe6e6", // Light red
-    Military: "#ffeae6", // Coral
-    Finance: "#e6eaf0", // Banking gray
-    Law: "#e9e9f2", // Justice gray
-    Governance: "#e6e6f0", // Official gray
-
-    // Culture & Communication (Pinks & Soft Reds)
-    Communication: "#ffe6f0", // Soft pink
-    "Visual media": "#ffe6eb", // Rose pink
-    Entertainment: "#ffeae6", // Light coral
-    Music: "#ffe9f2", // Musical pink
-  };
-
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
