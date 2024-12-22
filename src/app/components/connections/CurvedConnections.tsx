@@ -128,7 +128,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
       if (isSource) {
         return {
           x: centerX,
-          y: sourceY + (isUpward ? -NODE_HEIGHT / 2 : NODE_HEIGHT / 2),
+          y: sourceY + (isUpward ? -NODE_HEIGHT / 2 : NODE_HEIGHT / 2) + 50,
         };
       } else {
         return {
