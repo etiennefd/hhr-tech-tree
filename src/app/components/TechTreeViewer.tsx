@@ -547,15 +547,7 @@ const TechTreeViewer = () => {
   const formatYear = useCallback((year: number) => {
     if (year === 0) return "1"; // Year 0 doesn't exist
     const absYear = Math.abs(year);
-    if (year < 0) {
-      if (absYear >= 10000) {
-        return `${absYear
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} BCE`;
-      }
-      return `${absYear} BCE`;
-    }
-    return `${year}`;
+    return year < 0 ? `${absYear} BCE` : `${year}`;
   }, []);
 
   const shouldHighlightLink = useCallback(
