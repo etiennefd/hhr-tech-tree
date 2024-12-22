@@ -1127,18 +1127,18 @@ const TechTreeViewer = () => {
             </div>
           </div>
         </div>
+        <TechTreeMinimap
+          nodes={data.nodes}
+          containerWidth={containerWidth}
+          totalHeight={totalHeight}
+          viewportWidth={containerDimensions.width}
+          viewportHeight={containerDimensions.height}
+          scrollLeft={scrollPosition.left}
+          scrollTop={scrollPosition.top}
+          zoom={zoom}
+          onViewportChange={handleViewportChange}
+        />
       </div>
-      <TechTreeMinimap
-        nodes={data.nodes}
-        containerWidth={containerWidth}
-        totalHeight={totalHeight}
-        viewportWidth={containerDimensions.width}
-        viewportHeight={containerDimensions.height}
-        scrollLeft={scrollPosition.left}
-        scrollTop={scrollPosition.top}
-        zoom={zoom}
-        onViewportChange={handleViewportChange}
-      />
     </div>
   );
 };
