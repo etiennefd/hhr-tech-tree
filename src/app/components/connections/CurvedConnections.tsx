@@ -96,7 +96,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     onSelect?.();
   };
 
-  const ARROW_OFFSET = 85;
 
   const getControlPoints = (x1: number, y1: number, x2: number, y2: number) => {
     const deltaX = x2 - x1;
@@ -119,27 +118,38 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     nodeWidth = 160
   ) => {
     const halfNodeWidth = nodeWidth / 2;
-    
+    const NODE_HEIGHT = 150; // Approximate height of node for vertical spacing
+
+    // Check if this is a same-year connection (vertical)
+    if (Math.abs(sourceX - targetX) < nodeWidth) {
+      const isUpward = sourceY > targetY;
+      const centerX = (sourceX + targetX) / 2; // Center between the nodes
+
+      if (isSource) {
+        return {
+          x: centerX,
+          y: sourceY + (isUpward ? -NODE_HEIGHT / 2 : NODE_HEIGHT / 2),
+        };
+      } else {
+        return {
+          x: centerX,
+          y: targetY + (isUpward ? NODE_HEIGHT / 2 : -NODE_HEIGHT / 2),
+        };
+      }
+    }
+
+    // Non-vertical connections remain the same
     if (isSource) {
       const isLeftToRight = sourceX < targetX;
       return {
         x: sourceX + (isLeftToRight ? halfNodeWidth : -halfNodeWidth),
-        y: sourceY
+        y: sourceY,
       };
     } else {
-      if (Math.abs(sourceX - targetX) < nodeWidth) {
-        // Same year handling (to be improved later)
-        const angle = Math.atan2(targetY - sourceY, targetX - sourceX);
-        return {
-          x: targetX - ARROW_OFFSET * Math.cos(angle),
-          y: targetY - ARROW_OFFSET * Math.sin(angle)
-        };
-      }
-      
       const isLeftToRight = sourceX < targetX;
       return {
         x: targetX + (isLeftToRight ? -halfNodeWidth : halfNodeWidth),
-        y: targetY
+        y: targetY,
       };
     }
   };
@@ -182,16 +192,25 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   const sourcePoint = getAdjustedEndpoint(x1, y1, x2, y2, true);
   const endPoint = getAdjustedEndpoint(x1, y1, x2, y2, false);
 
-  const { cx1, cy1, cx2, cy2 } = getControlPoints(
-    sourcePoint.x,
-    sourcePoint.y,
-    endPoint.x,
-    endPoint.y
-  );
+  // Determine if this is a vertical connection
+  const isVertical = Math.abs(sourcePoint.x - endPoint.x) < 5; // Small threshold
 
-  const dx = endPoint.x - cx2;
-  const dy = endPoint.y - cy2;
-  const angle = Math.atan2(dy, dx);
+  // Get control points based on whether it's vertical or not
+  const { cx1, cy1, cx2, cy2 } = isVertical
+    ? {
+        cx1: sourcePoint.x,
+        cy1: sourcePoint.y,
+        cx2: endPoint.x,
+        cy2: endPoint.y,
+      }
+    : getControlPoints(sourcePoint.x, sourcePoint.y, endPoint.x, endPoint.y);
+
+  // Calculate angle based on whether it's vertical
+  const angle = isVertical
+    ? endPoint.y > sourcePoint.y
+      ? Math.PI / 2
+      : -Math.PI / 2 // Straight up or down
+    : Math.atan2(endPoint.y - cy2, endPoint.x - cx2);
 
   // First calculate the arrowhead base point (slightly before the endPoint)
   const arrowLength = 10;
