@@ -15,7 +15,7 @@ import BrutalistNode from "../components/nodes/BrutalistNode";
 import TechTreeMinimap from "../components/TechTreeMinimap";
 
 // Timeline scale boundaries
-const YEAR_INDUSTRIAL = 1700;
+const YEAR_INDUSTRIAL = 1750;
 const YEAR_EARLY_MODERN = 1500;
 const YEAR_LATE_ANTIQUITY = -200;
 const YEAR_MIDDLE_ANTIQUITY = -1000;
