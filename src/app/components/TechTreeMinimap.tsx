@@ -56,8 +56,15 @@ const TechTreeMinimap = ({
   // Format year label
   const formatYear = (year) => {
     if (year === 0) return "1";
-    if (year < 0) return `${Math.abs(year)} BCE`;
-    if (year < 1000) return `${year}`;
+    if (year < 0) {
+      const absYear = Math.abs(year);
+      if (absYear >= 10000) {
+        return `${absYear
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} BCE`;
+      }
+      return `${absYear} BCE`;
+    }
     return `${year}`;
   };
 
