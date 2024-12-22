@@ -17,19 +17,25 @@ const TechTreeMinimap = ({
   const isDragging = useRef(false);
   const [scale, setScale] = useState(1);
   
-  // Calculate scaling factors
+  // Calculate scaling factors without zoom for the minimap layout
   useEffect(() => {
-    const horizontalScale = viewportWidth / (containerWidth / zoom);
-    const verticalScale = MINIMAP_HEIGHT / (totalHeight / zoom);
+    const horizontalScale = viewportWidth / containerWidth;
+    const verticalScale = MINIMAP_HEIGHT / totalHeight;
     setScale(Math.min(horizontalScale, verticalScale));
-  }, [containerWidth, totalHeight, viewportWidth, viewportHeight, zoom, scrollLeft, scrollTop]);
+  }, [containerWidth, totalHeight, viewportWidth, viewportHeight]);
 
   // Calculate minimap viewport dimensions
+  // First calculate the base width based on our scale
+  const baseWidth = viewportWidth * scale;
+  
+  // Calculate height to maintain viewport's aspect ratio
+  const aspectRatio = viewportWidth / viewportHeight;
+  
   const minimapViewport = {
-    width: (viewportWidth / zoom) * scale,
-    height: (viewportHeight / zoom) * scale,
-    x: (scrollLeft / zoom) * scale,
-    y: (scrollTop / zoom) * scale
+    width: baseWidth,
+    height: baseWidth / aspectRatio, // This maintains the true aspect ratio
+    x: scrollLeft * scale,
+    y: scrollTop * scale
   };
 
   const handleMinimapClick = (e) => {
@@ -39,8 +45,8 @@ const TechTreeMinimap = ({
     const y = e.clientY - rect.top;
     
     // Get target position for the center of the viewport
-    const targetX = (x / scale) * zoom - (viewportWidth / 2);
-    const targetY = (y / scale) * zoom - (viewportHeight / 2);
+    const targetX = (x / scale) - (viewportWidth / 2);
+    const targetY = (y / scale) - (viewportHeight / 2);
     
     requestAnimationFrame(() => {
       onViewportChange(
@@ -62,9 +68,9 @@ const TechTreeMinimap = ({
     if (!isDragging.current || !minimapRef.current) return;
     const rect = minimapRef.current.getBoundingClientRect();
     
-    // Calculate target scroll position directly
-    const x = (e.clientX - rect.left) / scale * zoom - (viewportWidth / 2);
-    const y = (e.clientY - rect.top) / scale * zoom - (viewportHeight / 2);
+    // Calculate target scroll position without zoom factor
+    const x = (e.clientX - rect.left) / scale - (viewportWidth / 2);
+    const y = (e.clientY - rect.top) / scale - (viewportHeight / 2);
     
     requestAnimationFrame(() => {
       onViewportChange(
@@ -81,23 +87,16 @@ const TechTreeMinimap = ({
   };
 
   return (
-    <div className="sticky bottom-0 left-0 right-0 overflow-hidden" style={{ height: MINIMAP_HEIGHT }}>
-      {/* Solid yellow-50 background to match main diagram */}
-      <div className="absolute inset-0 bg-yellow-50" />
-      
-      {/* Minimap content container */}
+    <div className="sticky bottom-0 left-0 right-0 overflow-hidden bg-yellow-50" style={{ height: MINIMAP_HEIGHT }}>
       <div 
         ref={minimapRef}
-        className="sticky left-0 w-full h-full cursor-pointer"
+        className="relative w-full h-full cursor-pointer"
         onClick={handleMinimapClick}
-        style={{
-          width: viewportWidth
-        }}
       >
         {/* Node dots */}
         {nodes.map((node) => {
-          const nodeX = (node.x / zoom) * scale;
-          const nodeY = (node.y / zoom) * scale;
+          const nodeX = node.x * scale;
+          const nodeY = node.y * scale;
           return (
             <div
               key={node.id}
