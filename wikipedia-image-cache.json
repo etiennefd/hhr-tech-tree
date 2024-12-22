@@ -2518,5 +2518,17 @@
   "Viol": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Viola_Da_Gamba_Front_and_Side.png/300px-Viola_Da_Gamba_Front_and_Side.png",
     "timestamp": 1734890845055
+  },
+  "Scalpel": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Various_scalpels.png/300px-Various_scalpels.png",
+    "timestamp": 1734895372333
+  },
+  "Obsidian": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Lipari-Obsidienne_%285%29.jpg/300px-Lipari-Obsidienne_%285%29.jpg",
+    "timestamp": 1734895372503
+  },
+  "Bellows#Metallurgy": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Bellows_%28PSF%29.svg/300px-Bellows_%28PSF%29.svg.png",
+    "timestamp": 1734897944094
   }
 }
