@@ -8,7 +8,6 @@ const TechTreeMinimap = ({
   viewportHeight,
   scrollLeft,
   scrollTop,
-  zoom,
   onViewportChange
 }) => {
   const MINIMAP_HEIGHT = 48;

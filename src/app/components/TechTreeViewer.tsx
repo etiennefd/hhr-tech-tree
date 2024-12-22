@@ -1120,7 +1120,6 @@ const TechTreeViewer = () => {
           viewportHeight={containerDimensions.height}
           scrollLeft={scrollPosition.left}
           scrollTop={scrollPosition.top}
-          zoom={zoom}
           onViewportChange={handleViewportChange}
         />
       </div>
