@@ -385,6 +385,7 @@ const TechTreeViewer = () => {
   }, [calculateNodePositions]);
 
   // Window resize handler
+  // Window resize handler only
   useEffect(() => {
     const handleResize = () => {
       setContainerDimensions({
@@ -393,41 +394,11 @@ const TechTreeViewer = () => {
       });
     };
 
-    const handleScroll = () => {
-      if (
-        horizontalScrollContainerRef.current &&
-        verticalScrollContainerRef.current
-      ) {
-        setScrollPosition({
-          left: horizontalScrollContainerRef.current.scrollLeft,
-          top: verticalScrollContainerRef.current.scrollTop,
-        });
-      }
-    };
-
-    // Add scroll event listeners
-    horizontalScrollContainerRef.current?.addEventListener(
-      "scroll",
-      handleScroll
-    );
-    verticalScrollContainerRef.current?.addEventListener(
-      "scroll",
-      handleScroll
-    );
-
     handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      horizontalScrollContainerRef.current?.removeEventListener(
-        "scroll",
-        handleScroll
-      );
-      verticalScrollContainerRef.current?.removeEventListener(
-        "scroll",
-        handleScroll
-      );
     };
   }, []);
 
@@ -436,14 +407,14 @@ const TechTreeViewer = () => {
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollTo({
           left: newScrollLeft,
-          behavior: "smooth",
+          behavior: "instant",
         });
       }
 
       if (verticalScrollContainerRef.current) {
         verticalScrollContainerRef.current.scrollTo({
           top: newScrollTop,
-          behavior: "smooth",
+          behavior: "instant",
         });
       }
     },
@@ -890,6 +861,13 @@ const TechTreeViewer = () => {
         ref={horizontalScrollContainerRef}
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
         style={{ overscrollBehaviorY: "none" }}
+        onScroll={(e) => {
+          const horizontalScroll = e.currentTarget.scrollLeft;
+          setScrollPosition((prev) => ({
+            ...prev,
+            left: horizontalScroll,
+          }));
+        }}
       >
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
@@ -934,6 +912,13 @@ const TechTreeViewer = () => {
               height: "calc(100vh - 32px)",
               overscrollBehaviorY: "contain",
               position: "relative",
+            }}
+            onScroll={(e) => {
+              const verticalScroll = e.currentTarget.scrollTop;
+              setScrollPosition((prev) => ({
+                ...prev,
+                top: verticalScroll,
+              }));
             }}
           >
             <div

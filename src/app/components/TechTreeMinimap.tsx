@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 const TechTreeMinimap = ({
   nodes,
@@ -9,27 +9,27 @@ const TechTreeMinimap = ({
   scrollLeft,
   scrollTop,
   zoom,
-  onViewportChange,
+  onViewportChange
 }) => {
-  const MINIMAP_HEIGHT = 48; // Reduced height
-  const engineeringBlue = "#91B4C5"; // Engineering paper blue color
+  const MINIMAP_HEIGHT = 48;
+  const engineeringBlue = "#91B4C5";
   const minimapRef = useRef(null);
   const isDragging = useRef(false);
   const [scale, setScale] = useState(1);
-
+  
   // Calculate scaling factors
   useEffect(() => {
-    const horizontalScale = viewportWidth / containerWidth;
-    const verticalScale = MINIMAP_HEIGHT / totalHeight;
+    const horizontalScale = viewportWidth / (containerWidth / zoom);
+    const verticalScale = MINIMAP_HEIGHT / (totalHeight / zoom);
     setScale(Math.min(horizontalScale, verticalScale));
-  }, [containerWidth, totalHeight, viewportWidth]);
+  }, [containerWidth, totalHeight, viewportWidth, viewportHeight, zoom, scrollLeft, scrollTop]);
 
-  // Calculate viewport rectangle dimensions
-  const viewportRect = {
+  // Calculate minimap viewport dimensions
+  const minimapViewport = {
     width: (viewportWidth / zoom) * scale,
     height: (viewportHeight / zoom) * scale,
-    x: scrollLeft * scale,
-    y: scrollTop * scale,
+    x: (scrollLeft / zoom) * scale,
+    y: (scrollTop / zoom) * scale
   };
 
   const handleMinimapClick = (e) => {
@@ -37,89 +37,95 @@ const TechTreeMinimap = ({
     const rect = minimapRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-
-    // Center the viewport on the clicked point
-    const centerX = x - viewportRect.width / 2;
-    const centerY = y - viewportRect.height / 2;
-
-    onViewportChange(
-      Math.max(0, centerX / scale),
-      Math.max(0, centerY / scale)
-    );
+    
+    // Get target position for the center of the viewport
+    const targetX = (x / scale) * zoom - (viewportWidth / 2);
+    const targetY = (y / scale) * zoom - (viewportHeight / 2);
+    
+    requestAnimationFrame(() => {
+      onViewportChange(
+        Math.max(0, targetX),
+        Math.max(0, targetY)
+      );
+    });
   };
 
   const handleMouseDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
     isDragging.current = true;
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
   const handleMouseMove = (e) => {
     if (!isDragging.current || !minimapRef.current) return;
     const rect = minimapRef.current.getBoundingClientRect();
-    const x = Math.max(
-      0,
-      Math.min(e.clientX - rect.left, viewportWidth - viewportRect.width)
-    );
-    const y = Math.max(
-      0,
-      Math.min(e.clientY - rect.top, MINIMAP_HEIGHT - viewportRect.height)
-    );
-    onViewportChange(x / scale, y / scale);
+    
+    // Calculate target scroll position directly
+    const x = (e.clientX - rect.left) / scale * zoom - (viewportWidth / 2);
+    const y = (e.clientY - rect.top) / scale * zoom - (viewportHeight / 2);
+    
+    requestAnimationFrame(() => {
+      onViewportChange(
+        Math.max(0, x),
+        Math.max(0, y)
+      );
+    });
   };
 
   const handleMouseUp = () => {
     isDragging.current = false;
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
   };
 
   return (
-    <div
-      className="sticky bottom-0 left-0 right-0 overflow-hidden"
-      style={{ height: MINIMAP_HEIGHT }}
-    >
+    <div className="sticky bottom-0 left-0 right-0 overflow-hidden" style={{ height: MINIMAP_HEIGHT }}>
+      {/* Solid yellow-50 background to match main diagram */}
       <div className="absolute inset-0 bg-yellow-50" />
-
+      
       {/* Minimap content container */}
-      <div
+      <div 
         ref={minimapRef}
         className="sticky left-0 w-full h-full cursor-pointer"
         onClick={handleMinimapClick}
         style={{
-          width: viewportWidth,
+          width: viewportWidth
         }}
       >
         {/* Node dots */}
-        {nodes.map((node) => (
-          <div
-            key={node.id}
-            className="absolute rounded-full"
-            style={{
-              width: "2px",
-              height: "2px",
-              backgroundColor: engineeringBlue,
-              opacity: 0.5,
-              left: node.x * scale,
-              top: node.y * scale,
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        ))}
+        {nodes.map((node) => {
+          const nodeX = (node.x / zoom) * scale;
+          const nodeY = (node.y / zoom) * scale;
+          return (
+            <div
+              key={node.id}
+              className="absolute rounded-full"
+              style={{
+                width: '2px',
+                height: '2px',
+                backgroundColor: engineeringBlue,
+                opacity: 0.5,
+                left: nodeX,
+                top: nodeY,
+                transform: 'translate(-50%, -50%)'
+              }}
+            />
+          );
+        })}
 
         {/* Viewport rectangle */}
         <div
           className="absolute cursor-move"
           style={{
-            width: viewportRect.width,
-            height: viewportRect.height,
-            left: viewportRect.x,
-            top: viewportRect.y,
+            width: Math.max(20, minimapViewport.width),
+            height: Math.max(20, minimapViewport.height),
+            left: minimapViewport.x,
+            top: minimapViewport.y,
             border: `1px solid ${engineeringBlue}`,
             backgroundColor: `${engineeringBlue}20`,
-            boxShadow: `0 0 0 1px ${engineeringBlue}40`,
+            boxShadow: `0 0 0 1px ${engineeringBlue}40`
           }}
           onMouseDown={handleMouseDown}
         />
