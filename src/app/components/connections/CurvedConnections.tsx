@@ -32,6 +32,8 @@ interface CurvedConnectionsProps {
   onSelect?: () => void;
   isSelected?: boolean;
   onNodeClick: (title: string) => void;
+  sourceIndex: number;
+  targetIndex: number;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
@@ -113,21 +115,31 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     sourceY: number,
     targetX: number,
     targetY: number,
-    isSource: boolean
+    isSource: boolean,
+    nodeWidth = 160
   ) => {
-    const dx = targetX - sourceX;
-    const dy = targetY - sourceY;
-    const angle = Math.atan2(dy, dx);
-
+    const halfNodeWidth = nodeWidth / 2;
+    
     if (isSource) {
+      const isLeftToRight = sourceX < targetX;
       return {
-        x: sourceX + ARROW_OFFSET * Math.cos(angle),
-        y: sourceY + ARROW_OFFSET * Math.sin(angle),
+        x: sourceX + (isLeftToRight ? halfNodeWidth : -halfNodeWidth),
+        y: sourceY
       };
     } else {
+      if (Math.abs(sourceX - targetX) < nodeWidth) {
+        // Same year handling (to be improved later)
+        const angle = Math.atan2(targetY - sourceY, targetX - sourceX);
+        return {
+          x: targetX - ARROW_OFFSET * Math.cos(angle),
+          y: targetY - ARROW_OFFSET * Math.sin(angle)
+        };
+      }
+      
+      const isLeftToRight = sourceX < targetX;
       return {
-        x: targetX - ARROW_OFFSET * Math.cos(angle),
-        y: targetY - ARROW_OFFSET * Math.sin(angle),
+        x: targetX + (isLeftToRight ? -halfNodeWidth : halfNodeWidth),
+        y: targetY
       };
     }
   };
