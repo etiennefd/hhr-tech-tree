@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
+import TechTreeMinimap from "../components/TechTreeMinimap";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1700;
@@ -152,6 +153,7 @@ const TechTreeViewer = () => {
   const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const [totalHeight, setTotalHeight] = useState(1000); // Default height
   const [isKeyScrolling, setIsKeyScrolling] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -163,35 +165,36 @@ const TechTreeViewer = () => {
   );
 
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
+  const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
 
   const calculateNodePositions = useCallback((nodes) => {
     if (!nodes.length) return [];
 
     function estimateNodeHeight(node) {
       // Base heights for fixed elements
-      const IMAGE_HEIGHT = 80;  // Image container
-      const PADDING = 24;      // Total vertical padding
-      const BORDERS = 2;       // Top + bottom borders
-      
+      const IMAGE_HEIGHT = 80; // Image container
+      const PADDING = 24; // Total vertical padding
+      const BORDERS = 2; // Top + bottom borders
+
       let height = IMAGE_HEIGHT + PADDING + BORDERS;
-      
+
       // Title height (assuming ~15 chars per line at current width)
       const titleLines = Math.ceil(node.title.length / 15);
-      height += titleLines * 24;  // Line height for title text
-      
+      height += titleLines * 24; // Line height for title text
+
       // Subtitle if present
       if (node.subtitle) {
         const subtitleLines = Math.ceil(node.subtitle.length / 20);
-        height += subtitleLines * 16;  // Smaller line height for subtitle
+        height += subtitleLines * 16; // Smaller line height for subtitle
       }
-      
+
       // Year display badge
-      height += 28;  // Fixed height for year container
-      
+      height += 28; // Fixed height for year container
+
       // Field tags (assuming 2 tags per line)
       const fieldLines = Math.ceil(node.fields.length / 2);
       height += fieldLines * 24;
-      
+
       return height;
     }
 
@@ -210,25 +213,25 @@ const TechTreeViewer = () => {
       Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
       "Animal husbandry": Math.max(250, ABSOLUTE_MIN_Y),
       "Hunting and fishing": Math.max(300, ABSOLUTE_MIN_Y),
-    
+
       // Life Sciences (300-500)
       Biology: 300,
       Medicine: 350,
       Sanitation: 400,
-    
+
       // Physical Sciences (500-800)
       Physics: 500,
       Chemistry: 550,
       Astronomy: 600,
       Meteorology: 700,
       Optics: 750,
-    
+
       // Energy & Electronics (800-1000)
       Electricity: 800,
       Electronics: 850,
       Energy: 900,
       Lighting: 950,
-    
+
       // Construction/Materials (1000-1300)
       Construction: 1000,
       Mining: 1050,
@@ -236,33 +239,33 @@ const TechTreeViewer = () => {
       Manufacturing: 1150,
       Textiles: 1200,
       Hydraulics: 1250,
-    
+
       // Transportation/Movement (1300-1600)
       Transportation: 1300,
       Flying: 1350,
       Sailing: 1400,
       Space: 1450,
       Cartography: 1500,
-    
+
       // Computing/Math (1600-1800)
       Mathematics: 1600,
       Measurement: 1650,
       Timekeeping: 1700,
       Computing: 1750,
-    
+
       // Safety/Protection/Governance (1800-2100)
       Security: 1800,
       Military: 1850,
       Finance: 1900,
       Law: 1950,
       Governance: 2000,
-    
+
       // Culture (2100-2400)
       Communication: 2100,
       "Visual media": 2150,
       Entertainment: 2200,
       Music: 2250,
-    
+
       // Miscellaneous
       Misc: 2300,
     };
@@ -289,7 +292,7 @@ const TechTreeViewer = () => {
 
       nodesInYear.forEach((node) => {
         const nodeHeight = estimateNodeHeight(node);
-        
+
         // Get base position from primary field, ensuring minimum Y
         const basePosition = Math.max(
           ABSOLUTE_MIN_Y,
@@ -299,13 +302,15 @@ const TechTreeViewer = () => {
 
         const isOverlapping = (testPosition) => {
           if (testPosition < ABSOLUTE_MIN_Y) return true;
-          
+
           const testBottom = testPosition + nodeHeight;
-          
-          return usedPositions.some(({y: usedY, height: usedHeight}) => {
+
+          return usedPositions.some(({ y: usedY, height: usedHeight }) => {
             const usedBottom = usedY + usedHeight;
             // Add MIN_VERTICAL_GAP to ensure spacing between nodes
-            return !(testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP);
+            return !(
+              testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP
+            );
           });
         };
 
@@ -329,7 +334,10 @@ const TechTreeViewer = () => {
 
         if (isOverlapping(finalPosition) && usedPositions.length > 0) {
           const lastPosition = usedPositions[usedPositions.length - 1];
-          finalPosition = Math.max(ABSOLUTE_MIN_Y, lastPosition.y + lastPosition.height + MIN_VERTICAL_GAP);
+          finalPosition = Math.max(
+            ABSOLUTE_MIN_Y,
+            lastPosition.y + lastPosition.height + MIN_VERTICAL_GAP
+          );
         }
 
         // Add random offset while respecting minimum Y
@@ -349,7 +357,9 @@ const TechTreeViewer = () => {
       });
     });
 
-    const maxY = Math.max(...positionedNodes.map((node) => node.y + estimateNodeHeight(node)));
+    const maxY = Math.max(
+      ...positionedNodes.map((node) => node.y + estimateNodeHeight(node))
+    );
     setTotalHeight(maxY + 100);
 
     return positionedNodes;
@@ -383,10 +393,62 @@ const TechTreeViewer = () => {
       });
     };
 
+    const handleScroll = () => {
+      if (
+        horizontalScrollContainerRef.current &&
+        verticalScrollContainerRef.current
+      ) {
+        setScrollPosition({
+          left: horizontalScrollContainerRef.current.scrollLeft,
+          top: verticalScrollContainerRef.current.scrollTop,
+        });
+      }
+    };
+
+    // Add scroll event listeners
+    horizontalScrollContainerRef.current?.addEventListener(
+      "scroll",
+      handleScroll
+    );
+    verticalScrollContainerRef.current?.addEventListener(
+      "scroll",
+      handleScroll
+    );
+
     handleResize();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      horizontalScrollContainerRef.current?.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+      verticalScrollContainerRef.current?.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
   }, []);
+
+  const handleViewportChange = useCallback(
+    (newScrollLeft: number, newScrollTop: number) => {
+      if (horizontalScrollContainerRef.current) {
+        horizontalScrollContainerRef.current.scrollTo({
+          left: newScrollLeft,
+          behavior: "smooth",
+        });
+      }
+
+      if (verticalScrollContainerRef.current) {
+        verticalScrollContainerRef.current.scrollTo({
+          top: newScrollTop,
+          behavior: "smooth",
+        });
+      }
+    },
+    []
+  );
 
   // Client-side initialization
   useEffect(() => {
@@ -512,6 +574,7 @@ const TechTreeViewer = () => {
 
   // Memoized helper functions
   const formatYear = useCallback((year: number) => {
+    if (year === 0) return "1"; // Year 0 doesn't exist
     const absYear = Math.abs(year);
     return year < 0 ? `${absYear} BCE` : `${year}`;
   }, []);
@@ -865,6 +928,7 @@ const TechTreeViewer = () => {
 
           {/* Vertical scroll container */}
           <div
+            ref={verticalScrollContainerRef}
             className="overflow-y-auto overflow-x-hidden"
             style={{
               height: "calc(100vh - 32px)",
@@ -1064,6 +1128,17 @@ const TechTreeViewer = () => {
           </div>
         </div>
       </div>
+      <TechTreeMinimap
+        nodes={data.nodes}
+        containerWidth={containerWidth}
+        totalHeight={totalHeight}
+        viewportWidth={containerDimensions.width}
+        viewportHeight={containerDimensions.height}
+        scrollLeft={scrollPosition.left}
+        scrollTop={scrollPosition.top}
+        zoom={zoom}
+        onViewportChange={handleViewportChange}
+      />
     </div>
   );
 };
