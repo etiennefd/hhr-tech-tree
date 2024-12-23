@@ -130,7 +130,7 @@ const TechTreeMinimap = ({
             style={{
               left: getXPosition(year),
               transform: "translateX(-50%)",
-              fontSize: "6px",
+              fontSize: "7px",
               lineHeight: "1",
               color: engineeringBlue,
               fontFamily:
