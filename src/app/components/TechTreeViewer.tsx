@@ -204,7 +204,7 @@ const TechTreeViewer = () => {
     const yearGroups = new Map();
 
     // Ensure minimum distance from top of viewport
-    const ABSOLUTE_MIN_Y = 150;
+    const ABSOLUTE_MIN_Y = 50;
 
     // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
     const VERTICAL_BANDS = {
@@ -360,7 +360,7 @@ const TechTreeViewer = () => {
     const maxY = Math.max(
       ...positionedNodes.map((node) => node.y + estimateNodeHeight(node))
     );
-    setTotalHeight(maxY + 100);
+    setTotalHeight(maxY);
 
     return positionedNodes;
   }, []);
