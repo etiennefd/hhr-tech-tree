@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { Plus, Minus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
@@ -132,7 +132,6 @@ const TechTreeViewer = () => {
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
-  const [zoom, setZoom] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [hoveredNode, setHoveredNode] = useState(null);
   const [filteredNodes, setFilteredNodes] = useState([]);
@@ -475,13 +474,13 @@ const TechTreeViewer = () => {
 
     const container = document.querySelector(".overflow-y-auto") as HTMLElement;
 
-    const scrollPosition = node.y * zoom - container.clientHeight / 2 + 150;
+    const scrollPosition = node.y - container.clientHeight / 2 + 150;
 
     Promise.all([
       new Promise<void>((resolve) => {
         if (horizontalScrollContainerRef.current) {
           const horizontalPosition =
-            getXPosition(node.year) * zoom - window.innerWidth / 2;
+            getXPosition(node.year) - window.innerWidth / 2;
           horizontalScrollContainerRef.current.scrollTo({
             left: horizontalPosition,
             behavior: "smooth",
@@ -519,7 +518,7 @@ const TechTreeViewer = () => {
           // Calculate the scroll position:
           // node position - half the viewport height + some offset for the node height
           const scrollPosition =
-            stoneToolsNode.y * zoom - container.clientHeight / 2 + 150;
+            stoneToolsNode.y - container.clientHeight / 2 + 150;
 
           // Scroll to position
           container.scrollTo({
@@ -528,7 +527,7 @@ const TechTreeViewer = () => {
         }
       }
     }
-  }, [isLoading, data.nodes, zoom]);
+  }, [isLoading, data.nodes]);
 
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
@@ -827,23 +826,6 @@ const TechTreeViewer = () => {
           className="fixed top-4 right-4 flex flex-col gap-4"
           style={{ zIndex: 1000 }}
         >
-          <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur border border-black rounded-none shadow-md">
-            <button
-              onClick={() => setZoom((z) => Math.max(0.5, z - 0.1))}
-              className="p-2 border border-black rounded-none hover:bg-gray-100 transition-colors"
-            >
-              <Minus size={20} />
-            </button>
-            <span className="w-16 text-center font-medium">
-              {(zoom * 100).toFixed(0)}%
-            </span>
-            <button
-              onClick={() => setZoom((z) => Math.min(2, z + 0.1))}
-              className="p-2 border rounded hover:bg-gray-100 transition-colors"
-            >
-              <Plus size={20} />
-            </button>
-          </div>
           <div className="relative bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
@@ -875,8 +857,6 @@ const TechTreeViewer = () => {
             className="h-8 bg-yellow-50 border-b sticky top-0"
             style={{
               width: containerWidth,
-              transform: `scale(${zoom})`,
-              transformOrigin: "top left",
               zIndex: 100, // Increased z-index
               position: "relative", // Added to create new stacking context
             }}
@@ -924,9 +904,7 @@ const TechTreeViewer = () => {
             <div
               style={{
                 width: containerWidth,
-                minHeight: `${totalHeight * zoom}px`,
-                transform: `scale(${zoom})`,
-                transformOrigin: "top left",
+                minHeight: `${totalHeight}px`,
                 position: "relative",
                 marginBottom: "64px",
               }}

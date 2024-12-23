@@ -35,7 +35,7 @@ const TechTreeMinimap = ({
     2000,
   ];
 
-  // Calculate scaling factors without zoom for the minimap layout
+  // Calculate scaling factors for the minimap layout
   useEffect(() => {
     const horizontalScale = viewportWidth / containerWidth;
     const verticalScale = MINIMAP_CONTENT_HEIGHT / totalHeight;
@@ -116,7 +116,7 @@ const TechTreeMinimap = ({
   return (
     <div
       className="sticky bottom-0 left-0 right-0 overflow-hidden bg-yellow-50"
-      style={{ height: MINIMAP_HEIGHT }}
+      style={{ height: MINIMAP_HEIGHT, zIndex: 1000 }}
     >
       {/* Year labels */}
       <div
