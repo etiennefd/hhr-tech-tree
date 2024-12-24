@@ -45,7 +45,7 @@ type LocationData = {
       if (locationData.cities.length === 1) {
         return `${locationData.cities[0]}, ${country}`;
       } else {
-        const citiesString = locationData.cities.join(' and ');
+        const citiesString = locationData.cities.join(', ');
         return `${citiesString}, ${country}`;
       }
     }
