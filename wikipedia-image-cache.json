@@ -1,212 +1,4 @@
 {
-  "5G": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/7/75/Android_5G_signal.png",
-    "timestamp": 1734321842636
-  },
-  "Selective_laser_melting": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Selective_laser_melting.jpg/300px-Selective_laser_melting.jpg",
-    "timestamp": 1734321842878
-  },
-  "Fused_filament_fabrication#Fused_deposition_modeling": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Prusa_i3_3D_Printer_-_Reprap_-_Completed.jpg/300px-Prusa_i3_3D_Printer_-_Reprap_-_Completed.jpg",
-    "timestamp": 1734321843002
-  },
-  "Polymerase_chain_reaction": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/PCR_tubes.png/300px-PCR_tubes.png",
-    "timestamp": 1734321843115
-  },
-  "Selective_laser_sintering": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d8/3dprinter.jpg",
-    "timestamp": 1734321843130
-  },
-  "Automated_external_defibrillator": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/AED_open_cutout.jpg/300px-AED_open_cutout.jpg",
-    "timestamp": 1734321843305
-  },
-  "Calculator#Pocket_calculators": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Casio_calculator_JS-20WK_in_201901_002.jpg/300px-Casio_calculator_JS-20WK_in_201901_002.jpg",
-    "timestamp": 1734321843412
-  },
-  "Friden,_Inc.": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/The_Childrens_Museum_of_Indianapolis_-_Friden_model_132_calculator.jpg/300px-The_Childrens_Museum_of_Indianapolis_-_Friden_model_132_calculator.jpg",
-    "timestamp": 1734321843739
-  },
-  "DNA_polymerase": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/DNA_polymerase.png/300px-DNA_polymerase.png",
-    "timestamp": 1734321844207
-  },
-  "ENIAC": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/ENIAC_Penn1.jpg/300px-ENIAC_Penn1.jpg",
-    "timestamp": 1734321844558
-  },
-  "Von_Neumann_architecture": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Von_Neumann_Architecture.svg/300px-Von_Neumann_Architecture.svg.png",
-    "timestamp": 1734321844558
-  },
-  "Merge_sort": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif",
-    "timestamp": 1734321844559
-  },
-  "Colossus_computer": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Colossus.jpg/300px-Colossus.jpg",
-    "timestamp": 1734321844614
-  },
-  "Z3_(computer)": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Z3_Deutsches_Museum.JPG/300px-Z3_Deutsches_Museum.JPG",
-    "timestamp": 1734321844727
-  },
-  "Bombe": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Wartime_picture_of_a_Bletchley_Park_Bombe.jpg/300px-Wartime_picture_of_a_Bletchley_Park_Bombe.jpg",
-    "timestamp": 1734321844851
-  },
-  "Bomba_(cryptography)": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Bomba_full.jpg/300px-Bomba_full.jpg",
-    "timestamp": 1734321844852
-  },
-  "Enigma_machine": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg/300px-Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg",
-    "timestamp": 1734321845077
-  },
-  "Epinephrine_(medication)#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Epinephrine.svg/300px-Epinephrine.svg.png",
-    "timestamp": 1734321845513
-  },
-  "Conching": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Conchiermaschine.ogv/300px--Conchiermaschine.ogv.jpg",
-    "timestamp": 1734321846181
-  },
-  "Milk_chocolate": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Milka_Alpine_Milk_Chocolate_bar_100g_with_chunks_broken_off.jpg/300px-Milka_Alpine_Milk_Chocolate_bar_100g_with_chunks_broken_off.jpg",
-    "timestamp": 1734321846295
-  },
-  "Injection_moulding#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Injection_molding_diagram.svg/300px-Injection_molding_diagram.svg.png",
-    "timestamp": 1734321846400
-  },
-  "History_of_traffic_lights": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/TrafficSignalInstallationUS1940.jpg/300px-TrafficSignalInstallationUS1940.jpg",
-    "timestamp": 1734321846401
-  },
-  "Chemical_vapor_deposition": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/PICT0111.JPG/300px-PICT0111.JPG",
-    "timestamp": 1734321846750
-  },
-  "Condensed_milk": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/2016-03-26-Gezuckerte_Kondensmilch-4699.jpg/300px-2016-03-26-Gezuckerte_Kondensmilch-4699.jpg",
-    "timestamp": 1734321846756
-  },
-  "Chocolate_bar#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Green_and_Black%27s_dark_chocolate_bar_2.jpg/300px-Green_and_Black%27s_dark_chocolate_bar_2.jpg",
-    "timestamp": 1734321846970
-  },
-  "Railway_semaphore_signal": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Castleton_East_Junction_signal_box_59_signal_%281%29.jpg/300px-Castleton_East_Junction_signal_box_59_signal_%281%29.jpg",
-    "timestamp": 1734321847091
-  },
-  "Ebonite": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Ebonit.JPG/300px-Ebonit.JPG",
-    "timestamp": 1734321847201
-  },
-  "Thermostat#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/PECO_T8532-002.png/300px-PECO_T8532-002.png",
-    "timestamp": 1734321847316
-  },
-  "Coenraad_Johannes_van_Houten": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Coenraad_Johannes_van_Houten.jpg/300px-Coenraad_Johannes_van_Houten.jpg",
-    "timestamp": 1734321847323
-  },
-  "Dutch_process_cocoa": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Dutch_process_and_natural_cocoa.jpg/300px-Dutch_process_and_natural_cocoa.jpg",
-    "timestamp": 1734321847374
-  },
-  "Bimetallic_strip": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/2/26/Bimetal_coil_reacts_to_lighter.gif",
-    "timestamp": 1734321848119
-  },
-  "Cornelis_Drebbel#Chemistry": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Drebbel_Van_Sichem_ca_1631_groot.jpg/300px-Drebbel_Van_Sichem_ca_1631_groot.jpg",
-    "timestamp": 1734321848659
-  },
-  "Cigar": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Cigar_tube_and_cutter.jpg/300px-Cigar_tube_and_cutter.jpg",
-    "timestamp": 1734321848888
-  },
-  "Movable_type": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Metal_movable_type.jpg/300px-Metal_movable_type.jpg",
-    "timestamp": 1734321848894
-  },
-  "Maya_Bridge_at_Yaxchilan": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Yaxchilan_Pile.JPG/300px-Yaxchilan_Pile.JPG",
-    "timestamp": 1734321849025
-  },
-  "Toilet_paper#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Toiletpapier_%28Gobran111%29.jpg/300px-Toiletpapier_%28Gobran111%29.jpg",
-    "timestamp": 1734321849138
-  },
-  "Match#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Streichholz.jpg/300px-Streichholz.jpg",
-    "timestamp": 1734321849141
-  },
-  "Carding": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Jamieson_wool_Shetland.jpg/300px-Jamieson_wool_Shetland.jpg",
-    "timestamp": 1734321849255
-  },
-  "Vending_machine": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/CandiesVendingMachine1952.jpg/300px-CandiesVendingMachine1952.jpg",
-    "timestamp": 1734321849490
-  },
-  "Canal_pound": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Chesterfield_Canal_pound.jpg/300px-Chesterfield_Canal_pound.jpg",
-    "timestamp": 1734321849718
-  },
-  "List_of_ancient_spiral_stairs": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Trajans-Column-lower-animated.svg/300px-Trajans-Column-lower-animated.svg.png",
-    "timestamp": 1734321849846
-  },
-  "Stirrup": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/EnduranceStirrup.jpg/300px-EnduranceStirrup.jpg",
-    "timestamp": 1734321849963
-  },
-  "Concrete#Ancient_times": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Bloczek_betonowy.jpg/300px-Bloczek_betonowy.jpg",
-    "timestamp": 1734321850072
-  },
-  "Fountain#History": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Fountains_Collage.jpg/300px-Fountains_Collage.jpg",
-    "timestamp": 1734321850074
-  },
-  "Saddle": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Saddle_with_shabrack_according_to_tradition_linked_with_Hetman_Miko%C5%82aj_Hieronim_Sieniawski.jpg/300px-Saddle_with_shabrack_according_to_tradition_linked_with_Hetman_Miko%C5%82aj_Hieronim_Sieniawski.jpg",
-    "timestamp": 1734321850079
-  },
-  "Seed_drill": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/7263_Canterbury_Agricultural_College_farm.jpg/300px-7263_Canterbury_Agricultural_College_farm.jpg",
-    "timestamp": 1734321850185
-  },
-  "Incense": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Incenselonghua.jpg/300px-Incenselonghua.jpg",
-    "timestamp": 1734321850311
-  },
-  "Archipendulum": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/L%27_Inde_Fran%C3%A7aise24.jpg/300px-L%27_Inde_Fran%C3%A7aise24.jpg",
-    "timestamp": 1734321850339
-  },
-  "Theobroma_cacao#Domestication": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Matadecacao.jpg/300px-Matadecacao.jpg",
-    "timestamp": 1734321850448
-  },
-  "Boomerang": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%22Egyptian_boomerang%22_%283210654118%29.jpg/300px-%22Egyptian_boomerang%22_%283210654118%29.jpg",
-    "timestamp": 1734321850673
-  },
-  "Throwing_stick": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Aboriginal_craft.jpg/300px-Aboriginal_craft.jpg",
-    "timestamp": 1734321850794
-  },
-  "Videotex": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Viewdata_Graphics_1.jpg/300px-Viewdata_Graphics_1.jpg",
-    "timestamp": 1734323663594
-  },
   "AlexNet": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/AlexNet_block_diagram.svg/300px-AlexNet_block_diagram.svg.png",
     "timestamp": 1734627835530
@@ -2534,5 +2326,253 @@
   "Sulfuric_acid#History": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Sulphuric_acid_96_percent_extra_pure.jpg/300px-Sulphuric_acid_96_percent_extra_pure.jpg",
     "timestamp": 1734912851656
+  },
+  "5G": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Cellular_network_standards_and_generation_timeline.svg/300px-Cellular_network_standards_and_generation_timeline.svg.png",
+    "timestamp": 1734977400816
+  },
+  "Selective_laser_melting": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Selective_laser_melting.jpg/300px-Selective_laser_melting.jpg",
+    "timestamp": 1734977401080
+  },
+  "Fused_filament_fabrication#Fused_deposition_modeling": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Prusa_i3_3D_Printer_-_Reprap_-_Completed.jpg/300px-Prusa_i3_3D_Printer_-_Reprap_-_Completed.jpg",
+    "timestamp": 1734977401170
+  },
+  "Selective_laser_sintering": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d8/3dprinter.jpg",
+    "timestamp": 1734977401257
+  },
+  "Polymerase_chain_reaction": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/PCR_tubes.png/300px-PCR_tubes.png",
+    "timestamp": 1734977401257
+  },
+  "Automated_external_defibrillator": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/AED_open_cutout.jpg/300px-AED_open_cutout.jpg",
+    "timestamp": 1734977401445
+  },
+  "Calculator#Pocket_calculators": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Casio_calculator_JS-20WK_in_201901_002.jpg/300px-Casio_calculator_JS-20WK_in_201901_002.jpg",
+    "timestamp": 1734977401543
+  },
+  "Friden,_Inc.": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/The_Childrens_Museum_of_Indianapolis_-_Friden_model_132_calculator.jpg/300px-The_Childrens_Museum_of_Indianapolis_-_Friden_model_132_calculator.jpg",
+    "timestamp": 1734977401817
+  },
+  "DNA_polymerase": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/DNA_polymerase.png/300px-DNA_polymerase.png",
+    "timestamp": 1734977401905
+  },
+  "Von_Neumann_architecture": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Von_Neumann_Architecture.svg/300px-Von_Neumann_Architecture.svg.png",
+    "timestamp": 1734977402091
+  },
+  "ENIAC": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/ENIAC_Penn1.jpg/300px-ENIAC_Penn1.jpg",
+    "timestamp": 1734977402096
+  },
+  "Colossus_computer": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Colossus.jpg/300px-Colossus.jpg",
+    "timestamp": 1734977402191
+  },
+  "Merge_sort": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif",
+    "timestamp": 1734977402194
+  },
+  "Z3_(computer)": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Z3_Deutsches_Museum.JPG/300px-Z3_Deutsches_Museum.JPG",
+    "timestamp": 1734977402284
+  },
+  "Bombe": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Wartime_picture_of_a_Bletchley_Park_Bombe.jpg/300px-Wartime_picture_of_a_Bletchley_Park_Bombe.jpg",
+    "timestamp": 1734977402284
+  },
+  "Bomba_(cryptography)": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Bomba_full.jpg/300px-Bomba_full.jpg",
+    "timestamp": 1734977402378
+  },
+  "Enigma_machine": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg/300px-Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg",
+    "timestamp": 1734977402568
+  },
+  "Epinephrine_(medication)#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Epinephrine.svg/300px-Epinephrine.svg.png",
+    "timestamp": 1734977402840
+  },
+  "Conching": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Conchiermaschine.ogv/300px--Conchiermaschine.ogv.jpg",
+    "timestamp": 1734977403147
+  },
+  "Milk_chocolate": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Milka_Alpine_Milk_Chocolate_bar_100g_with_chunks_broken_off.jpg/300px-Milka_Alpine_Milk_Chocolate_bar_100g_with_chunks_broken_off.jpg",
+    "timestamp": 1734977403232
+  },
+  "Injection_moulding#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Injection_molding_diagram.svg/300px-Injection_molding_diagram.svg.png",
+    "timestamp": 1734977403328
+  },
+  "History_of_traffic_lights": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/TrafficSignalInstallationUS1940.jpg/300px-TrafficSignalInstallationUS1940.jpg",
+    "timestamp": 1734977403422
+  },
+  "Chemical_vapor_deposition": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/PICT0111.JPG/300px-PICT0111.JPG",
+    "timestamp": 1734977403534
+  },
+  "Condensed_milk": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/2016-03-26-Gezuckerte_Kondensmilch-4699.jpg/300px-2016-03-26-Gezuckerte_Kondensmilch-4699.jpg",
+    "timestamp": 1734977403626
+  },
+  "Chocolate_bar#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Green_and_Black%27s_dark_chocolate_bar_2.jpg/300px-Green_and_Black%27s_dark_chocolate_bar_2.jpg",
+    "timestamp": 1734977403715
+  },
+  "Railway_semaphore_signal": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Castleton_East_Junction_signal_box_59_signal_%281%29.jpg/300px-Castleton_East_Junction_signal_box_59_signal_%281%29.jpg",
+    "timestamp": 1734977403804
+  },
+  "Ebonite": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Ebonit.JPG/300px-Ebonit.JPG",
+    "timestamp": 1734977403895
+  },
+  "Thermostat#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/PECO_T8532-002.png/300px-PECO_T8532-002.png",
+    "timestamp": 1734977403982
+  },
+  "Dutch_process_cocoa": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Dutch_process_and_natural_cocoa.jpg/300px-Dutch_process_and_natural_cocoa.jpg",
+    "timestamp": 1734977403988
+  },
+  "Coenraad_Johannes_van_Houten": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Coenraad_Johannes_van_Houten.jpg/300px-Coenraad_Johannes_van_Houten.jpg",
+    "timestamp": 1734977403991
+  },
+  "Spar_torpedo": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/CSS_David_drawing.jpg/300px-CSS_David_drawing.jpg",
+    "timestamp": 1734977404155
+  },
+  "Bimetallic_strip": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/26/Bimetal_coil_reacts_to_lighter.gif",
+    "timestamp": 1734977404413
+  },
+  "Cornelis_Drebbel#Chemistry": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Drebbel_Van_Sichem_ca_1631_groot.jpg/300px-Drebbel_Van_Sichem_ca_1631_groot.jpg",
+    "timestamp": 1734977404779
+  },
+  "Movable_type": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Metal_movable_type.jpg/300px-Metal_movable_type.jpg",
+    "timestamp": 1734977404958
+  },
+  "Maya_Bridge_at_Yaxchilan": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Yaxchilan_Pile.JPG/300px-Yaxchilan_Pile.JPG",
+    "timestamp": 1734977405135
+  },
+  "Toilet_paper#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Toiletpapier_%28Gobran111%29.jpg/300px-Toiletpapier_%28Gobran111%29.jpg",
+    "timestamp": 1734977405143
+  },
+  "Match#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Streichholz.jpg/300px-Streichholz.jpg",
+    "timestamp": 1734977405229
+  },
+  "Vending_machine": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/CandiesVendingMachine1952.jpg/300px-CandiesVendingMachine1952.jpg",
+    "timestamp": 1734977405321
+  },
+  "Canal_pound": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Chesterfield_Canal_pound.jpg/300px-Chesterfield_Canal_pound.jpg",
+    "timestamp": 1734977405527
+  },
+  "List_of_ancient_spiral_stairs": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Trajans-Column-lower-animated.svg/300px-Trajans-Column-lower-animated.svg.png",
+    "timestamp": 1734977405617
+  },
+  "Stirrup": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/EnduranceStirrup.jpg/300px-EnduranceStirrup.jpg",
+    "timestamp": 1734977405709
+  },
+  "Saddle": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Saddle_with_shabrack_according_to_tradition_linked_with_Hetman_Miko%C5%82aj_Hieronim_Sieniawski.jpg/300px-Saddle_with_shabrack_according_to_tradition_linked_with_Hetman_Miko%C5%82aj_Hieronim_Sieniawski.jpg",
+    "timestamp": 1734977405800
+  },
+  "Fountain#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Fountains_Collage.jpg/300px-Fountains_Collage.jpg",
+    "timestamp": 1734977405809
+  },
+  "Concrete#Ancient_times": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Bloczek_betonowy.jpg/300px-Bloczek_betonowy.jpg",
+    "timestamp": 1734977405827
+  },
+  "Seed_drill": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/7263_Canterbury_Agricultural_College_farm.jpg/300px-7263_Canterbury_Agricultural_College_farm.jpg",
+    "timestamp": 1734977405923
+  },
+  "Incense": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Incenselonghua.jpg/300px-Incenselonghua.jpg",
+    "timestamp": 1734977406017
+  },
+  "Theobroma_cacao#Domestication": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Matadecacao.jpg/300px-Matadecacao.jpg",
+    "timestamp": 1734977406111
+  },
+  "Boomerang": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%22Egyptian_boomerang%22_%283210654118%29.jpg/300px-%22Egyptian_boomerang%22_%283210654118%29.jpg",
+    "timestamp": 1734977406275
+  },
+  "Throwing_stick": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Aboriginal_craft.jpg/300px-Aboriginal_craft.jpg",
+    "timestamp": 1734977406369
+  },
+  "Radioimmunoassay": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Radioimmunoassay_process.png/300px-Radioimmunoassay_process.png",
+    "timestamp": 1734983118174
+  },
+  "Quill": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg/300px-%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg",
+    "timestamp": 1734983120227
+  },
+  "Electroencephalography": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Spike-waves.png/300px-Spike-waves.png",
+    "timestamp": 1734984667526
+  },
+  "History_of_magnetic_resonance_imaging": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/MRI_Scanner_Mark_One.jpg/300px-MRI_Scanner_Mark_One.jpg",
+    "timestamp": 1735004006684
+  },
+  "Nuclear_magnetic_resonance": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/700_lab_fix.JPG/300px-700_lab_fix.JPG",
+    "timestamp": 1735004007229
+  },
+  "CT_scan": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg/300px-Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg",
+    "timestamp": 1735004857589
+  },
+  "PET-CT": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Viewer_medecine_nucleaire_keosys.JPG/300px-Viewer_medecine_nucleaire_keosys.JPG",
+    "timestamp": 1735055489140
+  },
+  "Focal_plane_tomography": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Panoramicfilm.JPG/300px-Panoramicfilm.JPG",
+    "timestamp": 1735055489678
+  },
+  "Fountain_pen": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Fountain_pen_writing_%28literacy%29.jpg/300px-Fountain_pen_writing_%28literacy%29.jpg",
+    "timestamp": 1735055491149
+  },
+  "Positron_emission_tomography": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Positron_emission_tomography.png/300px-Positron_emission_tomography.png",
+    "timestamp": 1735064727929
+  },
+  "Capillary_action": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Capillary_flow_brick.jpg/300px-Capillary_flow_brick.jpg",
+    "timestamp": 1735064728981
+  },
+  "Nib_(pen)": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pointed_pen_parts.svg/300px-Pointed_pen_parts.svg.png",
+    "timestamp": 1735064729498
+  },
+  "Babylonian_Map_of_the_World": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/The_Babylonian_map_of_the_world%2C_from_Sippar%2C_Mesopotamia..JPG/300px-The_Babylonian_map_of_the_world%2C_from_Sippar%2C_Mesopotamia..JPG",
+    "timestamp": 1735064729763
   }
 }
