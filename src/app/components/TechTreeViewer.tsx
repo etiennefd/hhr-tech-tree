@@ -1060,7 +1060,14 @@ const TechTreeViewer = () => {
                         {node.inventors?.length > 0 && (
                           <p className="text-xs mb-1">
                             <strong>
-                              Inventor{node.inventors.length > 1 ? "s" : ""}:
+                              {node.type === "Discovery"
+                                ? `Discoverer${
+                                    node.inventors.length > 1 ? "s" : ""
+                                  }`
+                                : `Inventor${
+                                    node.inventors.length > 1 ? "s" : ""
+                                  }`}
+                              :
                             </strong>{" "}
                             {node.inventors.join(", ")}
                           </p>
