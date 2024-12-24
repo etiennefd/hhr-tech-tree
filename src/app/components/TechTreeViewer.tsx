@@ -543,6 +543,7 @@ const TechTreeViewer = () => {
   );
 
   // Memoized helper functions
+
   const formatYear = useCallback((year: number) => {
     if (year === 0) return "1"; // Year 0 doesn't exist
     const absYear = Math.abs(year);
@@ -589,6 +590,23 @@ const TechTreeViewer = () => {
         containerDimensions.width
       ),
     [data.nodes, getXPosition, containerDimensions.width]
+  );
+
+  const getNodeConnections = useCallback(
+    (nodeId: string) => {
+      const ancestors = data.links
+        .filter((link) => link.target === nodeId)
+        .map((link) => data.nodes.find((n) => n.id === link.source))
+        .filter(Boolean);
+
+      const children = data.links
+        .filter((link) => link.source === nodeId)
+        .map((link) => data.nodes.find((n) => n.id === link.target))
+        .filter(Boolean);
+
+      return { ancestors, children };
+    },
+    [data.links, data.nodes]
   );
 
   useEffect(() => {
@@ -1030,7 +1048,7 @@ const TechTreeViewer = () => {
                           left: `${getXPosition(node.year)}px`,
                           top: `${node.y + 100}px`,
                           transform: "translate(-50%, 0)",
-                          width: "16rem",
+                          width: "14rem",
                           zIndex: 100,
                         }}
                         onClick={(e) => {
@@ -1046,7 +1064,6 @@ const TechTreeViewer = () => {
                         onMouseEnter={() => setIsTooltipHovered(true)}
                         onMouseLeave={() => {
                           setIsTooltipHovered(false);
-                          // Only clear hover if this isn't the selected node
                           if (node.id !== selectedNodeId) {
                             setHoveredNode(null);
                             setHoveredNodeId(null);
@@ -1083,10 +1100,68 @@ const TechTreeViewer = () => {
                           </p>
                         )}
                         {node.details && (
-                          <p className="text-xs line-clamp-3">{node.details}</p>
+                          <p className="text-xs mb-2">{node.details}</p>
                         )}
+
+                        {/* Add connections section */}
+                        {(() => {
+                          const { ancestors, children } = getNodeConnections(
+                            node.id
+                          );
+                          return (
+                            <>
+                              {ancestors.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Built upon:</strong>
+                                  <div className="ml-2">
+                                    {ancestors.map((ancestor: any) => (
+                                      <div key={`ancestor-${ancestor.id}`}>
+                                        {" "}
+                                        {/* Updated key */}•{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNodeClick(ancestor.title);
+                                          }}
+                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                                          type="button"
+                                        >
+                                          {ancestor.title}
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              {children.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Led to:</strong>
+                                  <div className="ml-2">
+                                    {children.map((child: any) => (
+                                      <div key={`child-${child.id}`}>
+                                        {" "}
+                                        {/* Updated key */}•{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNodeClick(child.title);
+                                          }}
+                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                                          type="button"
+                                        >
+                                          {child.title}
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
+
                         {node.wikipedia && (
-                          <p className="text-xs mt-1 text-blue-600 hover:underline cursor-pointer">
+                          <p className="text-xs mt-2 text-blue-600 hover:underline cursor-pointer">
                             View on Wikipedia →
                           </p>
                         )}
