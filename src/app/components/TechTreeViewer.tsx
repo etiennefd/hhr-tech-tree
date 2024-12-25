@@ -1103,7 +1103,7 @@ const TechTreeViewer = () => {
                           <p className="text-xs mb-2">{node.details}</p>
                         )}
 
-                        {/* Add connections section */}
+                        {/* Updated connections section */}
                         {(() => {
                           const { ancestors, children } = getNodeConnections(
                             node.id
@@ -1114,10 +1114,9 @@ const TechTreeViewer = () => {
                                 <div className="text-xs mb-1">
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
-                                    {ancestors.map((ancestor: any) => (
-                                      <div key={`ancestor-${ancestor.id}`}>
-                                        {" "}
-                                        {/* Updated key */}•{" "}
+                                    {ancestors.map((ancestor: any, index: number) => (
+                                      <div key={`ancestor-${node.id}-${ancestor.id}-${index}`}>
+                                        •{" "}
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
@@ -1137,10 +1136,9 @@ const TechTreeViewer = () => {
                                 <div className="text-xs mb-1">
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
-                                    {children.map((child: any) => (
-                                      <div key={`child-${child.id}`}>
-                                        {" "}
-                                        {/* Updated key */}•{" "}
+                                    {children.map((child: any, index: number) => (
+                                      <div key={`child-${node.id}-${child.id}-${index}`}>
+                                        •{" "}
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
