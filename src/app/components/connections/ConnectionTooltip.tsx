@@ -18,7 +18,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   targetTitle,
   type,
   details,
-  isSelected,
   onNodeClick,
 }) => {
   const isNearRightEdge = x > window.innerWidth - 300;

@@ -1,5 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 
+interface TechTreeMinimapProps {
+  nodes: Array<{
+    id: string;
+    x: number;
+    y: number;
+    year: number;
+  }>;
+  containerWidth: number;
+  totalHeight: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  scrollLeft: number;
+  scrollTop: number;
+  onViewportChange: (x: number, y: number) => void;
+}
+
 const TechTreeMinimap = ({
   nodes,
   containerWidth,
@@ -9,7 +25,7 @@ const TechTreeMinimap = ({
   scrollLeft,
   scrollTop,
   onViewportChange,
-}) => {
+}: TechTreeMinimapProps) => {
   const MINIMAP_HEIGHT = 64; // Increased total height
   const MINIMAP_CONTENT_HEIGHT = 48; // Original height for the node content
   const LABEL_HEIGHT = 10; // Space for labels
@@ -52,17 +68,15 @@ const TechTreeMinimap = ({
     x: scrollLeft * scale,
     y: scrollTop * scale,
   };
-
   // Format year label
-  const formatYear = (year) => {
+  const formatYear = (year: number) => {
     if (year === 0) return "1";
     if (year < 0) return `${Math.abs(year)} BCE`;
     if (year < 1000) return `${year}`;
     return `${year}`;
   };
-
   // Calculate x position for a year
-  const getXPosition = (year) => {
+  const getXPosition = (year: number) => {
     if (!nodes.length) return 0;
     const nearestNode = nodes.reduce((prev, curr) => {
       return Math.abs(curr.year - year) < Math.abs(prev.year - year)
@@ -72,9 +86,9 @@ const TechTreeMinimap = ({
     return nearestNode.x * scale;
   };
 
-  const handleMinimapClick = (e) => {
+  const handleMinimapClick = (e: React.MouseEvent) => {
     if (!minimapRef.current) return;
-    const rect = minimapRef.current.getBoundingClientRect();
+    const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top - LABEL_HEIGHT; // Adjust for label space
 
@@ -86,17 +100,17 @@ const TechTreeMinimap = ({
     });
   };
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     isDragging.current = true;
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove as EventListener);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current || !minimapRef.current) return;
-    const rect = minimapRef.current.getBoundingClientRect();
+    const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
     const x = (e.clientX - rect.left) / scale - viewportWidth / 2;
     const y =

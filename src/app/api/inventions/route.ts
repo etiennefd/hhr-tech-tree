@@ -5,7 +5,7 @@ import path from 'path';
 import { formatLocation, cleanCommaList } from '../../utils/location';
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  process.env.AIRTABLE_BASE_ID
+  process.env.AIRTABLE_BASE_ID ?? ''
 );
 
 // Constants
@@ -24,16 +24,15 @@ async function loadImageCache() {
     // Filter out expired entries
     const now = Date.now();
     const validCache: Record<string, { url: string; timestamp: number }> = {};
-    
-    for (const [key, entry] of Object.entries(cache)) {
+    for (const [key, entry] of Object.entries(cache) as [string, { url: string; timestamp: number }][]) {
       if (now - entry.timestamp < CACHE_DURATION) {
         validCache[key] = entry;
       }
     }
-    
     return validCache;
   } catch (error) {
     // If file doesn't exist or is invalid, return empty cache
+    console.error('Error loading cache:', error);
     return {};
   }
 }
@@ -87,9 +86,12 @@ async function getWikimediaImage(wikipediaUrl: string, cache: Record<string, { u
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
     const data = await response.json();
-    const page = Object.values(data.query.pages)[0] as any;
+    const page = Object.values(data.query.pages)[0] as {
+      thumbnail?: {
+        source: string;
+      };
+    };
 
     if (page?.thumbnail?.source) {
       // Update cache
@@ -132,7 +134,7 @@ async function processBatch<T, R>(
 
 export async function GET() {
   const startTime = Date.now();
-  let timeMarkers = {
+  const timeMarkers = {
     airtableFetch: 0,
     cacheLoad: 0,
     nodeProcessing: 0,
@@ -245,21 +247,25 @@ export async function GET() {
     console.log("Processing connections...");
     const connectionStart = Date.now();
 
-    const validNodeIds = new Set(validNodes.map((node) => node.id));
+    const validNodeIds = new Set(validNodes.map((node) => node?.id));
     const links = connectionRecords
       .filter((record) => {
-        const fromId = record.get("From")?.[0];
-        const toId = record.get("To")?.[0];
+        const fromId = record.get("From") as string[] | undefined;
+        const toId = record.get("To") as string[] | undefined;
         return (
-          fromId && toId && validNodeIds.has(fromId) && validNodeIds.has(toId)
+          fromId?.[0] && toId?.[0] && validNodeIds.has(fromId[0]) && validNodeIds.has(toId[0])
         );
       })
-      .map((record) => ({
-        source: record.get("From")?.[0],
-        target: record.get("To")?.[0],
-        type: String(record.get("Type") || "default"),
-        details: String(record.get("Details") || ""),
-      }));
+      .map((record) => {
+        const fromValue = record.get("From");
+        const toValue = record.get("To");
+        return {
+          source: Array.isArray(fromValue) ? String(fromValue[0] || "") : String(fromValue || ""),
+          target: Array.isArray(toValue) ? String(toValue[0] || "") : String(toValue || ""),
+          type: String(record.get("Type") || "default"),
+          details: String(record.get("Details") || ""),
+        };
+      });
 
     timeMarkers.connectionProcessing = Date.now() - connectionStart;
 
