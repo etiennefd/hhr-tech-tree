@@ -594,14 +594,18 @@ const TechTreeViewer = () => {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
+      // Filter out 'Independently invented' and 'Concurrent development' connections
+      const validConnectionTypes = (link: any) => 
+        !['Independently invented', 'Concurrent development'].includes(link.type);
+
       const ancestors = data.links
-        .filter((link) => link.target === nodeId)
-        .map((link) => data.nodes.find((n) => n.id === link.source))
+        .filter(link => link.target === nodeId && validConnectionTypes(link))
+        .map(link => data.nodes.find(n => n.id === link.source))
         .filter(Boolean);
 
       const children = data.links
-        .filter((link) => link.source === nodeId)
-        .map((link) => data.nodes.find((n) => n.id === link.target))
+        .filter(link => link.source === nodeId && validConnectionTypes(link))
+        .map(link => data.nodes.find(n => n.id === link.target))
         .filter(Boolean);
 
       return { ancestors, children };
