@@ -2586,5 +2586,33 @@
   "North_River_Steamboat": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Clermont_replica.jpg/300px-Clermont_replica.jpg",
     "timestamp": 1735073715681
+  },
+  "Transformer_read-only_storage": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/IBM_360_20_TROS.jpg/300px-IBM_360_20_TROS.jpg",
+    "timestamp": 1735169404952
+  },
+  "Crystal_radio": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Kristallradio.JPG/300px-Kristallradio.JPG",
+    "timestamp": 1735169405326
+  },
+  "Electrolytic_detector": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Electrolytic_detector.jpg/300px-Electrolytic_detector.jpg",
+    "timestamp": 1735169405415
+  },
+  "Crystal_detector#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/CatWhisker.jpg/300px-CatWhisker.jpg",
+    "timestamp": 1735169405689
+  },
+  "Line_printer#Origins": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/IBM_line_printer_1403.JPG/300px-IBM_line_printer_1403.JPG",
+    "timestamp": 1735229817514
+  },
+  "Coffee_percolator": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Perkulator.jpg/300px-Perkulator.jpg",
+    "timestamp": 1735229819090
+  },
+  "Wiki": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Wikitext-wiki_markup-wikipedia.png/300px-Wikitext-wiki_markup-wikipedia.png",
+    "timestamp": 1735230586858
   }
 }
