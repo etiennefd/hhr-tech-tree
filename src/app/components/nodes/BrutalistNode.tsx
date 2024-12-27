@@ -133,6 +133,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
             alt={node.title}
             fill
             className="object-cover"
+            onError={(e) => {
+              // Fallback to placeholder if image fails to load
+              const imgElement = e.target as HTMLImageElement;
+              imgElement.src = "/placeholder-invention.png";
+            }}
             style={{
               filter: "grayscale(20%) contrast(110%)",
               mixBlendMode: "multiply",
