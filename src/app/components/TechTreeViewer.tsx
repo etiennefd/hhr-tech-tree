@@ -312,7 +312,7 @@ const TechTreeViewer = () => {
       const usedPositions: NodePosition[] = []; // Will store {y, height} objects
       const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
-      nodesInYear.sort((a, b) => {
+      nodesInYear.sort((a: Node, b: Node) => {
         const aPos = a.fields?.[0] ? VERTICAL_BANDS[a.fields[0]] || 1200 : 1200;
         const bPos = b.fields?.[0] ? VERTICAL_BANDS[b.fields[0]] || 1200 : 1200;
         return aPos - bPos;
@@ -543,11 +543,8 @@ const TechTreeViewer = () => {
         node.title.toLowerCase().includes("stone tool")
       );
 
-      if (stoneToolsNode) {
-        // Get the container element
-        const container = document.querySelector(
-          ".overflow-y-auto"
-        ) as HTMLElement;
+      if (stoneToolsNode && stoneToolsNode.y !== undefined) {
+        const container = document.querySelector(".overflow-y-auto") as HTMLElement;
 
         if (container) {
           // Calculate the scroll position:
@@ -629,21 +626,18 @@ const TechTreeViewer = () => {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
-      // Filter out 'Independently invented' and 'Concurrent development' connections
-      const validConnectionTypes = (link: any) =>
-        !["Independently invented", "Concurrent development"].includes(
-          link.type
-        );
+      const validConnectionTypes = (link: Link) =>
+        !["Independently invented", "Concurrent development"].includes(link.type);
 
       const ancestors = data.links
         .filter((link) => link.target === nodeId && validConnectionTypes(link))
         .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter(Boolean);
+        .filter((n): n is Node => n !== undefined);
 
       const children = data.links
         .filter((link) => link.source === nodeId && validConnectionTypes(link))
         .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter(Boolean);
+        .filter((n): n is Node => n !== undefined);
 
       return { ancestors, children };
     },
@@ -1062,7 +1056,7 @@ const TechTreeViewer = () => {
                     style={{
                       position: "absolute",
                       left: `${getXPosition(node.year)}px`,
-                      top: `${node.y}px`,
+                      top: `${node.y ?? 0}px`,
                       opacity: selectedNodeId
                         ? node.id === selectedNodeId ||
                           isAdjacentToSelected(node.id)
@@ -1169,7 +1163,7 @@ const TechTreeViewer = () => {
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
                                     {ancestors.map(
-                                      (ancestor: any, index: number) => (
+                                      (ancestor: Node, index: number) => (
                                         <div
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
                                         >
@@ -1195,7 +1189,7 @@ const TechTreeViewer = () => {
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
                                     {children.map(
-                                      (child: any, index: number) => (
+                                      (child: Node, index: number) => (
                                         <div
                                           key={`child-${node.id}-${child.id}-${index}`}
                                         >
