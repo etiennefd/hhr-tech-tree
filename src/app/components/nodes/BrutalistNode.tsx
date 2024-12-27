@@ -12,6 +12,7 @@ interface Node {
 interface BrutalistNodeProps {
   node: Node;
   isSelected: boolean;
+  isAdjacent: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -22,6 +23,7 @@ interface BrutalistNodeProps {
 const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   node,
   isSelected,
+  isAdjacent,
   onClick,
   onMouseEnter,
   onMouseLeave,
@@ -101,7 +103,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         transition-transform 
         cursor-pointer 
         tech-node
-        ${isSelected ? "z-20" : "z-10"}
+        ${isSelected ? "z-20" : isAdjacent ? "z-15" : "z-10"}
       `}
       lang="en"
       style={{

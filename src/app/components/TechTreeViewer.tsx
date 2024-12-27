@@ -52,6 +52,7 @@ interface Node {
   fields: string[];
   type?: string;
   subtitle?: string;
+  image: string;
 }
 
 interface Link {
@@ -326,7 +327,7 @@ const TechTreeViewer = () => {
         return aPos - bPos;
       });
 
-      nodesInYear.forEach((node) => {
+      nodesInYear.forEach((node: Node) => {
         const nodeHeight = estimateNodeHeight(node);
 
         // Get base position from primary field, ensuring minimum Y
@@ -507,6 +508,7 @@ const TechTreeViewer = () => {
 
   const handleNodeClick = (title: string) => {
     const node = data.nodes.find((n) => n.title === title);
+    if (!node) return;
 
     // Clear states immediately to hide tooltip
     setSelectedLinkIndex(null);
@@ -516,14 +518,14 @@ const TechTreeViewer = () => {
     setHoveredNodeId(null);
 
     const container = document.querySelector(".overflow-y-auto") as HTMLElement;
+    if (!container) return;
 
     const scrollPosition = node.y - container.clientHeight / 2 + 150;
 
     Promise.all([
       new Promise<void>((resolve) => {
         if (horizontalScrollContainerRef.current) {
-          const horizontalPosition =
-            getXPosition(node.year) - window.innerWidth / 2;
+          const horizontalPosition = getXPosition(node.year) - window.innerWidth / 2;
           horizontalScrollContainerRef.current.scrollTo({
             left: horizontalPosition,
             behavior: "smooth",
@@ -591,7 +593,7 @@ const TechTreeViewer = () => {
   }, []);
 
   const shouldHighlightLink = useCallback(
-    (link: any, index: number) => {
+    (link: Link, index: number) => {
       // If a node is selected
       if (selectedNodeId) {
         return link.source === selectedNodeId || link.target === selectedNodeId;
@@ -999,6 +1001,8 @@ const TechTreeViewer = () => {
                         x: getXPosition(targetNode.year),
                         y: targetNode.y || 150,
                       }}
+                      sourceIndex={data.nodes.indexOf(sourceNode)}
+                      targetIndex={data.nodes.indexOf(targetNode)}
                       connectionType={link.type}
                       isHighlighted={shouldHighlightLink(link, index)}
                       opacity={
@@ -1040,7 +1044,6 @@ const TechTreeViewer = () => {
                     node={node}
                     isSelected={node.id === selectedNodeId}
                     isAdjacent={isAdjacentToSelected(node.id)}
-                    formatYear={formatYear}
                     onClick={() => {
                       if (node.id === selectedNodeId) {
                         setSelectedNodeId(null);
@@ -1064,10 +1067,9 @@ const TechTreeViewer = () => {
                     style={{
                       position: "absolute",
                       left: `${getXPosition(node.year)}px`,
-                      top: `${node.y ?? 0}px`,
+                      top: `${node.y}px`,
                       opacity: selectedNodeId
-                        ? node.id === selectedNodeId ||
-                          isAdjacentToSelected(node.id)
+                        ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
                           ? 1
                           : 0.2
                         : selectedLinkIndex !== null
