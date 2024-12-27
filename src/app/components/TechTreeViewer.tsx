@@ -1087,7 +1087,8 @@ const TechTreeViewer = () => {
                           <strong>Date:</strong> {formatYear(node.year)}
                           {node.dateDetails && ` (${node.dateDetails})`}
                         </p>
-                        {node.inventors?.length > 0 && (
+                        {node.inventors?.length > 0 && 
+                         node.inventors.filter(inv => inv !== "unknown").length > 0 && (
                           <p className="text-xs mb-1">
                             <strong>
                               {node.type === "Discovery"
@@ -1099,7 +1100,9 @@ const TechTreeViewer = () => {
                                   }`}
                               :
                             </strong>{" "}
-                            {node.inventors.join(", ")}
+                            {node.inventors.includes("unknown")
+                              ? "possibly " + node.inventors.filter(inv => inv !== "unknown").join(", ")
+                              : node.inventors.join(", ")}
                           </p>
                         )}
                         {node.organization && (
