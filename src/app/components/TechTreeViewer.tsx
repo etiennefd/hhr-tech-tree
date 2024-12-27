@@ -11,6 +11,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
+import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import TechTreeMinimap from "../components/TechTreeMinimap";
 
@@ -39,6 +40,8 @@ interface Node {
   id: string;
   title: string;
   year: number;
+  x: number;
+  y: number;
   description?: string;
   details?: string;
   dateDetails?: string;
@@ -48,21 +51,26 @@ interface Node {
   wikipedia?: string;
   fields: string[];
   type?: string;
-  x?: number;
-  y?: number;
   subtitle?: string;
 }
 
 interface Link {
   source: string;
   target: string;
-  type: string;
+  type: ConnectionType;
   details?: string;
 }
 
 interface NodePosition {
   y: number;
   height: number;
+}
+
+interface MinimapNode {
+  id: string;
+  x: number;
+  y: number;
+  year: number;
 }
 
 function getTimelineSegment(year: number) {
@@ -1115,18 +1123,13 @@ const TechTreeViewer = () => {
                           <strong>Date:</strong> {formatYear(node.year)}
                           {node.dateDetails && ` (${node.dateDetails})`}
                         </p>
-                        {node.inventors?.length > 0 &&
-                          node.inventors.filter((inv) => inv !== "unknown")
-                            .length > 0 && (
+                        {node.inventors && node.inventors.length > 0 && 
+                          node.inventors.filter((inv) => inv !== "unknown").length > 0 && (
                             <p className="text-xs mb-1">
                               <strong>
                                 {node.type === "Discovery"
-                                  ? `Discoverer${
-                                      node.inventors.length > 1 ? "s" : ""
-                                    }`
-                                  : `Inventor${
-                                      node.inventors.length > 1 ? "s" : ""
-                                    }`}
+                                  ? `Discoverer${node.inventors.length > 1 ? "s" : ""}`
+                                  : `Inventor${node.inventors.length > 1 ? "s" : ""}`}
                                 :
                               </strong>{" "}
                               {node.inventors.includes("unknown")
@@ -1227,7 +1230,12 @@ const TechTreeViewer = () => {
           </div>
         </div>
         <TechTreeMinimap
-          nodes={data.nodes}
+          nodes={data.nodes.map((node): MinimapNode => ({
+            id: node.id,
+            x: node.x || 0,
+            y: node.y || 0,
+            year: node.year
+          }))}
           containerWidth={containerWidth}
           totalHeight={totalHeight}
           viewportWidth={containerDimensions.width}

@@ -7,7 +7,7 @@ interface NodePosition {
   y: number;
 }
 
-type ConnectionType =
+export type ConnectionType =
   | "Prerequisite"
   | "Improvement"
   | "Speculative"
