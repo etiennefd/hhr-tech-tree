@@ -604,17 +604,19 @@ const TechTreeViewer = () => {
   const getNodeConnections = useCallback(
     (nodeId: string) => {
       // Filter out 'Independently invented' and 'Concurrent development' connections
-      const validConnectionTypes = (link: any) => 
-        !['Independently invented', 'Concurrent development'].includes(link.type);
+      const validConnectionTypes = (link: any) =>
+        !["Independently invented", "Concurrent development"].includes(
+          link.type
+        );
 
       const ancestors = data.links
-        .filter(link => link.target === nodeId && validConnectionTypes(link))
-        .map(link => data.nodes.find(n => n.id === link.source))
+        .filter((link) => link.target === nodeId && validConnectionTypes(link))
+        .map((link) => data.nodes.find((n) => n.id === link.source))
         .filter(Boolean);
 
       const children = data.links
-        .filter(link => link.source === nodeId && validConnectionTypes(link))
-        .map(link => data.nodes.find(n => n.id === link.target))
+        .filter((link) => link.source === nodeId && validConnectionTypes(link))
+        .map((link) => data.nodes.find((n) => n.id === link.target))
         .filter(Boolean);
 
       return { ancestors, children };
@@ -1087,24 +1089,28 @@ const TechTreeViewer = () => {
                           <strong>Date:</strong> {formatYear(node.year)}
                           {node.dateDetails && ` (${node.dateDetails})`}
                         </p>
-                        {node.inventors?.length > 0 && 
-                         node.inventors.filter(inv => inv !== "unknown").length > 0 && (
-                          <p className="text-xs mb-1">
-                            <strong>
-                              {node.type === "Discovery"
-                                ? `Discoverer${
-                                    node.inventors.length > 1 ? "s" : ""
-                                  }`
-                                : `Inventor${
-                                    node.inventors.length > 1 ? "s" : ""
-                                  }`}
-                              :
-                            </strong>{" "}
-                            {node.inventors.includes("unknown")
-                              ? "possibly " + node.inventors.filter(inv => inv !== "unknown").join(", ")
-                              : node.inventors.join(", ")}
-                          </p>
-                        )}
+                        {node.inventors?.length > 0 &&
+                          node.inventors.filter((inv) => inv !== "unknown")
+                            .length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.type === "Discovery"
+                                  ? `Discoverer${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`
+                                  : `Inventor${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`}
+                                :
+                              </strong>{" "}
+                              {node.inventors.includes("unknown")
+                                ? "possibly " +
+                                  node.inventors
+                                    .filter((inv) => inv !== "unknown")
+                                    .join(", ")
+                                : node.inventors.join(", ")}
+                            </p>
+                          )}
                         {node.organization && (
                           <p className="text-xs mb-1">
                             <strong>Organization:</strong> {node.organization}
@@ -1130,21 +1136,25 @@ const TechTreeViewer = () => {
                                 <div className="text-xs mb-1">
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
-                                    {ancestors.map((ancestor: any, index: number) => (
-                                      <div key={`ancestor-${node.id}-${ancestor.id}-${index}`}>
-                                        •{" "}
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNodeClick(ancestor.title);
-                                          }}
-                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
-                                          type="button"
+                                    {ancestors.map(
+                                      (ancestor: any, index: number) => (
+                                        <div
+                                          key={`ancestor-${node.id}-${ancestor.id}-${index}`}
                                         >
-                                          {ancestor.title}
-                                        </button>
-                                      </div>
-                                    ))}
+                                          •{" "}
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(ancestor.title);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                                            type="button"
+                                          >
+                                            {ancestor.title}
+                                          </button>
+                                        </div>
+                                      )
+                                    )}
                                   </div>
                                 </div>
                               )}
@@ -1152,21 +1162,25 @@ const TechTreeViewer = () => {
                                 <div className="text-xs mb-1">
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
-                                    {children.map((child: any, index: number) => (
-                                      <div key={`child-${node.id}-${child.id}-${index}`}>
-                                        •{" "}
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNodeClick(child.title);
-                                          }}
-                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
-                                          type="button"
+                                    {children.map(
+                                      (child: any, index: number) => (
+                                        <div
+                                          key={`child-${node.id}-${child.id}-${index}`}
                                         >
-                                          {child.title}
-                                        </button>
-                                      </div>
-                                    ))}
+                                          •{" "}
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(child.title);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                                            type="button"
+                                          >
+                                            {child.title}
+                                          </button>
+                                        </div>
+                                      )
+                                    )}
                                   </div>
                                 </div>
                               )}
