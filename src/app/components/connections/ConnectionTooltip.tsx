@@ -54,16 +54,36 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
 
     switch (type) {
       case "Independently invented":
-        return <>{Source} and {Target} were independently invented</>;
+        return (
+          <>
+            {Source} and {Target} were independently invented
+          </>
+        );
       case "Concurrent development":
-        return <>{Source} and {Target} were developed concurrently</>;
+        return (
+          <>
+            {Source} and {Target} were developed concurrently
+          </>
+        );
       case "Inspiration":
-        return <>{Source} inspired {Target}</>;
+        return (
+          <>
+            {Source} inspired {Target}
+          </>
+        );
       case "Speculative":
       case "Link plausible but unclear":
-        return <>{Source} may have led to {Target}</>;
+        return (
+          <>
+            {Source} may have led to {Target}
+          </>
+        );
       default:
-        return <>{Source} led to {Target}</>;
+        return (
+          <>
+            {Source} led to {Target}
+          </>
+        );
     }
   };
 
@@ -77,9 +97,7 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <p className="text-xs mb-1.5">
-        {renderConnectionContent()}
-      </p>
+      <p className="text-xs mb-1.5">{renderConnectionContent()}</p>
       {details && (
         <p className="text-xs text-gray-600 border-t pt-1.5 mt-1.5">
           {details}

@@ -1,30 +1,33 @@
 import { NextResponse } from "next/server";
 import Airtable from "airtable";
-import fs from 'fs/promises';
-import path from 'path';
-import { formatLocation, cleanCommaList } from '../../utils/location';
+import fs from "fs/promises";
+import path from "path";
+import { formatLocation, cleanCommaList } from "../../utils/location";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  process.env.AIRTABLE_BASE_ID ?? ''
+  process.env.AIRTABLE_BASE_ID ?? ""
 );
 
 // Constants
 const FETCH_TIMEOUT = 5000;
 const MAX_RETRIES = 2;
 const CONCURRENT_REQUESTS = 10;
-const CACHE_FILE = path.join(process.cwd(), 'wikipedia-image-cache.json');
+const CACHE_FILE = path.join(process.cwd(), "wikipedia-image-cache.json");
 const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 // Cache management functions
 async function loadImageCache() {
   try {
-    const data = await fs.readFile(CACHE_FILE, 'utf8');
+    const data = await fs.readFile(CACHE_FILE, "utf8");
     const cache = JSON.parse(data);
-    
+
     // Filter out expired entries
     const now = Date.now();
     const validCache: Record<string, { url: string; timestamp: number }> = {};
-    for (const [key, entry] of Object.entries(cache) as [string, { url: string; timestamp: number }][]) {
+    for (const [key, entry] of Object.entries(cache) as [
+      string,
+      { url: string; timestamp: number }
+    ][]) {
       if (now - entry.timestamp < CACHE_DURATION) {
         validCache[key] = entry;
       }
@@ -32,29 +35,31 @@ async function loadImageCache() {
     return validCache;
   } catch (error) {
     // If file doesn't exist or is invalid, return empty cache
-    console.error('Error loading cache:', error);
+    console.error("Error loading cache:", error);
     return {};
   }
 }
 
-async function saveImageCache(cache: Record<string, { url: string; timestamp: number }>) {
+async function saveImageCache(
+  cache: Record<string, { url: string; timestamp: number }>
+) {
   try {
     await fs.writeFile(CACHE_FILE, JSON.stringify(cache, null, 2));
   } catch (error) {
-    console.error('Error saving cache:', error);
+    console.error("Error saving cache:", error);
   }
 }
 
 async function fetchWithTimeout(url: string, timeout: number) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
+
   try {
-    const response = await fetch(url, { 
+    const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'TechTreeViewer/1.0 (educational project)'
-      }
+        "User-Agent": "TechTreeViewer/1.0 (educational project)",
+      },
     });
     clearTimeout(timeoutId);
     return response;
@@ -64,7 +69,11 @@ async function fetchWithTimeout(url: string, timeout: number) {
   }
 }
 
-async function getWikimediaImage(wikipediaUrl: string, cache: Record<string, { url: string; timestamp: number }>, retryCount = 0) {
+async function getWikimediaImage(
+  wikipediaUrl: string,
+  cache: Record<string, { url: string; timestamp: number }>,
+  retryCount = 0
+) {
   if (!wikipediaUrl) return null;
 
   // Extract title from URL
@@ -79,7 +88,9 @@ async function getWikimediaImage(wikipediaUrl: string, cache: Record<string, { u
   try {
     const response = await fetchWithTimeout(
       `https://en.wikipedia.org/w/api.php?` +
-      `action=query&prop=pageimages&format=json&pithumbsize=300&titles=${encodeURIComponent(title)}&origin=*`,
+        `action=query&prop=pageimages&format=json&pithumbsize=300&titles=${encodeURIComponent(
+          title
+        )}&origin=*`,
       FETCH_TIMEOUT
     );
 
@@ -97,22 +108,25 @@ async function getWikimediaImage(wikipediaUrl: string, cache: Record<string, { u
       // Update cache
       cache[title] = {
         url: page.thumbnail.source,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
       return page.thumbnail.source;
     }
 
     return null;
-
   } catch (error) {
     console.error(`Error fetching Wikimedia image for ${title}:`, error);
-    
+
     if (retryCount < MAX_RETRIES) {
-      console.log(`Retrying fetch for ${title} (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-      await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount)));
+      console.log(
+        `Retrying fetch for ${title} (attempt ${retryCount + 1}/${MAX_RETRIES})`
+      );
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 * Math.pow(2, retryCount))
+      );
       return getWikimediaImage(wikipediaUrl, cache, retryCount + 1);
     }
-    
+
     return null;
   }
 }
@@ -139,7 +153,7 @@ export async function GET() {
     cacheLoad: 0,
     nodeProcessing: 0,
     connectionProcessing: 0,
-    cacheSave: 0
+    cacheSave: 0,
   };
 
   try {
@@ -165,7 +179,7 @@ export async function GET() {
         .select({
           view: "Grid view",
         })
-        .all()
+        .all(),
     ]);
 
     timeMarkers.airtableFetch = Date.now() - fetchStart;
@@ -199,8 +213,11 @@ export async function GET() {
             subtitle: String(record.get("Secondary name") || ""),
             tier: String(record.get("Tier") || ""),
             image:
-              String(record.get("Image URL") || "") || 
-              (await getWikimediaImage(String(record.get("Wikipedia") || ""), imageCache)) ||
+              String(record.get("Image URL") || "") ||
+              (await getWikimediaImage(
+                String(record.get("Wikipedia") || ""),
+                imageCache
+              )) ||
               "/placeholder-invention.png",
             year,
             dateDetails: String(record.get("Date details") || ""),
@@ -213,10 +230,16 @@ export async function GET() {
               .split(",")
               .filter(Boolean)
               .map((i) => i.trim()),
-            organization: cleanCommaList(String(record.get("Organization") || "")),
+            organization: cleanCommaList(
+              String(record.get("Organization") || "")
+            ),
             city: String(record.get("City") || ""),
-            countryHistorical: cleanCommaList(String(record.get("Country (historical)") || "")),
-            countryModern: cleanCommaList(String(record.get("Country (modern borders)") || "")),
+            countryHistorical: cleanCommaList(
+              String(record.get("Country (historical)") || "")
+            ),
+            countryModern: cleanCommaList(
+              String(record.get("Country (modern borders)") || "")
+            ),
             // Add formatted location
             formattedLocation: formatLocation(
               String(record.get("City") || ""),
@@ -253,15 +276,22 @@ export async function GET() {
         const fromId = record.get("From") as string[] | undefined;
         const toId = record.get("To") as string[] | undefined;
         return (
-          fromId?.[0] && toId?.[0] && validNodeIds.has(fromId[0]) && validNodeIds.has(toId[0])
+          fromId?.[0] &&
+          toId?.[0] &&
+          validNodeIds.has(fromId[0]) &&
+          validNodeIds.has(toId[0])
         );
       })
       .map((record) => {
         const fromValue = record.get("From");
         const toValue = record.get("To");
         return {
-          source: Array.isArray(fromValue) ? String(fromValue[0] || "") : String(fromValue || ""),
-          target: Array.isArray(toValue) ? String(toValue[0] || "") : String(toValue || ""),
+          source: Array.isArray(fromValue)
+            ? String(fromValue[0] || "")
+            : String(fromValue || ""),
+          target: Array.isArray(toValue)
+            ? String(toValue[0] || "")
+            : String(toValue || ""),
           type: String(record.get("Type") || "default"),
           details: String(record.get("Details") || ""),
         };
@@ -273,32 +303,60 @@ export async function GET() {
     const totalTime = Date.now() - startTime;
     console.log("\nPerformance Summary:");
     console.log("-------------------");
-    console.log(`Cache Load:         ${timeMarkers.cacheLoad}ms (${(timeMarkers.cacheLoad/totalTime*100).toFixed(1)}%)`);
-    console.log(`Airtable Fetch:     ${timeMarkers.airtableFetch}ms (${(timeMarkers.airtableFetch/totalTime*100).toFixed(1)}%)`);
-    console.log(`Node Processing:    ${timeMarkers.nodeProcessing}ms (${(timeMarkers.nodeProcessing/totalTime*100).toFixed(1)}%)`);
-    console.log(`Cache Save:         ${timeMarkers.cacheSave}ms (${(timeMarkers.cacheSave/totalTime*100).toFixed(1)}%)`);
-    console.log(`Connection Process: ${timeMarkers.connectionProcessing}ms (${(timeMarkers.connectionProcessing/totalTime*100).toFixed(1)}%)`);
+    console.log(
+      `Cache Load:         ${timeMarkers.cacheLoad}ms (${(
+        (timeMarkers.cacheLoad / totalTime) *
+        100
+      ).toFixed(1)}%)`
+    );
+    console.log(
+      `Airtable Fetch:     ${timeMarkers.airtableFetch}ms (${(
+        (timeMarkers.airtableFetch / totalTime) *
+        100
+      ).toFixed(1)}%)`
+    );
+    console.log(
+      `Node Processing:    ${timeMarkers.nodeProcessing}ms (${(
+        (timeMarkers.nodeProcessing / totalTime) *
+        100
+      ).toFixed(1)}%)`
+    );
+    console.log(
+      `Cache Save:         ${timeMarkers.cacheSave}ms (${(
+        (timeMarkers.cacheSave / totalTime) *
+        100
+      ).toFixed(1)}%)`
+    );
+    console.log(
+      `Connection Process: ${timeMarkers.connectionProcessing}ms (${(
+        (timeMarkers.connectionProcessing / totalTime) *
+        100
+      ).toFixed(1)}%)`
+    );
     console.log(`Total Time:         ${totalTime}ms`);
     console.log("-------------------");
 
-    return NextResponse.json({ 
-      nodes: validNodes, 
+    return NextResponse.json({
+      nodes: validNodes,
       links,
       _debug: {
         timing: {
           ...timeMarkers,
-          total: totalTime
+          total: totalTime,
         },
         counts: {
           totalRecords: innovationRecords.length,
           validNodes: validNodes.length,
           connections: links.length,
-          cachedImages: Object.keys(imageCache).length
-        }
-      }
+          cachedImages: Object.keys(imageCache).length,
+        },
+      },
     });
   } catch (error) {
     console.error("Error details:", error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

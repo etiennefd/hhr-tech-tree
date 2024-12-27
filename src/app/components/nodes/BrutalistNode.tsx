@@ -178,7 +178,8 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 key={field}
                 className="text-[10px] px-1.5 py-0.5 uppercase font-bold text-white"
                 style={{
-                  backgroundColor: fieldColors[field as keyof typeof fieldColors] || "#2D2D2D",
+                  backgroundColor:
+                    fieldColors[field as keyof typeof fieldColors] || "#2D2D2D",
                 }}
               >
                 {field}

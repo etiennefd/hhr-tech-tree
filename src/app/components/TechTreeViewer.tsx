@@ -344,7 +344,9 @@ const TechTreeViewer = () => {
 
           return usedPositions.some(({ y: usedY, height: usedHeight }) => {
             const usedBottom = usedY + usedHeight;
-            return !(testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP);
+            return !(
+              testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP
+            );
           });
         };
 
@@ -525,7 +527,8 @@ const TechTreeViewer = () => {
     Promise.all([
       new Promise<void>((resolve) => {
         if (horizontalScrollContainerRef.current) {
-          const horizontalPosition = getXPosition(node.year) - window.innerWidth / 2;
+          const horizontalPosition =
+            getXPosition(node.year) - window.innerWidth / 2;
           horizontalScrollContainerRef.current.scrollTo({
             left: horizontalPosition,
             behavior: "smooth",
@@ -554,7 +557,9 @@ const TechTreeViewer = () => {
       );
 
       if (stoneToolsNode && stoneToolsNode.y !== undefined) {
-        const container = document.querySelector(".overflow-y-auto") as HTMLElement;
+        const container = document.querySelector(
+          ".overflow-y-auto"
+        ) as HTMLElement;
 
         if (container) {
           // Calculate the scroll position:
@@ -637,7 +642,9 @@ const TechTreeViewer = () => {
   const getNodeConnections = useCallback(
     (nodeId: string) => {
       const validConnectionTypes = (link: Link) =>
-        !["Independently invented", "Concurrent development"].includes(link.type);
+        !["Independently invented", "Concurrent development"].includes(
+          link.type
+        );
 
       const ancestors = data.links
         .filter((link) => link.target === nodeId && validConnectionTypes(link))
@@ -1069,7 +1076,8 @@ const TechTreeViewer = () => {
                       left: `${getXPosition(node.year)}px`,
                       top: `${node.y}px`,
                       opacity: selectedNodeId
-                        ? node.id === selectedNodeId || isAdjacentToSelected(node.id)
+                        ? node.id === selectedNodeId ||
+                          isAdjacentToSelected(node.id)
                           ? 1
                           : 0.2
                         : selectedLinkIndex !== null
@@ -1125,13 +1133,19 @@ const TechTreeViewer = () => {
                           <strong>Date:</strong> {formatYear(node.year)}
                           {node.dateDetails && ` (${node.dateDetails})`}
                         </p>
-                        {node.inventors && node.inventors.length > 0 && 
-                          node.inventors.filter((inv) => inv !== "unknown").length > 0 && (
+                        {node.inventors &&
+                          node.inventors.length > 0 &&
+                          node.inventors.filter((inv) => inv !== "unknown")
+                            .length > 0 && (
                             <p className="text-xs mb-1">
                               <strong>
                                 {node.type === "Discovery"
-                                  ? `Discoverer${node.inventors.length > 1 ? "s" : ""}`
-                                  : `Inventor${node.inventors.length > 1 ? "s" : ""}`}
+                                  ? `Discoverer${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`
+                                  : `Inventor${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`}
                                 :
                               </strong>{" "}
                               {node.inventors.includes("unknown")
@@ -1232,12 +1246,14 @@ const TechTreeViewer = () => {
           </div>
         </div>
         <TechTreeMinimap
-          nodes={data.nodes.map((node): MinimapNode => ({
-            id: node.id,
-            x: node.x || 0,
-            y: node.y || 0,
-            year: node.year
-          }))}
+          nodes={data.nodes.map(
+            (node): MinimapNode => ({
+              id: node.id,
+              x: node.x || 0,
+              y: node.y || 0,
+              year: node.year,
+            })
+          )}
           containerWidth={containerWidth}
           totalHeight={totalHeight}
           viewportWidth={containerDimensions.width}

@@ -96,7 +96,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     onSelect?.();
   };
 
-
   const getControlPoints = (x1: number, y1: number, x2: number, y2: number) => {
     const deltaX = x2 - x1;
     const controlPointOffset = Math.min(Math.abs(deltaX) * 0.5, 200);
