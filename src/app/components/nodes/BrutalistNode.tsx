@@ -12,8 +12,6 @@ interface Node {
 interface BrutalistNodeProps {
   node: Node;
   isSelected: boolean;
-  isAdjacent: boolean;
-  formatYear?: (year: number) => string;
   onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -24,8 +22,6 @@ interface BrutalistNodeProps {
 const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   node,
   isSelected,
-  isAdjacent,
-  formatYear,
   onClick,
   onMouseEnter,
   onMouseLeave,
