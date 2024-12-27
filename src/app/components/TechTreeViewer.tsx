@@ -35,6 +35,36 @@ const INTERVAL_UPPER_PALEOLITHIC = 1000;
 const INTERVAL_MIDDLE_PALEOLITHIC = 5000;
 const INTERVAL_EARLY_PALEOLITHIC = 100000;
 
+interface Node {
+  id: string;
+  title: string;
+  year: number;
+  description?: string;
+  details?: string;
+  dateDetails?: string;
+  inventors?: string[];
+  organization?: string;
+  formattedLocation?: string;
+  wikipedia?: string;
+  fields: string[];
+  type?: string;
+  x?: number;
+  y?: number;
+  subtitle?: string;
+}
+
+interface Link {
+  source: string;
+  target: string;
+  type: string;
+  details?: string;
+}
+
+interface NodePosition {
+  y: number;
+  height: number;
+}
+
 function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
   if (year >= YEAR_EARLY_MODERN)
@@ -133,15 +163,15 @@ const TechTreeViewer = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [hoveredNode, setHoveredNode] = useState(null);
-  const [filteredNodes, setFilteredNodes] = useState([]);
+  const [hoveredNode, setHoveredNode] = useState<Node | null>(null);
+  const [filteredNodes, setFilteredNodes] = useState<Node[]>([]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
   const [containerDimensions, setContainerDimensions] = useState({
     width: 0,
     height: 0,
   });
-  const [data, setData] = useState<{ nodes: any[]; links: any[] }>({
+  const [data, setData] = useState<{ nodes: Node[]; links: Link[] }>({
     nodes: [],
     links: [],
   });
@@ -149,7 +179,6 @@ const TechTreeViewer = () => {
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(
     null
   );
-  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const [totalHeight, setTotalHeight] = useState(1000); // Default height
   const [isKeyScrolling, setIsKeyScrolling] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
@@ -166,10 +195,10 @@ const TechTreeViewer = () => {
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const calculateNodePositions = useCallback((nodes) => {
+  const calculateNodePositions = useCallback((nodes: Node[]): Node[] => {
     if (!nodes.length) return [];
 
-    function estimateNodeHeight(node) {
+    function estimateNodeHeight(node: Node): number {
       // Base heights for fixed elements
       const IMAGE_HEIGHT = 80; // Image container
       const PADDING = 24; // Total vertical padding
@@ -199,14 +228,14 @@ const TechTreeViewer = () => {
 
     const minYear = Math.min(...nodes.map((n) => n.year));
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
-    const positionedNodes = [];
+    const positionedNodes: Node[] = [];
     const yearGroups = new Map();
 
     // Ensure minimum distance from top of viewport
     const ABSOLUTE_MIN_Y = 50;
 
     // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
-    const VERTICAL_BANDS = {
+    const VERTICAL_BANDS: Record<string, number> = {
       // Food & Agriculture (0-300)
       Food: Math.max(150, ABSOLUTE_MIN_Y),
       Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
@@ -280,7 +309,7 @@ const TechTreeViewer = () => {
 
     yearGroups.forEach((nodesInYear, year) => {
       const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-      const usedPositions = []; // Will store {y, height} objects
+      const usedPositions: NodePosition[] = []; // Will store {y, height} objects
       const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
       nodesInYear.sort((a, b) => {
@@ -299,17 +328,14 @@ const TechTreeViewer = () => {
             (Math.random() - 0.5) * 100
         );
 
-        const isOverlapping = (testPosition) => {
+        const isOverlapping = (testPosition: number): boolean => {
           if (testPosition < ABSOLUTE_MIN_Y) return true;
 
           const testBottom = testPosition + nodeHeight;
 
           return usedPositions.some(({ y: usedY, height: usedHeight }) => {
             const usedBottom = usedY + usedHeight;
-            // Add MIN_VERTICAL_GAP to ensure spacing between nodes
-            return !(
-              testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP
-            );
+            return !(testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP);
           });
         };
 
@@ -1021,8 +1047,10 @@ const TechTreeViewer = () => {
                       }
                     }}
                     onMouseEnter={() => {
-                      setHoveredNode(node);
-                      setHoveredNodeId(node.id);
+                      if (node.id !== selectedNodeId) {
+                        setHoveredNode(node);
+                        setHoveredNodeId(node.id);
+                      }
                     }}
                     onMouseLeave={() => {
                       if (node.id !== selectedNodeId) {
@@ -1076,9 +1104,13 @@ const TechTreeViewer = () => {
                             );
                           }
                         }}
-                        onMouseEnter={() => setIsTooltipHovered(true)}
+                        onMouseEnter={() => {
+                          if (node.id !== selectedNodeId) {
+                            setHoveredNode(node);
+                            setHoveredNodeId(node.id);
+                          }
+                        }}
                         onMouseLeave={() => {
-                          setIsTooltipHovered(false);
                           if (node.id !== selectedNodeId) {
                             setHoveredNode(null);
                             setHoveredNodeId(null);
