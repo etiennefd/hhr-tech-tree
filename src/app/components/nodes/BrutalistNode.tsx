@@ -1,6 +1,27 @@
 import React from "react";
+import Image from "next/image";
 
-const BrutalistNode = ({
+interface Node {
+  year: number;
+  title: string;
+  subtitle?: string;
+  image: string;
+  fields: string[];
+}
+
+interface BrutalistNodeProps {
+  node: Node;
+  isSelected: boolean;
+  isAdjacent: boolean;
+  formatYear?: (year: number) => string;
+  onClick: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  width: number;
+  style?: React.CSSProperties;
+}
+
+const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   node,
   isSelected,
   isAdjacent,
@@ -106,11 +127,12 @@ const BrutalistNode = ({
       `}
       >
         {/* Image section */}
-        <div className="border-b border-black p-0">
-          <img
+        <div className="border-b border-black p-0 relative h-20">
+          <Image
             src={node.image}
             alt={node.title}
-            className="w-full h-20 object-cover"
+            fill
+            className="object-cover"
             style={{
               filter: "grayscale(20%) contrast(110%)",
               mixBlendMode: "multiply",
@@ -148,12 +170,12 @@ const BrutalistNode = ({
 
           {/* Fields */}
           <div className="flex flex-wrap gap-1">
-            {node.fields.map((field) => (
+            {node.fields.map((field: string) => (
               <span
                 key={field}
                 className="text-[10px] px-1.5 py-0.5 uppercase font-bold text-white"
                 style={{
-                  backgroundColor: fieldColors[field] || "#2D2D2D",
+                  backgroundColor: fieldColors[field as keyof typeof fieldColors] || "#2D2D2D",
                 }}
               >
                 {field}

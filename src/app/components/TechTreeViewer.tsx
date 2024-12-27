@@ -370,7 +370,12 @@ const TechTreeViewer = () => {
   useEffect(() => {
     setIsLoading(true);
     fetch("/api/inventions")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((fetchedData) => {
         const positionedNodes = calculateNodePositions(fetchedData.nodes);
         setData({ ...fetchedData, nodes: positionedNodes });
@@ -379,7 +384,11 @@ const TechTreeViewer = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        // Set some error state to show to the user
         setIsLoading(false);
+        // You might want to add error state handling here
+        setData({ nodes: [], links: [] }); // Set empty data on error
+        setFilteredNodes([]); // Clear filtered nodes
       });
   }, [calculateNodePositions]);
 
@@ -673,7 +682,7 @@ const TechTreeViewer = () => {
 
   useEffect(() => {
     let isScrolling = false;
-    let scrollDirection = { x: 0, y: 0 };
+    const scrollDirection = { x: 0, y: 0 };
     let animationFrameId: number | null = null;
 
     const SCROLL_SPEED = 100; // Pixels per frame
