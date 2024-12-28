@@ -294,7 +294,6 @@ const TechTreeViewer = () => {
       Security: 1800,
       Military: 1850,
       Finance: 1900,
-      Law: 1950,
       Governance: 2000,
 
       // Culture (2100-2400)

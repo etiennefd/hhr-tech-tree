@@ -84,7 +84,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Security: "#E94F37", // Alert red
     Military: "#D64933", // Signal red
     Finance: "#2F4F4F", // Dark sage green
-    Law: "#5C7080", // Justice gray
     Governance: "#536B78", // Authority gray
 
     // Culture & Communication (Distinct Pinks)
