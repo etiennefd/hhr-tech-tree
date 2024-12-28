@@ -247,13 +247,24 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
         }}
         style={{ pointerEvents: "all" }}
       >
-        {/* Hit area */}
+        {/* Hit area - always present but with different sizes based on highlight status */}
         <path
           d={`M ${sourcePoint.x} ${sourcePoint.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${endPoint.x} ${endPoint.y}`}
           stroke="transparent"
-          strokeWidth={20}
+          strokeWidth={isHighlighted ? 30 : 15} // Wider hit area for highlighted connections
           fill="none"
-          style={{ pointerEvents: "stroke" }}
+          style={{ 
+            pointerEvents: "stroke",
+            cursor: "pointer"
+          }}
+        />
+
+        {/* Main connection line - no pointer events */}
+        <path
+          d={`M ${sourcePoint.x} ${sourcePoint.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${lineEndX} ${lineEndY}`}
+          fill="none"
+          {...lineStyle}
+          style={{ pointerEvents: "none" }}
         />
 
         {/* Start marker (square) */}
@@ -264,14 +275,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           height={6}
           fill={lineStyle.stroke}
           opacity={lineStyle.strokeOpacity}
-          style={{ pointerEvents: "none" }}
-        />
-
-        {/* Main connection line */}
-        <path
-          d={`M ${sourcePoint.x} ${sourcePoint.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${lineEndX} ${lineEndY}`}
-          fill="none"
-          {...lineStyle}
           style={{ pointerEvents: "none" }}
         />
 
