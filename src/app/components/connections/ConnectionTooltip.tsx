@@ -71,6 +71,12 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
             {Source} inspired {Target}
           </>
         );
+      case "Obsolescence":
+        return (
+          <>
+            {Source} was replaced by {Target}
+          </>
+        );
       case "Speculative":
       case "Link plausible but unclear":
         return (

@@ -16,6 +16,7 @@ export type ConnectionType =
   | "Independently invented"
   | "Link plausible but unclear"
   | "Concurrent development"
+  | "Obsolescence"
   | "default";
 
 interface CurvedConnectionsProps {
@@ -154,34 +155,30 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   };
 
   const getLineStyle = (type: ConnectionType, isActive: boolean) => {
-    // Light engineering paper blue
-    const engineeringBlue = "#91B4C5"; // Soft, pale blue matching technical paper
+    const engineeringBlue = "#91B4C5";
 
-    // Base style for all connections
     const baseStyle = {
       stroke: engineeringBlue,
       strokeWidth: isActive ? 2 : 1.5,
-      strokeOpacity: isActive ? opacity : 0.7 * opacity, // Higher base opacity since the color is lighter
+      strokeOpacity: isActive ? opacity : 0.7 * opacity,
     };
 
-    // Determine dash pattern based on connection type
     if (["Independently invented", "Concurrent development"].includes(type)) {
       return {
         ...baseStyle,
-        strokeDasharray: "10,4", // Longer dashes for independent/concurrent development
+        strokeDasharray: "10,4",
       };
     } else if (
-      ["Inspiration", "Speculative", "Link plausible but unclear"].includes(
+      ["Inspiration", "Speculative", "Link plausible but unclear", "Obsolescence"].includes(
         type
       )
     ) {
       return {
         ...baseStyle,
-        strokeDasharray: "4,4", // Shorter dashes for speculative/inspirational connections
+        strokeDasharray: "4,4",
       };
     }
 
-    // Default solid line for all other connection types
     return baseStyle;
   };
 
