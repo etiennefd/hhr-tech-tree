@@ -163,23 +163,32 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
       strokeOpacity: isActive ? opacity : 0.7 * opacity,
     };
 
-    if (["Independently invented", "Concurrent development"].includes(type)) {
-      return {
-        ...baseStyle,
-        strokeDasharray: "10,4",
-      };
-    } else if (
-      ["Inspiration", "Speculative", "Link plausible but unclear", "Obsolescence"].includes(
-        type
-      )
-    ) {
-      return {
-        ...baseStyle,
-        strokeDasharray: "4,4",
-      };
+    switch (type) {
+      case "Independently invented":
+      case "Concurrent development":
+        return {
+          ...baseStyle,
+          strokeDasharray: "10,4", // Long dashes for parallel development
+        };
+      case "Inspiration":
+        return {
+          ...baseStyle,
+          strokeDasharray: "4,4", // Medium dashes for inspiration
+        };
+      case "Speculative":
+      case "Link plausible but unclear":
+        return {
+          ...baseStyle,
+          strokeDasharray: "2,4", // Short dashes, longer gaps for uncertainty
+        };
+      case "Obsolescence":
+        return {
+          ...baseStyle,
+          strokeDasharray: "8,2,2,2", // Long dash, two dots for replacement
+        };
+      default:
+        return baseStyle;
     }
-
-    return baseStyle;
   };
 
   const { x: x1, y: y1 } = sourceNode;
