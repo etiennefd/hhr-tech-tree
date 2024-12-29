@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { TechNode } from '@/types/tech-node';
 
-interface SearchResult {
+export interface SearchResult {
   type: 'year' | 'node' | 'person' | 'field' | 'organization';
-  node?: Node;
+  node?: TechNode;
   text: string;
   subtext?: string;
   matchScore: number;
@@ -15,10 +16,9 @@ interface SearchBoxProps {
   onSearch: (query: string) => void;
   results: SearchResult[];
   onSelectResult: (result: SearchResult) => void;
-  isLoading?: boolean;
 }
 
-export function SearchBox({ onSearch, results, onSelectResult, isLoading = false }: SearchBoxProps) {
+export function SearchBox({ onSearch, results, onSelectResult }: SearchBoxProps) {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);

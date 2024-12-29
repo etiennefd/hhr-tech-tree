@@ -7,14 +7,13 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import TechTreeMinimap from "../components/TechTreeMinimap";
-import { SearchBox } from './SearchBox';
+import { SearchBox, SearchResult } from './SearchBox';
+import { TechNode } from '@/types/tech-node';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -36,25 +35,6 @@ const INTERVAL_NEOLITHIC = 500;
 const INTERVAL_UPPER_PALEOLITHIC = 1000;
 const INTERVAL_MIDDLE_PALEOLITHIC = 5000;
 const INTERVAL_EARLY_PALEOLITHIC = 100000;
-
-interface Node {
-  id: string;
-  title: string;
-  year: number;
-  x: number;
-  y: number;
-  description?: string;
-  details?: string;
-  dateDetails?: string;
-  inventors?: string[];
-  organizations?: string[];
-  formattedLocation?: string;
-  wikipedia?: string;
-  fields: string[];
-  type?: string;
-  subtitle?: string;
-  image: string;
-}
 
 interface Link {
   source: string;
@@ -172,16 +152,15 @@ const TechTreeViewer = () => {
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [hoveredNode, setHoveredNode] = useState<Node | null>(null);
-  const [filteredNodes, setFilteredNodes] = useState<Node[]>([]);
+  const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
+  const [filteredNodes, setFilteredNodes] = useState<TechNode[]>([]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
   const [containerDimensions, setContainerDimensions] = useState({
     width: 0,
     height: 0,
   });
-  const [data, setData] = useState<{ nodes: Node[]; links: Link[] }>({
+  const [data, setData] = useState<{ nodes: TechNode[]; links: Link[] }>({
     nodes: [],
     links: [],
   });
@@ -206,10 +185,10 @@ const TechTreeViewer = () => {
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const calculateNodePositions = useCallback((nodes: Node[]): Node[] => {
+  const calculateNodePositions = useCallback((nodes: TechNode[]): TechNode[] => {
     if (!nodes.length) return [];
 
-    function estimateNodeHeight(node: Node): number {
+    function estimateNodeHeight(node: TechNode): number {
       // Base heights for fixed elements
       const IMAGE_HEIGHT = 80; // Image container
       const PADDING = 24; // Total vertical padding
@@ -239,7 +218,7 @@ const TechTreeViewer = () => {
 
     const minYear = Math.min(...nodes.map((n) => n.year));
     const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
-    const positionedNodes: Node[] = [];
+    const positionedNodes: TechNode[] = [];
     const yearGroups = new Map();
 
     // Ensure minimum distance from top of viewport
@@ -322,13 +301,13 @@ const TechTreeViewer = () => {
       const usedPositions: NodePosition[] = []; // Will store {y, height} objects
       const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
-      nodesInYear.sort((a: Node, b: Node) => {
+      nodesInYear.sort((a: TechNode, b: TechNode) => {
         const aPos = a.fields?.[0] ? VERTICAL_BANDS[a.fields[0]] || 1200 : 1200;
         const bPos = b.fields?.[0] ? VERTICAL_BANDS[b.fields[0]] || 1200 : 1200;
         return aPos - bPos;
       });
 
-      nodesInYear.forEach((node: Node) => {
+      nodesInYear.forEach((node: TechNode) => {
         const nodeHeight = estimateNodeHeight(node);
 
         // Get base position from primary field, ensuring minimum Y
@@ -472,22 +451,6 @@ const TechTreeViewer = () => {
     setIsClient(true);
   }, []);
 
-  // Search effect
-  useEffect(() => {
-    if (!searchTerm.trim()) {
-      setFilteredNodes(data.nodes);
-      return;
-    }
-
-    const searchTermLower = searchTerm.toLowerCase();
-    const filtered = data.nodes.filter(
-      (node) =>
-        node.title.toLowerCase().includes(searchTermLower) ||
-        (node.description || "").toLowerCase().includes(searchTermLower)
-    );
-    setFilteredNodes(filtered);
-  }, [searchTerm, data.nodes]);
-
   // Add handler for clicks outside nodes
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -509,7 +472,7 @@ const TechTreeViewer = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleNodeClick = (title: string) => {
+  const handleNodeClick = useCallback((title: string) => {
     const node = data.nodes.find((n) => n.title === title);
     if (!node) return;
 
@@ -546,7 +509,17 @@ const TechTreeViewer = () => {
     setTimeout(() => {
       setSelectedNodeId(node.id);
     }, 100);
-  };
+  }, [
+    data.nodes, 
+    getXPosition, 
+    setSelectedLinkIndex, 
+    setSelectedNodeId, 
+    setHoveredLinkIndex, 
+    setHoveredNode, 
+    setHoveredNodeId,
+    horizontalScrollContainerRef,
+    verticalScrollContainerRef
+  ]);
 
   // Add this after data is loaded (right after setIsLoading(false))
   useEffect(() => {
@@ -649,12 +622,12 @@ const TechTreeViewer = () => {
       const ancestors = data.links
         .filter((link) => link.target === nodeId && validConnectionTypes(link))
         .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is Node => n !== undefined);
+        .filter((n): n is TechNode => n !== undefined);
 
       const children = data.links
         .filter((link) => link.source === nodeId && validConnectionTypes(link))
         .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is Node => n !== undefined);
+        .filter((n): n is TechNode => n !== undefined);
 
       return { ancestors, children };
     },
@@ -881,7 +854,7 @@ const TechTreeViewer = () => {
   // Add this memoized search index
   const searchIndex = useMemo(() => {
     const index = new Map<string, {
-      node: Node,
+      node: TechNode,
       searchableText: string,
       fields: Set<string>
     }>();
@@ -1056,7 +1029,6 @@ const TechTreeViewer = () => {
               onSearch={handleSearch}
               results={searchResults}
               onSelectResult={handleSelectResult}
-              isLoading={isLoading}
             />
           </div>
         </div>
@@ -1309,9 +1281,12 @@ const TechTreeViewer = () => {
                                 : node.inventors.join(", ")}
                             </p>
                           )}
-                        {node.organization && (
+                        {node.organizations && node.organizations.length > 0 && (
                           <p className="text-xs mb-1">
-                            <strong>Organization:</strong> {node.organization}
+                            <strong>
+                              {node.organizations.length > 1 ? 'Organizations' : 'Organization'}:
+                            </strong>{' '}
+                            {node.organizations.join(', ')}
                           </p>
                         )}
                         {node.formattedLocation && (
@@ -1335,7 +1310,7 @@ const TechTreeViewer = () => {
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
                                     {ancestors.map(
-                                      (ancestor: Node, index: number) => (
+                                      (ancestor: TechNode, index: number) => (
                                         <div
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
                                         >
@@ -1361,7 +1336,7 @@ const TechTreeViewer = () => {
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
                                     {children.map(
-                                      (child: Node, index: number) => (
+                                      (child: TechNode, index: number) => (
                                         <div
                                           key={`child-${node.id}-${child.id}-${index}`}
                                         >
