@@ -14,6 +14,7 @@ import CurvedConnections from "../components/connections/CurvedConnections";
 import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import TechTreeMinimap from "../components/TechTreeMinimap";
+import { SearchBox } from './SearchBox';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -46,7 +47,7 @@ interface Node {
   details?: string;
   dateDetails?: string;
   inventors?: string[];
-  organization?: string;
+  organizations?: string[];
   formattedLocation?: string;
   wikipedia?: string;
   fields: string[];
@@ -191,6 +192,7 @@ const TechTreeViewer = () => {
   const [totalHeight, setTotalHeight] = useState(1000); // Default height
   const [isKeyScrolling, setIsKeyScrolling] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -518,33 +520,32 @@ const TechTreeViewer = () => {
     setHoveredNode(null);
     setHoveredNodeId(null);
 
-    const container = document.querySelector(".overflow-y-auto") as HTMLElement;
-    if (!container) return;
+    // Get vertical scroll container
+    const verticalContainer = verticalScrollContainerRef.current;
+    if (!verticalContainer || !horizontalScrollContainerRef.current) {
+      console.error('Scroll containers not found');
+      return;
+    }
 
-    const scrollPosition = node.y - container.clientHeight / 2 + 150;
+    // Calculate scroll positions
+    const horizontalPosition = getXPosition(node.year) - window.innerWidth / 2;
+    const verticalPosition = node.y - verticalContainer.clientHeight / 2 + 150;
 
-    Promise.all([
-      new Promise<void>((resolve) => {
-        if (horizontalScrollContainerRef.current) {
-          const horizontalPosition =
-            getXPosition(node.year) - window.innerWidth / 2;
-          horizontalScrollContainerRef.current.scrollTo({
-            left: horizontalPosition,
-            behavior: "smooth",
-          });
-        }
-        setTimeout(resolve, 100);
-      }),
-      new Promise<void>((resolve) => {
-        container.scrollTo({
-          top: Math.max(0, scrollPosition),
-          behavior: "smooth",
-        });
-        setTimeout(resolve, 100);
-      }),
-    ]).then(() => {
-      setSelectedNodeId(node.id);
+    // Execute both scrolls
+    horizontalScrollContainerRef.current.scrollTo({
+      left: Math.max(0, horizontalPosition),
+      behavior: "smooth"
     });
+
+    verticalContainer.scrollTo({
+      top: Math.max(0, verticalPosition),
+      behavior: "smooth"
+    });
+
+    // Set selected node after a short delay to allow for smooth scrolling
+    setTimeout(() => {
+      setSelectedNodeId(node.id);
+    }, 100);
   };
 
   // Add this after data is loaded (right after setIsLoading(false))
@@ -877,6 +878,161 @@ const TechTreeViewer = () => {
     };
   }, []);
 
+  // Add this memoized search index
+  const searchIndex = useMemo(() => {
+    const index = new Map<string, {
+      node: Node,
+      searchableText: string,
+      fields: Set<string>
+    }>();
+    
+    data.nodes.forEach(node => {
+      const searchableText = [
+        node.title,
+        node.subtitle,
+        node.description,
+        node.inventors?.join(' '),
+        node.organizations?.join(' '),
+        node.fields.join(' '),
+        node.details
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      index.set(node.id, {
+        node,
+        searchableText,
+        fields: new Set([
+          'title:' + node.title.toLowerCase(),
+          ...(node.subtitle ? ['subtitle:' + node.subtitle.toLowerCase()] : []),
+          ...(node.inventors?.map(inv => 'inventor:' + inv.toLowerCase()) || []),
+          ...(node.organizations?.map(org => 'org:' + org.toLowerCase()) || []),
+          ...node.fields.map(field => 'field:' + field.toLowerCase())
+        ])
+      });
+    });
+    
+    return index;
+  }, [data.nodes]);
+
+  // Replace the existing handleSearch with this optimized version
+  const handleSearch = useCallback((query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const results: SearchResult[] = [];
+    
+    const yearMatch = query.match(/^-?\d+(?:\s*(?:BC|BCE))?$/i);
+    if (yearMatch) {
+      const year = parseInt(query.replace(/\s*(?:BC|BCE)/i, ''));
+      const isBCE = query.toLowerCase().includes('bc');
+      const adjustedYear = isBCE ? -year : year;
+      
+      const years = data.nodes.map(n => n.year);
+      const minYear = Math.min(...years);
+      const maxYear = Math.max(...years);
+      
+      if (adjustedYear >= minYear && adjustedYear <= maxYear) {
+        results.push({
+          type: 'year',
+          text: `Go to year ${isBCE ? `${year} BCE` : year}`,
+          matchScore: 1,
+          year: adjustedYear
+        });
+      }
+    }
+
+    // Split search terms and create regex patterns
+    const searchTerms = query.toLowerCase().split(' ').filter(Boolean);
+    const patterns = searchTerms.map(term => new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+    
+    // Use Set for tracking added nodes to prevent duplicates
+    const addedNodes = new Set<string>();
+
+    // Search through the index
+    searchIndex.forEach(({ node, searchableText, fields }, nodeId) => {
+      if (addedNodes.has(nodeId)) return;
+      
+      const matchesAllTerms = patterns.every(pattern => {
+        return searchableText.match(pattern) || 
+               Array.from(fields).some(field => field.match(pattern));
+      });
+
+      if (matchesAllTerms) {
+        let score = 0;
+        
+        patterns.forEach(pattern => {
+          if (node.title.match(pattern)) score += 10;
+          if (node.subtitle?.match(pattern)) score += 8;
+          if (node.inventors?.some(inv => inv.match(pattern))) score += 5;
+          if (node.organizations?.some(org => org.match(pattern))) score += 5;
+          if (searchableText.match(pattern)) score += 1;
+        });
+
+        // Add tech results - now including subtitle in display
+        if (node.title.toLowerCase().includes(query.toLowerCase()) ||
+            node.subtitle?.toLowerCase().includes(query.toLowerCase())) {
+          results.push({
+            type: 'node',
+            node,
+            text: node.title,
+            subtext: `${formatYear(node.year)}${node.subtitle ? ` - ${node.subtitle}` : ''}`,
+            matchScore: score
+          });
+          addedNodes.add(nodeId);
+        }
+
+        // Add person results
+        if (!addedNodes.has(nodeId) && node.inventors?.some(inv => 
+          inv.toLowerCase().includes(query.toLowerCase())
+        )) {
+          results.push({
+            type: 'person',
+            node,
+            text: node.inventors.join(', '),
+            subtext: `Invented ${node.title} (${formatYear(node.year)})`,
+            matchScore: score
+          });
+          addedNodes.add(nodeId);
+        }
+
+        // Add organization results
+        if (!addedNodes.has(nodeId) && node.organizations?.some(org => 
+          org.toLowerCase().includes(query.toLowerCase())
+        )) {
+          results.push({
+            type: 'organization',
+            node,
+            text: node.organizations.join(', '),
+            subtext: `Developed ${node.title} (${formatYear(node.year)})`,
+            matchScore: score
+          });
+          addedNodes.add(nodeId);
+        }
+      }
+    });
+
+    results.sort((a, b) => b.matchScore - a.matchScore);
+    setSearchResults(results.slice(0, 10));
+  }, [searchIndex, data.nodes, formatYear]);
+
+  // Add result selection handler
+  const handleSelectResult = useCallback((result: SearchResult) => {
+    if (result.type === 'year' && result.year) {
+      // Scroll to year
+      if (horizontalScrollContainerRef.current) {
+        const horizontalPosition = getXPosition(result.year) - window.innerWidth / 2;
+        horizontalScrollContainerRef.current.scrollTo({
+          left: horizontalPosition,
+          behavior: 'smooth'
+        });
+      }
+    } else if (result.node) {
+      // Navigate to node
+      handleNodeClick(result.node.title);
+    }
+  }, [getXPosition, handleNodeClick]);
+
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
@@ -895,14 +1051,12 @@ const TechTreeViewer = () => {
           className="fixed top-4 right-4 flex flex-col gap-4"
           style={{ zIndex: 1000 }}
         >
-          <div className="relative bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search technologies..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 border-black rounded-none font-mono"
+          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
+            <SearchBox
+              onSearch={handleSearch}
+              results={searchResults}
+              onSelectResult={handleSelectResult}
+              isLoading={isLoading}
             />
           </div>
         </div>
