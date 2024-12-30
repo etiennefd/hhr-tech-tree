@@ -1021,7 +1021,7 @@ const TechTreeViewer = () => {
       {/* Floating controls */}
       <>
         <div
-          className="fixed top-4 right-4 flex flex-col gap-4"
+          className="fixed top-16 right-4 flex flex-col gap-4"
           style={{ zIndex: 1000 }}
         >
           <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
