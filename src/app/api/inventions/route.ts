@@ -230,9 +230,11 @@ export async function GET() {
               .split(",")
               .filter(Boolean)
               .map((i) => i.trim()),
-            organization: cleanCommaList(
+            organizations: cleanCommaList(
               String(record.get("Organization") || "")
-            ),
+            ).split(",")
+              .filter(Boolean)
+              .map(org => org.trim()),
             city: String(record.get("City") || ""),
             countryHistorical: cleanCommaList(
               String(record.get("Country (historical)") || "")
