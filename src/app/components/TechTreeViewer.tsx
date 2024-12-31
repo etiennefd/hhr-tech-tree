@@ -1149,6 +1149,22 @@ const TechTreeViewer = () => {
     [data.nodes]
   );
 
+  // Create a Set of filtered node IDs, but only when filters are active
+  const filteredNodeIds = useMemo(() => {
+    const hasActiveFilters =
+      filters.fields.size > 0 ||
+      filters.countries.size > 0 ||
+      filters.cities.size > 0;
+
+    if (!hasActiveFilters) {
+      return new Set<string>(); // Explicitly type the empty set
+    }
+
+    return new Set<string>(
+      data.nodes.filter((node) => isNodeFiltered(node)).map((node) => node.id)
+    );
+  }, [filters, data.nodes, isNodeFiltered]);
+
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
@@ -1548,6 +1564,7 @@ const TechTreeViewer = () => {
           scrollLeft={scrollPosition.left}
           scrollTop={scrollPosition.top}
           onViewportChange={handleViewportChange}
+          filteredNodeIds={filteredNodeIds}
         />
       </div>
     </div>

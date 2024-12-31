@@ -14,6 +14,7 @@ interface TechTreeMinimapProps {
   scrollLeft: number;
   scrollTop: number;
   onViewportChange: (x: number, y: number) => void;
+  filteredNodeIds: Set<string>;
 }
 
 const TechTreeMinimap = ({
@@ -25,6 +26,7 @@ const TechTreeMinimap = ({
   scrollLeft,
   scrollTop,
   onViewportChange,
+  filteredNodeIds,
 }: TechTreeMinimapProps) => {
   const MINIMAP_HEIGHT = 64; // Increased total height
   const MINIMAP_CONTENT_HEIGHT = 48; // Original height for the node content
@@ -173,15 +175,18 @@ const TechTreeMinimap = ({
         {nodes.map((node) => {
           const nodeX = node.x * scale;
           const nodeY = node.y * scale;
+          const hasActiveFilters = filteredNodeIds.size > 0;
+          const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
+
           return (
             <div
               key={node.id}
               className="absolute rounded-full"
               style={{
-                width: "2px",
-                height: "2px",
+                width: isFiltered ? "3px" : "2px",
+                height: isFiltered ? "3px" : "2px",
                 backgroundColor: engineeringBlue,
-                opacity: 0.5,
+                opacity: hasActiveFilters ? (isFiltered ? 0.9 : 0.2) : 0.6,
                 left: nodeX,
                 top: nodeY,
                 transform: "translate(-50%, -50%)",
