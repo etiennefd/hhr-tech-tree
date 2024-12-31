@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Filter, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { FilterState } from '@/types/filters';
+import React, { useState, useRef, useEffect } from "react";
+import { Filter, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { FilterState } from "@/types/filters";
 
 interface FilterBoxProps {
   filters: FilterState;
@@ -21,9 +21,9 @@ interface FilterSuggestion {
 export const FilterBox: React.FC<FilterBoxProps> = ({
   filters,
   onFilterChange,
-  availableFilters
+  availableFilters,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,24 +31,24 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
   // Get suggestions based on query
   const getSuggestions = (searchQuery: string): FilterSuggestion[] => {
     if (!searchQuery.trim()) return [];
-    
+
     const suggestions: FilterSuggestion[] = [];
     const lowerQuery = searchQuery.toLowerCase();
-    
+
     // Helper to add matching items
     const addMatches = (type: keyof FilterState, items: string[]) => {
       items
-        .filter(item => 
-          item.toLowerCase().includes(lowerQuery) && 
-          !filters[type].has(item)
+        .filter(
+          (item) =>
+            item.toLowerCase().includes(lowerQuery) && !filters[type].has(item)
         )
-        .forEach(item => suggestions.push({ type, value: item }));
+        .forEach((item) => suggestions.push({ type, value: item }));
     };
 
     // Add matches from each category
-    addMatches('fields', availableFilters.fields);
-    addMatches('countries', availableFilters.countries);
-    addMatches('cities', availableFilters.cities);
+    addMatches("fields", availableFilters.fields);
+    addMatches("countries", availableFilters.countries);
+    addMatches("cities", availableFilters.cities);
 
     return suggestions;
   };
@@ -67,22 +67,24 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     if (!suggestions.length) return;
 
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         setSelectedIndex((prev) => (prev + 1) % suggestions.length);
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+        setSelectedIndex(
+          (prev) => (prev - 1 + suggestions.length) % suggestions.length
+        );
         break;
-      case 'Enter':
+      case "Enter":
         e.preventDefault();
         if (suggestions[selectedIndex]) {
           const suggestion = suggestions[selectedIndex];
           addFilter(suggestion.type, suggestion.value);
         }
         break;
-      case 'Escape':
+      case "Escape":
         e.preventDefault();
         setIsOpen(false);
         break;
@@ -94,7 +96,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     const newFilters = { ...filters };
     newFilters[type] = new Set(filters[type]).add(value);
     onFilterChange(newFilters);
-    setQuery('');
+    setQuery("");
     setIsOpen(false);
   };
 
@@ -110,22 +112,29 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Get type label
   const getTypeLabel = (type: keyof FilterState): string => {
     switch (type) {
-      case 'fields': return 'Field';
-      case 'countries': return 'Country';
-      case 'cities': return 'City';
-      default: return 'Filter';
+      case "fields":
+        return "Field";
+      case "countries":
+        return "Country";
+      case "cities":
+        return "City";
+      default:
+        return "Filter";
     }
   };
 
@@ -145,9 +154,9 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
       </div>
 
       {/* Active Filters */}
-      {Object.entries(filters).map(([type, set]) => {
+      {Object.entries(filters).map(([type, set]: [string, Set<string>]) => {
         if (set.size === 0) return null;
-        return Array.from(set).map(value => (
+        return Array.from(set as Set<string>).map((value: string) => (
           <div
             key={`${type}-${value}`}
             className="inline-flex items-center bg-yellow-100 border border-black rounded-none px-2 py-1 m-1 text-sm"
@@ -170,7 +179,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
             <div
               key={`${suggestion.type}-${suggestion.value}`}
               className={`p-2 cursor-pointer ${
-                index === selectedIndex ? 'bg-yellow-100' : 'hover:bg-yellow-50'
+                index === selectedIndex ? "bg-yellow-100" : "hover:bg-yellow-50"
               }`}
               onClick={() => addFilter(suggestion.type, suggestion.value)}
             >
@@ -194,4 +203,4 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
       )}
     </div>
   );
-}; 
+};

@@ -12,10 +12,10 @@ import CurvedConnections from "../components/connections/CurvedConnections";
 import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import TechTreeMinimap from "../components/TechTreeMinimap";
-import { SearchBox, SearchResult } from './SearchBox';
-import { TechNode } from '@/types/tech-node';
-import { FilterBox } from './FilterBox';
-import { FilterState } from '@/types/filters';
+import { SearchBox, SearchResult } from "./SearchBox";
+import { TechNode } from "@/types/tech-node";
+import { FilterBox } from "./FilterBox";
+import { FilterState } from "@/types/filters";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -192,201 +192,214 @@ const TechTreeViewer = () => {
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const calculateNodePositions = useCallback((nodes: TechNode[]): TechNode[] => {
-    if (!nodes.length) return [];
+  const calculateNodePositions = useCallback(
+    (nodes: TechNode[]): TechNode[] => {
+      if (!nodes.length) return [];
 
-    function estimateNodeHeight(node: TechNode): number {
-      // Base heights for fixed elements
-      const IMAGE_HEIGHT = 80; // Image container
-      const PADDING = 24; // Total vertical padding
-      const BORDERS = 2; // Top + bottom borders
+      function estimateNodeHeight(node: TechNode): number {
+        // Base heights for fixed elements
+        const IMAGE_HEIGHT = 80; // Image container
+        const PADDING = 24; // Total vertical padding
+        const BORDERS = 2; // Top + bottom borders
 
-      let height = IMAGE_HEIGHT + PADDING + BORDERS;
+        let height = IMAGE_HEIGHT + PADDING + BORDERS;
 
-      // Title height (assuming ~15 chars per line at current width)
-      const titleLines = Math.ceil(node.title.length / 15);
-      height += titleLines * 24; // Line height for title text
+        // Title height (assuming ~15 chars per line at current width)
+        const titleLines = Math.ceil(node.title.length / 15);
+        height += titleLines * 24; // Line height for title text
 
-      // Subtitle if present
-      if (node.subtitle) {
-        const subtitleLines = Math.ceil(node.subtitle.length / 20);
-        height += subtitleLines * 16; // Smaller line height for subtitle
-      }
-
-      // Year display badge
-      height += 28; // Fixed height for year container
-
-      // Field tags (assuming 2 tags per line)
-      const fieldLines = Math.ceil(node.fields.length / 2);
-      height += fieldLines * 24;
-
-      return height;
-    }
-
-    const minYear = Math.min(...nodes.map((n) => n.year));
-    const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
-    const positionedNodes: TechNode[] = [];
-    const yearGroups = new Map();
-
-    // Ensure minimum distance from top of viewport
-    const ABSOLUTE_MIN_Y = 50;
-
-    // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
-    const VERTICAL_BANDS: Record<string, number> = {
-      // Food & Agriculture (0-300)
-      Food: Math.max(150, ABSOLUTE_MIN_Y),
-      Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
-      "Animal husbandry": Math.max(250, ABSOLUTE_MIN_Y),
-      "Hunting and fishing": Math.max(300, ABSOLUTE_MIN_Y),
-
-      // Life Sciences (300-500)
-      Biology: 300,
-      Medicine: 350,
-      Sanitation: 400,
-
-      // Physical Sciences (500-800)
-      Physics: 500,
-      Chemistry: 550,
-      Astronomy: 600,
-      Meteorology: 700,
-      Optics: 750,
-
-      // Energy & Electronics (800-1000)
-      Electricity: 800,
-      Electronics: 850,
-      Energy: 900,
-      Lighting: 950,
-
-      // Construction/Materials (1000-1300)
-      Construction: 1000,
-      Mining: 1050,
-      Metallurgy: 1100,
-      Manufacturing: 1150,
-      Textiles: 1200,
-      Hydraulics: 1250,
-
-      // Transportation/Movement (1300-1600)
-      Transportation: 1300,
-      Flying: 1350,
-      Sailing: 1400,
-      Space: 1450,
-      Cartography: 1500,
-
-      // Computing/Math (1600-1800)
-      Mathematics: 1600,
-      Measurement: 1650,
-      Timekeeping: 1700,
-      Computing: 1750,
-
-      // Safety/Protection/Governance (1800-2100)
-      Security: 1800,
-      Military: 1850,
-      Finance: 1900,
-      Governance: 2000,
-
-      // Culture (2100-2400)
-      Communication: 2100,
-      "Visual media": 2150,
-      Entertainment: 2200,
-      Music: 2250,
-
-      // Miscellaneous
-      Misc: 2300,
-    };
-
-    // Group nodes by year
-    sortedNodes.forEach((node) => {
-      const alignedYear = getTimelineSegment(node.year);
-      if (!yearGroups.has(alignedYear)) {
-        yearGroups.set(alignedYear, []);
-      }
-      yearGroups.get(alignedYear).push(node);
-    });
-
-    yearGroups.forEach((nodesInYear, year) => {
-      const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-      const usedPositions: NodePosition[] = []; // Will store {y, height} objects
-      const MIN_VERTICAL_GAP = VERTICAL_SPACING;
-
-      nodesInYear.sort((a: TechNode, b: TechNode) => {
-        const aPos = a.fields?.[0] ? VERTICAL_BANDS[a.fields[0]] || 1200 : 1200;
-        const bPos = b.fields?.[0] ? VERTICAL_BANDS[b.fields[0]] || 1200 : 1200;
-        return aPos - bPos;
-      });
-
-      nodesInYear.forEach((node: TechNode) => {
-        const nodeHeight = estimateNodeHeight(node);
-
-        // Get base position from primary field, ensuring minimum Y
-        const basePosition = Math.max(
-          ABSOLUTE_MIN_Y,
-          (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
-            (Math.random() - 0.5) * 100
-        );
-
-        const isOverlapping = (testPosition: number): boolean => {
-          if (testPosition < ABSOLUTE_MIN_Y) return true;
-
-          const testBottom = testPosition + nodeHeight;
-
-          return usedPositions.some(({ y: usedY, height: usedHeight }) => {
-            const usedBottom = usedY + usedHeight;
-            return !(
-              testBottom < usedY || testPosition > usedBottom + MIN_VERTICAL_GAP
-            );
-          });
-        };
-
-        let finalPosition = basePosition;
-        let attempts = 0;
-        const maxAttempts = 20;
-        const searchRadius = MIN_VERTICAL_GAP * 2;
-
-        while (isOverlapping(finalPosition) && attempts < maxAttempts) {
-          const step = Math.ceil(attempts / 2) * (MIN_VERTICAL_GAP / 2);
-          const direction = attempts % 2 === 0 ? 1 : -1;
-
-          if (step > searchRadius) {
-            finalPosition = basePosition + direction * searchRadius;
-          } else {
-            finalPosition = basePosition + direction * step;
-          }
-          finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition);
-          attempts++;
+        // Subtitle if present
+        if (node.subtitle) {
+          const subtitleLines = Math.ceil(node.subtitle.length / 20);
+          height += subtitleLines * 16; // Smaller line height for subtitle
         }
 
-        if (isOverlapping(finalPosition) && usedPositions.length > 0) {
-          const lastPosition = usedPositions[usedPositions.length - 1];
+        // Year display badge
+        height += 28; // Fixed height for year container
+
+        // Field tags (assuming 2 tags per line)
+        const fieldLines = Math.ceil(node.fields.length / 2);
+        height += fieldLines * 24;
+
+        return height;
+      }
+
+      const minYear = Math.min(...nodes.map((n) => n.year));
+      const sortedNodes = [...nodes].sort((a, b) => a.year - b.year);
+      const positionedNodes: TechNode[] = [];
+      const yearGroups = new Map();
+
+      // Ensure minimum distance from top of viewport
+      const ABSOLUTE_MIN_Y = 50;
+
+      // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
+      const VERTICAL_BANDS: Record<string, number> = {
+        // Food & Agriculture (0-300)
+        Food: Math.max(150, ABSOLUTE_MIN_Y),
+        Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
+        "Animal husbandry": Math.max(250, ABSOLUTE_MIN_Y),
+        "Hunting and fishing": Math.max(300, ABSOLUTE_MIN_Y),
+
+        // Life Sciences (300-500)
+        Biology: 300,
+        Medicine: 350,
+        Sanitation: 400,
+
+        // Physical Sciences (500-800)
+        Physics: 500,
+        Chemistry: 550,
+        Astronomy: 600,
+        Meteorology: 700,
+        Optics: 750,
+
+        // Energy & Electronics (800-1000)
+        Electricity: 800,
+        Electronics: 850,
+        Energy: 900,
+        Lighting: 950,
+
+        // Construction/Materials (1000-1300)
+        Construction: 1000,
+        Mining: 1050,
+        Metallurgy: 1100,
+        Manufacturing: 1150,
+        Textiles: 1200,
+        Hydraulics: 1250,
+
+        // Transportation/Movement (1300-1600)
+        Transportation: 1300,
+        Flying: 1350,
+        Sailing: 1400,
+        Space: 1450,
+        Cartography: 1500,
+
+        // Computing/Math (1600-1800)
+        Mathematics: 1600,
+        Measurement: 1650,
+        Timekeeping: 1700,
+        Computing: 1750,
+
+        // Safety/Protection/Governance (1800-2100)
+        Security: 1800,
+        Military: 1850,
+        Finance: 1900,
+        Governance: 2000,
+
+        // Culture (2100-2400)
+        Communication: 2100,
+        "Visual media": 2150,
+        Entertainment: 2200,
+        Music: 2250,
+
+        // Miscellaneous
+        Misc: 2300,
+      };
+
+      // Group nodes by year
+      sortedNodes.forEach((node) => {
+        const alignedYear = getTimelineSegment(node.year);
+        if (!yearGroups.has(alignedYear)) {
+          yearGroups.set(alignedYear, []);
+        }
+        yearGroups.get(alignedYear).push(node);
+      });
+
+      yearGroups.forEach((nodesInYear, year) => {
+        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+        const usedPositions: NodePosition[] = []; // Will store {y, height} objects
+        const MIN_VERTICAL_GAP = VERTICAL_SPACING;
+
+        nodesInYear.sort((a: TechNode, b: TechNode) => {
+          const aPos = a.fields?.[0]
+            ? VERTICAL_BANDS[a.fields[0]] || 1200
+            : 1200;
+          const bPos = b.fields?.[0]
+            ? VERTICAL_BANDS[b.fields[0]] || 1200
+            : 1200;
+          return aPos - bPos;
+        });
+
+        nodesInYear.forEach((node: TechNode) => {
+          const nodeHeight = estimateNodeHeight(node);
+
+          // Get base position from primary field, ensuring minimum Y
+          const basePosition = Math.max(
+            ABSOLUTE_MIN_Y,
+            (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
+              (Math.random() - 0.5) * 100
+          );
+
+          const isOverlapping = (testPosition: number): boolean => {
+            if (testPosition < ABSOLUTE_MIN_Y) return true;
+
+            const testBottom = testPosition + nodeHeight;
+
+            return usedPositions.some(({ y: usedY, height: usedHeight }) => {
+              const usedBottom = usedY + usedHeight;
+              return !(
+                testBottom < usedY ||
+                testPosition > usedBottom + MIN_VERTICAL_GAP
+              );
+            });
+          };
+
+          let finalPosition = basePosition;
+          let attempts = 0;
+          const maxAttempts = 20;
+          const searchRadius = MIN_VERTICAL_GAP * 2;
+
+          while (isOverlapping(finalPosition) && attempts < maxAttempts) {
+            const step = Math.ceil(attempts / 2) * (MIN_VERTICAL_GAP / 2);
+            const direction = attempts % 2 === 0 ? 1 : -1;
+
+            if (step > searchRadius) {
+              finalPosition = basePosition + direction * searchRadius;
+            } else {
+              finalPosition = basePosition + direction * step;
+            }
+            finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition);
+            attempts++;
+          }
+
+          if (isOverlapping(finalPosition) && usedPositions.length > 0) {
+            const lastPosition = usedPositions[usedPositions.length - 1];
+            finalPosition = Math.max(
+              ABSOLUTE_MIN_Y,
+              lastPosition.y + lastPosition.height + MIN_VERTICAL_GAP
+            );
+          }
+
+          // Add random offset while respecting minimum Y
+          const randomOffset = (Math.random() - 0.5) * 50;
           finalPosition = Math.max(
             ABSOLUTE_MIN_Y,
-            lastPosition.y + lastPosition.height + MIN_VERTICAL_GAP
+            finalPosition + randomOffset
           );
-        }
 
-        // Add random offset while respecting minimum Y
-        const randomOffset = (Math.random() - 0.5) * 50;
-        finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition + randomOffset);
+          while (isOverlapping(finalPosition)) {
+            finalPosition += MIN_VERTICAL_GAP / 8;
+          }
 
-        while (isOverlapping(finalPosition)) {
-          finalPosition += MIN_VERTICAL_GAP / 8;
-        }
-
-        usedPositions.push({ y: finalPosition, height: nodeHeight });
-        positionedNodes.push({
-          ...node,
-          x,
-          y: finalPosition,
+          usedPositions.push({ y: finalPosition, height: nodeHeight });
+          positionedNodes.push({
+            ...node,
+            x,
+            y: finalPosition,
+          });
         });
       });
-    });
 
-    const maxY = Math.max(
-      ...positionedNodes.map((node) => node.y + estimateNodeHeight(node))
-    );
-    setTotalHeight(maxY);
+      const maxY = Math.max(
+        ...positionedNodes.map(
+          (node) => (node.y ?? 0) + estimateNodeHeight(node)
+        )
+      );
+      setTotalHeight(maxY);
 
-    return positionedNodes;
-  }, []);
+      return positionedNodes;
+    },
+    []
+  );
 
   // EFFECTS
 
@@ -479,54 +492,59 @@ const TechTreeViewer = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleNodeClick = useCallback((title: string) => {
-    const node = data.nodes.find((n) => n.title === title);
-    if (!node) return;
+  const handleNodeClick = useCallback(
+    (title: string) => {
+      const node = data.nodes.find((n) => n.title === title);
+      if (!node) return;
 
-    // Clear states immediately to hide tooltip
-    setSelectedLinkIndex(null);
-    setSelectedNodeId(null);
-    setHoveredLinkIndex(null);
-    setHoveredNode(null);
-    setHoveredNodeId(null);
+      // Clear states immediately to hide tooltip
+      setSelectedLinkIndex(null);
+      setSelectedNodeId(null);
+      setHoveredLinkIndex(null);
+      setHoveredNode(null);
+      setHoveredNodeId(null);
 
-    // Get vertical scroll container
-    const verticalContainer = verticalScrollContainerRef.current;
-    if (!verticalContainer || !horizontalScrollContainerRef.current) {
-      console.error('Scroll containers not found');
-      return;
-    }
+      // Get vertical scroll container
+      const verticalContainer = verticalScrollContainerRef.current;
+      if (!verticalContainer || !horizontalScrollContainerRef.current) {
+        console.error("Scroll containers not found");
+        return;
+      }
 
-    // Calculate scroll positions
-    const horizontalPosition = getXPosition(node.year) - window.innerWidth / 2;
-    const verticalPosition = node.y - verticalContainer.clientHeight / 2 + 150;
+      // Calculate scroll positions
+      const horizontalPosition =
+        getXPosition(node.year) - window.innerWidth / 2;
+      const verticalPosition =
+        (node.y ?? 0) - verticalContainer.clientHeight / 2 + 150;
 
-    // Execute both scrolls
-    horizontalScrollContainerRef.current.scrollTo({
-      left: Math.max(0, horizontalPosition),
-      behavior: "smooth"
-    });
+      // Execute both scrolls
+      horizontalScrollContainerRef.current.scrollTo({
+        left: Math.max(0, horizontalPosition),
+        behavior: "smooth",
+      });
 
-    verticalContainer.scrollTo({
-      top: Math.max(0, verticalPosition),
-      behavior: "smooth"
-    });
+      verticalContainer.scrollTo({
+        top: Math.max(0, verticalPosition),
+        behavior: "smooth",
+      });
 
-    // Set selected node after a short delay to allow for smooth scrolling
-    setTimeout(() => {
-      setSelectedNodeId(node.id);
-    }, 100);
-  }, [
-    data.nodes, 
-    getXPosition, 
-    setSelectedLinkIndex, 
-    setSelectedNodeId, 
-    setHoveredLinkIndex, 
-    setHoveredNode, 
-    setHoveredNodeId,
-    horizontalScrollContainerRef,
-    verticalScrollContainerRef
-  ]);
+      // Set selected node after a short delay to allow for smooth scrolling
+      setTimeout(() => {
+        setSelectedNodeId(node.id);
+      }, 100);
+    },
+    [
+      data.nodes,
+      getXPosition,
+      setSelectedLinkIndex,
+      setSelectedNodeId,
+      setHoveredLinkIndex,
+      setHoveredNode,
+      setHoveredNodeId,
+      horizontalScrollContainerRef,
+      verticalScrollContainerRef,
+    ]
+  );
 
   // Add this after data is loaded (right after setIsLoading(false))
   useEffect(() => {
@@ -860,213 +878,276 @@ const TechTreeViewer = () => {
 
   // Add this memoized search index
   const searchIndex = useMemo(() => {
-    const index = new Map<string, {
-      node: TechNode,
-      searchableText: string,
-      fields: Set<string>
-    }>();
-    
-    data.nodes.forEach(node => {
+    const index = new Map<
+      string,
+      {
+        node: TechNode;
+        searchableText: string;
+        fields: Set<string>;
+      }
+    >();
+
+    data.nodes.forEach((node) => {
       const searchableText = [
         node.title,
         node.subtitle,
         node.description,
-        node.inventors?.join(' '),
-        node.organizations?.join(' '),
-        node.fields.join(' '),
-        node.details
-      ].filter(Boolean).join(' ').toLowerCase();
+        node.inventors?.join(" "),
+        node.organizations?.join(" "),
+        node.fields.join(" "),
+        node.details,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
       index.set(node.id, {
         node,
         searchableText,
         fields: new Set([
-          'title:' + node.title.toLowerCase(),
-          ...(node.subtitle ? ['subtitle:' + node.subtitle.toLowerCase()] : []),
-          ...(node.inventors?.map(inv => 'inventor:' + inv.toLowerCase()) || []),
-          ...(node.organizations?.map(org => 'org:' + org.toLowerCase()) || []),
-          ...node.fields.map(field => 'field:' + field.toLowerCase())
-        ])
+          "title:" + node.title.toLowerCase(),
+          ...(node.subtitle ? ["subtitle:" + node.subtitle.toLowerCase()] : []),
+          ...(node.inventors?.map((inv) => "inventor:" + inv.toLowerCase()) ||
+            []),
+          ...(node.organizations?.map((org) => "org:" + org.toLowerCase()) ||
+            []),
+          ...node.fields.map((field) => "field:" + field.toLowerCase()),
+        ]),
       });
     });
-    
+
     return index;
   }, [data.nodes]);
 
   // Replace the existing handleSearch with this optimized version
-  const handleSearch = useCallback((query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      return;
-    }
-
-    const results: SearchResult[] = [];
-    
-    const yearMatch = query.match(/^-?\d+(?:\s*(?:BC|BCE))?$/i);
-    if (yearMatch) {
-      const year = parseInt(query.replace(/\s*(?:BC|BCE)/i, ''));
-      const isBCE = query.toLowerCase().includes('bc');
-      const adjustedYear = isBCE ? -year : year;
-      
-      const years = data.nodes.map(n => n.year);
-      const minYear = Math.min(...years);
-      const maxYear = Math.max(...years);
-      
-      if (adjustedYear >= minYear && adjustedYear <= maxYear) {
-        results.push({
-          type: 'year',
-          text: `Go to year ${isBCE ? `${year} BCE` : year}`,
-          matchScore: 1,
-          year: adjustedYear
-        });
+  const handleSearch = useCallback(
+    (query: string) => {
+      if (!query.trim()) {
+        setSearchResults([]);
+        return;
       }
-    }
 
-    // Split search terms and create regex patterns
-    const searchTerms = query.toLowerCase().split(' ').filter(Boolean);
-    const patterns = searchTerms.map(term => new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
-    
-    // Use Set for tracking added nodes to prevent duplicates
-    const addedNodes = new Set<string>();
+      const results: SearchResult[] = [];
 
-    // Search through the index
-    searchIndex.forEach(({ node, searchableText, fields }, nodeId) => {
-      if (addedNodes.has(nodeId)) return;
-      
-      const matchesAllTerms = patterns.every(pattern => {
-        return searchableText.match(pattern) || 
-               Array.from(fields).some(field => field.match(pattern));
+      const yearMatch = query.match(/^-?\d+(?:\s*(?:BC|BCE))?$/i);
+      if (yearMatch) {
+        const year = parseInt(query.replace(/\s*(?:BC|BCE)/i, ""));
+        const isBCE = query.toLowerCase().includes("bc");
+        const adjustedYear = isBCE ? -year : year;
+
+        const years = data.nodes.map((n) => n.year);
+        const minYear = Math.min(...years);
+        const maxYear = Math.max(...years);
+
+        if (adjustedYear >= minYear && adjustedYear <= maxYear) {
+          results.push({
+            type: "year",
+            text: `Go to year ${isBCE ? `${year} BCE` : year}`,
+            matchScore: 1,
+            year: adjustedYear,
+          });
+        }
+      }
+
+      // Split search terms and create regex patterns
+      const searchTerms = query.toLowerCase().split(" ").filter(Boolean);
+      const patterns = searchTerms.map(
+        (term) => new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
+      );
+
+      // Use Set for tracking added nodes to prevent duplicates
+      const addedNodes = new Set<string>();
+
+      // Search through the index
+      searchIndex.forEach(({ node, searchableText, fields }, nodeId) => {
+        if (addedNodes.has(nodeId)) return;
+
+        const matchesAllTerms = patterns.every((pattern) => {
+          return (
+            searchableText.match(pattern) ||
+            Array.from(fields).some((field) => field.match(pattern))
+          );
+        });
+
+        if (matchesAllTerms) {
+          let score = 0;
+
+          patterns.forEach((pattern) => {
+            if (node.title.match(pattern)) score += 10;
+            if (node.subtitle?.match(pattern)) score += 8;
+            if (node.inventors?.some((inv) => inv.match(pattern))) score += 5;
+            if (node.organizations?.some((org) => org.match(pattern)))
+              score += 5;
+            if (searchableText.match(pattern)) score += 1;
+          });
+
+          // Add tech results - now including subtitle in display
+          if (
+            node.title.toLowerCase().includes(query.toLowerCase()) ||
+            node.subtitle?.toLowerCase().includes(query.toLowerCase())
+          ) {
+            results.push({
+              type: "node",
+              node,
+              text: node.title,
+              subtext: `${formatYear(node.year)}${
+                node.subtitle ? ` - ${node.subtitle}` : ""
+              }`,
+              matchScore: score,
+            });
+            addedNodes.add(nodeId);
+          }
+
+          // Add person results
+          if (
+            !addedNodes.has(nodeId) &&
+            node.inventors?.some((inv) =>
+              inv.toLowerCase().includes(query.toLowerCase())
+            )
+          ) {
+            results.push({
+              type: "person",
+              node,
+              text: node.inventors.join(", "),
+              subtext: `Invented ${node.title} (${formatYear(node.year)})`,
+              matchScore: score,
+            });
+            addedNodes.add(nodeId);
+          }
+
+          // Add organization results
+          if (
+            !addedNodes.has(nodeId) &&
+            node.organizations?.some((org) =>
+              org.toLowerCase().includes(query.toLowerCase())
+            )
+          ) {
+            results.push({
+              type: "organization",
+              node,
+              text: node.organizations.join(", "),
+              subtext: `Developed ${node.title} (${formatYear(node.year)})`,
+              matchScore: score,
+            });
+            addedNodes.add(nodeId);
+          }
+        }
       });
 
-      if (matchesAllTerms) {
-        let score = 0;
-        
-        patterns.forEach(pattern => {
-          if (node.title.match(pattern)) score += 10;
-          if (node.subtitle?.match(pattern)) score += 8;
-          if (node.inventors?.some(inv => inv.match(pattern))) score += 5;
-          if (node.organizations?.some(org => org.match(pattern))) score += 5;
-          if (searchableText.match(pattern)) score += 1;
-        });
-
-        // Add tech results - now including subtitle in display
-        if (node.title.toLowerCase().includes(query.toLowerCase()) ||
-            node.subtitle?.toLowerCase().includes(query.toLowerCase())) {
-          results.push({
-            type: 'node',
-            node,
-            text: node.title,
-            subtext: `${formatYear(node.year)}${node.subtitle ? ` - ${node.subtitle}` : ''}`,
-            matchScore: score
-          });
-          addedNodes.add(nodeId);
-        }
-
-        // Add person results
-        if (!addedNodes.has(nodeId) && node.inventors?.some(inv => 
-          inv.toLowerCase().includes(query.toLowerCase())
-        )) {
-          results.push({
-            type: 'person',
-            node,
-            text: node.inventors.join(', '),
-            subtext: `Invented ${node.title} (${formatYear(node.year)})`,
-            matchScore: score
-          });
-          addedNodes.add(nodeId);
-        }
-
-        // Add organization results
-        if (!addedNodes.has(nodeId) && node.organizations?.some(org => 
-          org.toLowerCase().includes(query.toLowerCase())
-        )) {
-          results.push({
-            type: 'organization',
-            node,
-            text: node.organizations.join(', '),
-            subtext: `Developed ${node.title} (${formatYear(node.year)})`,
-            matchScore: score
-          });
-          addedNodes.add(nodeId);
-        }
-      }
-    });
-
-    results.sort((a, b) => b.matchScore - a.matchScore);
-    setSearchResults(results.slice(0, 10));
-  }, [searchIndex, data.nodes, formatYear]);
+      results.sort((a, b) => b.matchScore - a.matchScore);
+      setSearchResults(results.slice(0, 10));
+    },
+    [searchIndex, data.nodes, formatYear]
+  );
 
   // Add result selection handler
-  const handleSelectResult = useCallback((result: SearchResult) => {
-    if (result.type === 'year' && result.year) {
-      // Scroll to year
-      if (horizontalScrollContainerRef.current) {
-        const horizontalPosition = getXPosition(result.year) - window.innerWidth / 2;
-        horizontalScrollContainerRef.current.scrollTo({
-          left: horizontalPosition,
-          behavior: 'smooth'
-        });
+  const handleSelectResult = useCallback(
+    (result: SearchResult) => {
+      if (result.type === "year" && result.year) {
+        // Scroll to year
+        if (horizontalScrollContainerRef.current) {
+          const horizontalPosition =
+            getXPosition(result.year) - window.innerWidth / 2;
+          horizontalScrollContainerRef.current.scrollTo({
+            left: horizontalPosition,
+            behavior: "smooth",
+          });
+        }
+      } else if (result.node) {
+        // Navigate to node
+        handleNodeClick(result.node.title);
       }
-    } else if (result.node) {
-      // Navigate to node
-      handleNodeClick(result.node.title);
-    }
-  }, [getXPosition, handleNodeClick]);
+    },
+    [getXPosition, handleNodeClick]
+  );
 
-  const isNodeFiltered = useCallback((node: TechNode): boolean => {
-    // If no filters are active, show all nodes
-    if (!filters.fields.size && 
-        !filters.countries.size && 
-        !filters.cities.size) {
-      return true;
-    }
-
-    // Check if node matches any active filters
-    if (filters.fields.size && node.fields.some(field => filters.fields.has(field))) {
-      return true;
-    }
-    
-    // Check countries
-    if (filters.countries.size) {
-      const nodeCountries = [
-        ...(node.countryHistorical?.split(',').map(c => c.trim()) || []),
-        ...(node.countryModern?.split(',').map(c => c.trim()) || [])
-      ];
-      if (nodeCountries.some(country => filters.countries.has(country))) {
+  const isNodeFiltered = useCallback(
+    (node: TechNode): boolean => {
+      // If no filters are active, show all nodes
+      if (
+        !filters.fields.size &&
+        !filters.countries.size &&
+        !filters.cities.size
+      ) {
         return true;
       }
-    }
-    
-    // Check cities
-    if (filters.cities.size && node.city) {
-      const nodeCities = node.city.split(',').map(c => c.trim());
-      if (nodeCities.some(city => filters.cities.has(city))) {
+
+      // Check if node matches any active filters
+      if (
+        filters.fields.size &&
+        node.fields.some((field) => filters.fields.has(field))
+      ) {
         return true;
       }
-    }
 
-    return false;
-  }, [filters]);
+      // Check countries
+      if (filters.countries.size) {
+        const nodeCountries = [
+          ...(node.countryHistorical?.split(",").map((c) => c.trim()) || []),
+          ...(node.countryModern?.split(",").map((c) => c.trim()) || []),
+        ];
+        if (nodeCountries.some((country) => filters.countries.has(country))) {
+          return true;
+        }
+      }
 
-  const isLinkVisible = useCallback((link: Link): boolean => {
-    const sourceNode = data.nodes.find(n => n.id === link.source);
-    const targetNode = data.nodes.find(n => n.id === link.target);
-    
-    if (!sourceNode || !targetNode) return false;
-    
-    return isNodeFiltered(sourceNode) || isNodeFiltered(targetNode);
-  }, [data.nodes, isNodeFiltered]);
+      // Check cities
+      if (filters.cities.size && node.city) {
+        const nodeCities = node.city.split(",").map((c) => c.trim());
+        if (nodeCities.some((city) => filters.cities.has(city))) {
+          return true;
+        }
+      }
 
-  const getAvailableFilters = useMemo(() => ({
-    fields: Array.from(new Set(data.nodes.flatMap(n => n.fields))).sort(),
-    countries: Array.from(new Set(data.nodes.flatMap(n => [
-      ...(n.countryHistorical?.split(',').map(c => c.trim()).filter(Boolean) || []),
-      ...(n.countryModern?.split(',').map(c => c.trim()).filter(Boolean) || [])
-    ]))).sort(),
-    cities: Array.from(new Set(data.nodes.flatMap(n => 
-      n.city ? n.city.split(',').map(c => c.trim()).filter(Boolean) : []
-    ))).sort()
-  }), [data.nodes]);
+      return false;
+    },
+    [filters]
+  );
+
+  const isLinkVisible = useCallback(
+    (link: Link): boolean => {
+      const sourceNode = data.nodes.find((n) => n.id === link.source);
+      const targetNode = data.nodes.find((n) => n.id === link.target);
+
+      if (!sourceNode || !targetNode) return false;
+
+      return isNodeFiltered(sourceNode) || isNodeFiltered(targetNode);
+    },
+    [data.nodes, isNodeFiltered]
+  );
+
+  const getAvailableFilters = useMemo(
+    () => ({
+      fields: Array.from(new Set(data.nodes.flatMap((n) => n.fields))).sort(),
+      countries: Array.from(
+        new Set(
+          data.nodes.flatMap((n) => [
+            ...(n.countryHistorical
+              ?.split(",")
+              .map((c) => c.trim())
+              .filter(Boolean) || []),
+            ...(n.countryModern
+              ?.split(",")
+              .map((c) => c.trim())
+              .filter(Boolean) || []),
+          ])
+        )
+      ).sort(),
+      cities: Array.from(
+        new Set(
+          data.nodes.flatMap((n) =>
+            n.city
+              ? n.city
+                  .split(",")
+                  .map((c) => c.trim())
+                  .filter(Boolean)
+              : []
+          )
+        )
+      ).sort(),
+    }),
+    [data.nodes]
+  );
 
   if (!isClient || isLoading) {
     return (
@@ -1207,13 +1288,13 @@ const TechTreeViewer = () => {
                       connectionType={link.type}
                       isHighlighted={shouldHighlightLink(link, index)}
                       opacity={
-                        (selectedNodeId || selectedLinkIndex !== null)
-                        ? shouldHighlightLink(link, index)
+                        selectedNodeId || selectedLinkIndex !== null
+                          ? shouldHighlightLink(link, index)
+                            ? 1
+                            : 0.2
+                          : isLinkVisible(link)
                           ? 1
                           : 0.2
-                        : isLinkVisible(link)
-                        ? 1
-                        : 0.2
                       }
                       onMouseEnter={() => {
                         setHoveredLinkIndex(index);
@@ -1283,7 +1364,7 @@ const TechTreeViewer = () => {
                           : 0.2
                         : isNodeFiltered(node)
                         ? 1
-                        : 0.2
+                        : 0.2,
                     }}
                   />
                 ))}
@@ -1300,7 +1381,7 @@ const TechTreeViewer = () => {
                         className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
                         style={{
                           left: `${getXPosition(node.year)}px`,
-                          top: `${node.y + 100}px`,
+                          top: `${(node.y ?? 0) + 100}px`,
                           transform: "translate(-50%, 0)",
                           width: "14rem",
                           zIndex: 100,
@@ -1355,14 +1436,18 @@ const TechTreeViewer = () => {
                                 : node.inventors.join(", ")}
                             </p>
                           )}
-                        {node.organizations && node.organizations.length > 0 && (
-                          <p className="text-xs mb-1">
-                            <strong>
-                              {node.organizations.length > 1 ? 'Organizations' : 'Organization'}:
-                            </strong>{' '}
-                            {node.organizations.join(', ')}
-                          </p>
-                        )}
+                        {node.organizations &&
+                          node.organizations.length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.organizations.length > 1
+                                  ? "Organizations"
+                                  : "Organization"}
+                                :
+                              </strong>{" "}
+                              {node.organizations.join(", ")}
+                            </p>
+                          )}
                         {node.formattedLocation && (
                           <p className="text-xs mb-1">
                             <strong>Location:</strong> {node.formattedLocation}

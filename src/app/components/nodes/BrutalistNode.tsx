@@ -5,7 +5,7 @@ interface Node {
   year: number;
   title: string;
   subtitle?: string;
-  image: string;
+  image?: string;
   fields: string[];
 }
 
