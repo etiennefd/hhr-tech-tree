@@ -1,40 +1,4 @@
 {
-  "Radioimmunoassay": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Radioimmunoassay_process.png/300px-Radioimmunoassay_process.png",
-    "timestamp": 1734983118174
-  },
-  "Quill": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg/300px-%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg",
-    "timestamp": 1734983120227
-  },
-  "Electroencephalography": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Spike-waves.png/300px-Spike-waves.png",
-    "timestamp": 1734984667526
-  },
-  "History_of_magnetic_resonance_imaging": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/MRI_Scanner_Mark_One.jpg/300px-MRI_Scanner_Mark_One.jpg",
-    "timestamp": 1735004006684
-  },
-  "Nuclear_magnetic_resonance": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/700_lab_fix.JPG/300px-700_lab_fix.JPG",
-    "timestamp": 1735004007229
-  },
-  "CT_scan": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg/300px-Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg",
-    "timestamp": 1735004857589
-  },
-  "PET-CT": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Viewer_medecine_nucleaire_keosys.JPG/300px-Viewer_medecine_nucleaire_keosys.JPG",
-    "timestamp": 1735055489140
-  },
-  "Focal_plane_tomography": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Panoramicfilm.JPG/300px-Panoramicfilm.JPG",
-    "timestamp": 1735055489678
-  },
-  "Fountain_pen": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Fountain_pen_writing_%28literacy%29.jpg/300px-Fountain_pen_writing_%28literacy%29.jpg",
-    "timestamp": 1735055491149
-  },
   "Positron_emission_tomography": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Positron_emission_tomography.png/300px-Positron_emission_tomography.png",
     "timestamp": 1735064727929
@@ -2462,5 +2426,37 @@
   "Throwing_stick": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Aboriginal_craft.jpg/300px-Aboriginal_craft.jpg",
     "timestamp": 1735582260363
+  },
+  "PET-CT": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Viewer_medecine_nucleaire_keosys.JPG/300px-Viewer_medecine_nucleaire_keosys.JPG",
+    "timestamp": 1735666805942
+  },
+  "History_of_magnetic_resonance_imaging": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/MRI_Scanner_Mark_One.jpg/300px-MRI_Scanner_Mark_One.jpg",
+    "timestamp": 1735666806314
+  },
+  "CT_scan": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg/300px-Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg",
+    "timestamp": 1735666806319
+  },
+  "Radioimmunoassay": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Radioimmunoassay_process.png/300px-Radioimmunoassay_process.png",
+    "timestamp": 1735666806625
+  },
+  "Nuclear_magnetic_resonance": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/700_lab_fix.JPG/300px-700_lab_fix.JPG",
+    "timestamp": 1735666806938
+  },
+  "Focal_plane_tomography": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Panoramicfilm.JPG/300px-Panoramicfilm.JPG",
+    "timestamp": 1735666807265
+  },
+  "Fountain_pen": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Fountain_pen_writing_%28literacy%29.jpg/300px-Fountain_pen_writing_%28literacy%29.jpg",
+    "timestamp": 1735666808495
+  },
+  "Quill": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg/300px-%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg",
+    "timestamp": 1735666808708
   }
 }
