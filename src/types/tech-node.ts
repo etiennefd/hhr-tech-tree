@@ -1,21 +1,23 @@
 export interface TechNode {
   id: string;
   title: string;
+  subtitle?: string;
   year: number;
-  x: number;
-  y: number;
+  dateDetails?: string;
+  type?: string;
+  fields: string[];
   description?: string;
   details?: string;
-  dateDetails?: string;
   inventors?: string[];
   organizations?: string[];
-  formattedLocation?: string;
   wikipedia?: string;
-  fields: string[];
-  type?: string;
-  subtitle?: string;
-  image: string;
-  historicalLocation?: string[];
-  modernLocation?: string[];
-  cities?: string[];
+  image?: string;
+  x?: number;
+  y?: number;
+  
+  // Location fields
+  countryHistorical?: string;  // Comma-separated string from Airtable
+  countryModern?: string;      // Comma-separated string from Airtable
+  city?: string;
+  formattedLocation?: string;
 } 

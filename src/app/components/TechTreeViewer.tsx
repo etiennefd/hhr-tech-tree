@@ -15,6 +15,7 @@ import TechTreeMinimap from "../components/TechTreeMinimap";
 import { SearchBox, SearchResult } from './SearchBox';
 import { TechNode } from '@/types/tech-node';
 import { FilterBox } from './FilterBox';
+import { FilterState } from '@/types/filters';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -54,13 +55,6 @@ interface MinimapNode {
   x: number;
   y: number;
   year: number;
-}
-
-interface FilterState {
-  fields: Set<string>;
-  historicalCountries: Set<string>;
-  modernCountries: Set<string>;
-  cities: Set<string>;
 }
 
 function getTimelineSegment(year: number) {
@@ -182,8 +176,7 @@ const TechTreeViewer = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [filters, setFilters] = useState<FilterState>({
     fields: new Set(),
-    historicalCountries: new Set(),
-    modernCountries: new Set(),
+    countries: new Set(),
     cities: new Set(),
   });
 
@@ -1023,8 +1016,7 @@ const TechTreeViewer = () => {
   const isNodeFiltered = useCallback((node: TechNode): boolean => {
     // If no filters are active, show all nodes
     if (!filters.fields.size && 
-        !filters.historicalCountries.size && 
-        !filters.modernCountries.size && 
+        !filters.countries.size && 
         !filters.cities.size) {
       return true;
     }
@@ -1033,17 +1025,24 @@ const TechTreeViewer = () => {
     if (filters.fields.size && node.fields.some(field => filters.fields.has(field))) {
       return true;
     }
-    if (filters.historicalCountries.size && 
-        node.historicalLocation?.some(loc => filters.historicalCountries.has(loc))) {
-      return true;
+    
+    // Check countries
+    if (filters.countries.size) {
+      const nodeCountries = [
+        ...(node.countryHistorical?.split(',').map(c => c.trim()) || []),
+        ...(node.countryModern?.split(',').map(c => c.trim()) || [])
+      ];
+      if (nodeCountries.some(country => filters.countries.has(country))) {
+        return true;
+      }
     }
-    if (filters.modernCountries.size && 
-        node.modernLocation?.some(loc => filters.modernCountries.has(loc))) {
-      return true;
-    }
-    if (filters.cities.size && 
-        node.cities?.some(city => filters.cities.has(city))) {
-      return true;
+    
+    // Check cities
+    if (filters.cities.size && node.city) {
+      const nodeCities = node.city.split(',').map(c => c.trim());
+      if (nodeCities.some(city => filters.cities.has(city))) {
+        return true;
+      }
     }
 
     return false;
@@ -1057,6 +1056,17 @@ const TechTreeViewer = () => {
     
     return isNodeFiltered(sourceNode) || isNodeFiltered(targetNode);
   }, [data.nodes, isNodeFiltered]);
+
+  const getAvailableFilters = useMemo(() => ({
+    fields: Array.from(new Set(data.nodes.flatMap(n => n.fields))).sort(),
+    countries: Array.from(new Set(data.nodes.flatMap(n => [
+      ...(n.countryHistorical?.split(',').map(c => c.trim()).filter(Boolean) || []),
+      ...(n.countryModern?.split(',').map(c => c.trim()).filter(Boolean) || [])
+    ]))).sort(),
+    cities: Array.from(new Set(data.nodes.flatMap(n => 
+      n.city ? n.city.split(',').map(c => c.trim()).filter(Boolean) : []
+    ))).sort()
+  }), [data.nodes]);
 
   if (!isClient || isLoading) {
     return (
@@ -1087,12 +1097,7 @@ const TechTreeViewer = () => {
             <FilterBox
               filters={filters}
               onFilterChange={setFilters}
-              availableFilters={{
-                fields: Array.from(new Set(data.nodes.flatMap(n => n.fields))),
-                historicalCountries: Array.from(new Set(data.nodes.flatMap(n => n.historicalLocation || []))),
-                modernCountries: Array.from(new Set(data.nodes.flatMap(n => n.modernLocation || []))),
-                cities: Array.from(new Set(data.nodes.flatMap(n => n.cities || [])))
-              }}
+              availableFilters={getAvailableFilters}
             />
           </div>
         </div>

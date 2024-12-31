@@ -82,7 +82,7 @@ export function SearchBox({ onSearch, results, onSelectResult }: SearchBoxProps)
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
-          placeholder="Search or enter year..."
+          placeholder="Search or enter year"
           className="pl-8 pr-4 w-full border-black rounded-none font-mono"
         />
       </div>

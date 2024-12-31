@@ -8,8 +8,7 @@ interface FilterBoxProps {
   onFilterChange: (filters: FilterState) => void;
   availableFilters: {
     fields: string[];
-    historicalCountries: string[];
-    modernCountries: string[];
+    countries: string[];
     cities: string[];
   };
 }
@@ -48,8 +47,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
 
     // Add matches from each category
     addMatches('fields', availableFilters.fields);
-    addMatches('historicalCountries', availableFilters.historicalCountries);
-    addMatches('modernCountries', availableFilters.modernCountries);
+    addMatches('countries', availableFilters.countries);
     addMatches('cities', availableFilters.cities);
 
     return suggestions;
@@ -125,9 +123,9 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
   const getTypeLabel = (type: keyof FilterState): string => {
     switch (type) {
       case 'fields': return 'Field';
-      case 'historicalCountries': return 'Historical';
-      case 'modernCountries': return 'Modern';
+      case 'countries': return 'Country';
       case 'cities': return 'City';
+      default: return 'Filter';
     }
   };
 
@@ -141,7 +139,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
-          placeholder="Filter by field or location..."
+          placeholder="Filter by field/location"
           className="pl-8 pr-4 w-full border-black rounded-none font-mono"
         />
       </div>
@@ -154,9 +152,6 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
             key={`${type}-${value}`}
             className="inline-flex items-center bg-yellow-100 border border-black rounded-none px-2 py-1 m-1 text-sm"
           >
-            <span className="text-xs text-gray-500 mr-1">
-              {getTypeLabel(type as keyof FilterState)}:
-            </span>
             <span className="mr-1">{value}</span>
             <button
               onClick={() => removeFilter(type as keyof FilterState, value)}
