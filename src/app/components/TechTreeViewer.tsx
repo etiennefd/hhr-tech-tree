@@ -14,6 +14,7 @@ import BrutalistNode from "../components/nodes/BrutalistNode";
 import TechTreeMinimap from "../components/TechTreeMinimap";
 import { SearchBox, SearchResult } from './SearchBox';
 import { TechNode } from '@/types/tech-node';
+import { FilterBox } from './FilterBox';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -53,6 +54,13 @@ interface MinimapNode {
   x: number;
   y: number;
   year: number;
+}
+
+interface FilterState {
+  fields: Set<string>;
+  historicalCountries: Set<string>;
+  modernCountries: Set<string>;
+  cities: Set<string>;
 }
 
 function getTimelineSegment(year: number) {
@@ -172,6 +180,12 @@ const TechTreeViewer = () => {
   const [isKeyScrolling, setIsKeyScrolling] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [filters, setFilters] = useState<FilterState>({
+    fields: new Set(),
+    historicalCountries: new Set(),
+    modernCountries: new Set(),
+    cities: new Set(),
+  });
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -1006,6 +1020,44 @@ const TechTreeViewer = () => {
     }
   }, [getXPosition, handleNodeClick]);
 
+  const isNodeFiltered = useCallback((node: TechNode): boolean => {
+    // If no filters are active, show all nodes
+    if (!filters.fields.size && 
+        !filters.historicalCountries.size && 
+        !filters.modernCountries.size && 
+        !filters.cities.size) {
+      return true;
+    }
+
+    // Check if node matches any active filters
+    if (filters.fields.size && node.fields.some(field => filters.fields.has(field))) {
+      return true;
+    }
+    if (filters.historicalCountries.size && 
+        node.historicalLocation?.some(loc => filters.historicalCountries.has(loc))) {
+      return true;
+    }
+    if (filters.modernCountries.size && 
+        node.modernLocation?.some(loc => filters.modernCountries.has(loc))) {
+      return true;
+    }
+    if (filters.cities.size && 
+        node.cities?.some(city => filters.cities.has(city))) {
+      return true;
+    }
+
+    return false;
+  }, [filters]);
+
+  const isLinkVisible = useCallback((link: Link): boolean => {
+    const sourceNode = data.nodes.find(n => n.id === link.source);
+    const targetNode = data.nodes.find(n => n.id === link.target);
+    
+    if (!sourceNode || !targetNode) return false;
+    
+    return isNodeFiltered(sourceNode) || isNodeFiltered(targetNode);
+  }, [data.nodes, isNodeFiltered]);
+
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
@@ -1029,6 +1081,18 @@ const TechTreeViewer = () => {
               onSearch={handleSearch}
               results={searchResults}
               onSelectResult={handleSelectResult}
+            />
+          </div>
+          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
+            <FilterBox
+              filters={filters}
+              onFilterChange={setFilters}
+              availableFilters={{
+                fields: Array.from(new Set(data.nodes.flatMap(n => n.fields))),
+                historicalCountries: Array.from(new Set(data.nodes.flatMap(n => n.historicalLocation || []))),
+                modernCountries: Array.from(new Set(data.nodes.flatMap(n => n.modernLocation || []))),
+                cities: Array.from(new Set(data.nodes.flatMap(n => n.cities || [])))
+              }}
             />
           </div>
         </div>
@@ -1138,10 +1202,13 @@ const TechTreeViewer = () => {
                       connectionType={link.type}
                       isHighlighted={shouldHighlightLink(link, index)}
                       opacity={
-                        (selectedNodeId || selectedLinkIndex !== null) &&
-                        !shouldHighlightLink(link, index)
-                          ? 0.2
-                          : 1
+                        (selectedNodeId || selectedLinkIndex !== null)
+                        ? shouldHighlightLink(link, index)
+                          ? 1
+                          : 0.2
+                        : isLinkVisible(link)
+                        ? 1
+                        : 0.2
                       }
                       onMouseEnter={() => {
                         setHoveredLinkIndex(index);
@@ -1209,7 +1276,9 @@ const TechTreeViewer = () => {
                         ? isNodeConnectedToSelectedLink(node.id)
                           ? 1
                           : 0.2
-                        : 1,
+                        : isNodeFiltered(node)
+                        ? 1
+                        : 0.2
                     }}
                   />
                 ))}

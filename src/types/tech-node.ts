@@ -15,4 +15,7 @@ export interface TechNode {
   type?: string;
   subtitle?: string;
   image: string;
+  historicalLocation?: string[];
+  modernLocation?: string[];
+  cities?: string[];
 } 
