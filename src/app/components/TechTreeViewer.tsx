@@ -1488,14 +1488,15 @@ const TechTreeViewer = () => {
                                       (ancestor: TechNode, index: number) => (
                                         <div
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                          className="flex"
                                         >
-                                          •{" "}
+                                          <span className="flex-shrink-0 mr-1">•</span>
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               handleNodeClick(ancestor.title);
                                             }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                             type="button"
                                           >
                                             {ancestor.title}
@@ -1514,14 +1515,15 @@ const TechTreeViewer = () => {
                                       (child: TechNode, index: number) => (
                                         <div
                                           key={`child-${node.id}-${child.id}-${index}`}
+                                          className="flex"
                                         >
-                                          •{" "}
+                                          <span className="flex-shrink-0 mr-1">•</span>
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               handleNodeClick(child.title);
                                             }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                             type="button"
                                           >
                                             {child.title}
