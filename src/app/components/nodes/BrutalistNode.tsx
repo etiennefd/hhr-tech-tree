@@ -126,7 +126,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         {/* Image section */}
         <div className="border-b border-black p-0 relative h-20">
           <Image
-            src={node.image}
+            src={node.image || "/placeholder-invention.png"}
             alt={node.title}
             fill
             className="object-cover"
