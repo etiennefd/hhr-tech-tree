@@ -1183,14 +1183,14 @@ const TechTreeViewer = () => {
           className="fixed top-16 right-4 flex flex-col gap-4"
           style={{ zIndex: 1000 }}
         >
-          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
+          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4 relative" style={{ zIndex: 1001 }}>
             <SearchBox
               onSearch={handleSearch}
               results={searchResults}
               onSelectResult={handleSelectResult}
             />
           </div>
-          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4">
+          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4" style={{ zIndex: 1000 }}>
             <FilterBox
               filters={filters}
               onFilterChange={setFilters}
