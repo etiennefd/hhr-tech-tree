@@ -97,10 +97,32 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     onSelect?.();
   };
 
-  const getControlPoints = (x1: number, y1: number, x2: number, y2: number) => {
+  const getControlPoints = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    isSameYear: boolean
+  ) => {
     const deltaX = x2 - x1;
-    const controlPointOffset = Math.min(Math.abs(deltaX) * 0.5, 200);
 
+    if (isSameYear) {
+      // For same-year connections, create an S-curve that goes out to the right
+      // and curves back as if coming from the left
+      const horizontalOffset = 200; // Distance the curve extends to the right
+      return {
+        // First control point: curves out to the right and slightly up/down
+        cx1: x1 + horizontalOffset,
+        cy1: y1 - Math.sign(y1 - y2) * 50,
+        // Second control point: approaches from the left of the target
+        cx2: x2 - horizontalOffset,
+        cy2: y2 - Math.sign(y2 - y1) * 50,
+        // cy2: y2
+      };
+    }
+
+    // Regular connections remain the same
+    const controlPointOffset = Math.min(Math.abs(deltaX) * 0.5, 200);
     return {
       cx1: x1 + controlPointOffset,
       cy1: y1,
@@ -118,27 +140,24 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     nodeWidth = 160
   ) => {
     const halfNodeWidth = nodeWidth / 2;
-    const NODE_HEIGHT = 150; // Approximate height of node for vertical spacing
+    const isSameYear = Math.abs(sourceX - targetX) < nodeWidth;
 
-    // Check if this is a same-year connection (vertical)
-    if (Math.abs(sourceX - targetX) < nodeWidth) {
-      const isUpward = sourceY > targetY;
-      const centerX = (sourceX + targetX) / 2; // Center between the nodes
-
+    // For same-year connections, always exit right from source and enter left on target
+    if (isSameYear) {
       if (isSource) {
         return {
-          x: centerX,
-          y: sourceY + (isUpward ? -NODE_HEIGHT / 2 : NODE_HEIGHT / 2) + 50,
+          x: sourceX + halfNodeWidth, // Exit from right side
+          y: sourceY,
         };
       } else {
         return {
-          x: centerX,
-          y: targetY + (isUpward ? NODE_HEIGHT / 2 : -NODE_HEIGHT / 2),
+          x: targetX - halfNodeWidth, // Enter from left side
+          y: targetY,
         };
       }
     }
 
-    // Non-vertical connections remain the same
+    // Non-same-year connections remain the same
     if (isSource) {
       const isLeftToRight = sourceX < targetX;
       return {
@@ -193,29 +212,22 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
   const { x: x1, y: y1 } = sourceNode;
   const { x: x2, y: y2 } = targetNode;
+  const isSameYear = Math.abs(x1 - x2) < 160; // Using NODE_WIDTH
 
   const sourcePoint = getAdjustedEndpoint(x1, y1, x2, y2, true);
   const endPoint = getAdjustedEndpoint(x1, y1, x2, y2, false);
 
-  // Determine if this is a vertical connection
-  const isVertical = Math.abs(sourcePoint.x - endPoint.x) < 5; // Small threshold
+  // Get control points based on whether it's a same-year connection
+  const { cx1, cy1, cx2, cy2 } = getControlPoints(
+    sourcePoint.x,
+    sourcePoint.y,
+    endPoint.x,
+    endPoint.y,
+    isSameYear
+  );
 
-  // Get control points based on whether it's vertical or not
-  const { cx1, cy1, cx2, cy2 } = isVertical
-    ? {
-        cx1: sourcePoint.x,
-        cy1: sourcePoint.y,
-        cx2: endPoint.x,
-        cy2: endPoint.y,
-      }
-    : getControlPoints(sourcePoint.x, sourcePoint.y, endPoint.x, endPoint.y);
-
-  // Calculate angle based on whether it's vertical
-  const angle = isVertical
-    ? endPoint.y > sourcePoint.y
-      ? Math.PI / 2
-      : -Math.PI / 2 // Straight up or down
-    : Math.atan2(endPoint.y - cy2, endPoint.x - cx2);
+  // Arrowheads always point right
+  const angle = 0;
 
   // First calculate the arrowhead base point (slightly before the endPoint)
   const arrowLength = 10;
@@ -259,9 +271,9 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           stroke="transparent"
           strokeWidth={isHighlighted ? 30 : 15} // Wider hit area for highlighted connections
           fill="none"
-          style={{ 
+          style={{
             pointerEvents: "stroke",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         />
 
