@@ -54,7 +54,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Optics: "#5C6BC0", // Bright indigo
 
     // Energy & Electronics (Circuit Boards and Energy)
-    Electricity: "#FF9F1C", // Electric orange
+    Electricity: "#0099FF", // Electric blue
     Electronics: "#29A69B", // Circuit board teal
     Energy: "#FFB627", // Energy yellow
     Lighting: "#FFB01F", // Bright amber
