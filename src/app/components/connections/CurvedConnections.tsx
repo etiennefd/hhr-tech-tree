@@ -117,7 +117,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
         // Second control point: approaches from the left of the target
         cx2: x2 - horizontalOffset,
         cy2: y2 - Math.sign(y2 - y1) * 50,
-        // cy2: y2
       };
     }
 
