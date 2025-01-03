@@ -95,6 +95,23 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Misc: "#555555", // Medium gray
   };
 
+  const addSoftHyphens = (text: string) => {
+    // Estimate characters that fit per line based on width
+    // Assuming average character is ~8px at text-sm (14px) font size
+    const charsPerLine = Math.floor((width - 24) / 8); // 24px for padding
+
+    return text.split(' ').map(word => {
+      // If word contains hyphen, leave it alone
+      if (word.includes('-')) {
+        return word;
+      }
+      // Only add soft hyphens if word is longer than line width
+      return word.length > charsPerLine 
+        ? word.split('').join('\u00AD')
+        : word;
+    }).join(' ');
+  };
+
   return (
     <div
       className={`
@@ -150,13 +167,12 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               className="text-sm font-bold uppercase leading-tight"
               style={{
                 wordBreak: "break-word",
-                hyphens: "auto",
-                WebkitHyphens: "auto",
-                msHyphens: "auto",
-                hyphenateCharacter: "-",
+                overflowWrap: "break-word",
+                maxWidth: "100%",
+                fontSize: node.title.split(' ').some(word => word.length > 12) ? '0.8rem' : undefined,
               }}
             >
-              {node.title}
+              {addSoftHyphens(node.title)}
             </h3>
             {node.subtitle && (
               <div className="text-[10px] font-mono text-gray-600 mt-0.5">
