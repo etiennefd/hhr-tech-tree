@@ -92,7 +92,7 @@ const TechTreeMinimap = ({
     if (!minimapRef.current) return;
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top - LABEL_HEIGHT; // Adjust for label space
+    const y = e.clientY - rect.top;
 
     const targetX = x / scale - viewportWidth / 2;
     const targetY = y / scale - viewportHeight / 2;
@@ -199,8 +199,8 @@ const TechTreeMinimap = ({
         <div
           className="absolute cursor-move"
           style={{
-            width: Math.max(20, minimapViewport.width),
-            height: Math.max(20, minimapViewport.height),
+            width: minimapViewport.width,
+            height: minimapViewport.height,
             left: minimapViewport.x,
             top: minimapViewport.y,
             border: `1px solid ${engineeringBlue}`,
