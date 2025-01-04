@@ -1178,27 +1178,25 @@ const TechTreeViewer = () => {
   return (
     <div className="h-screen bg-yellow-50">
       {/* Floating controls */}
-      <>
-        <div
-          className="fixed top-16 right-4 flex flex-col gap-4"
-          style={{ zIndex: 1000 }}
-        >
-          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4 relative" style={{ zIndex: 1001 }}>
-            <SearchBox
-              onSearch={handleSearch}
-              results={searchResults}
-              onSelectResult={handleSelectResult}
-            />
-          </div>
-          <div className="bg-white/80 backdrop-blur border border-black rounded-none shadow-md p-4" style={{ zIndex: 1000 }}>
-            <FilterBox
-              filters={filters}
-              onFilterChange={setFilters}
-              availableFilters={getAvailableFilters}
-            />
-          </div>
+      <div
+        className="fixed top-16 right-4 flex flex-col items-end gap-4"
+        style={{ zIndex: 1000 }}
+      >
+        <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4">
+          <SearchBox
+            onSearch={handleSearch}
+            results={searchResults}
+            onSelectResult={handleSelectResult}
+          />
         </div>
-      </>
+        <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4">
+          <FilterBox
+            filters={filters}
+            onFilterChange={setFilters}
+            availableFilters={getAvailableFilters}
+          />
+        </div>
+      </div>
 
       <div
         ref={horizontalScrollContainerRef}
@@ -1490,7 +1488,9 @@ const TechTreeViewer = () => {
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
                                           className="flex"
                                         >
-                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <span className="flex-shrink-0 mr-1">
+                                            •
+                                          </span>
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation();
@@ -1517,7 +1517,9 @@ const TechTreeViewer = () => {
                                           key={`child-${node.id}-${child.id}-${index}`}
                                           className="flex"
                                         >
-                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <span className="flex-shrink-0 mr-1">
+                                            •
+                                          </span>
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation();

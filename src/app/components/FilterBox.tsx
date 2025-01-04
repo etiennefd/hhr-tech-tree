@@ -27,6 +27,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Get suggestions based on query
   const getSuggestions = (searchQuery: string): FilterSuggestion[] => {
@@ -138,69 +139,118 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     }
   };
 
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+    if (!isExpanded) {
+      setTimeout(() => {
+        const input = containerRef.current?.querySelector("input");
+        input?.focus();
+      }, 100);
+    }
+  };
+
+  // Count total active filters
+  const activeFilterCount = Object.values(filters).reduce(
+    (sum, set) => sum + set.size,
+    0
+  );
+
   return (
-    <div ref={containerRef} className="w-64">
-      <div className="relative">
-        <Filter className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setIsOpen(true)}
-          placeholder="Filter by field/location"
-          className="pl-8 pr-4 w-full border-black rounded-none font-mono"
-        />
-      </div>
+    <div ref={containerRef} className="relative">
+      {/* Collapsed state */}
+      {!isExpanded && (
+        <button
+          onClick={toggleExpand}
+          className="md:hidden flex items-center justify-center w-10 h-10 bg-white/80 backdrop-blur border border-black rounded-none shadow-md"
+        >
+          <Filter className="h-4 w-4" />
+          {activeFilterCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-[#91B4C5] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              {activeFilterCount}
+            </span>
+          )}
+        </button>
+      )}
 
-      {/* Active Filters */}
-      {Object.entries(filters).map(([type, set]: [string, Set<string>]) => {
-        if (set.size === 0) return null;
-        return Array.from(set as Set<string>).map((value: string) => (
-          <div
-            key={`${type}-${value}`}
-            className="inline-flex items-center bg-yellow-100 border border-black rounded-none px-2 py-1 m-1 text-sm"
-          >
-            <span className="mr-1">{value}</span>
+      {/* Expanded state */}
+      <div className={`${!isExpanded ? 'hidden md:block' : 'block'} w-72`}>
+        <div className="relative">
+          <Filter className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            type="text"
+            value={query}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsOpen(true)}
+            placeholder="Filter by field/location"
+            className="pl-8 pr-4 w-full border-black rounded-none font-mono"
+          />
+          {/* Add close button on mobile */}
+          {isExpanded && (
             <button
-              onClick={() => removeFilter(type as keyof FilterState, value)}
-              className="hover:text-gray-700"
+              onClick={toggleExpand}
+              className="md:hidden absolute right-2 top-1/2 -translate-y-1/2"
             >
-              <X className="h-3 w-3" />
+              <X className="h-4 w-4" />
             </button>
-          </div>
-        ));
-      })}
+          )}
+        </div>
 
-      {/* Suggestions Dropdown */}
-      {isOpen && suggestions.length > 0 && (
-        <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50">
-          {suggestions.map((suggestion, index) => (
+        {/* Active Filters */}
+        {Object.entries(filters).map(([type, set]: [string, Set<string>]) => {
+          if (set.size === 0) return null;
+          return Array.from(set as Set<string>).map((value: string) => (
             <div
-              key={`${suggestion.type}-${suggestion.value}`}
-              className={`p-2 cursor-pointer ${
-                index === selectedIndex ? "bg-yellow-100" : "hover:bg-yellow-50"
-              }`}
-              onClick={() => addFilter(suggestion.type, suggestion.value)}
+              key={`${type}-${value}`}
+              className="inline-flex items-center bg-yellow-100 border border-black rounded-none px-2 py-1 m-1 text-sm"
             >
-              <div className="flex items-start">
-                <span className="w-16 text-xs text-gray-500 mt-1">
-                  {getTypeLabel(suggestion.type)}
-                </span>
-                <div className="flex-1">
-                  <div className="text-sm font-medium">{suggestion.value}</div>
+              <span className="mr-1">{value}</span>
+              <button
+                onClick={() => removeFilter(type as keyof FilterState, value)}
+                className="hover:text-gray-700"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          ));
+        })}
+
+        {/* Suggestions Dropdown */}
+        {isOpen && suggestions.length > 0 && (
+          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50">
+            {suggestions.map((suggestion, index) => (
+              <div
+                key={`${suggestion.type}-${suggestion.value}`}
+                className={`p-2 cursor-pointer ${
+                  index === selectedIndex
+                    ? "bg-yellow-100"
+                    : "hover:bg-yellow-50"
+                }`}
+                onClick={() => addFilter(suggestion.type, suggestion.value)}
+              >
+                <div className="flex items-start">
+                  <span className="w-16 text-xs text-gray-500 mt-1">
+                    {getTypeLabel(suggestion.type)}
+                  </span>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">
+                      {suggestion.value}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
-      {isOpen && query && !suggestions.length && (
-        <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg p-2">
-          <div className="text-sm text-gray-500">No matching filters found</div>
-        </div>
-      )}
+        {isOpen && query && !suggestions.length && (
+          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg p-2">
+            <div className="text-sm text-gray-500">
+              No matching filters found
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
