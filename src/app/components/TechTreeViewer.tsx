@@ -6,16 +6,18 @@ import React, {
   useCallback,
   useMemo,
   useRef,
+  Suspense,
+  memo,
 } from "react";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
-import TechTreeMinimap from "../components/TechTreeMinimap";
 import { SearchBox, SearchResult } from "./SearchBox";
 import { TechNode } from "@/types/tech-node";
 import { FilterBox } from "./FilterBox";
 import { FilterState } from "@/types/filters";
+import { cacheManager, CACHE_VERSION } from '@/utils/cache';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -37,6 +39,23 @@ const INTERVAL_NEOLITHIC = 500;
 const INTERVAL_UPPER_PALEOLITHIC = 1000;
 const INTERVAL_MIDDLE_PALEOLITHIC = 5000;
 const INTERVAL_EARLY_PALEOLITHIC = 100000;
+
+// 1. Move these constants outside the component to avoid recreating them
+const NODE_WIDTH = 160;
+const VERTICAL_SPACING = 50;
+const YEAR_WIDTH = 240;
+const PADDING = 120;
+
+// 2. Lazy load non-critical components
+const DynamicMinimap = dynamic(() => import("../components/TechTreeMinimap"), {
+  ssr: false,
+  loading: () => null // Optional loading state
+});
+
+const DynamicFilterBox = dynamic(() => import("./FilterBox").then(mod => mod.FilterBox), {
+  ssr: false,
+  loading: () => null
+});
 
 interface Link {
   source: string;
@@ -145,12 +164,6 @@ function calculateXPosition(
 }
 
 const TechTreeViewer = () => {
-  // Constants
-  const NODE_WIDTH = 160;
-  const VERTICAL_SPACING = 50;
-  const YEAR_WIDTH = 240;
-  const PADDING = 120;
-
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -179,6 +192,7 @@ const TechTreeViewer = () => {
     countries: new Set(),
     cities: new Set(),
   });
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -403,30 +417,95 @@ const TechTreeViewer = () => {
 
   // EFFECTS
 
-  // Fetch data
+  // 3. Optimize initial data fetching
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/api/inventions")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        // Check cache first
+        const cachedData = await cacheManager.get();
+        if (cachedData) {
+          // Use cached data for initial render
+          const positionedNodes = calculateNodePositions(cachedData.basicData.nodes);
+          setData({ ...cachedData.basicData, nodes: positionedNodes });
+          setFilteredNodes(positionedNodes);
+          setIsLoading(false);
+
+          // If we have cached detail data, use it
+          if (cachedData.detailData) {
+            const positionedDetailNodes = calculateNodePositions(cachedData.detailData.nodes);
+            setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
+            setFilteredNodes(positionedDetailNodes);
+            return;
+          }
         }
-        return res.json();
-      })
-      .then((fetchedData) => {
-        const positionedNodes = calculateNodePositions(fetchedData.nodes);
-        setData({ ...fetchedData, nodes: positionedNodes });
+
+        // Fetch basic data
+        const basicResponse = await fetch('/api/inventions', {
+          signal: controller.signal,
+          priority: 'high'
+        });
+        if (!basicResponse.ok) throw new Error(`HTTP error! status: ${basicResponse.status}`);
+        const basicData = await basicResponse.json();
+
+        if (!isMounted) return;
+
+        // Process and display basic data
+        const positionedNodes = calculateNodePositions(basicData.nodes);
+        setData({ ...basicData, nodes: positionedNodes });
         setFilteredNodes(positionedNodes);
         setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        // Set some error state to show to the user
+
+        // Cache basic data
+        await cacheManager.set({
+          version: CACHE_VERSION,
+          timestamp: Date.now(),
+          basicData
+        });
+
+        // Fetch detailed data
+        setIsLoadingDetails(true);
+        const detailResponse = await fetch('/api/inventions?detail=true', {
+          signal: controller.signal
+        });
+        if (!detailResponse.ok) throw new Error(`HTTP error! status: ${detailResponse.status}`);
+        const detailData = await detailResponse.json();
+
+        if (!isMounted) return;
+
+        // Process and display detailed data
+        const positionedDetailNodes = calculateNodePositions(detailData.nodes);
+        setData({ ...detailData, nodes: positionedDetailNodes });
+        setFilteredNodes(positionedDetailNodes);
+        setIsLoadingDetails(false);
+
+        // Cache complete data
+        await cacheManager.set({
+          version: CACHE_VERSION,
+          timestamp: Date.now(),
+          basicData,
+          detailData
+        });
+
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        console.error("Error loading data:", error);
         setIsLoading(false);
-        // You might want to add error state handling here
-        setData({ nodes: [], links: [] }); // Set empty data on error
-        setFilteredNodes([]); // Clear filtered nodes
-      });
+        setIsLoadingDetails(false);
+        setData({ nodes: [], links: [] });
+        setFilteredNodes([]);
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, [calculateNodePositions]);
 
   // Window resize handler
@@ -1165,38 +1244,75 @@ const TechTreeViewer = () => {
     );
   }, [filters, data.nodes, isNodeFiltered]);
 
+  // Add prefetching for nodes
+  const prefetchNode = useCallback(async (nodeId: string) => {
+    try {
+      // Implement specific node prefetching logic here
+      // This could be a separate API endpoint that returns detailed node data
+      const response = await fetch(`/api/inventions/${nodeId}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const nodeData = await response.json();
+      
+      // Update the node in the current data
+      setData(prevData => ({
+        ...prevData,
+        nodes: prevData.nodes.map(node => 
+          node.id === nodeId ? { ...node, ...nodeData } : node
+        )
+      }));
+    } catch (error) {
+      console.warn(`Failed to prefetch node ${nodeId}:`, error);
+    }
+  }, []);
+
+  // Add prefetching to handleNodeHover
+  const handleNodeHover = useCallback((node: TechNode) => {
+    setHoveredNode(node);
+    setHoveredNodeId(node.id);
+    
+    // Prefetch connected nodes
+    const connectedNodeIds = data.links
+      .filter(link => link.source === node.id || link.target === node.id)
+      .map(link => link.source === node.id ? link.target : link.source);
+    
+    connectedNodeIds.forEach(prefetchNode);
+  }, [data.links, prefetchNode]);
+
+  // 4. Optimize initial render
   if (!isClient || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
-        <div className="text-lg font-mono tracking-wide">
+        <div className="text-lg font-mono tracking-wide animate-pulse">
           Loading visualization...
         </div>
       </div>
     );
   }
 
+  // 5. Defer non-critical UI elements
   return (
     <div className="h-screen bg-yellow-50">
-      {/* Floating controls */}
-      <div
-        className="fixed top-16 right-4 flex flex-col items-end gap-4"
-        style={{ zIndex: 1000 }}
-      >
-        <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4">
-          <SearchBox
-            onSearch={handleSearch}
-            results={searchResults}
-            onSelectResult={handleSelectResult}
-          />
+      {/* Defer loading of controls until after main content */}
+      {!isLoading && (
+        <div className="fixed top-16 right-4 flex flex-col items-end gap-4" style={{ zIndex: 1000 }}>
+          <Suspense fallback={null}>
+            <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4">
+              <SearchBox
+                onSearch={handleSearch}
+                results={searchResults}
+                onSelectResult={handleSelectResult}
+              />
+            </div>
+            <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4">
+              <DynamicFilterBox
+                filters={filters}
+                onFilterChange={setFilters}
+                availableFilters={getAvailableFilters}
+              />
+            </div>
+          </Suspense>
         </div>
-        <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4">
-          <FilterBox
-            filters={filters}
-            onFilterChange={setFilters}
-            availableFilters={getAvailableFilters}
-          />
-        </div>
-      </div>
+      )}
 
       <div
         ref={horizontalScrollContainerRef}
@@ -1552,7 +1668,7 @@ const TechTreeViewer = () => {
             </div>
           </div>
         </div>
-        <TechTreeMinimap
+        <DynamicMinimap
           nodes={data.nodes.map(
             (node): MinimapNode => ({
               id: node.id,
@@ -1575,9 +1691,10 @@ const TechTreeViewer = () => {
   );
 };
 
-export const TechTreeViewerNoSSR = dynamic(
-  () => Promise.resolve(TechTreeViewer),
-  { ssr: false }
-);
+// 6. Export with memo to prevent unnecessary re-renders
+export default memo(TechTreeViewer);
 
-export default TechTreeViewer;
+// 7. Keep the NoSSR wrapper
+export const TechTreeViewerNoSSR = dynamic(() => Promise.resolve(memo(TechTreeViewer)), {
+  ssr: false
+});

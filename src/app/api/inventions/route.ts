@@ -146,28 +146,15 @@ async function processBatch<T, R>(
   return results;
 }
 
-export async function GET() {
-  const startTime = Date.now();
-  const timeMarkers = {
-    airtableFetch: 0,
-    cacheLoad: 0,
-    nodeProcessing: 0,
-    connectionProcessing: 0,
-    cacheSave: 0,
-  };
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const detail = searchParams.get('detail') === 'true';
 
   try {
     // Load cache
-    console.log("Loading image cache...");
-    const cacheLoadStart = Date.now();
     const imageCache = await loadImageCache();
-    timeMarkers.cacheLoad = Date.now() - cacheLoadStart;
-    console.log(`Cache loaded: ${Object.keys(imageCache).length} entries`);
 
-    // Fetch records
-    console.log("Starting Airtable fetch...");
-    const fetchStart = Date.now();
-
+    // Fetch records from Airtable
     const [innovationRecords, connectionRecords] = await Promise.all([
       base("Innovations")
         .select({
@@ -182,26 +169,47 @@ export async function GET() {
         .all(),
     ]);
 
-    timeMarkers.airtableFetch = Date.now() - fetchStart;
-    console.log(`Airtable fetch complete: ${timeMarkers.airtableFetch}ms`);
-
-    // Filter valid records
     const validRecords = innovationRecords.filter((record) => {
       const dateValue = record.get("Date");
-      if (!dateValue) {
-        return false;
-      }
-      const year = Number(dateValue);
-      if (isNaN(year)) {
-        return false;
-      }
-      return true;
+      return dateValue && !isNaN(Number(dateValue));
     });
 
-    // Process nodes
-    console.log("Starting node processing...");
-    const nodeStart = Date.now();
+    // For basic data, return minimal information needed for initial render
+    if (!detail) {
+      const basicNodes = validRecords.map(record => ({
+        id: record.id,
+        title: String(record.get("Name") || ""),
+        year: Number(record.get("Date")),
+        fields: String(record.get("Field(s)") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((f) => f.trim()),
+        type: String(record.get("Type of innovation") || ""),
+      }));
 
+      const basicLinks = connectionRecords
+        .filter((record) => {
+          const fromId = record.get("From") as string[] | undefined;
+          const toId = record.get("To") as string[] | undefined;
+          return fromId?.[0] && toId?.[0];
+        })
+        .map((record) => ({
+          source: Array.isArray(record.get("From")) 
+            ? String(record.get("From")[0] || "") 
+            : String(record.get("From") || ""),
+          target: Array.isArray(record.get("To")) 
+            ? String(record.get("To")[0] || "") 
+            : String(record.get("To") || ""),
+          type: String(record.get("Type") || "default"),
+        }));
+
+      return NextResponse.json({
+        nodes: basicNodes,
+        links: basicLinks,
+      });
+    }
+
+    // For detailed data, process everything as before
     const nodes = await processBatch(
       validRecords,
       async (record) => {
@@ -258,21 +266,9 @@ export async function GET() {
       CONCURRENT_REQUESTS
     );
 
-    timeMarkers.nodeProcessing = Date.now() - nodeStart;
-
-    // Save updated cache
-    console.log("Saving updated cache...");
-    const cacheSaveStart = Date.now();
-    await saveImageCache(imageCache);
-    timeMarkers.cacheSave = Date.now() - cacheSaveStart;
-
     const validNodes = nodes.filter(Boolean);
-
-    // Process connections
-    console.log("Processing connections...");
-    const connectionStart = Date.now();
-
-    const validNodeIds = new Set(validNodes.map((node) => node?.id));
+    
+    // Process full connection data
     const links = connectionRecords
       .filter((record) => {
         const fromId = record.get("From") as string[] | undefined;
@@ -280,8 +276,8 @@ export async function GET() {
         return (
           fromId?.[0] &&
           toId?.[0] &&
-          validNodeIds.has(fromId[0]) &&
-          validNodeIds.has(toId[0])
+          validNodes.some(node => node.id === fromId[0]) &&
+          validNodes.some(node => node.id === toId[0])
         );
       })
       .map((record) => {
@@ -299,52 +295,19 @@ export async function GET() {
         };
       });
 
-    timeMarkers.connectionProcessing = Date.now() - connectionStart;
-
-    // Log summary
-    const totalTime = Date.now() - startTime;
-    console.log("\nPerformance Summary:");
-    console.log("-------------------");
-    console.log(
-      `Cache Load:         ${timeMarkers.cacheLoad}ms (${(
-        (timeMarkers.cacheLoad / totalTime) *
-        100
-      ).toFixed(1)}%)`
-    );
-    console.log(
-      `Airtable Fetch:     ${timeMarkers.airtableFetch}ms (${(
-        (timeMarkers.airtableFetch / totalTime) *
-        100
-      ).toFixed(1)}%)`
-    );
-    console.log(
-      `Node Processing:    ${timeMarkers.nodeProcessing}ms (${(
-        (timeMarkers.nodeProcessing / totalTime) *
-        100
-      ).toFixed(1)}%)`
-    );
-    console.log(
-      `Cache Save:         ${timeMarkers.cacheSave}ms (${(
-        (timeMarkers.cacheSave / totalTime) *
-        100
-      ).toFixed(1)}%)`
-    );
-    console.log(
-      `Connection Process: ${timeMarkers.connectionProcessing}ms (${(
-        (timeMarkers.connectionProcessing / totalTime) *
-        100
-      ).toFixed(1)}%)`
-    );
-    console.log(`Total Time:         ${totalTime}ms`);
-    console.log("-------------------");
+    await saveImageCache(imageCache);
 
     return NextResponse.json({
       nodes: validNodes,
       links,
       _debug: {
         timing: {
-          ...timeMarkers,
-          total: totalTime,
+          airtableFetch: 0,
+          cacheLoad: 0,
+          nodeProcessing: 0,
+          connectionProcessing: 0,
+          cacheSave: 0,
+          total: 0,
         },
         counts: {
           totalRecords: innovationRecords.length,
@@ -354,6 +317,7 @@ export async function GET() {
         },
       },
     });
+
   } catch (error) {
     console.error("Error details:", error);
     return NextResponse.json(
