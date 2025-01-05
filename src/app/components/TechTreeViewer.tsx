@@ -635,17 +635,7 @@ const TechTreeViewer = () => {
         setSelectedNodeId(node.id);
       }, 100);
     },
-    [
-      data.nodes,
-      getXPosition,
-      setSelectedLinkIndex,
-      setSelectedNodeId,
-      setHoveredLinkIndex,
-      setHoveredNode,
-      setHoveredNodeId,
-      horizontalScrollContainerRef,
-      verticalScrollContainerRef,
-    ]
+    [data.nodes, selectedNodeId, getXPosition]
   );
 
   // Add this after data is loaded (right after setIsLoading(false))
@@ -1504,15 +1494,30 @@ const TechTreeViewer = () => {
                       targetIndex={data.nodes.indexOf(targetNode)}
                       connectionType={link.type}
                       isHighlighted={shouldHighlightLink(link, index)}
-                      opacity={
-                        selectedNodeId || selectedLinkIndex !== null
-                          ? shouldHighlightLink(link, index)
-                            ? 1
-                            : 0.2
-                          : isLinkVisible(link)
-                          ? 1
-                          : 0.2
-                      }
+                      opacity={(() => {
+                        // If a node is selected
+                        if (selectedNodeId) {
+                          // If this is a connection between highlighted nodes
+                          if ((highlightedAncestors.has(link.source) && highlightedAncestors.has(link.target)) ||
+                              (highlightedDescendants.has(link.source) && highlightedDescendants.has(link.target))) {
+                            return 1;
+                          }
+                          // If this is a connection to/from the selected node
+                          if (shouldHighlightLink(link, index)) {
+                            return 1;
+                          }
+                          return 0.2;
+                        }
+                        // If a link is selected
+                        if (selectedLinkIndex !== null) {
+                          return index === selectedLinkIndex ? 1 : 0.2;
+                        }
+                        // If filters are applied
+                        if (filters.fields.size || filters.countries.size || filters.cities.size) {
+                          return isLinkVisible(link) ? 1 : 0.2;
+                        }
+                        return 1;
+                      })()}
                       onMouseEnter={() => {
                         setHoveredLinkIndex(index);
                       }}
@@ -1573,23 +1578,18 @@ const TechTreeViewer = () => {
                       opacity: (() => {
                         // If a node is selected
                         if (selectedNodeId) {
-                          return node.id === selectedNodeId ||
-                            isAdjacentToSelected(node.id)
-                            ? 1
-                            : 0.2;
+                          if (node.id === selectedNodeId) return 1;
+                          if (isAdjacentToSelected(node.id)) return 1;
+                          if (highlightedAncestors.has(node.id)) return 1;
+                          if (highlightedDescendants.has(node.id)) return 1;
+                          return 0.2;
                         }
                         // If a link is selected
                         if (selectedLinkIndex !== null) {
-                          return isNodeConnectedToSelectedLink(node.id)
-                            ? 1
-                            : 0.2;
+                          return isNodeConnectedToSelectedLink(node.id) ? 1 : 0.2;
                         }
                         // If filters are applied
-                        if (
-                          filters.fields.size ||
-                          filters.countries.size ||
-                          filters.cities.size
-                        ) {
+                        if (filters.fields.size || filters.countries.size || filters.cities.size) {
                           return isNodeFiltered(node) ? 1 : 0.2;
                         }
                         // Default state - fully visible
