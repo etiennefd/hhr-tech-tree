@@ -1015,7 +1015,9 @@ const TechTreeViewer = () => {
       }
 
       const results: SearchResult[] = [];
+      const searchTerms = query.toLowerCase().split(/\s+/).filter(Boolean);
 
+      // Early return for year searches
       const yearMatch = query.match(/^-?\d+(?:\s*(?:BC|BCE))?$/i);
       if (yearMatch) {
         const year = parseInt(query.replace(/\s*(?:BC|BCE)/i, ""));
@@ -1033,46 +1035,40 @@ const TechTreeViewer = () => {
             matchScore: 1,
             year: adjustedYear,
           });
+          setSearchResults(results);
+          return;
         }
       }
 
-      // Split search terms and create regex patterns
-      const searchTerms = query.toLowerCase().split(" ").filter(Boolean);
-      const patterns = searchTerms.map(
-        (term) => new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
-      );
-
-      // Use Set for tracking added nodes to prevent duplicates
+      // Use Set for tracking added nodes
       const addedNodes = new Set<string>();
 
-      // Search through the index
-      searchIndex.forEach(({ node, searchableText, fields }, nodeId) => {
-        if (addedNodes.has(nodeId)) return;
+      // Search through nodes with early termination
+      for (const [nodeId, { node, searchableText, fields }] of searchIndex) {
+        if (results.length >= 10) break; // Early termination
+        if (addedNodes.has(nodeId)) continue;
 
-        const matchesAllTerms = patterns.every((pattern) => {
-          return (
-            searchableText.match(pattern) ||
-            Array.from(fields).some((field) => field.match(pattern))
-          );
-        });
+        // Quick check if all terms exist in searchable text
+        const matchesAllTerms = searchTerms.every(term => 
+          searchableText.includes(term) || 
+          Array.from(fields).some(field => field.includes(term))
+        );
 
         if (matchesAllTerms) {
           let score = 0;
+          const lowerTitle = node.title.toLowerCase();
+          const lowerSubtitle = node.subtitle?.toLowerCase() || "";
 
-          patterns.forEach((pattern) => {
-            if (node.title.match(pattern)) score += 10;
-            if (node.subtitle?.match(pattern)) score += 8;
-            if (node.inventors?.some((inv) => inv.match(pattern))) score += 5;
-            if (node.organizations?.some((org) => org.match(pattern)))
-              score += 5;
-            if (searchableText.match(pattern)) score += 1;
-          });
+          // Prioritize exact matches in title/subtitle
+          if (lowerTitle.includes(query.toLowerCase())) {
+            score += 10;
+          }
+          if (lowerSubtitle.includes(query.toLowerCase())) {
+            score += 5;  // Add score for subtitle matches
+          }
 
-          // Add tech results - now including subtitle in display
-          if (
-            node.title.toLowerCase().includes(query.toLowerCase()) ||
-            node.subtitle?.toLowerCase().includes(query.toLowerCase())
-          ) {
+          // Only add to results if we found a match in title or subtitle
+          if (score > 0) {
             results.push({
               type: "node",
               node,
@@ -1083,43 +1079,40 @@ const TechTreeViewer = () => {
               matchScore: score,
             });
             addedNodes.add(nodeId);
+            continue;
           }
 
-          // Add person results
-          if (
-            !addedNodes.has(nodeId) &&
-            node.inventors?.some((inv) =>
+          // Check other fields only if necessary
+          if (!addedNodes.has(nodeId)) {
+            if (node.inventors?.some(inv => 
               inv.toLowerCase().includes(query.toLowerCase())
-            )
-          ) {
-            results.push({
-              type: "person",
-              node,
-              text: node.inventors.join(", "),
-              subtext: `Invented ${node.title} (${formatYear(node.year)})`,
-              matchScore: score,
-            });
-            addedNodes.add(nodeId);
-          }
+            )) {
+              results.push({
+                type: "person",
+                node,
+                text: node.inventors.join(", "),
+                subtext: `Invented ${node.title} (${formatYear(node.year)})`,
+                matchScore: 5,
+              });
+              addedNodes.add(nodeId);
+              continue;
+            }
 
-          // Add organization results
-          if (
-            !addedNodes.has(nodeId) &&
-            node.organizations?.some((org) =>
+            if (node.organizations?.some(org => 
               org.toLowerCase().includes(query.toLowerCase())
-            )
-          ) {
-            results.push({
-              type: "organization",
-              node,
-              text: node.organizations.join(", "),
-              subtext: `Developed ${node.title} (${formatYear(node.year)})`,
-              matchScore: score,
-            });
-            addedNodes.add(nodeId);
+            )) {
+              results.push({
+                type: "organization",
+                node,
+                text: node.organizations.join(", "),
+                subtext: `Developed ${node.title} (${formatYear(node.year)})`,
+                matchScore: 3,
+              });
+              addedNodes.add(nodeId);
+            }
           }
         }
-      });
+      }
 
       results.sort((a, b) => b.matchScore - a.matchScore);
       setSearchResults(results.slice(0, 10));

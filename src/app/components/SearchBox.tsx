@@ -28,15 +28,44 @@ export function SearchBox({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Add debounce timer ref
+  const debounceTimerRef = useRef<NodeJS.Timeout>();
 
-  // Handle input changes
+  // Optimized input change handler
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
-    onSearch(newQuery);
+    
+    // Clear previous timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Set immediate feedback for empty query
+    if (!newQuery.trim()) {
+      onSearch("");
+      setIsOpen(false);
+      return;
+    }
+
     setIsOpen(true);
     setSelectedIndex(0);
+
+    // Debounce search for non-empty queries
+    debounceTimerRef.current = setTimeout(() => {
+      onSearch(newQuery);
+    }, 150); // 150ms delay
   };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
