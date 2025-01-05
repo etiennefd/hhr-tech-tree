@@ -1751,7 +1751,7 @@ const TechTreeViewer = () => {
                           );
                         })()}
 
-                        {/* Links section */}
+                        {/* Update the tooltip section to separate Wikipedia link from ancestry controls */}
                         {(() => {
                           const nodeId = selectedNodeId || hoveredNode?.id;
                           if (!nodeId) return null;
@@ -1761,68 +1761,71 @@ const TechTreeViewer = () => {
                           ancestors.delete(nodeId);
                           descendants.delete(nodeId);
 
-                          if (ancestors.size === 0 && descendants.size === 0)
-                            return null;
-
                           return (
                             <div className="text-xs mt-2">
-                              {ancestors.size > 0 && descendants.size > 0 ? (
-                                <>
-                                  Highlight all{" "}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setHighlightedAncestors(ancestors);
-                                      setHighlightedDescendants(new Set());
-                                    }}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    ancestors
-                                  </button>
-                                  {" / "}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setHighlightedDescendants(descendants);
-                                      setHighlightedAncestors(new Set());
-                                    }}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    descendants
-                                  </button>
-                                </>
-                              ) : ancestors.size > 0 ? (
-                                <>
-                                  Highlight all{" "}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setHighlightedAncestors(ancestors);
-                                      setHighlightedDescendants(new Set());
-                                    }}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    ancestors
-                                  </button>
-                                </>
-                              ) : (
-                                <>
-                                  Highlight all{" "}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setHighlightedDescendants(descendants);
-                                      setHighlightedAncestors(new Set());
-                                    }}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    descendants
-                                  </button>
-                                </>
+                              {/* Show ancestry controls only if there are ancestors or descendants */}
+                              {(ancestors.size > 0 || descendants.size > 0) && (
+                                <div className="mb-1">
+                                  {ancestors.size > 0 && descendants.size > 0 ? (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setHighlightedAncestors(ancestors);
+                                          setHighlightedDescendants(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        ancestors
+                                      </button>
+                                      {" / "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setHighlightedDescendants(descendants);
+                                          setHighlightedAncestors(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        descendants
+                                      </button>
+                                    </>
+                                  ) : ancestors.size > 0 ? (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setHighlightedAncestors(ancestors);
+                                          setHighlightedDescendants(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        ancestors
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setHighlightedDescendants(descendants);
+                                          setHighlightedAncestors(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        descendants
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
                               )}
+                              
+                              {/* Always show Wikipedia link if it exists, regardless of connections */}
                               {node.wikipedia && (
-                                <>
-                                  <br />
+                                <div>
                                   View on{" "}
                                   <a
                                     href={node.wikipedia}
@@ -1833,7 +1836,7 @@ const TechTreeViewer = () => {
                                   >
                                     Wikipedia
                                   </a>
-                                </>
+                                </div>
                               )}
                             </div>
                           );
