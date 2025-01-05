@@ -3,6 +3,7 @@ import Airtable from "airtable";
 import fs from "fs/promises";
 import path from "path";
 import { formatLocation, cleanCommaList } from "../../utils/location";
+import { FieldSet, Record as AirtableRecord } from "airtable";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID ?? ""
@@ -146,16 +147,19 @@ async function processBatch<T, R>(
   return results;
 }
 
+// Update the type to extend Airtable's Record type
+type CustomAirtableRecord = AirtableRecord<FieldSet>;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const detail = searchParams.get('detail') === 'true';
+  const detail = searchParams.get("detail") === "true";
 
   try {
     // Load cache
     const imageCache = await loadImageCache();
 
     // Fetch records from Airtable
-    const [innovationRecords, connectionRecords] = await Promise.all([
+    const [innovationRecords, connectionRecords] = (await Promise.all([
       base("Innovations")
         .select({
           view: "Grid view",
@@ -167,7 +171,7 @@ export async function GET(request: Request) {
           view: "Grid view",
         })
         .all(),
-    ]);
+    ])) as [CustomAirtableRecord[], CustomAirtableRecord[]];
 
     const validRecords = innovationRecords.filter((record) => {
       const dateValue = record.get("Date");
@@ -176,7 +180,7 @@ export async function GET(request: Request) {
 
     // For basic data, return minimal information needed for initial render
     if (!detail) {
-      const basicNodes = validRecords.map(record => ({
+      const basicNodes = validRecords.map((record) => ({
         id: record.id,
         title: String(record.get("Name") || ""),
         year: Number(record.get("Date")),
@@ -189,19 +193,25 @@ export async function GET(request: Request) {
 
       const basicLinks = connectionRecords
         .filter((record) => {
-          const fromId = record.get("From") as string[] | undefined;
-          const toId = record.get("To") as string[] | undefined;
-          return fromId?.[0] && toId?.[0];
+          const fromId = record.get("From");
+          const toId = record.get("To");
+          return fromId && toId;
         })
-        .map((record) => ({
-          source: Array.isArray(record.get("From")) 
-            ? String(record.get("From")[0] || "") 
-            : String(record.get("From") || ""),
-          target: Array.isArray(record.get("To")) 
-            ? String(record.get("To")[0] || "") 
-            : String(record.get("To") || ""),
-          type: String(record.get("Type") || "default"),
-        }));
+        .map((record) => {
+          const fromValue = record.get("From");
+          const toValue = record.get("To");
+          return {
+            source:
+              Array.isArray(fromValue) && fromValue.length > 0
+                ? fromValue[0]
+                : String(fromValue ?? ""),
+            target:
+              Array.isArray(toValue) && toValue.length > 0
+                ? toValue[0]
+                : String(toValue ?? ""),
+            type: String(record.get("Type") || "default"),
+          };
+        });
 
       return NextResponse.json({
         nodes: basicNodes,
@@ -240,9 +250,10 @@ export async function GET(request: Request) {
               .map((i) => i.trim()),
             organizations: cleanCommaList(
               String(record.get("Organization") || "")
-            ).split(",")
+            )
+              .split(",")
               .filter(Boolean)
-              .map(org => org.trim()),
+              .map((org) => org.trim()),
             city: String(record.get("City") || ""),
             countryHistorical: cleanCommaList(
               String(record.get("Country (historical)") || "")
@@ -267,29 +278,37 @@ export async function GET(request: Request) {
     );
 
     const validNodes = nodes.filter(Boolean);
-    
+
     // Process full connection data
     const links = connectionRecords
       .filter((record) => {
-        const fromId = record.get("From") as string[] | undefined;
-        const toId = record.get("To") as string[] | undefined;
+        const fromId = record.get("From");
+        const toId = record.get("To");
+        const fromIdStr =
+          Array.isArray(fromId) && fromId.length > 0
+            ? fromId[0]
+            : String(fromId ?? "");
+        const toIdStr =
+          Array.isArray(toId) && toId.length > 0 ? toId[0] : String(toId ?? "");
         return (
-          fromId?.[0] &&
-          toId?.[0] &&
-          validNodes.some(node => node.id === fromId[0]) &&
-          validNodes.some(node => node.id === toId[0])
+          fromIdStr &&
+          toIdStr &&
+          validNodes.some((node) => node?.id === fromIdStr) &&
+          validNodes.some((node) => node?.id === toIdStr)
         );
       })
       .map((record) => {
         const fromValue = record.get("From");
         const toValue = record.get("To");
         return {
-          source: Array.isArray(fromValue)
-            ? String(fromValue[0] || "")
-            : String(fromValue || ""),
-          target: Array.isArray(toValue)
-            ? String(toValue[0] || "")
-            : String(toValue || ""),
+          source:
+            Array.isArray(fromValue) && fromValue.length > 0
+              ? fromValue[0]
+              : String(fromValue ?? ""),
+          target:
+            Array.isArray(toValue) && toValue.length > 0
+              ? toValue[0]
+              : String(toValue ?? ""),
           type: String(record.get("Type") || "default"),
           details: String(record.get("Details") || ""),
         };
@@ -317,7 +336,6 @@ export async function GET(request: Request) {
         },
       },
     });
-
   } catch (error) {
     console.error("Error details:", error);
     return NextResponse.json(

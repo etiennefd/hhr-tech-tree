@@ -1,17 +1,27 @@
-export const CACHE_VERSION = '1.0';
-const CACHE_KEY = 'tech-tree-cache';
+import { TechNode } from "@/types/tech-node";
+import { ConnectionType } from "@/app/components/connections/CurvedConnections";
+
+export const CACHE_VERSION = "1.0";
+const CACHE_KEY = "tech-tree-cache";
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
+
+interface Link {
+  source: string;
+  target: string;
+  type: ConnectionType;
+  details?: string;
+}
 
 interface CacheData {
   version: string;
   timestamp: number;
   basicData: {
-    nodes: BasicNode[];
-    links: BasicLink[];
+    nodes: TechNode[];
+    links: Link[];
   };
   detailData?: {
-    nodes: DetailNode[];
-    links: DetailLink[];
+    nodes: TechNode[];
+    links: Link[];
   };
 }
 
@@ -20,7 +30,7 @@ export const cacheManager = {
     try {
       await localStorage.setItem(CACHE_KEY, JSON.stringify(data));
     } catch (error) {
-      console.warn('Failed to cache data:', error);
+      console.warn("Failed to cache data:", error);
     }
   },
 
@@ -40,8 +50,8 @@ export const cacheManager = {
 
       return data;
     } catch (error) {
-      console.warn('Failed to retrieve cached data:', error);
+      console.warn("Failed to retrieve cached data:", error);
       return null;
     }
-  }
+  },
 };

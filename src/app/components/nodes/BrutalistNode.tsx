@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { TechNode } from "@/types/tech-node";
 
 interface Node {
   year: number;
@@ -50,7 +49,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       },
       {
         rootMargin: "50px", // Start loading images slightly before they come into view
-        threshold: 0.1
+        threshold: 0.1,
       }
     );
 
@@ -133,24 +132,30 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       // Assuming average character is ~8px at text-sm (14px) font size
       const charsPerLine = Math.floor((width - 24) / 8); // 24px for padding
 
-      return text.split(' ').map(word => {
-        // If word contains hyphen, leave it alone
-        if (word.includes('-')) {
-          return word;
-        }
-        // Only add soft hyphens if word is longer than line width
-        return word.length > charsPerLine 
-          ? word.split('').join('\u00AD')
-          : word;
-      }).join(' ');
+      return text
+        .split(" ")
+        .map((word) => {
+          // If word contains hyphen, leave it alone
+          if (word.includes("-")) {
+            return word;
+          }
+          // Only add soft hyphens if word is longer than line width
+          return word.length > charsPerLine
+            ? word.split("").join("\u00AD")
+            : word;
+        })
+        .join(" ");
     };
 
     return addSoftHyphens(node.title);
   }, [node.title, width]);
 
   // Memoize the dynamic font size calculation
-  const titleFontSize = React.useMemo(() => 
-    node.title.split(' ').some(word => word.length > 12) ? '0.8rem' : undefined,
+  const titleFontSize = React.useMemo(
+    () =>
+      node.title.split(" ").some((word) => word.length > 12)
+        ? "0.8rem"
+        : undefined,
     [node.title]
   );
 
@@ -173,7 +178,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       }}
       onClick={(e) => {
         if (node.wikipedia && e.ctrlKey) {
-          window.open(node.wikipedia, '_blank');
+          window.open(node.wikipedia, "_blank");
         } else {
           onClick();
         }
@@ -203,7 +208,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               placeholder="blur"
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJiEyNS0tLzIvNz1AQFNAU0BGTUVHS2ZXV2uDg4T/2wBDARUXFyQdJB0kTkNMTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               className={`object-cover transition-opacity duration-300 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
+                imageLoaded ? "opacity-100" : "opacity-0"
               }`}
               onError={(e) => {
                 const imgElement = e.target as HTMLImageElement;
