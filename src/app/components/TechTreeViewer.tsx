@@ -218,6 +218,18 @@ const TechTreeViewer = () => {
     (nodes: TechNode[]): TechNode[] => {
       if (!nodes.length) return [];
 
+      // Add a seeded random number generator
+      const seededRandom = (str: string) => {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          const char = str.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash & hash; // Convert to 32-bit integer
+        }
+        // Create a decimal between 0 and 1 using the hash
+        return (Math.abs(hash) % 1000) / 1000;
+      };
+
       function estimateNodeHeight(node: TechNode): number {
         // Base heights for fixed elements
         const IMAGE_HEIGHT = 80; // Image container
@@ -344,11 +356,14 @@ const TechTreeViewer = () => {
         nodesInYear.forEach((node: TechNode) => {
           const nodeHeight = estimateNodeHeight(node);
 
+          // Create seed string for base position
+          const baseSeedString = `base-${node.id}-${node.title}-${node.year}-${node.fields.join(',')}`;
+          
           // Get base position from primary field, ensuring minimum Y
           const basePosition = Math.max(
             ABSOLUTE_MIN_Y,
             (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
-              (Math.random() - 0.5) * 100
+              (seededRandom(baseSeedString) - 0.5) * 100
           );
 
           const isOverlapping = (testPosition: number): boolean => {
@@ -391,8 +406,9 @@ const TechTreeViewer = () => {
             );
           }
 
-          // Add random offset while respecting minimum Y
-          const randomOffset = (Math.random() - 0.5) * 50;
+          // Use different seed string for final offset to get different randomization
+          const offsetSeedString = `offset-${node.id}-${node.title}-${node.year}-${node.fields.join(',')}`;
+          const randomOffset = (seededRandom(offsetSeedString) - 0.5) * 50;
           finalPosition = Math.max(
             ABSOLUTE_MIN_Y,
             finalPosition + randomOffset
@@ -490,10 +506,28 @@ const TechTreeViewer = () => {
 
         if (!isMounted) return;
 
-        // Update with fresh detailed data
-        const positionedDetailNodes = calculateNodePositions(detailData.nodes);
-        setData({ ...detailData, nodes: positionedDetailNodes });
-        setFilteredNodes(positionedDetailNodes);
+        // Compare current and new data before updating
+        const currentNodes = data.nodes;
+        const hasChanges = detailData.nodes.some((newNode: TechNode, index: number) => {
+          const currentNode = currentNodes[index];
+          if (!currentNode) return true;
+          
+          // Compare relevant fields that would affect display
+          return (
+            newNode.title !== currentNode.title ||
+            newNode.year !== currentNode.year ||
+            newNode.fields.join(',') !== currentNode.fields.join(',') ||
+            newNode.image !== currentNode.image
+          );
+        });
+
+        // Only update if there are actual changes
+        if (hasChanges) {
+          const positionedDetailNodes = calculateNodePositions(detailData.nodes);
+          setData({ ...detailData, nodes: positionedDetailNodes });
+          setFilteredNodes(positionedDetailNodes);
+        }
+
         setIsLoadingDetails(false);
 
         // Cache complete fresh data
