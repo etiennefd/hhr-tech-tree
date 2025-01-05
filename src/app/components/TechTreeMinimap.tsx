@@ -78,7 +78,6 @@ const TechTreeMinimap = ({
   const formatYear = (year: number) => {
     if (year === 0) return "1";
     if (year < 0) return `${Math.abs(year)} BCE`;
-    if (year < 1000) return `${year}`;
     return `${year}`;
   };
   // Calculate x position for a year
