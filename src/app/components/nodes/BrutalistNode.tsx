@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import Image from "next/image";
+import { TechNode } from "@/types/tech-node";
 
 interface Node {
   year: number;
@@ -7,6 +8,7 @@ interface Node {
   subtitle?: string;
   image?: string;
   fields: string[];
+  wikipedia?: string;
 }
 
 interface BrutalistNodeProps {
@@ -30,6 +32,35 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   width,
   style,
 }) => {
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Set up intersection observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            // Once visible, we can disconnect the observer
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "50px", // Start loading images slightly before they come into view
+        threshold: 0.1
+      }
+    );
+
+    if (nodeRef.current) {
+      observer.observe(nodeRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;
 
@@ -95,28 +126,40 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Misc: "#555555", // Medium gray
   };
 
-  const addSoftHyphens = (text: string) => {
-    // Estimate characters that fit per line based on width
-    // Assuming average character is ~8px at text-sm (14px) font size
-    const charsPerLine = Math.floor((width - 24) / 8); // 24px for padding
+  // Move addSoftHyphens inside useMemo to handle dependencies properly
+  const formattedTitle = React.useMemo(() => {
+    const addSoftHyphens = (text: string) => {
+      // Estimate characters that fit per line based on width
+      // Assuming average character is ~8px at text-sm (14px) font size
+      const charsPerLine = Math.floor((width - 24) / 8); // 24px for padding
 
-    return text.split(' ').map(word => {
-      // If word contains hyphen, leave it alone
-      if (word.includes('-')) {
-        return word;
-      }
-      // Only add soft hyphens if word is longer than line width
-      return word.length > charsPerLine 
-        ? word.split('').join('\u00AD')
-        : word;
-    }).join(' ');
-  };
+      return text.split(' ').map(word => {
+        // If word contains hyphen, leave it alone
+        if (word.includes('-')) {
+          return word;
+        }
+        // Only add soft hyphens if word is longer than line width
+        return word.length > charsPerLine 
+          ? word.split('').join('\u00AD')
+          : word;
+      }).join(' ');
+    };
+
+    return addSoftHyphens(node.title);
+  }, [node.title, width]);
+
+  // Memoize the dynamic font size calculation
+  const titleFontSize = React.useMemo(() => 
+    node.title.split(' ').some(word => word.length > 12) ? '0.8rem' : undefined,
+    [node.title]
+  );
 
   return (
     <div
+      ref={nodeRef}
       className={`
         relative 
-        transition-transform 
+        transition-all
         cursor-pointer 
         tech-node
         ${isSelected ? "z-20" : isAdjacent ? "z-15" : "z-10"}
@@ -126,12 +169,19 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         ...style,
         width: `${width}px`,
         transform: `translate(-${width / 2}px, -75px)`,
+        opacity: style?.opacity,
       }}
-      onClick={onClick}
+      onClick={(e) => {
+        if (node.wikipedia && e.ctrlKey) {
+          window.open(node.wikipedia, '_blank');
+        } else {
+          onClick();
+        }
+      }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      title={node.wikipedia ? "Ctrl+click to open Wikipedia" : undefined}
     >
-      {/* Main container */}
       <div
         className={`
         border border-black
@@ -140,28 +190,40 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         transition-all
       `}
       >
-        {/* Image section */}
+        {/* Image section with visibility-based loading */}
         <div className="border-b border-black p-0 relative h-20">
-          <Image
-            src={node.image || "/placeholder-invention.png"}
-            alt={node.title}
-            fill
-            className="object-cover"
-            onError={(e) => {
-              // Fallback to placeholder if image fails to load
-              const imgElement = e.target as HTMLImageElement;
-              imgElement.src = "/placeholder-invention.png";
-            }}
-            style={{
-              filter: "grayscale(20%) contrast(110%)",
-              mixBlendMode: "multiply",
-            }}
-          />
+          {(isVisible || isSelected || isAdjacent) && (
+            <Image
+              src={node.image || "/placeholder-invention.png"}
+              alt={node.title}
+              fill
+              sizes="160px"
+              loading={isSelected || isAdjacent ? "eager" : "lazy"}
+              quality={75}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJiEyNS0tLzIvNz1AQFNAU0BGTUVHS2ZXV2uDg4T/2wBDARUXFyQdJB0kTkNMTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+              className={`object-cover transition-opacity duration-300 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              onError={(e) => {
+                const imgElement = e.target as HTMLImageElement;
+                imgElement.src = "/placeholder-invention.png";
+              }}
+              onLoad={() => setImageLoaded(true)}
+              style={{
+                filter: "grayscale(20%) contrast(110%)",
+                mixBlendMode: "multiply",
+              }}
+              priority={isSelected || isAdjacent}
+            />
+          )}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+          )}
         </div>
 
         {/* Content section */}
         <div className="px-3 py-2">
-          {/* Title and code */}
           <div className="mb-2">
             <h3
               className="text-sm font-bold uppercase leading-tight"
@@ -169,10 +231,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 wordBreak: "break-word",
                 overflowWrap: "break-word",
                 maxWidth: "100%",
-                fontSize: node.title.split(' ').some(word => word.length > 12) ? '0.8rem' : undefined,
+                fontSize: titleFontSize,
               }}
             >
-              {addSoftHyphens(node.title)}
+              {formattedTitle}
             </h3>
             {node.subtitle && (
               <div className="text-[10px] font-mono text-gray-600 mt-0.5">
@@ -207,4 +269,13 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   );
 };
 
-export default BrutalistNode;
+// Memoize the entire component to prevent unnecessary re-renders
+export default React.memo(BrutalistNode, (prevProps, nextProps) => {
+  return (
+    prevProps.isSelected === nextProps.isSelected &&
+    prevProps.isAdjacent === nextProps.isAdjacent &&
+    prevProps.node === nextProps.node &&
+    prevProps.width === nextProps.width &&
+    prevProps.style?.opacity === nextProps.style?.opacity
+  );
+});
