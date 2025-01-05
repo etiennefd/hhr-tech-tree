@@ -147,14 +147,13 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const formattedTitle = React.useMemo(() => {
     const addSoftHyphens = (text: string) => {
       // Estimate characters that fit per line based on width
-      // Assuming average character is ~8px at text-sm (14px) font size
       const charsPerLine = Math.floor((width - 24) / 8); // 24px for padding
 
       return text
         .split(" ")
         .map((word) => {
-          // If word contains hyphen, leave it alone
-          if (word.includes("-")) {
+          // If word already contains hyphens or similar characters, leave it alone
+          if (word.includes("-") || word.includes("–") || word.includes("—")) {
             return word;
           }
           // Only add soft hyphens if word is longer than line width
