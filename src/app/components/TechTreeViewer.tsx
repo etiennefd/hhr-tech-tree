@@ -1,5 +1,13 @@
 "use client";
 
+// Add type declaration for global mouse position
+declare global {
+  interface Window {
+    mouseX: number;
+    mouseY: number;
+  }
+}
+
 import React, {
   useState,
   useEffect,
@@ -198,7 +206,6 @@ const TechTreeViewer = () => {
     null
   );
   const [totalHeight, setTotalHeight] = useState(1000); // Default height
-  const [isKeyScrolling, setIsKeyScrolling] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [filters, setFilters] = useState<FilterState>({
@@ -206,8 +213,12 @@ const TechTreeViewer = () => {
     countries: new Set(),
     cities: new Set(),
   });
-  const [highlightedAncestors, setHighlightedAncestors] = useState<Set<string>>(new Set());
-  const [highlightedDescendants, setHighlightedDescendants] = useState<Set<string>>(new Set());
+  const [highlightedAncestors, setHighlightedAncestors] = useState<Set<string>>(
+    new Set()
+  );
+  const [highlightedDescendants, setHighlightedDescendants] = useState<
+    Set<string>
+  >(new Set());
   const currentNodesRef = useRef<TechNode[]>([]);
 
   const getXPosition = useCallback(
@@ -231,7 +242,7 @@ const TechTreeViewer = () => {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
           const char = str.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
+          hash = (hash << 5) - hash + char;
           hash = hash & hash; // Convert to 32-bit integer
         }
         // Create a decimal between 0 and 1 using the hash
@@ -365,8 +376,10 @@ const TechTreeViewer = () => {
           const nodeHeight = estimateNodeHeight(node);
 
           // Create seed string for base position
-          const baseSeedString = `base-${node.id}-${node.title}-${node.year}-${node.fields.join(',')}`;
-          
+          const baseSeedString = `base-${node.id}-${node.title}-${
+            node.year
+          }-${node.fields.join(",")}`;
+
           // Get base position from primary field, ensuring minimum Y
           const basePosition = Math.max(
             ABSOLUTE_MIN_Y,
@@ -415,7 +428,9 @@ const TechTreeViewer = () => {
           }
 
           // Use different seed string for final offset to get different randomization
-          const offsetSeedString = `offset-${node.id}-${node.title}-${node.year}-${node.fields.join(',')}`;
+          const offsetSeedString = `offset-${node.id}-${node.title}-${
+            node.year
+          }-${node.fields.join(",")}`;
           const randomOffset = (seededRandom(offsetSeedString) - 0.5) * 50;
           finalPosition = Math.max(
             ABSOLUTE_MIN_Y,
@@ -455,24 +470,28 @@ const TechTreeViewer = () => {
     const controller = new AbortController();
 
     const loadData = async () => {
-      let cachedData = null;  // Move declaration outside try block
+      let cachedData = null; // Move declaration outside try block
       try {
         // Check cache first for immediate display
         cachedData = await cacheManager.get();
-        
+
         if (!cachedData) {
           setIsLoading(true);
         }
 
         if (cachedData?.detailData) {
           // If we have detailed data in cache, use it and skip basic data fetch
-          const positionedDetailNodes = calculateNodePositions(cachedData.detailData.nodes);
+          const positionedDetailNodes = calculateNodePositions(
+            cachedData.detailData.nodes
+          );
           setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
           setFilteredNodes(positionedDetailNodes);
           setIsLoading(false);
         } else if (cachedData?.basicData) {
           // If we only have basic data, use it temporarily
-          const positionedNodes = calculateNodePositions(cachedData.basicData.nodes);
+          const positionedNodes = calculateNodePositions(
+            cachedData.basicData.nodes
+          );
           setData({ ...cachedData.basicData, nodes: positionedNodes });
           setFilteredNodes(positionedNodes);
           setIsLoading(false);
@@ -484,7 +503,8 @@ const TechTreeViewer = () => {
             signal: controller.signal,
             priority: "high",
           });
-          if (!basicResponse.ok) throw new Error(`HTTP error! status: ${basicResponse.status}`);
+          if (!basicResponse.ok)
+            throw new Error(`HTTP error! status: ${basicResponse.status}`);
           const basicData = await basicResponse.json();
 
           if (!isMounted) return;
@@ -509,28 +529,33 @@ const TechTreeViewer = () => {
         const detailResponse = await fetch("/api/inventions?detail=true", {
           signal: controller.signal,
         });
-        if (!detailResponse.ok) throw new Error(`HTTP error! status: ${detailResponse.status}`);
+        if (!detailResponse.ok)
+          throw new Error(`HTTP error! status: ${detailResponse.status}`);
         const detailData = await detailResponse.json();
 
         if (!isMounted) return;
 
         // Compare current and new data before updating
-        const hasChanges = detailData.nodes.some((newNode: TechNode, index: number) => {
-          const currentNode = currentNodesRef.current[index];
-          if (!currentNode) return true;
-          
-          // Compare relevant fields that would affect display
-          return (
-            newNode.title !== currentNode.title ||
-            newNode.year !== currentNode.year ||
-            newNode.fields.join(',') !== currentNode.fields.join(',') ||
-            newNode.image !== currentNode.image
-          );
-        });
+        const hasChanges = detailData.nodes.some(
+          (newNode: TechNode, index: number) => {
+            const currentNode = currentNodesRef.current[index];
+            if (!currentNode) return true;
+
+            // Compare relevant fields that would affect display
+            return (
+              newNode.title !== currentNode.title ||
+              newNode.year !== currentNode.year ||
+              newNode.fields.join(",") !== currentNode.fields.join(",") ||
+              newNode.image !== currentNode.image
+            );
+          }
+        );
 
         // Only update if there are actual changes
         if (hasChanges) {
-          const positionedDetailNodes = calculateNodePositions(detailData.nodes);
+          const positionedDetailNodes = calculateNodePositions(
+            detailData.nodes
+          );
           setData({ ...detailData, nodes: positionedDetailNodes });
           setFilteredNodes(positionedDetailNodes);
           currentNodesRef.current = positionedDetailNodes;
@@ -547,7 +572,8 @@ const TechTreeViewer = () => {
         if (error instanceof Error && error.name === "AbortError") return;
         console.error("Error loading data:", error);
         setIsLoading(false);
-        if (!cachedData) {  // Now cachedData is in scope
+        if (!cachedData) {
+          // Now cachedData is in scope
           setData({ nodes: [], links: [] });
           setFilteredNodes([]);
         }
@@ -770,8 +796,7 @@ const TechTreeViewer = () => {
     () =>
       Math.max(
         data.nodes.length
-          ? getXPosition(Math.max(...data.nodes.map((n) => n.year)) + 1) +
-              PADDING
+          ? getXPosition(Math.max(...data.nodes.map((n) => n.year))) + PADDING
           : containerDimensions.width,
         containerDimensions.width
       ),
@@ -857,7 +882,6 @@ const TechTreeViewer = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
-
 
   useEffect(() => {
     // Add your existing style element content
@@ -974,9 +998,10 @@ const TechTreeViewer = () => {
         if (results.length >= 10) break;
         if (addedNodes.has(nodeId)) continue;
 
-        const matchesAllTerms = searchTerms.every(term => 
-          searchableText.includes(term) || 
-          Array.from(fields).some(field => field.includes(term))
+        const matchesAllTerms = searchTerms.every(
+          (term) =>
+            searchableText.includes(term) ||
+            Array.from(fields).some((field) => field.includes(term))
         );
 
         if (matchesAllTerms) {
@@ -1008,9 +1033,11 @@ const TechTreeViewer = () => {
 
           // Check other fields only if necessary
           if (!addedNodes.has(nodeId)) {
-            if (node.inventors?.some(inv => 
-              inv.toLowerCase().includes(query.toLowerCase())
-            )) {
+            if (
+              node.inventors?.some((inv) =>
+                inv.toLowerCase().includes(query.toLowerCase())
+              )
+            ) {
               results.push({
                 type: "person",
                 node,
@@ -1022,9 +1049,11 @@ const TechTreeViewer = () => {
               continue;
             }
 
-            if (node.organizations?.some(org => 
-              org.toLowerCase().includes(query.toLowerCase())
-            )) {
+            if (
+              node.organizations?.some((org) =>
+                org.toLowerCase().includes(query.toLowerCase())
+              )
+            ) {
               results.push({
                 type: "organization",
                 node,
@@ -1218,54 +1247,108 @@ const TechTreeViewer = () => {
   }, [selectedLinkIndex, data.links]);
 
   // Add this helper function near your other helper functions
-  const getAdjacentNodeIds = useCallback((nodeId: string | null) => {
-    if (!nodeId) return new Set<string>();
-    
-    return new Set(
-      data.links
-        .filter(link => link.source === nodeId || link.target === nodeId)
-        .map(link => link.source === nodeId ? link.target : link.source)
-    );
-  }, [data.links]);
+  const getAdjacentNodeIds = useCallback(
+    (nodeId: string | null) => {
+      if (!nodeId) return new Set<string>();
+
+      return new Set(
+        data.links
+          .filter((link) => link.source === nodeId || link.target === nodeId)
+          .map((link) => (link.source === nodeId ? link.target : link.source))
+      );
+    },
+    [data.links]
+  );
 
   // Add these helper functions near your other utility functions
-  const getAllAncestors = useCallback((nodeId: string, visited = new Set<string>()): Set<string> => {
-    if (visited.has(nodeId)) return visited;
-    visited.add(nodeId);
-    
-    // Find all direct ancestors
-    const directAncestors = data.links
-      .filter(link => link.target === nodeId && 
-        // Exclude independent inventions and concurrent developments
-        !["Independently invented", "Concurrent development"].includes(link.type))
-      .map(link => link.source);
-      
-    // Recursively get ancestors of ancestors
-    directAncestors.forEach(ancestorId => {
-      getAllAncestors(ancestorId, visited);
-    });
-    
-    return visited;
-  }, [data.links]);
+  const getAllAncestors = useCallback(
+    (nodeId: string, visited = new Set<string>()): Set<string> => {
+      if (visited.has(nodeId)) return visited;
+      visited.add(nodeId);
 
-  const getAllDescendants = useCallback((nodeId: string, visited = new Set<string>()): Set<string> => {
-    if (visited.has(nodeId)) return visited;
-    visited.add(nodeId);
-    
-    // Find all direct descendants
-    const directDescendants = data.links
-      .filter(link => link.source === nodeId && 
-        // Exclude independent inventions and concurrent developments
-        !["Independently invented", "Concurrent development"].includes(link.type))
-      .map(link => link.target);
-      
-    // Recursively get descendants of descendants
-    directDescendants.forEach(descendantId => {
-      getAllDescendants(descendantId, visited);
-    });
-    
-    return visited;
-  }, [data.links]);
+      // Find all direct ancestors
+      const directAncestors = data.links
+        .filter(
+          (link) =>
+            link.target === nodeId &&
+            // Exclude independent inventions and concurrent developments
+            !["Independently invented", "Concurrent development"].includes(
+              link.type
+            )
+        )
+        .map((link) => link.source);
+
+      // Recursively get ancestors of ancestors
+      directAncestors.forEach((ancestorId) => {
+        getAllAncestors(ancestorId, visited);
+      });
+
+      return visited;
+    },
+    [data.links]
+  );
+
+  const getAllDescendants = useCallback(
+    (nodeId: string, visited = new Set<string>()): Set<string> => {
+      if (visited.has(nodeId)) return visited;
+      visited.add(nodeId);
+
+      // Find all direct descendants
+      const directDescendants = data.links
+        .filter(
+          (link) =>
+            link.source === nodeId &&
+            // Exclude independent inventions and concurrent developments
+            !["Independently invented", "Concurrent development"].includes(
+              link.type
+            )
+        )
+        .map((link) => link.target);
+
+      // Recursively get descendants of descendants
+      directDescendants.forEach((descendantId) => {
+        getAllDescendants(descendantId, visited);
+      });
+
+      return visited;
+    },
+    [data.links]
+  );
+
+  // Add this effect after your other useEffect hooks
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Get the element under the mouse pointer
+      const elementUnderMouse = document.elementFromPoint(
+        window.mouseX || 0,
+        window.mouseY || 0
+      );
+      const isTimelineOrMinimap =
+        elementUnderMouse?.closest(".timeline") ||
+        elementUnderMouse?.closest(".minimap");
+
+      if (
+        isTimelineOrMinimap &&
+        (e.key === "ArrowUp" || e.key === "ArrowDown")
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    // Track mouse position
+    const handleMouseMove = (e: MouseEvent) => {
+      window.mouseX = e.clientX;
+      window.mouseY = e.clientY;
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   // 4. Optimize initial render
   if (!isClient || isLoading) {
@@ -1329,11 +1412,11 @@ const TechTreeViewer = () => {
         <div style={{ width: containerWidth }}>
           {/* Timeline */}
           <div
-            className="h-8 bg-yellow-50 border-b sticky top-0"
+            className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
             style={{
               width: containerWidth,
-              zIndex: 100, // Increased z-index
-              position: "relative", // Added to create new stacking context
+              zIndex: 100,
+              position: "relative",
             }}
           >
             {/* Timeline content */}
@@ -1419,8 +1502,12 @@ const TechTreeViewer = () => {
                         // If a node is selected
                         if (selectedNodeId) {
                           // If this is a connection between highlighted nodes
-                          if ((highlightedAncestors.has(link.source) && highlightedAncestors.has(link.target)) ||
-                              (highlightedDescendants.has(link.source) && highlightedDescendants.has(link.target))) {
+                          if (
+                            (highlightedAncestors.has(link.source) &&
+                              highlightedAncestors.has(link.target)) ||
+                            (highlightedDescendants.has(link.source) &&
+                              highlightedDescendants.has(link.target))
+                          ) {
                             return 1;
                           }
                           // If this is a connection to/from the selected node
@@ -1434,7 +1521,11 @@ const TechTreeViewer = () => {
                           return index === selectedLinkIndex ? 1 : 0.2;
                         }
                         // If filters are applied
-                        if (filters.fields.size || filters.countries.size || filters.cities.size) {
+                        if (
+                          filters.fields.size ||
+                          filters.countries.size ||
+                          filters.cities.size
+                        ) {
                           return isLinkVisible(link) ? 1 : 0.2;
                         }
                         return 1;
@@ -1462,10 +1553,7 @@ const TechTreeViewer = () => {
               </svg>
 
               {/* Nodes */}
-              <div
-                className="relative"
-                style={{ zIndex: 10 }}
-              >
+              <div className="relative" style={{ zIndex: 10 }}>
                 {filteredNodes.map((node) => (
                   <BrutalistNode
                     key={node.id}
@@ -1507,10 +1595,16 @@ const TechTreeViewer = () => {
                         }
                         // If a link is selected
                         if (selectedLinkIndex !== null) {
-                          return isNodeConnectedToSelectedLink(node.id) ? 1 : 0.2;
+                          return isNodeConnectedToSelectedLink(node.id)
+                            ? 1
+                            : 0.2;
                         }
                         // If filters are applied
-                        if (filters.fields.size || filters.countries.size || filters.cities.size) {
+                        if (
+                          filters.fields.size ||
+                          filters.countries.size ||
+                          filters.cities.size
+                        ) {
                           return isNodeFiltered(node) ? 1 : 0.2;
                         }
                         // Default state - fully visible
@@ -1667,7 +1761,8 @@ const TechTreeViewer = () => {
                           ancestors.delete(nodeId);
                           descendants.delete(nodeId);
 
-                          if (ancestors.size === 0 && descendants.size === 0) return null;
+                          if (ancestors.size === 0 && descendants.size === 0)
+                            return null;
 
                           return (
                             <div className="text-xs mt-2">
