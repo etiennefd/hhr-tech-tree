@@ -1822,7 +1822,7 @@ const TechTreeViewer = () => {
                               )}
                               {node.wikipedia && (
                                 <>
-                                  {" "}
+                                  <br />
                                   View on{" "}
                                   <a
                                     href={node.wikipedia}
