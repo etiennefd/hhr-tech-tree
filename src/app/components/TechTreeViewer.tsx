@@ -198,9 +198,9 @@ const TechTreeViewer = () => {
     countries: new Set(),
     cities: new Set(),
   });
-  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [highlightedAncestors, setHighlightedAncestors] = useState<Set<string>>(new Set());
   const [highlightedDescendants, setHighlightedDescendants] = useState<Set<string>>(new Set());
+  const currentNodesRef = useRef<TechNode[]>([]);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -447,9 +447,10 @@ const TechTreeViewer = () => {
     const controller = new AbortController();
 
     const loadData = async () => {
+      let cachedData = null;  // Move declaration outside try block
       try {
         // Check cache first for immediate display
-        const cachedData = await cacheManager.get();
+        cachedData = await cacheManager.get();
         
         if (!cachedData) {
           setIsLoading(true);
@@ -497,7 +498,6 @@ const TechTreeViewer = () => {
         }
 
         // Always fetch fresh detailed data
-        setIsLoadingDetails(true);
         const detailResponse = await fetch("/api/inventions?detail=true", {
           signal: controller.signal,
         });
@@ -507,9 +507,8 @@ const TechTreeViewer = () => {
         if (!isMounted) return;
 
         // Compare current and new data before updating
-        const currentNodes = data.nodes;
         const hasChanges = detailData.nodes.some((newNode: TechNode, index: number) => {
-          const currentNode = currentNodes[index];
+          const currentNode = currentNodesRef.current[index];
           if (!currentNode) return true;
           
           // Compare relevant fields that would affect display
@@ -526,9 +525,8 @@ const TechTreeViewer = () => {
           const positionedDetailNodes = calculateNodePositions(detailData.nodes);
           setData({ ...detailData, nodes: positionedDetailNodes });
           setFilteredNodes(positionedDetailNodes);
+          currentNodesRef.current = positionedDetailNodes;
         }
-
-        setIsLoadingDetails(false);
 
         // Cache complete fresh data
         await cacheManager.set({
@@ -541,8 +539,7 @@ const TechTreeViewer = () => {
         if (error instanceof Error && error.name === "AbortError") return;
         console.error("Error loading data:", error);
         setIsLoading(false);
-        setIsLoadingDetails(false);
-        if (!cachedData) {
+        if (!cachedData) {  // Now cachedData is in scope
           setData({ nodes: [], links: [] });
           setFilteredNodes([]);
         }
@@ -677,8 +674,8 @@ const TechTreeViewer = () => {
     [data.nodes, selectedNodeId, getXPosition]
   );
 
-  // Add this after data is loaded (right after setIsLoading(false))
-  useEffect(() => {
+  // Add this memoized callback
+  const scrollToStoneTools = useCallback(() => {
     if (!isLoading && data.nodes.length > 0) {
       // Find the Stone Tools node
       const stoneToolsNode = data.nodes.find((node) =>
@@ -704,6 +701,11 @@ const TechTreeViewer = () => {
       }
     }
   }, [isLoading, data.nodes]);
+
+  // Update the effect to use the callback
+  useEffect(() => {
+    scrollToStoneTools();
+  }, [scrollToStoneTools]);
 
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
@@ -1060,6 +1062,7 @@ const TechTreeViewer = () => {
 
       const results: SearchResult[] = [];
       const searchTerms = query.toLowerCase().split(/\s+/).filter(Boolean);
+      const addedNodes = new Set<string>();
 
       // Early return for year searches
       const yearMatch = query.match(/^-?\d+(?:\s*(?:BC|BCE))?$/i);
@@ -1068,7 +1071,7 @@ const TechTreeViewer = () => {
         const isBCE = query.toLowerCase().includes("bc");
         const adjustedYear = isBCE ? -year : year;
 
-        // Add check to exclude year 0
+        // Only add year navigation for valid years
         if (adjustedYear !== 0) {
           const years = data.nodes.map((n) => n.year);
           const minYear = Math.min(...years);
@@ -1081,15 +1084,11 @@ const TechTreeViewer = () => {
               matchScore: 1,
               year: adjustedYear,
             });
-            setSearchResults(results);
-            return;
           }
         }
       }
 
-      // Use Set for tracking added nodes
-      const addedNodes = new Set<string>();
-
+      // Continue with text search even if it's a number
       // Search through nodes with early termination
       for (const [nodeId, { node, searchableText, fields }] of searchIndex) {
         if (results.length >= 10) break; // Early termination
@@ -1401,13 +1400,6 @@ const TechTreeViewer = () => {
   // 5. Defer non-critical UI elements
   return (
     <div className="h-screen bg-yellow-50">
-      {/* Add loading indicator for detailed data */}
-      {isLoadingDetails && (
-        <div className="fixed top-4 right-4 bg-white/80 border border-black p-2 text-sm z-50">
-          Loading detailed data...
-        </div>
-      )}
-
       {/* Defer loading of controls until after main content */}
       {!isLoading && (
         <div
