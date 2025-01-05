@@ -1283,6 +1283,13 @@ const TechTreeViewer = () => {
     [data.links, prefetchNode]
   );
 
+  // Add this helper function to get nodes connected by a selected link
+  const getSelectedConnectionNodes = useCallback(() => {
+    if (selectedLinkIndex === null) return new Set<string>();
+    const selectedLink = data.links[selectedLinkIndex];
+    return new Set([selectedLink.source, selectedLink.target]);
+  }, [selectedLinkIndex, data.links]);
+
   // 4. Optimize initial render
   if (!isClient || isLoading) {
     return (
@@ -1701,6 +1708,7 @@ const TechTreeViewer = () => {
           filteredNodeIds={filteredNodeIds}
           selectedNodeId={selectedNodeId}
           hoveredNodeId={hoveredNodeId}
+          selectedConnectionNodeIds={getSelectedConnectionNodes()}
         />
       </div>
     </div>

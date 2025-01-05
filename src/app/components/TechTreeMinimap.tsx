@@ -17,6 +17,7 @@ interface TechTreeMinimapProps {
   filteredNodeIds: Set<string>;
   selectedNodeId: string | null;
   hoveredNodeId: string | null;
+  selectedConnectionNodeIds?: Set<string>;
 }
 
 const TechTreeMinimap = ({
@@ -31,6 +32,7 @@ const TechTreeMinimap = ({
   filteredNodeIds,
   selectedNodeId,
   hoveredNodeId,
+  selectedConnectionNodeIds = new Set(),
 }: TechTreeMinimapProps) => {
   const MINIMAP_HEIGHT = 64; // Increased total height
   const MINIMAP_CONTENT_HEIGHT = 48; // Original height for the node content
@@ -180,7 +182,7 @@ const TechTreeMinimap = ({
           const nodeY = node.y * scale;
           const hasActiveFilters = filteredNodeIds.size > 0;
           const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
-          const isSelected = node.id === selectedNodeId;
+          const isSelected = node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);
           const isHovered = node.id === hoveredNodeId;
 
           return (
@@ -188,15 +190,15 @@ const TechTreeMinimap = ({
               key={node.id}
               className="absolute rounded-full"
               style={{
-                width: isSelected || isFiltered ? "3px" : "2px",
-                height: isSelected || isFiltered ? "3px" : "2px",
-                backgroundColor: isSelected ? "#2563eb" : engineeringBlue,
+                width: isSelected || isFiltered ? "4px" : "2px",
+                height: isSelected || isFiltered ? "4px" : "2px",
+                backgroundColor: engineeringBlue,
                 opacity: hasActiveFilters
                   ? isFiltered
                     ? 0.9
                     : 0.2
                   : isSelected
-                  ? 1
+                  ? 0.9
                   : isHovered
                   ? 0.8
                   : 0.6,
