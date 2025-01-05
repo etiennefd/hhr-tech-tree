@@ -96,6 +96,8 @@ const TechTreeMinimap = ({
   };
 
   const handleMinimapClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
     if (!minimapRef.current) return;
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -138,8 +140,9 @@ const TechTreeMinimap = ({
 
   return (
     <div
-      className="sticky bottom-0 left-0 right-0 overflow-hidden bg-yellow-50"
+      className="sticky bottom-0 left-0 right-0 overflow-hidden bg-yellow-50 minimap"
       style={{ height: MINIMAP_HEIGHT, zIndex: 1000 }}
+      onClick={(e) => e.stopPropagation()}
     >
       {/* Year labels */}
       <div

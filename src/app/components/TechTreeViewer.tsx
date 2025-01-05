@@ -565,7 +565,8 @@ const TechTreeViewer = () => {
       if (
         !target.closest(".tech-node") &&
         !target.closest(".node-tooltip") &&
-        !target.closest(".connection")
+        !target.closest(".connection") &&
+        !target.closest(".minimap")
       ) {
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
