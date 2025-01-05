@@ -431,58 +431,61 @@ const TechTreeViewer = () => {
     const controller = new AbortController();
 
     const loadData = async () => {
-      setIsLoading(true);
       try {
         // Check cache first for immediate display
         const cachedData = await cacheManager.get();
-        if (cachedData) {
-          const positionedNodes = calculateNodePositions(
-            cachedData.basicData.nodes
-          );
+        
+        if (!cachedData) {
+          setIsLoading(true);
+        }
+
+        if (cachedData?.detailData) {
+          // If we have detailed data in cache, use it and skip basic data fetch
+          const positionedDetailNodes = calculateNodePositions(cachedData.detailData.nodes);
+          setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
+          setFilteredNodes(positionedDetailNodes);
+          setIsLoading(false);
+        } else if (cachedData?.basicData) {
+          // If we only have basic data, use it temporarily
+          const positionedNodes = calculateNodePositions(cachedData.basicData.nodes);
           setData({ ...cachedData.basicData, nodes: positionedNodes });
           setFilteredNodes(positionedNodes);
           setIsLoading(false);
+        }
 
-          if (cachedData.detailData) {
-            const positionedDetailNodes = calculateNodePositions(
-              cachedData.detailData.nodes
-            );
-            setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
-            setFilteredNodes(positionedDetailNodes);
+        // If we don't have detailed cached data, fetch fresh basic data
+        if (!cachedData?.detailData) {
+          const basicResponse = await fetch("/api/inventions", {
+            signal: controller.signal,
+            priority: "high",
+          });
+          if (!basicResponse.ok) throw new Error(`HTTP error! status: ${basicResponse.status}`);
+          const basicData = await basicResponse.json();
+
+          if (!isMounted) return;
+
+          // Only update if we don't have detailed data yet
+          if (!cachedData?.detailData) {
+            const positionedNodes = calculateNodePositions(basicData.nodes);
+            setData({ ...basicData, nodes: positionedNodes });
+            setFilteredNodes(positionedNodes);
+            setIsLoading(false);
+
+            // Cache basic data
+            await cacheManager.set({
+              version: CACHE_VERSION,
+              timestamp: Date.now(),
+              basicData,
+            });
           }
         }
 
-        // Always fetch fresh data
-        const basicResponse = await fetch("/api/inventions", {
-          signal: controller.signal,
-          priority: "high",
-        });
-        if (!basicResponse.ok)
-          throw new Error(`HTTP error! status: ${basicResponse.status}`);
-        const basicData = await basicResponse.json();
-
-        if (!isMounted) return;
-
-        // Update with fresh data
-        const positionedNodes = calculateNodePositions(basicData.nodes);
-        setData({ ...basicData, nodes: positionedNodes });
-        setFilteredNodes(positionedNodes);
-        setIsLoading(false);
-
-        // Cache fresh data
-        await cacheManager.set({
-          version: CACHE_VERSION,
-          timestamp: Date.now(),
-          basicData,
-        });
-
-        // Fetch detailed data
+        // Always fetch fresh detailed data
         setIsLoadingDetails(true);
         const detailResponse = await fetch("/api/inventions?detail=true", {
           signal: controller.signal,
         });
-        if (!detailResponse.ok)
-          throw new Error(`HTTP error! status: ${detailResponse.status}`);
+        if (!detailResponse.ok) throw new Error(`HTTP error! status: ${detailResponse.status}`);
         const detailData = await detailResponse.json();
 
         if (!isMounted) return;
@@ -497,7 +500,7 @@ const TechTreeViewer = () => {
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
-          basicData,
+          basicData: detailData,
           detailData,
         });
       } catch (error: unknown) {
@@ -505,8 +508,10 @@ const TechTreeViewer = () => {
         console.error("Error loading data:", error);
         setIsLoading(false);
         setIsLoadingDetails(false);
-        setData({ nodes: [], links: [] });
-        setFilteredNodes([]);
+        if (!cachedData) {
+          setData({ nodes: [], links: [] });
+          setFilteredNodes([]);
+        }
       }
     };
 
