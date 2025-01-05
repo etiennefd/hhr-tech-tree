@@ -19,6 +19,8 @@ interface TechTreeMinimapProps {
   hoveredNodeId: string | null;
   selectedConnectionNodeIds: Set<string>;
   adjacentNodeIds?: Set<string>;
+  highlightedAncestors: Set<string>;
+  highlightedDescendants: Set<string>;
 }
 
 const TechTreeMinimap = ({
@@ -35,6 +37,8 @@ const TechTreeMinimap = ({
   hoveredNodeId,
   selectedConnectionNodeIds = new Set(),
   adjacentNodeIds = new Set(),
+  highlightedAncestors = new Set(),
+  highlightedDescendants = new Set(),
 }: TechTreeMinimapProps) => {
   const MINIMAP_HEIGHT = 64; // Increased total height
   const MINIMAP_CONTENT_HEIGHT = 48; // Original height for the node content
@@ -189,6 +193,8 @@ const TechTreeMinimap = ({
           const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
           const isSelected = node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);
           const isAdjacent = adjacentNodeIds.has(node.id);
+          const isAncestor = highlightedAncestors.has(node.id);
+          const isDescendant = highlightedDescendants.has(node.id);
           const isHovered = node.id === hoveredNodeId;
 
           return (
@@ -196,8 +202,8 @@ const TechTreeMinimap = ({
               key={node.id}
               className="absolute rounded-full"
               style={{
-                width: isSelected || isFiltered || isAdjacent ? "4px" : "2px",
-                height: isSelected || isFiltered || isAdjacent ? "4px" : "2px",
+                width: isSelected || isFiltered || isAdjacent || isAncestor || isDescendant ? "4px" : "2px",
+                height: isSelected || isFiltered || isAdjacent || isAncestor || isDescendant ? "4px" : "2px",
                 backgroundColor: engineeringBlue,
                 opacity: hasActiveFilters
                   ? isFiltered
@@ -205,15 +211,19 @@ const TechTreeMinimap = ({
                     : 0.2
                   : isSelected
                   ? 0.9
+                  : isAncestor
+                  ? 0.8
+                  : isDescendant
+                  ? 0.8
                   : isAdjacent
-                  ? 0.8
+                  ? 0.7
                   : isHovered
-                  ? 0.8
-                  : 0.6,
+                  ? 0.6
+                  : 0.4,
                 left: nodeX,
                 top: nodeY,
                 transform: "translate(-50%, -50%)",
-                zIndex: isSelected ? 2 : isAdjacent ? 1 : 0,
+                zIndex: isSelected ? 3 : isAncestor || isDescendant ? 2 : isAdjacent ? 1 : 0,
               }}
             />
           );

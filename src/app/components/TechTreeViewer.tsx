@@ -199,6 +199,8 @@ const TechTreeViewer = () => {
     cities: new Set(),
   });
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [highlightedAncestors, setHighlightedAncestors] = useState<Set<string>>(new Set());
+  const [highlightedDescendants, setHighlightedDescendants] = useState<Set<string>>(new Set());
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -573,6 +575,8 @@ const TechTreeViewer = () => {
         setHoveredNode(null);
         setHoveredNodeId(null);
         setHoveredLinkIndex(null);
+        setHighlightedAncestors(new Set());
+        setHighlightedDescendants(new Set());
       }
     };
 
@@ -587,10 +591,20 @@ const TechTreeViewer = () => {
 
       // Clear states immediately to hide tooltip
       setSelectedLinkIndex(null);
-      setSelectedNodeId(null);
       setHoveredLinkIndex(null);
       setHoveredNode(null);
       setHoveredNodeId(null);
+      setHighlightedAncestors(new Set());
+      setHighlightedDescendants(new Set());
+
+      // If clicking the same node, deselect it
+      if (selectedNodeId === node.id) {
+        setSelectedNodeId(null);
+        return;
+      }
+
+      // Set the new selected node
+      setSelectedNodeId(node.id);
 
       // Get vertical scroll container
       const verticalContainer = verticalScrollContainerRef.current;
@@ -1302,6 +1316,45 @@ const TechTreeViewer = () => {
     );
   }, [data.links]);
 
+  // Add these helper functions near your other utility functions
+  const getAllAncestors = useCallback((nodeId: string, visited = new Set<string>()): Set<string> => {
+    if (visited.has(nodeId)) return visited;
+    visited.add(nodeId);
+    
+    // Find all direct ancestors
+    const directAncestors = data.links
+      .filter(link => link.target === nodeId && 
+        // Exclude independent inventions and concurrent developments
+        !["Independently invented", "Concurrent development"].includes(link.type))
+      .map(link => link.source);
+      
+    // Recursively get ancestors of ancestors
+    directAncestors.forEach(ancestorId => {
+      getAllAncestors(ancestorId, visited);
+    });
+    
+    return visited;
+  }, [data.links]);
+
+  const getAllDescendants = useCallback((nodeId: string, visited = new Set<string>()): Set<string> => {
+    if (visited.has(nodeId)) return visited;
+    visited.add(nodeId);
+    
+    // Find all direct descendants
+    const directDescendants = data.links
+      .filter(link => link.source === nodeId && 
+        // Exclude independent inventions and concurrent developments
+        !["Independently invented", "Concurrent development"].includes(link.type))
+      .map(link => link.target);
+      
+    // Recursively get descendants of descendants
+    directDescendants.forEach(descendantId => {
+      getAllDescendants(descendantId, visited);
+    });
+    
+    return visited;
+  }, [data.links]);
+
   // 4. Optimize initial render
   if (!isClient || isLoading) {
     return (
@@ -1683,17 +1736,92 @@ const TechTreeViewer = () => {
                           );
                         })()}
 
-                        {node.wikipedia && (
-                          <a
-                            href={node.wikipedia}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-xs mt-2 text-blue-600 hover:underline cursor-pointer block"
-                          >
-                            View on Wikipedia →
-                          </a>
-                        )}
+                        {/* Links section */}
+                        {(() => {
+                          const nodeId = selectedNodeId || hoveredNode?.id;
+                          if (!nodeId) return null;
+
+                          const ancestors = getAllAncestors(nodeId);
+                          const descendants = getAllDescendants(nodeId);
+                          ancestors.delete(nodeId);
+                          descendants.delete(nodeId);
+
+                          if (ancestors.size === 0 && descendants.size === 0) return null;
+
+                          return (
+                            <div className="text-xs mt-2">
+                              {ancestors.size > 0 && descendants.size > 0 ? (
+                                <>
+                                  Highlight all{" "}
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setHighlightedAncestors(ancestors);
+                                      setHighlightedDescendants(new Set());
+                                    }}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    ancestors
+                                  </button>
+                                  {" / "}
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setHighlightedDescendants(descendants);
+                                      setHighlightedAncestors(new Set());
+                                    }}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    descendants
+                                  </button>
+                                </>
+                              ) : ancestors.size > 0 ? (
+                                <>
+                                  Highlight all{" "}
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setHighlightedAncestors(ancestors);
+                                      setHighlightedDescendants(new Set());
+                                    }}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    ancestors
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  Highlight all{" "}
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setHighlightedDescendants(descendants);
+                                      setHighlightedAncestors(new Set());
+                                    }}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    descendants
+                                  </button>
+                                </>
+                              )}
+                              {node.wikipedia && (
+                                <>
+                                  {" "}
+                                  View on{" "}
+                                  <a
+                                    href={node.wikipedia}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    Wikipedia
+                                  </a>
+                                </>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </div>
                     )
                 )}
@@ -1722,6 +1850,8 @@ const TechTreeViewer = () => {
           hoveredNodeId={hoveredNodeId}
           selectedConnectionNodeIds={getSelectedConnectionNodes()}
           adjacentNodeIds={getAdjacentNodeIds(selectedNodeId)}
+          highlightedAncestors={highlightedAncestors}
+          highlightedDescendants={highlightedDescendants}
         />
       </div>
     </div>
