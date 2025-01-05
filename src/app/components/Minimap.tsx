@@ -67,7 +67,14 @@ const TechTreeMinimap = ({
 
   // Calculate scaling factors for the minimap layout
   useEffect(() => {
-    const horizontalScale = viewportWidth / containerWidth;
+    if (!minimapRef.current) return;
+    
+    const minimapRect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
+    // Use the actual available width instead of viewport width
+    const availableWidth = minimapRect.width;
+    
+    // Calculate scale based on actual available space
+    const horizontalScale = availableWidth / containerWidth;
     const verticalScale = MINIMAP_CONTENT_HEIGHT / totalHeight;
     setScale(Math.min(horizontalScale, verticalScale));
   }, [containerWidth, totalHeight, viewportWidth, viewportHeight]);
