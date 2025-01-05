@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
-import { SearchBox, SearchResult } from "./SearchBox";
+import { SearchResult } from "./SearchBox";
 import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
@@ -55,8 +55,16 @@ const TechTreeMinimap = dynamic(() => import("../components/TechTreeMinimap"), {
   ),
 });
 
+const DynamicSearchBox = dynamic(
+  () => import("./SearchBox").then((mod) => ({ default: mod.SearchBox })),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+
 const DynamicFilterBox = dynamic(
-  () => import("./FilterBox").then((mod) => mod.FilterBox),
+  () => import("./FilterBox").then((mod) => ({ default: mod.FilterBox })),
   {
     ssr: false,
     loading: () => null,
@@ -1407,20 +1415,28 @@ const TechTreeViewer = () => {
           style={{ zIndex: 1000 }}
         >
           <Suspense fallback={null}>
-            <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30">
-              <SearchBox
-                onSearch={handleSearch}
-                results={searchResults}
-                onSelectResult={handleSelectResult}
-              />
-            </div>
-            <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20">
-              <DynamicFilterBox
-                filters={filters}
-                onFilterChange={setFilters}
-                availableFilters={getAvailableFilters}
-              />
-            </div>
+            <Suspense fallback={null}>
+              {isClient && (
+                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30">
+                  <DynamicSearchBox
+                    onSearch={handleSearch}
+                    results={searchResults}
+                    onSelectResult={handleSelectResult}
+                  />
+                </div>
+              )}
+            </Suspense>
+            <Suspense fallback={null}>
+              {isClient && (
+                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20">
+                  <DynamicFilterBox
+                    filters={filters}
+                    onFilterChange={setFilters}
+                    availableFilters={getAvailableFilters}
+                  />
+                </div>
+              )}
+            </Suspense>
           </Suspense>
         </div>
       )}
