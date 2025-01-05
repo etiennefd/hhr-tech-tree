@@ -858,133 +858,6 @@ const TechTreeViewer = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    let isScrolling = false;
-    const scrollDirection = { x: 0, y: 0 };
-    let animationFrameId: number | null = null;
-
-    const SCROLL_SPEED = 100; // Pixels per frame
-
-    const updateScroll = () => {
-      const horizontalContainer = horizontalScrollContainerRef.current;
-      const verticalContainer = document.querySelector(
-        ".overflow-y-auto"
-      ) as HTMLElement;
-
-      if (!horizontalContainer || !verticalContainer) return;
-
-      if (scrollDirection.x) {
-        horizontalContainer.scrollLeft += scrollDirection.x * SCROLL_SPEED;
-      }
-      if (scrollDirection.y) {
-        verticalContainer.scrollTop += scrollDirection.y * SCROLL_SPEED;
-      }
-
-      if (isScrolling) {
-        animationFrameId = requestAnimationFrame(updateScroll);
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Skip if already scrolling in this direction
-      if (isScrolling) return;
-
-      // Set scrolling state when starting scroll
-      if (
-        ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(
-          event.key
-        ) &&
-        !event.metaKey &&
-        !event.ctrlKey
-      ) {
-        setIsKeyScrolling(true);
-      }
-
-      const horizontalContainer = horizontalScrollContainerRef.current;
-      if (!horizontalContainer) return;
-
-      switch (event.key) {
-        case "ArrowLeft":
-          if (event.metaKey || event.ctrlKey) {
-            // Existing behavior for Cmd/Ctrl+Left
-            event.preventDefault();
-            horizontalContainer.scrollTo({
-              left: 0,
-              behavior: "smooth",
-            });
-          } else {
-            event.preventDefault();
-            scrollDirection.x = -1;
-            isScrolling = true;
-            animationFrameId = requestAnimationFrame(updateScroll);
-          }
-          break;
-
-        case "ArrowRight":
-          if (event.metaKey || event.ctrlKey) {
-            // Existing behavior for Cmd/Ctrl+Right
-            event.preventDefault();
-            horizontalContainer.scrollTo({
-              left: horizontalContainer.scrollWidth,
-              behavior: "smooth",
-            });
-          } else {
-            event.preventDefault();
-            scrollDirection.x = 1;
-            isScrolling = true;
-            animationFrameId = requestAnimationFrame(updateScroll);
-          }
-          break;
-
-        case "ArrowUp":
-          event.preventDefault();
-          scrollDirection.y = -1;
-          isScrolling = true;
-          animationFrameId = requestAnimationFrame(updateScroll);
-          break;
-
-        case "ArrowDown":
-          event.preventDefault();
-          scrollDirection.y = 1;
-          isScrolling = true;
-          animationFrameId = requestAnimationFrame(updateScroll);
-          break;
-      }
-    };
-
-    const handleKeyUp = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case "ArrowLeft":
-        case "ArrowRight":
-          scrollDirection.x = 0;
-          break;
-        case "ArrowUp":
-        case "ArrowDown":
-          scrollDirection.y = 0;
-          break;
-      }
-
-      // If no scrolling in either direction, stop the animation
-      if (scrollDirection.x === 0 && scrollDirection.y === 0) {
-        isScrolling = false;
-        setIsKeyScrolling(false);
-        if (animationFrameId !== null) {
-          cancelAnimationFrame(animationFrameId);
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-      if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     // Add your existing style element content
@@ -1513,9 +1386,7 @@ const TechTreeViewer = () => {
             >
               {/* SVG connections */}
               <svg
-                className={`absolute inset-0 w-full h-full ${
-                  isKeyScrolling ? "scrolling" : ""
-                }`}
+                className="absolute inset-0 w-full h-full"
                 style={{
                   zIndex: 1,
                 }}
@@ -1592,7 +1463,7 @@ const TechTreeViewer = () => {
 
               {/* Nodes */}
               <div
-                className={`relative ${isKeyScrolling ? "scrolling" : ""}`}
+                className="relative"
                 style={{ zIndex: 10 }}
               >
                 {filteredNodes.map((node) => (
