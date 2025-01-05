@@ -54,7 +54,7 @@ const YEAR_WIDTH = 240;
 const PADDING = 120;
 
 // 2. Lazy load non-critical components
-const TechTreeMinimap = dynamic(() => import("../components/TechTreeMinimap"), {
+const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
   loading: () => (
     <div className="fixed bottom-4 right-4 bg-white/80 border border-black p-2">
