@@ -176,16 +176,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         transform: `translate(-${width / 2}px, -75px)`,
         opacity: style?.opacity,
       }}
-      onClick={(e) => {
-        if (node.wikipedia && e.ctrlKey) {
-          window.open(node.wikipedia, "_blank");
-        } else {
-          onClick();
-        }
+      onClick={() => {
+        onClick();
       }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      title={node.wikipedia ? "Ctrl+click to open Wikipedia" : undefined}
     >
       <div
         className={`
