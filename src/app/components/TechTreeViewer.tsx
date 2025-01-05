@@ -1633,6 +1633,18 @@ const TechTreeViewer = () => {
                           zIndex: 100,
                         }}
                         onClick={(e) => e.stopPropagation()}
+                        onMouseEnter={() => {
+                          // Keep the hover state active when hovering the tooltip
+                          setHoveredNode(node);
+                          setHoveredNodeId(node.id);
+                        }}
+                        onMouseLeave={() => {
+                          // Only clear hover state if the node isn't selected
+                          if (selectedNodeId !== node.id) {
+                            setHoveredNode(null);
+                            setHoveredNodeId(null);
+                          }
+                        }}
                       >
                         <p className="text-xs mb-1">
                           <strong>Date:</strong> {formatYear(node.year)}
