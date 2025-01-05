@@ -431,10 +431,9 @@ const TechTreeViewer = () => {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        // Check cache first
+        // Check cache first for immediate display
         const cachedData = await cacheManager.get();
         if (cachedData) {
-          // Use cached data for initial render
           const positionedNodes = calculateNodePositions(
             cachedData.basicData.nodes
           );
@@ -442,18 +441,16 @@ const TechTreeViewer = () => {
           setFilteredNodes(positionedNodes);
           setIsLoading(false);
 
-          // If we have cached detail data, use it
           if (cachedData.detailData) {
             const positionedDetailNodes = calculateNodePositions(
               cachedData.detailData.nodes
             );
             setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
             setFilteredNodes(positionedDetailNodes);
-            return;
           }
         }
 
-        // Fetch basic data
+        // Always fetch fresh data
         const basicResponse = await fetch("/api/inventions", {
           signal: controller.signal,
           priority: "high",
@@ -464,13 +461,13 @@ const TechTreeViewer = () => {
 
         if (!isMounted) return;
 
-        // Process and display basic data
+        // Update with fresh data
         const positionedNodes = calculateNodePositions(basicData.nodes);
         setData({ ...basicData, nodes: positionedNodes });
         setFilteredNodes(positionedNodes);
         setIsLoading(false);
 
-        // Cache basic data
+        // Cache fresh data
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
@@ -488,13 +485,13 @@ const TechTreeViewer = () => {
 
         if (!isMounted) return;
 
-        // Process and display detailed data
+        // Update with fresh detailed data
         const positionedDetailNodes = calculateNodePositions(detailData.nodes);
         setData({ ...detailData, nodes: positionedDetailNodes });
         setFilteredNodes(positionedDetailNodes);
         setIsLoadingDetails(false);
 
-        // Cache complete data
+        // Cache complete fresh data
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
