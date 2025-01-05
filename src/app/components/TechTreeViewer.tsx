@@ -1034,19 +1034,22 @@ const TechTreeViewer = () => {
         const isBCE = query.toLowerCase().includes("bc");
         const adjustedYear = isBCE ? -year : year;
 
-        const years = data.nodes.map((n) => n.year);
-        const minYear = Math.min(...years);
-        const maxYear = Math.max(...years);
+        // Add check to exclude year 0
+        if (adjustedYear !== 0) {
+          const years = data.nodes.map((n) => n.year);
+          const minYear = Math.min(...years);
+          const maxYear = Math.max(...years);
 
-        if (adjustedYear >= minYear && adjustedYear <= maxYear) {
-          results.push({
-            type: "year",
-            text: `Go to year ${isBCE ? `${year} BCE` : year}`,
-            matchScore: 1,
-            year: adjustedYear,
-          });
-          setSearchResults(results);
-          return;
+          if (adjustedYear >= minYear && adjustedYear <= maxYear) {
+            results.push({
+              type: "year",
+              text: `Go to year ${isBCE ? `${year} BCE` : year}`,
+              matchScore: 1,
+              year: adjustedYear,
+            });
+            setSearchResults(results);
+            return;
+          }
         }
       }
 
