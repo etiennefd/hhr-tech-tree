@@ -1089,20 +1089,18 @@ const TechTreeViewer = () => {
             results.push({
               type: "year",
               text: `Go to year ${isBCE ? `${year} BCE` : year}`,
-              matchScore: 1,
+              matchScore: 1000, // Give year results a very high score
               year: adjustedYear,
             });
           }
         }
       }
 
-      // Continue with text search even if it's a number
-      // Search through nodes with early termination
+      // Continue with text search
       for (const [nodeId, { node, searchableText, fields }] of searchIndex) {
-        if (results.length >= 10) break; // Early termination
+        if (results.length >= 10) break;
         if (addedNodes.has(nodeId)) continue;
 
-        // Quick check if all terms exist in searchable text
         const matchesAllTerms = searchTerms.every(term => 
           searchableText.includes(term) || 
           Array.from(fields).some(field => field.includes(term))
@@ -1118,10 +1116,9 @@ const TechTreeViewer = () => {
             score += 10;
           }
           if (lowerSubtitle.includes(query.toLowerCase())) {
-            score += 5;  // Add score for subtitle matches
+            score += 5;
           }
 
-          // Only add to results if we found a match in title or subtitle
           if (score > 0) {
             results.push({
               type: "node",
@@ -1218,7 +1215,10 @@ const TechTreeViewer = () => {
       if (filters.countries.size) {
         const nodeCountries = [
           ...(node.countryHistorical?.split(",").map((c) => c.trim()) || []),
-          ...(node.countryModern?.split(",").map((c) => c.trim()) || []),
+          ...(node.countryModern
+            ?.split(",")
+            .map((c) => c.trim())
+            .filter(Boolean) || []),
         ];
         if (nodeCountries.some((country) => filters.countries.has(country))) {
           return true;
