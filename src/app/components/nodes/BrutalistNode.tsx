@@ -21,6 +21,24 @@ interface BrutalistNodeProps {
   style?: React.CSSProperties;
 }
 
+const formatTitle = (title: string) => {
+  // Special cases
+  const specialCases: { [key: string]: string } = {
+    'mRNA': 'mRNA',
+    // Add more special cases as needed
+  };
+
+  // Check if the entire title is a special case
+  if (specialCases[title]) {
+    return specialCases[title];
+  }
+
+  // Check for special cases within the title
+  return title.split(' ').map(word => {
+    return specialCases[word] || word.toUpperCase();
+  }).join(' ');
+};
+
 const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   node,
   isSelected,
@@ -226,7 +244,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         <div className="px-3 py-2">
           <div className="mb-2">
             <h3
-              className="text-sm font-bold uppercase leading-tight"
+              className="text-sm font-bold leading-tight"
               style={{
                 wordBreak: "break-word",
                 overflowWrap: "break-word",
@@ -234,7 +252,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 fontSize: titleFontSize,
               }}
             >
-              {formattedTitle}
+              {formatTitle(formattedTitle)}
             </h3>
             {node.subtitle && (
               <div className="text-[10px] font-mono text-gray-600 mt-0.5">
