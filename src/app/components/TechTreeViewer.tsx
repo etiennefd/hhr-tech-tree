@@ -1290,6 +1290,17 @@ const TechTreeViewer = () => {
     return new Set([selectedLink.source, selectedLink.target]);
   }, [selectedLinkIndex, data.links]);
 
+  // Add this helper function near your other helper functions
+  const getAdjacentNodeIds = useCallback((nodeId: string | null) => {
+    if (!nodeId) return new Set<string>();
+    
+    return new Set(
+      data.links
+        .filter(link => link.source === nodeId || link.target === nodeId)
+        .map(link => link.source === nodeId ? link.target : link.source)
+    );
+  }, [data.links]);
+
   // 4. Optimize initial render
   if (!isClient || isLoading) {
     return (
@@ -1709,6 +1720,7 @@ const TechTreeViewer = () => {
           selectedNodeId={selectedNodeId}
           hoveredNodeId={hoveredNodeId}
           selectedConnectionNodeIds={getSelectedConnectionNodes()}
+          adjacentNodeIds={getAdjacentNodeIds(selectedNodeId)}
         />
       </div>
     </div>

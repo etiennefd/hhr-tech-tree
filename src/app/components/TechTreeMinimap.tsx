@@ -17,7 +17,8 @@ interface TechTreeMinimapProps {
   filteredNodeIds: Set<string>;
   selectedNodeId: string | null;
   hoveredNodeId: string | null;
-  selectedConnectionNodeIds?: Set<string>;
+  selectedConnectionNodeIds: Set<string>;
+  adjacentNodeIds?: Set<string>;
 }
 
 const TechTreeMinimap = ({
@@ -33,6 +34,7 @@ const TechTreeMinimap = ({
   selectedNodeId,
   hoveredNodeId,
   selectedConnectionNodeIds = new Set(),
+  adjacentNodeIds = new Set(),
 }: TechTreeMinimapProps) => {
   const MINIMAP_HEIGHT = 64; // Increased total height
   const MINIMAP_CONTENT_HEIGHT = 48; // Original height for the node content
@@ -183,6 +185,7 @@ const TechTreeMinimap = ({
           const hasActiveFilters = filteredNodeIds.size > 0;
           const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
           const isSelected = node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);
+          const isAdjacent = adjacentNodeIds.has(node.id);
           const isHovered = node.id === hoveredNodeId;
 
           return (
@@ -190,8 +193,8 @@ const TechTreeMinimap = ({
               key={node.id}
               className="absolute rounded-full"
               style={{
-                width: isSelected || isFiltered ? "4px" : "2px",
-                height: isSelected || isFiltered ? "4px" : "2px",
+                width: isSelected || isFiltered || isAdjacent ? "4px" : "2px",
+                height: isSelected || isFiltered || isAdjacent ? "4px" : "2px",
                 backgroundColor: engineeringBlue,
                 opacity: hasActiveFilters
                   ? isFiltered
@@ -199,13 +202,15 @@ const TechTreeMinimap = ({
                     : 0.2
                   : isSelected
                   ? 0.9
+                  : isAdjacent
+                  ? 0.8
                   : isHovered
                   ? 0.8
                   : 0.6,
                 left: nodeX,
                 top: nodeY,
                 transform: "translate(-50%, -50%)",
-                zIndex: isSelected ? 2 : 1,
+                zIndex: isSelected ? 2 : isAdjacent ? 1 : 0,
               }}
             />
           );
