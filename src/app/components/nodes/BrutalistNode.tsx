@@ -171,7 +171,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const titleFontSize = React.useMemo(
     () =>
       node.title.split(" ").some((word) => word.length > 12)
-        ? "0.8rem"
+        ? "0.75rem"
         : undefined,
     [node.title]
   );
