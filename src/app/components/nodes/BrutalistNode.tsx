@@ -146,20 +146,20 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   // Move addSoftHyphens inside useMemo to handle dependencies properly
   const formattedTitle = React.useMemo(() => {
     const addSoftHyphens = (text: string) => {
-      // Estimate characters that fit per line based on width
-      const charsPerLine = Math.floor((width - 24) / 8); // 24px for padding
+      // Make the line width more conservative to prevent awkward breaks
+      const charsPerLine = Math.floor((width - 40) / 8); // Increased padding from 32 to 40
 
       return text
         .split(" ")
         .map((word) => {
-          // If word already contains hyphens or similar characters, leave it alone
           if (word.includes("-") || word.includes("–") || word.includes("—")) {
             return word;
           }
-          // Only add soft hyphens if word is longer than line width
-          return word.length > charsPerLine
-            ? word.split("").join("\u00AD")
-            : word;
+          if (word.length > charsPerLine) {
+            const chars = word.split("");
+            return chars.slice(0, -2).join("\u00AD") + chars.slice(-2).join("");
+          }
+          return word;
         })
         .join(" ");
     };
@@ -170,8 +170,8 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   // Memoize the dynamic font size calculation
   const titleFontSize = React.useMemo(
     () =>
-      node.title.split(" ").some((word) => word.length > 12)
-        ? "0.75rem"
+      node.title.split(" ").some((word) => word.length > 13)
+        ? "0.8rem"
         : undefined,
     [node.title]
   );
