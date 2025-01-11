@@ -137,7 +137,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     // Culture & Communication (Distinct Pinks)
     Communication: "#B07996", // Greyish pink
     "Visual media": "#DA70D6", // Orchid
-    Entertainment: "#FF69B4", // Hot pink
+    Recreation: "#FF69B4", // Hot pink
     Music: "#C71585", // Medium violet red
 
     Misc: "#555555", // Medium gray

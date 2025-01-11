@@ -341,7 +341,7 @@ const TechTreeViewer = () => {
         // Culture (2100-2400)
         Communication: 2100,
         "Visual media": 2150,
-        Entertainment: 2200,
+        Recreation: 2200,
         Music: 2250,
 
         // Miscellaneous
