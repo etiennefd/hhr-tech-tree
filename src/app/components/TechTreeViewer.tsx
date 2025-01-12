@@ -788,39 +788,6 @@ const TechTreeViewer = () => {
     [data.nodes, selectedNodeId, getXPosition]
   );
 
-  // Add this memoized callback
-  const scrollToStoneTools = useCallback(() => {
-    if (!isLoading && data.nodes.length > 0) {
-      // Find the Stone Tools node
-      const stoneToolsNode = data.nodes.find((node) =>
-        node.title.toLowerCase().includes("stone tool")
-      );
-
-      if (stoneToolsNode && stoneToolsNode.y !== undefined) {
-        const container = document.querySelector(
-          ".overflow-y-auto"
-        ) as HTMLElement;
-
-        if (container) {
-          // Calculate the scroll position:
-          // node position - half the viewport height + some offset for the node height
-          const scrollPosition =
-            stoneToolsNode.y - container.clientHeight / 2 + 150;
-
-          // Scroll to position
-          container.scrollTo({
-            top: Math.max(0, scrollPosition),
-          });
-        }
-      }
-    }
-  }, [isLoading, data.nodes]);
-
-  // Update the effect to use the callback
-  useEffect(() => {
-    scrollToStoneTools();
-  }, [scrollToStoneTools]);
-
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
     (nodeId: string) => {
