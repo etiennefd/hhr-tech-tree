@@ -52,6 +52,7 @@ const NODE_WIDTH = 160;
 const VERTICAL_SPACING = 50;
 const YEAR_WIDTH = 240;
 const PADDING = 120;
+const INFO_BOX_HEIGHT = 500; // Add this constant for the info box height
 
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
@@ -227,7 +228,7 @@ const IntroBox = memo(() => {
   }, []);
 
   return (
-    <div className="absolute left-8 top-12 p-6 w-[400px] z-50">
+    <div className="absolute left-4 top-12 p-6 w-[400px] z-50">
       <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>
         HISTORICAL TECH TREE
       </h1>
@@ -460,12 +461,19 @@ const TechTreeViewer = () => {
             node.year
           }-${node.fields.join(",")}`;
 
-          // Get base position from primary field, ensuring minimum Y
-          const basePosition = Math.max(
-            ABSOLUTE_MIN_Y,
-            (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
-              (seededRandom(baseSeedString) - 0.5) * 100
-          );
+          // Special handling for stone tools node
+          let basePosition;
+          if (node.title.toLowerCase() === "stone tool") {
+            // Position stone tools node below the info box
+            basePosition = INFO_BOX_HEIGHT;
+          } else {
+            // Get base position from primary field, ensuring minimum Y
+            basePosition = Math.max(
+              ABSOLUTE_MIN_Y,
+              (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
+                (seededRandom(baseSeedString) - 0.5) * 100
+            );
+          }
 
           const isOverlapping = (testPosition: number): boolean => {
             if (testPosition < ABSOLUTE_MIN_Y) return true;
