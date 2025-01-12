@@ -186,24 +186,44 @@ function calculateXPosition(
 }
 
 const IntroBox = memo(() => {
-  const nodeCount = useRef(0);
-  const linkCount = useRef(0);
+  const [counts, setCounts] = useState({ nodes: 0, links: 0 });
   const darkerBlue = "#6B98AE";
   const linkStyle = { color: darkerBlue, textDecoration: "underline" };
+  const numberStyle = { 
+    color: darkerBlue, 
+    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" 
+  };
 
-  // Get counts from the data context
+  // Get counts from cache and data
   useEffect(() => {
-    const fetchCounts = async () => {
+    const getCounts = async () => {
       try {
+        // First try to get cached data
+        const cachedData = await cacheManager.get();
+        if (cachedData?.detailData) {
+          setCounts({
+            nodes: cachedData.detailData.nodes.length,
+            links: cachedData.detailData.links.length
+          });
+        } else if (cachedData?.basicData) {
+          setCounts({
+            nodes: cachedData.basicData.nodes.length,
+            links: cachedData.basicData.links.length
+          });
+        }
+
+        // Then fetch fresh data
         const response = await fetch("/api/inventions");
-        const data = await response.json();
-        nodeCount.current = data.nodes.length;
-        linkCount.current = data.links.length;
+        const freshData = await response.json();
+        setCounts({
+          nodes: freshData.nodes.length,
+          links: freshData.links.length
+        });
       } catch (error) {
         console.error("Failed to fetch counts:", error);
       }
     };
-    fetchCounts();
+    getCounts();
   }, []);
 
   return (
@@ -226,7 +246,8 @@ const IntroBox = memo(() => {
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
         The tech tree is a representation of technological history from 3
         million years ago to today. A work in progress, it currently contains{" "}
-        {nodeCount.current} technologies and {linkCount.current} connections
+        <span style={numberStyle}>{counts.nodes}</span> technologies and{" "}
+        <span style={numberStyle}>{counts.links}</span> connections
         between them.
       </p>
 
