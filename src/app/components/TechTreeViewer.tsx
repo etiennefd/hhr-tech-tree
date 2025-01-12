@@ -189,18 +189,18 @@ const IntroBox = memo(() => {
   const nodeCount = useRef(0);
   const linkCount = useRef(0);
   const darkerBlue = "#6B98AE";
-  const linkStyle = { color: darkerBlue, textDecoration: 'underline' };
+  const linkStyle = { color: darkerBlue, textDecoration: "underline" };
 
   // Get counts from the data context
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const response = await fetch('/api/inventions');
+        const response = await fetch("/api/inventions");
         const data = await response.json();
         nodeCount.current = data.nodes.length;
         linkCount.current = data.links.length;
       } catch (error) {
-        console.error('Failed to fetch counts:', error);
+        console.error("Failed to fetch counts:", error);
       }
     };
     fetchCounts();
@@ -208,28 +208,41 @@ const IntroBox = memo(() => {
 
   return (
     <div className="absolute left-8 top-12 p-6 w-[400px] z-50">
-      <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>HISTORICAL TECH TREE</h1>
+      <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>
+        HISTORICAL TECH TREE
+      </h1>
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
-        A project by{' '}
-        <a href="https://etiennefd.com" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+        A project by{" "}
+        <a
+          href="https://etiennefd.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={linkStyle}
+        >
           Étienne Fortier-Dubois
         </a>
       </p>
-      
+
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
-        The tech tree is a representation of technological history from 3 million years ago to today. 
-        A work in progress, it currently contains {nodeCount.current} technologies and {linkCount.current} connections between them.
+        The tech tree is a representation of technological history from 3
+        million years ago to today. A work in progress, it currently contains{" "}
+        {nodeCount.current} technologies and {linkCount.current} connections
+        between them.
       </p>
-      
+
       <div className="text-sm space-x-4">
-        <a href="/about" style={linkStyle}>Read more</a>
-        <a href="/contribute" style={linkStyle}>Contribute</a>
+        <a href="/about" style={linkStyle}>
+          Read more
+        </a>
+        <a href="/contribute" style={linkStyle}>
+          Contribute
+        </a>
       </div>
     </div>
   );
 });
 
-IntroBox.displayName = 'IntroBox';
+IntroBox.displayName = "IntroBox";
 
 const TechTreeViewer = () => {
   // State
@@ -1827,7 +1840,8 @@ const TechTreeViewer = () => {
                               {/* Show ancestry controls only if there are ancestors or descendants */}
                               {(ancestors.size > 0 || descendants.size > 0) && (
                                 <div className="mb-1">
-                                  {ancestors.size > 0 && descendants.size > 0 ? (
+                                  {ancestors.size > 0 &&
+                                  descendants.size > 0 ? (
                                     <>
                                       Highlight all{" "}
                                       <button
@@ -1852,7 +1866,9 @@ const TechTreeViewer = () => {
                                           if (!selectedNodeId) {
                                             setSelectedNodeId(nodeId);
                                           }
-                                          setHighlightedDescendants(descendants);
+                                          setHighlightedDescendants(
+                                            descendants
+                                          );
                                           setHighlightedAncestors(new Set());
                                         }}
                                         className="text-blue-600 hover:underline cursor-pointer"
@@ -1888,7 +1904,9 @@ const TechTreeViewer = () => {
                                           if (!selectedNodeId) {
                                             setSelectedNodeId(nodeId);
                                           }
-                                          setHighlightedDescendants(descendants);
+                                          setHighlightedDescendants(
+                                            descendants
+                                          );
                                           setHighlightedAncestors(new Set());
                                         }}
                                         className="text-blue-600 hover:underline cursor-pointer"
@@ -1899,7 +1917,7 @@ const TechTreeViewer = () => {
                                   )}
                                 </div>
                               )}
-                              
+
                               {/* Always show Wikipedia link if it exists, regardless of connections */}
                               {node.wikipedia && (
                                 <div>
