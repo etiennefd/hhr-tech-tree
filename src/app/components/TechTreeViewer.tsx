@@ -1763,7 +1763,7 @@ const TechTreeViewer = () => {
                           );
                         })()}
 
-                        {/* Update the tooltip section to separate Wikipedia link from ancestry controls */}
+                        {/* Update the tooltip section with modified click handlers */}
                         {(() => {
                           const nodeId = selectedNodeId || hoveredNode?.id;
                           if (!nodeId) return null;
@@ -1784,6 +1784,10 @@ const TechTreeViewer = () => {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
                                           setHighlightedAncestors(ancestors);
                                           setHighlightedDescendants(new Set());
                                         }}
@@ -1795,6 +1799,10 @@ const TechTreeViewer = () => {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
                                           setHighlightedDescendants(descendants);
                                           setHighlightedAncestors(new Set());
                                         }}
@@ -1809,6 +1817,10 @@ const TechTreeViewer = () => {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
                                           setHighlightedAncestors(ancestors);
                                           setHighlightedDescendants(new Set());
                                         }}
@@ -1823,6 +1835,10 @@ const TechTreeViewer = () => {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
                                           setHighlightedDescendants(descendants);
                                           setHighlightedAncestors(new Set());
                                         }}
