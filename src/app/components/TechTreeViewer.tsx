@@ -185,6 +185,52 @@ function calculateXPosition(
   return PADDING + spaces * YEAR_WIDTH;
 }
 
+const IntroBox = memo(() => {
+  const nodeCount = useRef(0);
+  const linkCount = useRef(0);
+  const darkerBlue = "#6B98AE";
+  const linkStyle = { color: darkerBlue, textDecoration: 'underline' };
+
+  // Get counts from the data context
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const response = await fetch('/api/inventions');
+        const data = await response.json();
+        nodeCount.current = data.nodes.length;
+        linkCount.current = data.links.length;
+      } catch (error) {
+        console.error('Failed to fetch counts:', error);
+      }
+    };
+    fetchCounts();
+  }, []);
+
+  return (
+    <div className="absolute left-8 top-12 p-6 w-[400px] z-50">
+      <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>HISTORICAL TECH TREE</h1>
+      <p className="text-sm mb-4" style={{ color: darkerBlue }}>
+        A project by{' '}
+        <a href="https://etiennefd.com" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+          Étienne Fortier-Dubois
+        </a>
+      </p>
+      
+      <p className="text-sm mb-4" style={{ color: darkerBlue }}>
+        The tech tree is a representation of technological history from 3 million years ago to today. 
+        A work in progress, it currently contains {nodeCount.current} technologies and {linkCount.current} connections between them.
+      </p>
+      
+      <div className="text-sm space-x-4">
+        <a href="/about" style={linkStyle}>Read more</a>
+        <a href="/contribute" style={linkStyle}>Contribute</a>
+      </div>
+    </div>
+  );
+});
+
+IntroBox.displayName = 'IntroBox';
+
 const TechTreeViewer = () => {
   // State
   const [isLoading, setIsLoading] = useState(true);
@@ -1467,6 +1513,9 @@ const TechTreeViewer = () => {
                 marginBottom: "64px",
               }}
             >
+              {/* Add IntroBox here instead */}
+              <IntroBox />
+
               {/* SVG connections */}
               <svg
                 className="absolute inset-0 w-full h-full"
