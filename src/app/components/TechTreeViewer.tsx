@@ -25,6 +25,7 @@ import { SearchResult } from "./SearchBox";
 import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
+import Link from 'next/link';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -253,12 +254,12 @@ const IntroBox = memo(() => {
       </p>
 
       <div className="text-sm space-x-4">
-        <a href="/about" style={linkStyle}>
+        <Link href="/about" style={linkStyle}>
           Read more
-        </a>
-        <a href="/contribute" style={linkStyle}>
+        </Link>
+        <Link href="/contribute" style={linkStyle}>
           Contribute
-        </a>
+        </Link>
       </div>
     </div>
   );
