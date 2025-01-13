@@ -416,7 +416,7 @@ const TechTreeViewer = () => {
 
         // Safety/Protection/Governance (1800-2100)
         Security: 1800,
-        Military: 1850,
+        Weaponry: 1850,
         Finance: 1900,
         Governance: 2000,
 
