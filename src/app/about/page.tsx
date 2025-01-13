@@ -52,7 +52,7 @@ export default function AboutPage() {
           </h2>
 
           <p>
-            This is an open project and contributions are welcome. If you'd like to help improve the 
+            This is an open project and contributions are welcome. If you&apos;d like to help improve the 
             tech tree by adding new technologies, correcting information, or suggesting improvements, 
             please visit our{' '}
             <Link href="/contribute" style={linkStyle}>
