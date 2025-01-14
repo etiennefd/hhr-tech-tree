@@ -246,7 +246,7 @@ const IntroBox = memo(() => {
       </p>
 
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
-        The tech tree is a representation of technological history from 3
+        The tech tree is an interactive visualization of technological history from 3
         million years ago to today. A work in progress, it currently contains{" "}
         <span style={numberStyle}>{counts.nodes}</span> technologies and{" "}
         <span style={numberStyle}>{counts.links}</span> connections
