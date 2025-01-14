@@ -1764,15 +1764,19 @@ const TechTreeViewer = () => {
                                 <div className="text-xs mb-1">
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
-                                    {ancestors.map(
-                                      (ancestor: TechNode, index: number) => (
+                                    {ancestors.map((ancestor: TechNode, index: number) => {
+                                      // Find the link to check if it's speculative
+                                      const link = data.links.find(
+                                        l => l.source === ancestor.id && l.target === node.id
+                                      );
+                                      const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                      
+                                      return (
                                         <div
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
                                           className="flex"
                                         >
-                                          <span className="flex-shrink-0 mr-1">
-                                            •
-                                          </span>
+                                          <span className="flex-shrink-0 mr-1">•</span>
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation();
@@ -1782,10 +1786,11 @@ const TechTreeViewer = () => {
                                             type="button"
                                           >
                                             {ancestor.title}
+                                            {isSpeculative && " (possibly)"}
                                           </button>
                                         </div>
-                                      )
-                                    )}
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
@@ -1793,15 +1798,19 @@ const TechTreeViewer = () => {
                                 <div className="text-xs mb-1">
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
-                                    {children.map(
-                                      (child: TechNode, index: number) => (
+                                    {children.map((child: TechNode, index: number) => {
+                                      // Find the link to check if it's speculative
+                                      const link = data.links.find(
+                                        l => l.source === node.id && l.target === child.id
+                                      );
+                                      const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                      
+                                      return (
                                         <div
                                           key={`child-${node.id}-${child.id}-${index}`}
                                           className="flex"
                                         >
-                                          <span className="flex-shrink-0 mr-1">
-                                            •
-                                          </span>
+                                          <span className="flex-shrink-0 mr-1">•</span>
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation();
@@ -1811,10 +1820,11 @@ const TechTreeViewer = () => {
                                             type="button"
                                           >
                                             {child.title}
+                                            {isSpeculative && " (possibly)"}
                                           </button>
                                         </div>
-                                      )
-                                    )}
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
