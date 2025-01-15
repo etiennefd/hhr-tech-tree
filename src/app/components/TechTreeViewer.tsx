@@ -269,7 +269,7 @@ IntroBox.displayName = "IntroBox";
 
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [filteredNodes, setFilteredNodes] = useState<TechNode[]>([]);
