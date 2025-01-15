@@ -267,9 +267,9 @@ const IntroBox = memo(() => {
 
 IntroBox.displayName = "IntroBox";
 
-const TechTreeViewer = () => {
-  // State
+export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [filteredNodes, setFilteredNodes] = useState<TechNode[]>([]);
@@ -1406,6 +1406,27 @@ const TechTreeViewer = () => {
     };
   }, []);
 
+  // Add loading state UI
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // Add error state UI
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">Error Loading Tech Tree</h2>
+          <p className="text-gray-600">Please try refreshing the page</p>
+        </div>
+      </div>
+    );
+  }
+
   // 4. Optimize initial render
   if (!isClient || isLoading) {
     return (
@@ -1977,7 +1998,7 @@ const TechTreeViewer = () => {
       </div>
     </div>
   );
-};
+}
 
 // 6. Export with memo to prevent unnecessary re-renders
 export default memo(TechTreeViewer);
