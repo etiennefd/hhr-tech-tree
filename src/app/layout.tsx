@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     description: 'Interactive visualization of technological history',
     images: ['/og-image.png'],
   },
+  metadataBase: new URL('https://historicaltechtree.com'),
 };
 
 export default function RootLayout({
