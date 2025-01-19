@@ -55,10 +55,6 @@ const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500; // Add this constant for the info box height
 
-// 1. Add mobile detection and simplified rendering
-const MOBILE_BREAKPOINT = 768; // pixels
-const MOBILE_NODE_WIDTH = 140; // slightly smaller nodes on mobile
-
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -270,24 +266,6 @@ const IntroBox = memo(() => {
 });
 
 IntroBox.displayName = "IntroBox";
-// Add debounce utility
-function debounce<T extends (...args: unknown[]) => void>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
-  
-  return (...args: Parameters<T>) => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    
-    timeout = setTimeout(() => {
-      func(...args);
-      timeout = null;
-    }, wait);
-  };
-}
 
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
@@ -324,8 +302,6 @@ export function TechTreeViewer() {
     Set<string>
   >(new Set());
   const currentNodesRef = useRef<TechNode[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
-  const [visibleNodes, setVisibleNodes] = useState<TechNode[]>([]);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -705,8 +681,6 @@ export function TechTreeViewer() {
   // Window resize handler only
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < MOBILE_BREAKPOINT;
-      setIsMobile(mobile);
       setContainerDimensions({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -1432,56 +1406,6 @@ export function TechTreeViewer() {
     };
   }, []);
 
-  // 2. Optimize node rendering with windowing
-  const calculateVisibleNodes = useCallback(() => {
-    if (!verticalScrollContainerRef.current || !data.nodes.length) return [];
-    
-    const scrollTop = verticalScrollContainerRef.current.scrollTop;
-    const viewportHeight = verticalScrollContainerRef.current.clientHeight;
-    const scrollLeft = horizontalScrollContainerRef.current?.scrollLeft || 0;
-    const viewportWidth = horizontalScrollContainerRef.current?.clientWidth || window.innerWidth;
-
-    // Add buffer zones for smoother scrolling
-    const BUFFER = isMobile ? 500 : 1000;
-    
-    return filteredNodes.filter(node => {
-      const nodeX = getXPosition(node.year);
-      const nodeY = node.y || 0;
-      
-      return (
-        nodeX >= scrollLeft - BUFFER &&
-        nodeX <= scrollLeft + viewportWidth + BUFFER &&
-        nodeY >= scrollTop - BUFFER &&
-        nodeY <= scrollTop + viewportHeight + BUFFER
-      );
-    });
-  }, [filteredNodes, getXPosition, isMobile]);
-
-  // 3. Add debounced scroll handling
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      setVisibleNodes(calculateVisibleNodes());
-    }, isMobile ? 100 : 50);
-
-    const verticalContainer = verticalScrollContainerRef.current;
-    const horizontalContainer = horizontalScrollContainerRef.current;
-
-    if (verticalContainer && horizontalContainer) {
-      verticalContainer.addEventListener('scroll', handleScroll);
-      horizontalContainer.addEventListener('scroll', handleScroll);
-    }
-
-    // Initial calculation
-    setVisibleNodes(calculateVisibleNodes());
-
-    return () => {
-      if (verticalContainer && horizontalContainer) {
-        verticalContainer.removeEventListener('scroll', handleScroll);
-        horizontalContainer.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [calculateVisibleNodes, isMobile]);
-
   // Add loading state UI
   if (isLoading) {
     return (
@@ -1628,99 +1552,89 @@ export function TechTreeViewer() {
                 className="absolute inset-0 w-full h-full"
                 style={{
                   zIndex: 1,
-                  pointerEvents: isMobile ? 'none' : 'auto', // Disable interaction on mobile
                 }}
               >
-                {(() => {
-                  // Only render connections for visible nodes on mobile
-                  const relevantLinks = isMobile
-                    ? data.links.filter(link => 
-                        visibleNodes.some(n => n.id === link.source) &&
-                        visibleNodes.some(n => n.id === link.target))
-                    : data.links;
+                {data.links.map((link, index) => {
+                  const sourceNode = data.nodes.find(
+                    (n) => n.id === link.source
+                  );
+                  const targetNode = data.nodes.find(
+                    (n) => n.id === link.target
+                  );
 
-                  return relevantLinks.map((link, index) => {
-                    const sourceNode = data.nodes.find(
-                      (n) => n.id === link.source
-                    );
-                    const targetNode = data.nodes.find(
-                      (n) => n.id === link.target
-                    );
-
-                    if (!sourceNode || !targetNode) return null;
-                    return (
-                      <CurvedConnections
-                        key={index}
-                        sourceNode={{
-                          x: getXPosition(sourceNode.year),
-                          y: sourceNode.y || 150,
-                        }}
-                        targetNode={{
-                          x: getXPosition(targetNode.year),
-                          y: targetNode.y || 150,
-                        }}
-                        sourceIndex={data.nodes.indexOf(sourceNode)}
-                        targetIndex={data.nodes.indexOf(targetNode)}
-                        connectionType={link.type}
-                        isHighlighted={shouldHighlightLink(link, index)}
-                        opacity={(() => {
-                          // If a node is selected
-                          if (selectedNodeId) {
-                            // If this is a connection between highlighted nodes
-                            if (
-                              (highlightedAncestors.has(link.source) &&
-                                highlightedAncestors.has(link.target)) ||
-                              (highlightedDescendants.has(link.source) &&
-                                highlightedDescendants.has(link.target))
-                            ) {
-                              return 1;
-                            }
-                            // If this is a connection to/from the selected node
-                            if (shouldHighlightLink(link, index)) {
-                              return 1;
-                            }
-                            return 0.2;
-                          }
-                          // If a link is selected
-                          if (selectedLinkIndex !== null) {
-                            return index === selectedLinkIndex ? 1 : 0.2;
-                          }
-                          // If filters are applied
+                  if (!sourceNode || !targetNode) return null;
+                  return (
+                    <CurvedConnections
+                      key={index}
+                      sourceNode={{
+                        x: getXPosition(sourceNode.year),
+                        y: sourceNode.y || 150,
+                      }}
+                      targetNode={{
+                        x: getXPosition(targetNode.year),
+                        y: targetNode.y || 150,
+                      }}
+                      sourceIndex={data.nodes.indexOf(sourceNode)}
+                      targetIndex={data.nodes.indexOf(targetNode)}
+                      connectionType={link.type}
+                      isHighlighted={shouldHighlightLink(link, index)}
+                      opacity={(() => {
+                        // If a node is selected
+                        if (selectedNodeId) {
+                          // If this is a connection between highlighted nodes
                           if (
-                            filters.fields.size ||
-                            filters.countries.size ||
-                            filters.cities.size
+                            (highlightedAncestors.has(link.source) &&
+                              highlightedAncestors.has(link.target)) ||
+                            (highlightedDescendants.has(link.source) &&
+                              highlightedDescendants.has(link.target))
                           ) {
-                            return isLinkVisible(link) ? 1 : 0.2;
+                            return 1;
                           }
-                          return 1;
-                        })()}
-                        onMouseEnter={() => {
-                          setHoveredLinkIndex(index);
-                        }}
-                        onMouseLeave={() => setHoveredLinkIndex(null)}
-                        sourceTitle={sourceNode.title}
-                        targetTitle={targetNode.title}
-                        details={link.details}
-                        isSelected={selectedLinkIndex === index}
-                        onSelect={() => {
-                          setSelectedLinkIndex((current) =>
-                            current === index ? null : index
-                          );
-                          setSelectedNodeId(null);
-                        }}
-                        onNodeClick={(title) => {
-                          handleNodeClick(title);
-                        }}
-                      />
-                    );
-                  });
-                })()}
+                          // If this is a connection to/from the selected node
+                          if (shouldHighlightLink(link, index)) {
+                            return 1;
+                          }
+                          return 0.2;
+                        }
+                        // If a link is selected
+                        if (selectedLinkIndex !== null) {
+                          return index === selectedLinkIndex ? 1 : 0.2;
+                        }
+                        // If filters are applied
+                        if (
+                          filters.fields.size ||
+                          filters.countries.size ||
+                          filters.cities.size
+                        ) {
+                          return isLinkVisible(link) ? 1 : 0.2;
+                        }
+                        return 1;
+                      })()}
+                      onMouseEnter={() => {
+                        setHoveredLinkIndex(index);
+                      }}
+                      onMouseLeave={() => setHoveredLinkIndex(null)}
+                      sourceTitle={sourceNode.title}
+                      targetTitle={targetNode.title}
+                      details={link.details}
+                      isSelected={selectedLinkIndex === index}
+                      onSelect={() => {
+                        setSelectedLinkIndex((current) =>
+                          current === index ? null : index
+                        );
+                        setSelectedNodeId(null);
+                      }}
+                      onNodeClick={(title) => {
+                        handleNodeClick(title);
+                      }}
+                    />
+                  );
+                })}
               </svg>
 
               {/* Nodes */}
               <div className="relative" style={{ zIndex: 10 }}>
-                {visibleNodes.map((node) => (
+                {filteredNodes.map((node) => (
                   <BrutalistNode
                     key={node.id}
                     node={node}
@@ -1735,23 +1649,21 @@ export function TechTreeViewer() {
                       }
                     }}
                     onMouseEnter={() => {
-                      if (!isMobile && node.id !== selectedNodeId) {
+                      if (node.id !== selectedNodeId) {
                         handleNodeHover(node);
                       }
                     }}
                     onMouseLeave={() => {
-                      if (!isMobile && node.id !== selectedNodeId) {
+                      if (node.id !== selectedNodeId) {
                         setHoveredNode(null);
                         setHoveredNodeId(null);
                       }
                     }}
-                    width={isMobile ? MOBILE_NODE_WIDTH : NODE_WIDTH}
+                    width={NODE_WIDTH}
                     style={{
                       position: "absolute",
                       left: `${getXPosition(node.year)}px`,
                       top: `${node.y}px`,
-                      transform: isMobile ? 'scale(0.9)' : 'none',
-                      transformOrigin: 'center center',
                       opacity: (() => {
                         // If a node is selected
                         if (selectedNodeId) {
@@ -1786,7 +1698,7 @@ export function TechTreeViewer() {
 
               {/* Tooltips */}
               <div className="relative" style={{ zIndex: 100 }}>
-                {!isMobile && visibleNodes.map(
+                {filteredNodes.map(
                   (node) =>
                     (hoveredNode?.id === node.id ||
                       selectedNodeId === node.id) && (
