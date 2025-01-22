@@ -236,7 +236,7 @@ const IntroBox = memo(() => {
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
         A project by{" "}
         <a
-          href="https://etiennefd.com"
+          href="https://www.hopefulmons.com/"
           target="_blank"
           rel="noopener noreferrer"
           style={linkStyle}
