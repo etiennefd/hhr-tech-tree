@@ -1548,7 +1548,7 @@ export function TechTreeViewer() {
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
         style={{ 
           overscrollBehaviorY: "none",
-          touchAction: isMobile ? "none" : "auto" // Disable default touch handling on mobile
+          touchAction: isMobile ? "none" : "auto"
         }}
         onTouchStart={isMobile ? handleTouchStart : undefined}
         onTouchMove={isMobile ? handleTouchMove : undefined}
@@ -1563,7 +1563,6 @@ export function TechTreeViewer() {
       >
         <div 
           style={{ 
-            width: containerWidth,
             transform: isMobile ? `scale(${zoom})` : undefined,
             transformOrigin: isMobile ? "0 0" : undefined,
             width: isMobile ? containerWidth * zoom : containerWidth
@@ -2054,30 +2053,33 @@ export function TechTreeViewer() {
             </div>
           </div>
         </div>
-        <TechTreeMinimap
-          nodes={data.nodes.map(
-            (node): MinimapNode => ({
-              id: node.id,
-              x: getXPosition(node.year),
-              y: node.y || 0,
-              year: node.year,
-            })
-          )}
-          containerWidth={containerWidth}
-          totalHeight={totalHeight}
-          viewportWidth={containerDimensions.width}
-          viewportHeight={containerDimensions.height}
-          scrollLeft={scrollPosition.left}
-          scrollTop={scrollPosition.top}
-          onViewportChange={handleViewportChange}
-          filteredNodeIds={filteredNodeIds}
-          selectedNodeId={selectedNodeId}
-          hoveredNodeId={hoveredNodeId}
-          selectedConnectionNodeIds={getSelectedConnectionNodes()}
-          adjacentNodeIds={getAdjacentNodeIds(selectedNodeId)}
-          highlightedAncestors={highlightedAncestors}
-          highlightedDescendants={highlightedDescendants}
-        />
+        {/* Only show minimap on non-mobile devices */}
+        {!isMobile && (
+          <TechTreeMinimap
+            nodes={data.nodes.map(
+              (node): MinimapNode => ({
+                id: node.id,
+                x: getXPosition(node.year),
+                y: node.y || 0,
+                year: node.year,
+              })
+            )}
+            containerWidth={containerWidth}
+            totalHeight={totalHeight}
+            viewportWidth={containerDimensions.width}
+            viewportHeight={containerDimensions.height}
+            scrollLeft={scrollPosition.left}
+            scrollTop={scrollPosition.top}
+            onViewportChange={handleViewportChange}
+            filteredNodeIds={filteredNodeIds}
+            selectedNodeId={selectedNodeId}
+            hoveredNodeId={hoveredNodeId}
+            selectedConnectionNodeIds={getSelectedConnectionNodes()}
+            adjacentNodeIds={getAdjacentNodeIds(selectedNodeId)}
+            highlightedAncestors={highlightedAncestors}
+            highlightedDescendants={highlightedDescendants}
+          />
+        )}
       </div>
     </div>
   );
