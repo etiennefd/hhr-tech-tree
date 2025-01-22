@@ -56,7 +56,7 @@ const PADDING = 120;
 const INFO_BOX_HEIGHT = 500; // Add this constant for the info box height
 
 // Add these constants near the other constants
-const MIN_ZOOM = 0.5;
+const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 2;
 const DEFAULT_ZOOM = 1;
 
