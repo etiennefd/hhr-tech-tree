@@ -26,6 +26,7 @@ import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 import Link from 'next/link';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -266,6 +267,24 @@ const IntroBox = memo(() => {
 });
 
 IntroBox.displayName = "IntroBox";
+
+// Add this helper function near the top of the file
+const isMobile = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth <= 768;
+};
+
+// Add these styles near your other constants
+const mobileStyles = {
+  node: {
+    touchAction: 'none',
+    WebkitTapHighlightColor: 'transparent',
+  },
+  connection: {
+    strokeWidth: '3px', // Make connections easier to tap
+    touchAction: 'none',
+  }
+};
 
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
@@ -1441,12 +1460,9 @@ export function TechTreeViewer() {
   // 5. Defer non-critical UI elements
   return (
     <div className="h-screen bg-yellow-50">
-      {/* Defer loading of controls until after main content */}
+      {/* Controls remain outside the zoom wrapper */}
       {!isLoading && (
-        <div
-          className="fixed top-16 right-4 flex flex-col items-end gap-4"
-          style={{ zIndex: 1000 }}
-        >
+        <div className="fixed top-16 right-4 flex flex-col items-end gap-4" style={{ zIndex: 1000 }}>
           <Suspense fallback={null}>
             <Suspense fallback={null}>
               {isClient && (
@@ -1474,503 +1490,978 @@ export function TechTreeViewer() {
         </div>
       )}
 
-      <div
-        ref={horizontalScrollContainerRef}
-        className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
-        style={{ overscrollBehaviorY: "none" }}
-        onScroll={(e) => {
-          const horizontalScroll = e.currentTarget.scrollLeft;
-          setScrollPosition((prev) => ({
-            ...prev,
-            left: horizontalScroll,
-          }));
-        }}
-      >
-        <div style={{ width: containerWidth }}>
-          {/* Timeline */}
-          <div
-            className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
-            style={{
-              width: containerWidth,
-              zIndex: 100,
-              position: "relative",
-            }}
+      {isMobile() ? (
+        // Mobile view with zoom/pan
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.5}
+          maxScale={3}
+          centerOnInit={true}
+          wheel={{ disabled: true }}
+        >
+          <TransformComponent 
+            wrapperClass="h-screen"
+            contentClass="bg-yellow-50"
           >
-            {/* Timeline content */}
-            {(() => {
-              if (!data.nodes.length) return null;
-              const years = data.nodes.map((n) => n.year);
-              const minYear = Math.min(...years);
-              const maxYear = Math.max(...years);
-              const timelineYears = getTimelineYears(minYear, maxYear);
-
-              return timelineYears.map((year) => (
-                <div
-                  key={year}
-                  className="absolute text-sm text-gray-600 font-mono"
-                  style={{
-                    left: `${getXPosition(year)}px`,
-                    transform: "translateX(-50%)",
-                  }}
-                >
-                  {formatYear(year)}
-                </div>
-              ));
-            })()}
-          </div>
-
-          {/* Vertical scroll container */}
-          <div
-            ref={verticalScrollContainerRef}
-            className="overflow-y-auto overflow-x-hidden"
-            style={{
-              height: "calc(100vh - 32px)",
-              overscrollBehaviorY: "contain",
-              position: "relative",
-            }}
-            onScroll={(e) => {
-              const verticalScroll = e.currentTarget.scrollTop;
-              setScrollPosition((prev) => ({
-                ...prev,
-                top: verticalScroll,
-              }));
-            }}
-          >
-            <div
-              style={{
-                width: containerWidth,
-                minHeight: `${totalHeight}px`,
-                position: "relative",
-                marginBottom: "64px",
-              }}
-            >
-              {/* Add IntroBox here instead */}
-              <IntroBox />
-
-              {/* SVG connections */}
-              <svg
-                className="absolute inset-0 w-full h-full"
+            <div style={{ width: containerWidth, minHeight: '100vh' }}>
+              {/* Timeline */}
+              <div
+                className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
                 style={{
-                  zIndex: 1,
+                  width: containerWidth,
+                  zIndex: 100,
+                  position: "relative",
                 }}
               >
-                {data.links.map((link, index) => {
-                  const sourceNode = data.nodes.find(
-                    (n) => n.id === link.source
-                  );
-                  const targetNode = data.nodes.find(
-                    (n) => n.id === link.target
-                  );
+                {/* Timeline content */}
+                {(() => {
+                  if (!data.nodes.length) return null;
+                  const years = data.nodes.map((n) => n.year);
+                  const minYear = Math.min(...years);
+                  const maxYear = Math.max(...years);
+                  const timelineYears = getTimelineYears(minYear, maxYear);
 
-                  if (!sourceNode || !targetNode) return null;
-                  return (
-                    <CurvedConnections
-                      key={index}
-                      sourceNode={{
-                        x: getXPosition(sourceNode.year),
-                        y: sourceNode.y || 150,
+                  return timelineYears.map((year) => (
+                    <div
+                      key={year}
+                      className="absolute text-sm text-gray-600 font-mono"
+                      style={{
+                        left: `${getXPosition(year)}px`,
+                        transform: "translateX(-50%)",
                       }}
-                      targetNode={{
-                        x: getXPosition(targetNode.year),
-                        y: targetNode.y || 150,
-                      }}
-                      sourceIndex={data.nodes.indexOf(sourceNode)}
-                      targetIndex={data.nodes.indexOf(targetNode)}
-                      connectionType={link.type}
-                      isHighlighted={shouldHighlightLink(link, index)}
-                      opacity={(() => {
-                        // If a node is selected
-                        if (selectedNodeId) {
-                          // If this is a connection between highlighted nodes
-                          if (
-                            (highlightedAncestors.has(link.source) &&
-                              highlightedAncestors.has(link.target)) ||
-                            (highlightedDescendants.has(link.source) &&
-                              highlightedDescendants.has(link.target))
-                          ) {
-                            return 1;
-                          }
-                          // If this is a connection to/from the selected node
-                          if (shouldHighlightLink(link, index)) {
-                            return 1;
-                          }
-                          return 0.2;
-                        }
-                        // If a link is selected
-                        if (selectedLinkIndex !== null) {
-                          return index === selectedLinkIndex ? 1 : 0.2;
-                        }
-                        // If filters are applied
-                        if (
-                          filters.fields.size ||
-                          filters.countries.size ||
-                          filters.cities.size
-                        ) {
-                          return isLinkVisible(link) ? 1 : 0.2;
-                        }
-                        return 1;
-                      })()}
-                      onMouseEnter={() => {
-                        setHoveredLinkIndex(index);
-                      }}
-                      onMouseLeave={() => setHoveredLinkIndex(null)}
-                      sourceTitle={sourceNode.title}
-                      targetTitle={targetNode.title}
-                      details={link.details}
-                      isSelected={selectedLinkIndex === index}
-                      onSelect={() => {
-                        setSelectedLinkIndex((current) =>
-                          current === index ? null : index
-                        );
-                        setSelectedNodeId(null);
-                      }}
-                      onNodeClick={(title) => {
-                        handleNodeClick(title);
-                      }}
-                    />
-                  );
-                })}
-              </svg>
-
-              {/* Nodes */}
-              <div className="relative" style={{ zIndex: 10 }}>
-                {filteredNodes.map((node) => (
-                  <BrutalistNode
-                    key={node.id}
-                    node={node}
-                    isSelected={node.id === selectedNodeId}
-                    isAdjacent={isAdjacentToSelected(node.id)}
-                    onClick={() => {
-                      if (node.id === selectedNodeId) {
-                        setSelectedNodeId(null);
-                      } else {
-                        setSelectedNodeId(node.id);
-                        setSelectedLinkIndex(null);
-                      }
-                    }}
-                    onMouseEnter={() => {
-                      if (node.id !== selectedNodeId) {
-                        handleNodeHover(node);
-                      }
-                    }}
-                    onMouseLeave={() => {
-                      if (node.id !== selectedNodeId) {
-                        setHoveredNode(null);
-                        setHoveredNodeId(null);
-                      }
-                    }}
-                    width={NODE_WIDTH}
-                    style={{
-                      position: "absolute",
-                      left: `${getXPosition(node.year)}px`,
-                      top: `${node.y}px`,
-                      opacity: (() => {
-                        // If a node is selected
-                        if (selectedNodeId) {
-                          if (node.id === selectedNodeId) return 1;
-                          if (isAdjacentToSelected(node.id)) return 1;
-                          if (highlightedAncestors.has(node.id)) return 1;
-                          if (highlightedDescendants.has(node.id)) return 1;
-                          return 0.2;
-                        }
-                        // If a link is selected
-                        if (selectedLinkIndex !== null) {
-                          return isNodeConnectedToSelectedLink(node.id)
-                            ? 1
-                            : 0.2;
-                        }
-                        // If filters are applied
-                        if (
-                          filters.fields.size ||
-                          filters.countries.size ||
-                          filters.cities.size
-                        ) {
-                          return isNodeFiltered(node) ? 1 : 0.2;
-                        }
-                        // Default state - fully visible
-                        return 1;
-                      })(),
-                      transition: "opacity 0.2s ease-in-out",
-                    }}
-                  />
-                ))}
+                    >
+                      {formatYear(year)}
+                    </div>
+                  ));
+                })()}
               </div>
 
-              {/* Tooltips */}
-              <div className="relative" style={{ zIndex: 100 }}>
-                {filteredNodes.map(
-                  (node) =>
-                    (hoveredNode?.id === node.id ||
-                      selectedNodeId === node.id) && (
-                      <div
-                        key={`tooltip-${node.id}`}
-                        className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
-                        style={{
-                          left: `${getXPosition(node.year)}px`,
-                          top: `${(node.y ?? 0) + 100}px`,
-                          transform: "translate(-50%, 0)",
-                          width: "14rem",
-                          zIndex: 100,
+              {/* Main content */}
+              <div style={{ 
+                width: containerWidth,
+                minHeight: `${totalHeight}px`,
+                position: 'relative',
+                marginBottom: '64px'
+              }}>
+                <IntroBox />
+                {/* SVG connections */}
+                <svg
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    zIndex: 1,
+                  }}
+                >
+                  {data.links.map((link, index) => {
+                    const sourceNode = data.nodes.find(
+                      (n) => n.id === link.source
+                    );
+                    const targetNode = data.nodes.find(
+                      (n) => n.id === link.target
+                    );
+
+                    if (!sourceNode || !targetNode) return null;
+                    return (
+                      <CurvedConnections
+                        key={index}
+                        sourceNode={{
+                          x: getXPosition(sourceNode.year),
+                          y: sourceNode.y || 150,
                         }}
-                        onClick={(e) => e.stopPropagation()}
-                        onMouseEnter={() => {
-                          // Keep the hover state active when hovering the tooltip
-                          setHoveredNode(node);
-                          setHoveredNodeId(node.id);
+                        targetNode={{
+                          x: getXPosition(targetNode.year),
+                          y: targetNode.y || 150,
                         }}
-                        onMouseLeave={() => {
-                          // Only clear hover state if the node isn't selected
-                          if (selectedNodeId !== node.id) {
-                            setHoveredNode(null);
-                            setHoveredNodeId(null);
+                        sourceIndex={data.nodes.indexOf(sourceNode)}
+                        targetIndex={data.nodes.indexOf(targetNode)}
+                        connectionType={link.type}
+                        isHighlighted={shouldHighlightLink(link, index)}
+                        opacity={(() => {
+                          // If a node is selected
+                          if (selectedNodeId) {
+                            // If this is a connection between highlighted nodes
+                            if (
+                              (highlightedAncestors.has(link.source) &&
+                                highlightedAncestors.has(link.target)) ||
+                              (highlightedDescendants.has(link.source) &&
+                                highlightedDescendants.has(link.target))
+                            ) {
+                              return 1;
+                            }
+                            // If this is a connection to/from the selected node
+                            if (shouldHighlightLink(link, index)) {
+                              return 1;
+                            }
+                            return 0.2;
                           }
+                          // If a link is selected
+                          if (selectedLinkIndex !== null) {
+                            return index === selectedLinkIndex ? 1 : 0.2;
+                          }
+                          // If filters are applied
+                          if (
+                            filters.fields.size ||
+                            filters.countries.size ||
+                            filters.cities.size
+                          ) {
+                            return isLinkVisible(link) ? 1 : 0.2;
+                          }
+                          return 1;
+                        })()}
+                        onMouseEnter={() => {
+                          setHoveredLinkIndex(index);
                         }}
-                      >
-                        <p className="text-xs mb-1">
-                          <strong>Date:</strong> {formatYear(node.year)}
-                          {node.dateDetails && ` (${node.dateDetails})`}
-                        </p>
-                        {node.inventors &&
-                          node.inventors.length > 0 &&
-                          node.inventors.filter((inv) => inv !== "unknown")
-                            .length > 0 && (
-                            <p className="text-xs mb-1">
-                              <strong>
-                                {node.type === "Discovery"
-                                  ? `Discoverer${
-                                      node.inventors.length > 1 ? "s" : ""
-                                    }`
-                                  : `Inventor${
-                                      node.inventors.length > 1 ? "s" : ""
-                                    }`}
-                                :
-                              </strong>{" "}
-                              {node.inventors.includes("unknown")
-                                ? "possibly " +
-                                  node.inventors
-                                    .filter((inv) => inv !== "unknown")
-                                    .join(", ")
-                                : node.inventors.join(", ")}
-                            </p>
-                          )}
-                        {node.organizations &&
-                          node.organizations.length > 0 && (
-                            <p className="text-xs mb-1">
-                              <strong>
-                                {node.organizations.length > 1
-                                  ? "Organizations"
-                                  : "Organization"}
-                                :
-                              </strong>{" "}
-                              {node.organizations.join(", ")}
-                            </p>
-                          )}
-                        {node.formattedLocation && (
+                        onMouseLeave={() => setHoveredLinkIndex(null)}
+                        sourceTitle={sourceNode.title}
+                        targetTitle={targetNode.title}
+                        details={link.details}
+                        isSelected={selectedLinkIndex === index}
+                        onSelect={() => {
+                          setSelectedLinkIndex((current) =>
+                            current === index ? null : index
+                          );
+                          setSelectedNodeId(null);
+                        }}
+                        onNodeClick={(title) => {
+                          handleNodeClick(title);
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+
+                {/* Nodes */}
+                <div className="relative" style={{ zIndex: 10 }}>
+                  {filteredNodes.map((node) => (
+                    <BrutalistNode
+                      key={node.id}
+                      node={node}
+                      isSelected={node.id === selectedNodeId}
+                      isAdjacent={isAdjacentToSelected(node.id)}
+                      onClick={() => {
+                        if (node.id === selectedNodeId) {
+                          setSelectedNodeId(null);
+                        } else {
+                          setSelectedNodeId(node.id);
+                          setSelectedLinkIndex(null);
+                        }
+                      }}
+                      onMouseEnter={() => {
+                        if (node.id !== selectedNodeId) {
+                          handleNodeHover(node);
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (node.id !== selectedNodeId) {
+                          setHoveredNode(null);
+                          setHoveredNodeId(null);
+                        }
+                      }}
+                      width={NODE_WIDTH}
+                      style={{
+                        position: "absolute",
+                        left: `${getXPosition(node.year)}px`,
+                        top: `${node.y}px`,
+                        opacity: (() => {
+                          // If a node is selected
+                          if (selectedNodeId) {
+                            if (node.id === selectedNodeId) return 1;
+                            if (isAdjacentToSelected(node.id)) return 1;
+                            if (highlightedAncestors.has(node.id)) return 1;
+                            if (highlightedDescendants.has(node.id)) return 1;
+                            return 0.2;
+                          }
+                          // If a link is selected
+                          if (selectedLinkIndex !== null) {
+                            return isNodeConnectedToSelectedLink(node.id)
+                              ? 1
+                              : 0.2;
+                          }
+                          // If filters are applied
+                          if (
+                            filters.fields.size ||
+                            filters.countries.size ||
+                            filters.cities.size
+                          ) {
+                            return isNodeFiltered(node) ? 1 : 0.2;
+                          }
+                          // Default state - fully visible
+                          return 1;
+                        })(),
+                        transition: "opacity 0.2s ease-in-out",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Tooltips */}
+                <div className="relative" style={{ zIndex: 100 }}>
+                  {filteredNodes.map(
+                    (node) =>
+                      (hoveredNode?.id === node.id ||
+                        selectedNodeId === node.id) && (
+                        <div
+                          key={`tooltip-${node.id}`}
+                          className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
+                          style={{
+                            left: `${getXPosition(node.year)}px`,
+                            top: `${(node.y ?? 0) + 100}px`,
+                            transform: "translate(-50%, 0)",
+                            width: "14rem",
+                            zIndex: 100,
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => {
+                            // Keep the hover state active when hovering the tooltip
+                            setHoveredNode(node);
+                            setHoveredNodeId(node.id);
+                          }}
+                          onMouseLeave={() => {
+                            // Only clear hover state if the node isn't selected
+                            if (selectedNodeId !== node.id) {
+                              setHoveredNode(null);
+                              setHoveredNodeId(null);
+                            }
+                          }}
+                        >
                           <p className="text-xs mb-1">
-                            <strong>Location:</strong> {node.formattedLocation}
+                            <strong>Date:</strong> {formatYear(node.year)}
+                            {node.dateDetails && ` (${node.dateDetails})`}
                           </p>
-                        )}
-                        {node.details && (
-                          <p className="text-xs mb-2">{node.details}</p>
-                        )}
+                          {node.inventors &&
+                            node.inventors.length > 0 &&
+                            node.inventors.filter((inv) => inv !== "unknown")
+                              .length > 0 && (
+                              <p className="text-xs mb-1">
+                                <strong>
+                                  {node.type === "Discovery"
+                                    ? `Discoverer${
+                                        node.inventors.length > 1 ? "s" : ""
+                                      }`
+                                    : `Inventor${
+                                        node.inventors.length > 1 ? "s" : ""
+                                      }`}
+                                  :
+                                </strong>{" "}
+                                {node.inventors.includes("unknown")
+                                  ? "possibly " +
+                                    node.inventors
+                                      .filter((inv) => inv !== "unknown")
+                                      .join(", ")
+                                  : node.inventors.join(", ")}
+                              </p>
+                            )}
+                          {node.organizations &&
+                            node.organizations.length > 0 && (
+                              <p className="text-xs mb-1">
+                                <strong>
+                                  {node.organizations.length > 1
+                                    ? "Organizations"
+                                    : "Organization"}
+                                  :
+                                </strong>{" "}
+                                {node.organizations.join(", ")}
+                              </p>
+                            )}
+                          {node.formattedLocation && (
+                            <p className="text-xs mb-1">
+                              <strong>Location:</strong> {node.formattedLocation}
+                            </p>
+                          )}
+                          {node.details && (
+                            <p className="text-xs mb-2">{node.details}</p>
+                          )}
 
-                        {/* Updated connections section */}
-                        {(() => {
-                          const { ancestors, children } = getNodeConnections(
-                            node.id
-                          );
-                          return (
-                            <>
-                              {ancestors.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Built upon:</strong>
-                                  <div className="ml-2">
-                                    {ancestors.map((ancestor: TechNode, index: number) => {
-                                      // Find the link to check if it's speculative
-                                      const link = data.links.find(
-                                        l => l.source === ancestor.id && l.target === node.id
-                                      );
-                                      const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
-                                      
-                                      return (
-                                        <div
-                                          key={`ancestor-${node.id}-${ancestor.id}-${index}`}
-                                          className="flex"
-                                        >
-                                          <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(ancestor.title);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
+                          {/* Updated connections section */}
+                          {(() => {
+                            const { ancestors, children } = getNodeConnections(
+                              node.id
+                            );
+                            return (
+                              <>
+                                {ancestors.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Built upon:</strong>
+                                    <div className="ml-2">
+                                      {ancestors.map((ancestor: TechNode, index: number) => {
+                                        // Find the link to check if it's speculative
+                                        const link = data.links.find(
+                                          l => l.source === ancestor.id && l.target === node.id
+                                        );
+                                        const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                        
+                                        return (
+                                          <div
+                                            key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                            className="flex"
                                           >
-                                            {ancestor.title}
-                                            {isSpeculative && " (possibly)"}
-                                          </button>
-                                        </div>
-                                      );
-                                    })}
+                                            <span className="flex-shrink-0 mr-1">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(ancestor.title);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {ancestor.title}
+                                              {isSpeculative && " (possibly)"}
+                                            </button>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                              {children.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Led to:</strong>
-                                  <div className="ml-2">
-                                    {children.map((child: TechNode, index: number) => {
-                                      // Find the link to check if it's speculative
-                                      const link = data.links.find(
-                                        l => l.source === node.id && l.target === child.id
-                                      );
-                                      const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
-                                      
-                                      return (
-                                        <div
-                                          key={`child-${node.id}-${child.id}-${index}`}
-                                          className="flex"
-                                        >
-                                          <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(child.title);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
+                                )}
+                                {children.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Led to:</strong>
+                                    <div className="ml-2">
+                                      {children.map((child: TechNode, index: number) => {
+                                        // Find the link to check if it's speculative
+                                        const link = data.links.find(
+                                          l => l.source === node.id && l.target === child.id
+                                        );
+                                        const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                        
+                                        return (
+                                          <div
+                                            key={`child-${node.id}-${child.id}-${index}`}
+                                            className="flex"
                                           >
-                                            {child.title}
-                                            {isSpeculative && " (possibly)"}
-                                          </button>
-                                        </div>
-                                      );
-                                    })}
+                                            <span className="flex-shrink-0 mr-1">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(child.title);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {child.title}
+                                              {isSpeculative && " (possibly)"}
+                                            </button>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </>
-                          );
+                                )}
+                              </>
+                            );
+                          })()}
+
+                          {/* Update the tooltip section with modified click handlers */}
+                          {(() => {
+                            const nodeId = selectedNodeId || hoveredNode?.id;
+                            if (!nodeId) return null;
+
+                            const ancestors = getAllAncestors(nodeId);
+                            const descendants = getAllDescendants(nodeId);
+                            ancestors.delete(nodeId);
+                            descendants.delete(nodeId);
+
+                            return (
+                              <div className="text-xs mt-2">
+                                {/* Show ancestry controls only if there are ancestors or descendants */}
+                                {(ancestors.size > 0 || descendants.size > 0) && (
+                                  <div className="mb-1">
+                                    {ancestors.size > 0 &&
+                                    descendants.size > 0 ? (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedAncestors(ancestors);
+                                            setHighlightedDescendants(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          ancestors
+                                        </button>
+                                        {" / "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedDescendants(
+                                              descendants
+                                            );
+                                            setHighlightedAncestors(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          descendants
+                                        </button>
+                                      </>
+                                    ) : ancestors.size > 0 ? (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedAncestors(ancestors);
+                                            setHighlightedDescendants(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          ancestors
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedDescendants(
+                                              descendants
+                                            );
+                                            setHighlightedAncestors(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          descendants
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                )}
+
+                                {/* Always show Wikipedia link if it exists, regardless of connections */}
+                                {node.wikipedia && (
+                                  <div>
+                                    View on{" "}
+                                    <a
+                                      href={node.wikipedia}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="text-blue-600 hover:underline cursor-pointer"
+                                    >
+                                      Wikipedia
+                                    </a>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
+      ) : (
+        // Desktop view with regular scrolling
+        <div ref={horizontalScrollContainerRef} className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50">
+          <div style={{ width: containerWidth }}>
+            {/* Timeline */}
+            <div
+              className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
+              style={{
+                width: containerWidth,
+                zIndex: 100,
+                position: "relative",
+              }}
+            >
+              {/* Timeline content */}
+              {(() => {
+                if (!data.nodes.length) return null;
+                const years = data.nodes.map((n) => n.year);
+                const minYear = Math.min(...years);
+                const maxYear = Math.max(...years);
+                const timelineYears = getTimelineYears(minYear, maxYear);
+
+                return timelineYears.map((year) => (
+                  <div
+                    key={year}
+                    className="absolute text-sm text-gray-600 font-mono"
+                    style={{
+                      left: `${getXPosition(year)}px`,
+                      transform: "translateX(-50%)",
+                    }}
+                  >
+                    {formatYear(year)}
+                  </div>
+                ));
+              })()}
+            </div>
+
+            {/* Vertical scroll container */}
+            <div
+              ref={verticalScrollContainerRef}
+              className="overflow-y-auto overflow-x-hidden"
+              style={{
+                height: "calc(100vh - 32px)",
+                overscrollBehaviorY: "contain",
+                position: "relative",
+              }}
+              onScroll={(e) => {
+                const verticalScroll = e.currentTarget.scrollTop;
+                setScrollPosition((prev) => ({
+                  ...prev,
+                  top: verticalScroll,
+                }));
+              }}
+            >
+              <div
+                style={{
+                  width: containerWidth,
+                  minHeight: `${totalHeight}px`,
+                  position: "relative",
+                  marginBottom: "64px",
+                }}
+              >
+                {/* Add IntroBox here instead */}
+                <IntroBox />
+
+                {/* SVG connections */}
+                <svg
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    zIndex: 1,
+                  }}
+                >
+                  {data.links.map((link, index) => {
+                    const sourceNode = data.nodes.find(
+                      (n) => n.id === link.source
+                    );
+                    const targetNode = data.nodes.find(
+                      (n) => n.id === link.target
+                    );
+
+                    if (!sourceNode || !targetNode) return null;
+                    return (
+                      <CurvedConnections
+                        key={index}
+                        sourceNode={{
+                          x: getXPosition(sourceNode.year),
+                          y: sourceNode.y || 150,
+                        }}
+                        targetNode={{
+                          x: getXPosition(targetNode.year),
+                          y: targetNode.y || 150,
+                        }}
+                        sourceIndex={data.nodes.indexOf(sourceNode)}
+                        targetIndex={data.nodes.indexOf(targetNode)}
+                        connectionType={link.type}
+                        isHighlighted={shouldHighlightLink(link, index)}
+                        opacity={(() => {
+                          // If a node is selected
+                          if (selectedNodeId) {
+                            // If this is a connection between highlighted nodes
+                            if (
+                              (highlightedAncestors.has(link.source) &&
+                                highlightedAncestors.has(link.target)) ||
+                              (highlightedDescendants.has(link.source) &&
+                                highlightedDescendants.has(link.target))
+                            ) {
+                              return 1;
+                            }
+                            // If this is a connection to/from the selected node
+                            if (shouldHighlightLink(link, index)) {
+                              return 1;
+                            }
+                            return 0.2;
+                          }
+                          // If a link is selected
+                          if (selectedLinkIndex !== null) {
+                            return index === selectedLinkIndex ? 1 : 0.2;
+                          }
+                          // If filters are applied
+                          if (
+                            filters.fields.size ||
+                            filters.countries.size ||
+                            filters.cities.size
+                          ) {
+                            return isLinkVisible(link) ? 1 : 0.2;
+                          }
+                          return 1;
                         })()}
-
-                        {/* Update the tooltip section with modified click handlers */}
-                        {(() => {
-                          const nodeId = selectedNodeId || hoveredNode?.id;
-                          if (!nodeId) return null;
-
-                          const ancestors = getAllAncestors(nodeId);
-                          const descendants = getAllDescendants(nodeId);
-                          ancestors.delete(nodeId);
-                          descendants.delete(nodeId);
-
-                          return (
-                            <div className="text-xs mt-2">
-                              {/* Show ancestry controls only if there are ancestors or descendants */}
-                              {(ancestors.size > 0 || descendants.size > 0) && (
-                                <div className="mb-1">
-                                  {ancestors.size > 0 &&
-                                  descendants.size > 0 ? (
-                                    <>
-                                      Highlight all{" "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedAncestors(ancestors);
-                                          setHighlightedDescendants(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        ancestors
-                                      </button>
-                                      {" / "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedDescendants(
-                                            descendants
-                                          );
-                                          setHighlightedAncestors(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        descendants
-                                      </button>
-                                    </>
-                                  ) : ancestors.size > 0 ? (
-                                    <>
-                                      Highlight all{" "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedAncestors(ancestors);
-                                          setHighlightedDescendants(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        ancestors
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <>
-                                      Highlight all{" "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedDescendants(
-                                            descendants
-                                          );
-                                          setHighlightedAncestors(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        descendants
-                                      </button>
-                                    </>
-                                  )}
-                                </div>
-                              )}
-
-                              {/* Always show Wikipedia link if it exists, regardless of connections */}
-                              {node.wikipedia && (
-                                <div>
-                                  View on{" "}
-                                  <a
-                                    href={node.wikipedia}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    Wikipedia
-                                  </a>
-                                </div>
-                              )}
-                            </div>
+                        onMouseEnter={() => {
+                          setHoveredLinkIndex(index);
+                        }}
+                        onMouseLeave={() => setHoveredLinkIndex(null)}
+                        sourceTitle={sourceNode.title}
+                        targetTitle={targetNode.title}
+                        details={link.details}
+                        isSelected={selectedLinkIndex === index}
+                        onSelect={() => {
+                          setSelectedLinkIndex((current) =>
+                            current === index ? null : index
                           );
-                        })()}
-                      </div>
-                    )
-                )}
+                          setSelectedNodeId(null);
+                        }}
+                        onNodeClick={(title) => {
+                          handleNodeClick(title);
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+
+                {/* Nodes */}
+                <div className="relative" style={{ zIndex: 10 }}>
+                  {filteredNodes.map((node) => (
+                    <BrutalistNode
+                      key={node.id}
+                      node={node}
+                      isSelected={node.id === selectedNodeId}
+                      isAdjacent={isAdjacentToSelected(node.id)}
+                      onClick={() => {
+                        if (node.id === selectedNodeId) {
+                          setSelectedNodeId(null);
+                        } else {
+                          setSelectedNodeId(node.id);
+                          setSelectedLinkIndex(null);
+                        }
+                      }}
+                      onMouseEnter={() => {
+                        if (node.id !== selectedNodeId) {
+                          handleNodeHover(node);
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (node.id !== selectedNodeId) {
+                          setHoveredNode(null);
+                          setHoveredNodeId(null);
+                        }
+                      }}
+                      width={NODE_WIDTH}
+                      style={{
+                        position: "absolute",
+                        left: `${getXPosition(node.year)}px`,
+                        top: `${node.y}px`,
+                        opacity: (() => {
+                          // If a node is selected
+                          if (selectedNodeId) {
+                            if (node.id === selectedNodeId) return 1;
+                            if (isAdjacentToSelected(node.id)) return 1;
+                            if (highlightedAncestors.has(node.id)) return 1;
+                            if (highlightedDescendants.has(node.id)) return 1;
+                            return 0.2;
+                          }
+                          // If a link is selected
+                          if (selectedLinkIndex !== null) {
+                            return isNodeConnectedToSelectedLink(node.id)
+                              ? 1
+                              : 0.2;
+                          }
+                          // If filters are applied
+                          if (
+                            filters.fields.size ||
+                            filters.countries.size ||
+                            filters.cities.size
+                          ) {
+                            return isNodeFiltered(node) ? 1 : 0.2;
+                          }
+                          // Default state - fully visible
+                          return 1;
+                        })(),
+                        transition: "opacity 0.2s ease-in-out",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Tooltips */}
+                <div className="relative" style={{ zIndex: 100 }}>
+                  {filteredNodes.map(
+                    (node) =>
+                      (hoveredNode?.id === node.id ||
+                        selectedNodeId === node.id) && (
+                        <div
+                          key={`tooltip-${node.id}`}
+                          className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
+                          style={{
+                            left: `${getXPosition(node.year)}px`,
+                            top: `${(node.y ?? 0) + 100}px`,
+                            transform: "translate(-50%, 0)",
+                            width: "14rem",
+                            zIndex: 100,
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => {
+                            // Keep the hover state active when hovering the tooltip
+                            setHoveredNode(node);
+                            setHoveredNodeId(node.id);
+                          }}
+                          onMouseLeave={() => {
+                            // Only clear hover state if the node isn't selected
+                            if (selectedNodeId !== node.id) {
+                              setHoveredNode(null);
+                              setHoveredNodeId(null);
+                            }
+                          }}
+                        >
+                          <p className="text-xs mb-1">
+                            <strong>Date:</strong> {formatYear(node.year)}
+                            {node.dateDetails && ` (${node.dateDetails})`}
+                          </p>
+                          {node.inventors &&
+                            node.inventors.length > 0 &&
+                            node.inventors.filter((inv) => inv !== "unknown")
+                              .length > 0 && (
+                              <p className="text-xs mb-1">
+                                <strong>
+                                  {node.type === "Discovery"
+                                    ? `Discoverer${
+                                        node.inventors.length > 1 ? "s" : ""
+                                      }`
+                                    : `Inventor${
+                                        node.inventors.length > 1 ? "s" : ""
+                                      }`}
+                                    :
+                                  </strong>{" "}
+                                  {node.inventors.includes("unknown")
+                                    ? "possibly " +
+                                      node.inventors
+                                        .filter((inv) => inv !== "unknown")
+                                        .join(", ")
+                                    : node.inventors.join(", ")}
+                              </p>
+                            )}
+                          {node.organizations &&
+                            node.organizations.length > 0 && (
+                              <p className="text-xs mb-1">
+                                <strong>
+                                  {node.organizations.length > 1
+                                    ? "Organizations"
+                                    : "Organization"}
+                                  :
+                                </strong>{" "}
+                                {node.organizations.join(", ")}
+                              </p>
+                            )}
+                          {node.formattedLocation && (
+                            <p className="text-xs mb-1">
+                              <strong>Location:</strong> {node.formattedLocation}
+                            </p>
+                          )}
+                          {node.details && (
+                            <p className="text-xs mb-2">{node.details}</p>
+                          )}
+
+                          {/* Updated connections section */}
+                          {(() => {
+                            const { ancestors, children } = getNodeConnections(
+                              node.id
+                            );
+                            return (
+                              <>
+                                {ancestors.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Built upon:</strong>
+                                    <div className="ml-2">
+                                      {ancestors.map((ancestor: TechNode, index: number) => {
+                                        // Find the link to check if it's speculative
+                                        const link = data.links.find(
+                                          l => l.source === ancestor.id && l.target === node.id
+                                        );
+                                        const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                        
+                                        return (
+                                          <div
+                                            key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                            className="flex"
+                                          >
+                                            <span className="flex-shrink-0 mr-1">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(ancestor.title);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {ancestor.title}
+                                              {isSpeculative && " (possibly)"}
+                                            </button>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                {children.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Led to:</strong>
+                                    <div className="ml-2">
+                                      {children.map((child: TechNode, index: number) => {
+                                        // Find the link to check if it's speculative
+                                        const link = data.links.find(
+                                          l => l.source === node.id && l.target === child.id
+                                        );
+                                        const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                        
+                                        return (
+                                          <div
+                                            key={`child-${node.id}-${child.id}-${index}`}
+                                            className="flex"
+                                          >
+                                            <span className="flex-shrink-0 mr-1">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(child.title);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {child.title}
+                                              {isSpeculative && " (possibly)"}
+                                            </button>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
+
+                          {/* Update the tooltip section with modified click handlers */}
+                          {(() => {
+                            const nodeId = selectedNodeId || hoveredNode?.id;
+                            if (!nodeId) return null;
+
+                            const ancestors = getAllAncestors(nodeId);
+                            const descendants = getAllDescendants(nodeId);
+                            ancestors.delete(nodeId);
+                            descendants.delete(nodeId);
+
+                            return (
+                              <div className="text-xs mt-2">
+                                {/* Show ancestry controls only if there are ancestors or descendants */}
+                                {(ancestors.size > 0 || descendants.size > 0) && (
+                                  <div className="mb-1">
+                                    {ancestors.size > 0 &&
+                                    descendants.size > 0 ? (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedAncestors(ancestors);
+                                            setHighlightedDescendants(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          ancestors
+                                        </button>
+                                        {" / "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedDescendants(
+                                              descendants
+                                            );
+                                            setHighlightedAncestors(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          descendants
+                                        </button>
+                                      </>
+                                    ) : ancestors.size > 0 ? (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedAncestors(ancestors);
+                                            setHighlightedDescendants(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          ancestors
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // First ensure the node is selected
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedDescendants(
+                                              descendants
+                                            );
+                                            setHighlightedAncestors(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          descendants
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                )}
+
+                                {/* Always show Wikipedia link if it exists, regardless of connections */}
+                                {node.wikipedia && (
+                                  <div>
+                                    View on{" "}
+                                    <a
+                                      href={node.wikipedia}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="text-blue-600 hover:underline cursor-pointer"
+                                    >
+                                      Wikipedia
+                                    </a>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      )
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Minimap (only show on desktop) */}
+      {!isMobile() && (
         <TechTreeMinimap
           nodes={data.nodes.map(
             (node): MinimapNode => ({
@@ -1995,7 +2486,7 @@ export function TechTreeViewer() {
           highlightedAncestors={highlightedAncestors}
           highlightedDescendants={highlightedDescendants}
         />
-      </div>
+      )}
     </div>
   );
 }
