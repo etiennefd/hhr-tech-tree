@@ -35,6 +35,7 @@ interface CurvedConnectionsProps {
   onNodeClick: (title: string) => void;
   sourceIndex: number;
   targetIndex: number;
+  style?: React.CSSProperties;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
@@ -51,6 +52,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onSelect,
   isSelected = false,
   onNodeClick,
+  style,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
@@ -262,7 +264,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
             setMousePos({ x: e.clientX, y: e.clientY });
           }
         }}
-        style={{ pointerEvents: "all" }}
+        style={{ pointerEvents: "all", ...style }}
       >
         {/* Hit area - always present but with different sizes based on highlight status */}
         <path
