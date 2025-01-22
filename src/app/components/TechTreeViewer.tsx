@@ -55,6 +55,11 @@ const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500; // Add this constant for the info box height
 
+// Add these constants near the other constants
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 2;
+const DEFAULT_ZOOM = 1;
+
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -98,6 +103,18 @@ interface MinimapNode {
   x: number;
   y: number;
   year: number;
+}
+
+// Add these interfaces near the other interfaces
+interface Touch {
+  clientX: number;
+  clientY: number;
+}
+
+interface TouchState {
+  touches: Touch[];
+  scale: number;
+  startDistance?: number;
 }
 
 function getTimelineSegment(year: number) {
@@ -302,6 +319,9 @@ export function TechTreeViewer() {
     Set<string>
   >(new Set());
   const currentNodesRef = useRef<TechNode[]>([]);
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStateRef = useRef<TouchState>({ touches: [], scale: 1 });
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -1406,6 +1426,55 @@ export function TechTreeViewer() {
     };
   }, []);
 
+  // Add this effect to detect mobile devices
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Add these touch event handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStateRef.current = {
+      touches: Array.from(e.touches),
+      scale: zoom,
+    };
+    
+    if (e.touches.length === 2) {
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      touchStateRef.current.startDistance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+    }
+  }, [zoom]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length !== 2) return;
+    
+    const touch1 = e.touches[0];
+    const touch2 = e.touches[1];
+    const currentDistance = Math.hypot(
+      touch2.clientX - touch1.clientX,
+      touch2.clientY - touch1.clientY
+    );
+    
+    if (touchStateRef.current.startDistance) {
+      const scale = touchStateRef.current.scale * (currentDistance / touchStateRef.current.startDistance);
+      const newZoom = Math.min(Math.max(scale, MIN_ZOOM), MAX_ZOOM);
+      setZoom(newZoom);
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    touchStateRef.current = { touches: [], scale: zoom };
+  }, [zoom]);
+
   // Add loading state UI
   if (isLoading) {
     return (
@@ -1477,7 +1546,13 @@ export function TechTreeViewer() {
       <div
         ref={horizontalScrollContainerRef}
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
-        style={{ overscrollBehaviorY: "none" }}
+        style={{ 
+          overscrollBehaviorY: "none",
+          touchAction: isMobile ? "none" : "auto" // Disable default touch handling on mobile
+        }}
+        onTouchStart={isMobile ? handleTouchStart : undefined}
+        onTouchMove={isMobile ? handleTouchMove : undefined}
+        onTouchEnd={isMobile ? handleTouchEnd : undefined}
         onScroll={(e) => {
           const horizontalScroll = e.currentTarget.scrollLeft;
           setScrollPosition((prev) => ({
@@ -1486,7 +1561,14 @@ export function TechTreeViewer() {
           }));
         }}
       >
-        <div style={{ width: containerWidth }}>
+        <div 
+          style={{ 
+            width: containerWidth,
+            transform: isMobile ? `scale(${zoom})` : undefined,
+            transformOrigin: isMobile ? "0 0" : undefined,
+            width: isMobile ? containerWidth * zoom : containerWidth
+          }}
+        >
           {/* Timeline */}
           <div
             className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
@@ -1527,6 +1609,7 @@ export function TechTreeViewer() {
               height: "calc(100vh - 32px)",
               overscrollBehaviorY: "contain",
               position: "relative",
+              touchAction: isMobile ? "none" : "auto"
             }}
             onScroll={(e) => {
               const verticalScroll = e.currentTarget.scrollTop;
