@@ -215,15 +215,23 @@ const IntroBox = memo(() => {
           });
         }
 
-        // Then fetch fresh data
-        const response = await fetch("/api/inventions");
-        const freshData = await response.json();
-        setCounts({
-          nodes: freshData.nodes.length,
-          links: freshData.links.length
-        });
+        // Then try to fetch fresh data
+        try {
+          const response = await fetch("/api/inventions");
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const freshData = await response.json();
+          setCounts({
+            nodes: freshData.nodes.length,
+            links: freshData.links.length
+          });
+        } catch (fetchError) {
+          console.warn("Failed to fetch fresh counts:", fetchError);
+          // Don't throw here - we'll use cached data if available
+        }
       } catch (error) {
-        console.error("Failed to fetch counts:", error);
+        console.warn("Failed to get counts:", error);
+        // Set some fallback counts if everything fails
+        setCounts({ nodes: 0, links: 0 });
       }
     };
     getCounts();
