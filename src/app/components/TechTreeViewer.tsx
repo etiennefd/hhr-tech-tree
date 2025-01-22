@@ -1624,7 +1624,6 @@ export function TechTreeViewer() {
                         onNodeClick={(title) => {
                           handleNodeClick(title);
                         }}
-                        style={isMobile() ? mobileStyles.connection : undefined}
                       />
                     );
                   })}
@@ -1689,7 +1688,6 @@ export function TechTreeViewer() {
                           return 1;
                         })(),
                         transition: "opacity 0.2s ease-in-out",
-                        ...(isMobile() ? mobileStyles.node : {}),
                       }}
                     />
                   ))}
@@ -2115,7 +2113,6 @@ export function TechTreeViewer() {
                         onNodeClick={(title) => {
                           handleNodeClick(title);
                         }}
-                        style={isMobile() ? mobileStyles.connection : undefined}
                       />
                     );
                   })}
@@ -2180,7 +2177,6 @@ export function TechTreeViewer() {
                           return 1;
                         })(),
                         transition: "opacity 0.2s ease-in-out",
-                        ...(isMobile() ? mobileStyles.node : {}),
                       }}
                     />
                   ))}
