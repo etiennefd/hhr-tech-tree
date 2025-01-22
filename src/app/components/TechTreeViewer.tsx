@@ -117,6 +117,15 @@ interface TouchState {
   startDistance?: number;
 }
 
+// Add these to your existing interfaces section
+interface DragState {
+  isDragging: boolean;
+  startX: number;
+  startY: number;
+  scrollLeft: number;
+  scrollTop: number;
+}
+
 function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
   if (year >= YEAR_EARLY_MODERN)
@@ -322,6 +331,13 @@ export function TechTreeViewer() {
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [isMobile, setIsMobile] = useState(false);
   const touchStateRef = useRef<TouchState>({ touches: [], scale: 1 });
+  const dragStateRef = useRef<DragState>({
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    scrollLeft: 0,
+    scrollTop: 0,
+  });
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -1437,42 +1453,70 @@ export function TechTreeViewer() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Add these touch event handlers
+  // Update the touch handlers to handle both dragging and pinch zoom
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStateRef.current = {
-      touches: Array.from(e.touches),
-      scale: zoom,
-    };
-    
     if (e.touches.length === 2) {
+      // Pinch zoom logic
+      touchStateRef.current = {
+        touches: Array.from(e.touches),
+        scale: zoom,
+      };
+      
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       touchStateRef.current.startDistance = Math.hypot(
         touch2.clientX - touch1.clientX,
         touch2.clientY - touch1.clientY
       );
+    } else if (e.touches.length === 1) {
+      // Single touch drag logic
+      dragStateRef.current = {
+        isDragging: true,
+        startX: e.touches[0].clientX,
+        startY: e.touches[0].clientY,
+        scrollLeft: horizontalScrollContainerRef.current?.scrollLeft || 0,
+        scrollTop: verticalScrollContainerRef.current?.scrollTop || 0,
+      };
     }
   }, [zoom]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (e.touches.length !== 2) return;
-    
-    const touch1 = e.touches[0];
-    const touch2 = e.touches[1];
-    const currentDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
-    
-    if (touchStateRef.current.startDistance) {
-      const scale = touchStateRef.current.scale * (currentDistance / touchStateRef.current.startDistance);
-      const newZoom = Math.min(Math.max(scale, MIN_ZOOM), MAX_ZOOM);
-      setZoom(newZoom);
+    e.preventDefault(); // Prevent default scrolling
+
+    if (e.touches.length === 2) {
+      // Pinch zoom logic
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const currentDistance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      
+      if (touchStateRef.current.startDistance) {
+        const scale = touchStateRef.current.scale * (currentDistance / touchStateRef.current.startDistance);
+        const newZoom = Math.min(Math.max(scale, MIN_ZOOM), MAX_ZOOM);
+        setZoom(newZoom);
+      }
+    } else if (e.touches.length === 1 && dragStateRef.current.isDragging) {
+      // Single touch drag logic
+      const deltaX = e.touches[0].clientX - dragStateRef.current.startX;
+      const deltaY = e.touches[0].clientY - dragStateRef.current.startY;
+      
+      if (horizontalScrollContainerRef.current) {
+        horizontalScrollContainerRef.current.scrollLeft = 
+          dragStateRef.current.scrollLeft - deltaX;
+      }
+      
+      if (verticalScrollContainerRef.current) {
+        verticalScrollContainerRef.current.scrollTop = 
+          dragStateRef.current.scrollTop - deltaY;
+      }
     }
   }, []);
 
   const handleTouchEnd = useCallback(() => {
     touchStateRef.current = { touches: [], scale: zoom };
+    dragStateRef.current.isDragging = false;
   }, [zoom]);
 
   // Add loading state UI
@@ -1548,7 +1592,8 @@ export function TechTreeViewer() {
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
         style={{ 
           overscrollBehaviorY: "none",
-          touchAction: isMobile ? "none" : "auto"
+          touchAction: isMobile ? "none" : "auto",
+          WebkitOverflowScrolling: "touch", // Add smooth scrolling on iOS
         }}
         onTouchStart={isMobile ? handleTouchStart : undefined}
         onTouchMove={isMobile ? handleTouchMove : undefined}
