@@ -1593,7 +1593,7 @@ export function TechTreeViewer() {
         style={{ 
           overscrollBehaviorY: "none",
           touchAction: isMobile ? "none" : "auto",
-          WebkitOverflowScrolling: "touch", // Add smooth scrolling on iOS
+          WebkitOverflowScrolling: "touch",
         }}
         onTouchStart={isMobile ? handleTouchStart : undefined}
         onTouchMove={isMobile ? handleTouchMove : undefined}
@@ -1608,16 +1608,17 @@ export function TechTreeViewer() {
       >
         <div 
           style={{ 
+            width: containerWidth,
+            minHeight: '100vh',
             transform: isMobile ? `scale(${zoom})` : undefined,
             transformOrigin: isMobile ? "0 0" : undefined,
-            width: isMobile ? containerWidth * zoom : containerWidth
           }}
         >
           {/* Timeline */}
           <div
             className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
             style={{
-              width: containerWidth,
+              width: '100%',
               zIndex: 100,
               position: "relative",
             }}
@@ -1650,10 +1651,11 @@ export function TechTreeViewer() {
             ref={verticalScrollContainerRef}
             className="overflow-y-auto overflow-x-hidden"
             style={{
-              height: "calc(100vh - 32px)",
+              height: isMobile ? `${window.innerHeight / zoom}px` : "calc(100vh - 32px)",
               overscrollBehaviorY: "contain",
               position: "relative",
-              touchAction: isMobile ? "none" : "auto"
+              touchAction: isMobile ? "none" : "auto",
+              minHeight: isMobile ? `${Math.max(totalHeight, window.innerHeight) / zoom}px` : undefined,
             }}
             onScroll={(e) => {
               const verticalScroll = e.currentTarget.scrollTop;
@@ -1665,8 +1667,8 @@ export function TechTreeViewer() {
           >
             <div
               style={{
-                width: containerWidth,
-                minHeight: `${totalHeight}px`,
+                width: '100%',
+                height: isMobile ? `${Math.max(totalHeight, window.innerHeight) / zoom}px` : `${totalHeight}px`,
                 position: "relative",
                 marginBottom: "64px",
               }}
