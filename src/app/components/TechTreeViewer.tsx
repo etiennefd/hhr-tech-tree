@@ -796,29 +796,28 @@ export function TechTreeViewer() {
       setHighlightedAncestors(new Set());
       setHighlightedDescendants(new Set());
 
-      // If clicking the same node, deselect it
       if (selectedNodeId === node.id) {
         setSelectedNodeId(null);
         return;
       }
 
-      // Set the new selected node
       setSelectedNodeId(node.id);
 
-      // Get vertical scroll container
       const verticalContainer = verticalScrollContainerRef.current;
-      if (!verticalContainer || !horizontalScrollContainerRef.current) {
-        console.error("Scroll containers not found");
-        return;
-      }
+      if (!verticalContainer || !horizontalScrollContainerRef.current) return;
 
-      // Calculate scroll positions
-      const horizontalPosition =
-        getXPosition(node.year) - window.innerWidth / 2;
-      const verticalPosition =
-        (node.y ?? 0) - verticalContainer.clientHeight / 2 + 150;
+      // Calculate scroll positions accounting for zoom
+      const xPosition = getXPosition(node.year);
+      const horizontalPosition = isMobile
+        ? (xPosition * zoom) - (window.innerWidth / 2)
+        : xPosition - (window.innerWidth / 2);
 
-      // Execute both scrolls
+      const yPosition = node.y ?? 0;
+      const verticalPosition = isMobile
+        ? (yPosition * zoom) - (verticalContainer.clientHeight / 2) + (150 * zoom)
+        : yPosition - verticalContainer.clientHeight / 2 + 150;
+
+      // Execute scrolls
       horizontalScrollContainerRef.current.scrollTo({
         left: Math.max(0, horizontalPosition),
         behavior: "smooth",
@@ -834,7 +833,7 @@ export function TechTreeViewer() {
         setSelectedNodeId(node.id);
       }, 100);
     },
-    [data.nodes, selectedNodeId, getXPosition]
+    [data.nodes, selectedNodeId, getXPosition, isMobile, zoom]
   );
 
   // Helper function to check if a node is adjacent to selected node
@@ -1169,25 +1168,26 @@ export function TechTreeViewer() {
     [searchIndex, data.nodes, formatYear]
   );
 
-  // Add result selection handler
+  // Update handleSelectResult to account for zoom level
   const handleSelectResult = useCallback(
     (result: SearchResult) => {
       if (result.type === "year" && result.year) {
-        // Scroll to year
         if (horizontalScrollContainerRef.current) {
-          const horizontalPosition =
-            getXPosition(result.year) - window.innerWidth / 2;
+          const xPosition = getXPosition(result.year);
+          const horizontalPosition = isMobile
+            ? (xPosition * zoom) - (window.innerWidth / 2)
+            : xPosition - (window.innerWidth / 2);
+
           horizontalScrollContainerRef.current.scrollTo({
-            left: horizontalPosition,
+            left: Math.max(0, horizontalPosition),
             behavior: "smooth",
           });
         }
       } else if (result.node) {
-        // Navigate to node
         handleNodeClick(result.node.title);
       }
     },
-    [getXPosition, handleNodeClick]
+    [getXPosition, handleNodeClick, isMobile, zoom]
   );
 
   const isNodeFiltered = useCallback(
