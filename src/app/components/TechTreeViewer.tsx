@@ -26,6 +26,7 @@ import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 import Link from 'next/link';
+import { debounce } from 'lodash';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -59,6 +60,9 @@ const INFO_BOX_HEIGHT = 500; // Add this constant for the info box height
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 2;
 const DEFAULT_ZOOM = 1;
+
+// Add these constants near other constants
+const ZOOM_DEBOUNCE_MS = 16; // About 1 frame at 60fps
 
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
@@ -1480,11 +1484,17 @@ export function TechTreeViewer() {
     }
   }, [zoom]);
 
+  const debouncedSetZoom = useMemo(
+    () => debounce((newZoom: number) => {
+      setZoom(newZoom);
+    }, ZOOM_DEBOUNCE_MS),
+    [setZoom]
+  );
+
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default scrolling
+    e.preventDefault();
 
     if (e.touches.length === 2) {
-      // Pinch zoom logic
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       const currentDistance = Math.hypot(
@@ -1495,29 +1505,35 @@ export function TechTreeViewer() {
       if (touchStateRef.current.startDistance) {
         const scale = touchStateRef.current.scale * (currentDistance / touchStateRef.current.startDistance);
         const newZoom = Math.min(Math.max(scale, MIN_ZOOM), MAX_ZOOM);
-        setZoom(newZoom);
+        debouncedSetZoom(newZoom);
       }
     } else if (e.touches.length === 1 && dragStateRef.current.isDragging) {
-      // Single touch drag logic
       const deltaX = e.touches[0].clientX - dragStateRef.current.startX;
       const deltaY = e.touches[0].clientY - dragStateRef.current.startY;
       
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollLeft = 
-          dragStateRef.current.scrollLeft - deltaX;
+          dragStateRef.current.scrollLeft - deltaX / zoom;
       }
       
       if (verticalScrollContainerRef.current) {
         verticalScrollContainerRef.current.scrollTop = 
-          dragStateRef.current.scrollTop - deltaY;
+          dragStateRef.current.scrollTop - deltaY / zoom;
       }
     }
-  }, []);
+  }, [zoom, debouncedSetZoom]);
 
   const handleTouchEnd = useCallback(() => {
     touchStateRef.current = { touches: [], scale: zoom };
     dragStateRef.current.isDragging = false;
   }, [zoom]);
+
+  // Add cleanup effect here, before any returns
+  useEffect(() => {
+    return () => {
+      debouncedSetZoom.cancel();
+    };
+  }, [debouncedSetZoom]);
 
   // Add loading state UI
   if (isLoading) {
@@ -1612,6 +1628,8 @@ export function TechTreeViewer() {
             minHeight: '100vh',
             transform: isMobile ? `scale(${zoom})` : undefined,
             transformOrigin: isMobile ? "0 0" : undefined,
+            willChange: 'transform', // Add hardware acceleration hint
+            backfaceVisibility: 'hidden', // Optimize rendering
           }}
         >
           {/* Timeline */}
