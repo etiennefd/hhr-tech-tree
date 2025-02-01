@@ -1535,6 +1535,25 @@ export function TechTreeViewer() {
     };
   }, [debouncedSetZoom]);
 
+  // Add this effect near your other keyboard-related effects
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Clear all selections and highlights
+        setSelectedNodeId(null);
+        setSelectedLinkIndex(null);
+        setHoveredNode(null);
+        setHoveredNodeId(null);
+        setHoveredLinkIndex(null);
+        setHighlightedAncestors(new Set());
+        setHighlightedDescendants(new Set());
+      }
+    };
+
+    window.addEventListener('keydown', handleEscapeKey);
+    return () => window.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
   // Add loading state UI
   if (isLoading) {
     return (
