@@ -908,12 +908,16 @@ export function TechTreeViewer() {
       const ancestors = data.links
         .filter((link) => link.target === nodeId && validConnectionTypes(link))
         .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is TechNode => n !== undefined);
+        .filter((n): n is TechNode => n !== undefined)
+        // Sort ancestors by year (most recent first)
+        .sort((a, b) => b.year - a.year);
 
       const children = data.links
         .filter((link) => link.source === nodeId && validConnectionTypes(link))
         .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is TechNode => n !== undefined);
+        .filter((n): n is TechNode => n !== undefined)
+        // Sort children by year (earliest first)
+        .sort((a, b) => a.year - b.year);
 
       return { ancestors, children };
     },
