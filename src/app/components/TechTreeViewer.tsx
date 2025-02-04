@@ -1122,7 +1122,7 @@ export function TechTreeViewer() {
               node,
               text: node.title,
               subtext: `${formatYear(node.year)}${
-                node.subtitle ? ` - ${node.subtitle}` : ""
+                node.subtitle ? ` – ${node.subtitle}` : ""
               }`,
               matchScore: score,
             });
