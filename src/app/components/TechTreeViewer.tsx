@@ -412,7 +412,6 @@ export function TechTreeViewer() {
         // Food & Agriculture (0-300)
         Food: Math.max(150, ABSOLUTE_MIN_Y),
         Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
-        "Animal husbandry": Math.max(250, ABSOLUTE_MIN_Y),
         "Hunting and fishing": Math.max(300, ABSOLUTE_MIN_Y),
 
         // Life Sciences (300-500)
