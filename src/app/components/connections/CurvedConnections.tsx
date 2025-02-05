@@ -188,16 +188,15 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           ...baseStyle,
           strokeDasharray: "10,4", // Long dashes for parallel development
         };
-      case "Inspiration":
-        return {
-          ...baseStyle,
-          strokeDasharray: "4,4", // Medium dashes for inspiration
-        };
-      case "Speculative":
       case "Link plausible but unclear":
         return {
           ...baseStyle,
-          strokeDasharray: "2,4", // Short dashes, longer gaps for uncertainty
+          strokeDasharray: "4,4", // Medium dashes for unclear links
+        };
+      case "Speculative":
+        return {
+          ...baseStyle,
+          strokeDasharray: "2,4", // Short dashes, longer gaps for speculative connections
         };
       case "Obsolescence":
         return {
