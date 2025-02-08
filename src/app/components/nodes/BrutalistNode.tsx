@@ -86,7 +86,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     // Food & Agriculture (Vibrant Greens)
     Food: "#2AAE4A", // Bright grass green
     Agriculture: "#34B441", // Fresh leaf green
-    "Hunting and fishing": "#3EAF49", // Forest green
 
     // Life Sciences (Teals and Aquas)
     Biology: "#00A499", // Rich teal
