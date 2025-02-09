@@ -904,20 +904,33 @@ export function TechTreeViewer() {
         );
 
       const ancestors = data.links
-        .filter((link) => link.target === nodeId && validConnectionTypes(link))
+        .filter((link) => link.target === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
         .map((link) => data.nodes.find((n) => n.id === link.source))
         .filter((n): n is TechNode => n !== undefined)
         // Sort ancestors by year (most recent first)
         .sort((a, b) => b.year - a.year);
 
       const children = data.links
-        .filter((link) => link.source === nodeId && validConnectionTypes(link))
+        .filter((link) => link.source === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
         .map((link) => data.nodes.find((n) => n.id === link.target))
         .filter((n): n is TechNode => n !== undefined)
         // Sort children by year (earliest first)
         .sort((a, b) => a.year - b.year);
 
-      return { ancestors, children };
+      // Add replaced and replacedBy
+      const replaced = data.links
+        .filter((link) => link.target === nodeId && link.type === "Obsolescence")
+        .map((link) => data.nodes.find((n) => n.id === link.source))
+        .filter((n): n is TechNode => n !== undefined)
+        .sort((a, b) => a.year - b.year);
+
+      const replacedBy = data.links
+        .filter((link) => link.source === nodeId && link.type === "Obsolescence")
+        .map((link) => data.nodes.find((n) => n.id === link.target))
+        .filter((n): n is TechNode => n !== undefined)
+        .sort((a, b) => b.year - a.year);
+
+      return { ancestors, children, replaced, replacedBy };
     },
     [data.links, data.nodes]
   );
@@ -1944,7 +1957,7 @@ export function TechTreeViewer() {
 
                         {/* Updated connections section */}
                         {(() => {
-                          const { ancestors, children } = getNodeConnections(
+                          const { ancestors, children, replaced, replacedBy } = getNodeConnections(
                             node.id
                           );
                           return (
@@ -2014,6 +2027,58 @@ export function TechTreeViewer() {
                                         </div>
                                       );
                                     })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {replaced.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Replaced:</strong>
+                                  <div className="ml-2">
+                                    {replaced.map((replacedNode: TechNode, index: number) => (
+                                      <div
+                                        key={`replaced-${node.id}-${replacedNode.id}-${index}`}
+                                        className="flex"
+                                      >
+                                        <span className="flex-shrink-0 mr-1">•</span>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNodeClick(replacedNode.title);
+                                          }}
+                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                          type="button"
+                                        >
+                                          {replacedNode.title}
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {replacedBy.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Replaced by:</strong>
+                                  <div className="ml-2">
+                                    {replacedBy.map((replacedByNode: TechNode, index: number) => (
+                                      <div
+                                        key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
+                                        className="flex"
+                                      >
+                                        <span className="flex-shrink-0 mr-1">•</span>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNodeClick(replacedByNode.title);
+                                          }}
+                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                          type="button"
+                                        >
+                                          {replacedByNode.title}
+                                        </button>
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
                               )}
