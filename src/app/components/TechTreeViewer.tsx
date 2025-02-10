@@ -297,6 +297,12 @@ const IntroBox = memo(() => {
 
 IntroBox.displayName = "IntroBox";
 
+// Add this helper function near other utility functions, before the TechTreeViewer component
+const cleanLocationForTooltip = (location: string | undefined): string | undefined => {
+  if (!location) return undefined;
+  return location.replace(/ \(unspecified\)/g, '');
+};
+
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
@@ -1948,7 +1954,7 @@ export function TechTreeViewer() {
                           )}
                         {node.formattedLocation && (
                           <p className="text-xs mb-1">
-                            <strong>Location:</strong> {node.formattedLocation}
+                            <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
                           </p>
                         )}
                         {node.details && (
