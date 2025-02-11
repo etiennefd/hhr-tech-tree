@@ -1,8 +1,4 @@
 {
-  "Paraffin_wax": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Paraffin.jpg/300px-Paraffin.jpg",
-    "timestamp": 1738624759859
-  },
   "Selective_laser_melting": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Selective_laser_melting.jpg/300px-Selective_laser_melting.jpg",
     "timestamp": 1738708583310
@@ -2522,5 +2518,21 @@
   "Bitumen#History": {
     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Bitumen.jpg/300px-Bitumen.jpg",
     "timestamp": 1739207386956
+  },
+  "Lithium": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Lithiumcut_cropped.jpg/300px-Lithiumcut_cropped.jpg",
+    "timestamp": 1739220290997
+  },
+  "Titanium": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Titan-crystal_bar.JPG/300px-Titan-crystal_bar.JPG",
+    "timestamp": 1739228518028
+  },
+  "Paraffin_wax": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Paraffin.jpg/300px-Paraffin.jpg",
+    "timestamp": 1739245747607
+  },
+  "Reflection_(artificial_intelligence)#History": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Diagram_of_reflexion.jpg/300px-Diagram_of_reflexion.jpg",
+    "timestamp": 1739289038804
   }
 }
