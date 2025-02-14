@@ -1481,6 +1481,8 @@ export function TechTreeViewer() {
   // Update the touch handlers to handle both dragging and pinch zoom
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2) {
+      // Only prevent default for pinch zoom
+      e.preventDefault();
       // Pinch zoom logic
       touchStateRef.current = {
         touches: Array.from(e.touches),
@@ -1513,9 +1515,9 @@ export function TechTreeViewer() {
   );
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    e.preventDefault();
-
     if (e.touches.length === 2) {
+      // Only prevent default for pinch zoom
+      e.preventDefault();
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       const currentDistance = Math.hypot(
@@ -1528,25 +1530,11 @@ export function TechTreeViewer() {
         const newZoom = Math.min(Math.max(scale, MIN_ZOOM), MAX_ZOOM);
         debouncedSetZoom(newZoom);
       }
-    } else if (e.touches.length === 1 && dragStateRef.current.isDragging) {
-      const deltaX = e.touches[0].clientX - dragStateRef.current.startX;
-      const deltaY = e.touches[0].clientY - dragStateRef.current.startY;
-      
-      if (horizontalScrollContainerRef.current) {
-        horizontalScrollContainerRef.current.scrollLeft = 
-          dragStateRef.current.scrollLeft - deltaX / zoom;
-      }
-      
-      if (verticalScrollContainerRef.current) {
-        verticalScrollContainerRef.current.scrollTop = 
-          dragStateRef.current.scrollTop - deltaY / zoom;
-      }
     }
   }, [zoom, debouncedSetZoom]);
 
   const handleTouchEnd = useCallback(() => {
     touchStateRef.current = { touches: [], scale: zoom };
-    dragStateRef.current.isDragging = false;
   }, [zoom]);
 
   // Add cleanup effect here, before any returns
@@ -1648,7 +1636,7 @@ export function TechTreeViewer() {
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
         style={{ 
           overscrollBehaviorY: "none",
-          touchAction: isMobile ? "none" : "auto",
+          touchAction: isMobile ? "pan-x pan-y pinch-zoom" : "auto",
           WebkitOverflowScrolling: "touch",
         }}
         onTouchStart={isMobile ? handleTouchStart : undefined}
@@ -1712,7 +1700,8 @@ export function TechTreeViewer() {
               height: isMobile ? `${window.innerHeight / zoom}px` : "calc(100vh - 32px)",
               overscrollBehaviorY: "contain",
               position: "relative",
-              touchAction: isMobile ? "none" : "auto",
+              touchAction: isMobile ? "pan-x pan-y pinch-zoom" : "auto",
+              WebkitOverflowScrolling: "touch",
               minHeight: isMobile ? `${Math.max(totalHeight, window.innerHeight) / zoom}px` : undefined,
             }}
             onScroll={(e) => {
