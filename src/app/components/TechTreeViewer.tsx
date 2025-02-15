@@ -1962,11 +1962,12 @@ export function TechTreeViewer() {
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
                                     {ancestors.map((ancestor: TechNode, index: number) => {
-                                      // Find the link to check if it's speculative
+                                      // Find the link to check its type
                                       const link = data.links.find(
                                         l => l.source === ancestor.id && l.target === node.id
                                       );
-                                      const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                      // Only show (possibly) for speculative connections
+                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
                                       
                                       return (
                                         <div
@@ -1982,8 +1983,7 @@ export function TechTreeViewer() {
                                             className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                             type="button"
                                           >
-                                            {ancestor.title}
-                                            {isSpeculative && " (possibly)"}
+                                            {ancestor.title}{suffix}
                                           </button>
                                         </div>
                                       );
@@ -1996,11 +1996,12 @@ export function TechTreeViewer() {
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
                                     {children.map((child: TechNode, index: number) => {
-                                      // Find the link to check if it's speculative
+                                      // Find the link to check its type
                                       const link = data.links.find(
                                         l => l.source === node.id && l.target === child.id
                                       );
-                                      const isSpeculative = link?.type === "Speculative" || link?.type === "Link plausible but unclear";
+                                      // Only show (possibly) for speculative connections
+                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
                                       
                                       return (
                                         <div
@@ -2016,8 +2017,7 @@ export function TechTreeViewer() {
                                             className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                             type="button"
                                           >
-                                            {child.title}
-                                            {isSpeculative && " (possibly)"}
+                                            {child.title}{suffix}
                                           </button>
                                         </div>
                                       );

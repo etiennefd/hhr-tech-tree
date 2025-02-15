@@ -78,10 +78,15 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
           </>
         );
       case "Speculative":
-      case "Link plausible but unclear":
         return (
           <>
             {Source} may have led to {Target}
+          </>
+        );
+      case "Link plausible but unclear":
+        return (
+          <>
+            {Source} may have led to {Target} (to be confirmed)
           </>
         );
       default:
