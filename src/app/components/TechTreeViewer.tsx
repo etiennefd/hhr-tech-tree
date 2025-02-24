@@ -1318,17 +1318,25 @@ export function TechTreeViewer() {
     );
   }, [filters, data.nodes, isNodeFiltered]);
 
-  // Add prefetching for nodes
-  const prefetchNode = useCallback(async (nodeId: string) => {
-    try {
-      // Implement specific node prefetching logic here
-      // This could be a separate API endpoint that returns detailed node data
-      const response = await fetch(`/api/inventions/${nodeId}`);
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-      const nodeData = await response.json();
+  // Add this near the top of the component
+  const prefetchedNodes = useRef(new Set<string>());
 
-      // Update the node in the current data
+  // Update the prefetchNode function
+  const prefetchNode = useCallback(async (nodeId: string) => {
+    // Skip if already prefetched
+    if (prefetchedNodes.current.has(nodeId)) return;
+    prefetchedNodes.current.add(nodeId);
+
+    try {
+      const response = await fetch(`/api/inventions/${nodeId}`);
+      if (!response.ok) {
+        if (response.status !== 404) {  // Don't log 404s as they're expected
+          console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
+        }
+        return;
+      }
+      const nodeData = await response.json();
+      
       setData((prevData) => ({
         ...prevData,
         nodes: prevData.nodes.map((node) =>
@@ -1340,21 +1348,36 @@ export function TechTreeViewer() {
     }
   }, []);
 
-  // Add prefetching to handleNodeHover
+  // Update handleNodeHover to limit prefetching
   const handleNodeHover = useCallback(
     (node: TechNode) => {
       setHoveredNode(node);
       setHoveredNodeId(node.id);
 
-      // Prefetch connected nodes
+      // Only prefetch immediate neighbors
       const connectedNodeIds = data.links
         .filter((link) => link.source === node.id || link.target === node.id)
-        .map((link) => (link.source === node.id ? link.target : link.source));
+        .map((link) => (link.source === node.id ? link.target : link.source))
+        // Limit the number of simultaneous prefetch requests
+        .slice(0, 5);
 
       connectedNodeIds.forEach(prefetchNode);
     },
     [data.links, prefetchNode]
   );
+
+  // Add cleanup for prefetch cache
+  useEffect(() => {
+    const nodes = prefetchedNodes.current;
+    const cleanupInterval = setInterval(() => {
+      nodes.clear();
+    }, 60000);
+
+    return () => {
+      clearInterval(cleanupInterval);
+      nodes.clear();
+    };
+  }, []);
 
   // Add this helper function to get nodes connected by a selected link
   const getSelectedConnectionNodes = useCallback(() => {
