@@ -31,5 +31,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/api/inventions/:path*',
+  matcher: ['/api/inventions/:path*'],
 }; 
