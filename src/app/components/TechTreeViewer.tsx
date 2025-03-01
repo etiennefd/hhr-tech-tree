@@ -66,7 +66,6 @@ const ZOOM_DEBOUNCE_MS = 16; // About 1 frame at 60fps
 
 // Add these constants near the other constants
 // const VIRTUALIZATION_OVERSCAN = 5; // Number of items to render beyond the visible area
-const VIRTUALIZATION_ENABLED = true; // Flag to enable/disable virtualization
 
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
@@ -332,7 +331,6 @@ export function TechTreeViewer() {
   const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
-  const [filteredNodes, setFilteredNodes] = useState<TechNode[]>([]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
   const [containerDimensions, setContainerDimensions] = useState({
@@ -384,6 +382,17 @@ export function TechTreeViewer() {
     top: 0,
     bottom: 0,
   });
+
+  // Add this near the other state variables
+  const [cachedNodeIds, setCachedNodeIds] = useState<Set<string>>(new Set());
+  const cachedNodesTimeoutRef = useRef<{[key: string]: NodeJS.Timeout}>({});
+  const CACHE_DURATION = 60000; // Keep nodes in cache for 1 minute after they leave viewport
+
+  // Add this near the other state variables
+  const [cachedConnectionIndices, setCachedConnectionIndices] = useState<Set<number>>(new Set());
+  const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
+  // Use the same cache duration for connections as for nodes
+  // const CACHE_DURATION = 60000; // Already defined above
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -658,7 +667,6 @@ export function TechTreeViewer() {
           
           const positionedDetailNodes = calculateNodePositions(validatedNodes);
           setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
-          setFilteredNodes(positionedDetailNodes);
           setIsLoading(false);
         } else if (cachedData?.basicData) {
           // If we only have basic data, use it temporarily
@@ -670,7 +678,6 @@ export function TechTreeViewer() {
           
           const positionedNodes = calculateNodePositions(validatedNodes);
           setData({ ...cachedData.basicData, nodes: positionedNodes });
-          setFilteredNodes(positionedNodes);
           setIsLoading(false);
         }
 
@@ -696,7 +703,6 @@ export function TechTreeViewer() {
             
             const positionedNodes = calculateNodePositions(validatedNodes);
             setData({ ...basicData, nodes: positionedNodes });
-            setFilteredNodes(positionedNodes);
             setIsLoading(false);
 
             // Cache basic data
@@ -744,7 +750,6 @@ export function TechTreeViewer() {
         if (hasChanges) {
           const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
           setData({ ...detailData, nodes: positionedDetailNodes });
-          setFilteredNodes(positionedDetailNodes);
           currentNodesRef.current = positionedDetailNodes;
         }
 
@@ -762,7 +767,6 @@ export function TechTreeViewer() {
         if (!cachedData) {
           // Now cachedData is in scope
           setData({ nodes: [], links: [] });
-          setFilteredNodes([]);
         }
       }
     };
@@ -1266,26 +1270,18 @@ export function TechTreeViewer() {
   );
 
   const isNodeFiltered = useCallback(
-    (node: TechNode): boolean => {
-      // If no filters are active, show all nodes
-      if (
-        !filters.fields.size &&
-        !filters.countries.size &&
-        !filters.cities.size
-      ) {
-        return true;
+    (node: TechNode) => {
+      // Apply field filters
+      if (filters.fields.size > 0) {
+        const nodeFields = node.fields || [];
+        if (!nodeFields.some((field) => filters.fields.has(field))) {
+          return false;
+        }
       }
 
-      // Check if node matches any active filters
-      if (
-        filters.fields.size &&
-        node.fields.some((field) => filters.fields.has(field))
-      ) {
-        return true;
-      }
-
-      // Check countries
-      if (filters.countries.size) {
+      // Apply country filters
+      if (filters.countries.size > 0) {
+        // Combine historical and modern countries
         const nodeCountries = [
           ...(node.countryHistorical?.split(",").map((c) => c.trim()) || []),
           ...(node.countryModern
@@ -1293,22 +1289,22 @@ export function TechTreeViewer() {
             .map((c) => c.trim())
             .filter(Boolean) || []),
         ];
-        if (nodeCountries.some((country) => filters.countries.has(country))) {
-          return true;
+        if (!nodeCountries.some((country: string) => filters.countries.has(country))) {
+          return false;
         }
       }
 
-      // Check cities
-      if (filters.cities.size && node.city) {
-        const nodeCities = node.city.split(",").map((c) => c.trim());
-        if (nodeCities.some((city) => filters.cities.has(city))) {
-          return true;
+      // Apply city filters
+      if (filters.cities.size > 0) {
+        const nodeCities = node.city ? node.city.split(",").map((c) => c.trim()) : [];
+        if (!nodeCities.some((city: string) => filters.cities.has(city))) {
+          return false;
         }
       }
 
-      return false;
+      return true;
     },
-    [filters]
+    [filters.fields, filters.countries, filters.cities]
   );
 
   const isLinkVisible = useCallback(
@@ -1745,22 +1741,29 @@ export function TechTreeViewer() {
     return () => window.removeEventListener('keydown', handleEscapeKey);
   }, []);
 
-  // Add a function to determine if a node is in the visible viewport
+  // Update the isNodeInViewport function to use data.nodes directly
   const isNodeInViewport = useCallback(
     (node: TechNode) => {
-      if (!VIRTUALIZATION_ENABLED) return true;
-      
+      if (!visibleViewport) return true;
+
+      // Apply a buffer around the viewport to preload nearby nodes
+      const buffer = 500; // pixels
+      const bufferedViewport = {
+        left: visibleViewport.left - buffer,
+        right: visibleViewport.right + buffer,
+        top: visibleViewport.top - buffer,
+        bottom: visibleViewport.bottom + buffer,
+      };
+
       const nodeX = getXPosition(node.year);
       const nodeY = node.y || 0;
-      
-      // Add a larger buffer around the viewport for smoother scrolling
-      const buffer = 2000; // Increased from 1000 to 2000
-      
+
+      // Check if the node is within the buffered viewport
       return (
-        nodeX + NODE_WIDTH/2 >= visibleViewport.left - buffer &&
-        nodeX - NODE_WIDTH/2 <= visibleViewport.right + buffer &&
-        nodeY + 200 >= visibleViewport.top - buffer && // Approximate node height
-        nodeY - 200 <= visibleViewport.bottom + buffer
+        nodeX + NODE_WIDTH / 2 >= bufferedViewport.left &&
+        nodeX - NODE_WIDTH / 2 <= bufferedViewport.right &&
+        nodeY >= bufferedViewport.top &&
+        nodeY <= bufferedViewport.bottom
       );
     },
     [visibleViewport, getXPosition]
@@ -1769,7 +1772,7 @@ export function TechTreeViewer() {
   // Add a function to determine if a connection is in the visible viewport
   const isConnectionInViewport = useCallback(
     (link: Link) => {
-      if (!VIRTUALIZATION_ENABLED) return true;
+      if (!visibleViewport) return true;
       
       const sourceNode = data.nodes.find((n) => n.id === link.source);
       const targetNode = data.nodes.find((n) => n.id === link.target);
@@ -1781,19 +1784,25 @@ export function TechTreeViewer() {
       const targetX = getXPosition(targetNode.year);
       const targetY = targetNode.y || 0;
       
-      // Add a larger buffer around the viewport for connections
-      const buffer = 1000;
+      // Use the same buffer size as the node viewport check for consistency
+      const buffer = 500; // pixels
+      const bufferedViewport = {
+        left: visibleViewport.left - buffer,
+        right: visibleViewport.right + buffer,
+        top: visibleViewport.top - buffer,
+        bottom: visibleViewport.bottom + buffer,
+      };
       
-      // Check if either endpoint is in the viewport (original check)
+      // Check if either endpoint is in the viewport
       const endpointInViewport = 
-        (sourceX >= visibleViewport.left - buffer &&
-         sourceX <= visibleViewport.right + buffer &&
-         sourceY >= visibleViewport.top - buffer &&
-         sourceY <= visibleViewport.bottom + buffer) ||
-        (targetX >= visibleViewport.left - buffer &&
-         targetX <= visibleViewport.right + buffer &&
-         targetY >= visibleViewport.top - buffer &&
-         targetY <= visibleViewport.bottom + buffer);
+        (sourceX >= bufferedViewport.left &&
+         sourceX <= bufferedViewport.right &&
+         sourceY >= bufferedViewport.top &&
+         sourceY <= bufferedViewport.bottom) ||
+        (targetX >= bufferedViewport.left &&
+         targetX <= bufferedViewport.right &&
+         targetY >= bufferedViewport.top &&
+         targetY <= bufferedViewport.bottom);
       
       if (endpointInViewport) return true;
       
@@ -1806,16 +1815,16 @@ export function TechTreeViewer() {
       const minY = Math.min(sourceY, targetY);
       const maxY = Math.max(sourceY, targetY);
       
-      // If the bounding box doesn't intersect the viewport (with buffer), the line doesn't either
-      if (maxX < visibleViewport.left - buffer || 
-          minX > visibleViewport.right + buffer ||
-          maxY < visibleViewport.top - buffer || 
-          minY > visibleViewport.bottom + buffer) {
+      // If the bounding box doesn't intersect the buffered viewport, the line doesn't either
+      if (maxX < bufferedViewport.left || 
+          minX > bufferedViewport.right ||
+          maxY < bufferedViewport.top || 
+          minY > bufferedViewport.bottom) {
         return false;
       }
       
-      // 2. For curved connections, we need a more generous check
-      // If the bounding box of the line intersects the viewport, consider it visible
+      // If we get here, the connection's bounding box intersects the viewport
+      // For simplicity, we'll consider this a match rather than doing a precise line-rectangle intersection test
       return true;
     },
     [visibleViewport, data.nodes, getXPosition]
@@ -1859,10 +1868,35 @@ export function TechTreeViewer() {
 
   // Memoize the filtered and visible nodes
   const visibleNodes = useMemo(() => {
-    // Start with nodes that are in the viewport
-    const inViewportNodes = filteredNodes.filter(isNodeInViewport);
+    // Start with nodes in the viewport
+    const inViewportNodes = data.nodes.filter((node) => {
+      return isNodeInViewport(node);
+    });
     
-    // If we have a selected node, add all connected nodes regardless of viewport
+    // Get the IDs of nodes in the viewport
+    const inViewportNodeIds = new Set(inViewportNodes.map(node => node.id));
+    
+    // Include nodes connected to a selected link
+    if (selectedLinkIndex !== null) {
+      const selectedLink = data.links[selectedLinkIndex];
+      if (selectedLink) {
+        // Add source and target nodes if they're not already included
+        const sourceNode = data.nodes.find(n => n.id === selectedLink.source);
+        const targetNode = data.nodes.find(n => n.id === selectedLink.target);
+        
+        if (sourceNode && !inViewportNodeIds.has(sourceNode.id)) {
+          inViewportNodes.push(sourceNode);
+          inViewportNodeIds.add(sourceNode.id);
+        }
+        
+        if (targetNode && !inViewportNodeIds.has(targetNode.id)) {
+          inViewportNodes.push(targetNode);
+          inViewportNodeIds.add(targetNode.id);
+        }
+      }
+    }
+    
+    // Include nodes connected to the selected node
     if (selectedNodeId) {
       const connectedNodeIds = new Set<string>();
       
@@ -1875,114 +1909,163 @@ export function TechTreeViewer() {
         }
       });
       
-      // Add highlighted ancestors and descendants
-      if (highlightedAncestors.size > 0) {
-        highlightedAncestors.forEach(id => connectedNodeIds.add(id));
-      }
-      
-      if (highlightedDescendants.size > 0) {
-        highlightedDescendants.forEach(id => connectedNodeIds.add(id));
-      }
-      
-      // Add connected nodes that aren't already in the viewport
-      const connectedNodes = filteredNodes.filter(
-        node => connectedNodeIds.has(node.id) && !inViewportNodes.some(n => n.id === node.id)
-      );
-      
-      return [...inViewportNodes, ...connectedNodes];
-    }
-    
-    // If we have a selected link, add the nodes connected by that link
-    if (selectedLinkIndex !== null) {
-      const selectedLink = data.links[selectedLinkIndex];
-      if (selectedLink) {
-        // Get the nodes at both ends of the selected link
-        const sourceNode = filteredNodes.find(node => node.id === selectedLink.source);
-        const targetNode = filteredNodes.find(node => node.id === selectedLink.target);
-        
-        // Add these nodes if they're not already in the viewport
-        const additionalNodes = [];
-        
-        if (sourceNode && !inViewportNodes.some(n => n.id === sourceNode.id)) {
-          additionalNodes.push(sourceNode);
-        }
-        
-        if (targetNode && !inViewportNodes.some(n => n.id === targetNode.id)) {
-          additionalNodes.push(targetNode);
-        }
-        
-        return [...inViewportNodes, ...additionalNodes];
-      }
-    }
-    
-    // If we have a hovered node, also include its direct connections
-    if (hoveredNodeId) {
-      const connectedNodeIds = new Set<string>();
-      
-      // Add all directly connected nodes
-      data.links.forEach(link => {
-        if (link.source === hoveredNodeId) {
-          connectedNodeIds.add(link.target);
-        } else if (link.target === hoveredNodeId) {
-          connectedNodeIds.add(link.source);
+      // Add these connected nodes if they're not already included
+      connectedNodeIds.forEach(nodeId => {
+        if (!inViewportNodeIds.has(nodeId)) {
+          const node = data.nodes.find(n => n.id === nodeId);
+          if (node) {
+            inViewportNodes.push(node);
+            inViewportNodeIds.add(nodeId);
+          }
         }
       });
-      
-      // Add connected nodes that aren't already in the viewport
-      const connectedNodes = filteredNodes.filter(
-        node => connectedNodeIds.has(node.id) && !inViewportNodes.some(n => n.id === node.id)
-      );
-      
-      return [...inViewportNodes, ...connectedNodes];
     }
     
-    return inViewportNodes;
-  }, [
-    filteredNodes, 
-    isNodeInViewport, 
-    selectedNodeId, 
-    selectedLinkIndex,
-    hoveredNodeId, 
-    data.links, 
-    highlightedAncestors, 
-    highlightedDescendants
-  ]);
+    // Include cached nodes that are not in the viewport
+    const cachedNodes = data.nodes.filter(node => 
+      cachedNodeIds.has(node.id) && !inViewportNodeIds.has(node.id)
+    );
+    
+    return [...inViewportNodes, ...cachedNodes];
+  }, [data.nodes, data.links, visibleViewport, selectedNodeId, selectedLinkIndex, cachedNodeIds]);
+
+  // Add an effect to manage the cache of nodes
+  useEffect(() => {
+    // Get the IDs of all currently visible nodes
+    const currentlyVisibleNodeIds = new Set(
+      data.nodes
+        .filter(node => isNodeInViewport(node))
+        .map(node => node.id)
+    );
+    
+    // Add newly visible nodes to the cache
+    const newCachedNodeIds = new Set(cachedNodeIds);
+    currentlyVisibleNodeIds.forEach(nodeId => {
+      newCachedNodeIds.add(nodeId);
+      
+      // Clear any existing timeout for this node
+      if (cachedNodesTimeoutRef.current[nodeId]) {
+        clearTimeout(cachedNodesTimeoutRef.current[nodeId]);
+        delete cachedNodesTimeoutRef.current[nodeId];
+      }
+    });
+    
+    // Set timeouts for nodes that are no longer visible
+    cachedNodeIds.forEach(nodeId => {
+      if (!currentlyVisibleNodeIds.has(nodeId) && !cachedNodesTimeoutRef.current[nodeId]) {
+        // Set a timeout to remove this node from the cache after CACHE_DURATION
+        cachedNodesTimeoutRef.current[nodeId] = setTimeout(() => {
+          setCachedNodeIds(prev => {
+            const updated = new Set(prev);
+            updated.delete(nodeId);
+            return updated;
+          });
+          delete cachedNodesTimeoutRef.current[nodeId];
+        }, CACHE_DURATION);
+      }
+    });
+    
+    // Update the cache if it changed
+    if (newCachedNodeIds.size !== cachedNodeIds.size) {
+      setCachedNodeIds(newCachedNodeIds);
+    }
+    
+    // Cleanup timeouts on unmount
+    return () => {
+      Object.values(cachedNodesTimeoutRef.current).forEach(timeout => {
+        clearTimeout(timeout);
+      });
+    };
+  }, [visibleViewport, data.nodes, cachedNodeIds]);
 
   // Memoize the filtered and visible connections
   const visibleConnections = useMemo(() => {
-    return data.links.filter((link) => {
-      // Always include connections for selected or hovered nodes
-      if (selectedNodeId) {
-        if (link.source === selectedNodeId || link.target === selectedNodeId) {
-          return true;
-        }
-      }
-      
-      if (hoveredNodeId) {
-        if (link.source === hoveredNodeId || link.target === hoveredNodeId) {
-          return true;
-        }
-      }
-      
-      // Include connections for highlighted ancestors/descendants
-      if (highlightedAncestors.size > 0 || highlightedDescendants.size > 0) {
-        if ((highlightedAncestors.has(link.source) && highlightedAncestors.has(link.target)) ||
-            (highlightedDescendants.has(link.source) && highlightedDescendants.has(link.target))) {
-          return true;
-        }
-      }
-      
-      // For all other connections, check if they're in viewport
+    // Start with connections that have at least one endpoint in the viewport
+    const inViewportConnections = data.links.filter((link) => {
       return isConnectionInViewport(link);
     });
-  }, [
-    data.links, 
-    selectedNodeId, 
-    hoveredNodeId, 
-    highlightedAncestors, 
-    highlightedDescendants, 
-    isConnectionInViewport
-  ]);
+    
+    // Get the indices of connections in the viewport
+    const inViewportConnectionIndices = new Set(
+      inViewportConnections.map((link) => data.links.findIndex(l => l === link))
+    );
+    
+    // Include the selected connection if it exists
+    if (selectedLinkIndex !== null && !inViewportConnectionIndices.has(selectedLinkIndex)) {
+      const selectedLink = data.links[selectedLinkIndex];
+      if (selectedLink) {
+        inViewportConnections.push(selectedLink);
+        inViewportConnectionIndices.add(selectedLinkIndex);
+      }
+    }
+    
+    // Include connections to/from the selected node
+    if (selectedNodeId) {
+      data.links.forEach((link, index) => {
+        if ((link.source === selectedNodeId || link.target === selectedNodeId) && 
+            !inViewportConnectionIndices.has(index)) {
+          inViewportConnections.push(link);
+          inViewportConnectionIndices.add(index);
+        }
+      });
+    }
+    
+    // Include cached connections that are not in the viewport
+    const cachedConnections = data.links.filter((link, index) => 
+      cachedConnectionIndices.has(index) && !inViewportConnectionIndices.has(index)
+    );
+    
+    return [...inViewportConnections, ...cachedConnections];
+  }, [data.links, isConnectionInViewport, selectedNodeId, selectedLinkIndex, cachedConnectionIndices]);
+
+  // Add an effect to manage the cache of connections
+  useEffect(() => {
+    // Get the indices of all currently visible connections
+    const currentlyVisibleConnectionIndices = new Set(
+      data.links
+        .map((link, index) => isConnectionInViewport(link) ? index : -1)
+        .filter(index => index !== -1)
+    );
+    
+    // Add newly visible connections to the cache
+    const newCachedConnectionIndices = new Set(cachedConnectionIndices);
+    currentlyVisibleConnectionIndices.forEach(index => {
+      newCachedConnectionIndices.add(index);
+      
+      // Clear any existing timeout for this connection
+      if (cachedConnectionsTimeoutRef.current[index]) {
+        clearTimeout(cachedConnectionsTimeoutRef.current[index]);
+        delete cachedConnectionsTimeoutRef.current[index];
+      }
+    });
+    
+    // Set timeouts for connections that are no longer visible
+    cachedConnectionIndices.forEach(index => {
+      if (!currentlyVisibleConnectionIndices.has(index) && !cachedConnectionsTimeoutRef.current[index]) {
+        // Set a timeout to remove this connection from the cache after CACHE_DURATION
+        cachedConnectionsTimeoutRef.current[index] = setTimeout(() => {
+          setCachedConnectionIndices(prev => {
+            const updated = new Set(prev);
+            updated.delete(index);
+            return updated;
+          });
+          delete cachedConnectionsTimeoutRef.current[index];
+        }, CACHE_DURATION);
+      }
+    });
+    
+    // Update the cache if it changed
+    if (newCachedConnectionIndices.size !== cachedConnectionIndices.size) {
+      setCachedConnectionIndices(newCachedConnectionIndices);
+    }
+    
+    // Cleanup timeouts on unmount
+    return () => {
+      Object.values(cachedConnectionsTimeoutRef.current).forEach(timeout => {
+        clearTimeout(timeout);
+      });
+    };
+  }, [visibleViewport, data.links, cachedConnectionIndices, isConnectionInViewport]);
 
   // Function to handle node hover for prefetching
   const handleNodeHoverForPrefetch = useCallback((title: string) => {
