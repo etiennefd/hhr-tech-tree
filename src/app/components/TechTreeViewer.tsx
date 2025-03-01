@@ -1370,14 +1370,27 @@ export function TechTreeViewer() {
 
   // Add this near the top of the component
   const prefetchedNodes = useRef(new Set<string>());
+  const prefetchQueue = useRef<string[]>([]);
+  const isPrefetching = useRef(false);
 
-  // Update the prefetchNode function
-  const prefetchNode = useCallback(async (nodeId: string) => {
-    // Skip if already prefetched or if nodeId is invalid
-    if (prefetchedNodes.current.has(nodeId) || !nodeId) return;
-    prefetchedNodes.current.add(nodeId);
-
+  // Process the prefetch queue one by one to avoid overwhelming the network
+  const processPrefetchQueue = useCallback(async () => {
+    if (isPrefetching.current || prefetchQueue.current.length === 0) return;
+    
+    isPrefetching.current = true;
+    
     try {
+      const nodeId = prefetchQueue.current.shift()!;
+      
+      // Skip if already prefetched or if nodeId is invalid
+      if (prefetchedNodes.current.has(nodeId) || !nodeId) {
+        isPrefetching.current = false;
+        processPrefetchQueue(); // Process next item
+        return;
+      }
+      
+      prefetchedNodes.current.add(nodeId);
+      
       // Ensure nodeId is properly encoded for URLs
       const encodedNodeId = encodeURIComponent(nodeId);
       const apiUrl = `/api/inventions/${encodedNodeId}`;
@@ -1387,8 +1400,11 @@ export function TechTreeViewer() {
         if (response.status !== 404) {  // Don't log 404s as they're expected
           console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
         }
+        isPrefetching.current = false;
+        processPrefetchQueue(); // Process next item
         return;
       }
+      
       const nodeData = await response.json();
       
       // Simple validation for image URL
@@ -1398,24 +1414,95 @@ export function TechTreeViewer() {
             !nodeData.image.startsWith('http://') && 
             !nodeData.image.startsWith('https://')) {
           // Invalid image URL, remove it
-          console.warn(`Invalid image URL for node ${nodeId}: "${nodeData.image}"`);
-          nodeData.image = undefined;
+          nodeData.image = null;
         }
       }
       
+      // Update the node data in the state
       setData((prevData) => ({
         ...prevData,
         nodes: prevData.nodes.map((node) =>
           node.id === nodeId ? { ...node, ...nodeData } : node
         ),
       }));
+      
     } catch (error) {
-      console.warn(`Failed to prefetch node ${nodeId}:`, error);
+      console.warn('Error in prefetch processing:', error);
+    } finally {
+      isPrefetching.current = false;
+      // Continue processing the queue
+      processPrefetchQueue();
     }
   }, []);
 
+  // Update the prefetchNode function to use the queue
+  const prefetchNode = useCallback((nodeId: string, priority = false) => {
+    // Skip if already prefetched, already in queue, or if nodeId is invalid
+    if (prefetchedNodes.current.has(nodeId) || 
+        prefetchQueue.current.includes(nodeId) || 
+        !nodeId) return;
+    
+    // Add to queue based on priority
+    if (priority) {
+      prefetchQueue.current.unshift(nodeId); // Add to front of queue
+    } else {
+      prefetchQueue.current.push(nodeId); // Add to end of queue
+    }
+    
+    // Start processing the queue if not already processing
+    processPrefetchQueue();
+  }, [processPrefetchQueue]);
+
+  // Function to prefetch important nodes proactively
+  const prefetchImportantNodes = useCallback(() => {
+    const nodesToPrefetch = new Set<string>();
+    
+    // 1. Prefetch the selected node with high priority
+    if (selectedNodeId) {
+      prefetchNode(selectedNodeId, true);
+      
+      // 2. Prefetch nodes connected to the selected node with high priority
+      data.links.forEach(link => {
+        if (link.source === selectedNodeId) {
+          nodesToPrefetch.add(link.target);
+        } else if (link.target === selectedNodeId) {
+          nodesToPrefetch.add(link.source);
+        }
+      });
+    }
+    
+    // 3. Prefetch nodes connected to a selected link with high priority
+    if (selectedLinkIndex !== null) {
+      const selectedLink = data.links[selectedLinkIndex];
+      if (selectedLink) {
+        nodesToPrefetch.add(selectedLink.source);
+        nodesToPrefetch.add(selectedLink.target);
+      }
+    }
+    
+    // 4. Prefetch highlighted ancestors and descendants with high priority
+    // Use for...of instead of forEach to avoid TypeScript errors
+    for (const nodeId of highlightedAncestors) {
+      nodesToPrefetch.add(nodeId);
+    }
+    
+    for (const nodeId of highlightedDescendants) {
+      nodesToPrefetch.add(nodeId);
+    }
+    
+    // Prefetch all the important nodes with high priority
+    for (const nodeId of nodesToPrefetch) {
+      prefetchNode(nodeId, true);
+    }
+    
+  }, [selectedNodeId, selectedLinkIndex, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
+
   // Add this effect to prefetch data for connected nodes when a node is selected
   useEffect(() => {
+    // Call the prefetchImportantNodes function to proactively prefetch important nodes
+    prefetchImportantNodes();
+    
+    // The rest of the existing code can stay as a fallback
     if (!selectedNodeId) return;
     
     // Get all connected node IDs
@@ -1444,32 +1531,17 @@ export function TechTreeViewer() {
     const prefetchPromises = Array.from(connectedNodeIds)
       .filter(nodeId => !prefetchedNodes.current.has(nodeId))
       .map(nodeId => {
-        prefetchedNodes.current.add(nodeId);
         return fetch(`/api/inventions/${encodeURIComponent(nodeId)}`)
           .then(response => {
             if (!response.ok) {
-              if (response.status !== 404) {
-                console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
-              }
-              return null;
+              throw new Error(`Failed to prefetch node ${nodeId}: ${response.status}`);
             }
             return response.json();
           })
           .then(nodeData => {
-            if (!nodeData) return;
+            prefetchedNodes.current.add(nodeId);
             
-            // Simple validation for image URL
-            if (nodeData.image && typeof nodeData.image === 'string') {
-              // Check if image URL is valid (must start with / or http:// or https://)
-              if (!nodeData.image.startsWith('/') && 
-                  !nodeData.image.startsWith('http://') && 
-                  !nodeData.image.startsWith('https://')) {
-                // Invalid image URL, remove it
-                console.warn(`Invalid image URL for node ${nodeId}: "${nodeData.image}"`);
-                nodeData.image = undefined;
-              }
-            }
-            
+            // Update the node data in the state
             setData((prevData) => ({
               ...prevData,
               nodes: prevData.nodes.map((node) =>
@@ -1487,7 +1559,7 @@ export function TechTreeViewer() {
       console.warn('Error in parallel prefetching:', error);
     });
     
-  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants]);
+  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants, prefetchImportantNodes]);
 
   // Add this effect to prefetch data for nodes connected by a selected link
   useEffect(() => {
@@ -1955,66 +2027,106 @@ export function TechTreeViewer() {
 
   // Memoize the filtered and visible nodes
   const visibleNodes = useMemo(() => {
-    // Start with nodes in the viewport
-    const inViewportNodes = data.nodes.filter((node) => {
-      return isNodeInViewport(node);
-    });
+    // Start with important nodes that should always be visible
+    const priorityNodes: TechNode[] = [];
+    const priorityNodeIds = new Set<string>();
     
-    // Get the IDs of nodes in the viewport
-    const inViewportNodeIds = new Set(inViewportNodes.map(node => node.id));
+    // 1. Always include the selected node
+    if (selectedNodeId) {
+      const selectedNode = data.nodes.find(n => n.id === selectedNodeId);
+      if (selectedNode) {
+        priorityNodes.push(selectedNode);
+        priorityNodeIds.add(selectedNodeId);
+      }
+    }
     
-    // Include nodes connected to a selected link
+    // 2. Always include nodes connected to a selected link
     if (selectedLinkIndex !== null) {
       const selectedLink = data.links[selectedLinkIndex];
       if (selectedLink) {
-        // Add source and target nodes if they're not already included
         const sourceNode = data.nodes.find(n => n.id === selectedLink.source);
         const targetNode = data.nodes.find(n => n.id === selectedLink.target);
         
-        if (sourceNode && !inViewportNodeIds.has(sourceNode.id)) {
-          inViewportNodes.push(sourceNode);
-          inViewportNodeIds.add(sourceNode.id);
+        if (sourceNode && !priorityNodeIds.has(sourceNode.id)) {
+          priorityNodes.push(sourceNode);
+          priorityNodeIds.add(sourceNode.id);
         }
         
-        if (targetNode && !inViewportNodeIds.has(targetNode.id)) {
-          inViewportNodes.push(targetNode);
-          inViewportNodeIds.add(targetNode.id);
+        if (targetNode && !priorityNodeIds.has(targetNode.id)) {
+          priorityNodes.push(targetNode);
+          priorityNodeIds.add(targetNode.id);
         }
       }
     }
     
-    // Include nodes connected to the selected node
+    // 3. Always include nodes connected to the selected node
     if (selectedNodeId) {
-      const connectedNodeIds = new Set<string>();
-      
-      // Add all directly connected nodes
       data.links.forEach(link => {
+        let connectedNodeId: string | null = null;
+        
         if (link.source === selectedNodeId) {
-          connectedNodeIds.add(link.target);
+          connectedNodeId = link.target;
         } else if (link.target === selectedNodeId) {
-          connectedNodeIds.add(link.source);
+          connectedNodeId = link.source;
         }
-      });
-      
-      // Add these connected nodes if they're not already included
-      connectedNodeIds.forEach(nodeId => {
-        if (!inViewportNodeIds.has(nodeId)) {
-          const node = data.nodes.find(n => n.id === nodeId);
-          if (node) {
-            inViewportNodes.push(node);
-            inViewportNodeIds.add(nodeId);
+        
+        if (connectedNodeId && !priorityNodeIds.has(connectedNodeId)) {
+          const connectedNode = data.nodes.find(n => n.id === connectedNodeId);
+          if (connectedNode) {
+            priorityNodes.push(connectedNode);
+            priorityNodeIds.add(connectedNodeId);
           }
         }
       });
     }
     
-    // Include cached nodes that are not in the viewport
-    const cachedNodes = data.nodes.filter(node => 
-      cachedNodeIds.has(node.id) && !inViewportNodeIds.has(node.id)
+    // 4. Always include highlighted ancestors and descendants
+    if (highlightedAncestors.size > 0 || highlightedDescendants.size > 0) {
+      data.nodes.forEach(node => {
+        if ((highlightedAncestors.has(node.id) || highlightedDescendants.has(node.id)) 
+            && !priorityNodeIds.has(node.id)) {
+          priorityNodes.push(node);
+          priorityNodeIds.add(node.id);
+        }
+      });
+    }
+    
+    // 5. Always include nodes that match active filters
+    const hasActiveFilters = filters.fields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
+    if (hasActiveFilters) {
+      data.nodes.forEach(node => {
+        if (isNodeFiltered(node) && !priorityNodeIds.has(node.id)) {
+          priorityNodes.push(node);
+          priorityNodeIds.add(node.id);
+        }
+      });
+    }
+    
+    // 6. Include nodes in the viewport that aren't already included
+    const inViewportNodes = data.nodes.filter(node => 
+      !priorityNodeIds.has(node.id) && isNodeInViewport(node)
     );
     
-    return [...inViewportNodes, ...cachedNodes];
-  }, [data.nodes, data.links, visibleViewport, selectedNodeId, selectedLinkIndex, cachedNodeIds]);
+    // 7. Include cached nodes that aren't already included
+    const cachedNodes = data.nodes.filter(node => 
+      !priorityNodeIds.has(node.id) && 
+      !inViewportNodes.some(n => n.id === node.id) && 
+      cachedNodeIds.has(node.id)
+    );
+    
+    return [...priorityNodes, ...inViewportNodes, ...cachedNodes];
+  }, [
+    data.nodes, 
+    data.links, 
+    visibleViewport, 
+    selectedNodeId, 
+    selectedLinkIndex, 
+    cachedNodeIds, 
+    highlightedAncestors, 
+    highlightedDescendants,
+    filters,
+    isNodeFiltered
+  ]);
 
   // Add an effect to manage the cache of nodes
   useEffect(() => {
@@ -2064,6 +2176,22 @@ export function TechTreeViewer() {
       });
     };
   }, [visibleViewport, data.nodes, cachedNodeIds]);
+
+  // Add an effect to prefetch visible nodes when the viewport changes
+  useEffect(() => {
+    if (!data.nodes.length) return;
+    
+    // Get nodes that are currently in the viewport
+    const visibleNodeIds = data.nodes
+      .filter(node => isNodeInViewport(node))
+      .map(node => node.id);
+    
+    // Prefetch these nodes (with normal priority)
+    for (const nodeId of visibleNodeIds) {
+      prefetchNode(nodeId);
+    }
+    
+  }, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]);
 
   // Memoize the filtered and visible connections
   const visibleConnections = useMemo(() => {
@@ -2855,3 +2983,4 @@ export const TechTreeViewerNoSSR = dynamic(
     ssr: false,
   }
 );
+
