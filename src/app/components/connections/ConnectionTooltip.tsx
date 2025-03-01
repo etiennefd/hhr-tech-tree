@@ -9,6 +9,7 @@ interface ConnectionTooltipProps {
   details?: string;
   isSelected?: boolean;
   onNodeClick?: (title: string) => void;
+  onNodeHover?: (title: string) => void;
 }
 
 const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
@@ -19,6 +20,7 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   type,
   details,
   onNodeClick,
+  onNodeHover,
 }) => {
   const isNearRightEdge = x > window.innerWidth - 300;
   const isNearBottomEdge = y > window.innerHeight - 150;
@@ -31,10 +33,17 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     }
   };
 
+  const handleNodeHover = (title: string) => {
+    if (onNodeHover) {
+      onNodeHover(title);
+    }
+  };
+
   const renderConnectionContent = () => {
     const Source = (
       <button
         onClick={(e) => handleNodeClick(e, sourceTitle)}
+        onMouseEnter={() => handleNodeHover(sourceTitle)}
         className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
         type="button"
       >
@@ -45,6 +54,7 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     const Target = (
       <button
         onClick={(e) => handleNodeClick(e, targetTitle)}
+        onMouseEnter={() => handleNodeHover(targetTitle)}
         className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
         type="button"
       >

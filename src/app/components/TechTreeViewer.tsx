@@ -1443,17 +1443,69 @@ export function TechTreeViewer() {
       highlightedDescendants.forEach(id => connectedNodeIds.add(id));
     }
     
-    // Prefetch data for all connected nodes (with a limit to avoid too many requests)
-    const prefetchLimit = 20; // Limit the number of prefetch requests
-    let count = 0;
+    // Prefetch data for all connected nodes in parallel
+    // This will load all connected nodes immediately rather than one by one
+    const prefetchPromises = Array.from(connectedNodeIds)
+      .filter(nodeId => !prefetchedNodes.current.has(nodeId))
+      .map(nodeId => {
+        prefetchedNodes.current.add(nodeId);
+        return fetch(`/api/inventions/${encodeURIComponent(nodeId)}`)
+          .then(response => {
+            if (!response.ok) {
+              if (response.status !== 404) {
+                console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
+              }
+              return null;
+            }
+            return response.json();
+          })
+          .then(nodeData => {
+            if (!nodeData) return;
+            
+            // Simple validation for image URL
+            if (nodeData.image && typeof nodeData.image === 'string') {
+              // Check if image URL is valid (must start with / or http:// or https://)
+              if (!nodeData.image.startsWith('/') && 
+                  !nodeData.image.startsWith('http://') && 
+                  !nodeData.image.startsWith('https://')) {
+                // Invalid image URL, remove it
+                console.warn(`Invalid image URL for node ${nodeId}: "${nodeData.image}"`);
+                nodeData.image = undefined;
+              }
+            }
+            
+            setData((prevData) => ({
+              ...prevData,
+              nodes: prevData.nodes.map((node) =>
+                node.id === nodeId ? { ...node, ...nodeData } : node
+              ),
+            }));
+          })
+          .catch(error => {
+            console.warn(`Failed to prefetch node ${nodeId}:`, error);
+          });
+      });
     
-    connectedNodeIds.forEach(nodeId => {
-      if (count < prefetchLimit) {
-        prefetchNode(nodeId);
-        count++;
-      }
+    // Execute all prefetch requests in parallel
+    Promise.all(prefetchPromises).catch(error => {
+      console.warn('Error in parallel prefetching:', error);
     });
-  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
+    
+  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants]);
+
+  // Add this effect to prefetch data for nodes connected by a selected link
+  useEffect(() => {
+    if (selectedLinkIndex === null) return;
+    
+    // Get the selected link
+    const selectedLink = data.links[selectedLinkIndex];
+    if (!selectedLink) return;
+    
+    // Prefetch both source and target nodes
+    prefetchNode(selectedLink.source);
+    prefetchNode(selectedLink.target);
+    
+  }, [selectedLinkIndex, data.links, prefetchNode]);
 
   // Update handleNodeHover to limit prefetching
   const handleNodeHover = useCallback(
@@ -1701,8 +1753,8 @@ export function TechTreeViewer() {
       const nodeX = getXPosition(node.year);
       const nodeY = node.y || 0;
       
-      // Add a buffer around the viewport for smoother scrolling
-      const buffer = 300;
+      // Add a larger buffer around the viewport for smoother scrolling
+      const buffer = 2000; // Increased from 1000 to 2000
       
       return (
         nodeX + NODE_WIDTH/2 >= visibleViewport.left - buffer &&
@@ -1840,6 +1892,29 @@ export function TechTreeViewer() {
       return [...inViewportNodes, ...connectedNodes];
     }
     
+    // If we have a selected link, add the nodes connected by that link
+    if (selectedLinkIndex !== null) {
+      const selectedLink = data.links[selectedLinkIndex];
+      if (selectedLink) {
+        // Get the nodes at both ends of the selected link
+        const sourceNode = filteredNodes.find(node => node.id === selectedLink.source);
+        const targetNode = filteredNodes.find(node => node.id === selectedLink.target);
+        
+        // Add these nodes if they're not already in the viewport
+        const additionalNodes = [];
+        
+        if (sourceNode && !inViewportNodes.some(n => n.id === sourceNode.id)) {
+          additionalNodes.push(sourceNode);
+        }
+        
+        if (targetNode && !inViewportNodes.some(n => n.id === targetNode.id)) {
+          additionalNodes.push(targetNode);
+        }
+        
+        return [...inViewportNodes, ...additionalNodes];
+      }
+    }
+    
     // If we have a hovered node, also include its direct connections
     if (hoveredNodeId) {
       const connectedNodeIds = new Set<string>();
@@ -1866,6 +1941,7 @@ export function TechTreeViewer() {
     filteredNodes, 
     isNodeInViewport, 
     selectedNodeId, 
+    selectedLinkIndex,
     hoveredNodeId, 
     data.links, 
     highlightedAncestors, 
@@ -1907,6 +1983,16 @@ export function TechTreeViewer() {
     highlightedDescendants, 
     isConnectionInViewport
   ]);
+
+  // Function to handle node hover for prefetching
+  const handleNodeHoverForPrefetch = useCallback((title: string) => {
+    // Find the node by title
+    const node = data.nodes.find(n => n.title === title);
+    if (node) {
+      // Prefetch the node data
+      prefetchNode(node.id);
+    }
+  }, [data.nodes, prefetchNode]);
 
   // Add loading state UI
   if (isLoading) {
@@ -2157,6 +2243,9 @@ export function TechTreeViewer() {
                       onNodeClick={(title) => {
                         handleNodeClick(title);
                       }}
+                      onNodeHover={(title) => {
+                        handleNodeHoverForPrefetch(title);
+                      }}
                     />
                   );
                 })}
@@ -2345,6 +2434,7 @@ export function TechTreeViewer() {
                                   </div>
                                 </div>
                               )}
+
                               {children.length > 0 && (
                                 <div className="text-xs mb-1">
                                   <strong>Led to:</strong>

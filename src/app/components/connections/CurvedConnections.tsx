@@ -33,6 +33,7 @@ interface CurvedConnectionsProps {
   onSelect?: () => void;
   isSelected?: boolean;
   onNodeClick: (title: string) => void;
+  onNodeHover?: (title: string) => void;
   sourceIndex: number;
   targetIndex: number;
 }
@@ -51,6 +52,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onSelect,
   isSelected = false,
   onNodeClick,
+  onNodeHover,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
@@ -331,6 +333,11 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
             onNodeClick={(title) => {
               if (onNodeClick) {
                 onNodeClick(title);
+              }
+            }}
+            onNodeHover={(title) => {
+              if (onNodeHover) {
+                onNodeHover(title);
               }
             }}
           />
