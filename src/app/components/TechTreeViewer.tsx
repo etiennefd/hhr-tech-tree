@@ -1530,36 +1530,14 @@ export function TechTreeViewer() {
     // This will load all connected nodes immediately rather than one by one
     const prefetchPromises = Array.from(connectedNodeIds)
       .filter(nodeId => !prefetchedNodes.current.has(nodeId))
-      .map(nodeId => {
-        return fetch(`/api/inventions/${encodeURIComponent(nodeId)}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`Failed to prefetch node ${nodeId}: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(nodeData => {
-            prefetchedNodes.current.add(nodeId);
-            
-            // Update the node data in the state
-            setData((prevData) => ({
-              ...prevData,
-              nodes: prevData.nodes.map((node) =>
-                node.id === nodeId ? { ...node, ...nodeData } : node
-              ),
-            }));
-          })
-          .catch(error => {
-            console.warn(`Failed to prefetch node ${nodeId}:`, error);
-          });
-      });
+      .slice(0, 5);
+
+    // Use for...of instead of forEach to avoid TypeScript errors
+    for (const nodeId of prefetchPromises) {
+      prefetchNode(nodeId);
+    }
     
-    // Execute all prefetch requests in parallel
-    Promise.all(prefetchPromises).catch(error => {
-      console.warn('Error in parallel prefetching:', error);
-    });
-    
-  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants, prefetchImportantNodes]);
+  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
 
   // Add this effect to prefetch data for nodes connected by a selected link
   useEffect(() => {
@@ -1675,7 +1653,10 @@ export function TechTreeViewer() {
         // Limit the number of simultaneous prefetch requests
         .slice(0, 5);
 
-      connectedNodeIds.forEach(prefetchNode);
+      // Use for...of instead of forEach to avoid TypeScript errors
+      for (const nodeId of connectedNodeIds) {
+        prefetchNode(nodeId);
+      }
     },
     [data.links, prefetchNode]
   );
