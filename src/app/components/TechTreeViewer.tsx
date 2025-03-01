@@ -1589,8 +1589,10 @@ export function TechTreeViewer() {
   // Add loading state UI
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      <div className="flex items-center justify-center h-screen bg-yellow-50">
+        <div className="text-lg font-mono tracking-wide animate-pulse">
+          Loading visualization...
+        </div>
       </div>
     );
   }
@@ -1608,7 +1610,7 @@ export function TechTreeViewer() {
   }
 
   // 4. Optimize initial render
-  if (!isClient || isLoading) {
+  if (!isClient) {
     return (
       <div className="flex items-center justify-center h-screen bg-yellow-50">
         <div className="text-lg font-mono tracking-wide animate-pulse">
