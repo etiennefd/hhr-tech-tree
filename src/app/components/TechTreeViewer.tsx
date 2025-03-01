@@ -307,6 +307,26 @@ const cleanLocationForTooltip = (location: string | undefined): string | undefin
   return location.replace(/ \(unspecified\)/g, '');
 };
 
+// Add this helper function near other utility functions, before the TechTreeViewer component
+const validateImageUrl = (imageUrl: string | null | undefined): string | undefined => {
+  // If imageUrl is null or undefined, return undefined
+  if (imageUrl === null || imageUrl === undefined) {
+    return undefined;
+  }
+  
+  // Check if image URL is valid
+  if (typeof imageUrl !== 'string' || 
+      imageUrl.length < 2 || 
+      (!imageUrl.startsWith('/') && 
+       !imageUrl.startsWith('http://') && 
+       !imageUrl.startsWith('https://'))) {
+    // Invalid image URL
+    console.warn(`Invalid image URL: "${imageUrl}"`);
+    return undefined; // or return a default image path
+  }
+  return imageUrl;
+};
+
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
@@ -630,17 +650,25 @@ export function TechTreeViewer() {
 
         if (cachedData?.detailData) {
           // If we have detailed data in cache, use it and skip basic data fetch
-          const positionedDetailNodes = calculateNodePositions(
-            cachedData.detailData.nodes
-          );
+          // Validate image URLs in cached data
+          const validatedNodes = cachedData.detailData.nodes.map((node: TechNode) => ({
+            ...node,
+            image: validateImageUrl(node.image)
+          }));
+          
+          const positionedDetailNodes = calculateNodePositions(validatedNodes);
           setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
           setFilteredNodes(positionedDetailNodes);
           setIsLoading(false);
         } else if (cachedData?.basicData) {
           // If we only have basic data, use it temporarily
-          const positionedNodes = calculateNodePositions(
-            cachedData.basicData.nodes
-          );
+          // Validate image URLs in cached data
+          const validatedNodes = cachedData.basicData.nodes.map((node: TechNode) => ({
+            ...node,
+            image: validateImageUrl(node.image)
+          }));
+          
+          const positionedNodes = calculateNodePositions(validatedNodes);
           setData({ ...cachedData.basicData, nodes: positionedNodes });
           setFilteredNodes(positionedNodes);
           setIsLoading(false);
@@ -660,7 +688,13 @@ export function TechTreeViewer() {
 
           // Only update if we don't have detailed data yet
           if (!cachedData?.detailData) {
-            const positionedNodes = calculateNodePositions(basicData.nodes);
+            // Validate image URLs in fetched data
+            const validatedNodes = basicData.nodes.map((node: TechNode) => ({
+              ...node,
+              image: validateImageUrl(node.image)
+            }));
+            
+            const positionedNodes = calculateNodePositions(validatedNodes);
             setData({ ...basicData, nodes: positionedNodes });
             setFilteredNodes(positionedNodes);
             setIsLoading(false);
@@ -684,8 +718,14 @@ export function TechTreeViewer() {
 
         if (!isMounted) return;
 
+        // Validate image URLs in fetched detailed data
+        const validatedDetailNodes = detailData.nodes.map((node: TechNode) => ({
+          ...node,
+          image: validateImageUrl(node.image)
+        }));
+        
         // Compare current and new data before updating
-        const hasChanges = detailData.nodes.some(
+        const hasChanges = validatedDetailNodes.some(
           (newNode: TechNode, index: number) => {
             const currentNode = currentNodesRef.current[index];
             if (!currentNode) return true;
@@ -702,20 +742,18 @@ export function TechTreeViewer() {
 
         // Only update if there are actual changes
         if (hasChanges) {
-          const positionedDetailNodes = calculateNodePositions(
-            detailData.nodes
-          );
+          const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
           setData({ ...detailData, nodes: positionedDetailNodes });
           setFilteredNodes(positionedDetailNodes);
           currentNodesRef.current = positionedDetailNodes;
         }
 
-        // Cache complete fresh data
+        // Cache complete fresh data with validated nodes
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
-          basicData: detailData,
-          detailData,
+          basicData: { ...detailData, nodes: validatedDetailNodes },
+          detailData: { ...detailData, nodes: validatedDetailNodes },
         });
       } catch (error: unknown) {
         if (error instanceof Error && error.name === "AbortError") return;
@@ -1339,12 +1377,16 @@ export function TechTreeViewer() {
 
   // Update the prefetchNode function
   const prefetchNode = useCallback(async (nodeId: string) => {
-    // Skip if already prefetched
-    if (prefetchedNodes.current.has(nodeId)) return;
+    // Skip if already prefetched or if nodeId is invalid
+    if (prefetchedNodes.current.has(nodeId) || !nodeId) return;
     prefetchedNodes.current.add(nodeId);
 
     try {
-      const response = await fetch(`/api/inventions/${nodeId}`);
+      // Ensure nodeId is properly encoded for URLs
+      const encodedNodeId = encodeURIComponent(nodeId);
+      const apiUrl = `/api/inventions/${encodedNodeId}`;
+      
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         if (response.status !== 404) {  // Don't log 404s as they're expected
           console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
@@ -1352,6 +1394,18 @@ export function TechTreeViewer() {
         return;
       }
       const nodeData = await response.json();
+      
+      // Simple validation for image URL
+      if (nodeData.image && typeof nodeData.image === 'string') {
+        // Check if image URL is valid (must start with / or http:// or https://)
+        if (!nodeData.image.startsWith('/') && 
+            !nodeData.image.startsWith('http://') && 
+            !nodeData.image.startsWith('https://')) {
+          // Invalid image URL, remove it
+          console.warn(`Invalid image URL for node ${nodeId}: "${nodeData.image}"`);
+          nodeData.image = undefined;
+        }
+      }
       
       setData((prevData) => ({
         ...prevData,
@@ -1363,6 +1417,43 @@ export function TechTreeViewer() {
       console.warn(`Failed to prefetch node ${nodeId}:`, error);
     }
   }, []);
+
+  // Add this effect to prefetch data for connected nodes when a node is selected
+  useEffect(() => {
+    if (!selectedNodeId) return;
+    
+    // Get all connected node IDs
+    const connectedNodeIds = new Set<string>();
+    
+    // Add all directly connected nodes
+    data.links.forEach(link => {
+      if (link.source === selectedNodeId) {
+        connectedNodeIds.add(link.target);
+      } else if (link.target === selectedNodeId) {
+        connectedNodeIds.add(link.source);
+      }
+    });
+    
+    // Add highlighted ancestors and descendants
+    if (highlightedAncestors.size > 0) {
+      highlightedAncestors.forEach(id => connectedNodeIds.add(id));
+    }
+    
+    if (highlightedDescendants.size > 0) {
+      highlightedDescendants.forEach(id => connectedNodeIds.add(id));
+    }
+    
+    // Prefetch data for all connected nodes (with a limit to avoid too many requests)
+    const prefetchLimit = 20; // Limit the number of prefetch requests
+    let count = 0;
+    
+    connectedNodeIds.forEach(nodeId => {
+      if (count < prefetchLimit) {
+        prefetchNode(nodeId);
+        count++;
+      }
+    });
+  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
 
   // Update handleNodeHover to limit prefetching
   const handleNodeHover = useCallback(
@@ -1638,11 +1729,11 @@ export function TechTreeViewer() {
       const targetX = getXPosition(targetNode.year);
       const targetY = targetNode.y || 0;
       
-      // Add a buffer around the viewport for smoother scrolling
-      const buffer = 300;
+      // Add a larger buffer around the viewport for connections
+      const buffer = 1000;
       
-      // Check if either endpoint is in the viewport
-      return (
+      // Check if either endpoint is in the viewport (original check)
+      const endpointInViewport = 
         (sourceX >= visibleViewport.left - buffer &&
          sourceX <= visibleViewport.right + buffer &&
          sourceY >= visibleViewport.top - buffer &&
@@ -1650,8 +1741,30 @@ export function TechTreeViewer() {
         (targetX >= visibleViewport.left - buffer &&
          targetX <= visibleViewport.right + buffer &&
          targetY >= visibleViewport.top - buffer &&
-         targetY <= visibleViewport.bottom + buffer)
-      );
+         targetY <= visibleViewport.bottom + buffer);
+      
+      if (endpointInViewport) return true;
+      
+      // Additional check for line segments that cross the viewport
+      // This uses a simplified line-rectangle intersection test
+      
+      // 1. Check if the bounding box of the line intersects the viewport
+      const minX = Math.min(sourceX, targetX);
+      const maxX = Math.max(sourceX, targetX);
+      const minY = Math.min(sourceY, targetY);
+      const maxY = Math.max(sourceY, targetY);
+      
+      // If the bounding box doesn't intersect the viewport (with buffer), the line doesn't either
+      if (maxX < visibleViewport.left - buffer || 
+          minX > visibleViewport.right + buffer ||
+          maxY < visibleViewport.top - buffer || 
+          minY > visibleViewport.bottom + buffer) {
+        return false;
+      }
+      
+      // 2. For curved connections, we need a more generous check
+      // If the bounding box of the line intersects the viewport, consider it visible
+      return true;
     },
     [visibleViewport, data.nodes, getXPosition]
   );
@@ -1694,8 +1807,70 @@ export function TechTreeViewer() {
 
   // Memoize the filtered and visible nodes
   const visibleNodes = useMemo(() => {
-    return filteredNodes.filter(isNodeInViewport);
-  }, [filteredNodes, isNodeInViewport]);
+    // Start with nodes that are in the viewport
+    const inViewportNodes = filteredNodes.filter(isNodeInViewport);
+    
+    // If we have a selected node, add all connected nodes regardless of viewport
+    if (selectedNodeId) {
+      const connectedNodeIds = new Set<string>();
+      
+      // Add all directly connected nodes
+      data.links.forEach(link => {
+        if (link.source === selectedNodeId) {
+          connectedNodeIds.add(link.target);
+        } else if (link.target === selectedNodeId) {
+          connectedNodeIds.add(link.source);
+        }
+      });
+      
+      // Add highlighted ancestors and descendants
+      if (highlightedAncestors.size > 0) {
+        highlightedAncestors.forEach(id => connectedNodeIds.add(id));
+      }
+      
+      if (highlightedDescendants.size > 0) {
+        highlightedDescendants.forEach(id => connectedNodeIds.add(id));
+      }
+      
+      // Add connected nodes that aren't already in the viewport
+      const connectedNodes = filteredNodes.filter(
+        node => connectedNodeIds.has(node.id) && !inViewportNodes.some(n => n.id === node.id)
+      );
+      
+      return [...inViewportNodes, ...connectedNodes];
+    }
+    
+    // If we have a hovered node, also include its direct connections
+    if (hoveredNodeId) {
+      const connectedNodeIds = new Set<string>();
+      
+      // Add all directly connected nodes
+      data.links.forEach(link => {
+        if (link.source === hoveredNodeId) {
+          connectedNodeIds.add(link.target);
+        } else if (link.target === hoveredNodeId) {
+          connectedNodeIds.add(link.source);
+        }
+      });
+      
+      // Add connected nodes that aren't already in the viewport
+      const connectedNodes = filteredNodes.filter(
+        node => connectedNodeIds.has(node.id) && !inViewportNodes.some(n => n.id === node.id)
+      );
+      
+      return [...inViewportNodes, ...connectedNodes];
+    }
+    
+    return inViewportNodes;
+  }, [
+    filteredNodes, 
+    isNodeInViewport, 
+    selectedNodeId, 
+    hoveredNodeId, 
+    data.links, 
+    highlightedAncestors, 
+    highlightedDescendants
+  ]);
 
   // Memoize the filtered and visible connections
   const visibleConnections = useMemo(() => {
