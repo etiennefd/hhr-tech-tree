@@ -64,6 +64,10 @@ const DEFAULT_ZOOM = 1;
 // Add these constants near other constants
 const ZOOM_DEBOUNCE_MS = 16; // About 1 frame at 60fps
 
+// Add these constants near the other constants
+// const VIRTUALIZATION_OVERSCAN = 5; // Number of items to render beyond the visible area
+const VIRTUALIZATION_ENABLED = true; // Flag to enable/disable virtualization
+
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -347,6 +351,18 @@ export function TechTreeViewer() {
     startY: 0,
     scrollLeft: 0,
     scrollTop: 0,
+  });
+
+  // Add refs for virtualization
+  const nodesContainerRef = useRef<HTMLDivElement>(null);
+  const connectionsContainerRef = useRef<SVGSVGElement>(null);
+  
+  // Add state for visible viewport
+  const [visibleViewport, setVisibleViewport] = useState({
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   });
 
   const getXPosition = useCallback(
@@ -1586,6 +1602,137 @@ export function TechTreeViewer() {
     return () => window.removeEventListener('keydown', handleEscapeKey);
   }, []);
 
+  // Add a function to determine if a node is in the visible viewport
+  const isNodeInViewport = useCallback(
+    (node: TechNode) => {
+      if (!VIRTUALIZATION_ENABLED) return true;
+      
+      const nodeX = getXPosition(node.year);
+      const nodeY = node.y || 0;
+      
+      // Add a buffer around the viewport for smoother scrolling
+      const buffer = 300;
+      
+      return (
+        nodeX + NODE_WIDTH/2 >= visibleViewport.left - buffer &&
+        nodeX - NODE_WIDTH/2 <= visibleViewport.right + buffer &&
+        nodeY + 200 >= visibleViewport.top - buffer && // Approximate node height
+        nodeY - 200 <= visibleViewport.bottom + buffer
+      );
+    },
+    [visibleViewport, getXPosition]
+  );
+
+  // Add a function to determine if a connection is in the visible viewport
+  const isConnectionInViewport = useCallback(
+    (link: Link) => {
+      if (!VIRTUALIZATION_ENABLED) return true;
+      
+      const sourceNode = data.nodes.find((n) => n.id === link.source);
+      const targetNode = data.nodes.find((n) => n.id === link.target);
+      
+      if (!sourceNode || !targetNode) return false;
+      
+      const sourceX = getXPosition(sourceNode.year);
+      const sourceY = sourceNode.y || 0;
+      const targetX = getXPosition(targetNode.year);
+      const targetY = targetNode.y || 0;
+      
+      // Add a buffer around the viewport for smoother scrolling
+      const buffer = 300;
+      
+      // Check if either endpoint is in the viewport
+      return (
+        (sourceX >= visibleViewport.left - buffer &&
+         sourceX <= visibleViewport.right + buffer &&
+         sourceY >= visibleViewport.top - buffer &&
+         sourceY <= visibleViewport.bottom + buffer) ||
+        (targetX >= visibleViewport.left - buffer &&
+         targetX <= visibleViewport.right + buffer &&
+         targetY >= visibleViewport.top - buffer &&
+         targetY <= visibleViewport.bottom + buffer)
+      );
+    },
+    [visibleViewport, data.nodes, getXPosition]
+  );
+
+  // Update the scroll handler to track visible viewport
+  useEffect(() => {
+    const updateVisibleViewport = () => {
+      if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) return;
+      
+      const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
+      const verticalScroll = verticalScrollContainerRef.current.scrollTop;
+      
+      setVisibleViewport({
+        left: horizontalScroll,
+        right: horizontalScroll + containerDimensions.width,
+        top: verticalScroll,
+        bottom: verticalScroll + containerDimensions.height,
+      });
+    };
+    
+    // Initial update
+    updateVisibleViewport();
+    
+    // Add scroll event listeners
+    const horizontalContainer = horizontalScrollContainerRef.current;
+    const verticalContainer = verticalScrollContainerRef.current;
+    
+    if (horizontalContainer && verticalContainer) {
+      horizontalContainer.addEventListener('scroll', updateVisibleViewport);
+      verticalContainer.addEventListener('scroll', updateVisibleViewport);
+    }
+    
+    return () => {
+      if (horizontalContainer && verticalContainer) {
+        horizontalContainer.removeEventListener('scroll', updateVisibleViewport);
+        verticalContainer.removeEventListener('scroll', updateVisibleViewport);
+      }
+    };
+  }, [containerDimensions.width, containerDimensions.height]);
+
+  // Memoize the filtered and visible nodes
+  const visibleNodes = useMemo(() => {
+    return filteredNodes.filter(isNodeInViewport);
+  }, [filteredNodes, isNodeInViewport]);
+
+  // Memoize the filtered and visible connections
+  const visibleConnections = useMemo(() => {
+    return data.links.filter((link) => {
+      // Always include connections for selected or hovered nodes
+      if (selectedNodeId) {
+        if (link.source === selectedNodeId || link.target === selectedNodeId) {
+          return true;
+        }
+      }
+      
+      if (hoveredNodeId) {
+        if (link.source === hoveredNodeId || link.target === hoveredNodeId) {
+          return true;
+        }
+      }
+      
+      // Include connections for highlighted ancestors/descendants
+      if (highlightedAncestors.size > 0 || highlightedDescendants.size > 0) {
+        if ((highlightedAncestors.has(link.source) && highlightedAncestors.has(link.target)) ||
+            (highlightedDescendants.has(link.source) && highlightedDescendants.has(link.target))) {
+          return true;
+        }
+      }
+      
+      // For all other connections, check if they're in viewport
+      return isConnectionInViewport(link);
+    });
+  }, [
+    data.links, 
+    selectedNodeId, 
+    hoveredNodeId, 
+    highlightedAncestors, 
+    highlightedDescendants, 
+    isConnectionInViewport
+  ]);
+
   // Add loading state UI
   if (isLoading) {
     return (
@@ -1750,12 +1897,13 @@ export function TechTreeViewer() {
 
               {/* SVG connections */}
               <svg
+                ref={connectionsContainerRef}
                 className="absolute inset-0 w-full h-full"
                 style={{
                   zIndex: 1,
                 }}
               >
-                {data.links.map((link, index) => {
+                {visibleConnections.map((link) => {
                   const sourceNode = data.nodes.find(
                     (n) => n.id === link.source
                   );
@@ -1764,9 +1912,15 @@ export function TechTreeViewer() {
                   );
 
                   if (!sourceNode || !targetNode) return null;
+                  
+                  // Find the index in the original data.links array
+                  const originalIndex = data.links.findIndex(
+                    (l) => l === link
+                  );
+                  
                   return (
                     <CurvedConnections
-                      key={index}
+                      key={`connection-${originalIndex}`}
                       sourceNode={{
                         x: getXPosition(sourceNode.year),
                         y: sourceNode.y || 150,
@@ -1778,7 +1932,7 @@ export function TechTreeViewer() {
                       sourceIndex={data.nodes.indexOf(sourceNode)}
                       targetIndex={data.nodes.indexOf(targetNode)}
                       connectionType={link.type}
-                      isHighlighted={shouldHighlightLink(link, index)}
+                      isHighlighted={shouldHighlightLink(link, originalIndex)}
                       opacity={(() => {
                         // If a node is selected
                         if (selectedNodeId) {
@@ -1792,14 +1946,14 @@ export function TechTreeViewer() {
                             return 1;
                           }
                           // If this is a connection to/from the selected node
-                          if (shouldHighlightLink(link, index)) {
+                          if (shouldHighlightLink(link, originalIndex)) {
                             return 1;
                           }
                           return 0.2;
                         }
                         // If a link is selected
                         if (selectedLinkIndex !== null) {
-                          return index === selectedLinkIndex ? 1 : 0.2;
+                          return originalIndex === selectedLinkIndex ? 1 : 0.2;
                         }
                         // If filters are applied
                         if (
@@ -1812,16 +1966,16 @@ export function TechTreeViewer() {
                         return 1;
                       })()}
                       onMouseEnter={() => {
-                        setHoveredLinkIndex(index);
+                        setHoveredLinkIndex(originalIndex);
                       }}
                       onMouseLeave={() => setHoveredLinkIndex(null)}
                       sourceTitle={sourceNode.title}
                       targetTitle={targetNode.title}
                       details={link.details}
-                      isSelected={selectedLinkIndex === index}
+                      isSelected={selectedLinkIndex === originalIndex}
                       onSelect={() => {
                         setSelectedLinkIndex((current) =>
-                          current === index ? null : index
+                          current === originalIndex ? null : originalIndex
                         );
                         setSelectedNodeId(null);
                       }}
@@ -1834,8 +1988,8 @@ export function TechTreeViewer() {
               </svg>
 
               {/* Nodes */}
-              <div className="relative" style={{ zIndex: 10 }}>
-                {filteredNodes.map((node) => (
+              <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
+                {visibleNodes.map((node) => (
                   <BrutalistNode
                     key={node.id}
                     node={node}
@@ -1899,7 +2053,7 @@ export function TechTreeViewer() {
 
               {/* Tooltips */}
               <div className="relative" style={{ zIndex: 100 }}>
-                {filteredNodes.map(
+                {visibleNodes.map(
                   (node) =>
                     (hoveredNode?.id === node.id ||
                       selectedNodeId === node.id) && (
