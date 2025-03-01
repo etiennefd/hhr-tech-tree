@@ -1503,6 +1503,93 @@ export function TechTreeViewer() {
     
   }, [selectedLinkIndex, data.links, prefetchNode]);
 
+  // Add this effect to prefetch nodes when filters are applied
+  useEffect(() => {
+    // Skip if no filters are applied
+    const hasActiveFilters = filters.fields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
+    if (!hasActiveFilters) return;
+    
+    console.log(`[Filter Prefetch] Active filters: Fields=${filters.fields.size}, Countries=${filters.countries.size}, Cities=${filters.cities.size}`);
+    
+    // Find nodes that match the current filters
+    const matchingNodes = data.nodes.filter(node => {
+      // Check if node matches field filters
+      const matchesFields = filters.fields.size === 0 || 
+        node.fields?.some(field => filters.fields.has(field));
+      
+      // Check if node matches country filters
+      const matchesCountries = filters.countries.size === 0 || 
+        (node.formattedLocation && filters.countries.has(cleanLocationForTooltip(node.formattedLocation) || '')) ||
+        (node.countryModern && filters.countries.has(node.countryModern)) ||
+        (node.countryHistorical && filters.countries.has(node.countryHistorical));
+      
+      // Check if node matches city filters
+      const matchesCity = filters.cities.size === 0 || 
+        (node.city && filters.cities.has(node.city)) ||
+        (node.formattedLocation && filters.cities.has(cleanLocationForTooltip(node.formattedLocation) || ''));
+      
+      return matchesFields && matchesCountries && matchesCity;
+    });
+    
+    console.log(`[Filter Prefetch] Found ${matchingNodes.length} matching nodes`);
+    
+    // Limit the number of nodes to prefetch to avoid overwhelming the API
+    const nodesToPrefetch = matchingNodes.slice(0, 20);
+    
+    console.log(`[Filter Prefetch] Prefetching ${nodesToPrefetch.length} nodes`);
+    
+    // Prefetch the matching nodes in parallel
+    const prefetchPromises = nodesToPrefetch
+      .filter(node => !prefetchedNodes.current.has(node.id))
+      .map(node => prefetchNode(node.id));
+    
+    console.log(`[Filter Prefetch] Sending ${prefetchPromises.length} prefetch requests`);
+    
+    // Execute all prefetch requests
+    Promise.all(prefetchPromises).then(() => {
+      console.log(`[Filter Prefetch] Successfully prefetched filtered nodes`);
+    }).catch(error => {
+      console.warn('Error prefetching filtered nodes:', error);
+    });
+    
+    // Also prefetch connections between these nodes
+    const filteredNodeIds = new Set(nodesToPrefetch.map(node => node.id));
+    
+    // Find all connections where both source and target are in the filtered nodes
+    // or where one node is in the filtered set and the other is a direct connection
+    const relevantConnections = data.links.filter(link => {
+      // Direct connections between filtered nodes
+      const isDirectConnection = filteredNodeIds.has(link.source) && filteredNodeIds.has(link.target);
+      
+      // One-hop connections (where only one end is in the filtered set)
+      const isOneHopConnection = 
+        (filteredNodeIds.has(link.source) || filteredNodeIds.has(link.target));
+      
+      return isDirectConnection || isOneHopConnection;
+    });
+    
+    // Update the cache to include these connections
+    setCachedConnectionIndices(prev => {
+      const updated = new Set(prev);
+      relevantConnections.forEach(link => {
+        const index = data.links.findIndex(l => l === link);
+        if (index !== -1) {
+          updated.add(index);
+          
+          // Also prefetch the nodes at both ends of the connection
+          if (!filteredNodeIds.has(link.source)) {
+            prefetchNode(link.source);
+          }
+          if (!filteredNodeIds.has(link.target)) {
+            prefetchNode(link.target);
+          }
+        }
+      });
+      return updated;
+    });
+    
+  }, [filters, data.nodes, data.links, prefetchNode, cleanLocationForTooltip]);
+
   // Update handleNodeHover to limit prefetching
   const handleNodeHover = useCallback(
     (node: TechNode) => {
