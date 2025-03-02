@@ -328,7 +328,7 @@ const validateImageUrl = (imageUrl: string | null | undefined): string | undefin
 
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -393,6 +393,8 @@ export function TechTreeViewer() {
   const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
   // Use the same cache duration for connections as for nodes
   // const CACHE_DURATION = 60000; // Already defined above
+
+  const [retryCountdown, setRetryCountdown] = useState<number | null>(null);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -640,144 +642,162 @@ export function TechTreeViewer() {
     []
   );
 
-  // EFFECTS
+  // Define controller and isMounted refs outside of loadData
+  const controllerRef = useRef<AbortController | null>(null);
+  const isMountedRef = useRef(true);
 
-  // 3. Optimize initial data fetching
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+  // Define loadData as a useCallback function so it can be referenced elsewhere
+  const loadData = useCallback(async () => {
+    let cachedData = null; // Move declaration outside try block
+    try {
+      // Check cache first for immediate display
+      cachedData = await cacheManager.get();
 
-    const loadData = async () => {
-      let cachedData = null; // Move declaration outside try block
-      try {
-        // Check cache first for immediate display
-        cachedData = await cacheManager.get();
+      if (!cachedData) {
+        setIsLoading(true);
+      }
+      
+      if (cachedData?.detailData) {
+        // If we have detailed data in cache, use it and skip basic data fetch
+        // Validate image URLs in cached data
+        const validatedNodes = cachedData.detailData.nodes.map((node: TechNode) => ({
+          ...node,
+          image: validateImageUrl(node.image)
+        }));
+        
+        const positionedDetailNodes = calculateNodePositions(validatedNodes);
+        setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
+        setIsLoading(false);
+      } else if (cachedData?.basicData) {
+        // If we only have basic data, use it temporarily
+        // Validate image URLs in cached data
+        const validatedNodes = cachedData.basicData.nodes.map((node: TechNode) => ({
+          ...node,
+          image: validateImageUrl(node.image)
+        }));
+        
+        const positionedNodes = calculateNodePositions(validatedNodes);
+        setData({ ...cachedData.basicData, nodes: positionedNodes });
+        setIsLoading(false);
+      }
 
-        if (!cachedData) {
-          setIsLoading(true);
+      // If we don't have detailed cached data, fetch fresh basic data
+      if (!cachedData?.detailData) {
+        const basicResponse = await fetch("/api/inventions", {
+          signal: controllerRef.current?.signal,
+          priority: "high",
+        });
+        if (!basicResponse.ok) {
+          if (basicResponse.status === 429) {
+            const retryAfter = basicResponse.headers.get('Retry-After');
+            const retrySeconds = retryAfter ? parseInt(retryAfter, 10) : 60;
+            setRetryCountdown(retrySeconds);
+            throw new Error(`Rate limit exceeded. Please try again in ${retrySeconds} seconds.`);
+          }
+          throw new Error(`HTTP error! status: ${basicResponse.status}`);
         }
+        const basicData = await basicResponse.json();
 
-        if (cachedData?.detailData) {
-          // If we have detailed data in cache, use it and skip basic data fetch
-          // Validate image URLs in cached data
-          const validatedNodes = cachedData.detailData.nodes.map((node: TechNode) => ({
-            ...node,
-            image: validateImageUrl(node.image)
-          }));
-          
-          const positionedDetailNodes = calculateNodePositions(validatedNodes);
-          setData({ ...cachedData.detailData, nodes: positionedDetailNodes });
-          setIsLoading(false);
-        } else if (cachedData?.basicData) {
-          // If we only have basic data, use it temporarily
-          // Validate image URLs in cached data
-          const validatedNodes = cachedData.basicData.nodes.map((node: TechNode) => ({
+        if (!isMountedRef.current) return;
+        
+        // Only update if we don't have detailed data yet
+        if (!cachedData?.detailData) {
+          // Validate image URLs in fetched data
+          const validatedNodes = basicData.nodes.map((node: TechNode) => ({
             ...node,
             image: validateImageUrl(node.image)
           }));
           
           const positionedNodes = calculateNodePositions(validatedNodes);
-          setData({ ...cachedData.basicData, nodes: positionedNodes });
+          setData({ ...basicData, nodes: positionedNodes });
           setIsLoading(false);
-        }
 
-        // If we don't have detailed cached data, fetch fresh basic data
-        if (!cachedData?.detailData) {
-          const basicResponse = await fetch("/api/inventions", {
-            signal: controller.signal,
-            priority: "high",
+          // Cache basic data
+          await cacheManager.set({
+            version: CACHE_VERSION,
+            timestamp: Date.now(),
+            basicData,
           });
-          if (!basicResponse.ok)
-            throw new Error(`HTTP error! status: ${basicResponse.status}`);
-          const basicData = await basicResponse.json();
-
-          if (!isMounted) return;
-
-          // Only update if we don't have detailed data yet
-          if (!cachedData?.detailData) {
-            // Validate image URLs in fetched data
-            const validatedNodes = basicData.nodes.map((node: TechNode) => ({
-              ...node,
-              image: validateImageUrl(node.image)
-            }));
-            
-            const positionedNodes = calculateNodePositions(validatedNodes);
-            setData({ ...basicData, nodes: positionedNodes });
-            setIsLoading(false);
-
-            // Cache basic data
-            await cacheManager.set({
-              version: CACHE_VERSION,
-              timestamp: Date.now(),
-              basicData,
-            });
-          }
-        }
-
-        // Always fetch fresh detailed data
-        const detailResponse = await fetch("/api/inventions?detail=true", {
-          signal: controller.signal,
-        });
-        if (!detailResponse.ok)
-          throw new Error(`HTTP error! status: ${detailResponse.status}`);
-        const detailData = await detailResponse.json();
-
-        if (!isMounted) return;
-
-        // Validate image URLs in fetched detailed data
-        const validatedDetailNodes = detailData.nodes.map((node: TechNode) => ({
-          ...node,
-          image: validateImageUrl(node.image)
-        }));
-        
-        // Compare current and new data before updating
-        const hasChanges = validatedDetailNodes.some(
-          (newNode: TechNode, index: number) => {
-            const currentNode = currentNodesRef.current[index];
-            if (!currentNode) return true;
-
-            // Compare relevant fields that would affect display
-            return (
-              newNode.title !== currentNode.title ||
-              newNode.year !== currentNode.year ||
-              newNode.fields.join(",") !== currentNode.fields.join(",") ||
-              newNode.image !== currentNode.image
-            );
-          }
-        );
-
-        // Only update if there are actual changes
-        if (hasChanges) {
-          const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
-          setData({ ...detailData, nodes: positionedDetailNodes });
-          currentNodesRef.current = positionedDetailNodes;
-        }
-
-        // Cache complete fresh data with validated nodes
-        await cacheManager.set({
-          version: CACHE_VERSION,
-          timestamp: Date.now(),
-          basicData: { ...detailData, nodes: validatedDetailNodes },
-          detailData: { ...detailData, nodes: validatedDetailNodes },
-        });
-      } catch (error: unknown) {
-        if (error instanceof Error && error.name === "AbortError") return;
-        console.error("Error loading data:", error);
-        setIsLoading(false);
-        if (!cachedData) {
-          // Now cachedData is in scope
-          setData({ nodes: [], links: [] });
         }
       }
-    };
 
-    loadData();
+      // Always fetch fresh detailed data
+      const detailResponse = await fetch("/api/inventions?detail=true", {
+        signal: controllerRef.current?.signal,
+      });
+      if (!detailResponse.ok) {
+        if (detailResponse.status === 429) {
+          const retryAfter = detailResponse.headers.get('Retry-After');
+          const retrySeconds = retryAfter ? parseInt(retryAfter, 10) : 60;
+          setRetryCountdown(retrySeconds);
+          throw new Error(`Rate limit exceeded. Please try again in ${retrySeconds} seconds.`);
+        }
+        throw new Error(`HTTP error! status: ${detailResponse.status}`);
+      }
+      const detailData = await detailResponse.json();
 
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
+      if (!isMountedRef.current) return;
+      
+      // Validate image URLs in fetched detailed data
+      const validatedDetailNodes = detailData.nodes.map((node: TechNode) => ({
+        ...node,
+        image: validateImageUrl(node.image)
+      }));
+      
+      // Compare current and new data before updating
+      const hasChanges = validatedDetailNodes.some(
+        (newNode: TechNode, index: number) => {
+          const currentNode = currentNodesRef.current[index];
+          if (!currentNode) return true;
+
+          // Compare relevant fields that would affect display
+          return (
+            newNode.title !== currentNode.title ||
+            newNode.year !== currentNode.year ||
+            newNode.fields.join(",") !== currentNode.fields.join(",") ||
+            newNode.image !== currentNode.image
+          );
+        }
+      );
+
+      // Only update if there are actual changes
+      if (hasChanges) {
+        const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
+        setData({ ...detailData, nodes: positionedDetailNodes });
+        currentNodesRef.current = positionedDetailNodes;
+      }
+
+      // Cache complete fresh data with validated nodes
+      await cacheManager.set({
+        version: CACHE_VERSION,
+        timestamp: Date.now(),
+        basicData: { ...detailData, nodes: validatedDetailNodes },
+        detailData: { ...detailData, nodes: validatedDetailNodes },
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "AbortError") return;
+      console.error("Error loading data:", error);
+      setIsLoading(false);
+      setErrorMessage(error instanceof Error ? error.message : "An unknown error occurred");
+      if (!cachedData) {
+        // Now cachedData is in scope
+        setData({ nodes: [], links: [] });
+      }
+    }
   }, [calculateNodePositions]);
+
+  // Use loadData in useEffect
+  useEffect(() => {
+    isMountedRef.current = true;
+    controllerRef.current = new AbortController();
+    
+    loadData();
+    
+    return () => {
+      isMountedRef.current = false;
+      controllerRef.current?.abort();
+    };
+  }, [loadData]);
 
   // Window resize handler
   // Window resize handler only
@@ -1887,7 +1907,7 @@ export function TechTreeViewer() {
       if (!visibleViewport) return true;
 
       // Apply a buffer around the viewport to preload nearby nodes
-      const buffer = 500; // pixels
+      const buffer = 1000; // pixels
       const bufferedViewport = {
         left: visibleViewport.left - buffer,
         right: visibleViewport.right + buffer,
@@ -1925,7 +1945,7 @@ export function TechTreeViewer() {
       const targetY = targetNode.y || 0;
       
       // Use the same buffer size as the node viewport check for consistency
-      const buffer = 500; // pixels
+      const buffer = 1000; // pixels
       const bufferedViewport = {
         left: visibleViewport.left - buffer,
         right: visibleViewport.right + buffer,
@@ -2273,6 +2293,17 @@ export function TechTreeViewer() {
     }
   }, [data.nodes, prefetchNode]);
 
+  // Add a useEffect for the countdown timer
+  useEffect(() => {
+    if (retryCountdown === null || retryCountdown <= 0) return;
+    
+    const timer = setTimeout(() => {
+      setRetryCountdown(prev => prev !== null ? prev - 1 : null);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [retryCountdown]);
+
   // Add loading state UI
   if (isLoading) {
     return (
@@ -2285,12 +2316,30 @@ export function TechTreeViewer() {
   }
 
   // Add error state UI
-  if (isError) {
+  if (errorMessage) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-2">Error Loading Tech Tree</h2>
-          <p className="text-gray-600">Please try refreshing the page</p>
+          <p className="text-gray-600">{errorMessage}</p>
+          <button 
+            onClick={() => {
+              if (retryCountdown === null || retryCountdown <= 0) {
+                setErrorMessage(null);
+                loadData();
+              }
+            }}
+            disabled={retryCountdown !== null && retryCountdown > 0}
+            className={`mt-4 px-4 py-2 rounded ${
+              retryCountdown !== null && retryCountdown > 0 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-500 hover:bg-blue-600 text-white'
+            }`}
+          >
+            {retryCountdown !== null && retryCountdown > 0 
+              ? `Retry in ${retryCountdown}s` 
+              : 'Try Again'}
+          </button>
         </div>
       </div>
     );
