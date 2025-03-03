@@ -465,58 +465,58 @@ export function TechTreeViewer() {
         Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
 
         // Life Sciences (300-500)
-        Biology: 300,
-        Medicine: 350,
-        Sanitation: 400,
+        Biology: Math.max(250, ABSOLUTE_MIN_Y),
+        Medicine: Math.max(300, ABSOLUTE_MIN_Y),
+        Sanitation: 350,
 
         // Physical Sciences (500-800)
-        Physics: 500,
-        Chemistry: 550,
-        Astronomy: 600,
-        Meteorology: 700,
-        Optics: 750,
+        Physics: 450,
+        Chemistry: 500,
+        Astronomy: 550,
+        Meteorology: 600,
+        Optics: 650,
 
         // Energy & Electronics (800-1000)
-        Electricity: 800,
-        Electronics: 850,
-        Energy: 900,
-        Lighting: 950,
+        Electricity: 700,
+        Electronics: 750,
+        Energy: 800,
+        Lighting: 850,
 
         // Construction/Materials (1000-1300)
-        Construction: 1000,
-        Mining: 1050,
-        Metallurgy: 1100,
-        Manufacturing: 1150,
-        Textiles: 1200,
-        Hydraulics: 1250,
+        Construction: 900,
+        Mining: 950,
+        Metallurgy: 1000,
+        Manufacturing: 1050,
+        Textiles: 1100,
+        Hydraulics: 1150,
 
         // Transportation/Movement (1300-1600)
-        Transportation: 1300,
-        Flying: 1350,
-        Sailing: 1400,
-        Space: 1450,
-        Cartography: 1500,
+        Transportation: 1200,
+        Flying: 1250,
+        Sailing: 1300,
+        Space: 1350,
+        Cartography: 1400,
 
         // Computing/Math (1600-1800)
-        Mathematics: 1600,
-        Measurement: 1650,
-        Timekeeping: 1700,
-        Computing: 1750,
+        Mathematics: 1450,
+        Measurement: 1500,
+        Timekeeping: 1550,
+        Computing: 1600,
 
         // Safety/Protection/Governance (1800-2100)
-        Security: 1800,
-        Weaponry: 1850,
-        Finance: 1900,
-        Governance: 2000,
+        Security: 1650,
+        Weaponry: 1700,
+        Finance: 1750,
+        Governance: 1800,
 
         // Culture (2100-2400)
-        Communication: 2100,
-        "Visual media": 2150,
-        Recreation: 2200,
-        Music: 2250,
+        Communication: 1850,
+        "Visual media": 1900,
+        Recreation: 1950,
+        Music: 2000,
 
         // Miscellaneous
-        Misc: 2300,
+        Misc: 2050,
       };
 
       // Group nodes by year
