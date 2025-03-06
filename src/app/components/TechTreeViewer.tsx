@@ -2409,12 +2409,11 @@ export function TechTreeViewer() {
             ref={verticalScrollContainerRef}
             className="overflow-y-auto overflow-x-hidden"
             style={{
-              height: isMobile ? `${window.innerHeight / zoom}px` : "calc(100vh - 32px)",
+              height: "calc(100vh - 32px)",
               overscrollBehaviorY: "contain",
               position: "relative",
               touchAction: isMobile ? "pan-x pan-y pinch-zoom" : "auto",
               WebkitOverflowScrolling: "touch",
-              minHeight: isMobile ? `${Math.max(totalHeight, window.innerHeight) / zoom}px` : undefined,
             }}
             onScroll={(e) => {
               const verticalScroll = e.currentTarget.scrollTop;
@@ -2427,9 +2426,13 @@ export function TechTreeViewer() {
             <div
               style={{
                 width: '100%',
-                height: isMobile ? `${Math.max(totalHeight, window.innerHeight) / zoom}px` : `${totalHeight}px`,
+                height: `${totalHeight}px`,
                 position: "relative",
                 marginBottom: "64px",
+                transform: isMobile ? `scale(${zoom})` : undefined,
+                transformOrigin: isMobile ? "0 0" : undefined,
+                willChange: 'transform',
+                backfaceVisibility: 'hidden',
               }}
             >
               {/* Add IntroBox here instead */}
