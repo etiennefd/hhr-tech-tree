@@ -2389,18 +2389,24 @@ export function TechTreeViewer() {
               const maxYear = Math.max(...years);
               const timelineYears = getTimelineYears(minYear, maxYear);
 
-              return timelineYears.map((year) => (
-                <div
-                  key={year}
-                  className="absolute text-sm text-gray-600 font-mono"
-                  style={{
-                    left: `${getXPosition(year)}px`,
-                    transform: "translateX(-50%)",
-                  }}
-                >
-                  {formatYear(year)}
+              // Create a container for timeline labels with absolute positioning
+              return (
+                <div className="relative" style={{ width: '100%', height: '100%' }}>
+                  {timelineYears.map((year) => (
+                    <div
+                      key={year}
+                      className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
+                      style={{
+                        left: `${getXPosition(year)}px`,
+                        transform: "translateX(-50%)",
+                        top: '4px', // Center vertically in the timeline
+                      }}
+                    >
+                      {formatYear(year)}
+                    </div>
+                  ))}
                 </div>
-              ));
+              );
             })()}
           </div>
 
