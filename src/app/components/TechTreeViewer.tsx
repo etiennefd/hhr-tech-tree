@@ -2379,6 +2379,10 @@ export function TechTreeViewer() {
               width: '100%',
               zIndex: 100,
               position: "relative",
+              minHeight: isMobile ? "32px" : undefined,
+              maxHeight: isMobile ? "32px" : undefined,
+              overflow: isMobile ? "hidden" : undefined,
+              touchAction: isMobile ? "pan-x" : undefined,
             }}
           >
             {/* Timeline content */}
