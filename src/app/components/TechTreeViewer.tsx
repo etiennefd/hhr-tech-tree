@@ -26,7 +26,6 @@ import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 import Link from 'next/link';
-import { debounce } from 'lodash';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
