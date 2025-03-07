@@ -292,9 +292,13 @@ const validateImageUrl = (imageUrl: string | null | undefined): string | undefin
        !imageUrl.startsWith('https://'))) {
     // Invalid image URL
     console.warn(`Invalid image URL: "${imageUrl}"`);
-    return undefined; // or return a default image path
+    return undefined;
   }
-  return imageUrl;
+
+  // Add cache-busting parameter for image URLs
+  const url = new URL(imageUrl, window.location.origin);
+  url.searchParams.set('t', Date.now().toString());
+  return url.toString();
 };
 
 // Add retry logic helper
@@ -702,24 +706,60 @@ export function TechTreeViewer() {
           ...node,
           image: validateImageUrl(node.image)
         })) || [];
-
-        // Compare current and new data before updating
-        const hasChanges = validatedDetailNodes.some(
-          (newNode: TechNode, index: number) => {
-            const currentNode = currentNodesRef.current[index];
+        
+        // First check if the number of nodes has changed
+        const hasLengthChanged = validatedDetailNodes.length !== currentNodesRef.current.length;
+        
+        // Then check for changes in existing nodes
+        const hasNodeChanges = validatedDetailNodes.some(
+          (newNode: TechNode) => {
+            const currentNode = currentNodesRef.current.find(n => n.id === newNode.id);
+            // If we can't find the node, it's new
             if (!currentNode) return true;
+            
+            // Check if image URL has changed (ignoring cache-busting parameters)
+            const stripCacheBusting = (url?: string) => {
+              if (!url) return url;
+              try {
+                const parsed = new URL(url, window.location.origin);
+                parsed.searchParams.delete('t');
+                return parsed.toString();
+              } catch {
+                return url;
+              }
+            };
 
+            const oldImage = stripCacheBusting(currentNode.image);
+            const newImage = stripCacheBusting(newNode.image);
+            
+            if (oldImage !== newImage) {
+              console.log(`Image changed for node ${newNode.title}:`, {
+                old: oldImage,
+                new: newImage
+              });
+              return true;
+            }
+            
+            // Check other fields
             return (
               newNode.title !== currentNode.title ||
               newNode.year !== currentNode.year ||
               newNode.fields.join(",") !== currentNode.fields.join(",") ||
-              newNode.image !== currentNode.image
+              newNode.subtitle !== currentNode.subtitle ||
+              newNode.details !== currentNode.details ||
+              (newNode.inventors || []).join(",") !== (currentNode.inventors || []).join(",") ||
+              (newNode.organizations || []).join(",") !== (currentNode.organizations || []).join(",") ||
+              newNode.wikipedia !== currentNode.wikipedia
             );
           }
         );
 
-        // Only update if there are actual changes
-        if (hasChanges) {
+        // Update if either length changed or nodes changed
+        if (hasLengthChanged || hasNodeChanges) {
+          console.log('Updating nodes due to:', {
+            hasLengthChanged,
+            hasNodeChanges
+          });
           const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
           setData({ 
             nodes: positionedDetailNodes, 
