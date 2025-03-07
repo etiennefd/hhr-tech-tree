@@ -2825,11 +2825,10 @@ export function TechTreeViewer() {
 
                           return (
                             <div className="text-xs mt-2">
-                              {/* Show ancestry controls only if there are ancestors or descendants */}
-                              {(ancestors.size > 0 || descendants.size > 0) && (
+                              {/* Show ancestry controls only if there are ancestors or descendants and not on mobile */}
+                              {!isMobile && (ancestors.size > 0 || descendants.size > 0) && (
                                 <div className="mb-1">
-                                  {ancestors.size > 0 &&
-                                  descendants.size > 0 ? (
+                                  {ancestors.size > 0 && descendants.size > 0 ? (
                                     <>
                                       Highlight all{" "}
                                       <button
