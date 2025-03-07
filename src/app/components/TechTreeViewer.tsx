@@ -2404,9 +2404,15 @@ export function TechTreeViewer() {
                         left: `${getXPosition(year)}px`,
                         transform: "translateX(-50%)",
                         top: '4px', // Center vertically in the timeline
+                        textDecorationLine: 'none', // Prevent underlining
+                        WebkitTextDecorationLine: 'none', // For Safari
+                        textDecoration: 'none', // Fallback
+                        WebkitUserSelect: 'none', // Prevent selection
+                        userSelect: 'none',
+                        WebkitTouchCallout: 'none', // Prevent callout
                       }}
                     >
-                      {formatYear(year)}
+                      <span style={{ pointerEvents: 'none' }}>{formatYear(year)}</span>
                     </div>
                   ))}
                 </div>
