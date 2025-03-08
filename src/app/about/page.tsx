@@ -31,8 +31,15 @@ export default function AboutPage() {
 
           <p>
             This historical tech tree presented here is not a game tree. Its only goal is to show what happened. 
-            Of course, like game trees, it is also constrained by assumptions, but of a different nature. Some of 
-            them include:
+            Of course, like game trees, it is also constrained by assumptions, but  different ones.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-8 mb-4" style={{ color: darkerBlue }}>
+            Assumptions and design choices
+          </h2>
+
+          <p>
+            Some of the core assumptions of the tree include:
           </p>
 
           <ol className="list-decimal pl-5 space-y-2">
@@ -49,7 +56,7 @@ export default function AboutPage() {
 
           <ol className="list-decimal pl-5 space-y-2">
             <li>
-              <strong>Definition of technology</strong>: A technology is, in the ideal case, an piece of knowledge (an idea) 
+              <strong>Definition of technology</strong>: A technology is, in the ideal case, a piece of knowledge (an idea) 
               that is created intentionally by humans for a practical purpose (not for its own sake) and is implemented 
               in some kind of physical substrate.
               <ol className="list-[lower-alpha] pl-5 space-y-2 mt-2">
@@ -74,12 +81,12 @@ export default function AboutPage() {
               if a technology has its own Wikipedia page, it&apos;s a strong signal that it should be in the tree.
               <ol className="list-[lower-alpha] pl-5 space-y-2 mt-2">
                 <li>
-                  This means the tree does not reach sufficiently high resolution to describe unimplemented ideas, prototypes, 
+                  This means the tree does not reach a sufficiently high resolution to describe unimplemented ideas, prototypes, 
                   failed commercialization attempts, patents, etc. In return, the benefit is that the tree is possible at all!
                 </li>
                 <li>
                   Independent inventions happen often, but are usually included only once. Exceptions exist for cases like 
-                  the invention of writing, where each independent event played a different role technological role in its 
+                  the invention of writing, where each independent event played a different technological role in its 
                   part of the world.
                 </li>
               </ol>
@@ -122,6 +129,10 @@ export default function AboutPage() {
             patterns and connections, and generally make the complexity of modern tech feel less daunting.
           </p>
 
+          <h2 className="text-2xl font-bold mt-8 mb-4" style={{ color: darkerBlue }}>
+            Contributing
+          </h2>
+
           <p>
             At the time of publicly releasing this project, the tree contained about 1500 technologies and 1600 connections 
             between them. They were all compiled manually by myself. Going forward, the tree is open to contributions from 
@@ -129,11 +140,7 @@ export default function AboutPage() {
             can one day be &quot;fully&quot; complete is an open question.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-4" style={{ color: darkerBlue }}>
-            Contributing
-          </h2>
-
-          <p>To contribute, fill use these forms:</p>
+          <p>To contribute, you can use the forms below or <a href="mailto:contact@etiennefd.com" style={linkStyle}>contact the author</a>.</p>
           <ul className="list-disc pl-5 space-y-2">
             <li><a href="https://airtable.com/appmQuONO382L03FY/paggvkJsCPLV4kREr/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Suggest an additional technology</a></li>
             <li><a href="https://airtable.com/appmQuONO382L03FY/pagEg9lS1crt6nuqY/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Suggest a new connection</a></li>
