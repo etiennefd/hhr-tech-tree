@@ -4,7 +4,6 @@ import fs from "fs/promises";
 import path from "path";
 import { formatLocation, cleanCommaList } from "../../utils/location";
 import { FieldSet, Record as AirtableRecord } from "airtable";
-import placeholderImage from "@/assets/placeholder-invention.png";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID ?? ""
@@ -237,7 +236,7 @@ export async function GET(request: Request) {
                 String(record.get("Wikipedia") || ""),
                 imageCache
               )) ||
-              placeholderImage.src,
+              "/placeholder-invention.png",
             year,
             dateDetails: String(record.get("Date details") || ""),
             type: String(record.get("Type of innovation") || ""),
