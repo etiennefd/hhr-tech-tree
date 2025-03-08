@@ -13,7 +13,7 @@ export default function AboutPage() {
 
         <div className="space-y-6 text-gray-700">
           <p>
-            The historical tech tree is a project by <a href="https://www.hopefulmons.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>Étienne Fortier-Dubois</a> to 
+            The <a href="https://www.historicaltechtree.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>historical tech tree</a> is a project by <a href="https://www.hopefulmons.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>Étienne Fortier-Dubois</a> to 
             visualize the entire history of technologies, inventions, and (some) discoveries, from prehistory to today. 
             Unlike other visualizations, the tree emphasizes the connections between technologies: prerequisites, 
             improvements, inspirations, and so on. These connections allow viewers to understand how technologies 
@@ -52,7 +52,7 @@ export default function AboutPage() {
               <strong>Definition of technology</strong>: A technology is, in the ideal case, an piece of knowledge (an idea) 
               that is created intentionally by humans for a practical purpose (not for its own sake) and is implemented 
               in some kind of physical substrate.
-              <ol className="list-decimal pl-5 space-y-2 mt-2">
+              <ol className="list-[lower-alpha] pl-5 space-y-2 mt-2">
                 <li>
                   Defining things is hard, so the above is not a perfect definition: Something may be called a technology 
                   without respecting all characteristics. For example, some technologies like vulcanization and penicillin 
@@ -72,7 +72,7 @@ export default function AboutPage() {
             <li>
               <strong>Discretization</strong>: The level of discretization chosen is approximately the same as Wikipedia&apos;s: 
               if a technology has its own Wikipedia page, it&apos;s a strong signal that it should be in the tree.
-              <ol className="list-decimal pl-5 space-y-2 mt-2">
+              <ol className="list-[lower-alpha] pl-5 space-y-2 mt-2">
                 <li>
                   This means the tree does not reach sufficiently high resolution to describe unimplemented ideas, prototypes, 
                   failed commercialization attempts, patents, etc. In return, the benefit is that the tree is possible at all!
@@ -87,7 +87,7 @@ export default function AboutPage() {
             <li>
               <strong>Dates</strong>: Most technologies could be assigned several different dates, but a constraint of the 
               timeline is that one must be picked.
-              <ol className="list-decimal pl-5 space-y-2 mt-2">
+              <ol className="list-[lower-alpha] pl-5 space-y-2 mt-2">
                 <li>
                   For prehistoric, ancient, and medieval tech, the date is often the oldest archeological or documentary 
                   evidence available, with the understanding that the technology may in fact be much older. The date could 
@@ -104,7 +104,7 @@ export default function AboutPage() {
               <strong>Connections</strong>: There isn&apos;t really such a thing as a technology that appears out of nowhere: 
               virtually every innovation comes from several existing ones, or at least from something that exists in nature. 
               The tech tree is based on the idea that we can find most of these and represent them.
-              <ol className="list-decimal pl-5 space-y-2 mt-2">
+              <ol className="list-[lower-alpha] pl-5 space-y-2 mt-2">
                 <li>
                   Since the tree doesn&apos;t represent non-technologies, there are many connections from and to things like 
                   nature or artworks that aren&apos;t represented.
