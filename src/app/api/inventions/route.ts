@@ -162,13 +162,13 @@ export async function GET(request: Request) {
     const [innovationRecords, connectionRecords] = (await Promise.all([
       base("Innovations")
         .select({
-          view: "Grid view",
+          view: "Used for deployment, do not edit directly",
           sort: [{ field: "Date", direction: "desc" }],
         })
         .all(),
       base("Connections")
         .select({
-          view: "Grid view",
+          view: "Used for deployment, do not edit directly",
         })
         .all(),
     ])) as [CustomAirtableRecord[], CustomAirtableRecord[]];
