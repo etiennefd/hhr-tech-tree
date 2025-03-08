@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import placeholderImage from "@/assets/placeholder-invention.png";
 
 interface Node {
   year: number;
@@ -210,7 +211,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         <div className="border-b border-black p-0 relative h-20">
           {(isVisible || isSelected || isAdjacent) && (
             <Image
-              src={node.image || "/placeholder-invention.png"}
+              src={node.image || placeholderImage}
               alt={node.title}
               fill
               sizes="160px"
@@ -223,7 +224,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               }`}
               onError={(e) => {
                 const imgElement = e.target as HTMLImageElement;
-                imgElement.src = "/placeholder-invention.png";
+                imgElement.src = placeholderImage.src;
               }}
               onLoad={() => setImageLoaded(true)}
               style={{

@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import { formatLocation, cleanCommaList } from "../../utils/location";
 import { FieldSet, Record as AirtableRecord } from "airtable";
+import placeholderImage from "@/assets/placeholder-invention.png";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID ?? ""
@@ -162,13 +163,13 @@ export async function GET(request: Request) {
     const [innovationRecords, connectionRecords] = (await Promise.all([
       base("Innovations")
         .select({
-          view: "Grid view",
+          view: "Used for deployment, do not edit directly",
           sort: [{ field: "Date", direction: "desc" }],
         })
         .all(),
       base("Connections")
         .select({
-          view: "Grid view",
+          view: "Used for deployment, do not edit directly",
         })
         .all(),
     ])) as [CustomAirtableRecord[], CustomAirtableRecord[]];
@@ -236,7 +237,7 @@ export async function GET(request: Request) {
                 String(record.get("Wikipedia") || ""),
                 imageCache
               )) ||
-              "/placeholder-invention.png",
+              placeholderImage.src,
             year,
             dateDetails: String(record.get("Date details") || ""),
             type: String(record.get("Type of innovation") || ""),
