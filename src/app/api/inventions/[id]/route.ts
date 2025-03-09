@@ -7,12 +7,17 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID ?? ""
 );
 
-export async function GET(
-  request: Request,
-  context: { params: { id: string } }
-) {
-  // Properly await the params object before accessing its properties
-  const { id } = await context.params;
+export async function GET(request: Request) {
+  // Extract the id from the URL path
+  const { pathname } = new URL(request.url);
+  const id = pathname.split('/').pop();
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "Invalid ID" },
+      { status: 400 }
+    );
+  }
 
   try {
     // Fetch the specific record from Airtable
