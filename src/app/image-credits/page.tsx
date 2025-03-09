@@ -68,10 +68,11 @@ export default function ImageCreditsPage() {
           Image Credits
         </h1>
 
-        <p className="mb-6 text-gray-700">
-          The Historical Tech Tree uses images from Wikimedia Commons and other sources. 
-          This page lists the credits for these images as required by their respective licenses.
-        </p>
+        <div className="mb-6">
+          <Link href="/about" className="inline-block" style={linkStyle}>
+            ← Back to About
+          </Link>
+        </div>
 
         {loading && (
           <div className="text-center py-10">
@@ -93,10 +94,6 @@ export default function ImageCreditsPage() {
 
         {!loading && !error && imageCredits.length > 0 && (
           <>
-            <p className="mb-4 text-gray-700">
-              Showing attribution for {imageCredits.length} images used in the Tech Tree
-            </p>
-            
             <div className="space-y-4">
               {imageCredits.map((credit, index) => (
                 <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
@@ -125,18 +122,6 @@ export default function ImageCreditsPage() {
                     <p className="text-sm text-gray-600 mb-1">
                       <span className="font-medium">License:</span> {formatLicense(credit.credits.license)}
                     </p>
-                  )}
-                  
-                  {credit.credits.descriptionUrl && (
-                    <a 
-                      href={credit.credits.descriptionUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-sm mt-1 inline-block"
-                      style={linkStyle}
-                    >
-                      Source
-                    </a>
                   )}
                 </div>
               ))}

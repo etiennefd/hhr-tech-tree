@@ -11,9 +11,15 @@ export default function AboutPage() {
           About the Historical Tech Tree
         </h1>
 
+        <div className="mb-6">
+          <Link href="/" className="inline-block" style={linkStyle}>
+            ← Back to Tech Tree
+          </Link>
+        </div>
+
         <div className="space-y-6 text-gray-700">
           <p>
-            The <a href="https://www.historicaltechtree.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>historical tech tree</a> is a project by <a href="https://www.hopefulmons.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>Étienne Fortier-Dubois</a> to 
+            The historical tech tree is a project by <a href="https://www.hopefulmons.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>Étienne Fortier-Dubois</a> to 
             visualize the entire history of technologies, inventions, and (some) discoveries, from prehistory to today. 
             Unlike other visualizations, the tree emphasizes the connections between technologies: prerequisites, 
             improvements, inspirations, and so on. These connections allow viewers to understand how technologies 
@@ -148,11 +154,11 @@ export default function AboutPage() {
           </ul>
 
           <h2 className="text-2xl font-bold mt-8 mb-4" style={{ color: darkerBlue }}>
-            Additional Resources
+            Additional resources
           </h2>
 
           <ul className="list-disc pl-5 space-y-2">
-            <li><Link href="/image-credits" style={linkStyle}>Image Credits</Link> - Attribution for images used from Wikimedia Commons</li>
+            <li><Link href="/image-credits" style={linkStyle}>Image credits</Link></li>
           </ul>
 
           <div className="mt-12 pt-6 border-t border-gray-300">

@@ -58,7 +58,14 @@ export async function GET() {
     
     // Extract only entries with credits and match with tech tree node names
     const imageCredits = Object.entries(cache)
-      .filter(([, entry]) => entry.credits)
+      .filter(([, entry]) => {
+        // Only include entries with meaningful credit information
+        const credits = entry.credits;
+        if (!credits) return false;
+        
+        // Check if we have at least one of: artist, license, or descriptionUrl
+        return !!(credits.artist || credits.license || credits.descriptionUrl);
+      })
       .map(([key, entry]) => {
         // Construct a Wikimedia Commons URL if descriptionUrl is not available
         let descriptionUrl = entry.credits?.descriptionUrl;
@@ -85,7 +92,22 @@ export async function GET() {
           credits: updatedCredits
         };
       })
-      .sort((a, b) => a.nodeName.localeCompare(b.nodeName));
+      .sort((a, b) => {
+        // Normalize strings for better alphabetical sorting
+        const nameA = a.nodeName.toLowerCase().trim();
+        const nameB = b.nodeName.toLowerCase().trim();
+        
+        // Handle entries that start with numbers
+        const aStartsWithNumber = /^\d/.test(nameA);
+        const bStartsWithNumber = /^\d/.test(nameB);
+        
+        // Put entries starting with letters before those starting with numbers
+        if (aStartsWithNumber && !bStartsWithNumber) return 1;
+        if (!aStartsWithNumber && bStartsWithNumber) return -1;
+        
+        // Regular alphabetical sort
+        return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+      });
     
     return NextResponse.json({ imageCredits });
   } catch (error) {
