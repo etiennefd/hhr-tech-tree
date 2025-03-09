@@ -14,7 +14,12 @@ const FETCH_TIMEOUT = 5000;
 const MAX_RETRIES = 2;
 const CONCURRENT_REQUESTS = 10;
 const CACHE_FILE = path.join(process.cwd(), "wikipedia-image-cache.json");
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds (reduced from 7 days)
+
+// Environment-specific cache durations
+const isDevelopment = process.env.NODE_ENV === 'development';
+const CACHE_DURATION = isDevelopment
+  ? 60 * 60 * 1000            // 1 hour for development
+  : 7 * 24 * 60 * 60 * 1000;  // 7 days for production
 
 // Cache management functions
 async function loadImageCache() {

@@ -3,7 +3,12 @@ import { ConnectionType } from "@/app/components/connections/CurvedConnections";
 
 export const CACHE_VERSION = "1.0";
 const CACHE_KEY = "tech-tree-cache";
-const CACHE_EXPIRY = 5 * 60 * 1000; // 5 minutes (reduced from 24 hours)
+
+// Environment-specific cache durations
+const isDevelopment = process.env.NODE_ENV === 'development';
+const CACHE_EXPIRY = isDevelopment 
+  ? 5 * 60 * 1000        // 5 minutes for development
+  : 24 * 60 * 60 * 1000; // 24 hours for production
 
 interface Link {
   source: string;
