@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -H 0.0.0.0",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "NODE_OPTIONS='--no-deprecation' next dev --turbopack -H 0.0.0.0",
+    "build": "NODE_OPTIONS='--no-deprecation' next build",
+    "start": "NODE_OPTIONS='--no-deprecation' next start",
+    "lint": "NODE_OPTIONS='--no-deprecation' next lint"
   },
   "dependencies": {
     "airtable": "^0.12.2",
@@ -25,10 +25,11 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "eslint": "^9.22.0",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tr46": "^5.0.0",
     "typescript": "^5"
   }
 }
