@@ -147,6 +147,14 @@ export default function AboutPage() {
             <li><a href="https://airtable.com/appmQuONO382L03FY/pagNcBGN2JzHckpTP/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Report a problem</a></li>
           </ul>
 
+          <h2 className="text-2xl font-bold mt-8 mb-4" style={{ color: darkerBlue }}>
+            Additional Resources
+          </h2>
+
+          <ul className="list-disc pl-5 space-y-2">
+            <li><Link href="/image-credits" style={linkStyle}>Image Credits</Link> - Attribution for images used from Wikimedia Commons</li>
+          </ul>
+
           <div className="mt-12 pt-6 border-t border-gray-300">
             <Link href="/" className="inline-block" style={linkStyle}>
               ← Back to Tech Tree

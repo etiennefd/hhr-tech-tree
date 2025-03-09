@@ -77,7 +77,7 @@ async function fetchWithTimeout(url: string, timeout: number) {
 
 async function getWikimediaImage(
   wikipediaUrl: string,
-  cache: Record<string, { url: string; timestamp: number }>,
+  cache: Record<string, { url: string; timestamp: number; credits?: { title: string; artist?: string; license?: string; descriptionUrl?: string } }>,
   retryCount = 0
 ) {
   if (!wikipediaUrl) return null;
@@ -92,6 +92,7 @@ async function getWikimediaImage(
   }
 
   try {
+    // First, get the image URL
     const response = await fetchWithTimeout(
       `https://en.wikipedia.org/w/api.php?` +
         `action=query&prop=pageimages&format=json&pithumbsize=200&titles=${encodeURIComponent(
@@ -111,12 +112,65 @@ async function getWikimediaImage(
     };
 
     if (page?.thumbnail?.source) {
-      // Update cache
+      const imageUrl = page.thumbnail.source;
+      
+      // Now fetch image info to get credits
+      try {
+        // Extract the filename from the URL
+        const filenameMatch = imageUrl.match(/\/([^\/]+)\/200px-([^\/]+)$/);
+        if (filenameMatch) {
+          const filename = decodeURIComponent(filenameMatch[2]);
+          
+          const imageInfoResponse = await fetchWithTimeout(
+            `https://commons.wikimedia.org/w/api.php?` +
+              `action=query&prop=imageinfo&iiprop=extmetadata&format=json&titles=File:${encodeURIComponent(
+                filename
+              )}&origin=*`,
+            FETCH_TIMEOUT
+          );
+          
+          if (imageInfoResponse.ok) {
+            const imageInfoData = await imageInfoResponse.json();
+            const imagePage = Object.values(imageInfoData.query?.pages || {})[0] as {
+              imageinfo?: Array<{
+                extmetadata?: {
+                  ImageDescription?: { value: string };
+                  Artist?: { value: string };
+                  License?: { value: string };
+                  DescriptionUrl?: { value: string };
+                }
+              }>
+            };
+            
+            const metadata = imagePage?.imageinfo?.[0]?.extmetadata;
+            const credits = {
+              title: metadata?.ImageDescription?.value || title,
+              artist: metadata?.Artist?.value || undefined,
+              license: metadata?.License?.value || undefined,
+              descriptionUrl: metadata?.DescriptionUrl?.value || undefined
+            };
+            
+            // Update cache with image URL and credits
+            cache[title] = {
+              url: imageUrl,
+              timestamp: Date.now(),
+              credits
+            };
+            
+            return imageUrl;
+          }
+        }
+      } catch (creditError) {
+        console.error(`Error fetching image credits for ${title}:`, creditError);
+      }
+      
+      // If credits fetch fails, still cache the image URL
       cache[title] = {
-        url: page.thumbnail.source,
-        timestamp: Date.now(),
+        url: imageUrl,
+        timestamp: Date.now()
       };
-      return page.thumbnail.source;
+      
+      return imageUrl;
     }
 
     return null;
