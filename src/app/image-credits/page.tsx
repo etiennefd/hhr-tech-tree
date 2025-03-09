@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 type ImageCredit = {
   title: string;
+  nodeName: string;
   imageUrl: string;
   credits: {
     title: string;
@@ -54,18 +55,10 @@ export default function ImageCreditsPage() {
     
     // Replace "pd" with "Public Domain"
     if (license.toLowerCase() === 'pd') {
-      return 'Public Domain';
+      return 'public domain';
     }
     
     return license;
-  };
-
-  // Function to format the tech tree node title
-  const formatNodeTitle = (title: string): string => {
-    // Replace underscores with spaces
-    return title.replace(/_/g, ' ')
-      // Replace hash with " - " for section titles
-      .replace(/#/g, ' - ');
   };
 
   return (
@@ -107,7 +100,7 @@ export default function ImageCreditsPage() {
             <div className="space-y-4">
               {imageCredits.map((credit, index) => (
                 <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
-                  <h3 className="font-semibold text-gray-800 mb-2">{formatNodeTitle(credit.title)}</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">{credit.nodeName}</h3>
                   
                   {credit.credits.artist && (
                     <p className="text-sm text-gray-600 mb-1">
