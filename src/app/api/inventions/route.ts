@@ -89,7 +89,7 @@ async function getWikimediaImage(
   try {
     const response = await fetchWithTimeout(
       `https://en.wikipedia.org/w/api.php?` +
-        `action=query&prop=pageimages&format=json&pithumbsize=300&titles=${encodeURIComponent(
+        `action=query&prop=pageimages&format=json&pithumbsize=200&titles=${encodeURIComponent(
           title
         )}&origin=*`,
       FETCH_TIMEOUT
