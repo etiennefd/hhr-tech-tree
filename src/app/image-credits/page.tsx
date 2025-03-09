@@ -49,6 +49,18 @@ export default function ImageCreditsPage() {
     return html.replace(/<[^>]*>/g, '');
   };
 
+  // Function to format license text
+  const formatLicense = (license?: string): string => {
+    if (!license) return '';
+    
+    // Replace "pd" with "Public Domain"
+    if (license.toLowerCase() === 'pd') {
+      return 'public domain';
+    }
+    
+    return license;
+  };
+
   return (
     <div className="min-h-screen bg-yellow-50 p-8">
       <div className="max-w-4xl mx-auto">
@@ -103,8 +115,8 @@ export default function ImageCreditsPage() {
                     )}
                     
                     {credit.credits.license && (
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">License:</span> {credit.credits.license}
+                      <p className="text-xs text-gray-600 mb-1">
+                        <span className="font-medium">License:</span> {formatLicense(credit.credits.license)}
                       </p>
                     )}
                     
