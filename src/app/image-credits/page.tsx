@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 type ImageCredit = {
   title: string;
@@ -55,10 +54,18 @@ export default function ImageCreditsPage() {
     
     // Replace "pd" with "Public Domain"
     if (license.toLowerCase() === 'pd') {
-      return 'public domain';
+      return 'Public Domain';
     }
     
     return license;
+  };
+
+  // Function to format the tech tree node title
+  const formatNodeTitle = (title: string): string => {
+    // Replace underscores with spaces
+    return title.replace(/_/g, ' ')
+      // Replace hash with " - " for section titles
+      .replace(/#/g, ' - ');
   };
 
   return (
@@ -92,50 +99,43 @@ export default function ImageCreditsPage() {
         )}
 
         {!loading && !error && imageCredits.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {imageCredits.map((credit, index) => (
-              <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-20 h-20 relative">
-                    <Image 
-                      src={credit.imageUrl} 
-                      alt={credit.title}
-                      width={80}
-                      height={80}
-                      className="object-contain"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800">{credit.title.replace(/_/g, ' ')}</h3>
-                    
-                    {credit.credits.artist && (
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">Artist/Author:</span> {cleanHtml(credit.credits.artist)}
-                      </p>
-                    )}
-                    
-                    {credit.credits.license && (
-                      <p className="text-xs text-gray-600 mb-1">
-                        <span className="font-medium">License:</span> {formatLicense(credit.credits.license)}
-                      </p>
-                    )}
-                    
-                    {credit.credits.descriptionUrl && (
-                      <a 
-                        href={credit.credits.descriptionUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-sm mt-1 inline-block"
-                        style={linkStyle}
-                      >
-                        Source
-                      </a>
-                    )}
-                  </div>
+          <>
+            <p className="mb-4 text-gray-700">
+              Showing attribution for {imageCredits.length} images used in the Tech Tree
+            </p>
+            
+            <div className="space-y-4">
+              {imageCredits.map((credit, index) => (
+                <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
+                  <h3 className="font-semibold text-gray-800 mb-2">{formatNodeTitle(credit.title)}</h3>
+                  
+                  {credit.credits.artist && (
+                    <p className="text-sm text-gray-600 mb-1">
+                      <span className="font-medium">Artist/Author:</span> {cleanHtml(credit.credits.artist)}
+                    </p>
+                  )}
+                  
+                  {credit.credits.license && (
+                    <p className="text-sm text-gray-600 mb-1">
+                      <span className="font-medium">License:</span> {formatLicense(credit.credits.license)}
+                    </p>
+                  )}
+                  
+                  {credit.credits.descriptionUrl && (
+                    <a 
+                      href={credit.credits.descriptionUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm mt-1 inline-block"
+                      style={linkStyle}
+                    >
+                      Source
+                    </a>
+                  )}
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
 
         <div className="mt-12 pt-6 border-t border-gray-300">
