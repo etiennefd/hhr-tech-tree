@@ -59,12 +59,32 @@ export async function GET() {
     // Extract only entries with credits and match with tech tree node names
     const imageCredits = Object.entries(cache)
       .filter(([, entry]) => entry.credits)
-      .map(([key, entry]) => ({
-        title: key,
-        nodeName: wikiToNodeName.get(key) || key.replace(/_/g, ' '),
-        imageUrl: entry.url,
-        credits: entry.credits
-      }))
+      .map(([key, entry]) => {
+        // Construct a Wikimedia Commons URL if descriptionUrl is not available
+        let descriptionUrl = entry.credits?.descriptionUrl;
+        
+        if (!descriptionUrl && entry.url) {
+          // Extract filename from the thumbnail URL
+          const filenameMatch = entry.url.match(/\/([^\/]+)\/\d+px-([^\/]+)$/);
+          if (filenameMatch) {
+            const filename = decodeURIComponent(filenameMatch[2]);
+            descriptionUrl = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
+          }
+        }
+        
+        // Update the credits object with the constructed descriptionUrl
+        const updatedCredits = {
+          ...entry.credits,
+          descriptionUrl: descriptionUrl || entry.credits?.descriptionUrl
+        };
+        
+        return {
+          title: key,
+          nodeName: wikiToNodeName.get(key) || key.replace(/_/g, ' '),
+          imageUrl: entry.url,
+          credits: updatedCredits
+        };
+      })
       .sort((a, b) => a.nodeName.localeCompare(b.nodeName));
     
     return NextResponse.json({ imageCredits });

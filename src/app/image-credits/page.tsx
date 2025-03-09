@@ -53,7 +53,7 @@ export default function ImageCreditsPage() {
   const formatLicense = (license?: string): string => {
     if (!license) return '';
     
-    // Replace "pd" with "Public Domain"
+    // Replace "pd" with "public domain"
     if (license.toLowerCase() === 'pd') {
       return 'public domain';
     }
@@ -100,7 +100,20 @@ export default function ImageCreditsPage() {
             <div className="space-y-4">
               {imageCredits.map((credit, index) => (
                 <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
-                  <h3 className="font-semibold text-gray-800 mb-2">{credit.nodeName}</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">
+                    {credit.credits.descriptionUrl ? (
+                      <a 
+                        href={credit.credits.descriptionUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={linkStyle}
+                      >
+                        {credit.nodeName}
+                      </a>
+                    ) : (
+                      credit.nodeName
+                    )}
+                  </h3>
                   
                   {credit.credits.artist && (
                     <p className="text-sm text-gray-600 mb-1">
