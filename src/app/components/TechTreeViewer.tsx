@@ -233,7 +233,7 @@ const IntroBox = memo(() => {
   }, []);
 
   return (
-    <div className="absolute left-4 top-12 p-6 w-[400px] z-50">
+    <div className="absolute left-4 top-12 p-6 w-[375px] z-50">
       <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>
         HISTORICAL TECH TREE
       </h1>
