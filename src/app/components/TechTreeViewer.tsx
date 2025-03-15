@@ -2246,7 +2246,8 @@ export function TechTreeViewer() {
         className="overflow-x-auto overflow-y-hidden h-screen bg-yellow-50"
         style={{ 
           overscrollBehaviorX: "none",
-          touchAction: "auto",
+          overscrollBehaviorY: "none",
+          touchAction: "pan-x pinch-zoom",
           WebkitOverflowScrolling: "touch",
           WebkitTapHighlightColor: "transparent"
         }}
