@@ -2269,11 +2269,12 @@ export function TechTreeViewer() {
         >
           {/* Timeline */}
           <div
-            className="h-8 bg-yellow-50 border-b sticky top-0 timeline"
+            className="h-12 bg-yellow-50 border-b timeline flex-shrink-0"
             style={{
               width: '100%',
               zIndex: 100,
-              position: "relative",
+              position: "sticky",
+              top: 0,
               minHeight: isMobile ? "32px" : undefined,
               maxHeight: isMobile ? "32px" : undefined,
               overflow: isMobile ? "hidden" : undefined,
@@ -2298,13 +2299,13 @@ export function TechTreeViewer() {
                       style={{
                         left: `${getXPosition(year)}px`,
                         transform: "translateX(-50%)",
-                        top: '4px', // Center vertically in the timeline
-                        textDecorationLine: 'none', // Prevent underlining
-                        WebkitTextDecorationLine: 'none', // For Safari
-                        textDecoration: 'none', // Fallback
-                        WebkitUserSelect: 'none', // Prevent selection
+                        top: '16px', // Adjust this value to move text down
+                        textDecorationLine: 'none',
+                        WebkitTextDecorationLine: 'none',
+                        textDecoration: 'none',
+                        WebkitUserSelect: 'none',
                         userSelect: 'none',
-                        WebkitTouchCallout: 'none', // Prevent callout
+                        WebkitTouchCallout: 'none',
                       }}
                     >
                       <span style={{ pointerEvents: 'none' }}>{formatYear(year)}</span>
