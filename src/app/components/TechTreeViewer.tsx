@@ -839,23 +839,19 @@ export function TechTreeViewer() {
 
       setSelectedNodeId(node.id);
 
-      const verticalContainer = verticalScrollContainerRef.current;
-      if (!verticalContainer || !horizontalScrollContainerRef.current) return;
+      const container = horizontalScrollContainerRef.current;
+      if (!container) return;
 
       // Calculate scroll positions
       const xPosition = getXPosition(node.year);
       const horizontalPosition = xPosition - (window.innerWidth / 2);
 
       const yPosition = node.y ?? 0;
-      const verticalPosition = yPosition - verticalContainer.clientHeight / 2 + 150;
+      const verticalPosition = yPosition - container.clientHeight / 2 + 150;
 
       // Execute scrolls
-      horizontalScrollContainerRef.current.scrollTo({
+      container.scrollTo({
         left: Math.max(0, horizontalPosition),
-        behavior: "smooth",
-      });
-
-      verticalContainer.scrollTo({
         top: Math.max(0, verticalPosition),
         behavior: "smooth",
       });
