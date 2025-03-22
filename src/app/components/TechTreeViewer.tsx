@@ -2243,12 +2243,15 @@ export function TechTreeViewer() {
 
       <div
         ref={horizontalScrollContainerRef}
-        className="overflow-auto h-screen bg-yellow-50"
+        className="overflow-auto h-screen bg-yellow-50 [&::-webkit-scrollbar]:hidden"
         style={{ 
           overscrollBehavior: "none",
           touchAction: "pan-x pan-y pinch-zoom",
           WebkitOverflowScrolling: "touch",
-          WebkitTapHighlightColor: "transparent"
+          WebkitTapHighlightColor: "transparent",
+          scrollBehavior: "smooth",
+          msOverflowStyle: "none",  // Hide scrollbar in IE/Edge
+          scrollbarWidth: "none",   // Hide scrollbar in Firefox
         }}
         onScroll={(e) => {
           const horizontalScroll = e.currentTarget.scrollLeft;
