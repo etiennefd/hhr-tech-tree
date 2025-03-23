@@ -776,12 +776,6 @@ export function TechTreeViewer() {
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollTo({
           left: newScrollLeft,
-          behavior: "instant",
-        });
-      }
-
-      if (verticalScrollContainerRef.current) {
-        verticalScrollContainerRef.current.scrollTo({
           top: newScrollTop,
           behavior: "instant",
         });

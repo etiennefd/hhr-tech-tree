@@ -135,8 +135,7 @@ const TechTreeMinimap = ({
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
     const x = (e.clientX - rect.left) / scale - viewportWidth / 2;
-    const y =
-      (e.clientY - rect.top - LABEL_HEIGHT) / scale - viewportHeight / 2;
+    const y = (e.clientY - rect.top) / scale - viewportHeight / 2;
 
     requestAnimationFrame(() => {
       onViewportChange(Math.max(0, x), Math.max(0, y));
