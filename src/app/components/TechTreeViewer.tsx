@@ -365,7 +365,7 @@ export function TechTreeViewer() {
   const [isMobile, setIsMobile] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
-
+  
   // Add refs for virtualization
   const nodesContainerRef = useRef<HTMLDivElement>(null);
   const connectionsContainerRef = useRef<SVGSVGElement>(null);
@@ -386,8 +386,16 @@ export function TechTreeViewer() {
   // Add this near the other state variables
   const [cachedConnectionIndices, setCachedConnectionIndices] = useState<Set<number>>(new Set());
   const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
-  // Use the same cache duration for connections as for nodes
-  // const CACHE_DURATION = 60000; // Already defined above
+
+  // Add scroll positions cache
+  const scrollPositionsCache = useRef<Map<string, { x: number; y: number }>>(new Map());
+
+  // Add cleanup for scroll positions cache
+  useEffect(() => {
+    return () => {
+      scrollPositionsCache.current.clear();
+    };
+  }, []);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -828,49 +836,46 @@ export function TechTreeViewer() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Update the handleNodeClick function
   const handleNodeClick = useCallback(
-    (title: string) => {
+    (title: string, isFromTooltip: boolean = false) => {
       const node = data.nodes.find((n) => n.title === title);
       if (!node) return;
 
-      // Clear states immediately to hide tooltip
-      setSelectedLinkIndex(null);
-      setHoveredLinkIndex(null);
-      setHoveredNode(null);
-      setHoveredNodeId(null);
-      setHighlightedAncestors(new Set());
-      setHighlightedDescendants(new Set());
-
+      // If clicking the same node, just deselect it
       if (selectedNodeId === node.id) {
         setSelectedNodeId(null);
         return;
       }
 
-      setSelectedNodeId(node.id);
-
-      const container = horizontalScrollContainerRef.current;
-      if (!container) return;
-
-      // Calculate scroll positions
+      // Calculate scroll position once
       const xPosition = getXPosition(node.year);
       const horizontalPosition = xPosition - (window.innerWidth / 2);
-
       const yPosition = node.y ?? 0;
-      const verticalPosition = yPosition - container.clientHeight / 2 + 150;
+      const verticalPosition = yPosition - containerDimensions.height / 2 + 150;
 
-      // Execute scrolls
-      container.scrollTo({
-        left: Math.max(0, horizontalPosition),
-        top: Math.max(0, verticalPosition),
-        behavior: "smooth",
-      });
+      // Start scrolling immediately
+      const container = horizontalScrollContainerRef.current;
+      if (container) {
+        container.scrollTo({
+          left: Math.max(0, horizontalPosition),
+          top: Math.max(0, verticalPosition),
+          behavior: "smooth",
+        });
+      }
 
-      // Set selected node after a short delay to allow for smooth scrolling
-      setTimeout(() => {
+      // Batch all state updates in a single transition
+      React.startTransition(() => {
         setSelectedNodeId(node.id);
-      }, 100);
+        setSelectedLinkIndex(null);
+        setHoveredLinkIndex(null);
+        setHoveredNode(null);
+        setHoveredNodeId(null);
+        setHighlightedAncestors(new Set());
+        setHighlightedDescendants(new Set());
+      });
     },
-    [data.nodes, selectedNodeId, getXPosition]
+    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height]
   );
 
   // Helper function to check if a node is adjacent to selected node
