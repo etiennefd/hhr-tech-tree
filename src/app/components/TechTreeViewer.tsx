@@ -319,6 +319,20 @@ const fetchWithRetry = async (url: string, retries = 3, delay = 1000) => {
   throw new Error('Max retries reached');
 };
 
+// Add throttle utility function
+const throttle = <T extends (...args: any[]) => void>(func: T, limit: number): T => {
+  let inThrottle = false;
+  return ((...args: Parameters<T>) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  }) as T;
+};
+
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
@@ -1860,7 +1874,7 @@ export function TechTreeViewer() {
 
   // Update the scroll handler to track visible viewport
   useEffect(() => {
-    const updateVisibleViewport = () => {
+    const updateVisibleViewport = throttle(() => {
       if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) return;
       
       const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
@@ -1872,7 +1886,7 @@ export function TechTreeViewer() {
         top: verticalScroll,
         bottom: verticalScroll + containerDimensions.height,
       });
-    };
+    }, 100); // Throttle viewport updates to max once every 100ms
     
     // Initial update
     updateVisibleViewport();
@@ -2239,18 +2253,17 @@ export function TechTreeViewer() {
           touchAction: "pan-x pan-y pinch-zoom",
           WebkitOverflowScrolling: "touch",
           WebkitTapHighlightColor: "transparent",
-          scrollBehavior: "smooth",
           msOverflowStyle: "none",  // Hide scrollbar in IE/Edge
           scrollbarWidth: "none",   // Hide scrollbar in Firefox
         }}
-        onScroll={(e) => {
+        onScroll={throttle((e) => {
           const horizontalScroll = e.currentTarget.scrollLeft;
           const verticalScroll = e.currentTarget.scrollTop;
           setScrollPosition({
             left: horizontalScroll,
             top: verticalScroll,
           });
-        }}
+        }, 100)} // Throttle to max once every 100ms
       >
         <div 
           style={{ 
