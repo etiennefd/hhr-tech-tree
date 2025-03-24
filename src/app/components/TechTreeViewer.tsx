@@ -320,16 +320,15 @@ const fetchWithRetry = async (url: string, retries = 3, delay = 1000) => {
 };
 
 // Add throttle utility function
-const throttle = <T extends (...args: any[]) => any>(
-  func: T,
-  limit: number
-): T => {
-  let inThrottle: boolean;
+const throttle = <T extends (...args: any[]) => void>(func: T, limit: number): T => {
+  let inThrottle = false;
   return ((...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
     }
   }) as T;
 };
@@ -1897,13 +1896,13 @@ export function TechTreeViewer() {
     // Initial update
     updateVisibleViewport();
     
-    // Add scroll event listeners with passive option for better performance
+    // Add scroll event listeners
     const horizontalContainer = horizontalScrollContainerRef.current;
     const verticalContainer = verticalScrollContainerRef.current;
     
     if (horizontalContainer && verticalContainer) {
-      horizontalContainer.addEventListener('scroll', updateVisibleViewport, { passive: true });
-      verticalContainer.addEventListener('scroll', updateVisibleViewport, { passive: true });
+      horizontalContainer.addEventListener('scroll', updateVisibleViewport);
+      verticalContainer.addEventListener('scroll', updateVisibleViewport);
     }
     
     return () => {
@@ -2227,17 +2226,7 @@ export function TechTreeViewer() {
           <Suspense fallback={null}>
             <Suspense fallback={null}>
               {isClient && (
-                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30"
-                  onMouseEnter={() => {
-                    if (horizontalScrollContainerRef.current) {
-                      horizontalScrollContainerRef.current.style.pointerEvents = "none";
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    if (horizontalScrollContainerRef.current) {
-                      horizontalScrollContainerRef.current.style.pointerEvents = "auto";
-                    }
-                  }}>
+                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30">
                   <DynamicSearchBox
                     onSearch={handleSearch}
                     results={searchResults}
@@ -2248,17 +2237,7 @@ export function TechTreeViewer() {
             </Suspense>
             <Suspense fallback={null}>
               {isClient && (
-                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20"
-                  onMouseEnter={() => {
-                    if (horizontalScrollContainerRef.current) {
-                      horizontalScrollContainerRef.current.style.pointerEvents = "none";
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    if (horizontalScrollContainerRef.current) {
-                      horizontalScrollContainerRef.current.style.pointerEvents = "auto";
-                    }
-                  }}>
+                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20">
                   <DynamicFilterBox
                     filters={filters}
                     onFilterChange={setFilters}
@@ -2279,15 +2258,17 @@ export function TechTreeViewer() {
           touchAction: "pan-x pan-y pinch-zoom",
           WebkitOverflowScrolling: "touch",
           WebkitTapHighlightColor: "transparent",
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
-          pointerEvents: "auto"
+          msOverflowStyle: "none",  // Hide scrollbar in IE/Edge
+          scrollbarWidth: "none",   // Hide scrollbar in Firefox
         }}
         onScroll={throttle((e) => {
           const horizontalScroll = e.currentTarget.scrollLeft;
           const verticalScroll = e.currentTarget.scrollTop;
-          setScrollPosition({ left: horizontalScroll, top: verticalScroll });
-        }, 16)} // Throttle to ~60fps
+          setScrollPosition({
+            left: horizontalScroll,
+            top: verticalScroll,
+          });
+        }, 100)} // Throttle to max once every 100ms
       >
         <div 
           style={{ 

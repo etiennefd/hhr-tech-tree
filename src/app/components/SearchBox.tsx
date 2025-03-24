@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TechNode } from "@/types/tech-node";
@@ -29,22 +29,11 @@ export function SearchBox({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Add debounce timer ref with proper cleanup
+  // Add debounce timer ref
   const debounceTimerRef = useRef<NodeJS.Timeout>();
-  const isMountedRef = useRef(true);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, []);
-
-  // Optimized input change handler with proper cleanup
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  // Optimized input change handler
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
     
@@ -65,11 +54,18 @@ export function SearchBox({
 
     // Debounce search for non-empty queries
     debounceTimerRef.current = setTimeout(() => {
-      if (isMountedRef.current) {
-        onSearch(newQuery);
-      }
+      onSearch(newQuery);
     }, 150); // 150ms delay
-  }, [onSearch]);
+  };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
