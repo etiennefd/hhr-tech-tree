@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import Image from "next/image";
 
 interface Node {
@@ -40,6 +40,18 @@ const formatTitle = (title: string) => {
   }).join(' ');
 };
 
+// Add debounce utility function at the top of the file
+const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): T => {
+  let timeout: NodeJS.Timeout;
+  return ((...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  }) as T;
+};
+
 const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   node,
   isSelected,
@@ -53,6 +65,17 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Debounce mouse events
+  const debouncedMouseEnter = useMemo(
+    () => debounce(() => onMouseEnter?.(), 50),
+    [onMouseEnter]
+  );
+
+  const debouncedMouseLeave = useMemo(
+    () => debounce(() => onMouseLeave?.(), 50),
+    [onMouseLeave]
+  );
 
   // Set up intersection observer
   useEffect(() => {
@@ -192,11 +215,9 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         transform: `translate(-${width / 2}px, -75px)`,
         opacity: style?.opacity,
       }}
-      onClick={() => {
-        onClick();
-      }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onClick={onClick}
+      onMouseEnter={debouncedMouseEnter}
+      onMouseLeave={debouncedMouseLeave}
     >
       <div
         className={`
