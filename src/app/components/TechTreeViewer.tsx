@@ -2624,7 +2624,7 @@ export function TechTreeViewer() {
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNodeClick(ancestor.title);
+                                            handleNodeClick(ancestor.title, true);
                                           }}
                                           className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                           type="button"
@@ -2659,7 +2659,7 @@ export function TechTreeViewer() {
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNodeClick(child.title);
+                                            handleNodeClick(child.title, true);
                                           }}
                                           className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                           type="button"
@@ -2686,7 +2686,7 @@ export function TechTreeViewer() {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleNodeClick(replacedNode.title);
+                                          handleNodeClick(replacedNode.title, true);
                                         }}
                                         className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                         type="button"
@@ -2712,7 +2712,7 @@ export function TechTreeViewer() {
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleNodeClick(replacedByNode.title);
+                                          handleNodeClick(replacedByNode.title, true);
                                         }}
                                         className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                         type="button"
