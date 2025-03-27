@@ -16,6 +16,7 @@ import React, {
   useRef,
   Suspense,
   memo,
+  useDeferredValue,
 } from "react";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
@@ -98,6 +99,11 @@ interface MinimapNode {
   x: number;
   y: number;
   year: number;
+}
+
+interface VisibleElements {
+  visibleNodes: TechNode[];
+  visibleConnections: Link[];
 }
 
 function getTimelineSegment(year: number) {
@@ -1877,10 +1883,18 @@ export function TechTreeViewer() {
     [visibleViewport, data.nodes, getXPosition]
   );
 
-  // Update the scroll handler to track visible viewport
+  // Add this near the top with other state variables
+  const lastViewportUpdate = useRef(0);
+  const VIEWPORT_UPDATE_THROTTLE = 100; // ms
+
+  // Update the scroll handler to track visible viewport with throttling
   useEffect(() => {
-    const updateVisibleViewport = throttle(() => {
+    const updateVisibleViewport = () => {
       if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) return;
+      
+      const now = performance.now();
+      if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
+      lastViewportUpdate.current = now;
       
       const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
       const verticalScroll = verticalScrollContainerRef.current.scrollTop;
@@ -1891,7 +1905,7 @@ export function TechTreeViewer() {
         top: verticalScroll,
         bottom: verticalScroll + containerDimensions.height,
       });
-    }, 100); // Throttle viewport updates to max once every 100ms
+    };
     
     // Initial update
     updateVisibleViewport();
@@ -1913,108 +1927,259 @@ export function TechTreeViewer() {
     };
   }, [containerDimensions.width, containerDimensions.height]);
 
-  // Memoize the filtered and visible nodes
-  const visibleNodes = useMemo(() => {
-    // Start with important nodes that should always be visible
-    const priorityNodes: TechNode[] = [];
-    const priorityNodeIds = new Set<string>();
-    
-    // 1. Always include the selected node
-    if (selectedNodeId) {
-      const selectedNode = data.nodes.find(n => n.id === selectedNodeId);
-      if (selectedNode) {
-        priorityNodes.push(selectedNode);
-        priorityNodeIds.add(selectedNodeId);
+  // Add this memoized function for calculating node opacity
+  const getNodeOpacity = useCallback(
+    (node: TechNode) => {
+      // If a node is selected
+      if (selectedNodeId) {
+        if (node.id === selectedNodeId) return 1;
+        if (isAdjacentToSelected(node.id)) return 1;
+        if (highlightedAncestors.has(node.id)) return 1;
+        if (highlightedDescendants.has(node.id)) return 1;
+        return 0.2;
       }
+      // If a link is selected
+      if (selectedLinkIndex !== null) {
+        return isNodeConnectedToSelectedLink(node.id) ? 1 : 0.2;
+      }
+      // If filters are applied
+      if (filters.fields.size || filters.countries.size || filters.cities.size) {
+        return isNodeFiltered(node) ? 1 : 0.2;
+      }
+      // Default state - fully visible
+      return 1;
+    },
+    [selectedNodeId, selectedLinkIndex, filters, isAdjacentToSelected, isNodeConnectedToSelectedLink, isNodeFiltered, highlightedAncestors, highlightedDescendants]
+  );
+
+  // Add this memoized function for calculating link opacity
+  const getLinkOpacity = useCallback(
+    (link: Link, index: number) => {
+      // If a node is selected
+      if (selectedNodeId) {
+        // If this is a connection between highlighted nodes
+        if (
+          (highlightedAncestors.has(link.source) &&
+            highlightedAncestors.has(link.target)) ||
+          (highlightedDescendants.has(link.source) &&
+            highlightedDescendants.has(link.target))
+        ) {
+          return 1;
+        }
+        // If this is a connection to/from the selected node
+        if (link.source === selectedNodeId || link.target === selectedNodeId) {
+          return 1;
+        }
+        return 0.2;
+      }
+      // If a link is selected
+      if (selectedLinkIndex !== null) {
+        return index === selectedLinkIndex ? 1 : 0.2;
+      }
+      // If filters are applied
+      if (filters.fields.size || filters.countries.size || filters.cities.size) {
+        return isLinkVisible(link) ? 1 : 0.2;
+      }
+      return 1;
+    },
+    [selectedNodeId, selectedLinkIndex, filters, highlightedAncestors, highlightedDescendants, isLinkVisible]
+  );
+
+  // Add performance measurement refs
+  const memoRecalculationCount = useRef({ nodes: 0, connections: 0 });
+
+  // Add these near other state/ref declarations
+  const lastCalculationTime = useRef(0);
+  const lastCalculationFrame = useRef(0);
+  const FRAME_DURATION = 16.67; // ms (60fps)
+  const calculationTrigger = useRef<'selection' | 'highlight' | 'filter' | 'viewport' | 'cache' | 'initial' | 'unknown'>('initial');
+  const deferredViewport = useDeferredValue(visibleViewport);
+  const previousCalculation = useRef<VisibleElements>({
+    visibleNodes: [],
+    visibleConnections: []
+  });
+  const lastSelectionState = useRef({ nodeId: null as string | null, linkIndex: null as number | null });
+
+  // Update selection trigger to be more precise
+  useEffect(() => {
+    // Only trigger if selection actually changed
+    if (selectedNodeId !== lastSelectionState.current.nodeId || 
+        selectedLinkIndex !== lastSelectionState.current.linkIndex) {
+      const timestamp = new Date().toLocaleTimeString();
+      console.log(`[${timestamp}] Selection changed - Node: ${selectedNodeId} (was ${lastSelectionState.current.nodeId}), Link: ${selectedLinkIndex} (was ${lastSelectionState.current.linkIndex})`);
+      calculationTrigger.current = 'selection';
+      lastSelectionState.current = { nodeId: selectedNodeId, linkIndex: selectedLinkIndex };
+      
+      // Force a new frame for selection changes
+      lastCalculationFrame.current = -1;
+    }
+  }, [selectedNodeId, selectedLinkIndex]);
+
+  // Update the visibleElements memo with proper types
+  const visibleElements = useMemo<VisibleElements>(() => {
+    const now = performance.now();
+    const currentFrame = Math.floor(now / FRAME_DURATION);
+    
+    // Skip if recalculating in the same frame, unless it's a critical update
+    if (currentFrame === lastCalculationFrame.current && 
+        calculationTrigger.current !== 'selection' &&
+        calculationTrigger.current !== 'filter' &&
+        calculationTrigger.current !== 'initial' &&
+        previousCalculation.current.visibleNodes.length > 0) {
+      return previousCalculation.current;
     }
     
-    // 2. Always include nodes connected to a selected link
+    lastCalculationTime.current = now;
+    lastCalculationFrame.current = currentFrame;
+    const start = now;
+    
+    // Create sets for O(1) lookups
+    const visibleNodeIds = new Set<string>();
+    const visibleConnectionIndices = new Set<number>();
+    
+    // Add selected node and its connections
+    if (selectedNodeId) {
+      visibleNodeIds.add(selectedNodeId);
+      data.links.forEach((link: Link, index: number) => {
+        if (link.source === selectedNodeId || link.target === selectedNodeId) {
+          visibleNodeIds.add(link.source);
+          visibleNodeIds.add(link.target);
+          visibleConnectionIndices.add(index);
+        }
+      });
+    }
+    
+    // Add selected link and its nodes
     if (selectedLinkIndex !== null) {
       const selectedLink = data.links[selectedLinkIndex];
       if (selectedLink) {
-        const sourceNode = data.nodes.find(n => n.id === selectedLink.source);
-        const targetNode = data.nodes.find(n => n.id === selectedLink.target);
-        
-        if (sourceNode && !priorityNodeIds.has(sourceNode.id)) {
-          priorityNodes.push(sourceNode);
-          priorityNodeIds.add(sourceNode.id);
-        }
-        
-        if (targetNode && !priorityNodeIds.has(targetNode.id)) {
-          priorityNodes.push(targetNode);
-          priorityNodeIds.add(targetNode.id);
-        }
+        visibleNodeIds.add(selectedLink.source);
+        visibleNodeIds.add(selectedLink.target);
+        visibleConnectionIndices.add(selectedLinkIndex);
       }
     }
     
-    // 3. Always include nodes connected to the selected node
-    if (selectedNodeId) {
-      data.links.forEach(link => {
-        let connectedNodeId: string | null = null;
-        
-        if (link.source === selectedNodeId) {
-          connectedNodeId = link.target;
-        } else if (link.target === selectedNodeId) {
-          connectedNodeId = link.source;
+    // Add highlighted nodes and their connections
+    highlightedAncestors.forEach((id: string) => {
+      visibleNodeIds.add(id);
+      data.links.forEach((link: Link, index: number) => {
+        if (link.source === id || link.target === id) {
+          visibleNodeIds.add(link.source);
+          visibleNodeIds.add(link.target);
+          visibleConnectionIndices.add(index);
         }
-        
-        if (connectedNodeId && !priorityNodeIds.has(connectedNodeId)) {
-          const connectedNode = data.nodes.find(n => n.id === connectedNodeId);
-          if (connectedNode) {
-            priorityNodes.push(connectedNode);
-            priorityNodeIds.add(connectedNodeId);
-          }
+      });
+    });
+    
+    highlightedDescendants.forEach((id: string) => {
+      visibleNodeIds.add(id);
+      data.links.forEach((link: Link, index: number) => {
+        if (link.source === id || link.target === id) {
+          visibleNodeIds.add(link.source);
+          visibleNodeIds.add(link.target);
+          visibleConnectionIndices.add(index);
+        }
+      });
+    });
+    
+    // Add filtered nodes and their connections
+    if (filters.fields.size || filters.countries.size || filters.cities.size) {
+      data.nodes.forEach((node: TechNode) => {
+        if (isNodeFiltered(node)) {
+          visibleNodeIds.add(node.id);
+          data.links.forEach((link: Link, index: number) => {
+            if (link.source === node.id || link.target === node.id) {
+              visibleNodeIds.add(link.source);
+              visibleNodeIds.add(link.target);
+              visibleConnectionIndices.add(index);
+            }
+          });
         }
       });
     }
     
-    // 4. Always include highlighted ancestors and descendants
-    if (highlightedAncestors.size > 0 || highlightedDescendants.size > 0) {
-      data.nodes.forEach(node => {
-        if ((highlightedAncestors.has(node.id) || highlightedDescendants.has(node.id)) 
-            && !priorityNodeIds.has(node.id)) {
-          priorityNodes.push(node);
-          priorityNodeIds.add(node.id);
-        }
-      });
+    // Add nodes in viewport
+    data.nodes.forEach((node: TechNode) => {
+      if (!visibleNodeIds.has(node.id) && isNodeInViewport(node)) {
+        visibleNodeIds.add(node.id);
+      }
+    });
+    
+    // Add cached nodes
+    data.nodes.forEach((node: TechNode) => {
+      if (!visibleNodeIds.has(node.id) && cachedNodeIds.has(node.id)) {
+        visibleNodeIds.add(node.id);
+      }
+    });
+    
+    // Add connections in viewport
+    data.links.forEach((link: Link, index: number) => {
+      if (!visibleConnectionIndices.has(index) && isConnectionInViewport(link)) {
+        visibleConnectionIndices.add(index);
+      }
+    });
+    
+    // Add cached connections
+    cachedConnectionIndices.forEach((index: number) => visibleConnectionIndices.add(index));
+    
+    // Get final arrays
+    const newVisibleNodes = data.nodes.filter((node: TechNode) => visibleNodeIds.has(node.id));
+    const newVisibleConnections = data.links.filter((_, index: number) => visibleConnectionIndices.has(index));
+    
+    const end = performance.now();
+    const timestamp = new Date().toLocaleTimeString();
+    
+    // Only log if we have actual data and something changed
+    if ((newVisibleNodes.length > 0 || newVisibleConnections.length > 0) &&
+        (newVisibleNodes.length !== previousCalculation.current.visibleNodes.length ||
+         newVisibleConnections.length !== previousCalculation.current.visibleConnections.length)) {
+      console.log(`[${timestamp}] [Performance] Processing ${newVisibleNodes.length} nodes and ${newVisibleConnections.length} connections took ${end - start}ms (trigger: ${calculationTrigger.current}, frame: ${currentFrame})`);
     }
     
-    // 5. Always include nodes that match active filters
-    const hasActiveFilters = filters.fields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
-    if (hasActiveFilters) {
-      data.nodes.forEach(node => {
-        if (isNodeFiltered(node) && !priorityNodeIds.has(node.id)) {
-          priorityNodes.push(node);
-          priorityNodeIds.add(node.id);
-        }
-      });
+    // Store the result for future use
+    previousCalculation.current = {
+      visibleNodes: newVisibleNodes,
+      visibleConnections: newVisibleConnections
+    };
+    
+    // Reset trigger to unknown after initial render
+    if (calculationTrigger.current === 'initial') {
+      calculationTrigger.current = 'unknown';
     }
     
-    // 6. Include nodes in the viewport that aren't already included
-    const inViewportNodes = data.nodes.filter(node => 
-      !priorityNodeIds.has(node.id) && isNodeInViewport(node)
-    );
-    
-    // 7. Include cached nodes that aren't already included
-    const cachedNodes = data.nodes.filter(node => 
-      !priorityNodeIds.has(node.id) && 
-      !inViewportNodes.some(n => n.id === node.id) && 
-      cachedNodeIds.has(node.id)
-    );
-    
-    return [...priorityNodes, ...inViewportNodes, ...cachedNodes];
+    return previousCalculation.current;
   }, [
-    data.nodes, 
-    data.links, 
-    visibleViewport, 
-    selectedNodeId, 
-    selectedLinkIndex, 
-    cachedNodeIds, 
-    highlightedAncestors, 
+    data.nodes,
+    data.links,
+    selectedNodeId,
+    selectedLinkIndex,
+    highlightedAncestors,
     highlightedDescendants,
     filters,
-    isNodeFiltered
+    isNodeFiltered,
+    deferredViewport,
+    isConnectionInViewport,
+    cachedNodeIds,
+    cachedConnectionIndices
   ]);
+
+  // Destructure the memoized values
+  const { visibleNodes, visibleConnections } = visibleElements;
+
+  // Remove the old memos
+  // const visibleNodes = useMemo(...)
+  // const visibleConnections = useMemo(...)
+
+  // Add an effect to reset performance counters periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      memoRecalculationCount.current = { nodes: 0, connections: 0 };
+      const timestamp = new Date().toLocaleTimeString();
+      console.log(`[${timestamp}] [Performance] Reset counters`);
+    }, 5000); // Reset every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Add an effect to manage the cache of nodes
   useEffect(() => {
@@ -2080,46 +2245,6 @@ export function TechTreeViewer() {
     }
     
   }, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]);
-
-  // Memoize the filtered and visible connections
-  const visibleConnections = useMemo(() => {
-    // Start with connections that have at least one endpoint in the viewport
-    const inViewportConnections = data.links.filter((link) => {
-      return isConnectionInViewport(link);
-    });
-    
-    // Get the indices of connections in the viewport
-    const inViewportConnectionIndices = new Set(
-      inViewportConnections.map((link) => data.links.findIndex(l => l === link))
-    );
-    
-    // Include the selected connection if it exists
-    if (selectedLinkIndex !== null && !inViewportConnectionIndices.has(selectedLinkIndex)) {
-      const selectedLink = data.links[selectedLinkIndex];
-      if (selectedLink) {
-        inViewportConnections.push(selectedLink);
-        inViewportConnectionIndices.add(selectedLinkIndex);
-      }
-    }
-    
-    // Include connections to/from the selected node
-    if (selectedNodeId) {
-      data.links.forEach((link, index) => {
-        if ((link.source === selectedNodeId || link.target === selectedNodeId) && 
-            !inViewportConnectionIndices.has(index)) {
-          inViewportConnections.push(link);
-          inViewportConnectionIndices.add(index);
-        }
-      });
-    }
-    
-    // Include cached connections that are not in the viewport
-    const cachedConnections = data.links.filter((link, index) => 
-      cachedConnectionIndices.has(index) && !inViewportConnectionIndices.has(index)
-    );
-    
-    return [...inViewportConnections, ...cachedConnections];
-  }, [data.links, isConnectionInViewport, selectedNodeId, selectedLinkIndex, cachedConnectionIndices]);
 
   // Add an effect to manage the cache of connections
   useEffect(() => {
@@ -2378,38 +2503,7 @@ export function TechTreeViewer() {
                     targetIndex={data.nodes.indexOf(targetNode)}
                     connectionType={link.type}
                     isHighlighted={shouldHighlightLink(link, originalIndex)}
-                    opacity={(() => {
-                      // If a node is selected
-                      if (selectedNodeId) {
-                        // If this is a connection between highlighted nodes
-                        if (
-                          (highlightedAncestors.has(link.source) &&
-                            highlightedAncestors.has(link.target)) ||
-                          (highlightedDescendants.has(link.source) &&
-                            highlightedDescendants.has(link.target))
-                        ) {
-                          return 1;
-                        }
-                        // If this is a connection to/from the selected node
-                        if (shouldHighlightLink(link, originalIndex)) {
-                          return 1;
-                        }
-                        return 0.2;
-                      }
-                      // If a link is selected
-                      if (selectedLinkIndex !== null) {
-                        return originalIndex === selectedLinkIndex ? 1 : 0.2;
-                      }
-                      // If filters are applied
-                      if (
-                        filters.fields.size ||
-                        filters.countries.size ||
-                        filters.cities.size
-                      ) {
-                        return isLinkVisible(link) ? 1 : 0.2;
-                      }
-                      return 1;
-                    })()}
+                    opacity={getLinkOpacity(link, originalIndex)}
                     onMouseEnter={() => {
                       setHoveredLinkIndex(originalIndex);
                     }}
@@ -2467,32 +2561,7 @@ export function TechTreeViewer() {
                     position: "absolute",
                     left: `${getXPosition(node.year)}px`,
                     top: `${node.y}px`,
-                    opacity: (() => {
-                      // If a node is selected
-                      if (selectedNodeId) {
-                        if (node.id === selectedNodeId) return 1;
-                        if (isAdjacentToSelected(node.id)) return 1;
-                        if (highlightedAncestors.has(node.id)) return 1;
-                        if (highlightedDescendants.has(node.id)) return 1;
-                        return 0.2;
-                      }
-                      // If a link is selected
-                      if (selectedLinkIndex !== null) {
-                        return isNodeConnectedToSelectedLink(node.id)
-                          ? 1
-                          : 0.2;
-                      }
-                      // If filters are applied
-                      if (
-                        filters.fields.size ||
-                        filters.countries.size ||
-                        filters.cities.size
-                      ) {
-                        return isNodeFiltered(node) ? 1 : 0.2;
-                      }
-                      // Default state - fully visible
-                      return 1;
-                    })(),
+                    opacity: getNodeOpacity(node),
                     transition: "opacity 0.2s ease-in-out",
                   }}
                 />
