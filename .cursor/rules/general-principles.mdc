@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- At the beginning of a chat, always answer the question and make a plan for what to do without writing code initially.
+- Aim to make targeted edits that improve the problem at hand. Don't change unrelated parts of the code.
