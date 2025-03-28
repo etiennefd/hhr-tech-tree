@@ -339,6 +339,74 @@ const throttle = <T extends (...args: any[]) => void>(func: T, limit: number): T
   }) as T;
 };
 
+// Add these performance tracking utilities near the top of the file, after imports
+const performanceMarks = {
+  start: (name: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      performance.mark(`${name}-start`);
+    }
+  },
+  end: (name: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      performance.mark(`${name}-end`);
+      performance.measure(name, `${name}-start`, `${name}-end`);
+    }
+  },
+  log: (name: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      const entries = performance.getEntriesByName(name);
+      if (entries.length > 0) {
+        const lastEntry = entries[entries.length - 1];
+        console.log(`[Performance] ${name}: ${lastEntry.duration.toFixed(2)}ms`);
+      }
+    }
+  },
+  clear: (name: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      performance.clearMarks(`${name}-start`);
+      performance.clearMarks(`${name}-end`);
+      performance.clearMeasures(name);
+    }
+  }
+};
+
+// Add render counter
+const renderCounter = {
+  count: 0,
+  increment: () => {
+    if (process.env.NODE_ENV === 'development') {
+      renderCounter.count++;
+      console.log(`[Performance] Render count: ${renderCounter.count}`);
+    }
+  },
+  reset: () => {
+    if (process.env.NODE_ENV === 'development') {
+      renderCounter.count = 0;
+    }
+  }
+};
+
+// Add memoization effectiveness tracker
+const memoEffectiveness = {
+  hits: 0,
+  misses: 0,
+  track: (hit: boolean) => {
+    if (process.env.NODE_ENV === 'development') {
+      if (hit) memoEffectiveness.hits++;
+      else memoEffectiveness.misses++;
+      const total = memoEffectiveness.hits + memoEffectiveness.misses;
+      const hitRate = (memoEffectiveness.hits / total) * 100;
+      console.log(`[Performance] Memo effectiveness: ${hitRate.toFixed(1)}% (${memoEffectiveness.hits}/${total})`);
+    }
+  },
+  reset: () => {
+    if (process.env.NODE_ENV === 'development') {
+      memoEffectiveness.hits = 0;
+      memoEffectiveness.misses = 0;
+    }
+  }
+};
+
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
@@ -841,15 +909,19 @@ export function TechTreeViewer() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Update the handleNodeClick function
+  // Update the handleNodeClick function to include performance tracking
   const handleNodeClick = useCallback(
     (title: string, isFromTooltip: boolean = false) => {
+      performanceMarks.start('nodeClick');
+      
       const node = data.nodes.find((n) => n.title === title);
       if (!node) return;
 
       // If clicking the same node, just deselect it
       if (selectedNodeId === node.id) {
         setSelectedNodeId(null);
+        performanceMarks.end('nodeClick');
+        performanceMarks.log('nodeClick');
         return;
       }
 
@@ -879,6 +951,9 @@ export function TechTreeViewer() {
         setHighlightedAncestors(new Set());
         setHighlightedDescendants(new Set());
       });
+
+      performanceMarks.end('nodeClick');
+      performanceMarks.log('nodeClick');
     },
     [data.nodes, selectedNodeId, getXPosition, containerDimensions.height]
   );
@@ -1681,7 +1756,13 @@ export function TechTreeViewer() {
   // Add these helper functions near your other utility functions
   const getAllAncestors = useCallback(
     (nodeId: string, visited = new Set<string>()): Set<string> => {
-      if (visited.has(nodeId)) return visited;
+      performanceMarks.start('getAllAncestors');
+      
+      if (visited.has(nodeId)) {
+        performanceMarks.end('getAllAncestors');
+        performanceMarks.log('getAllAncestors');
+        return visited;
+      }
       visited.add(nodeId);
 
       // Find all direct ancestors
@@ -1689,7 +1770,6 @@ export function TechTreeViewer() {
         .filter(
           (link) =>
             link.target === nodeId &&
-            // Exclude independent inventions and concurrent developments
             !["Independently invented", "Concurrent development"].includes(
               link.type
             )
@@ -1701,6 +1781,8 @@ export function TechTreeViewer() {
         getAllAncestors(ancestorId, visited);
       });
 
+      performanceMarks.end('getAllAncestors');
+      performanceMarks.log('getAllAncestors');
       return visited;
     },
     [data.links]
@@ -1708,7 +1790,13 @@ export function TechTreeViewer() {
 
   const getAllDescendants = useCallback(
     (nodeId: string, visited = new Set<string>()): Set<string> => {
-      if (visited.has(nodeId)) return visited;
+      performanceMarks.start('getAllDescendants');
+      
+      if (visited.has(nodeId)) {
+        performanceMarks.end('getAllDescendants');
+        performanceMarks.log('getAllDescendants');
+        return visited;
+      }
       visited.add(nodeId);
 
       // Find all direct descendants
@@ -1716,7 +1804,6 @@ export function TechTreeViewer() {
         .filter(
           (link) =>
             link.source === nodeId &&
-            // Exclude independent inventions and concurrent developments
             !["Independently invented", "Concurrent development"].includes(
               link.type
             )
@@ -1728,6 +1815,8 @@ export function TechTreeViewer() {
         getAllDescendants(descendantId, visited);
       });
 
+      performanceMarks.end('getAllDescendants');
+      performanceMarks.log('getAllDescendants');
       return visited;
     },
     [data.links]
@@ -2015,8 +2104,9 @@ export function TechTreeViewer() {
     }
   }, [selectedNodeId, selectedLinkIndex]);
 
-  // Update the visibleElements memo with proper types
+  // Update the visibleElements memo to include performance tracking
   const visibleElements = useMemo<VisibleElements>(() => {
+    performanceMarks.start('visibleElements');
     const now = performance.now();
     const currentFrame = Math.floor(now / FRAME_DURATION);
     
@@ -2026,9 +2116,13 @@ export function TechTreeViewer() {
         calculationTrigger.current !== 'filter' &&
         calculationTrigger.current !== 'initial' &&
         previousCalculation.current.visibleNodes.length > 0) {
+      memoEffectiveness.track(true);
+      performanceMarks.end('visibleElements');
+      performanceMarks.log('visibleElements');
       return previousCalculation.current;
     }
     
+    memoEffectiveness.track(false);
     lastCalculationTime.current = now;
     lastCalculationFrame.current = currentFrame;
     const start = now;
@@ -2147,6 +2241,8 @@ export function TechTreeViewer() {
       calculationTrigger.current = 'unknown';
     }
     
+    performanceMarks.end('visibleElements');
+    performanceMarks.log('visibleElements');
     return previousCalculation.current;
   }, [
     data.nodes,
