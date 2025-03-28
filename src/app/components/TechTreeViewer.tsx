@@ -451,6 +451,10 @@ export function TechTreeViewer() {
     bottom: 0,
   });
 
+  // Add cache refs for ancestors and descendants
+  const descendantsCache = useRef<Map<string, Set<string>>>(new Map());
+  const ancestorsCache = useRef<Map<string, Set<string>>>(new Map());
+
   // Add this near the other state variables
   const [cachedNodeIds, setCachedNodeIds] = useState<Set<string>>(new Set());
   const cachedNodesTimeoutRef = useRef<{[key: string]: NodeJS.Timeout}>({});
@@ -1418,13 +1422,28 @@ export function TechTreeViewer() {
       filters.cities.size > 0;
 
     if (!hasActiveFilters) {
-      return new Set<string>(); // Explicitly type the empty set
+      return new Set<string>();
     }
 
     return new Set<string>(
       data.nodes.filter((node) => isNodeFiltered(node)).map((node) => node.id)
     );
   }, [filters, data.nodes, isNodeFiltered]);
+
+  const selectedConnectionNodeIds = useMemo(() => {
+    if (selectedLinkIndex === null) return new Set<string>();
+    const selectedLink = data.links[selectedLinkIndex];
+    return new Set([selectedLink.source, selectedLink.target]);
+  }, [selectedLinkIndex, data.links]);
+
+  const adjacentNodeIds = useMemo(() => {
+    if (!selectedNodeId) return new Set<string>();
+    return new Set(
+      data.links
+        .filter((link) => link.source === selectedNodeId || link.target === selectedNodeId)
+        .map((link) => (link.source === selectedNodeId ? link.target : link.source))
+    );
+  }, [selectedNodeId, data.links]);
 
   // Add this near the top of the component
   const prefetchedNodes = useRef(new Set<string>());
@@ -1758,6 +1777,14 @@ export function TechTreeViewer() {
     (nodeId: string, visited = new Set<string>()): Set<string> => {
       performanceMarks.start('getAllAncestors');
       
+      // Check cache first
+      if (ancestorsCache.current.has(nodeId)) {
+        const cached = ancestorsCache.current.get(nodeId)!;
+        performanceMarks.end('getAllAncestors');
+        performanceMarks.log('getAllAncestors');
+        return cached;
+      }
+      
       if (visited.has(nodeId)) {
         performanceMarks.end('getAllAncestors');
         performanceMarks.log('getAllAncestors');
@@ -1781,6 +1808,9 @@ export function TechTreeViewer() {
         getAllAncestors(ancestorId, visited);
       });
 
+      // Cache the result
+      ancestorsCache.current.set(nodeId, visited);
+      
       performanceMarks.end('getAllAncestors');
       performanceMarks.log('getAllAncestors');
       return visited;
@@ -1791,6 +1821,14 @@ export function TechTreeViewer() {
   const getAllDescendants = useCallback(
     (nodeId: string, visited = new Set<string>()): Set<string> => {
       performanceMarks.start('getAllDescendants');
+      
+      // Check cache first
+      if (descendantsCache.current.has(nodeId)) {
+        const cached = descendantsCache.current.get(nodeId)!;
+        performanceMarks.end('getAllDescendants');
+        performanceMarks.log('getAllDescendants');
+        return cached;
+      }
       
       if (visited.has(nodeId)) {
         performanceMarks.end('getAllDescendants');
@@ -1815,12 +1853,21 @@ export function TechTreeViewer() {
         getAllDescendants(descendantId, visited);
       });
 
+      // Cache the result
+      descendantsCache.current.set(nodeId, visited);
+      
       performanceMarks.end('getAllDescendants');
       performanceMarks.log('getAllDescendants');
       return visited;
     },
     [data.links]
   );
+
+  // Add cleanup for caches when data changes
+  useEffect(() => {
+    descendantsCache.current.clear();
+    ancestorsCache.current.clear();
+  }, [data.links]);
 
   // Remove unused touch handlers
   useEffect(() => {
@@ -2104,17 +2151,82 @@ export function TechTreeViewer() {
     }
   }, [selectedNodeId, selectedLinkIndex]);
 
-  // Update the visibleElements memo to include performance tracking
+  // Add these near the top of the component with other refs
+  const connectionLookupCache = useRef<Map<string, Set<number>>>(new Map());
+  const nodeConnectionCache = useRef<Map<string, Set<string>>>(new Map());
+  const lastFrameData = useRef<{
+    selectedNodeId: string | null;
+    selectedLinkIndex: number | null;
+    highlightedAncestors: Set<string>;
+    highlightedDescendants: Set<string>;
+    filteredNodeIds: Set<string>;
+    viewport: { left: number; right: number; top: number; bottom: number };
+  } | null>(null);
+
+  // Add this helper function to get connections for a node
+  const getNodeConnectionIndices = useCallback((nodeId: string): Set<number> => {
+    if (connectionLookupCache.current.has(nodeId)) {
+      return connectionLookupCache.current.get(nodeId)!;
+    }
+    
+    const connections = new Set<number>();
+    data.links.forEach((link, index) => {
+      if (link.source === nodeId || link.target === nodeId) {
+        connections.add(index);
+      }
+    });
+    
+    connectionLookupCache.current.set(nodeId, connections);
+    return connections;
+  }, [data.links]);
+
+  // Add this helper function to get connected nodes
+  const getConnectedNodes = useCallback((nodeId: string): Set<string> => {
+    if (nodeConnectionCache.current.has(nodeId)) {
+      return nodeConnectionCache.current.get(nodeId)!;
+    }
+    
+    const connectedNodes = new Set<string>();
+    data.links.forEach(link => {
+      if (link.source === nodeId) {
+        connectedNodes.add(link.target);
+      } else if (link.target === nodeId) {
+        connectedNodes.add(link.source);
+      }
+    });
+    
+    nodeConnectionCache.current.set(nodeId, connectedNodes);
+    return connectedNodes;
+  }, [data.links]);
+
+  // Update the visibleElements memo
   const visibleElements = useMemo<VisibleElements>(() => {
     performanceMarks.start('visibleElements');
     const now = performance.now();
     const currentFrame = Math.floor(now / FRAME_DURATION);
     
-    // Skip if recalculating in the same frame, unless it's a critical update
+    // Create current frame data for comparison
+    const currentFrameData = {
+      selectedNodeId,
+      selectedLinkIndex,
+      highlightedAncestors,
+      highlightedDescendants,
+      filteredNodeIds,
+      viewport: deferredViewport
+    };
+    
+    // Skip if recalculating in the same frame with same data
     if (currentFrame === lastCalculationFrame.current && 
-        calculationTrigger.current !== 'selection' &&
-        calculationTrigger.current !== 'filter' &&
-        calculationTrigger.current !== 'initial' &&
+        lastFrameData.current &&
+        currentFrameData.selectedNodeId === lastFrameData.current.selectedNodeId &&
+        currentFrameData.selectedLinkIndex === lastFrameData.current.selectedLinkIndex &&
+        currentFrameData.highlightedAncestors === lastFrameData.current.highlightedAncestors &&
+        currentFrameData.highlightedDescendants === lastFrameData.current.highlightedDescendants &&
+        currentFrameData.filteredNodeIds === lastFrameData.current.filteredNodeIds &&
+        currentFrameData.viewport.left === lastFrameData.current.viewport.left &&
+        currentFrameData.viewport.right === lastFrameData.current.viewport.right &&
+        currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
+        currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
         previousCalculation.current.visibleNodes.length > 0) {
       memoEffectiveness.track(true);
       performanceMarks.end('visibleElements');
@@ -2125,6 +2237,7 @@ export function TechTreeViewer() {
     memoEffectiveness.track(false);
     lastCalculationTime.current = now;
     lastCalculationFrame.current = currentFrame;
+    lastFrameData.current = currentFrameData;
     const start = now;
     
     // Create sets for O(1) lookups
@@ -2134,12 +2247,12 @@ export function TechTreeViewer() {
     // Add selected node and its connections
     if (selectedNodeId) {
       visibleNodeIds.add(selectedNodeId);
-      data.links.forEach((link: Link, index: number) => {
-        if (link.source === selectedNodeId || link.target === selectedNodeId) {
-          visibleNodeIds.add(link.source);
-          visibleNodeIds.add(link.target);
-          visibleConnectionIndices.add(index);
-        }
+      const connections = getNodeConnectionIndices(selectedNodeId);
+      connections.forEach(index => {
+        visibleConnectionIndices.add(index);
+        const link = data.links[index];
+        visibleNodeIds.add(link.source);
+        visibleNodeIds.add(link.target);
       });
     }
     
@@ -2156,39 +2269,37 @@ export function TechTreeViewer() {
     // Add highlighted nodes and their connections
     highlightedAncestors.forEach((id: string) => {
       visibleNodeIds.add(id);
-      data.links.forEach((link: Link, index: number) => {
-        if (link.source === id || link.target === id) {
-          visibleNodeIds.add(link.source);
-          visibleNodeIds.add(link.target);
-          visibleConnectionIndices.add(index);
-        }
+      const connections = getNodeConnectionIndices(id);
+      connections.forEach(index => {
+        visibleConnectionIndices.add(index);
+        const link = data.links[index];
+        visibleNodeIds.add(link.source);
+        visibleNodeIds.add(link.target);
       });
     });
     
     highlightedDescendants.forEach((id: string) => {
       visibleNodeIds.add(id);
-      data.links.forEach((link: Link, index: number) => {
-        if (link.source === id || link.target === id) {
-          visibleNodeIds.add(link.source);
-          visibleNodeIds.add(link.target);
-          visibleConnectionIndices.add(index);
-        }
+      const connections = getNodeConnectionIndices(id);
+      connections.forEach(index => {
+        visibleConnectionIndices.add(index);
+        const link = data.links[index];
+        visibleNodeIds.add(link.source);
+        visibleNodeIds.add(link.target);
       });
     });
     
     // Add filtered nodes and their connections
-    if (filters.fields.size || filters.countries.size || filters.cities.size) {
-      data.nodes.forEach((node: TechNode) => {
-        if (isNodeFiltered(node)) {
-          visibleNodeIds.add(node.id);
-          data.links.forEach((link: Link, index: number) => {
-            if (link.source === node.id || link.target === node.id) {
-              visibleNodeIds.add(link.source);
-              visibleNodeIds.add(link.target);
-              visibleConnectionIndices.add(index);
-            }
-          });
-        }
+    if (filteredNodeIds.size > 0) {
+      filteredNodeIds.forEach((nodeId: string) => {
+        visibleNodeIds.add(nodeId);
+        const connections = getNodeConnectionIndices(nodeId);
+        connections.forEach(index => {
+          visibleConnectionIndices.add(index);
+          const link = data.links[index];
+          visibleNodeIds.add(link.source);
+          visibleNodeIds.add(link.target);
+        });
       });
     }
     
@@ -2251,13 +2362,21 @@ export function TechTreeViewer() {
     selectedLinkIndex,
     highlightedAncestors,
     highlightedDescendants,
-    filters,
-    isNodeFiltered,
+    filteredNodeIds,
+    isNodeInViewport,
     deferredViewport,
     isConnectionInViewport,
     cachedNodeIds,
-    cachedConnectionIndices
+    cachedConnectionIndices,
+    getNodeConnectionIndices
   ]);
+
+  // Add cleanup for caches when data changes
+  useEffect(() => {
+    connectionLookupCache.current.clear();
+    nodeConnectionCache.current.clear();
+    lastFrameData.current = null;
+  }, [data.links]);
 
   // Destructure the memoized values
   const { visibleNodes, visibleConnections } = visibleElements;
@@ -3011,8 +3130,8 @@ export function TechTreeViewer() {
             filteredNodeIds={filteredNodeIds}
             selectedNodeId={selectedNodeId}
             hoveredNodeId={hoveredNodeId}
-            selectedConnectionNodeIds={getSelectedConnectionNodes()}
-            adjacentNodeIds={getAdjacentNodeIds(selectedNodeId)}
+            selectedConnectionNodeIds={selectedConnectionNodeIds}
+            adjacentNodeIds={adjacentNodeIds}
             highlightedAncestors={highlightedAncestors}
             highlightedDescendants={highlightedDescendants}
           />
