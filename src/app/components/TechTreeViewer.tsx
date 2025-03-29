@@ -411,6 +411,11 @@ export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  
+  // Constants for viewport calculations
+  const VIEWPORT_UPDATE_THROTTLE = 250; // Increased from 100ms to 250ms
+  const VIEWPORT_BUFFER = Math.floor(window.innerWidth / 2); // Reduced buffer size
+  
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
@@ -422,6 +427,28 @@ export function TechTreeViewer() {
     nodes: [],
     links: [],
   });
+
+  // Add efficient lookup maps
+  const nodeMap = useMemo(() => new Map(data.nodes.map(node => [node.id, node])), [data.nodes]);
+  const linksBySource = useMemo(() => {
+    const map = new Map<string, Link[]>();
+    data.links.forEach(link => {
+      const links = map.get(link.source) || [];
+      links.push(link);
+      map.set(link.source, links);
+    });
+    return map;
+  }, [data.links]);
+  const linksByTarget = useMemo(() => {
+    const map = new Map<string, Link[]>();
+    data.links.forEach(link => {
+      const links = map.get(link.target) || [];
+      links.push(link);
+      map.set(link.target, links);
+    });
+    return map;
+  }, [data.links]);
+
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(null);
   const [totalHeight, setTotalHeight] = useState(1000);
@@ -1024,44 +1051,46 @@ export function TechTreeViewer() {
     [data.nodes, getXPosition, containerDimensions.width]
   );
 
-  const getNodeConnections = useCallback(
-    (nodeId: string) => {
-      const validConnectionTypes = (link: Link) =>
-        !["Independently invented", "Concurrent development"].includes(
-          link.type
-        );
+  const getNodeConnections = useCallback((nodeId: string) => {
+    const ancestors: TechNode[] = [];
+    const children: TechNode[] = [];
+    const replaced: TechNode[] = [];
+    const replacedBy: TechNode[] = [];
 
-      const ancestors = data.links
-        .filter((link) => link.target === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is TechNode => n !== undefined)
-        // Sort ancestors by year (most recent first)
-        .sort((a, b) => b.year - a.year);
+    // Get incoming links from linksByTarget
+    const incomingLinks = linksByTarget.get(nodeId) || [];
+    incomingLinks.forEach(link => {
+      const sourceNode = nodeMap.get(link.source);
+      if (sourceNode) {
+        if (link.type === "Obsolescence") {
+          replaced.push(sourceNode);
+        } else if (!["Independently invented", "Concurrent development"].includes(link.type)) {
+          ancestors.push(sourceNode);
+        }
+      }
+    });
 
-      const children = data.links
-        .filter((link) => link.source === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is TechNode => n !== undefined)
-        // Sort children by year (earliest first)
-        .sort((a, b) => a.year - b.year);
+    // Get outgoing links from linksBySource
+    const outgoingLinks = linksBySource.get(nodeId) || [];
+    outgoingLinks.forEach(link => {
+      const targetNode = nodeMap.get(link.target);
+      if (targetNode) {
+        if (link.type === "Obsolescence") {
+          replacedBy.push(targetNode);
+        } else if (!["Independently invented", "Concurrent development"].includes(link.type)) {
+          children.push(targetNode);
+        }
+      }
+    });
 
-      // Add replaced and replacedBy
-      const replaced = data.links
-        .filter((link) => link.target === nodeId && link.type === "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is TechNode => n !== undefined)
-        .sort((a, b) => a.year - b.year);
+    // Sort by year
+    ancestors.sort((a, b) => b.year - a.year); // most recent first
+    children.sort((a, b) => a.year - b.year); // earliest first
+    replaced.sort((a, b) => a.year - b.year);
+    replacedBy.sort((a, b) => b.year - a.year);
 
-      const replacedBy = data.links
-        .filter((link) => link.source === nodeId && link.type === "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is TechNode => n !== undefined)
-        .sort((a, b) => b.year - a.year);
-
-      return { ancestors, children, replaced, replacedBy };
-    },
-    [data.links, data.nodes]
-  );
+    return { ancestors, children, replaced, replacedBy };
+  }, [nodeMap, linksBySource, linksByTarget]);
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -1943,13 +1972,12 @@ export function TechTreeViewer() {
       // If no viewport is set yet, show everything
       if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
 
-      // Apply a much larger buffer around the viewport
-      const buffer = window.innerWidth; // Use full screen width as buffer
+      // Apply reduced buffer around the viewport
       const bufferedViewport = {
-        left: visibleViewport.left - buffer,
-        right: visibleViewport.right + buffer,
-        top: visibleViewport.top - buffer,
-        bottom: visibleViewport.bottom + buffer,
+        left: visibleViewport.left - VIEWPORT_BUFFER,
+        right: visibleViewport.right + VIEWPORT_BUFFER,
+        top: visibleViewport.top - VIEWPORT_BUFFER,
+        bottom: visibleViewport.bottom + VIEWPORT_BUFFER,
       };
 
       const nodeX = getXPosition(node.year);
@@ -1963,7 +1991,7 @@ export function TechTreeViewer() {
         nodeY <= bufferedViewport.bottom
       );
     },
-    [visibleViewport, getXPosition]
+    [visibleViewport, getXPosition, VIEWPORT_BUFFER]
   );
 
   // Add a function to determine if a connection is in the visible viewport
@@ -1972,8 +2000,8 @@ export function TechTreeViewer() {
       // If no viewport is set yet, show everything
       if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
       
-      const sourceNode = data.nodes.find((n) => n.id === link.source);
-      const targetNode = data.nodes.find((n) => n.id === link.target);
+      const sourceNode = nodeMap.get(link.source);
+      const targetNode = nodeMap.get(link.target);
       
       if (!sourceNode || !targetNode) return false;
       
@@ -1982,13 +2010,12 @@ export function TechTreeViewer() {
       const targetX = getXPosition(targetNode.year);
       const targetY = targetNode.y || 0;
       
-      // Use the same large buffer size as the node viewport check
-      const buffer = window.innerWidth;
+      // Use reduced buffer size
       const bufferedViewport = {
-        left: visibleViewport.left - buffer,
-        right: visibleViewport.right + buffer,
-        top: visibleViewport.top - buffer,
-        bottom: visibleViewport.bottom + buffer,
+        left: visibleViewport.left - VIEWPORT_BUFFER,
+        right: visibleViewport.right + VIEWPORT_BUFFER,
+        top: visibleViewport.top - VIEWPORT_BUFFER,
+        bottom: visibleViewport.bottom + VIEWPORT_BUFFER,
       };
       
       // Check if either endpoint is in the viewport
@@ -2016,12 +2043,11 @@ export function TechTreeViewer() {
                maxY < bufferedViewport.top || 
                minY > bufferedViewport.bottom);
     },
-    [visibleViewport, data.nodes, getXPosition]
+    [visibleViewport, nodeMap, getXPosition]
   );
 
   // Add this near the top with other state variables
   const lastViewportUpdate = useRef(0);
-  const VIEWPORT_UPDATE_THROTTLE = 100; // ms
 
   // Update the scroll handler to track visible viewport with throttling
   useEffect(() => {
