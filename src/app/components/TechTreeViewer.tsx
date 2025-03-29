@@ -2626,8 +2626,8 @@ export function TechTreeViewer() {
               zIndex: 100,
               position: "sticky",
               top: 0,
-              minHeight: isMobile ? "32px" : undefined,
-              maxHeight: isMobile ? "32px" : undefined,
+              minHeight: isMobile ? "48px" : undefined,
+              maxHeight: isMobile ? "48px" : undefined,
               overflow: isMobile ? "hidden" : undefined,
               touchAction: "none"
             }}
@@ -2649,7 +2649,7 @@ export function TechTreeViewer() {
                       style={{
                         left: `${getXPosition(year)}px`,
                         transform: "translateX(-50%)",
-                        top: '16px',
+                        top: isMobile ? '16px' : '16px',
                         textDecorationLine: 'none',
                         WebkitTextDecorationLine: 'none',
                         textDecoration: 'none',
