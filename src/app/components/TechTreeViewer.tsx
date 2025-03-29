@@ -411,11 +411,6 @@ export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  
-  // Constants for viewport calculations
-  const VIEWPORT_UPDATE_THROTTLE = 250; // Increased from 100ms to 250ms
-  const VIEWPORT_BUFFER = Math.floor(window.innerWidth / 2); // Reduced buffer size
-  
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
@@ -427,28 +422,6 @@ export function TechTreeViewer() {
     nodes: [],
     links: [],
   });
-
-  // Add efficient lookup maps
-  const nodeMap = useMemo(() => new Map(data.nodes.map(node => [node.id, node])), [data.nodes]);
-  const linksBySource = useMemo(() => {
-    const map = new Map<string, Link[]>();
-    data.links.forEach(link => {
-      const links = map.get(link.source) || [];
-      links.push(link);
-      map.set(link.source, links);
-    });
-    return map;
-  }, [data.links]);
-  const linksByTarget = useMemo(() => {
-    const map = new Map<string, Link[]>();
-    data.links.forEach(link => {
-      const links = map.get(link.target) || [];
-      links.push(link);
-      map.set(link.target, links);
-    });
-    return map;
-  }, [data.links]);
-
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(null);
   const [totalHeight, setTotalHeight] = useState(1000);
@@ -1051,46 +1024,44 @@ export function TechTreeViewer() {
     [data.nodes, getXPosition, containerDimensions.width]
   );
 
-  const getNodeConnections = useCallback((nodeId: string) => {
-    const ancestors: TechNode[] = [];
-    const children: TechNode[] = [];
-    const replaced: TechNode[] = [];
-    const replacedBy: TechNode[] = [];
+  const getNodeConnections = useCallback(
+    (nodeId: string) => {
+      const validConnectionTypes = (link: Link) =>
+        !["Independently invented", "Concurrent development"].includes(
+          link.type
+        );
 
-    // Get incoming links from linksByTarget
-    const incomingLinks = linksByTarget.get(nodeId) || [];
-    incomingLinks.forEach(link => {
-      const sourceNode = nodeMap.get(link.source);
-      if (sourceNode) {
-        if (link.type === "Obsolescence") {
-          replaced.push(sourceNode);
-        } else if (!["Independently invented", "Concurrent development"].includes(link.type)) {
-          ancestors.push(sourceNode);
-        }
-      }
-    });
+      const ancestors = data.links
+        .filter((link) => link.target === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
+        .map((link) => data.nodes.find((n) => n.id === link.source))
+        .filter((n): n is TechNode => n !== undefined)
+        // Sort ancestors by year (most recent first)
+        .sort((a, b) => b.year - a.year);
 
-    // Get outgoing links from linksBySource
-    const outgoingLinks = linksBySource.get(nodeId) || [];
-    outgoingLinks.forEach(link => {
-      const targetNode = nodeMap.get(link.target);
-      if (targetNode) {
-        if (link.type === "Obsolescence") {
-          replacedBy.push(targetNode);
-        } else if (!["Independently invented", "Concurrent development"].includes(link.type)) {
-          children.push(targetNode);
-        }
-      }
-    });
+      const children = data.links
+        .filter((link) => link.source === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
+        .map((link) => data.nodes.find((n) => n.id === link.target))
+        .filter((n): n is TechNode => n !== undefined)
+        // Sort children by year (earliest first)
+        .sort((a, b) => a.year - b.year);
 
-    // Sort by year
-    ancestors.sort((a, b) => b.year - a.year); // most recent first
-    children.sort((a, b) => a.year - b.year); // earliest first
-    replaced.sort((a, b) => a.year - b.year);
-    replacedBy.sort((a, b) => b.year - a.year);
+      // Add replaced and replacedBy
+      const replaced = data.links
+        .filter((link) => link.target === nodeId && link.type === "Obsolescence")
+        .map((link) => data.nodes.find((n) => n.id === link.source))
+        .filter((n): n is TechNode => n !== undefined)
+        .sort((a, b) => a.year - b.year);
 
-    return { ancestors, children, replaced, replacedBy };
-  }, [nodeMap, linksBySource, linksByTarget]);
+      const replacedBy = data.links
+        .filter((link) => link.source === nodeId && link.type === "Obsolescence")
+        .map((link) => data.nodes.find((n) => n.id === link.target))
+        .filter((n): n is TechNode => n !== undefined)
+        .sort((a, b) => b.year - a.year);
+
+      return { ancestors, children, replaced, replacedBy };
+    },
+    [data.links, data.nodes]
+  );
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -1972,12 +1943,13 @@ export function TechTreeViewer() {
       // If no viewport is set yet, show everything
       if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
 
-      // Apply reduced buffer around the viewport
+      // Apply a much larger buffer around the viewport
+      const buffer = window.innerWidth; // Use full screen width as buffer
       const bufferedViewport = {
-        left: visibleViewport.left - VIEWPORT_BUFFER,
-        right: visibleViewport.right + VIEWPORT_BUFFER,
-        top: visibleViewport.top - VIEWPORT_BUFFER,
-        bottom: visibleViewport.bottom + VIEWPORT_BUFFER,
+        left: visibleViewport.left - buffer,
+        right: visibleViewport.right + buffer,
+        top: visibleViewport.top - buffer,
+        bottom: visibleViewport.bottom + buffer,
       };
 
       const nodeX = getXPosition(node.year);
@@ -1991,7 +1963,7 @@ export function TechTreeViewer() {
         nodeY <= bufferedViewport.bottom
       );
     },
-    [visibleViewport, getXPosition, VIEWPORT_BUFFER]
+    [visibleViewport, getXPosition]
   );
 
   // Add a function to determine if a connection is in the visible viewport
@@ -2000,8 +1972,8 @@ export function TechTreeViewer() {
       // If no viewport is set yet, show everything
       if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
       
-      const sourceNode = nodeMap.get(link.source);
-      const targetNode = nodeMap.get(link.target);
+      const sourceNode = data.nodes.find((n) => n.id === link.source);
+      const targetNode = data.nodes.find((n) => n.id === link.target);
       
       if (!sourceNode || !targetNode) return false;
       
@@ -2010,12 +1982,13 @@ export function TechTreeViewer() {
       const targetX = getXPosition(targetNode.year);
       const targetY = targetNode.y || 0;
       
-      // Use reduced buffer size
+      // Use the same large buffer size as the node viewport check
+      const buffer = window.innerWidth;
       const bufferedViewport = {
-        left: visibleViewport.left - VIEWPORT_BUFFER,
-        right: visibleViewport.right + VIEWPORT_BUFFER,
-        top: visibleViewport.top - VIEWPORT_BUFFER,
-        bottom: visibleViewport.bottom + VIEWPORT_BUFFER,
+        left: visibleViewport.left - buffer,
+        right: visibleViewport.right + buffer,
+        top: visibleViewport.top - buffer,
+        bottom: visibleViewport.bottom + buffer,
       };
       
       // Check if either endpoint is in the viewport
@@ -2043,11 +2016,12 @@ export function TechTreeViewer() {
                maxY < bufferedViewport.top || 
                minY > bufferedViewport.bottom);
     },
-    [visibleViewport, nodeMap, getXPosition]
+    [visibleViewport, data.nodes, getXPosition]
   );
 
   // Add this near the top with other state variables
   const lastViewportUpdate = useRef(0);
+  const VIEWPORT_UPDATE_THROTTLE = 100; // ms
 
   // Update the scroll handler to track visible viewport with throttling
   useEffect(() => {
@@ -3024,22 +2998,50 @@ export function TechTreeViewer() {
                         const nodeId = selectedNodeId || hoveredNode?.id;
                         if (!nodeId) return null;
 
-                        const ancestors = getAllAncestors(nodeId);
-                        const descendants = getAllDescendants(nodeId);
-                        ancestors.delete(nodeId);
-                        descendants.delete(nodeId);
+                        // Only show ancestry controls if not on mobile
+                        if (isMobile) {
+                          return node.wikipedia && (
+                            <div className="text-xs mt-2">
+                              <div>
+                                View on{" "}
+                                <a
+                                  href={node.wikipedia}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="text-blue-600 hover:underline cursor-pointer"
+                                >
+                                  Wikipedia
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        }
+
+                        // Check if the node has any potential ancestors or descendants without calculating them
+                        const hasAncestors = data.links.some(
+                          link => link.target === nodeId && 
+                          !["Independently invented", "Concurrent development"].includes(link.type)
+                        );
+                        const hasDescendants = data.links.some(
+                          link => link.source === nodeId && 
+                          !["Independently invented", "Concurrent development"].includes(link.type)
+                        );
 
                         return (
                           <div className="text-xs mt-2">
-                            {/* Show ancestry controls only if there are ancestors or descendants and not on mobile */}
-                            {!isMobile && (ancestors.size > 0 || descendants.size > 0) && (
+                            {/* Show ancestry controls if there are potential ancestors or descendants */}
+                            {(hasAncestors || hasDescendants) && (
                               <div className="mb-1">
-                                {ancestors.size > 0 && descendants.size > 0 ? (
+                                {hasAncestors && hasDescendants ? (
                                   <>
                                     Highlight all{" "}
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();
+                                        // Calculate ancestors only when clicked
+                                        const ancestors = getAllAncestors(nodeId);
+                                        ancestors.delete(nodeId);
                                         // First ensure the node is selected
                                         if (!selectedNodeId) {
                                           setSelectedNodeId(nodeId);
@@ -3055,13 +3057,14 @@ export function TechTreeViewer() {
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();
+                                        // Calculate descendants only when clicked
+                                        const descendants = getAllDescendants(nodeId);
+                                        descendants.delete(nodeId);
                                         // First ensure the node is selected
                                         if (!selectedNodeId) {
                                           setSelectedNodeId(nodeId);
                                         }
-                                        setHighlightedDescendants(
-                                          descendants
-                                        );
+                                        setHighlightedDescendants(descendants);
                                         setHighlightedAncestors(new Set());
                                       }}
                                       className="text-blue-600 hover:underline cursor-pointer"
@@ -3069,12 +3072,15 @@ export function TechTreeViewer() {
                                       descendants
                                     </button>
                                   </>
-                                ) : ancestors.size > 0 ? (
+                                ) : hasAncestors ? (
                                   <>
                                     Highlight all{" "}
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();
+                                        // Calculate ancestors only when clicked
+                                        const ancestors = getAllAncestors(nodeId);
+                                        ancestors.delete(nodeId);
                                         // First ensure the node is selected
                                         if (!selectedNodeId) {
                                           setSelectedNodeId(nodeId);
@@ -3093,13 +3099,14 @@ export function TechTreeViewer() {
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();
+                                        // Calculate descendants only when clicked
+                                        const descendants = getAllDescendants(nodeId);
+                                        descendants.delete(nodeId);
                                         // First ensure the node is selected
                                         if (!selectedNodeId) {
                                           setSelectedNodeId(nodeId);
                                         }
-                                        setHighlightedDescendants(
-                                          descendants
-                                        );
+                                        setHighlightedDescendants(descendants);
                                         setHighlightedAncestors(new Set());
                                       }}
                                       className="text-blue-600 hover:underline cursor-pointer"
@@ -3111,7 +3118,6 @@ export function TechTreeViewer() {
                               </div>
                             )}
 
-                            {/* Always show Wikipedia link if it exists, regardless of connections */}
                             {node.wikipedia && (
                               <div>
                                 View on{" "}
