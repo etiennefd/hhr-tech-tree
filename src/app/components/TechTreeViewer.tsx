@@ -27,6 +27,7 @@ import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 import Link from 'next/link';
+import { SpatialIndex } from "@/utils/SpatialIndex";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -407,6 +408,18 @@ const memoEffectiveness = {
   }
 };
 
+// Add these near the top of the file, after imports
+const PERFORMANCE_LOG_INTERVAL = 1000; // Log at most once per second
+let lastPerformanceLog = 0;
+
+function logPerformance(operation: string, data: Record<string, any>) {
+  const now = performance.now();
+  if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
+    console.log(`[TechTree] ${operation}:`, data);
+    lastPerformanceLog = now;
+  }
+}
+
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
@@ -438,6 +451,8 @@ export function TechTreeViewer() {
   const [isMobile, setIsMobile] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
+  // Reduce cell size from 1000 to 250
+  const spatialIndexRef = useRef<SpatialIndex>(new SpatialIndex(250));
   
   // Add refs for virtualization
   const nodesContainerRef = useRef<HTMLDivElement>(null);
@@ -450,6 +465,10 @@ export function TechTreeViewer() {
     top: 0,
     bottom: 0,
   });
+
+  // Add viewport update tracking
+  const lastViewportUpdate = useRef(0);
+  const VIEWPORT_UPDATE_THROTTLE = 100; // ms
 
   // Add cache refs for ancestors and descendants
   const descendantsCache = useRef<Map<string, Set<string>>>(new Map());
@@ -745,6 +764,42 @@ export function TechTreeViewer() {
           setData({ 
             nodes: positionedDetailNodes, 
             links: cachedData.detailData.links || [] 
+          });
+          currentNodesRef.current = positionedDetailNodes;
+
+          // Initialize spatial index with positioned nodes
+          console.log('[Debug] Initializing spatial index:', {
+            cellSize: 250,
+            totalNodes: positionedDetailNodes.length,
+            totalConnections: cachedData.detailData.links?.length || 0,
+            bounds: {
+              left: Math.min(...positionedDetailNodes.map((n: TechNode) => n.x || 0)),
+              right: Math.max(...positionedDetailNodes.map((n: TechNode) => n.x || 0)),
+              top: Math.min(...positionedDetailNodes.map((n: TechNode) => n.y || 0)),
+              bottom: Math.max(...positionedDetailNodes.map((n: TechNode) => n.y || 0))
+            }
+          });
+
+          // Reset and populate spatial index
+          spatialIndexRef.current = new SpatialIndex(250);
+          positionedDetailNodes.forEach((node: TechNode) => {
+            if (node.x !== undefined && node.y !== undefined) {
+              spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
+            }
+          });
+
+          // Add connections to spatial index
+          (cachedData.detailData.links || []).forEach((link: Link, index: number) => {
+            const sourceNode = positionedDetailNodes.find((n: TechNode) => n.id === link.source);
+            const targetNode = positionedDetailNodes.find((n: TechNode) => n.id === link.target);
+            if (sourceNode?.x !== undefined && sourceNode?.y !== undefined &&
+                targetNode?.x !== undefined && targetNode?.y !== undefined) {
+              spatialIndexRef.current.addConnection(
+                index,
+                { x: sourceNode.x, y: sourceNode.y },
+                { x: targetNode.x, y: targetNode.y }
+              );
+            }
           });
           setIsLoading(false);
         } else if (cachedData?.basicData) {
@@ -1937,14 +1992,39 @@ export function TechTreeViewer() {
   // Remove all touch handlers
   // Remove all zoom-related code
 
+  // Add effect to initialize viewport
+  useEffect(() => {
+    if (horizontalScrollContainerRef.current && verticalScrollContainerRef.current) {
+      const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
+      const verticalScroll = verticalScrollContainerRef.current.scrollTop;
+      
+      const newViewport = {
+        left: horizontalScroll,
+        right: horizontalScroll + containerDimensions.width,
+        top: verticalScroll,
+        bottom: verticalScroll + containerDimensions.height,
+      };
+
+      console.log('[Debug] Initial viewport set:', {
+        viewport: newViewport,
+        containerDimensions,
+        scroll: { horizontalScroll, verticalScroll }
+      });
+
+      setVisibleViewport(newViewport);
+    }
+  }, [containerDimensions.width, containerDimensions.height]);
+
   // Update the isNodeInViewport function to use data.nodes directly
   const isNodeInViewport = useCallback(
     (node: TechNode) => {
-      // If no viewport is set yet, show everything
-      if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
+      // If no viewport is set yet, show everything initially
+      if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) {
+        return true;
+      }
 
-      // Apply a much larger buffer around the viewport
-      const buffer = window.innerWidth; // Use full screen width as buffer
+      // Use a reasonable buffer size - half window width but max 500px
+      const buffer = Math.min(window.innerWidth / 2, 500);
       const bufferedViewport = {
         left: visibleViewport.left - buffer,
         right: visibleViewport.right + buffer,
@@ -1952,116 +2032,150 @@ export function TechTreeViewer() {
         bottom: visibleViewport.bottom + buffer,
       };
 
-      const nodeX = getXPosition(node.year);
-      const nodeY = node.y || 0;
+      // Add debug logging for viewport checks
+      const isVisible = spatialIndexRef.current.getNodesInViewport(bufferedViewport).has(node.id);
+      
+      // Log viewport check results periodically
+      const now = performance.now();
+      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
+        console.log('[Debug] Viewport check:', {
+          viewport: bufferedViewport,
+          actualViewport: visibleViewport,
+          buffer,
+          windowSize: { width: window.innerWidth, height: window.innerHeight },
+          time: new Date().toLocaleTimeString()
+        });
+      }
 
-      // Check if the node is within the buffered viewport
-      return (
-        nodeX + NODE_WIDTH / 2 >= bufferedViewport.left &&
-        nodeX - NODE_WIDTH / 2 <= bufferedViewport.right &&
-        nodeY >= bufferedViewport.top &&
-        nodeY <= bufferedViewport.bottom
-      );
+      return isVisible;
     },
-    [visibleViewport, getXPosition]
+    [visibleViewport]
   );
 
-  // Add a function to determine if a connection is in the visible viewport
+  // Update isConnectionInViewport to use the same buffer
   const isConnectionInViewport = useCallback(
-    (link: Link) => {
-      // If no viewport is set yet, show everything
+    (link: Link, index: number) => {
+      // If no viewport is set yet, show everything initially
       if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
       
-      const sourceNode = data.nodes.find((n) => n.id === link.source);
-      const targetNode = data.nodes.find((n) => n.id === link.target);
-      
-      if (!sourceNode || !targetNode) return false;
-      
-      const sourceX = getXPosition(sourceNode.year);
-      const sourceY = sourceNode.y || 0;
-      const targetX = getXPosition(targetNode.year);
-      const targetY = targetNode.y || 0;
-      
-      // Use the same large buffer size as the node viewport check
-      const buffer = window.innerWidth;
+      // Use the same buffer as nodes
+      const buffer = Math.min(window.innerWidth / 2, 500);
       const bufferedViewport = {
         left: visibleViewport.left - buffer,
         right: visibleViewport.right + buffer,
         top: visibleViewport.top - buffer,
         bottom: visibleViewport.bottom + buffer,
       };
+
+      // Add debug logging for connection viewport checks
+      const isVisible = spatialIndexRef.current.getConnectionsInViewport(bufferedViewport).has(index);
       
-      // Check if either endpoint is in the viewport
-      const endpointInViewport = 
-        (sourceX >= bufferedViewport.left &&
-         sourceX <= bufferedViewport.right &&
-         sourceY >= bufferedViewport.top &&
-         sourceY <= bufferedViewport.bottom) ||
-        (targetX >= bufferedViewport.left &&
-         targetX <= bufferedViewport.right &&
-         targetY >= bufferedViewport.top &&
-         targetY <= bufferedViewport.bottom);
-      
-      if (endpointInViewport) return true;
-      
-      // Additional check for line segments that cross the viewport
-      const minX = Math.min(sourceX, targetX);
-      const maxX = Math.max(sourceX, targetX);
-      const minY = Math.min(sourceY, targetY);
-      const maxY = Math.max(sourceY, targetY);
-      
-      // If the bounding box doesn't intersect the buffered viewport, the line doesn't either
-      return !(maxX < bufferedViewport.left || 
-               minX > bufferedViewport.right ||
-               maxY < bufferedViewport.top || 
-               minY > bufferedViewport.bottom);
+      // Log viewport check results periodically
+      const now = performance.now();
+      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
+        const sourceNode = data.nodes.find(n => n.id === link.source);
+        const targetNode = data.nodes.find(n => n.id === link.target);
+        
+        logPerformance('connection_viewport_check', {
+          connectionIndex: index,
+          sourcePosition: sourceNode ? { x: sourceNode.x, y: sourceNode.y } : null,
+          targetPosition: targetNode ? { x: targetNode.x, y: targetNode.y } : null,
+          viewport: bufferedViewport,
+          actualViewport: visibleViewport,
+          buffer,
+          isVisible,
+          totalVisibleConnections: spatialIndexRef.current.getConnectionsInViewport(bufferedViewport).size,
+          windowDimensions: {
+            width: window.innerWidth,
+            height: window.innerHeight
+          }
+        });
+      }
+
+      return isVisible;
     },
-    [visibleViewport, data.nodes, getXPosition]
+    [visibleViewport, data.nodes]
   );
 
-  // Add this near the top with other state variables
-  const lastViewportUpdate = useRef(0);
-  const VIEWPORT_UPDATE_THROTTLE = 100; // ms
-
-  // Update the scroll handler to track visible viewport with throttling
+  // Add viewport diagnostic logging
   useEffect(() => {
+    const timestamp = new Date().toLocaleTimeString();
+    logPerformance('viewport_diagnostics', {
+      viewport: visibleViewport,
+      containerDimensions,
+      maxBuffer: Math.min(window.innerWidth / 2, 500),
+      timestamp
+    });
+  }, [visibleViewport, containerDimensions]);
+
+  // Update the scroll handler to be more selective about viewport updates
+  useEffect(() => {
+    const VIEWPORT_UPDATE_THRESHOLD = 100; // pixels
+    const VIEWPORT_UPDATE_THROTTLE = 150; // ms
+    
     const updateVisibleViewport = () => {
       if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) return;
       
       const now = performance.now();
       if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
-      lastViewportUpdate.current = now;
       
       const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
       const verticalScroll = verticalScrollContainerRef.current.scrollTop;
       
-      setVisibleViewport({
+      // Only update if scroll position has changed significantly
+      const hasSignificantChange = 
+        Math.abs(horizontalScroll - visibleViewport.left) > VIEWPORT_UPDATE_THRESHOLD ||
+        Math.abs(verticalScroll - visibleViewport.top) > VIEWPORT_UPDATE_THRESHOLD;
+
+      if (!hasSignificantChange) return;
+
+      lastViewportUpdate.current = now;
+      
+      const newViewport = {
         left: horizontalScroll,
         right: horizontalScroll + containerDimensions.width,
         top: verticalScroll,
         bottom: verticalScroll + containerDimensions.height,
-      });
+      };
+
+      // Log viewport updates less frequently
+      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
+        console.log('[Debug] Viewport update:', {
+          viewport: newViewport,
+          previousViewport: visibleViewport,
+          change: {
+            horizontal: horizontalScroll - visibleViewport.left,
+            vertical: verticalScroll - visibleViewport.top
+          },
+          dimensions: containerDimensions,
+          time: new Date().toLocaleTimeString()
+        });
+      }
+
+      setVisibleViewport(newViewport);
     };
     
     // Initial update
     updateVisibleViewport();
     
-    // Add scroll event listeners
+    // Add scroll event listeners with throttling
+    const throttledUpdate = throttle(updateVisibleViewport, VIEWPORT_UPDATE_THROTTLE);
+    
     const horizontalContainer = horizontalScrollContainerRef.current;
     const verticalContainer = verticalScrollContainerRef.current;
     
     if (horizontalContainer && verticalContainer) {
-      horizontalContainer.addEventListener('scroll', updateVisibleViewport);
-      verticalContainer.addEventListener('scroll', updateVisibleViewport);
+      horizontalContainer.addEventListener('scroll', throttledUpdate);
+      verticalContainer.addEventListener('scroll', throttledUpdate);
     }
     
     return () => {
       if (horizontalContainer && verticalContainer) {
-        horizontalContainer.removeEventListener('scroll', updateVisibleViewport);
-        verticalContainer.removeEventListener('scroll', updateVisibleViewport);
+        horizontalContainer.removeEventListener('scroll', throttledUpdate);
+        verticalContainer.removeEventListener('scroll', throttledUpdate);
       }
     };
-  }, [containerDimensions.width, containerDimensions.height]);
+  }, [containerDimensions.width, containerDimensions.height, visibleViewport]);
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
@@ -2157,9 +2271,9 @@ export function TechTreeViewer() {
   const lastFrameData = useRef<{
     selectedNodeId: string | null;
     selectedLinkIndex: number | null;
-    highlightedAncestors: Set<string>;
-    highlightedDescendants: Set<string>;
-    filteredNodeIds: Set<string>;
+    highlightedAncestors: string;
+    highlightedDescendants: string;
+    filteredNodeIds: string;
     viewport: { left: number; right: number; top: number; bottom: number };
   } | null>(null);
 
@@ -2199,25 +2313,47 @@ export function TechTreeViewer() {
     return connectedNodes;
   }, [data.links]);
 
-  // Update the visibleElements memo
+  // Create stable dependency values for set comparisons
+  const stableHighlightedAncestorsString = useMemo(
+    () => Array.from(highlightedAncestors).sort().join(','),
+    [highlightedAncestors]
+  );
+  
+  const stableHighlightedDescendantsString = useMemo(
+    () => Array.from(highlightedDescendants).sort().join(','),
+    [highlightedDescendants]
+  );
+  
+  const stableFilteredNodeIdsString = useMemo(
+    () => Array.from(filteredNodeIds).sort().join(','),
+    [filteredNodeIds]
+  );
+
+  // Update visibleElements memo with performance logging
   const visibleElements = useMemo<VisibleElements>(() => {
+    const startTime = performance.now();
     performanceMarks.start('visibleElements');
-    const now = performance.now();
-    const currentFrame = Math.floor(now / FRAME_DURATION);
+    
+    // Create stable viewport values for comparison
+    const stableViewport = {
+      left: Math.floor(deferredViewport.left / 100) * 100,
+      right: Math.ceil(deferredViewport.right / 100) * 100,
+      top: Math.floor(deferredViewport.top / 100) * 100,
+      bottom: Math.ceil(deferredViewport.bottom / 100) * 100
+    };
     
     // Create current frame data for comparison
     const currentFrameData = {
       selectedNodeId,
       selectedLinkIndex,
-      highlightedAncestors,
-      highlightedDescendants,
-      filteredNodeIds,
-      viewport: deferredViewport
+      highlightedAncestors: stableHighlightedAncestorsString,
+      highlightedDescendants: stableHighlightedDescendantsString,
+      filteredNodeIds: stableFilteredNodeIdsString,
+      viewport: stableViewport
     };
     
-    // Skip if recalculating in the same frame with same data
-    if (currentFrame === lastCalculationFrame.current && 
-        lastFrameData.current &&
+    // Skip if nothing has changed
+    if (lastFrameData.current &&
         currentFrameData.selectedNodeId === lastFrameData.current.selectedNodeId &&
         currentFrameData.selectedLinkIndex === lastFrameData.current.selectedLinkIndex &&
         currentFrameData.highlightedAncestors === lastFrameData.current.highlightedAncestors &&
@@ -2230,16 +2366,29 @@ export function TechTreeViewer() {
         previousCalculation.current.visibleNodes.length > 0) {
       memoEffectiveness.track(true);
       performanceMarks.end('visibleElements');
-      performanceMarks.log('visibleElements');
       return previousCalculation.current;
     }
     
-    memoEffectiveness.track(false);
-    lastCalculationTime.current = now;
-    lastCalculationFrame.current = currentFrame;
-    lastFrameData.current = currentFrameData;
-    const start = now;
+    // Log what triggered the recalculation
+    const changes = [];
+    if (lastFrameData.current) {
+      if (currentFrameData.selectedNodeId !== lastFrameData.current.selectedNodeId) changes.push('selectedNode');
+      if (currentFrameData.selectedLinkIndex !== lastFrameData.current.selectedLinkIndex) changes.push('selectedLink');
+      if (currentFrameData.highlightedAncestors !== lastFrameData.current.highlightedAncestors) changes.push('ancestors');
+      if (currentFrameData.highlightedDescendants !== lastFrameData.current.highlightedDescendants) changes.push('descendants');
+      if (currentFrameData.filteredNodeIds !== lastFrameData.current.filteredNodeIds) changes.push('filters');
+      if (currentFrameData.viewport.left !== lastFrameData.current.viewport.left ||
+          currentFrameData.viewport.right !== lastFrameData.current.viewport.right ||
+          currentFrameData.viewport.top !== lastFrameData.current.viewport.top ||
+          currentFrameData.viewport.bottom !== lastFrameData.current.viewport.bottom) changes.push('viewport');
+    }
     
+    console.log(`[Performance] Recalculating visible elements due to changes in: ${changes.join(', ') || 'initial'}`);
+    
+    memoEffectiveness.track(false);
+    lastCalculationTime.current = startTime;
+    lastFrameData.current = currentFrameData;
+
     // Create sets for O(1) lookups
     const visibleNodeIds = new Set<string>();
     const visibleConnectionIndices = new Set<number>();
@@ -2319,7 +2468,7 @@ export function TechTreeViewer() {
     
     // Add connections in viewport
     data.links.forEach((link: Link, index: number) => {
-      if (!visibleConnectionIndices.has(index) && isConnectionInViewport(link)) {
+      if (!visibleConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
         visibleConnectionIndices.add(index);
       }
     });
@@ -2331,45 +2480,60 @@ export function TechTreeViewer() {
     const newVisibleNodes = data.nodes.filter((node: TechNode) => visibleNodeIds.has(node.id));
     const newVisibleConnections = data.links.filter((_, index: number) => visibleConnectionIndices.has(index));
     
-    const end = performance.now();
-    const timestamp = new Date().toLocaleTimeString();
-    
-    // Only log if we have actual data and something changed
-    if ((newVisibleNodes.length > 0 || newVisibleConnections.length > 0) &&
-        (newVisibleNodes.length !== previousCalculation.current.visibleNodes.length ||
-         newVisibleConnections.length !== previousCalculation.current.visibleConnections.length)) {
-      console.log(`[${timestamp}] [Performance] Processing ${newVisibleNodes.length} nodes and ${newVisibleConnections.length} connections took ${end - start}ms (trigger: ${calculationTrigger.current}, frame: ${currentFrame})`);
-    }
+    const endTime = performance.now();
+    logPerformance('visible_elements_calculation', {
+      duration: endTime - startTime,
+      visibleNodes: newVisibleNodes.length,
+      visibleConnections: newVisibleConnections.length,
+      totalNodes: data.nodes.length,
+      totalConnections: data.links.length,
+      trigger: calculationTrigger.current
+    });
+
+    performanceMarks.end('visibleElements');
     
     // Store the result for future use
-    previousCalculation.current = {
+    const result = {
       visibleNodes: newVisibleNodes,
       visibleConnections: newVisibleConnections
     };
+    previousCalculation.current = result;
     
-    // Reset trigger to unknown after initial render
-    if (calculationTrigger.current === 'initial') {
-      calculationTrigger.current = 'unknown';
-    }
-    
-    performanceMarks.end('visibleElements');
-    performanceMarks.log('visibleElements');
-    return previousCalculation.current;
+    return result;
   }, [
     data.nodes,
     data.links,
     selectedNodeId,
     selectedLinkIndex,
-    highlightedAncestors,
-    highlightedDescendants,
-    filteredNodeIds,
-    isNodeInViewport,
     deferredViewport,
+    isNodeInViewport,
     isConnectionInViewport,
     cachedNodeIds,
     cachedConnectionIndices,
-    getNodeConnectionIndices
+    getNodeConnectionIndices,
+    stableHighlightedAncestorsString,
+    stableHighlightedDescendantsString,
+    stableFilteredNodeIdsString
   ]);
+
+  // Add effect to log general performance metrics
+  useEffect(() => {
+    const logInterval = setInterval(() => {
+      logPerformance('general_metrics', {
+        totalNodes: data.nodes.length,
+        totalConnections: data.links.length,
+        cachedNodes: cachedNodeIds.size,
+        cachedConnections: cachedConnectionIndices.size,
+        memoEffectiveness: {
+          hits: memoEffectiveness.hits,
+          misses: memoEffectiveness.misses,
+          rate: memoEffectiveness.hits / (memoEffectiveness.hits + memoEffectiveness.misses)
+        }
+      });
+    }, 5000); // Log every 5 seconds
+
+    return () => clearInterval(logInterval);
+  }, [data.nodes.length, data.links.length, cachedNodeIds.size, cachedConnectionIndices.size]);
 
   // Add cleanup for caches when data changes
   useEffect(() => {
@@ -2466,7 +2630,7 @@ export function TechTreeViewer() {
     // Get the indices of all currently visible connections
     const currentlyVisibleConnectionIndices = new Set(
       data.links
-        .map((link, index) => isConnectionInViewport(link) ? index : -1)
+        .map((link, index) => isConnectionInViewport(link, index) ? index : -1)
         .filter(index => index !== -1)
     );
     
@@ -2688,7 +2852,7 @@ export function TechTreeViewer() {
                 zIndex: 1,
               }}
             >
-              {visibleConnections.map((link) => {
+              {visibleConnections.map((link, visibleIndex) => {
                 const sourceNode = data.nodes.find(
                   (n) => n.id === link.source
                 );
@@ -2698,14 +2862,12 @@ export function TechTreeViewer() {
 
                 if (!sourceNode || !targetNode) return null;
                 
-                // Find the index in the original data.links array
-                const originalIndex = data.links.findIndex(
-                  (l) => l === link
-                );
+                // Generate a unique key using both the link IDs and the visible index
+                const connectionKey = `connection-${link.source}-${link.target}-${visibleIndex}`;
                 
                 return (
                   <CurvedConnections
-                    key={`connection-${originalIndex}`}
+                    key={connectionKey}
                     sourceNode={{
                       x: getXPosition(sourceNode.year),
                       y: sourceNode.y || 150,
@@ -2717,19 +2879,19 @@ export function TechTreeViewer() {
                     sourceIndex={data.nodes.indexOf(sourceNode)}
                     targetIndex={data.nodes.indexOf(targetNode)}
                     connectionType={link.type}
-                    isHighlighted={shouldHighlightLink(link, originalIndex)}
-                    opacity={getLinkOpacity(link, originalIndex)}
+                    isHighlighted={shouldHighlightLink(link, visibleIndex)}
+                    opacity={getLinkOpacity(link, visibleIndex)}
                     onMouseEnter={() => {
-                      setHoveredLinkIndex(originalIndex);
+                      setHoveredLinkIndex(visibleIndex);
                     }}
                     onMouseLeave={() => setHoveredLinkIndex(null)}
                     sourceTitle={sourceNode.title}
                     targetTitle={targetNode.title}
                     details={link.details}
-                    isSelected={selectedLinkIndex === originalIndex}
+                    isSelected={selectedLinkIndex === visibleIndex}
                     onSelect={() => {
                       setSelectedLinkIndex((current) =>
-                        current === originalIndex ? null : originalIndex
+                        current === visibleIndex ? null : visibleIndex
                       );
                       setSelectedNodeId(null);
                     }}
