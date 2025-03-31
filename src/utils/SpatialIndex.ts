@@ -152,11 +152,28 @@ export class SpatialIndex {
     cells.forEach(cellId => {
       const nodesInCell = this.nodeCells.get(cellId);
       if (nodesInCell) {
-        nodesInCell.forEach(nodeId => result.add(nodeId));
+        nodesInCell.forEach(nodeId => {
+          // Do precise point-in-viewport check
+          const pos = this.nodePositions.get(nodeId);
+          if (pos && 
+              pos.x >= viewport.left && 
+              pos.x <= viewport.right && 
+              pos.y >= viewport.top && 
+              pos.y <= viewport.bottom) {
+            result.add(nodeId);
+          }
+        });
       }
     });
 
-    this.logPerformance(`getNodesInViewport (cells: ${cells.length}, nodes: ${result.size})`, start);
+    // Enhanced logging
+    const totalNodes = this.nodePositions.size;
+    const visibleRatio = result.size / totalNodes;
+    this.logPerformance(
+      `getNodesInViewport (cells: ${cells.length}, visible: ${result.size}/${totalNodes} = ${(visibleRatio * 100).toFixed(1)}%, viewport: ${JSON.stringify(viewport)})`, 
+      start
+    );
+    
     return result;
   }
 
@@ -175,12 +192,73 @@ export class SpatialIndex {
     cells.forEach(cellId => {
       const connectionsInCell = this.connectionCells.get(cellId);
       if (connectionsInCell) {
-        connectionsInCell.forEach(connectionIndex => result.add(connectionIndex));
+        connectionsInCell.forEach(connectionIndex => {
+          // Do precise line segment intersection check
+          const line = this.connectionPositions.get(connectionIndex);
+          if (line && this.isLineInViewport(line, viewport)) {
+            result.add(connectionIndex);
+          }
+        });
       }
     });
 
-    this.logPerformance(`getConnectionsInViewport (cells: ${cells.length}, connections: ${result.size})`, start);
+    // Enhanced logging
+    const totalConnections = this.connectionPositions.size;
+    const visibleRatio = result.size / totalConnections;
+    this.logPerformance(
+      `getConnectionsInViewport (cells: ${cells.length}, visible: ${result.size}/${totalConnections} = ${(visibleRatio * 100).toFixed(1)}%, viewport: ${JSON.stringify(viewport)})`, 
+      start
+    );
+
     return result;
+  }
+
+  // Helper to check if a line segment intersects with the viewport
+  private isLineInViewport(line: Line, viewport: Viewport): boolean {
+    // Check if either endpoint is in viewport
+    const isStartInside = 
+      line.start.x >= viewport.left && 
+      line.start.x <= viewport.right && 
+      line.start.y >= viewport.top && 
+      line.start.y <= viewport.bottom;
+    
+    const isEndInside = 
+      line.end.x >= viewport.left && 
+      line.end.x <= viewport.right && 
+      line.end.y >= viewport.top && 
+      line.end.y <= viewport.bottom;
+
+    if (isStartInside || isEndInside) return true;
+
+    // Check if line intersects any viewport edge
+    const edges = [
+      {start: {x: viewport.left, y: viewport.top}, end: {x: viewport.right, y: viewport.top}},
+      {start: {x: viewport.right, y: viewport.top}, end: {x: viewport.right, y: viewport.bottom}},
+      {start: {x: viewport.right, y: viewport.bottom}, end: {x: viewport.left, y: viewport.bottom}},
+      {start: {x: viewport.left, y: viewport.bottom}, end: {x: viewport.left, y: viewport.top}}
+    ];
+
+    return edges.some(edge => this.doLinesIntersect(line, edge));
+  }
+
+  // Helper to check if two line segments intersect
+  private doLinesIntersect(line1: Line, line2: Line): boolean {
+    const x1 = line1.start.x;
+    const y1 = line1.start.y;
+    const x2 = line1.end.x;
+    const y2 = line1.end.y;
+    const x3 = line2.start.x;
+    const y3 = line2.start.y;
+    const x4 = line2.end.x;
+    const y4 = line2.end.y;
+
+    const denominator = ((y4 - y3) * (x2 - x1)) - ((x4 - x3) * (y2 - y1));
+    if (denominator === 0) return false;
+
+    const ua = (((x4 - x3) * (y1 - y3)) - ((y4 - y3) * (x1 - x3))) / denominator;
+    const ub = (((x2 - x1) * (y1 - y3)) - ((y2 - y1) * (x1 - x3))) / denominator;
+
+    return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
   }
 
   // Clear all data from the spatial index

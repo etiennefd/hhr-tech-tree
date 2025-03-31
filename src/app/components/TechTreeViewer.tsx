@@ -451,8 +451,8 @@ export function TechTreeViewer() {
   const [isMobile, setIsMobile] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
-  // Reduce cell size from 1000 to 250
-  const spatialIndexRef = useRef<SpatialIndex>(new SpatialIndex(250));
+  // Initialize spatial index with smaller cell size
+  const spatialIndexRef = useRef(new SpatialIndex(100)); // Reduced from 250 to 100
   
   // Add refs for virtualization
   const nodesContainerRef = useRef<HTMLDivElement>(null);
@@ -769,7 +769,7 @@ export function TechTreeViewer() {
 
           // Initialize spatial index with positioned nodes
           console.log('[Debug] Initializing spatial index:', {
-            cellSize: 250,
+            cellSize: 100,
             totalNodes: positionedDetailNodes.length,
             totalConnections: cachedData.detailData.links?.length || 0,
             bounds: {
@@ -781,7 +781,7 @@ export function TechTreeViewer() {
           });
 
           // Reset and populate spatial index
-          spatialIndexRef.current = new SpatialIndex(250);
+          spatialIndexRef.current = new SpatialIndex(100);
           positionedDetailNodes.forEach((node: TechNode) => {
             if (node.x !== undefined && node.y !== undefined) {
               spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
@@ -2023,8 +2023,8 @@ export function TechTreeViewer() {
         return true;
       }
 
-      // Use a reasonable buffer size - half window width but max 500px
-      const buffer = Math.min(window.innerWidth / 2, 500);
+      // Use a smaller buffer size - quarter window width but max 250px
+      const buffer = Math.min(window.innerWidth / 4, 250);
       const bufferedViewport = {
         left: visibleViewport.left - buffer,
         right: visibleViewport.right + buffer,
@@ -2059,7 +2059,7 @@ export function TechTreeViewer() {
       if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
       
       // Use the same buffer as nodes
-      const buffer = Math.min(window.innerWidth / 2, 500);
+      const buffer = Math.min(window.innerWidth / 4, 250);
       const bufferedViewport = {
         left: visibleViewport.left - buffer,
         right: visibleViewport.right + buffer,
@@ -2103,7 +2103,7 @@ export function TechTreeViewer() {
     logPerformance('viewport_diagnostics', {
       viewport: visibleViewport,
       containerDimensions,
-      maxBuffer: Math.min(window.innerWidth / 2, 500),
+      maxBuffer: Math.min(window.innerWidth / 4, 250),
       timestamp
     });
   }, [visibleViewport, containerDimensions]);
@@ -2122,10 +2122,12 @@ export function TechTreeViewer() {
       const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
       const verticalScroll = verticalScrollContainerRef.current.scrollTop;
       
-      // Only update if scroll position has changed significantly
-      const hasSignificantChange = 
+      // Only update if scroll position has changed significantly OR viewport is zero
+      const isInitialViewport = !visibleViewport.right && !visibleViewport.bottom;
+      const hasSignificantChange = isInitialViewport || (
         Math.abs(horizontalScroll - visibleViewport.left) > VIEWPORT_UPDATE_THRESHOLD ||
-        Math.abs(verticalScroll - visibleViewport.top) > VIEWPORT_UPDATE_THRESHOLD;
+        Math.abs(verticalScroll - visibleViewport.top) > VIEWPORT_UPDATE_THRESHOLD
+      );
 
       if (!hasSignificantChange) return;
 
@@ -2148,6 +2150,7 @@ export function TechTreeViewer() {
             vertical: verticalScroll - visibleViewport.top
           },
           dimensions: containerDimensions,
+          isInitialViewport,
           time: new Date().toLocaleTimeString()
         });
       }
@@ -2155,8 +2158,10 @@ export function TechTreeViewer() {
       setVisibleViewport(newViewport);
     };
     
-    // Initial update
-    updateVisibleViewport();
+    // Force initial update
+    requestAnimationFrame(() => {
+      updateVisibleViewport();
+    });
     
     // Add scroll event listeners with throttling
     const throttledUpdate = throttle(updateVisibleViewport, VIEWPORT_UPDATE_THROTTLE);
@@ -2175,7 +2180,7 @@ export function TechTreeViewer() {
         verticalContainer.removeEventListener('scroll', throttledUpdate);
       }
     };
-  }, [containerDimensions.width, containerDimensions.height, visibleViewport]);
+  }, [containerDimensions]); // Remove visibleViewport from dependencies
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
@@ -2393,19 +2398,28 @@ export function TechTreeViewer() {
     const visibleNodeIds = new Set<string>();
     const visibleConnectionIndices = new Set<number>();
     
-    // Add selected node and its connections
-    if (selectedNodeId) {
-      visibleNodeIds.add(selectedNodeId);
-      const connections = getNodeConnectionIndices(selectedNodeId);
+    // First, add nodes that must be visible regardless of viewport
+    const addRequiredNode = (nodeId: string) => {
+      if (!nodeId) return;
+      visibleNodeIds.add(nodeId);
+      // Add immediate neighbors for context
+      const connections = getNodeConnectionIndices(nodeId);
       connections.forEach(index => {
-        visibleConnectionIndices.add(index);
         const link = data.links[index];
-        visibleNodeIds.add(link.source);
-        visibleNodeIds.add(link.target);
+        if (link.source === nodeId) {
+          visibleNodeIds.add(link.target);
+        } else {
+          visibleNodeIds.add(link.source);
+        }
       });
+    };
+
+    // Add selected node and its immediate connections
+    if (selectedNodeId) {
+      addRequiredNode(selectedNodeId);
     }
     
-    // Add selected link and its nodes
+    // Add nodes from selected link
     if (selectedLinkIndex !== null) {
       const selectedLink = data.links[selectedLinkIndex];
       if (selectedLink) {
@@ -2415,70 +2429,64 @@ export function TechTreeViewer() {
       }
     }
     
-    // Add highlighted nodes and their connections
-    highlightedAncestors.forEach((id: string) => {
-      visibleNodeIds.add(id);
-      const connections = getNodeConnectionIndices(id);
-      connections.forEach(index => {
-        visibleConnectionIndices.add(index);
-        const link = data.links[index];
-        visibleNodeIds.add(link.source);
-        visibleNodeIds.add(link.target);
-      });
-    });
+    // Add highlighted nodes
+    highlightedAncestors.forEach(addRequiredNode);
+    highlightedDescendants.forEach(addRequiredNode);
     
-    highlightedDescendants.forEach((id: string) => {
-      visibleNodeIds.add(id);
-      const connections = getNodeConnectionIndices(id);
-      connections.forEach(index => {
-        visibleConnectionIndices.add(index);
-        const link = data.links[index];
-        visibleNodeIds.add(link.source);
-        visibleNodeIds.add(link.target);
-      });
-    });
-    
-    // Add filtered nodes and their connections
+    // Add filtered nodes only if they're in or near viewport
     if (filteredNodeIds.size > 0) {
-      filteredNodeIds.forEach((nodeId: string) => {
-        visibleNodeIds.add(nodeId);
-        const connections = getNodeConnectionIndices(nodeId);
-        connections.forEach(index => {
-          visibleConnectionIndices.add(index);
-          const link = data.links[index];
-          visibleNodeIds.add(link.source);
-          visibleNodeIds.add(link.target);
-        });
+      data.nodes.forEach(node => {
+        if (filteredNodeIds.has(node.id) && isNodeInViewport(node)) {
+          visibleNodeIds.add(node.id);
+        }
       });
     }
     
     // Add nodes in viewport
-    data.nodes.forEach((node: TechNode) => {
+    data.nodes.forEach(node => {
       if (!visibleNodeIds.has(node.id) && isNodeInViewport(node)) {
         visibleNodeIds.add(node.id);
       }
     });
-    
-    // Add cached nodes
-    data.nodes.forEach((node: TechNode) => {
-      if (!visibleNodeIds.has(node.id) && cachedNodeIds.has(node.id)) {
+
+    // Add cached nodes only if they're near the viewport
+    const CACHE_VIEWPORT_BUFFER = 500; // pixels
+    const extendedViewport = {
+      left: stableViewport.left - CACHE_VIEWPORT_BUFFER,
+      right: stableViewport.right + CACHE_VIEWPORT_BUFFER,
+      top: stableViewport.top - CACHE_VIEWPORT_BUFFER,
+      bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER
+    };
+
+    data.nodes.forEach(node => {
+      if (!visibleNodeIds.has(node.id) && 
+          cachedNodeIds.has(node.id) && 
+          node.x !== undefined && 
+          node.y !== undefined &&
+          node.x >= extendedViewport.left &&
+          node.x <= extendedViewport.right &&
+          node.y >= extendedViewport.top &&
+          node.y <= extendedViewport.bottom) {
         visibleNodeIds.add(node.id);
       }
     });
     
-    // Add connections in viewport
-    data.links.forEach((link: Link, index: number) => {
-      if (!visibleConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
+    // Add relevant connections
+    data.links.forEach((link, index) => {
+      // Add connection if both nodes are visible
+      if (visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target)) {
+        visibleConnectionIndices.add(index);
+      }
+      // Or if it's in viewport and at least one node is visible
+      else if (isConnectionInViewport(link, index) && 
+               (visibleNodeIds.has(link.source) || visibleNodeIds.has(link.target))) {
         visibleConnectionIndices.add(index);
       }
     });
     
-    // Add cached connections
-    cachedConnectionIndices.forEach((index: number) => visibleConnectionIndices.add(index));
-    
     // Get final arrays
-    const newVisibleNodes = data.nodes.filter((node: TechNode) => visibleNodeIds.has(node.id));
-    const newVisibleConnections = data.links.filter((_, index: number) => visibleConnectionIndices.has(index));
+    const newVisibleNodes = data.nodes.filter(node => visibleNodeIds.has(node.id));
+    const newVisibleConnections = data.links.filter((_, index) => visibleConnectionIndices.has(index));
     
     const endTime = performance.now();
     logPerformance('visible_elements_calculation', {
@@ -2487,7 +2495,13 @@ export function TechTreeViewer() {
       visibleConnections: newVisibleConnections.length,
       totalNodes: data.nodes.length,
       totalConnections: data.links.length,
-      trigger: calculationTrigger.current
+      trigger: calculationTrigger.current,
+      viewport: stableViewport,
+      cacheStats: {
+        cachedNodes: cachedNodeIds.size,
+        cachedConnections: cachedConnectionIndices.size,
+        visibleCachedNodes: newVisibleNodes.filter(n => cachedNodeIds.has(n.id)).length
+      }
     });
 
     performanceMarks.end('visibleElements');
@@ -2560,54 +2574,130 @@ export function TechTreeViewer() {
     return () => clearInterval(interval);
   }, []);
 
-  // Add an effect to manage the cache of nodes
+  // Add effect to manage the cache of nodes and connections
   useEffect(() => {
-    // Get the IDs of all currently visible nodes
-    const currentlyVisibleNodeIds = new Set(
-      data.nodes
-        .filter(node => isNodeInViewport(node))
-        .map(node => node.id)
-    );
+    const CACHE_VIEWPORT_BUFFER = 1000; // Larger buffer for cache than for visibility
+    const extendedViewport = {
+      left: visibleViewport.left - CACHE_VIEWPORT_BUFFER,
+      right: visibleViewport.right + CACHE_VIEWPORT_BUFFER,
+      top: visibleViewport.top - CACHE_VIEWPORT_BUFFER,
+      bottom: visibleViewport.bottom + CACHE_VIEWPORT_BUFFER
+    };
     
-    // Add newly visible nodes to the cache
-    const newCachedNodeIds = new Set(cachedNodeIds);
-    currentlyVisibleNodeIds.forEach(nodeId => {
-      newCachedNodeIds.add(nodeId);
-      
-      // Clear any existing timeout for this node
-      if (cachedNodesTimeoutRef.current[nodeId]) {
-        clearTimeout(cachedNodesTimeoutRef.current[nodeId]);
-        delete cachedNodesTimeoutRef.current[nodeId];
+    // Get nodes that should be cached
+    const nodesToCache = new Set<string>();
+    const connectionsToCache = new Set<number>();
+    
+    // Add nodes in extended viewport
+    data.nodes.forEach(node => {
+      if (node.x !== undefined && 
+          node.y !== undefined &&
+          node.x >= extendedViewport.left &&
+          node.x <= extendedViewport.right &&
+          node.y >= extendedViewport.top &&
+          node.y <= extendedViewport.bottom) {
+        nodesToCache.add(node.id);
+        
+        // Add connections for this node
+        const nodeConnections = getNodeConnectionIndices(node.id);
+        nodeConnections.forEach(index => {
+          const link = data.links[index];
+          const otherNodeId = link.source === node.id ? link.target : link.source;
+          const otherNode = data.nodes.find(n => n.id === otherNodeId);
+          
+          // Cache connection if other node is also in extended viewport
+          if (otherNode?.x !== undefined && 
+              otherNode?.y !== undefined &&
+              otherNode.x >= extendedViewport.left &&
+              otherNode.x <= extendedViewport.right &&
+              otherNode.y >= extendedViewport.top &&
+              otherNode.y <= extendedViewport.bottom) {
+            connectionsToCache.add(index);
+          }
+        });
       }
     });
     
-    // Set timeouts for nodes that are no longer visible
-    cachedNodeIds.forEach(nodeId => {
-      if (!currentlyVisibleNodeIds.has(nodeId) && !cachedNodesTimeoutRef.current[nodeId]) {
-        // Set a timeout to remove this node from the cache after CACHE_DURATION
-        cachedNodesTimeoutRef.current[nodeId] = setTimeout(() => {
-          setCachedNodeIds(prev => {
-            const updated = new Set(prev);
-            updated.delete(nodeId);
-            return updated;
-          });
-          delete cachedNodesTimeoutRef.current[nodeId];
-        }, CACHE_DURATION);
-      }
-    });
-    
-    // Update the cache if it changed
-    if (newCachedNodeIds.size !== cachedNodeIds.size) {
-      setCachedNodeIds(newCachedNodeIds);
+    // Add selected node, its connections, and connected nodes
+    if (selectedNodeId) {
+      nodesToCache.add(selectedNodeId);
+      const connections = getNodeConnectionIndices(selectedNodeId);
+      connections.forEach(index => {
+        const link = data.links[index];
+        connectionsToCache.add(index);
+        nodesToCache.add(link.source);
+        nodesToCache.add(link.target);
+      });
     }
     
-    // Cleanup timeouts on unmount
-    return () => {
-      Object.values(cachedNodesTimeoutRef.current).forEach(timeout => {
-        clearTimeout(timeout);
+    // Add highlighted nodes and their connections
+    const addHighlightedNode = (nodeId: string) => {
+      nodesToCache.add(nodeId);
+      const connections = getNodeConnectionIndices(nodeId);
+      connections.forEach(index => {
+        const link = data.links[index];
+        connectionsToCache.add(index);
+        nodesToCache.add(link.source);
+        nodesToCache.add(link.target);
       });
     };
-  }, [visibleViewport, data.nodes, cachedNodeIds]);
+    
+    highlightedAncestors.forEach(addHighlightedNode);
+    highlightedDescendants.forEach(addHighlightedNode);
+    
+    // Check if we need to update the cache
+    const hasNodeChanges = cachedNodeIds.size !== nodesToCache.size || 
+      Array.from(nodesToCache).some(id => !cachedNodeIds.has(id));
+    const hasConnectionChanges = cachedConnectionIndices.size !== connectionsToCache.size ||
+      Array.from(connectionsToCache).some(index => !cachedConnectionIndices.has(index));
+    
+    // Only update if there are actual changes
+    if (hasNodeChanges || hasConnectionChanges) {
+      // Batch the updates together
+      requestAnimationFrame(() => {
+        if (hasNodeChanges) {
+          setCachedNodeIds(new Set(nodesToCache));
+        }
+        if (hasConnectionChanges) {
+          setCachedConnectionIndices(new Set(connectionsToCache));
+        }
+        
+        // Log cache update
+        console.log('[Cache] Updated cache:', {
+          nodes: {
+            total: data.nodes.length,
+            cached: nodesToCache.size,
+            inViewport: nodesToCache.size,
+            changed: hasNodeChanges
+          },
+          connections: {
+            total: data.links.length,
+            cached: connectionsToCache.size,
+            inViewport: connectionsToCache.size,
+            changed: hasConnectionChanges
+          },
+          viewport: {
+            visible: visibleViewport,
+            extended: extendedViewport
+          },
+          context: {
+            selectedNode: selectedNodeId,
+            highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
+          }
+        });
+      });
+    }
+  }, [
+    visibleViewport,
+    data.nodes,
+    data.links,
+    cachedNodeIds,
+    cachedConnectionIndices,
+    selectedNodeId,
+    getNodeConnectionIndices,
+    highlightedAncestors,
+    highlightedDescendants
+  ]);
 
   // Add an effect to prefetch visible nodes when the viewport changes
   useEffect(() => {
