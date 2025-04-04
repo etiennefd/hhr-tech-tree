@@ -5,6 +5,7 @@ declare global {
   interface Window {
     mouseX: number;
     mouseY: number;
+    lastNodeVisibilityLog?: number;
   }
 }
 
@@ -1014,8 +1015,24 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions]);
 
+  // Add logging for viewport state changes
+  useEffect(() => {
+    console.log('[ViewportDebug] deferredViewportState updated:', deferredViewportState);
+  }, [deferredViewportState]);
+
+  useEffect(() => {
+    console.log('[ViewportDebug] visibleViewport updated:', visibleViewport);
+  }, [visibleViewport]);
+
+  // Add logging for scroll position changes
+  useEffect(() => {
+    console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
+  }, [scrollPosition]);
+
+  // Add logging to handleViewportChange (minimap click handler)
   const handleViewportChange = useCallback(
     (newScrollLeft: number, newScrollTop: number) => {
+      console.log('[MinimapDebug] handleViewportChange called with:', { newScrollLeft, newScrollTop });
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollTo({
           left: newScrollLeft,
@@ -2106,6 +2123,11 @@ export function TechTreeViewer() {
   // Simplified isNodeInViewport function
   const isNodeInViewport = useCallback(
     (node: TechNode) => {
+      // Debug log for important nodes like Stone Tool
+      const IMPORTANT_NODES = ["Stone tool"];
+      const DEBUG_INTERVAL = 2000; // Only log every 2 seconds
+      const now = Date.now();
+      
       // Nodes without position data can't be in viewport
       if (node.x === undefined || node.y === undefined) {
         return false;
@@ -2121,12 +2143,27 @@ export function TechTreeViewer() {
       };
 
       // Simple bounds check
-      return (
+      const isVisible = (
         node.x >= bufferedViewport.left &&
         node.x <= bufferedViewport.right &&
         node.y >= bufferedViewport.top &&
         node.y <= bufferedViewport.bottom
       );
+      
+      // Log visibility for important nodes
+      if (IMPORTANT_NODES.includes(node.title) && (!window.lastNodeVisibilityLog || now - window.lastNodeVisibilityLog > DEBUG_INTERVAL)) {
+        window.lastNodeVisibilityLog = now;
+        console.log(`[NodeVisibility] "${node.title}" visibility check:`, {
+          isVisible,
+          node: { x: node.x, y: node.y, id: node.id },
+          bufferedViewport,
+          deferredViewportState,
+          scrollPosition,
+          time: new Date().toLocaleTimeString()
+        });
+      }
+      
+      return isVisible;
     },
     [deferredViewportState, scrollPosition]
   );
@@ -2203,13 +2240,26 @@ export function TechTreeViewer() {
     const VIEWPORT_UPDATE_THROTTLE = 100; // ms - faster updates
     
     const updateVisibleViewport = () => {
-      if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) return;
+      if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) {
+        console.log('[ScrollDebug] Scroll containers not found', {
+          horizontalExists: !!horizontalScrollContainerRef.current,
+          verticalExists: !!verticalScrollContainerRef.current,
+          time: new Date().toLocaleTimeString()
+        });
+        return;
+      }
       
       const now = performance.now();
       if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
       
       const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
       const verticalScroll = verticalScrollContainerRef.current.scrollTop;
+      
+      console.log('[ScrollDebug] Scroll positions updated', {
+        horizontalScroll,
+        verticalScroll,
+        time: new Date().toLocaleTimeString()
+      });
       
       // Update the scrollPosition state for the minimap
       setScrollPosition({
@@ -2228,23 +2278,13 @@ export function TechTreeViewer() {
         bottom: verticalScroll + height,
       };
 
-      // Only log if something significant changed
-      const hasSignificantChange = 
-        Math.abs(newViewport.left - visibleViewport.left) > 50 ||
-        Math.abs(newViewport.right - visibleViewport.right) > 50 ||
-        Math.abs(newViewport.top - visibleViewport.top) > 50 ||
-        Math.abs(newViewport.bottom - visibleViewport.bottom) > 50;
-        
-      if (hasSignificantChange && now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
-        console.log('[Debug] Viewport update:', {
-          viewport: newViewport,
-          scrollPosition: { left: horizontalScroll, top: verticalScroll },
-          previousViewport: visibleViewport,
-          containerDimensions,
-          windowSize: { width: window.innerWidth, height: window.innerHeight },
-          time: new Date().toLocaleTimeString()
-        });
-      }
+      console.log('[ViewportDebug] Calculated new viewport', {
+        newViewport,
+        oldViewport: visibleViewport,
+        width,
+        height,
+        time: new Date().toLocaleTimeString()
+      });
 
       lastViewportUpdate.current = now;
       setVisibleViewport(newViewport);
@@ -2252,6 +2292,10 @@ export function TechTreeViewer() {
       // Defer viewport update to next frame for stability in calculations
       requestAnimationFrame(() => {
         setDeferredViewport(newViewport);
+        console.log('[ViewportDebug] Updated deferred viewport', {
+          newViewport,
+          time: new Date().toLocaleTimeString()
+        });
       });
     };
     
@@ -2267,6 +2311,20 @@ export function TechTreeViewer() {
     if (horizontalContainer && verticalContainer) {
       horizontalContainer.addEventListener('scroll', throttledUpdate);
       verticalContainer.addEventListener('scroll', throttledUpdate);
+      
+      console.log('[ScrollDebug] Attached scroll listeners', {
+        horizontalId: horizontalContainer.id,
+        horizontalClass: horizontalContainer.className,
+        verticalId: verticalContainer.id,
+        verticalClass: verticalContainer.className,
+        time: new Date().toLocaleTimeString()
+      });
+    } else {
+      console.warn('[ScrollDebug] Failed to attach scroll listeners - containers not found', {
+        horizontalExists: !!horizontalContainer,
+        verticalExists: !!verticalContainer,
+        time: new Date().toLocaleTimeString()
+      });
     }
     
     // Also update on window resize and after a short delay for stability
@@ -2279,6 +2337,9 @@ export function TechTreeViewer() {
       if (horizontalContainer && verticalContainer) {
         horizontalContainer.removeEventListener('scroll', throttledUpdate);
         verticalContainer.removeEventListener('scroll', throttledUpdate);
+        console.log('[ScrollDebug] Removed scroll listeners', {
+          time: new Date().toLocaleTimeString()
+        });
       }
       window.removeEventListener('resize', throttledUpdate);
     };
@@ -2448,6 +2509,15 @@ export function TechTreeViewer() {
       top: Math.floor(deferredViewportState.top / 100) * 100,
       bottom: Math.ceil(deferredViewportState.bottom / 100) * 100
     };
+
+    // Log the viewport values being used
+    console.log('[ViewportCalculation] Viewport values used for visibility check:', {
+      deferredViewportState,
+      stableViewport,
+      originalViewport: visibleViewport,
+      scrollPosition,
+      time: new Date().toLocaleTimeString()
+    });
     
     // Create current frame data for comparison
     const currentFrameData = {
