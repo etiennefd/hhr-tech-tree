@@ -421,6 +421,44 @@ function logPerformance(operation: string, data: Record<string, any>) {
   }
 }
 
+// Add this component for debugging - will show in corner of screen only in dev mode
+function DebugOverlay({
+  viewport,
+  scrollPosition,
+  totalNodes,
+  visibleNodes
+}: {
+  viewport: any;
+  scrollPosition: any;
+  totalNodes: number;
+  visibleNodes: number;
+}) {
+  // Only render in development mode
+  if (process.env.NODE_ENV !== 'development') return null;
+  
+  return (
+    <div 
+      style={{
+        position: 'fixed',
+        bottom: '70px',
+        left: '10px',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        color: 'white',
+        padding: '8px',
+        borderRadius: '4px',
+        fontSize: '12px',
+        zIndex: 9999,
+        maxWidth: '300px',
+        fontFamily: 'monospace'
+      }}
+    >
+      <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
+      <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
+      <div><strong>Visible:</strong> {visibleNodes}/{totalNodes} nodes</div>
+    </div>
+  );
+}
+
 export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
@@ -3640,6 +3678,15 @@ export function TechTreeViewer() {
           />
         )}
       </div>
+      {/* Only render debug overlay in development mode */}
+      {process.env.NODE_ENV === 'development' && (
+        <DebugOverlay
+          viewport={visibleViewport}
+          scrollPosition={scrollPosition}
+          totalNodes={data.nodes.length}
+          visibleNodes={visibleNodes.length}
+        />
+      )}
     </div>
   );
 }
