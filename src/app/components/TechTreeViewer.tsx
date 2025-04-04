@@ -2200,7 +2200,7 @@ export function TechTreeViewer() {
       }
 
       // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 4, 250);
+      const buffer = Math.min(window.innerWidth / 3, 350);
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2234,7 +2234,7 @@ export function TechTreeViewer() {
       }
 
       // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 4, 250);
+      const buffer = Math.min(window.innerWidth / 3, 350);
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2283,7 +2283,7 @@ export function TechTreeViewer() {
     logPerformance('viewport_diagnostics', {
       viewport: visibleViewport,
       containerDimensions,
-      maxBuffer: Math.min(window.innerWidth / 4, 250),
+      maxBuffer: Math.min(window.innerWidth / 3, 350),
       timestamp
     });
   }, [visibleViewport, containerDimensions]);
@@ -2731,7 +2731,7 @@ export function TechTreeViewer() {
     });
 
     // Add cached nodes only if they're near the viewport
-    const CACHE_VIEWPORT_BUFFER = 500; // pixels
+    const CACHE_VIEWPORT_BUFFER = 700; // pixels
     const extendedViewport = {
       left: stableViewport.left - CACHE_VIEWPORT_BUFFER,
       right: stableViewport.right + CACHE_VIEWPORT_BUFFER,
@@ -2857,7 +2857,7 @@ export function TechTreeViewer() {
 
   // Add effect to manage the cache of nodes and connections
   useEffect(() => {
-    const CACHE_VIEWPORT_BUFFER = 1000; // Larger buffer for cache than for visibility
+    const CACHE_VIEWPORT_BUFFER = 1400; // Larger buffer for cache than for visibility
     const extendedViewport = {
       left: visibleViewport.left - CACHE_VIEWPORT_BUFFER,
       right: visibleViewport.right + CACHE_VIEWPORT_BUFFER,
