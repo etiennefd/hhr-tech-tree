@@ -1096,32 +1096,20 @@ export function TechTreeViewer() {
   // Add logging to handleViewportChange (minimap click handler)
   const handleViewportChange = useCallback(
     (newScrollLeft: number, newScrollTop: number) => {
-      console.log('[MinimapDebug] handleViewportChange called with:', { newScrollLeft, newScrollTop });
-      
-      // Update horizontal scroll
+      // Our main container handles both horizontal and vertical scrolling
+      // So we need to apply both coordinates to the same container
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollTo({
           left: newScrollLeft,
-          behavior: "instant",
-        });
-      }
-      
-      // Update vertical scroll - use the correct vertical container
-      const verticalContainer = verticalScrollContainerRef.current;
-      if (verticalContainer) {
-        // Use the vertical container for vertical scrolling
-        verticalContainer.scrollTo({
           top: newScrollTop,
           behavior: "instant",
         });
-        console.log('[ScrollDebug] Applied vertical scroll to container:', newScrollTop);
-      } else {
-        // Fallback to window scrolling if no container is found
-        window.scrollTo({
-          top: newScrollTop,
-          behavior: "instant"
+        
+        // Force update the scroll position state to ensure minimap sync
+        setScrollPosition({
+          left: newScrollLeft,
+          top: newScrollTop
         });
-        console.log('[ScrollDebug] Applied vertical scroll to window:', newScrollTop);
       }
     },
     []
