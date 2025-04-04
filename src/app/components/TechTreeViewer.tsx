@@ -2233,8 +2233,8 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 3, 350);
+      // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling
+      const buffer = Math.min(window.innerWidth / 2, 500);
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2257,18 +2257,41 @@ export function TechTreeViewer() {
       
       // Also check if connection crosses viewport even if endpoints are outside
       if (!isSourceInViewport && !isTargetInViewport) {
-        // Simple line segment intersection with viewport borders
-        // This is a basic approximation - only checking if the line might cross the viewport
-        const minX = Math.min(sourceNode.x, targetNode.x);
-        const maxX = Math.max(sourceNode.x, targetNode.x);
-        const minY = Math.min(sourceNode.y, targetNode.y);
-        const maxY = Math.max(sourceNode.y, targetNode.y);
+        // Calculate control points for the bezier curve (simplified approximation)
+        const isSameYear = Math.abs(sourceNode.x - targetNode.x) < 160;
+        const controlPointOffset = Math.min(Math.abs(sourceNode.x - targetNode.x) * 0.5, 200);
         
+        let cx1, cy1, cx2, cy2;
+        
+        if (isSameYear) {
+          // For same-year connections (s-curve)
+          const horizontalOffset = 200;
+          cx1 = sourceNode.x + horizontalOffset;
+          cy1 = sourceNode.y - Math.sign(sourceNode.y - targetNode.y) * 50;
+          cx2 = targetNode.x - horizontalOffset;
+          cy2 = targetNode.y - Math.sign(targetNode.y - sourceNode.y) * 50;
+        } else {
+          // For regular connections
+          cx1 = sourceNode.x + controlPointOffset;
+          cy1 = sourceNode.y;
+          cx2 = targetNode.x - controlPointOffset;
+          cy2 = targetNode.y;
+        }
+        
+        // Check if bounding box of the curve intersects the viewport
+        const curveBoundingBox = {
+          left: Math.min(sourceNode.x, targetNode.x, cx1, cx2),
+          right: Math.max(sourceNode.x, targetNode.x, cx1, cx2),
+          top: Math.min(sourceNode.y, targetNode.y, cy1, cy2),
+          bottom: Math.max(sourceNode.y, targetNode.y, cy1, cy2),
+        };
+        
+        // Return true if the bounding box of the curve intersects the viewport
         return !(
-          maxX < bufferedViewport.left ||
-          minX > bufferedViewport.right ||
-          maxY < bufferedViewport.top ||
-          minY > bufferedViewport.bottom
+          curveBoundingBox.right < bufferedViewport.left ||
+          curveBoundingBox.left > bufferedViewport.right ||
+          curveBoundingBox.bottom < bufferedViewport.top ||
+          curveBoundingBox.top > bufferedViewport.bottom
         );
       }
       
@@ -2283,7 +2306,7 @@ export function TechTreeViewer() {
     logPerformance('viewport_diagnostics', {
       viewport: visibleViewport,
       containerDimensions,
-      maxBuffer: Math.min(window.innerWidth / 3, 350),
+      maxBuffer: Math.min(window.innerWidth / 2, 500),
       timestamp
     });
   }, [visibleViewport, containerDimensions]);
@@ -2758,10 +2781,13 @@ export function TechTreeViewer() {
       if (visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target)) {
         visibleConnectionIndices.add(index);
       }
-      // Or if it's in viewport and at least one node is visible
-      else if (isConnectionInViewport(link, index) && 
-               (visibleNodeIds.has(link.source) || visibleNodeIds.has(link.target))) {
+      // Or if it's in viewport (even if no nodes are visible, add both source and target)
+      else if (isConnectionInViewport(link, index)) {
         visibleConnectionIndices.add(index);
+        
+        // Always add both source and target nodes to ensure the connection has its endpoints
+        visibleNodeIds.add(link.source);
+        visibleNodeIds.add(link.target);
       }
     });
     
@@ -2857,7 +2883,7 @@ export function TechTreeViewer() {
 
   // Add effect to manage the cache of nodes and connections
   useEffect(() => {
-    const CACHE_VIEWPORT_BUFFER = 1400; // Larger buffer for cache than for visibility
+    const CACHE_VIEWPORT_BUFFER = 2000; // Larger buffer for cache than for visibility
     const extendedViewport = {
       left: visibleViewport.left - CACHE_VIEWPORT_BUFFER,
       right: visibleViewport.right + CACHE_VIEWPORT_BUFFER,
