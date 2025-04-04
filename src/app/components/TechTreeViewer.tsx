@@ -452,7 +452,7 @@ function DebugOverlay({
         borderRadius: '4px',
         fontSize: '12px',
         zIndex: 9999,
-        maxWidth: '300px',
+        maxWidth: '400px',
         fontFamily: 'monospace'
       }}
     >
