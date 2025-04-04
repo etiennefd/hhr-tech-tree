@@ -1058,6 +1058,36 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions]);
 
+  // Update the scrollPosition state based on onScroll event
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (
+        target === horizontalScrollContainerRef.current ||
+        target === document.documentElement
+      ) {
+        const newScrollPosition = {
+          left:
+            horizontalScrollContainerRef.current?.scrollLeft ||
+            window.scrollX ||
+            document.documentElement.scrollLeft ||
+            0,
+          top:
+            horizontalScrollContainerRef.current?.scrollTop ||
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            0,
+        };
+
+        setScrollPosition(newScrollPosition);
+        // console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
+      }
+    };
+
+    document.addEventListener("scroll", handleScroll, true);
+    return () => document.removeEventListener("scroll", handleScroll, true);
+  }, []);
+
   // Add logging for scroll position changes
   useEffect(() => {
     console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
