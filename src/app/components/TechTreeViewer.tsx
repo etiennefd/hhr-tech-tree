@@ -2123,11 +2123,6 @@ export function TechTreeViewer() {
   // Simplified isNodeInViewport function
   const isNodeInViewport = useCallback(
     (node: TechNode) => {
-      // Debug log for important nodes like Stone Tool
-      const IMPORTANT_NODES = ["Stone tool"];
-      const DEBUG_INTERVAL = 2000; // Only log every 2 seconds
-      const now = Date.now();
-      
       // Nodes without position data can't be in viewport
       if (node.x === undefined || node.y === undefined) {
         return false;
@@ -2149,19 +2144,6 @@ export function TechTreeViewer() {
         node.y >= bufferedViewport.top &&
         node.y <= bufferedViewport.bottom
       );
-      
-      // Log visibility for important nodes
-      if (IMPORTANT_NODES.includes(node.title) && (!window.lastNodeVisibilityLog || now - window.lastNodeVisibilityLog > DEBUG_INTERVAL)) {
-        window.lastNodeVisibilityLog = now;
-        console.log(`[NodeVisibility] "${node.title}" visibility check:`, {
-          isVisible,
-          node: { x: node.x, y: node.y, id: node.id },
-          bufferedViewport,
-          deferredViewportState,
-          scrollPosition,
-          time: new Date().toLocaleTimeString()
-        });
-      }
       
       return isVisible;
     },
