@@ -1067,12 +1067,31 @@ export function TechTreeViewer() {
   const handleViewportChange = useCallback(
     (newScrollLeft: number, newScrollTop: number) => {
       console.log('[MinimapDebug] handleViewportChange called with:', { newScrollLeft, newScrollTop });
+      
+      // Update horizontal scroll
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollTo({
           left: newScrollLeft,
+          behavior: "instant",
+        });
+      }
+      
+      // Update vertical scroll - use the correct vertical container
+      const verticalContainer = verticalScrollContainerRef.current;
+      if (verticalContainer) {
+        // Use the vertical container for vertical scrolling
+        verticalContainer.scrollTo({
           top: newScrollTop,
           behavior: "instant",
         });
+        console.log('[ScrollDebug] Applied vertical scroll to container:', newScrollTop);
+      } else {
+        // Fallback to window scrolling if no container is found
+        window.scrollTo({
+          top: newScrollTop,
+          behavior: "instant"
+        });
+        console.log('[ScrollDebug] Applied vertical scroll to window:', newScrollTop);
       }
     },
     []
@@ -3090,7 +3109,7 @@ export function TechTreeViewer() {
 
       <div
         ref={horizontalScrollContainerRef}
-        className="overflow-auto h-screen bg-yellow-50 [&::-webkit-scrollbar]:hidden"
+        className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50 [&::-webkit-scrollbar]:hidden"
         style={{ 
           overscrollBehavior: "none",
           touchAction: "pan-x pan-y pinch-zoom",
