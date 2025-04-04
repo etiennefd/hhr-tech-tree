@@ -1058,15 +1058,6 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions]);
 
-  // Add logging for viewport state changes
-  useEffect(() => {
-    console.log('[ViewportDebug] deferredViewportState updated:', deferredViewportState);
-  }, [deferredViewportState]);
-
-  useEffect(() => {
-    console.log('[ViewportDebug] visibleViewport updated:', visibleViewport);
-  }, [visibleViewport]);
-
   // Add logging for scroll position changes
   useEffect(() => {
     console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
@@ -2599,15 +2590,6 @@ export function TechTreeViewer() {
       top: Math.floor(deferredViewportState.top / 100) * 100,
       bottom: Math.ceil(deferredViewportState.bottom / 100) * 100
     };
-
-    // Log the viewport values being used
-    console.log('[ViewportCalculation] Viewport values used for visibility check:', {
-      deferredViewportState,
-      stableViewport,
-      originalViewport: visibleViewport,
-      scrollPosition,
-      time: new Date().toLocaleTimeString()
-    });
     
     // Create current frame data for comparison
     const currentFrameData = {
@@ -2925,28 +2907,28 @@ export function TechTreeViewer() {
         }
         
         // Log cache update
-        console.log('[Cache] Updated cache:', {
-          nodes: {
-            total: data.nodes.length,
-            cached: nodesToCache.size,
-            inViewport: nodesToCache.size,
-            changed: hasNodeChanges
-          },
-          connections: {
-            total: data.links.length,
-            cached: connectionsToCache.size,
-            inViewport: connectionsToCache.size,
-            changed: hasConnectionChanges
-          },
-          viewport: {
-            visible: visibleViewport,
-            extended: extendedViewport
-          },
-          context: {
-            selectedNode: selectedNodeId,
-            highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
-          }
-        });
+        // console.log('[Cache] Updated cache:', {
+        //   nodes: {
+        //     total: data.nodes.length,
+        //     cached: nodesToCache.size,
+        //     inViewport: nodesToCache.size,
+        //     changed: hasNodeChanges
+        //   },
+        //   connections: {
+        //     total: data.links.length,
+        //     cached: connectionsToCache.size,
+        //     inViewport: connectionsToCache.size,
+        //     changed: hasConnectionChanges
+        //   },
+        //   viewport: {
+        //     visible: visibleViewport,
+        //     extended: extendedViewport
+        //   },
+        //   context: {
+        //     selectedNode: selectedNodeId,
+        //     highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
+        //   }
+        // });
       });
     }
   }, [
