@@ -5,6 +5,7 @@ declare global {
   interface Window {
     mouseX: number;
     mouseY: number;
+    lastNodeVisibilityLog?: number;
   }
 }
 
@@ -397,7 +398,7 @@ const memoEffectiveness = {
       else memoEffectiveness.misses++;
       const total = memoEffectiveness.hits + memoEffectiveness.misses;
       const hitRate = (memoEffectiveness.hits / total) * 100;
-      console.log(`[Performance] Memo effectiveness: ${hitRate.toFixed(1)}% (${memoEffectiveness.hits}/${total})`);
+      // console.log(`[Performance] Memo effectiveness: ${hitRate.toFixed(1)}% (${memoEffectiveness.hits}/${total})`);
     }
   },
   reset: () => {
@@ -418,6 +419,49 @@ function logPerformance(operation: string, data: Record<string, any>) {
     console.log(`[TechTree] ${operation}:`, data);
     lastPerformanceLog = now;
   }
+}
+
+// Add this component for debugging - will show in corner of screen only in dev mode
+function DebugOverlay({
+  viewport,
+  scrollPosition,
+  totalNodes,
+  visibleNodes,
+  totalConnections,
+  visibleConnections
+}: {
+  viewport: any;
+  scrollPosition: any;
+  totalNodes: number;
+  visibleNodes: number;
+  totalConnections: number;
+  visibleConnections: number;
+}) {
+  // Only render in development mode
+  if (process.env.NODE_ENV !== 'development') return null;
+  
+  return (
+    <div 
+      style={{
+        position: 'fixed',
+        bottom: '70px',
+        left: '10px',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        color: 'white',
+        padding: '8px',
+        borderRadius: '4px',
+        fontSize: '12px',
+        zIndex: 9999,
+        maxWidth: '400px',
+        fontFamily: 'monospace'
+      }}
+    >
+      <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
+      <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
+      <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
+      <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
+    </div>
+  );
 }
 
 export function TechTreeViewer() {
@@ -461,9 +505,16 @@ export function TechTreeViewer() {
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
     left: 0,
-    right: 0,
+    right: window.innerWidth,  // Initialize with window dimensions instead of zeros
     top: 0,
-    bottom: 0,
+    bottom: window.innerHeight, // Initialize with window dimensions instead of zeros
+  });
+  // Create a deferred version of the viewport for stable calculations
+  const [deferredViewportState, setDeferredViewport] = useState({
+    left: 0,
+    right: window.innerWidth,
+    top: 0,
+    bottom: window.innerHeight,
   });
 
   // Add viewport update tracking
@@ -881,6 +932,63 @@ export function TechTreeViewer() {
             links: detailData.links || [] 
           });
           currentNodesRef.current = positionedDetailNodes;
+          
+          // Initialize spatial index with the newly loaded data
+          console.log('[Debug] Initializing spatial index with', positionedDetailNodes.length, 'nodes and', detailData.links?.length || 0, 'connections');
+          
+          // Find data bounds
+          let minX = Infinity;
+          let maxX = -Infinity;
+          let minY = Infinity;
+          let maxY = -Infinity;
+          
+          positionedDetailNodes.forEach(node => {
+            if (node.x !== undefined) {
+              minX = Math.min(minX, node.x);
+              maxX = Math.max(maxX, node.x);
+            }
+            if (node.y !== undefined) {
+              minY = Math.min(minY, node.y);
+              maxY = Math.max(maxY, node.y);
+            }
+          });
+          
+          // Calculate optimal cell size (aim for ~100-200 cells total)
+          const width = maxX - minX;
+          const height = maxY - minY;
+          const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
+          
+          // Create fresh spatial index with optimal cell size
+          spatialIndexRef.current = new SpatialIndex(cellSize);
+          
+          // Add all nodes to spatial index
+          positionedDetailNodes.forEach(node => {
+            if (node.x !== undefined && node.y !== undefined) {
+              spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
+            }
+          });
+          
+          // Add all connections to spatial index
+          (detailData.links || []).forEach((link: Link, index: number) => {
+            const sourceNode = positionedDetailNodes.find(n => n.id === link.source);
+            const targetNode = positionedDetailNodes.find(n => n.id === link.target);
+            
+            if (sourceNode?.x !== undefined && sourceNode?.y !== undefined && 
+                targetNode?.x !== undefined && targetNode?.y !== undefined) {
+              spatialIndexRef.current.addConnection(
+                index,
+                { x: sourceNode.x, y: sourceNode.y },
+                { x: targetNode.x, y: targetNode.y }
+              );
+            }
+          });
+          
+          console.log('[Debug] Spatial index initialized:', {
+            cellSize,
+            totalNodes: positionedDetailNodes.length,
+            totalConnections: detailData.links?.length || 0,
+            bounds: { left: minX, right: maxX, top: minY, bottom: maxY }
+          });
         }
 
         // Cache complete fresh data with validated nodes
@@ -908,32 +1016,112 @@ export function TechTreeViewer() {
     };
   }, [calculateNodePositions]);
 
-  // Window resize handler
-  // Window resize handler only
+  // Make sure containerDimensions are initialized with window size
   useEffect(() => {
-    const handleResize = () => {
+    const updateContainerDimensions = () => {
       setContainerDimensions({
         width: window.innerWidth,
         height: window.innerHeight,
       });
     };
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
+    // Set initial dimensions
+    updateContainerDimensions();
+
+    // Set up listener for resize
+    window.addEventListener('resize', updateContainerDimensions);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', updateContainerDimensions);
     };
   }, []);
 
+  // Initialize viewport properly on first load and component mount
+  useEffect(() => {
+    if (containerDimensions.width > 0 && containerDimensions.height > 0) {
+      // Initialize with proper dimensions
+      const initialViewport = {
+        left: 0,
+        right: containerDimensions.width,
+        top: 0,
+        bottom: containerDimensions.height,
+      };
+      
+      console.log('[Debug] Initializing viewport with proper dimensions:', {
+        viewport: initialViewport,
+        containerDimensions,
+        windowSize: { width: window.innerWidth, height: window.innerHeight }
+      });
+      
+      setVisibleViewport(initialViewport);
+      setDeferredViewport(initialViewport);
+    }
+  }, [containerDimensions]);
+
+  // Update the scrollPosition state based on onScroll event
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (
+        target === horizontalScrollContainerRef.current ||
+        target === document.documentElement
+      ) {
+        const newScrollPosition = {
+          left:
+            horizontalScrollContainerRef.current?.scrollLeft ||
+            window.scrollX ||
+            document.documentElement.scrollLeft ||
+            0,
+          top:
+            horizontalScrollContainerRef.current?.scrollTop ||
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            0,
+        };
+
+        setScrollPosition(newScrollPosition);
+        // console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
+      }
+    };
+
+    document.addEventListener("scroll", handleScroll, true);
+    return () => document.removeEventListener("scroll", handleScroll, true);
+  }, []);
+
+  // Add logging for scroll position changes
+  useEffect(() => {
+    console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
+  }, [scrollPosition]);
+
+  // Add logging to handleViewportChange (minimap click handler)
   const handleViewportChange = useCallback(
     (newScrollLeft: number, newScrollTop: number) => {
+      console.log('[MinimapDebug] handleViewportChange called with:', { newScrollLeft, newScrollTop });
+      
+      // Update horizontal scroll
       if (horizontalScrollContainerRef.current) {
         horizontalScrollContainerRef.current.scrollTo({
           left: newScrollLeft,
+          behavior: "instant",
+        });
+      }
+      
+      // Update vertical scroll - use the correct vertical container
+      const verticalContainer = verticalScrollContainerRef.current;
+      if (verticalContainer) {
+        // Use the vertical container for vertical scrolling
+        verticalContainer.scrollTo({
           top: newScrollTop,
           behavior: "instant",
         });
+        console.log('[ScrollDebug] Applied vertical scroll to container:', newScrollTop);
+      } else {
+        // Fallback to window scrolling if no container is found
+        window.scrollTo({
+          top: newScrollTop,
+          behavior: "instant"
+        });
+        console.log('[ScrollDebug] Applied vertical scroll to window:', newScrollTop);
       }
     },
     []
@@ -2015,86 +2203,90 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions.width, containerDimensions.height]);
 
-  // Update the isNodeInViewport function to use data.nodes directly
+  // Simplified isNodeInViewport function
   const isNodeInViewport = useCallback(
     (node: TechNode) => {
-      // If no viewport is set yet, show everything initially
-      if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) {
-        return true;
+      // Nodes without position data can't be in viewport
+      if (node.x === undefined || node.y === undefined) {
+        return false;
       }
 
-      // Use a smaller buffer size - quarter window width but max 250px
+      // Use a reasonable buffer for better user experience
       const buffer = Math.min(window.innerWidth / 4, 250);
       const bufferedViewport = {
-        left: visibleViewport.left - buffer,
-        right: visibleViewport.right + buffer,
-        top: visibleViewport.top - buffer,
-        bottom: visibleViewport.bottom + buffer,
+        left: deferredViewportState.left - buffer,
+        right: deferredViewportState.right + buffer,
+        top: deferredViewportState.top - buffer,
+        bottom: deferredViewportState.bottom + buffer,
       };
 
-      // Add debug logging for viewport checks
-      const isVisible = spatialIndexRef.current.getNodesInViewport(bufferedViewport).has(node.id);
+      // Simple bounds check
+      const isVisible = (
+        node.x >= bufferedViewport.left &&
+        node.x <= bufferedViewport.right &&
+        node.y >= bufferedViewport.top &&
+        node.y <= bufferedViewport.bottom
+      );
       
-      // Log viewport check results periodically
-      const now = performance.now();
-      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
-        console.log('[Debug] Viewport check:', {
-          viewport: bufferedViewport,
-          actualViewport: visibleViewport,
-          buffer,
-          windowSize: { width: window.innerWidth, height: window.innerHeight },
-          time: new Date().toLocaleTimeString()
-        });
-      }
-
       return isVisible;
     },
-    [visibleViewport]
+    [deferredViewportState, scrollPosition]
   );
 
-  // Update isConnectionInViewport to use the same buffer
+  // Simplified isConnectionInViewport function
   const isConnectionInViewport = useCallback(
     (link: Link, index: number) => {
-      // If no viewport is set yet, show everything initially
-      if (!visibleViewport || !visibleViewport.right || !visibleViewport.bottom) return true;
+      // Get the source and target nodes
+      const sourceNode = data.nodes.find(n => n.id === link.source);
+      const targetNode = data.nodes.find(n => n.id === link.target);
       
-      // Use the same buffer as nodes
-      const buffer = Math.min(window.innerWidth / 4, 250);
-      const bufferedViewport = {
-        left: visibleViewport.left - buffer,
-        right: visibleViewport.right + buffer,
-        top: visibleViewport.top - buffer,
-        bottom: visibleViewport.bottom + buffer,
-      };
-
-      // Add debug logging for connection viewport checks
-      const isVisible = spatialIndexRef.current.getConnectionsInViewport(bufferedViewport).has(index);
-      
-      // Log viewport check results periodically
-      const now = performance.now();
-      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
-        const sourceNode = data.nodes.find(n => n.id === link.source);
-        const targetNode = data.nodes.find(n => n.id === link.target);
-        
-        logPerformance('connection_viewport_check', {
-          connectionIndex: index,
-          sourcePosition: sourceNode ? { x: sourceNode.x, y: sourceNode.y } : null,
-          targetPosition: targetNode ? { x: targetNode.x, y: targetNode.y } : null,
-          viewport: bufferedViewport,
-          actualViewport: visibleViewport,
-          buffer,
-          isVisible,
-          totalVisibleConnections: spatialIndexRef.current.getConnectionsInViewport(bufferedViewport).size,
-          windowDimensions: {
-            width: window.innerWidth,
-            height: window.innerHeight
-          }
-        });
+      // If we can't find either node with valid positions, connection can't be in viewport
+      if (!sourceNode?.x || !sourceNode?.y || !targetNode?.x || !targetNode?.y) {
+        return false;
       }
 
-      return isVisible;
+      // Use a reasonable buffer for better user experience
+      const buffer = Math.min(window.innerWidth / 4, 250);
+      const bufferedViewport = {
+        left: deferredViewportState.left - buffer,
+        right: deferredViewportState.right + buffer,
+        top: deferredViewportState.top - buffer,
+        bottom: deferredViewportState.bottom + buffer,
+      };
+
+      // Connection is visible if either end is in viewport
+      const isSourceInViewport = 
+        sourceNode.x >= bufferedViewport.left &&
+        sourceNode.x <= bufferedViewport.right &&
+        sourceNode.y >= bufferedViewport.top &&
+        sourceNode.y <= bufferedViewport.bottom;
+      
+      const isTargetInViewport = 
+        targetNode.x >= bufferedViewport.left &&
+        targetNode.x <= bufferedViewport.right &&
+        targetNode.y >= bufferedViewport.top &&
+        targetNode.y <= bufferedViewport.bottom;
+      
+      // Also check if connection crosses viewport even if endpoints are outside
+      if (!isSourceInViewport && !isTargetInViewport) {
+        // Simple line segment intersection with viewport borders
+        // This is a basic approximation - only checking if the line might cross the viewport
+        const minX = Math.min(sourceNode.x, targetNode.x);
+        const maxX = Math.max(sourceNode.x, targetNode.x);
+        const minY = Math.min(sourceNode.y, targetNode.y);
+        const maxY = Math.max(sourceNode.y, targetNode.y);
+        
+        return !(
+          maxX < bufferedViewport.left ||
+          minX > bufferedViewport.right ||
+          maxY < bufferedViewport.top ||
+          minY > bufferedViewport.bottom
+        );
+      }
+      
+      return isSourceInViewport || isTargetInViewport;
     },
-    [visibleViewport, data.nodes]
+    [deferredViewportState, data.nodes]
   );
 
   // Add viewport diagnostic logging
@@ -2108,79 +2300,180 @@ export function TechTreeViewer() {
     });
   }, [visibleViewport, containerDimensions]);
 
-  // Update the scroll handler to be more selective about viewport updates
+  // Update the scroll handler to find containers at the right time
   useEffect(() => {
-    const VIEWPORT_UPDATE_THRESHOLD = 100; // pixels
-    const VIEWPORT_UPDATE_THROTTLE = 150; // ms
+    const VIEWPORT_UPDATE_THROTTLE = 100; // ms
     
-    const updateVisibleViewport = () => {
-      if (!horizontalScrollContainerRef.current || !verticalScrollContainerRef.current) return;
+    // Store local references to avoid read-only ref issues
+    let hContainer: HTMLDivElement | null = null;
+    let vContainer: HTMLDivElement | null = null;
+    
+    const findContainers = () => {
+      // First try the refs
+      if (horizontalScrollContainerRef.current) {
+        hContainer = horizontalScrollContainerRef.current;
+      }
+      if (verticalScrollContainerRef.current) {
+        vContainer = verticalScrollContainerRef.current;
+      }
+      
+      // Try to find horizontal container if not found yet
+      if (!hContainer) {
+        const foundH = document.querySelector('.overflow-x-auto') || 
+                       document.querySelector('[ref=horizontalScrollContainerRef]') ||
+                       document.querySelector('div[style*="overflow-x"]');
+        if (foundH) {
+          hContainer = foundH as HTMLDivElement;
+          console.log('[ContainerDebug] Found horizontal container:', {
+            class: hContainer.className,
+            id: hContainer.id
+          });
+        }
+      }
+      
+      // Try to find vertical container if not found yet
+      if (!vContainer) {
+        const foundV = document.querySelector('.overflow-y-auto') ||
+                       document.querySelector('[ref=verticalScrollContainerRef]') ||
+                       document.querySelector('div[style*="overflow-y"]');
+        if (foundV) {
+          vContainer = foundV as HTMLDivElement;
+          console.log('[ContainerDebug] Found vertical container:', {
+            class: vContainer.className,
+            id: vContainer.id
+          });
+        }
+      }
+
+      return { hContainer, vContainer };
+    };
+    
+    // Create throttled update function for scroll events
+    const throttledUpdate = throttle(() => {
+      const { hContainer, vContainer } = findContainers();
+      
+      if (!hContainer) {
+        console.log('[ScrollDebug] Horizontal container missing, trying again shortly...');
+        setTimeout(findContainers, 100);
+        return;
+      }
       
       const now = performance.now();
       if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
       
-      const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
-      const verticalScroll = verticalScrollContainerRef.current.scrollTop;
+      // Get horizontal scroll from the horizontal container
+      const horizontalScroll = hContainer.scrollLeft;
       
-      // Only update if scroll position has changed significantly OR viewport is zero
-      const isInitialViewport = !visibleViewport.right && !visibleViewport.bottom;
-      const hasSignificantChange = isInitialViewport || (
-        Math.abs(horizontalScroll - visibleViewport.left) > VIEWPORT_UPDATE_THRESHOLD ||
-        Math.abs(verticalScroll - visibleViewport.top) > VIEWPORT_UPDATE_THRESHOLD
-      );
-
-      if (!hasSignificantChange) return;
-
-      lastViewportUpdate.current = now;
+      // Get vertical scroll from either the vertical container OR the window if container not found
+      let verticalScroll = 0;
+      if (vContainer) {
+        verticalScroll = vContainer.scrollTop;
+      } else {
+        // Fall back to window scroll position if vertical container not found
+        verticalScroll = window.scrollY || document.documentElement.scrollTop;
+      }
+      
+      console.log('[ScrollDebug] Scroll positions captured', {
+        horizontalScroll,
+        verticalScroll,
+        hasVerticalContainer: !!vContainer,
+        time: new Date().toLocaleTimeString()
+      });
+      
+      // Update the scrollPosition state for the minimap
+      setScrollPosition({
+        left: horizontalScroll,
+        top: verticalScroll
+      });
+      
+      // Calculate viewport based on scroll position and container dimensions
+      const width = containerDimensions.width || window.innerWidth;
+      const height = containerDimensions.height || window.innerHeight;
       
       const newViewport = {
         left: horizontalScroll,
-        right: horizontalScroll + containerDimensions.width,
+        right: horizontalScroll + width,
         top: verticalScroll,
-        bottom: verticalScroll + containerDimensions.height,
+        bottom: verticalScroll + height,
       };
 
-      // Log viewport updates less frequently
-      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
-        console.log('[Debug] Viewport update:', {
-          viewport: newViewport,
-          previousViewport: visibleViewport,
-          change: {
-            horizontal: horizontalScroll - visibleViewport.left,
-            vertical: verticalScroll - visibleViewport.top
-          },
-          dimensions: containerDimensions,
-          isInitialViewport,
-          time: new Date().toLocaleTimeString()
+      console.log('[ViewportDebug] Updating viewport from scroll', {
+        newViewport,
+        time: new Date().toLocaleTimeString()
+      });
+
+      lastViewportUpdate.current = now;
+      
+      // Update both viewport states
+      setVisibleViewport(newViewport);
+      requestAnimationFrame(() => {
+        setDeferredViewport(newViewport);
+      });
+    }, VIEWPORT_UPDATE_THROTTLE);
+    
+    // Add a global scroll listener to catch all scroll events
+    const globalScrollHandler = (e: Event) => {
+      // Log all scroll events for debugging
+      const target = e.target as HTMLElement;
+      if (target) {
+        console.log('[ScrollDebug] Scroll event on:', {
+          element: target.tagName,
+          class: target.className,
+          id: target.id
         });
       }
-
-      setVisibleViewport(newViewport);
+      throttledUpdate();
     };
     
-    // Force initial update
-    requestAnimationFrame(() => {
-      updateVisibleViewport();
+    // Try to find containers on mount
+    findContainers();
+    
+    // Attach to document/window for global scroll events
+    window.addEventListener('scroll', throttledUpdate, true);
+    document.addEventListener('scroll', globalScrollHandler, true);
+    
+    // Set up a MutationObserver to watch for container availability
+    const observer = new MutationObserver(() => {
+      const { hContainer, vContainer } = findContainers();
+      if (hContainer && vContainer) {
+        observer.disconnect();
+        
+        // Attach event listeners directly to the containers
+        hContainer.addEventListener('scroll', () => throttledUpdate());
+        vContainer.addEventListener('scroll', () => throttledUpdate());
+        
+        console.log('[ScrollDebug] Successfully attached scroll listeners', {
+          horizontalContainer: hContainer.className,
+          verticalContainer: vContainer.className,
+          time: new Date().toLocaleTimeString()
+        });
+        
+        // Force an update now that we have containers
+        throttledUpdate();
+      }
     });
     
-    // Add scroll event listeners with throttling
-    const throttledUpdate = throttle(updateVisibleViewport, VIEWPORT_UPDATE_THROTTLE);
+    // Start observing the document for container creation
+    observer.observe(document.body, { childList: true, subtree: true });
     
-    const horizontalContainer = horizontalScrollContainerRef.current;
-    const verticalContainer = verticalScrollContainerRef.current;
-    
-    if (horizontalContainer && verticalContainer) {
-      horizontalContainer.addEventListener('scroll', throttledUpdate);
-      verticalContainer.addEventListener('scroll', throttledUpdate);
-    }
+    // Also watch for resize events
+    window.addEventListener('resize', throttledUpdate);
     
     return () => {
-      if (horizontalContainer && verticalContainer) {
-        horizontalContainer.removeEventListener('scroll', throttledUpdate);
-        verticalContainer.removeEventListener('scroll', throttledUpdate);
+      // Clean up event listeners
+      const { hContainer, vContainer } = findContainers();
+      if (hContainer) {
+        hContainer.removeEventListener('scroll', throttledUpdate);
       }
+      if (vContainer) {
+        vContainer.removeEventListener('scroll', throttledUpdate);
+      }
+      window.removeEventListener('scroll', throttledUpdate, true);
+      document.removeEventListener('scroll', globalScrollHandler, true);
+      window.removeEventListener('resize', throttledUpdate);
+      observer.disconnect();
     };
-  }, [containerDimensions]); // Remove visibleViewport from dependencies
+  }, [containerDimensions]);
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
@@ -2341,10 +2634,10 @@ export function TechTreeViewer() {
     
     // Create stable viewport values for comparison
     const stableViewport = {
-      left: Math.floor(deferredViewport.left / 100) * 100,
-      right: Math.ceil(deferredViewport.right / 100) * 100,
-      top: Math.floor(deferredViewport.top / 100) * 100,
-      bottom: Math.ceil(deferredViewport.bottom / 100) * 100
+      left: Math.floor(deferredViewportState.left / 100) * 100,
+      right: Math.ceil(deferredViewportState.right / 100) * 100,
+      top: Math.floor(deferredViewportState.top / 100) * 100,
+      bottom: Math.ceil(deferredViewportState.bottom / 100) * 100
     };
     
     // Create current frame data for comparison
@@ -2519,7 +2812,7 @@ export function TechTreeViewer() {
     data.links,
     selectedNodeId,
     selectedLinkIndex,
-    deferredViewport,
+    deferredViewportState,
     isNodeInViewport,
     isConnectionInViewport,
     cachedNodeIds,
@@ -2663,28 +2956,28 @@ export function TechTreeViewer() {
         }
         
         // Log cache update
-        console.log('[Cache] Updated cache:', {
-          nodes: {
-            total: data.nodes.length,
-            cached: nodesToCache.size,
-            inViewport: nodesToCache.size,
-            changed: hasNodeChanges
-          },
-          connections: {
-            total: data.links.length,
-            cached: connectionsToCache.size,
-            inViewport: connectionsToCache.size,
-            changed: hasConnectionChanges
-          },
-          viewport: {
-            visible: visibleViewport,
-            extended: extendedViewport
-          },
-          context: {
-            selectedNode: selectedNodeId,
-            highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
-          }
-        });
+        // console.log('[Cache] Updated cache:', {
+        //   nodes: {
+        //     total: data.nodes.length,
+        //     cached: nodesToCache.size,
+        //     inViewport: nodesToCache.size,
+        //     changed: hasNodeChanges
+        //   },
+        //   connections: {
+        //     total: data.links.length,
+        //     cached: connectionsToCache.size,
+        //     inViewport: connectionsToCache.size,
+        //     changed: hasConnectionChanges
+        //   },
+        //   viewport: {
+        //     visible: visibleViewport,
+        //     extended: extendedViewport
+        //   },
+        //   context: {
+        //     selectedNode: selectedNodeId,
+        //     highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
+        //   }
+        // });
       });
     }
   }, [
@@ -2846,7 +3139,7 @@ export function TechTreeViewer() {
 
       <div
         ref={horizontalScrollContainerRef}
-        className="overflow-auto h-screen bg-yellow-50 [&::-webkit-scrollbar]:hidden"
+        className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50 [&::-webkit-scrollbar]:hidden"
         style={{ 
           overscrollBehavior: "none",
           touchAction: "pan-x pan-y pinch-zoom",
@@ -3421,6 +3714,17 @@ export function TechTreeViewer() {
           />
         )}
       </div>
+      {/* Only render debug overlay in development mode */}
+      {process.env.NODE_ENV === 'development' && (
+        <DebugOverlay
+          viewport={visibleViewport}
+          scrollPosition={scrollPosition}
+          totalNodes={data.nodes.length}
+          visibleNodes={visibleNodes.length}
+          totalConnections={data.links.length}
+          visibleConnections={visibleConnections.length}
+        />
+      )}
     </div>
   );
 }
