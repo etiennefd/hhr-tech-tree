@@ -2221,43 +2221,56 @@ export function TechTreeViewer() {
   useEffect(() => {
     const VIEWPORT_UPDATE_THROTTLE = 100; // ms
     
-    // Get container references reliably, ensuring they're found after mounting
-    let horizontalContainer = horizontalScrollContainerRef.current;
-    let verticalContainer = verticalScrollContainerRef.current;
+    // Store local references to avoid read-only ref issues
+    let hContainer: HTMLDivElement | null = null;
+    let vContainer: HTMLDivElement | null = null;
     
     const findContainers = () => {
-      // Try to find containers if refs aren't set yet
-      if (!horizontalContainer) {
-        // Try multiple selectors to find the horizontal container
-        const hContainer = document.querySelector('.overflow-x-auto') || 
-                           document.querySelector('[ref=horizontalScrollContainerRef]') ||
-                           document.querySelector('.tech-tree-container > .overflow-x-auto');
-        if (hContainer) {
-          horizontalContainer = hContainer as HTMLDivElement;
-          // Don't update ref here as it's read-only in strict mode
+      // First try the refs
+      if (horizontalScrollContainerRef.current) {
+        hContainer = horizontalScrollContainerRef.current;
+      }
+      if (verticalScrollContainerRef.current) {
+        vContainer = verticalScrollContainerRef.current;
+      }
+      
+      // Try to find horizontal container if not found yet
+      if (!hContainer) {
+        const foundH = document.querySelector('.overflow-x-auto') || 
+                       document.querySelector('[ref=horizontalScrollContainerRef]') ||
+                       document.querySelector('div[style*="overflow-x"]');
+        if (foundH) {
+          hContainer = foundH as HTMLDivElement;
+          console.log('[ContainerDebug] Found horizontal container:', {
+            class: hContainer.className,
+            id: hContainer.id
+          });
         }
       }
       
-      if (!verticalContainer && horizontalContainer) {
-        // The vertical container is a child of the horizontal container
-        const vContainer = horizontalContainer.querySelector('.overflow-y-auto') ||
-                           horizontalContainer.querySelector('[ref=verticalScrollContainerRef]') ||
-                           document.querySelector('.overflow-y-auto');
-        if (vContainer) {
-          verticalContainer = vContainer as HTMLDivElement;
-          // Don't update ref here as it's read-only in strict mode
+      // Try to find vertical container if not found yet
+      if (!vContainer) {
+        const foundV = document.querySelector('.overflow-y-auto') ||
+                       document.querySelector('[ref=verticalScrollContainerRef]') ||
+                       document.querySelector('div[style*="overflow-y"]');
+        if (foundV) {
+          vContainer = foundV as HTMLDivElement;
+          console.log('[ContainerDebug] Found vertical container:', {
+            class: vContainer.className,
+            id: vContainer.id
+          });
         }
       }
 
-      return { horizontalContainer, verticalContainer };
+      return { hContainer, vContainer };
     };
     
-    const updateVisibleViewport = () => {
-      const containers = findContainers();
+    // Create throttled update function for scroll events
+    const throttledUpdate = throttle(() => {
+      const { hContainer, vContainer } = findContainers();
       
-      if (!containers.horizontalContainer || !containers.verticalContainer) {
-        console.log('[ScrollDebug] Container refs missing, trying again shortly...');
-        // Try again in a moment - the DOM might not be ready
+      if (!hContainer) {
+        console.log('[ScrollDebug] Horizontal container missing, trying again shortly...');
         setTimeout(findContainers, 100);
         return;
       }
@@ -2265,12 +2278,22 @@ export function TechTreeViewer() {
       const now = performance.now();
       if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
       
-      const horizontalScroll = containers.horizontalContainer.scrollLeft;
-      const verticalScroll = containers.verticalContainer.scrollTop;
+      // Get horizontal scroll from the horizontal container
+      const horizontalScroll = hContainer.scrollLeft;
+      
+      // Get vertical scroll from either the vertical container OR the window if container not found
+      let verticalScroll = 0;
+      if (vContainer) {
+        verticalScroll = vContainer.scrollTop;
+      } else {
+        // Fall back to window scroll position if vertical container not found
+        verticalScroll = window.scrollY || document.documentElement.scrollTop;
+      }
       
       console.log('[ScrollDebug] Scroll positions captured', {
         horizontalScroll,
         verticalScroll,
+        hasVerticalContainer: !!vContainer,
         time: new Date().toLocaleTimeString()
       });
       
@@ -2303,64 +2326,66 @@ export function TechTreeViewer() {
       requestAnimationFrame(() => {
         setDeferredViewport(newViewport);
       });
+    }, VIEWPORT_UPDATE_THROTTLE);
+    
+    // Add a global scroll listener to catch all scroll events
+    const globalScrollHandler = (e: Event) => {
+      // Log all scroll events for debugging
+      const target = e.target as HTMLElement;
+      if (target) {
+        console.log('[ScrollDebug] Scroll event on:', {
+          element: target.tagName,
+          class: target.className,
+          id: target.id
+        });
+      }
+      throttledUpdate();
     };
     
-    // Try to find containers immediately after mount
+    // Try to find containers on mount
     findContainers();
     
-    // Force initial update once component is mounted
-    setTimeout(updateVisibleViewport, 100);
-    
-    // Create throttled update function for scroll events
-    const throttledUpdate = throttle(updateVisibleViewport, VIEWPORT_UPDATE_THROTTLE);
+    // Attach to document/window for global scroll events
+    window.addEventListener('scroll', throttledUpdate, true);
+    document.addEventListener('scroll', globalScrollHandler, true);
     
     // Set up a MutationObserver to watch for container availability
     const observer = new MutationObserver(() => {
-      const { horizontalContainer, verticalContainer } = findContainers();
-      if (horizontalContainer && verticalContainer) {
+      const { hContainer, vContainer } = findContainers();
+      if (hContainer && vContainer) {
         observer.disconnect();
         
-        // Attach event listeners
-        horizontalContainer.addEventListener('scroll', throttledUpdate);
-        verticalContainer.addEventListener('scroll', throttledUpdate);
+        // Attach event listeners directly to the containers
+        hContainer.addEventListener('scroll', () => throttledUpdate());
+        vContainer.addEventListener('scroll', () => throttledUpdate());
         
         console.log('[ScrollDebug] Successfully attached scroll listeners', {
-          horizontalContainer: horizontalContainer.className,
-          verticalContainer: verticalContainer.className,
+          horizontalContainer: hContainer.className,
+          verticalContainer: vContainer.className,
           time: new Date().toLocaleTimeString()
         });
         
         // Force an update now that we have containers
-        updateVisibleViewport();
+        throttledUpdate();
       }
     });
     
     // Start observing the document for container creation
     observer.observe(document.body, { childList: true, subtree: true });
     
-    // Add a global scroll listener as a fallback
-    const globalScrollHandler = (e: Event) => {
-      // Only respond to scrolling within our containers
-      const target = e.target as HTMLElement;
-      if (target?.classList?.contains('overflow-x-auto') || 
-          target?.classList?.contains('overflow-y-auto')) {
-        throttledUpdate();
-      }
-    };
-    
-    document.addEventListener('scroll', globalScrollHandler, true); // Use capture phase to get all events
-    
     // Also watch for resize events
     window.addEventListener('resize', throttledUpdate);
     
     return () => {
       // Clean up event listeners
-      if (horizontalContainer) {
-        horizontalContainer.removeEventListener('scroll', throttledUpdate);
+      const { hContainer, vContainer } = findContainers();
+      if (hContainer) {
+        hContainer.removeEventListener('scroll', throttledUpdate);
       }
-      if (verticalContainer) {
-        verticalContainer.removeEventListener('scroll', throttledUpdate);
+      if (vContainer) {
+        vContainer.removeEventListener('scroll', throttledUpdate);
       }
+      window.removeEventListener('scroll', throttledUpdate, true);
       document.removeEventListener('scroll', globalScrollHandler, true);
       window.removeEventListener('resize', throttledUpdate);
       observer.disconnect();
