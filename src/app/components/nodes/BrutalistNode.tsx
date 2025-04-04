@@ -67,7 +67,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         });
       },
       {
-        rootMargin: "50px", // Start loading images slightly before they come into view
+        rootMargin: "200px", // Start loading images earlier before they come into view
         threshold: 0.1,
       }
     );
