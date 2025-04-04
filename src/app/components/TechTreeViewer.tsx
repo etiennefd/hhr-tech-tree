@@ -481,6 +481,7 @@ export function TechTreeViewer() {
   });
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(null);
+  const [selectedLinkKey, setSelectedLinkKey] = useState<string | null>(null);
   const [totalHeight, setTotalHeight] = useState(1000);
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -1132,6 +1133,7 @@ export function TechTreeViewer() {
       ) {
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
+        setSelectedLinkKey(null);
         setHoveredNode(null);
         setHoveredNodeId(null);
         setHoveredLinkIndex(null);
@@ -1180,6 +1182,7 @@ export function TechTreeViewer() {
       React.startTransition(() => {
         setSelectedNodeId(node.id);
         setSelectedLinkIndex(null);
+        setSelectedLinkKey(null);
         setHoveredLinkIndex(null);
         setHoveredNode(null);
         setHoveredNodeId(null);
@@ -1214,6 +1217,9 @@ export function TechTreeViewer() {
     return year < 0 ? `${absYear} BCE` : `${year}`;
   }, []);
 
+  // Helper function to get a unique key for a connection
+  const getLinkKey = useCallback((link: Link) => `${link.source}-${link.target}`, []);
+
   const shouldHighlightLink = useCallback(
     (link: Link, index: number) => {
       // If a node is selected
@@ -1221,8 +1227,8 @@ export function TechTreeViewer() {
         return link.source === selectedNodeId || link.target === selectedNodeId;
       }
       // If a link is selected
-      if (selectedLinkIndex !== null) {
-        return index === selectedLinkIndex;
+      if (selectedLinkKey !== null) {
+        return getLinkKey(link) === selectedLinkKey;
       }
       // If a node is being hovered
       if (hoveredNodeId) {
@@ -1232,16 +1238,16 @@ export function TechTreeViewer() {
       if (hoveredLinkIndex === index) return true;
       return false;
     },
-    [hoveredLinkIndex, hoveredNodeId, selectedNodeId, selectedLinkIndex]
+    [hoveredLinkIndex, hoveredNodeId, selectedNodeId, selectedLinkKey, getLinkKey]
   );
 
   const isNodeConnectedToSelectedLink = useCallback(
     (nodeId: string) => {
-      if (selectedLinkIndex === null) return false;
-      const selectedLink = data.links[selectedLinkIndex];
-      return selectedLink.source === nodeId || selectedLink.target === nodeId;
+      if (selectedLinkKey === null) return false;
+      const [sourceId, targetId] = selectedLinkKey.split('-');
+      return sourceId === nodeId || targetId === nodeId;
     },
-    [selectedLinkIndex, data.links]
+    [selectedLinkKey]
   );
 
   const containerWidth = useMemo(
@@ -1662,10 +1668,11 @@ export function TechTreeViewer() {
   }, [filters, data.nodes, isNodeFiltered]);
 
   const selectedConnectionNodeIds = useMemo(() => {
-    if (selectedLinkIndex === null) return new Set<string>();
-    const selectedLink = data.links[selectedLinkIndex];
-    return new Set([selectedLink.source, selectedLink.target]);
-  }, [selectedLinkIndex, data.links]);
+    if (selectedLinkKey === null) return new Set<string>();
+    // Parse the selectedLinkKey to get source and target
+    const [source, target] = selectedLinkKey.split('-');
+    return new Set([source, target]);
+  }, [selectedLinkKey]);
 
   const adjacentNodeIds = useMemo(() => {
     if (!selectedNodeId) return new Set<string>();
@@ -1780,12 +1787,10 @@ export function TechTreeViewer() {
     }
     
     // 3. Prefetch nodes connected to a selected link with high priority
-    if (selectedLinkIndex !== null) {
-      const selectedLink = data.links[selectedLinkIndex];
-      if (selectedLink) {
-        nodesToPrefetch.add(selectedLink.source);
-        nodesToPrefetch.add(selectedLink.target);
-      }
+    if (selectedLinkKey !== null) {
+      const [source, target] = selectedLinkKey.split('-');
+      nodesToPrefetch.add(source);
+      nodesToPrefetch.add(target);
     }
     
     // 4. Prefetch highlighted ancestors and descendants with high priority
@@ -1803,7 +1808,7 @@ export function TechTreeViewer() {
       prefetchNode(nodeId, true);
     }
     
-  }, [selectedNodeId, selectedLinkIndex, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
+  }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
 
   // Add this effect to prefetch data for connected nodes when a node is selected
   useEffect(() => {
@@ -1849,17 +1854,16 @@ export function TechTreeViewer() {
 
   // Add this effect to prefetch data for nodes connected by a selected link
   useEffect(() => {
-    if (selectedLinkIndex === null) return;
+    if (selectedLinkKey === null) return;
     
-    // Get the selected link
-    const selectedLink = data.links[selectedLinkIndex];
-    if (!selectedLink) return;
+    // Get node IDs from the selectedLinkKey
+    const [source, target] = selectedLinkKey.split('-');
     
     // Prefetch both source and target nodes
-    prefetchNode(selectedLink.source);
-    prefetchNode(selectedLink.target);
+    prefetchNode(source);
+    prefetchNode(target);
     
-  }, [selectedLinkIndex, data.links, prefetchNode]);
+  }, [selectedLinkKey, prefetchNode]);
 
   // Add this effect to prefetch nodes when filters are applied
   useEffect(() => {
@@ -1984,10 +1988,10 @@ export function TechTreeViewer() {
 
   // Add this helper function to get nodes connected by a selected link
   const getSelectedConnectionNodes = useCallback(() => {
-    if (selectedLinkIndex === null) return new Set<string>();
-    const selectedLink = data.links[selectedLinkIndex];
-    return new Set([selectedLink.source, selectedLink.target]);
-  }, [selectedLinkIndex, data.links]);
+    if (selectedLinkKey === null) return new Set<string>();
+    const [source, target] = selectedLinkKey.split('-');
+    return new Set([source, target]);
+  }, [selectedLinkKey]);
 
   // Add this helper function near your other helper functions
   const getAdjacentNodeIds = useCallback(
@@ -2152,6 +2156,7 @@ export function TechTreeViewer() {
       // Clear all selections and highlights
       setSelectedNodeId(null);
       setSelectedLinkIndex(null);
+      setSelectedLinkKey(null);
       setHoveredNode(null);
       setHoveredNodeId(null);
       setHoveredLinkIndex(null);
@@ -2532,8 +2537,8 @@ export function TechTreeViewer() {
         return 0.2;
       }
       // If a link is selected
-      if (selectedLinkIndex !== null) {
-        return index === selectedLinkIndex ? 1 : 0.2;
+      if (selectedLinkKey !== null) {
+        return getLinkKey(link) === selectedLinkKey ? 1 : 0.2;
       }
       // If filters are applied
       if (filters.fields.size || filters.countries.size || filters.cities.size) {
@@ -2541,7 +2546,7 @@ export function TechTreeViewer() {
       }
       return 1;
     },
-    [selectedNodeId, selectedLinkIndex, filters, highlightedAncestors, highlightedDescendants, isLinkVisible]
+    [selectedNodeId, selectedLinkKey, filters, highlightedAncestors, highlightedDescendants, isLinkVisible, getLinkKey]
   );
 
   // Add performance measurement refs
@@ -3285,11 +3290,10 @@ export function TechTreeViewer() {
                     sourceTitle={sourceNode.title}
                     targetTitle={targetNode.title}
                     details={link.details}
-                    isSelected={selectedLinkIndex === visibleIndex}
+                    isSelected={selectedLinkKey === getLinkKey(link)}
                     onSelect={() => {
-                      setSelectedLinkIndex((current) =>
-                        current === visibleIndex ? null : visibleIndex
-                      );
+                      setSelectedLinkKey(getLinkKey(link));
+                      setSelectedLinkIndex(visibleIndex);
                       setSelectedNodeId(null);
                     }}
                     onNodeClick={(title) => {
@@ -3317,6 +3321,7 @@ export function TechTreeViewer() {
                     } else {
                       setSelectedNodeId(node.id);
                       setSelectedLinkIndex(null);
+                      setSelectedLinkKey(null);
                     }
                   }}
                   onMouseEnter={() => {

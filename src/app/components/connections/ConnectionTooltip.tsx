@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface ConnectionTooltipProps {
   x: number;
@@ -19,11 +19,39 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   targetTitle,
   type,
   details,
+  isSelected,
   onNodeClick,
   onNodeHover,
 }) => {
-  const isNearRightEdge = x > window.innerWidth - 300;
-  const isNearBottomEdge = y > window.innerHeight - 150;
+  const [position, setPosition] = useState({ left: 0, top: 0 });
+  
+  // Update position when coordinates change
+  useEffect(() => {
+    // Convert SVG coordinates to screen coordinates if needed
+    let screenX = x;
+    let screenY = y;
+    
+    if (isSelected) {
+      // Convert SVG coordinates to screen coordinates
+      // Get the SVG element's bounding box
+      const svgElement = document.querySelector('svg');
+      if (svgElement) {
+        const svgRect = svgElement.getBoundingClientRect();
+        // Add the SVG's position to the relative coordinates
+        screenX = x + svgRect.left;
+        screenY = y + svgRect.top;
+      }
+    }
+    
+    // Check if near screen edges
+    const isNearRightEdge = screenX > window.innerWidth - 300;
+    const isNearBottomEdge = screenY > window.innerHeight - 150;
+    
+    setPosition({
+      left: isNearRightEdge ? screenX - 274 : screenX + 10,
+      top: isNearBottomEdge ? screenY - 100 : screenY + 10
+    });
+  }, [x, y, isSelected]);
 
   const handleNodeClick = (e: React.MouseEvent, title: string) => {
     e.preventDefault();
@@ -112,8 +140,8 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     <div
       className="fixed bg-white border rounded-lg p-3 shadow-lg w-64 z-50"
       style={{
-        left: isNearRightEdge ? x - 274 : x + 10,
-        top: isNearBottomEdge ? y - 100 : y + 10,
+        left: position.left,
+        top: position.top,
         pointerEvents: "all",
       }}
       onClick={(e) => e.stopPropagation()}

@@ -71,27 +71,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     }
   }, [isSelected]);
 
-  // Add scroll handler
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isSelected) {
-        onSelect?.(); // This will trigger deselection
-      }
-    };
-
-    // Add listeners to both scroll containers
-    const verticalContainer = document.querySelector(".overflow-y-auto");
-    const horizontalContainer = document.querySelector(".overflow-x-auto");
-
-    verticalContainer?.addEventListener("scroll", handleScroll);
-    horizontalContainer?.addEventListener("scroll", handleScroll);
-
-    return () => {
-      verticalContainer?.removeEventListener("scroll", handleScroll);
-      horizontalContainer?.removeEventListener("scroll", handleScroll);
-    };
-  }, [isSelected, onSelect]);
-
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newPos = { x: e.clientX, y: e.clientY };
@@ -319,12 +298,12 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
         )}
       </g>
 
-      {/* Tooltip Portal */}
-      {((isHovered && mousePos) || (isSelected && selectedPos)) && (
+      {/* Tooltip Portal - Keep it visible but handle position updates */}
+      {((isHovered && mousePos) || isSelected) && (
         <Portal>
           <ConnectionTooltip
-            x={isSelected ? selectedPos?.x || 0 : mousePos?.x || 0}
-            y={isSelected ? selectedPos?.y || 0 : mousePos?.y || 0}
+            x={isHovered ? mousePos?.x || 0 : (sourcePoint.x + endPoint.x) / 2}
+            y={isHovered ? mousePos?.y || 0 : (sourcePoint.y + endPoint.y) / 2 - 20}
             sourceTitle={sourceTitle}
             targetTitle={targetTitle}
             type={connectionType}
