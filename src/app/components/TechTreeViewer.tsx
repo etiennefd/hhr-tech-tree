@@ -2111,13 +2111,6 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Special case for initial load or extremely tiny viewport - show something
-      if (deferredViewportState.right - deferredViewportState.left < 50 || 
-          deferredViewportState.bottom - deferredViewportState.top < 50) {
-        // Use a very generous initial viewport
-        return true;
-      }
-
       // Use a reasonable buffer for better user experience
       const buffer = Math.min(window.innerWidth / 4, 250);
       const bufferedViewport = {
@@ -2126,21 +2119,6 @@ export function TechTreeViewer() {
         top: deferredViewportState.top - buffer,
         bottom: deferredViewportState.bottom + buffer,
       };
-
-      // Log periodically to debug viewport issues
-      const now = performance.now();
-      if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL && node.title === "Stone tool") {
-        console.log('[Debug] Viewport check for Stone tool:', {
-          nodePosition: { x: node.x, y: node.y },
-          viewport: bufferedViewport,
-          scrollPosition,
-          isInViewport: 
-            node.x >= bufferedViewport.left &&
-            node.x <= bufferedViewport.right &&
-            node.y >= bufferedViewport.top &&
-            node.y <= bufferedViewport.bottom
-        });
-      }
 
       // Simple bounds check
       return (
@@ -2572,56 +2550,6 @@ export function TechTreeViewer() {
         visibleNodeIds.add(node.id);
       }
     });
-
-    // FAILSAFE: If we don't have enough visible nodes, add some important ones
-    // This ensures users always see something meaningful
-    if (visibleNodeIds.size < 5) {
-      // First try: Add stone tool and directly connected nodes
-      const stoneTool = data.nodes.find(n => n.title === "Stone tool");
-      if (stoneTool && !visibleNodeIds.has(stoneTool.id)) {
-        addRequiredNode(stoneTool.id);
-      }
-      
-      // Second try: Add some significant inventions across time periods
-      const significantInventions = [
-        "Fire", "Wheel", "Writing", "Printing press", 
-        "Steam engine", "Telephone", "Computer", "Internet"
-      ];
-      
-      significantInventions.forEach(title => {
-        const node = data.nodes.find(n => n.title === title);
-        if (node && !visibleNodeIds.has(node.id)) {
-          addRequiredNode(node.id);
-        }
-      });
-      
-      // Third try: Add nodes from different time periods
-      const timeRanges = [
-        { min: -100000, max: -10000 }, // Prehistoric
-        { min: -10000, max: -1000 },   // Ancient
-        { min: -1000, max: 500 },      // Classical
-        { min: 500, max: 1500 },       // Medieval
-        { min: 1500, max: 1800 },      // Early modern
-        { min: 1800, max: 1900 },      // Industrial
-        { min: 1900, max: 2000 },      // Modern
-        { min: 2000, max: 3000 }       // Contemporary
-      ];
-      
-      timeRanges.forEach(range => {
-        // Find first node in time range that's not already included
-        const node = data.nodes.find(n => 
-          n.year >= range.min && 
-          n.year < range.max && 
-          !visibleNodeIds.has(n.id)
-        );
-        
-        if (node) {
-          addRequiredNode(node.id);
-        }
-      });
-      
-      console.log('[Failsafe] Added important nodes as viewport failsafe. Visible nodes:', visibleNodeIds.size);
-    }
 
     // Add cached nodes only if they're near the viewport
     const CACHE_VIEWPORT_BUFFER = 500; // pixels
