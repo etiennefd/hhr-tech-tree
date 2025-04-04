@@ -426,12 +426,16 @@ function DebugOverlay({
   viewport,
   scrollPosition,
   totalNodes,
-  visibleNodes
+  visibleNodes,
+  totalConnections,
+  visibleConnections
 }: {
   viewport: any;
   scrollPosition: any;
   totalNodes: number;
   visibleNodes: number;
+  totalConnections: number;
+  visibleConnections: number;
 }) {
   // Only render in development mode
   if (process.env.NODE_ENV !== 'development') return null;
@@ -454,7 +458,8 @@ function DebugOverlay({
     >
       <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
       <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
-      <div><strong>Visible:</strong> {visibleNodes}/{totalNodes} nodes</div>
+      <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
+      <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
     </div>
   );
 }
@@ -3685,6 +3690,8 @@ export function TechTreeViewer() {
           scrollPosition={scrollPosition}
           totalNodes={data.nodes.length}
           visibleNodes={visibleNodes.length}
+          totalConnections={data.links.length}
+          visibleConnections={visibleConnections.length}
         />
       )}
     </div>
