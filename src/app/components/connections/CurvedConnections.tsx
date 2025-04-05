@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import ReactDOM from "react-dom";
 import ConnectionTooltip from "./ConnectionTooltip";
+
+// Add type declaration for window property
+declare global {
+  interface Window {
+    lastConnectionClickPos?: { x: number; y: number };
+  }
+}
+
+// Create a static map to store positions by connection
+const connectionPositions = new Map<string, { x: number; y: number }>();
 
 interface NodePosition {
   x: number;
@@ -53,30 +63,30 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   isSelected = false,
   onNodeClick,
   onNodeHover,
+  sourceIndex,
+  targetIndex,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(
-    null
-  );
-  const [selectedPos, setSelectedPos] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!isSelected) {
-      setSelectedPos(null);
-      setIsHovered(false);
-      // Don't clear mousePos when deselecting
-    }
-  }, [isSelected]);
-
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  
+  // Create a unique key for this connection
+  const connectionKey = `${sourceTitle}_${targetTitle}`;
+  
+  // Handle click event
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newPos = { x: e.clientX, y: e.clientY };
-    setSelectedPos(newPos);
-    setMousePos(newPos); // Save click position as mousePos too
-    onSelect?.();
+    console.log(`[Connection] Clicked at ${newPos.x},${newPos.y}`);
+    
+    // Store the position in the static map
+    connectionPositions.set(connectionKey, newPos);
+    
+    // Also store in window for absolute persistence
+    window.lastConnectionClickPos = newPos;
+    
+    if (!isSelected) {
+      onSelect?.();
+    }
   };
 
   const getControlPoints = (
@@ -222,25 +232,57 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
   const lineStyle = getLineStyle(connectionType, isHovered || isHighlighted);
 
+  // Much simpler tooltip position logic
+  const getTooltipPosition = () => {
+    // If this connection was clicked before, use that position
+    if (connectionPositions.has(connectionKey)) {
+      const savedPos = connectionPositions.get(connectionKey);
+      console.log(`[Connection] Using saved click position: ${savedPos!.x},${savedPos!.y}`);
+      return savedPos!;
+    }
+    
+    // For hover state, use current mouse position
+    if (isHovered && !isSelected && mousePos) {
+      return mousePos;
+    }
+    
+    // For new selections with no saved position, use current mouse position
+    if (mousePos) {
+      return mousePos;
+    }
+    
+    // Absolute last resort - use connection midpoint
+    const midPoint = {
+      x: (sourcePoint.x + endPoint.x) / 2,
+      y: (sourcePoint.y + endPoint.y) / 2 - 20
+    };
+    return midPoint;
+  };
+
   return (
     <>
       <g
         className="connection"
         onMouseEnter={() => {
+          console.log(`[Connection] Mouse entered`);
           setIsHovered(true);
           onMouseEnter?.();
         }}
         onMouseLeave={() => {
           if (!isSelected) {
+            console.log(`[Connection] Mouse left (not selected)`);
             setIsHovered(false);
             onMouseLeave?.();
             setMousePos(null);
+          } else {
+            console.log(`[Connection] Mouse left while selected - keeping state`);
           }
         }}
         onClick={handleClick}
         onMouseMove={(e) => {
           if (!isSelected) {
-            setMousePos({ x: e.clientX, y: e.clientY });
+            const pos = { x: e.clientX, y: e.clientY };
+            setMousePos(pos);
           }
         }}
         style={{ pointerEvents: "all" }}
@@ -299,31 +341,41 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
         )}
       </g>
 
-      {/* Tooltip Portal - Keep it visible but handle position updates */}
-      {(isHovered && mousePos && mousePos.x > 0 && mousePos.y > 0) || 
-        (isSelected && (selectedPos ? (selectedPos.x > 0 && selectedPos.y > 0) : ((sourcePoint.x + endPoint.x) / 2 > 0 && (sourcePoint.y + endPoint.y) / 2 > 0))) ? (
-        <Portal>
-          <ConnectionTooltip
-            x={isHovered ? (mousePos?.x || 0) : (selectedPos ? selectedPos.x : (sourcePoint.x + endPoint.x) / 2)}
-            y={isHovered ? (mousePos?.y || 0) : (selectedPos ? selectedPos.y : (sourcePoint.y + endPoint.y) / 2 - 20)}
-            sourceTitle={sourceTitle}
-            targetTitle={targetTitle}
-            type={connectionType}
-            details={details}
-            isSelected={isSelected}
-            onNodeClick={(title) => {
-              if (onNodeClick) {
-                onNodeClick(title);
-              }
-            }}
-            onNodeHover={(title) => {
-              if (onNodeHover) {
-                onNodeHover(title);
-              }
-            }}
-          />
-        </Portal>
-      ) : null}
+      {/* Tooltip Portal */}
+      {(() => {
+        const shouldShowTooltip = isHovered || isSelected;
+        
+        if (!shouldShowTooltip) {
+          return null;
+        }
+        
+        const tooltipPos = getTooltipPosition();
+        
+        return (
+          <Portal>
+            <ConnectionTooltip
+              x={tooltipPos.x}
+              y={tooltipPos.y}
+              sourceTitle={sourceTitle}
+              targetTitle={targetTitle}
+              type={connectionType}
+              details={details}
+              isSelected={isSelected}
+              onNodeClick={(title) => {
+                console.log(`[Connection] Node "${title}" clicked in tooltip`);
+                if (onNodeClick) {
+                  onNodeClick(title);
+                }
+              }}
+              onNodeHover={(title) => {
+                if (onNodeHover) {
+                  onNodeHover(title);
+                }
+              }}
+            />
+          </Portal>
+        );
+      })()}
     </>
   );
 };
@@ -353,3 +405,4 @@ const Portal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default CurvedConnections;
+

@@ -1090,12 +1090,24 @@ export function TechTreeViewer() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (
-        !target.closest(".tech-node") &&
-        !target.closest(".node-tooltip") &&
-        !target.closest(".connection") &&
-        !target.closest(".minimap")
-      ) {
+      
+      // Check for tooltip elements more specifically
+      const isTooltip = 
+        !!target.closest(".fixed") || 
+        !!target.closest(".bg-white") || 
+        target.tagName === 'BUTTON' || 
+        !!target.closest('button');
+      
+      const isInteractive = 
+        !!target.closest(".tech-node") ||
+        !!target.closest(".node-tooltip") ||
+        !!target.closest(".connection") ||
+        !!target.closest(".minimap") ||
+        isTooltip;
+      
+      // Only log on actual clicks that change selection state
+      if (!isInteractive) {
+        console.log('[Click] Clearing selection');
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
         setSelectedLinkKey(null);
