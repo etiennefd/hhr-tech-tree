@@ -67,7 +67,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     if (!isSelected) {
       setSelectedPos(null);
       setIsHovered(false);
-      setMousePos(null);
+      // Don't clear mousePos when deselecting
     }
   }, [isSelected]);
 
@@ -75,6 +75,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     e.stopPropagation();
     const newPos = { x: e.clientX, y: e.clientY };
     setSelectedPos(newPos);
+    setMousePos(newPos); // Save click position as mousePos too
     onSelect?.();
   };
 
@@ -300,11 +301,11 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
       {/* Tooltip Portal - Keep it visible but handle position updates */}
       {(isHovered && mousePos && mousePos.x > 0 && mousePos.y > 0) || 
-       (isSelected && ((sourcePoint.x + endPoint.x) / 2 > 0) && ((sourcePoint.y + endPoint.y) / 2 > 0)) ? (
+        (isSelected && (selectedPos ? (selectedPos.x > 0 && selectedPos.y > 0) : ((sourcePoint.x + endPoint.x) / 2 > 0 && (sourcePoint.y + endPoint.y) / 2 > 0))) ? (
         <Portal>
           <ConnectionTooltip
-            x={isHovered ? (mousePos?.x || 0) : (sourcePoint.x + endPoint.x) / 2}
-            y={isHovered ? (mousePos?.y || 0) : (sourcePoint.y + endPoint.y) / 2 - 20}
+            x={isHovered ? (mousePos?.x || 0) : (selectedPos ? selectedPos.x : (sourcePoint.x + endPoint.x) / 2)}
+            y={isHovered ? (mousePos?.y || 0) : (selectedPos ? selectedPos.y : (sourcePoint.y + endPoint.y) / 2 - 20)}
             sourceTitle={sourceTitle}
             targetTitle={targetTitle}
             type={connectionType}
