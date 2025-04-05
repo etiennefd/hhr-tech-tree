@@ -1162,13 +1162,24 @@ export function TechTreeViewer() {
         return;
       }
 
+      // Update selection state FIRST, before scrolling
+      // This ensures the node is selected before any scrolling happens
+      setSelectedNodeId(node.id);
+      setSelectedLinkIndex(null);
+      setSelectedLinkKey(null);
+      setHoveredLinkIndex(null);
+      setHoveredNode(null);
+      setHoveredNodeId(null);
+      setHighlightedAncestors(new Set());
+      setHighlightedDescendants(new Set());
+
       // Calculate scroll position once
       const xPosition = getXPosition(node.year);
       const horizontalPosition = xPosition - (window.innerWidth / 2);
       const yPosition = node.y ?? 0;
       const verticalPosition = yPosition - containerDimensions.height / 2 + 150;
 
-      // Start scrolling immediately
+      // Start scrolling AFTER selection state is updated
       const container = horizontalScrollContainerRef.current;
       if (container) {
         container.scrollTo({
@@ -1177,18 +1188,6 @@ export function TechTreeViewer() {
           behavior: "smooth",
         });
       }
-
-      // Batch all state updates in a single transition
-      React.startTransition(() => {
-        setSelectedNodeId(node.id);
-        setSelectedLinkIndex(null);
-        setSelectedLinkKey(null);
-        setHoveredLinkIndex(null);
-        setHoveredNode(null);
-        setHoveredNodeId(null);
-        setHighlightedAncestors(new Set());
-        setHighlightedDescendants(new Set());
-      });
 
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
