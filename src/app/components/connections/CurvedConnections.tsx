@@ -299,11 +299,12 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
       </g>
 
       {/* Tooltip Portal - Keep it visible but handle position updates */}
-      {((isHovered && mousePos) || isSelected) && (
+      {(isHovered && mousePos && mousePos.x > 0 && mousePos.y > 0) || 
+       (isSelected && ((sourcePoint.x + endPoint.x) / 2 > 0) && ((sourcePoint.y + endPoint.y) / 2 > 0)) ? (
         <Portal>
           <ConnectionTooltip
-            x={isHovered ? mousePos?.x || 0 : (sourcePoint.x + endPoint.x) / 2}
-            y={isHovered ? mousePos?.y || 0 : (sourcePoint.y + endPoint.y) / 2 - 20}
+            x={isHovered ? (mousePos?.x || 0) : (sourcePoint.x + endPoint.x) / 2}
+            y={isHovered ? (mousePos?.y || 0) : (sourcePoint.y + endPoint.y) / 2 - 20}
             sourceTitle={sourceTitle}
             targetTitle={targetTitle}
             type={connectionType}
@@ -321,7 +322,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
             }}
           />
         </Portal>
-      )}
+      ) : null}
     </>
   );
 };

@@ -23,10 +23,13 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   onNodeClick,
   onNodeHover,
 }) => {
-  const [position, setPosition] = useState({ left: 0, top: 0 });
+  const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
   
   // Update position when coordinates change
   useEffect(() => {
+    // Skip updates if coordinates are at the origin (likely default values)
+    if (x === 0 && y === 0) return;
+    
     // Convert SVG coordinates to screen coordinates if needed
     let screenX = x;
     let screenY = y;
@@ -135,6 +138,9 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
         );
     }
   };
+
+  // Don't render anything until we have a valid position
+  if (!position) return null;
 
   return (
     <div
