@@ -206,7 +206,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         transition-all
       `}
       >
-        {/* Image section with visibility-based loading */}
+        {/* Image section with improved loading */}
         <div className="border-b border-black p-0 relative h-20">
           {(isVisible || isSelected || isAdjacent) && (
             <Image
@@ -214,7 +214,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               alt={node.title}
               fill
               sizes="160px"
-              loading={isSelected || isAdjacent ? "eager" : "lazy"}
+              loading="eager"
               quality={75}
               placeholder="blur"
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJiEyNS0tLzIvNz1AQFNAU0BGTUVHS2ZXV2uDg4T/2wBDARUXFyQdJB0kTkNMTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
@@ -223,14 +223,22 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               }`}
               onError={(e) => {
                 const imgElement = e.target as HTMLImageElement;
-                imgElement.src = "/placeholder-invention.png";
+                const originalSrc = node.image;
+                if (imgElement.src !== "/placeholder-invention.png" && originalSrc) {
+                  setTimeout(() => {
+                    if (originalSrc) imgElement.src = originalSrc;
+                  }, 800);
+                } else {
+                  imgElement.src = "/placeholder-invention.png";
+                  setImageLoaded(true);
+                }
               }}
               onLoad={() => setImageLoaded(true)}
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
               }}
-              priority={isSelected || isAdjacent}
+              priority={true}
             />
           )}
           {!imageLoaded && (
