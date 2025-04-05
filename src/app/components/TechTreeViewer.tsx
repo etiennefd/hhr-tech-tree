@@ -428,7 +428,8 @@ function DebugOverlay({
   totalNodes,
   visibleNodes,
   totalConnections,
-  visibleConnections
+  visibleConnections,
+  onClose
 }: {
   viewport: any;
   scrollPosition: any;
@@ -436,6 +437,7 @@ function DebugOverlay({
   visibleNodes: number;
   totalConnections: number;
   visibleConnections: number;
+  onClose: () => void;
 }) {
   // Only render in development mode
   if (process.env.NODE_ENV !== 'development') return null;
@@ -456,6 +458,23 @@ function DebugOverlay({
         fontFamily: 'monospace'
       }}
     >
+      <button 
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          top: '2px',
+          right: '2px',
+          background: 'transparent',
+          border: 'none',
+          color: 'white',
+          fontSize: '14px',
+          cursor: 'pointer',
+          padding: '2px 6px',
+          lineHeight: 1
+        }}
+      >
+        ×
+      </button>
       <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
       <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
       <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
@@ -468,6 +487,7 @@ export function TechTreeViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [showDebugOverlay, setShowDebugOverlay] = useState(true);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
@@ -3651,7 +3671,7 @@ export function TechTreeViewer() {
         )}
       </div>
       {/* Only render debug overlay in development mode */}
-      {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === 'development' && showDebugOverlay && (
         <DebugOverlay
           viewport={visibleViewport}
           scrollPosition={scrollPosition}
@@ -3659,6 +3679,7 @@ export function TechTreeViewer() {
           visibleNodes={visibleNodes.length}
           totalConnections={data.links.length}
           visibleConnections={visibleConnections.length}
+          onClose={() => setShowDebugOverlay(false)}
         />
       )}
     </div>
