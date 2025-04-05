@@ -82,7 +82,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newPos = { x: e.clientX, y: e.clientY };
-    console.log(`[Connection] Clicked at ${newPos.x},${newPos.y}`);
     
     // If this is a different connection than last selected, clear other positions
     if (lastSelectedConnectionKey && lastSelectedConnectionKey !== connectionKey) {
@@ -259,7 +258,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     // If this connection was clicked before, use that position
     if (connectionPositions.has(connectionKey)) {
       const savedPos = connectionPositions.get(connectionKey);
-      console.log(`[Connection] Using saved click position: ${savedPos!.x},${savedPos!.y}`);
       return savedPos!;
     }
     
@@ -296,21 +294,17 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
       <g
         className="connection"
         onMouseEnter={() => {
-          console.log(`[Connection] Mouse entered`);
           setIsHovered(true);
           onMouseEnter?.();
         }}
         onMouseLeave={() => {
           if (!isSelected) {
-            console.log(`[Connection] Mouse left (not selected)`);
             setIsHovered(false);
             onMouseLeave?.();
             // Only clear mouse position if we're not transitioning to selected
             if (!isTransitioningToSelected) {
               setMousePos(null);
             }
-          } else {
-            console.log(`[Connection] Mouse left while selected - keeping state`);
           }
         }}
         onClick={handleClick}
@@ -383,7 +377,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
         
         // Track visibility to help with debugging
         if (shouldShowTooltip !== lastTooltipVisible) {
-          console.log(`[Connection] Tooltip visibility changed: ${shouldShowTooltip}`);
           lastTooltipVisible = shouldShowTooltip;
         }
         
@@ -404,7 +397,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
               details={details}
               isSelected={isSelected}
               onNodeClick={(title) => {
-                console.log(`[Connection] Node "${title}" clicked in tooltip`);
                 if (onNodeClick) {
                   onNodeClick(title);
                 }

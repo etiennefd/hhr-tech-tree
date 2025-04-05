@@ -76,7 +76,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     };
     
     if (!hasLoggedInitialPosition.current) {
-      console.log(`[Tooltip] Initial position set to ${newPosition.left},${newPosition.top}`);
       hasLoggedInitialPosition.current = true;
     }
     
@@ -85,7 +84,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     
     // If this is a newly selected tooltip, save the first position
     if (isSelected && !firstPositionForSelectedRef.current) {
-      console.log(`[Tooltip] Saving position for selected tooltip: ${newPosition.left},${newPosition.top}`);
       firstPositionForSelectedRef.current = newPosition;
     }
   }, [x, y, isSelected]);
@@ -98,7 +96,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
       hasLoggedInitialPosition.current = false;
     } else if (position && !firstPositionForSelectedRef.current) {
       // If becoming selected and we have a position, save it
-      console.log(`[Tooltip] Selection state changed to selected, saving position`);
       firstPositionForSelectedRef.current = position;
     }
   }, [isSelected, position]);
@@ -106,7 +103,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   const handleNodeClick = (e: React.MouseEvent, title: string) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(`[Tooltip] Node "${title}" clicked`);
     if (onNodeClick) {
       onNodeClick(title);
     }
@@ -133,7 +129,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
         pointerEvents: "all",
       }}
       onClick={(e) => {
-        console.log(`[Tooltip] Clicked`);
         e.stopPropagation();
         e.preventDefault();
       }}
