@@ -53,6 +53,9 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  const imageRetryCount = useRef(0);
+  const originalSrc = useRef(node.image);
 
   // Set up intersection observer
   useEffect(() => {
@@ -210,7 +213,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         <div className="border-b border-black p-0 relative h-20">
           {(isVisible || isSelected || isAdjacent) && (
             <Image
-              src={node.image || "/placeholder-invention.png"}
+              src={imageFailed ? "/placeholder-invention.png" : (node.image || "/placeholder-invention.png")}
               alt={node.title}
               fill
               sizes="160px"
@@ -223,17 +226,40 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               }`}
               onError={(e) => {
                 const imgElement = e.target as HTMLImageElement;
-                const originalSrc = node.image;
-                if (imgElement.src !== "/placeholder-invention.png" && originalSrc) {
+                const currentSrc = imgElement.src;
+                
+                // Only retry if we have the original source and haven't tried too many times
+                if (
+                  !imageFailed && 
+                  originalSrc.current && 
+                  currentSrc !== "/placeholder-invention.png" && 
+                  imageRetryCount.current < 2
+                ) {
+                  imageRetryCount.current += 1;
+                  // Try with the original source after a short delay
                   setTimeout(() => {
-                    if (originalSrc) imgElement.src = originalSrc;
+                    if (originalSrc.current && !imageFailed) {
+                      imgElement.src = originalSrc.current;
+                    }
                   }, 800);
                 } else {
-                  imgElement.src = "/placeholder-invention.png";
-                  setImageLoaded(true);
+                  // Give up and use placeholder
+                  setImageFailed(true);
+                  setImageLoaded(true); // Show the placeholder without loading animation
                 }
               }}
-              onLoad={() => setImageLoaded(true)}
+              onLoad={(e) => {
+                // Only mark as loaded if it's not the placeholder
+                const imgElement = e.target as HTMLImageElement;
+                if (imgElement.src.includes("placeholder-invention.png")) {
+                  // It's a placeholder, but we still want to show it
+                  setImageLoaded(true);
+                } else {
+                  // It's the actual image, successfully loaded
+                  setImageLoaded(true);
+                  setImageFailed(false);
+                }
+              }}
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
