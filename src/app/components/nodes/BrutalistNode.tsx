@@ -40,6 +40,23 @@ const formatTitle = (title: string) => {
   }).join(' ');
 };
 
+// Helper function to validate image URLs
+const validateImage = (url?: string): string => {
+  if (!url) return "/placeholder-invention.png";
+
+  // Basic URL validation
+  if (typeof url !== 'string' || url.length < 5) {
+    return "/placeholder-invention.png";
+  }
+  
+  // Check if image URL is valid (must start with / or http:// or https://)
+  if (!url.startsWith('/') && !url.startsWith('http://') && !url.startsWith('https://')) {
+    return "/placeholder-invention.png";
+  }
+
+  return url;
+};
+
 const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   node,
   isSelected,
@@ -53,9 +70,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageFailed, setImageFailed] = useState(false);
-  const imageRetryCount = useRef(0);
-  const originalSrc = useRef(node.image);
+  const [imageUrl, setImageUrl] = useState<string>(() => validateImage(node.image));
+  const hasLoadedRef = useRef(false); // Track successful loads with ref to persist across re-renders
+  const retryCountRef = useRef(0);
+  const originalUrlRef = useRef(validateImage(node.image));
 
   // Set up intersection observer
   useEffect(() => {
@@ -81,6 +99,19 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
     return () => observer.disconnect();
   }, []);
+
+  // Stable effect for handling image URL changes from parent
+  useEffect(() => {
+    // Only update the image URL if we haven't already successfully loaded one
+    // and if the original URL changes
+    const newValidUrl = validateImage(node.image);
+    
+    if (!hasLoadedRef.current && originalUrlRef.current !== newValidUrl) {
+      originalUrlRef.current = newValidUrl;
+      setImageUrl(newValidUrl);
+      retryCountRef.current = 0;
+    }
+  }, [node.image]);
 
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;
@@ -178,6 +209,33 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     [node.title]
   );
 
+  // Error handler for image loading
+  const handleImageError = () => {
+    if (retryCountRef.current < 1 && imageUrl !== "/placeholder-invention.png") {
+      // Try once more with the original source after a delay
+      retryCountRef.current++;
+      setTimeout(() => {
+        if (originalUrlRef.current !== "/placeholder-invention.png") {
+          setImageUrl(originalUrlRef.current);
+        }
+      }, 1000);
+    } else {
+      // Give up and use placeholder
+      if (imageUrl !== "/placeholder-invention.png") {
+        setImageUrl("/placeholder-invention.png");
+      }
+      setImageLoaded(true);
+    }
+  };
+
+  // Success handler for image loading
+  const handleImageLoad = () => {
+    if (imageUrl !== "/placeholder-invention.png") {
+      hasLoadedRef.current = true;
+    }
+    setImageLoaded(true);
+  };
+
   return (
     <div
       ref={nodeRef}
@@ -213,7 +271,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         <div className="border-b border-black p-0 relative h-20">
           {(isVisible || isSelected || isAdjacent) && (
             <Image
-              src={imageFailed ? "/placeholder-invention.png" : (node.image || "/placeholder-invention.png")}
+              src={imageUrl}
               alt={node.title}
               fill
               sizes="160px"
@@ -224,47 +282,13 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               className={`object-cover transition-opacity duration-300 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
-              onError={(e) => {
-                const imgElement = e.target as HTMLImageElement;
-                const currentSrc = imgElement.src;
-                
-                // Only retry if we have the original source and haven't tried too many times
-                if (
-                  !imageFailed && 
-                  originalSrc.current && 
-                  currentSrc !== "/placeholder-invention.png" && 
-                  imageRetryCount.current < 2
-                ) {
-                  imageRetryCount.current += 1;
-                  // Try with the original source after a short delay
-                  setTimeout(() => {
-                    if (originalSrc.current && !imageFailed) {
-                      imgElement.src = originalSrc.current;
-                    }
-                  }, 800);
-                } else {
-                  // Give up and use placeholder
-                  setImageFailed(true);
-                  setImageLoaded(true); // Show the placeholder without loading animation
-                }
-              }}
-              onLoad={(e) => {
-                // Only mark as loaded if it's not the placeholder
-                const imgElement = e.target as HTMLImageElement;
-                if (imgElement.src.includes("placeholder-invention.png")) {
-                  // It's a placeholder, but we still want to show it
-                  setImageLoaded(true);
-                } else {
-                  // It's the actual image, successfully loaded
-                  setImageLoaded(true);
-                  setImageFailed(false);
-                }
-              }}
+              onError={handleImageError}
+              onLoad={handleImageLoad}
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
               }}
-              priority={true}
+              priority={isSelected || isAdjacent}
             />
           )}
           {!imageLoaded && (
@@ -324,7 +348,8 @@ export default React.memo(BrutalistNode, (prevProps, nextProps) => {
   return (
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.isAdjacent === nextProps.isAdjacent &&
-    prevProps.node === nextProps.node &&
+    prevProps.node.title === nextProps.node.title &&
+    prevProps.node.year === nextProps.node.year &&
     prevProps.width === nextProps.width &&
     prevProps.style?.opacity === nextProps.style?.opacity
   );
