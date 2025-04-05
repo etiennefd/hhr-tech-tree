@@ -11,6 +11,10 @@ declare global {
 
 // Create a static map to store positions by connection
 const connectionPositions = new Map<string, { x: number; y: number }>();
+// Track the last tooltip display state to prevent flickering during selection
+let lastTooltipVisible = false;
+// Track the last selected connection key to manage position clearing
+let lastSelectedConnectionKey: string | null = null;
 
 interface NodePosition {
   x: number;
@@ -68,6 +72,8 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  // Add a transitioning state to prevent flickering
+  const [isTransitioningToSelected, setIsTransitioningToSelected] = useState(false);
   
   // Create a unique key for this connection
   const connectionKey = `${sourceTitle}_${targetTitle}`;
@@ -78,11 +84,27 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     const newPos = { x: e.clientX, y: e.clientY };
     console.log(`[Connection] Clicked at ${newPos.x},${newPos.y}`);
     
+    // If this is a different connection than last selected, clear other positions
+    if (lastSelectedConnectionKey && lastSelectedConnectionKey !== connectionKey) {
+      // Keep only this connection's position
+      const currentPos = connectionPositions.get(connectionKey);
+      connectionPositions.clear();
+      if (currentPos) {
+        connectionPositions.set(connectionKey, currentPos);
+      }
+    }
+    
     // Store the position in the static map
     connectionPositions.set(connectionKey, newPos);
     
+    // Update last selected connection
+    lastSelectedConnectionKey = connectionKey;
+    
     // Also store in window for absolute persistence
     window.lastConnectionClickPos = newPos;
+    
+    // Set transition state to prevent flickering
+    setIsTransitioningToSelected(true);
     
     if (!isSelected) {
       onSelect?.();
@@ -259,6 +281,16 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     return midPoint;
   };
 
+  // Clear transition state when selection state changes
+  useEffect(() => {
+    if (isSelected) {
+      // After selection completes, clear the transition state
+      setIsTransitioningToSelected(false);
+      // Update last selected connection to this one
+      lastSelectedConnectionKey = connectionKey;
+    }
+  }, [isSelected, connectionKey]);
+
   return (
     <>
       <g
@@ -273,7 +305,10 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
             console.log(`[Connection] Mouse left (not selected)`);
             setIsHovered(false);
             onMouseLeave?.();
-            setMousePos(null);
+            // Only clear mouse position if we're not transitioning to selected
+            if (!isTransitioningToSelected) {
+              setMousePos(null);
+            }
           } else {
             console.log(`[Connection] Mouse left while selected - keeping state`);
           }
@@ -343,7 +378,14 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
       {/* Tooltip Portal */}
       {(() => {
-        const shouldShowTooltip = isHovered || isSelected;
+        // Show tooltip if hovered, selected, or transitioning between states
+        const shouldShowTooltip = isHovered || isSelected || isTransitioningToSelected;
+        
+        // Track visibility to help with debugging
+        if (shouldShowTooltip !== lastTooltipVisible) {
+          console.log(`[Connection] Tooltip visibility changed: ${shouldShowTooltip}`);
+          lastTooltipVisible = shouldShowTooltip;
+        }
         
         if (!shouldShowTooltip) {
           return null;
