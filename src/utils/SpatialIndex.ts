@@ -21,8 +21,6 @@ export class SpatialIndex {
   private cellSize: number;
   private nodePositions: Map<string, Point>;
   private connectionPositions: Map<number, Line>;
-  private lastLogTime: number = 0;
-  private LOG_INTERVAL = 1000; // Log at most once per second
 
   constructor(cellSize: number = 1000) {
     this.nodeCells = new Map();
@@ -30,15 +28,6 @@ export class SpatialIndex {
     this.nodePositions = new Map();
     this.connectionPositions = new Map();
     this.cellSize = cellSize;
-  }
-
-  private logPerformance(operation: string, startTime: number) {
-    const now = performance.now();
-    if (now - this.lastLogTime > this.LOG_INTERVAL) {
-      const duration = now - startTime;
-      console.log(`[SpatialIndex] ${operation}: ${duration.toFixed(2)}ms`);
-      this.lastLogTime = now;
-    }
   }
 
   private getCellsForBoundingBox(left: number, right: number, top: number, bottom: number): string[] {
@@ -75,8 +64,6 @@ export class SpatialIndex {
 
   // Add a node to the spatial index
   addNode(nodeId: string, position: Point) {
-    const start = performance.now();
-    
     // Remove old position if it exists
     if (this.nodePositions.has(nodeId)) {
       this.removeNode(nodeId);
@@ -89,14 +76,10 @@ export class SpatialIndex {
       this.nodeCells.set(cellId, new Set());
     }
     this.nodeCells.get(cellId)!.add(nodeId);
-
-    this.logPerformance('addNode', start);
   }
 
   // Add a connection to the spatial index
   addConnection(connectionIndex: number, start: Point, end: Point) {
-    const startTime = performance.now();
-    
     // Remove old connection if it exists
     if (this.connectionPositions.has(connectionIndex)) {
       this.removeConnection(connectionIndex);
@@ -111,8 +94,6 @@ export class SpatialIndex {
       }
       this.connectionCells.get(cellId)!.add(connectionIndex);
     });
-
-    this.logPerformance(`addConnection (cells: ${cells.length})`, startTime);
   }
 
   // Remove a node from the spatial index
@@ -139,8 +120,6 @@ export class SpatialIndex {
 
   // Get all nodes that might be visible in the viewport
   getNodesInViewport(viewport: Viewport): Set<string> {
-    const start = performance.now();
-    
     const cells = this.getCellsForBoundingBox(
       viewport.left,
       viewport.right,
@@ -165,22 +144,12 @@ export class SpatialIndex {
         });
       }
     });
-
-    // Enhanced logging
-    const totalNodes = this.nodePositions.size;
-    const visibleRatio = result.size / totalNodes;
-    this.logPerformance(
-      `getNodesInViewport (cells: ${cells.length}, visible: ${result.size}/${totalNodes} = ${(visibleRatio * 100).toFixed(1)}%, viewport: ${JSON.stringify(viewport)})`, 
-      start
-    );
     
     return result;
   }
 
   // Get all connections that might be visible in the viewport
   getConnectionsInViewport(viewport: Viewport): Set<number> {
-    const start = performance.now();
-    
     const cells = this.getCellsForBoundingBox(
       viewport.left,
       viewport.right,
@@ -201,14 +170,6 @@ export class SpatialIndex {
         });
       }
     });
-
-    // Enhanced logging
-    const totalConnections = this.connectionPositions.size;
-    const visibleRatio = result.size / totalConnections;
-    this.logPerformance(
-      `getConnectionsInViewport (cells: ${cells.length}, visible: ${result.size}/${totalConnections} = ${(visibleRatio * 100).toFixed(1)}%, viewport: ${JSON.stringify(viewport)})`, 
-      start
-    );
 
     return result;
   }

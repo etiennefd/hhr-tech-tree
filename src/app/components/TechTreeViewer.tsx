@@ -819,19 +819,6 @@ export function TechTreeViewer() {
           });
           currentNodesRef.current = positionedDetailNodes;
 
-          // Initialize spatial index with positioned nodes
-          console.log('[Debug] Initializing spatial index:', {
-            cellSize: 100,
-            totalNodes: positionedDetailNodes.length,
-            totalConnections: cachedData.detailData.links?.length || 0,
-            bounds: {
-              left: Math.min(...positionedDetailNodes.map((n: TechNode) => n.x || 0)),
-              right: Math.max(...positionedDetailNodes.map((n: TechNode) => n.x || 0)),
-              top: Math.min(...positionedDetailNodes.map((n: TechNode) => n.y || 0)),
-              bottom: Math.max(...positionedDetailNodes.map((n: TechNode) => n.y || 0))
-            }
-          });
-
           // Reset and populate spatial index
           spatialIndexRef.current = new SpatialIndex(100);
           positionedDetailNodes.forEach((node: TechNode) => {
@@ -933,10 +920,7 @@ export function TechTreeViewer() {
             links: detailData.links || [] 
           });
           currentNodesRef.current = positionedDetailNodes;
-          
-          // Initialize spatial index with the newly loaded data
-          console.log('[Debug] Initializing spatial index with', positionedDetailNodes.length, 'nodes and', detailData.links?.length || 0, 'connections');
-          
+                    
           // Find data bounds
           let minX = Infinity;
           let maxX = -Infinity;
@@ -982,13 +966,6 @@ export function TechTreeViewer() {
                 { x: targetNode.x, y: targetNode.y }
               );
             }
-          });
-          
-          console.log('[Debug] Spatial index initialized:', {
-            cellSize,
-            totalNodes: positionedDetailNodes.length,
-            totalConnections: detailData.links?.length || 0,
-            bounds: { left: minX, right: maxX, top: minY, bottom: maxY }
           });
         }
 
@@ -1048,12 +1025,6 @@ export function TechTreeViewer() {
         bottom: containerDimensions.height,
       };
       
-      console.log('[Debug] Initializing viewport with proper dimensions:', {
-        viewport: initialViewport,
-        containerDimensions,
-        windowSize: { width: window.innerWidth, height: window.innerHeight }
-      });
-      
       setVisibleViewport(initialViewport);
       setDeferredViewport(initialViewport);
     }
@@ -1081,18 +1052,12 @@ export function TechTreeViewer() {
         };
 
         setScrollPosition(newScrollPosition);
-        // console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
       }
     };
 
     document.addEventListener("scroll", handleScroll, true);
     return () => document.removeEventListener("scroll", handleScroll, true);
   }, []);
-
-  // Add logging for scroll position changes
-  useEffect(() => {
-    console.log('[ScrollDebug] scrollPosition updated:', scrollPosition);
-  }, [scrollPosition]);
 
   // Add logging to handleViewportChange (minimap click handler)
   const handleViewportChange = useCallback(
@@ -2304,17 +2269,6 @@ export function TechTreeViewer() {
     [deferredViewportState, data.nodes]
   );
 
-  // Add viewport diagnostic logging
-  useEffect(() => {
-    const timestamp = new Date().toLocaleTimeString();
-    logPerformance('viewport_diagnostics', {
-      viewport: visibleViewport,
-      containerDimensions,
-      maxBuffer: Math.min(window.innerWidth / 2, 500),
-      timestamp
-    });
-  }, [visibleViewport, containerDimensions]);
-
   // Update the scroll handler to find containers at the right time
   useEffect(() => {
     const VIEWPORT_UPDATE_THROTTLE = 100; // ms
@@ -2353,10 +2307,6 @@ export function TechTreeViewer() {
                        document.querySelector('div[style*="overflow-y"]');
         if (foundV) {
           vContainer = foundV as HTMLDivElement;
-          console.log('[ContainerDebug] Found vertical container:', {
-            class: vContainer.className,
-            id: vContainer.id
-          });
         }
       }
 
@@ -2388,13 +2338,6 @@ export function TechTreeViewer() {
         verticalScroll = window.scrollY || document.documentElement.scrollTop;
       }
       
-      console.log('[ScrollDebug] Scroll positions captured', {
-        horizontalScroll,
-        verticalScroll,
-        hasVerticalContainer: !!vContainer,
-        time: new Date().toLocaleTimeString()
-      });
-      
       // Update the scrollPosition state for the minimap
       setScrollPosition({
         left: horizontalScroll,
@@ -2412,11 +2355,6 @@ export function TechTreeViewer() {
         bottom: verticalScroll + height,
       };
 
-      console.log('[ViewportDebug] Updating viewport from scroll', {
-        newViewport,
-        time: new Date().toLocaleTimeString()
-      });
-
       lastViewportUpdate.current = now;
       
       // Update both viewport states
@@ -2430,13 +2368,6 @@ export function TechTreeViewer() {
     const globalScrollHandler = (e: Event) => {
       // Log all scroll events for debugging
       const target = e.target as HTMLElement;
-      if (target) {
-        console.log('[ScrollDebug] Scroll event on:', {
-          element: target.tagName,
-          class: target.className,
-          id: target.id
-        });
-      }
       throttledUpdate();
     };
     
@@ -2456,12 +2387,6 @@ export function TechTreeViewer() {
         // Attach event listeners directly to the containers
         hContainer.addEventListener('scroll', () => throttledUpdate());
         vContainer.addEventListener('scroll', () => throttledUpdate());
-        
-        console.log('[ScrollDebug] Successfully attached scroll listeners', {
-          horizontalContainer: hContainer.className,
-          verticalContainer: vContainer.className,
-          time: new Date().toLocaleTimeString()
-        });
         
         // Force an update now that we have containers
         throttledUpdate();
@@ -2695,9 +2620,7 @@ export function TechTreeViewer() {
           currentFrameData.viewport.top !== lastFrameData.current.viewport.top ||
           currentFrameData.viewport.bottom !== lastFrameData.current.viewport.bottom) changes.push('viewport');
     }
-    
-    console.log(`[Performance] Recalculating visible elements due to changes in: ${changes.join(', ') || 'initial'}`);
-    
+        
     memoEffectiveness.track(false);
     lastCalculationTime.current = startTime;
     lastFrameData.current = currentFrameData;
@@ -2798,22 +2721,6 @@ export function TechTreeViewer() {
     // Get final arrays
     const newVisibleNodes = data.nodes.filter(node => visibleNodeIds.has(node.id));
     const newVisibleConnections = data.links.filter((_, index) => visibleConnectionIndices.has(index));
-    
-    const endTime = performance.now();
-    logPerformance('visible_elements_calculation', {
-      duration: endTime - startTime,
-      visibleNodes: newVisibleNodes.length,
-      visibleConnections: newVisibleConnections.length,
-      totalNodes: data.nodes.length,
-      totalConnections: data.links.length,
-      trigger: calculationTrigger.current,
-      viewport: stableViewport,
-      cacheStats: {
-        cachedNodes: cachedNodeIds.size,
-        cachedConnections: cachedConnectionIndices.size,
-        visibleCachedNodes: newVisibleNodes.filter(n => cachedNodeIds.has(n.id)).length
-      }
-    });
 
     performanceMarks.end('visibleElements');
     
@@ -2879,7 +2786,6 @@ export function TechTreeViewer() {
     const interval = setInterval(() => {
       memoRecalculationCount.current = { nodes: 0, connections: 0 };
       const timestamp = new Date().toLocaleTimeString();
-      console.log(`[${timestamp}] [Performance] Reset counters`);
     }, 5000); // Reset every 5 seconds
 
     return () => clearInterval(interval);
