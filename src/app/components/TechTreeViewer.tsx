@@ -3316,7 +3316,7 @@ export function TechTreeViewer() {
                     >
                       <p className="text-xs mb-1">
                         <strong>Date:</strong> {formatYear(node.year)}
-                        {node.dateDetails && ` (${node.dateDetails})`}
+                        {node.dateDetails && ` – ${node.dateDetails}`}
                       </p>
                       {node.inventors &&
                         node.inventors.length > 0 &&
