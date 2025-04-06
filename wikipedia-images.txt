@@ -1,0 +1,687 @@
+# Wikipedia Image URLs for Airtable Import
+# Format: Tech Name | Airtable ID | Image URL
+# Generated on 2025-04-06T20:30:04.778Z
+# ------------------------------------------------------------
+
+	
+Aluminium | recn3TpfmguYhaguZ | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Tovarna_glinice_in_aluminija_Kidri%C4%8Devo_-_kupi_aluminija_1968.jpg/250px-Tovarna_glinice_in_aluminija_Kidri%C4%8Devo_-_kupi_aluminija_1968.jpg
+3G cellular network | recHqj3izPdC1yq9j | https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/PC_modem_3G_HSPA_DSC_0084.JPG/500px-PC_modem_3G_HSPA_DSC_0084.JPG
+Abjad | recwRwY7F5EZauTAp | https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/Ba%60alat.jpg/250px-Ba%60alat.jpg
+Acetylsalicylic acid | recIvKSsJC5e1Lg3s | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Aspirin-B-3D-balls.png/500px-Aspirin-B-3D-balls.png
+Acheson process | rec1dgiMRHRQNugon | https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Acheson_furnace.svg/200px-Acheson_furnace.svg.png
+Achromatic lens | recgvXcePq1lrXZDA | https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Chromatic_aberration_lens_diagram.svg/200px-Chromatic_aberration_lens_diagram.svg.png
+Advanced driver-assistance system | recxozE12bcyyKta1 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Tesla_Autopilot_Engaged_in_Model_X.jpg/250px-Tesla_Autopilot_Engaged_in_Model_X.jpg
+Aeolipile | reclxF1eyHVIoTjzz | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Aeolipile_illustration.png/200px-Aeolipile_illustration.png
+Aerogel | recXM2PNkHYBm1OPt | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Aerogel_hand.jpg/200px-Aerogel_hand.jpg
+Agar | rect4G5RXglUIXi5x | https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/GreenTeaYokan.jpg/250px-GreenTeaYokan.jpg
+Agar plate | recxg3qDr9lnWwrNj | https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Ecoli_colonies.png/200px-Ecoli_colonies.png
+Air conditioner | reckKEwwm7kJNsPGs | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/MITSUBISHI_ELECTRIC_WINDOW_TYPE_AIR_CONDITIONER_OUTDOOR_UNIT.jpg/200px-MITSUBISHI_ELECTRIC_WINDOW_TYPE_AIR_CONDITIONER_OUTDOOR_UNIT.jpg
+Aircraft carrier | recNLEyAP64NLk53Z | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/HMS_Furious-15.jpg/250px-HMS_Furious-15.jpg
+Aircraft carrier with full-length flight deck | rec2fuIZvNEI3cOfk | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/HMS_Argus_%281917%29_crop.jpg/250px-HMS_Argus_%281917%29_crop.jpg
+Aircraft dope | recHWkJtnj7EIO904 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/RAF2699.jpg/200px-RAF2699.jpg
+Alcohol thermometer | recZcQnIVrm2CoNsY | https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Alcohol-In-Glass_Taylor_Thermometer.jpg/250px-Alcohol-In-Glass_Taylor_Thermometer.jpg
+AlexNet | recPOBdM5nljJ3f3S | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/AlexNet_block_diagram.svg/250px-AlexNet_block_diagram.svg.png
+Alternating current | recu8dlaHiuq6wrbS | https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Types_of_current.svg/250px-Types_of_current.svg.png
+Amate | recso0EpS0Sq2iKSv | https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Huex_codex_1a_loc.jpg/250px-Huex_codex_1a_loc.jpg
+Amphetamine | rec2JEUFaTdZZp5ni | https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Amphetamine.svg/250px-Amphetamine.svg.png
+Analog computer | rec1c5ICWBh7G8rGC | https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/NAMA_Machine_d%27Anticyth%C3%A8re_1.jpg/250px-NAMA_Machine_d%27Anticyth%C3%A8re_1.jpg
+Analytical engine | recZCUi3UHkqjQ9Lj | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Babbages_Analytical_Engine%2C_1834-1871._%289660574685%29.jpg/250px-Babbages_Analytical_Engine%2C_1834-1871._%289660574685%29.jpg
+Anemometer | rec5PlJG6zSNFLCvG | https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Wea00920.jpg/200px-Wea00920.jpg
+Animal-driven rotary mill | recHPFapCp9y8bMyB | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Horse_mill_045493.jpg/250px-Horse_mill_045493.jpg
+Anode ray | recLobyjntUeJ3UIk | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Discovery_of_neon_isotopes.JPG/500px-Discovery_of_neon_isotopes.JPG
+Antimony | rec9eWXCnQJxD6tq0 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Antimony-4.jpg/250px-Antimony-4.jpg
+Arc lamp | reccbzk5LJbPdFDuP | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Xenon_short_arc_1.jpg/250px-Xenon_short_arc_1.jpg
+Arcade video game | rec0M87biFpv727Cx | https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Nutting_ComputerSpace-Blue.JPG/200px-Nutting_ComputerSpace-Blue.JPG
+Arch dam | recDQtsmuq1CRL0s2 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Morrowdam.JPG/250px-Morrowdam.JPG
+Argand lamp | recpj68LrNIfc49II | https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/James_Peale_by_Charles_Wilson_Peale.jpg/250px-James_Peale_by_Charles_Wilson_Peale.jpg
+Argon | recBLBVrPAjZDUghk | https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Argon_discharge_tube.jpg/250px-Argon_discharge_tube.jpg
+Arithmometer | recFXtTY2hEc9N9Cg | https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Arithmometre_%28cropped%29.jpg/250px-Arithmometre_%28cropped%29.jpg
+Armed car | recMNbKXyTZOC2GHW | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Simms_Motor_Scout_from_Autocar.jpg/200px-Simms_Motor_Scout_from_Autocar.jpg
+Armoured car | recD7D8KjLKMFjKbu | https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Simms_War_Car_at_the_Crystal_Palace_London_April_1902.jpg/250px-Simms_War_Car_at_the_Crystal_Palace_London_April_1902.jpg
+Armstrong gun | recSzl2wg1g6Hzi6O | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Sagahan_Armstrong_gun_used_at_the_Battle_of_Ueno_against_the_Shogitai_1868.jpg/250px-Sagahan_Armstrong_gun_used_at_the_Battle_of_Ueno_against_the_Shogitai_1868.jpg
+Arrow-firing catapult | recfnJF8FwGN9mVCO | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Gastraphetes_-_Biton%27s_catapult_-_catapulta_di_Bitone.jpg/200px-Gastraphetes_-_Biton%27s_catapult_-_catapulta_di_Bitone.jpg
+Arsenic | recGyGvhvABUeuIHx | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Arsen_1a.jpg/250px-Arsen_1a.jpg
+Arsenical bronze | rec5k5ZIDr7l6hYua | https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Thai_-_Seated_Buddha_in_%22Maravijaya%22_-_Walters_542742.jpg/250px-Thai_-_Seated_Buddha_in_%22Maravijaya%22_-_Walters_542742.jpg
+Artificial refrigeration | recW1HfMNirawOGyw | https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kuehlregal_USA.jpg/500px-Kuehlregal_USA.jpg
+Artificial satellite | recfcFgbS5Z7I5bz2 | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B2_%D0%BC%D0%B8%D1%80%D0%B5_%D0%B8%D1%81%D0%BA%D1%83%D1%81%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%81%D0%BF%D1%83%D1%82%D0%BD%D0%B8%D0%BA_%D0%97%D0%B5%D0%BC%D0%BB%D0%B8.jpg/250px-%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B2_%D0%BC%D0%B8%D1%80%D0%B5_%D0%B8%D1%81%D0%BA%D1%83%D1%81%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%81%D0%BF%D1%83%D1%82%D0%BD%D0%B8%D0%BA_%D0%97%D0%B5%D0%BC%D0%BB%D0%B8.jpg
+Asbestos (industrial use) | recubfnrfuBEQgY4k | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Asbestos_with_muscovite.png/200px-Asbestos_with_muscovite.png
+Aschheim-Zondek pregnancy test | recge8OJiyrxP4JvW | NO_IMAGE_FOUND
+Astrolabe | rechdqZMoTHqNOPvV | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Khalili_Collection_Islamic_Art_sci_0430_back.jpg/200px-Khalili_Collection_Islamic_Art_sci_0430_back.jpg
+Atmospheric railway | reciBfYSQyVWDuO6F | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Aerom%C3%B3vel_de_Porto_Alegre.JPG/250px-Aerom%C3%B3vel_de_Porto_Alegre.JPG
+Aulos | recIwguNtdErooKMN | https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Banquet_Euaion_Louvre_G467_n2_cropped.jpg/250px-Banquet_Euaion_Louvre_G467_n2_cropped.jpg
+Aurignacian stone tool | recgQP6zsZOqeHsvt | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Lions_painting%2C_Chauvet_Cave_%28museum_replica%29.jpg/200px-Lions_painting%2C_Chauvet_Cave_%28museum_replica%29.jpg
+Automated external defibrillator | recsrkev1k0EB6Vm5 | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Modern_AED_Automated_external_defibrillator.png/200px-Modern_AED_Automated_external_defibrillator.png
+Automatic machine gun | recw7r6K0AobyeGJn | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Maxim_gun%2C_Georgian_national_museum.JPG/250px-Maxim_gun%2C_Georgian_national_museum.JPG
+Automatic telephone exchange | recuYPU2dxOriUfcF | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Uniselector_Stepper_detail.jpg/200px-Uniselector_Stepper_detail.jpg
+Automobile | rec7qr8XbSVHl42sV | https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/1885Benz.jpg/200px-1885Benz.jpg
+Avvisi | recxsHWQBeF0HaVkb | https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Avviso_from_Antwerp_dated_26_Dec_1663.jpg/250px-Avviso_from_Antwerp_dated_26_Dec_1663.jpg
+Backpropagation | recMUS5931B8tZlH7 | NO_IMAGE_FOUND
+Ballistic missile | recOAQRYM24cKsFDF | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Fus%C3%A9e_V2.jpg/250px-Fus%C3%A9e_V2.jpg
+Barium | recCJQTaYZyFuqfIh | https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Barium_unter_Argon_Schutzgas_Atmosph%C3%A4re.jpg/500px-Barium_unter_Argon_Schutzgas_Atmosph%C3%A4re.jpg
+Barometer | recfkkyYHhGHVjaYH | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Dosen-barometer.jpg/250px-Dosen-barometer.jpg
+Basic oxygen steelmaking | recGmvMTixCTCP5jR | https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ThyssenKrupp_Duisburg_016.jpg/250px-ThyssenKrupp_Duisburg_016.jpg
+Beryllium | rec3LSb4GbnvGp61b | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Be-140g.jpg/500px-Be-140g.jpg
+Bessemer process | rec4KCN3QOgszxg6W | https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Bessemer_converter.jpg/250px-Bessemer_converter.jpg
+Bessemer process (ancient) | recMHRc5PSYwgU7zl | https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Bessemer_converter.jpg/250px-Bessemer_converter.jpg
+Beta blocker | recK1wrEG4xFcOImM | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Propranolol.svg/250px-Propranolol.svg.png
+Binocular microscope | rec9iixAG1cCkQLvt | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Scientists_are_working_in_the_lab.9.jpg/500px-Scientists_are_working_in_the_lab.9.jpg
+Bireme | recLb5bzjuXdW7aKe | https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Greek_Bireme_500BC.jpg/250px-Greek_Bireme_500BC.jpg
+Bismuth | recOK3Utq2BfujW7g | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Bismuth_crystals_and_1cm3_cube.jpg/500px-Bismuth_crystals_and_1cm3_cube.jpg
+Bitumen | recDrAsCiY1XNX6qL | https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Bitumen.jpg/500px-Bitumen.jpg
+Boat | recbtavhHtEj0Xk4F | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Boomstamkano_van_Pesse%2C_Drents_Museum%2C_1955-VIII-2.jpg/250px-Boomstamkano_van_Pesse%2C_Drents_Museum%2C_1955-VIII-2.jpg
+Bomba kryptologiczna | receIPmKRjcM2Bv9F | https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Bomba_full.jpg/250px-Bomba_full.jpg
+Bombe (cryptology) | rec4BZkY9B29B9WM9 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Wartime_picture_of_a_Bletchley_Park_Bombe.jpg/250px-Wartime_picture_of_a_Bletchley_Park_Bombe.jpg
+Bone tool | recTiDOA03u5BP3Pk | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Os_Tart%C3%A9_MHNT_PRE.2009.0.248.2_Noir.jpg/500px-Os_Tart%C3%A9_MHNT_PRE.2009.0.248.2_Noir.jpg
+Boomerang | rec8zaAnmPrKFSv6G | https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%22Egyptian_boomerang%22_%283210654118%29.jpg/200px-%22Egyptian_boomerang%22_%283210654118%29.jpg
+Borehole drilling | recIU4gfxvTULwEi4 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Borewell_digging.jpg/500px-Borewell_digging.jpg
+Boring machine | recrNoAM2wb7MQT3n | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Lemuel_Francis_Abbott_-_Portrait_of_John_Wilkinson%2C_The_Ironmaster.jpg/500px-Lemuel_Francis_Abbott_-_Portrait_of_John_Wilkinson%2C_The_Ironmaster.jpg
+Boron | recZhGiTqJiLRnuck | https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Boron_R105.jpg/500px-Boron_R105.jpg
+Boyle's air pump | recbwo09VF9NbXqfu | https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Boyle_air_pump.jpg/200px-Boyle_air_pump.jpg
+Brace | rec81D3FuVTkDpnpY | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Bohrwinde_und_Schraubendreherklinge.jpg/250px-Bohrwinde_und_Schraubendreherklinge.jpg
+Braille | recUCIZOsH9Ws4ctn | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Reading_Braille.jpg/250px-Reading_Braille.jpg
+Brake lining | recVvpB2ascrrpPor | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Brake_shoes.jpg/250px-Brake_shoes.jpg
+Bubble chamber | recM0GNNvf94g5FV9 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/BubbleChamber-fnal.jpg/200px-BubbleChamber-fnal.jpg
+Bude-Light | recdortqL6em7AP3W | https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Bude_Light_Trafalgar_Square_1845_b.png/250px-Bude_Light_Trafalgar_Square_1845_b.png
+Bulldozer | recRs1528j8KS6eYK | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/CatD9T.jpg/500px-CatD9T.jpg
+Bullroarer | recqevFCjGiH19yFs | https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Bull_roarers.jpg/250px-Bull_roarers.jpg
+Byzantine lyra | recAoyJ9vHaqXbtQi | https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Byzantine_Lyra_Museo_Nazionale.jpg/250px-Byzantine_Lyra_Museo_Nazionale.jpg
+Calcium | recS5qLlo3R0QKVAQ | https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Calcium_unter_Argon_Schutzgasatmosph%C3%A4re.jpg/500px-Calcium_unter_Argon_Schutzgasatmosph%C3%A4re.jpg
+Calotype | reczAU8yTWm6j1nDv | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Henry_Fox_Talbot_-_The_Building_of_Nelson%5Es_Column_-_B2018.20.3_-_Yale_Center_for_British_Art.jpg/250px-Henry_Fox_Talbot_-_The_Building_of_Nelson%5Es_Column_-_B2018.20.3_-_Yale_Center_for_British_Art.jpg
+Camera lucida | rec5xdVuevx173mtB | https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Camera_Lucida_in_use_drawing_small_figurine.jpg/250px-Camera_Lucida_in_use_drawing_small_figurine.jpg
+Camera obscura | rec7HN3laxXJQafXZ | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/1755_james_ayscough.jpg/200px-1755_james_ayscough.jpg
+Capillary action | recHsP2jo7J4PjKjX | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Capillary_flow_brick.jpg/250px-Capillary_flow_brick.jpg
+Capsule endoscopy | recBzWXfdqN4avUH4 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/CapsuleEndoscope.jpg/250px-CapsuleEndoscope.jpg
+Carbon fibers | recLJqr0FBV1J6qDM | https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kohlenstofffasermatte.jpg/250px-Kohlenstofffasermatte.jpg
+Carbon paper | recQlfyGUU8TSJbLc | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Carbon_paper.jpg/250px-Carbon_paper.jpg
+Carnot cycle | recFeUsIJ5rPs0O0P | https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Carnot_heat_engine_2.svg/250px-Carnot_heat_engine_2.svg.png
+Carrack | recW3ZabWqS7AlWHR | https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Portuguese_Carracks_off_a_Rocky_Coast.jpg/250px-Portuguese_Carracks_off_a_Rocky_Coast.jpg
+Cash register | recyhO1yKRreM7CvH | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Old_National_Cash_Register.jpg/200px-Old_National_Cash_Register.jpg
+Cassegrain reflector telescope | recP2uTQu54oUywdk | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Cassegrain.en.png/250px-Cassegrain.en.png
+Cast stone | reczpeoHFdRwYhLA1 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Betonsteinwerk_02_Hildastrasse_Freiburg_i._B.JPG/250px-Betonsteinwerk_02_Hildastrasse_Freiburg_i._B.JPG
+Catalytic converter | recEjal3yOjo0xZX1 | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/DodgeCatCon.jpg/200px-DodgeCatCon.jpg
+Cataract surgery | recSXhOzzkMm5cLbP | https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Couching_for_cataract._Wellcome_L0021165.jpg/250px-Couching_for_cataract._Wellcome_L0021165.jpg
+Cathode ray | recFcVstUbH07XsjU | https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Cyclotron_motion_smaller_view.jpg/200px-Cyclotron_motion_smaller_view.jpg
+Cave painting | recYYdRfQNKCoUkGn | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/SantaCruz-CuevaManos-P2210651b.jpg/250px-SantaCruz-CuevaManos-P2210651b.jpg
+Cavity magnetron | recA0q7xEzH8UYiEI | https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Magnetron2.jpg/200px-Magnetron2.jpg
+Cell | recd9N3TsHhdrMEt3 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Wilson1900Fig2.jpg/250px-Wilson1900Fig2.jpg
+Cell theory | recjHykimCur8XNts | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/HeLa_cells_stained_with_Hoechst_33258.jpg/250px-HeLa_cells_stained_with_Hoechst_33258.jpg
+Cellophane | recd6eUBL030IxBMq | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Chocolates_in_cellophane.jpg/250px-Chocolates_in_cellophane.jpg
+Cellulose | rec3Lc7YMIX90JzQl | https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Cellulose_Sessel.svg/500px-Cellulose_Sessel.svg.png
+Central processing unit | recykKUE7SSP6ve6l | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Intel_i9-14900KF_CPU.jpg/250px-Intel_i9-14900KF_CPU.jpg
+Charcoal | rec5OoWycfAO3VHyY | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Charcoal_8.jpg/250px-Charcoal_8.jpg
+Chemical vapor deposition | reclg2E2dK7JoWXcJ | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/PICT0111.JPG/500px-PICT0111.JPG
+Cheque | rec9nllDcMuPONN82 | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/FORD%2C_Gerald_%28signed_check%29.jpg/250px-FORD%2C_Gerald_%28signed_check%29.jpg
+Chlorine | recUjqi6lWMPp0hrX | https://upload.wikimedia.org/wikipedia/commons/4/49/Chlorine_in_bottle.jpg
+Chocolate bar | recwtdMv3Vsrm5Qo1 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Green_and_Black%27s_dark_chocolate_bar_2.jpg/500px-Green_and_Black%27s_dark_chocolate_bar_2.jpg
+Chromium | recWNoONGELiqqrGH | https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Chromium_crystals_and_1cm3_cube.jpg/250px-Chromium_crystals_and_1cm3_cube.jpg
+Chromosomes | rec6Gu1m7Ue2sUi5P | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Chromosome_DNA_Gene_unannotated.svg/250px-Chromosome_DNA_Gene_unannotated.svg.png
+Chronophotographic gun | reco97If02mCOrkrM | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Fusil_photographique_Marey2.png/250px-Fusil_photographique_Marey2.png
+Chronophotography | recPwmThw15mVIUWW | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/The_Horse_in_Motion_high_res.jpg/250px-The_Horse_in_Motion_high_res.jpg
+Cigarette | reclmEZSqfJpjvKLf | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Cigarette_DS.jpg/250px-Cigarette_DS.jpg
+Cipher disk | reccD4CHfixAYCO81 | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/CipherDisk2000.jpg/250px-CipherDisk2000.jpg
+Class-D amplifier | recUyg27iJBpRXn4Z | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Pwm_amp.svg/250px-Pwm_amp.svg.png
+Claude air liquefaction | reckdJWKJgYcRBCJ1 | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Liquidnitrogen.jpg/500px-Liquidnitrogen.jpg
+Claus process | recMRaCAzmPlQ3xcJ | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/AlbertaSulfurAtVancouverBC.jpg/200px-AlbertaSulfurAtVancouverBC.jpg
+Cloud chamber | recNXdf3y1R7ooFnT | https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/CTRwilsonCloudChamberCavendishLab2013-08-29-17-09-40.jpg/200px-CTRwilsonCloudChamberCavendishLab2013-08-29-17-09-40.jpg
+CMOS | recqekMB7dHZZKiYd | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/CMOS_inverter.svg/250px-CMOS_inverter.svg.png
+Coade stone | recOjW0S2nBwwIyQn | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/South_Bank_Lion_%285809599144%29_%28cropped%29.jpg/250px-South_Bank_Lion_%285809599144%29_%28cropped%29.jpg
+Coal gas and gas lighting | recgMs2iAKEYqVLsJ | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Drawing_the_retorts_at_the_Great_Gas_Establishment_Brick_Lane.png/500px-Drawing_the_retorts_at_the_Great_Gas_Establishment_Brick_Lane.png
+Cobalt | rec2FpFW8lj0AF3Ob | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Kobalt_electrolytic_and_1cm3_cube.jpg/500px-Kobalt_electrolytic_and_1cm3_cube.jpg
+Cochlear implant | recA5L4LKKwtAvwXP | https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Blausen_0244_CochlearImplant_01.png/200px-Blausen_0244_CochlearImplant_01.png
+Codex | recAnl1CDbF5ehCXq | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Devil_codex_Gigas.jpg/250px-Devil_codex_Gigas.jpg
+Coffee | rec3PSEBkYgpYUX1t | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/John_Frederick_Lewis_004.jpg/250px-John_Frederick_Lewis_004.jpg
+Coffee percolator | recSTtb1ZhXar3vSe | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Perkulator.jpg/250px-Perkulator.jpg
+Coherer | reci6cLrhHjD19FN7 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Coherer.jpg/200px-Coherer.jpg
+Coke (fuel) | recmFC8gI0fKrjnwA | https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Koks_Brennstoff.jpg/250px-Koks_Brennstoff.jpg
+Collodion | recxgPXqmo64ORBlG | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Alfred_Stieglitz_by_Frank_S._Herrmann.jpg/250px-Alfred_Stieglitz_by_Frank_S._Herrmann.jpg
+Collodion wet-plate photography | recjhQfVueoMj0h09 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/A%C3%B1o_1867%2C_negativo_de_vidrio_al_colodi%C3%B3n%2C_vista_de_Gerona_o_Girona%2C_Fototeca_del_IPCE%2C_Spain.JPG/250px-A%C3%B1o_1867%2C_negativo_de_vidrio_al_colodi%C3%B3n%2C_vista_de_Gerona_o_Girona%2C_Fototeca_del_IPCE%2C_Spain.JPG
+Color photography | rec7U7uFoCBwr5OFT | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Tartan_Ribbon.jpg/250px-Tartan_Ribbon.jpg
+Colt revolver | reccfWjvGxAF5Vpww | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Colt_Paterson_5th_Model.jpg/200px-Colt_Paterson_5th_Model.jpg
+Combined oral contraceptive pill | recaNyVpv9umvqtld | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Pilule_contraceptive.jpg/250px-Pilule_contraceptive.jpg
+Compton scattering | recPDcc4YUYisKdAW | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Light-matter_interaction_-_schematic.svg/200px-Light-matter_interaction_-_schematic.svg.png
+Computer program | rect5U8mHUevtfhmZ | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Diagram_for_the_computation_of_Bernoulli_numbers.jpg/250px-Diagram_for_the_computation_of_Bernoulli_numbers.jpg
+Computer-generated imagery | recCWANTx2TzRsX2l | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Morphogenic_digital_art_exhibition_by_Andy_Lomas_at_Watermans_Arts_Centre%2C_London.jpg/500px-Morphogenic_digital_art_exhibition_by_Andy_Lomas_at_Watermans_Arts_Centre%2C_London.jpg
+Concrete | recl33Y6mAkTNc8yg | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Bloczek_betonowy.jpg/500px-Bloczek_betonowy.jpg
+Conex box | rec1LxYtsTwdJZbvW | https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Conex_us_army.gif/250px-Conex_us_army.gif
+Contact lens | recUvYMDTIZ0mewGX | https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Contactlenzen_Confortissimo.JPG/250px-Contactlenzen_Confortissimo.JPG
+Container ship | reco9QmczI88mkp6G | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/MAERSK_MC_KINNEY_M%C3%96LLER_%26_MARSEILLE_MAERSK_%2848694054418%29.jpg/500px-MAERSK_MC_KINNEY_M%C3%96LLER_%26_MARSEILLE_MAERSK_%2848694054418%29.jpg
+Copernican heliocentrism | recqVRCf9n5FlzBD7 | https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Copernican_heliocentrism_diagram-2.jpg/250px-Copernican_heliocentrism_diagram-2.jpg
+Copper | recELe2BrpXEg38Cv | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/NatCopper.jpg/500px-NatCopper.jpg
+Copying lathe | recXcsZUPSdXRfjmz | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Harpers_Ferry_gun_smith_shop_-_Blanchard_lathe_-_01.jpg/250px-Harpers_Ferry_gun_smith_shop_-_Blanchard_lathe_-_01.jpg
+Corliss steam engine | recQdyOmTkK3auHuq | https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Corliss_engine%2C_showing_valvegear_%28New_Catechism_of_the_Steam_Engine%2C_1904%29.jpg/200px-Corliss_engine%2C_showing_valvegear_%28New_Catechism_of_the_Steam_Engine%2C_1904%29.jpg
+Corneal contact lens | recfgU3NGSSs3TzUq | https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Contactlenzen_Confortissimo.JPG/250px-Contactlenzen_Confortissimo.JPG
+Cornu helicopter | recITZclGu0bbhqT1 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/HE2G8.jpg/250px-HE2G8.jpg
+Corridor | recvkllF3UjmVOn2j | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Luhrs_Tower_Hallway.jpg/200px-Luhrs_Tower_Hallway.jpg
+Corrugated galvanised iron | rec4ikbtP6CyH6SQ9 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/MountLawleyRooftops_gobeirne.jpg/250px-MountLawleyRooftops_gobeirne.jpg
+Cotton (Old World) | recvvppZQe3EPZBDI | https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/CottonPlant.JPG/500px-CottonPlant.JPG
+Crank-slider mechanism | recJb0O11sJZ8zOAP | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/R%C3%B6mische_S%C3%A4gem%C3%BChle.svg/200px-R%C3%B6mische_S%C3%A4gem%C3%BChle.svg.png
+Credit card | recsK9IxhFg7Xx8W3 | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Credit-cards.jpg/500px-Credit-cards.jpg
+CRISPR gene editing | rec7621zEZaK34VNk | https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/GRNA-Cas9.svg/250px-GRNA-Cas9.svg.png
+Crookes tube | rec2SovotJBlk0TCL | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Kat%C3%B3dsugarak_m%C3%A1gneses_mez%C5%91ben%281%29.jpg/250px-Kat%C3%B3dsugarak_m%C3%A1gneses_mez%C5%91ben%281%29.jpg
+Crossbow (Greece) | recFmVxQ7swU36OwQ | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/200910311250MEZ_Saalburg-Museum%2C_Gastraphetes.jpg/250px-200910311250MEZ_Saalburg-Museum%2C_Gastraphetes.jpg
+Cryptocurrency | recbnNhh5ECZa86mH | https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/200px-Bitcoin.svg.png
+Crystal detector | recugspCXMSyOlZLu | https://upload.wikimedia.org/wikipedia/commons/8/8c/CatWhisker.jpg
+Crystal oscillator | reck8o2UKgurUeduI | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/16MHZ_Crystal.jpg/500px-16MHZ_Crystal.jpg
+Crystal radio | recCpZYiU5Vh183d7 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Kristallradio.JPG/250px-Kristallradio.JPG
+CT scan | recmiLGYAqQHRVgma | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg/250px-Modern%C3%AD_v%C3%BDpo%C4%8Detn%C3%AD_tomografie_s_p%C5%99%C3%ADmo_digit%C3%A1ln%C3%AD_detekc%C3%AD_rentgenov%C3%A9ho_z%C3%A1%C5%99en%C3%AD.jpg
+Cyclotron | receOtxej3fV0SZyc | https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Cyclotron_with_glowing_beam.jpg/500px-Cyclotron_with_glowing_beam.jpg
+Daniell cell | recctKjWq10iZ8Rae | https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/NMAH-Daniell_cell_batteries_1836.JPG/250px-NMAH-Daniell_cell_batteries_1836.JPG
+Davy lamp | rec3VD9VE6JLiczAg | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Davy%27s_first_safety_lantern%2C_1815%2C_and_early_wire_gauge_safety_lamp%2C_Science_Museum%2C_South_Kensington%2C_Acme_Newspictures%2C_c._December_1929%2C_from_the_Digital_Commonwealth_-_1_22_10_001309_0004_A.jpg/250px-thumbnail.jpg
+Dictionary | rec0iCLRFbuCeWbJv | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Woerterbuchstapel_Langenscheidt.jpg/500px-Woerterbuchstapel_Langenscheidt.jpg
+Diesel engine | recRzWpLzA6m0R8jQ | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Dieselmotor_Langen_%26_Wolf%2C_1898.jpg/500px-Dieselmotor_Langen_%26_Wolf%2C_1898.jpg
+Diesel-powered excavator | rec706NjhuXW7zfNj | https://upload.wikimedia.org/wikipedia/commons/4/4e/MarioModel90_1908.jpg
+Difference engine | reciO8P4WsLiFOFfC | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Babbage_Difference_Engine.jpg/200px-Babbage_Difference_Engine.jpg
+Digital audio player | rececZdHbW9EfwZmk | https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Archos.jpg/250px-Archos.jpg
+Digital currency | reczM3ZqwH4ZkfzZb | https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Money_flower.png/250px-Money_flower.png
+Digital programmable computer | reccaP74B8cnMYjur | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Z3_Deutsches_Museum.JPG/250px-Z3_Deutsches_Museum.JPG
+Dioptra | recRIIP5Gk78zj5Yf | https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dioptra_-_ESP.jpg/200px-Dioptra_-_ESP.jpg
+Directed evolution | recvh2ubnh9QuOAi9 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/DE_cycle.png/200px-DE_cycle.png
+Discovery of Uranus | recmGxpZ2xQvThSrn | https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Uranus_Voyager2_color_calibrated.png/500px-Uranus_Voyager2_color_calibrated.png
+Dissolving views | recE308kw6Aloy3Zp | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Magiclantern.jpg/200px-Magiclantern.jpg
+DNA ligase | recR8oAP8jxXAakHx | https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/DNA_Repair.jpg/250px-DNA_Repair.jpg
+DNA polymerase | recISgdcsQIzmEwpQ | https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/DNA_polymerase.png/250px-DNA_polymerase.png
+DNA sequencer | rec9UekcXOpIX7Z2M | https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/DNA-Sequencers_from_Flickr_57080968.jpg/500px-DNA-Sequencers_from_Flickr_57080968.jpg
+DNA sequencing | reci4hfAlsEH63cBc | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Sanger-sequencing.svg/250px-Sanger-sequencing.svg.png
+Dock | rec6OuBaz48umvIxc | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Cruise_ship_dock_in_St_Maarten.JPG/200px-Cruise_ship_dock_in_St_Maarten.JPG
+Dog sled | recLb9jmymuc4wUT1 | https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/%22Nugget_Express%22_Dawson%2C_Yukon_Territory_%28CURTIS_565%29.jpeg/200px-%22Nugget_Express%22_Dawson%2C_Yukon_Territory_%28CURTIS_565%29.jpeg
+Dolby noise-reduction system | recwZLwCOjRexX4bS | https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Dolby361.jpg/250px-Dolby361.jpg
+Domestication of barley | recSgJeDlBH1HRrxF | https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Barley_%28Hordeum_vulgare%29_-_United_States_National_Arboretum_-_24_May_2009.jpg/250px-Barley_%28Hordeum_vulgare%29_-_United_States_National_Arboretum_-_24_May_2009.jpg
+Domestication of cucumbers | recBozkmu19Vbtdbo | https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/ARS_cucumber.jpg/500px-ARS_cucumber.jpg
+Domestication of flax | recgy5Gaf6pWrwTm5 | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/K%C3%B6hler%27s_Medizinal-Pflanzen_in_naturgetreuen_Abbildungen_mit_kurz_erl%C3%A4uterndem_Texte_%28Plate_16%29_BHL303594.jpg/250px-K%C3%B6hler%27s_Medizinal-Pflanzen_in_naturgetreuen_Abbildungen_mit_kurz_erl%C3%A4uterndem_Texte_%28Plate_16%29_BHL303594.jpg
+Domestication of sugarcane | recOP1fOzMYtLr6IQ | https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Saccharum_officinarum_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-125.jpg/200px-Saccharum_officinarum_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-125.jpg
+Double-acting pin tumbler lock | recc2tDqXzCmbsiac | https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Unbranded_Pin_Tumbler_Euro_cylinder_%28cropped%29.jpg/250px-Unbranded_Pin_Tumbler_Euro_cylinder_%28cropped%29.jpg
+Double-action piston bellows | recirpK1Lw2UhKIRb | https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Bellows_%28PSF%29.svg/500px-Bellows_%28PSF%29.svg.png
+Dry dock | recNLLtOT6vY6MXst | https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/USS_Greeneville_%28SSN_772%29_-_dry_dock_Pearl_Harbor_%281%29.jpg/250px-USS_Greeneville_%28SSN_772%29_-_dry_dock_Pearl_Harbor_%281%29.jpg
+Dry latrines | recw9vqQgsXZqEIgd | https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Ostia-Toilets.JPG/250px-Ostia-Toilets.JPG
+Duct tape | reccwezIzcR7wkHee | https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Duct-tape.jpg/250px-Duct-tape.jpg
+Dutch process cocoa | recstGRNIPDJzy6vo | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Dutch_process_and_natural_cocoa.jpg/250px-Dutch_process_and_natural_cocoa.jpg
+DVD | recinqQLxCyK6e9rq | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/DVD-R_bottom-side.jpg/250px-DVD-R_bottom-side.jpg
+Dye-sensitized solar cell | recZeqGKuQresaqfK | https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Dye.sensitized.solar.cells.jpg/250px-Dye.sensitized.solar.cells.jpg
+Dynamite | recgZQvlI0C1UZmJS | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Inserting_dynamite_into_hole.jpg/250px-Inserting_dynamite_into_hole.jpg
+Dynamo self-excitation | recf3Wn0hrTjhvBtX | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Murray_Alternator_with_Belt-Driven_Exciter.jpg/500px-Murray_Alternator_with_Belt-Driven_Exciter.jpg
+Earth oven | recV08djToSDwKiq4 | https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Samoa_umu.JPG/200px-Samoa_umu.JPG
+Ebonite | reculBUdswnT90moe | https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Ebonit.JPG/250px-Ebonit.JPG
+EEPROM | rec1hgnkAN3i66L0E | https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/AT24C02_EEPROM_1480355_6_7_HDR_Enhancer.jpg/200px-AT24C02_EEPROM_1480355_6_7_HDR_Enhancer.jpg
+Ejector seat | reclyp9PPqYN2DWS9 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/EjectionSeats40.jpg/250px-EjectionSeats40.jpg
+Electret microphone | receNM7ob9wMs6vtP | https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Electret_condenser_microphone_capsules.jpg/200px-Electret_condenser_microphone_capsules.jpg
+Electric arc | recnVAuT3Dh8pZhu4 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Lichtbogen_3000_Volt.jpg/250px-Lichtbogen_3000_Volt.jpg
+Electric arc furnace | rectF35zihumGQvYX | https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/An_electric_arc_furn%2Cace_%28the_large_cylinder%29_being_tapped_n-08_0000383.jpg/200px-An_electric_arc_furn%2Cace_%28the_large_cylinder%29_being_tapped_n-08_0000383.jpg
+Electric generator | rec6OYA3zx7AYg2HU | https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/GrammeMachine.jpg/250px-GrammeMachine.jpg
+Electrolytic detector | recW3Hwc2XWLIGrh3 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Electrolytic_detector.jpg/250px-Electrolytic_detector.jpg
+Electromagnetic catapult | recbA4d3otkOqgKZt | https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/EMALS.JPG/200px-EMALS.JPG
+Electromechanical programmable computer | recAVPTHqgWIJEDMn | https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/German_Museum_of_Technology%2C_Berlin_2017_024.jpg/250px-German_Museum_of_Technology%2C_Berlin_2017_024.jpg
+Electromechanical relay | recvEzWBOU5g7labA | https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Delta_Electronics_DPS-350FB_A_-_board_1_-_OEG_SDT-SS-112M_-_case_removed-3045.jpg/200px-Delta_Electronics_DPS-350FB_A_-_board_1_-_OEG_SDT-SS-112M_-_case_removed-3045.jpg
+Electronic calculator | rec49jo6oAOsCRyWU | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/AnitaMk8-01.jpg/250px-AnitaMk8-01.jpg
+Electronic digital computer | recatHWrhlRy9ozPC | https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Atanasoff-Berry_Computer_at_Durhum_Center.jpg/200px-Atanasoff-Berry_Computer_at_Durhum_Center.jpg
+Electronic general purpose computer | recq4rjL1HeVLsFq5 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/ENIAC_Penn1.jpg/200px-ENIAC_Penn1.jpg
+Electrotachyscope | recWDWLiOyPjyV85e | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Electrotachyscope1.jpg/200px-Electrotachyscope1.jpg
+Electrotyping | recdfYuFZx20UNCnH | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Electrotyping.svg/200px-Electrotyping.svg.png
+Elephant clock | recmrWl5BU9G3cVp8 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Al-jazari_elephant_clock.png/250px-Al-jazari_elephant_clock.png
+Enigma machine | recfkNpJHqBbWiBX3 | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg/250px-Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg
+Epinephrine (medication) | recVRZZohnINTvpQx | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Epinephrine.svg/500px-Epinephrine.svg.png
+Epoxy | recxT7YzqMyhTj131 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Epoxide_generic.svg/250px-Epoxide_generic.svg.png
+EPROM | receQKevQrG5ILb8i | https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/4Mbit_EPROM_Texas_Instruments_TMS27C040_%281%29.jpg/200px-4Mbit_EPROM_Texas_Instruments_TMS27C040_%281%29.jpg
+Excimer laser | recJBZTRJpuaP3LEu | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Excimer_laser_1.jpg/200px-Excimer_laser_1.jpg
+External pacemaker | recDwd0f7MBHQB3OS | NO_IMAGE_FOUND
+Extreme ultraviolet lithography | recZku02zlIsiy9tP | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/EUV_photoelectrons_and_secondaries_%28vector%29.svg/200px-EUV_photoelectrons_and_secondaries_%28vector%29.svg.png
+Fahrenheit scale | recy79PFPVU1JHapU | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Raumthermometer_Fahrenheit%2BCelsius.jpg/250px-Raumthermometer_Fahrenheit%2BCelsius.jpg
+Far-UVC | recJ2RMY0y47MgipP | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Far-UVC_in_the_Electromagnetic_Spectrum.svg/500px-Far-UVC_in_the_Electromagnetic_Spectrum.svg.png
+Field-effect transistor (concept) | recnFS1CzdEuQp9P6 | https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/FET_cross_section.svg/200px-FET_cross_section.svg.png
+Fierce-fire oil cabinet | rec9r96D9wo1RLlAy | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chinese_Flamethrower.JPG/200px-Chinese_Flamethrower.JPG
+Fighter aircraft | recNLFwKbCJ3nDjaf | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Vickers_FB.5_Gunbus_2345_G-ATVP_Yvtn_09.07.66_edited-3.jpg/250px-Vickers_FB.5_Gunbus_2345_G-ATVP_Yvtn_09.07.66_edited-3.jpg
+Finery forge | recoMZjFgvihsxEWr | https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/PSM_V38_D183_A_forge_trip_hammer.jpg/200px-PSM_V38_D183_A_forge_trip_hammer.jpg
+Fire arrow | recIDfm2R5pPRYBl2 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Manual_Fire_Arrow.jpg/200px-Manual_Fire_Arrow.jpg
+Fire engine | recOm9JcWRpHgIqEw | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Humberside_Fire_%26_Rescue_DH03P4_-_YT21_EHF.jpg/500px-Humberside_Fire_%26_Rescue_DH03P4_-_YT21_EHF.jpg
+Fire piston | rec9WqflhKqm308SE | https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Fire_piston.jpg/200px-Fire_piston.jpg
+Fired bricks | recx1wVlQHTWLlvQI | https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Brick.jpg/500px-Brick.jpg
+Flash memory | recedo7d1BkZrGZ3v | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/USB_flash_drive.JPG/250px-USB_flash_drive.JPG
+Float glass | reciOrNOMZxOyDON7 | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/CrystalPalaceStation.jpg/200px-CrystalPalaceStation.jpg
+Floppy disc | recP9i0aqgXrhOaIR | https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Floppy_disk_2009_G1.jpg/500px-Floppy_disk_2009_G1.jpg
+Fluid catalytic cracking | recYvzC17D8ZNpjWw | https://upload.wikimedia.org/wikipedia/commons/2/25/Fluid_Catalytic_Cracker.gif
+Fluorescent lamp | reczDkExZ4Dq0sSfd | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Fluorescent_lamps_artistic.jpg/500px-Fluorescent_lamps_artistic.jpg
+Fluyt | rech1E6Yd3vg43jx2 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Wenceslas_Hollar_-_A_Flute_%28State_2%29.jpg/200px-Wenceslas_Hollar_-_A_Flute_%28State_2%29.jpg
+Flying bomb | recBAhaFQRdPbxn1w | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Bundesarchiv_Bild_146-1975-117-26%2C_Marschflugk%C3%B6rper_V1_vor_Start.jpg/250px-Bundesarchiv_Bild_146-1975-117-26%2C_Marschflugk%C3%B6rper_V1_vor_Start.jpg
+Flying shuttle | recOLLejR9sRLjTrJ | https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Frisador_Curler.jpg/200px-Frisador_Curler.jpg
+Focal plane tomography | rechM2REdwn1jmBFA | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Panoramicfilm.JPG/250px-Panoramicfilm.JPG
+Fountain | recWtpENZ2JqPBZt4 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Fountains_Collage.jpg/500px-Fountains_Collage.jpg
+Fountain pen | recBdpTDt037mrawk | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Fountain_pen_writing_%28literacy%29.jpg/200px-Fountain_pen_writing_%28literacy%29.jpg
+Fourdrinier machine | recDpVgSh6ICvkELw | https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Fourdrinier_paper_machine%2C_Frogmore_Mills_-_geograph.org.uk_-_1544694.jpg/500px-Fourdrinier_paper_machine%2C_Frogmore_Mills_-_geograph.org.uk_-_1544694.jpg
+Fracking | reckxdvj0hyFEgFm6 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Frac_job_in_process.JPG/250px-Frac_job_in_process.JPG
+Francis turbine | recXapEDVKeNYqJpU | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Francis_Turbine_inlet_scroll_Grand_Coulee_Dam.jpg/250px-Francis_Turbine_inlet_scroll_Grand_Coulee_Dam.jpg
+Franklin stove | rec1H59yQwopekgc8 | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Franklin_stove.jpg/250px-Franklin_stove.jpg
+Friction match | recgJQIsIShZezi4D | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Streichholz.jpg/500px-Streichholz.jpg
+Froth flotation | recefClp3UMJC6qJP | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Flotation_cell.jpg/500px-Flotation_cell.jpg
+Fuel cell | recPeTRr47mt8Z4JM | https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Fuel_cell_NASA_p48600ac.jpg/250px-Fuel_cell_NASA_p48600ac.jpg
+Fürstenberger lighter | recno8qACskKxsiTS | NO_IMAGE_FOUND
+Fused filament fabrication | recpHhb1i94VO8h3X | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Prusa_i3_3D_Printer_-_Reprap_-_Completed.jpg/500px-Prusa_i3_3D_Printer_-_Reprap_-_Completed.jpg
+Galley | recL7ox7tsFqOza3m | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Sbonski_de_Passabon-Galere_a_la_voille.jpeg/200px-Sbonski_de_Passabon-Galere_a_la_voille.jpeg
+Gallium | recox0C2Zv2N03L9U | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Gallium_crystals.jpg/250px-Gallium_crystals.jpg
+Gas mantle | rec0zxXgGb9BSTitG | https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Glowing_gas_mantle.jpg/250px-Glowing_gas_mantle.jpg
+Gatling gun | recNKPNJiRLqzxDau | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Gatling_gun.jpg/500px-Gatling_gun.jpg
+Geissler tube | recEN6Zu49wOSBVPe | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Geissler_tubes_%28Les_ph%C3%A9nom%C3%A8nes_de_la_physique%29.jpg/250px-Geissler_tubes_%28Les_ph%C3%A9nom%C3%A8nes_de_la_physique%29.jpg
+Gelignite | rec2OQOlkioSPu7zd | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Gelingnite_general_view.pdf/page1-200px-Gelingnite_general_view.pdf.jpg
+General anesthesia | recARdmc7Iv9nPlle | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/HuaTuo.jpg/250px-HuaTuo.jpg
+General relativity | recchJfFTm2TvMkC3 | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/BBH_gravitational_lensing_of_gw150914.webm/200px--BBH_gravitational_lensing_of_gw150914.webm.jpg
+Genetically modified animal | recvH61xD5VdaAtTb | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Knockout_Mice5006-300.jpg/250px-Knockout_Mice5006-300.jpg
+Germanium | reczhVsXnH5ie6kfQ | https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Polycrystalline-germanium.jpg/500px-Polycrystalline-germanium.jpg
+Glass | rectZoJd9vYpg6YWH | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Roman_diatretglas.jpg/200px-Roman_diatretglas.jpg
+Glucose (isolation) | rectZMbw2KOpNWwL2 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Alpha-D-Glucopyranose.svg/500px-Alpha-D-Glucopyranose.svg.png
+Gold | recFr2pyYbrS9GcYN | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Gold-crystals.jpg/250px-Gold-crystals.jpg
+Grafting | recHlCW1JYxOIF2Fc | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Zweij%C3%A4hrige-Gei%C3%9Ffu%C3%9Fveredelu.jpg/250px-Zweij%C3%A4hrige-Gei%C3%9Ffu%C3%9Fveredelu.jpg
+Grain cradle | recTtYAjAZUckd3HC | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Ernteabend_-_Holzschnitt_nach_Gem%C3%A4lde_von_Ernst_Henseler.jpg/250px-Ernteabend_-_Holzschnitt_nach_Gem%C3%A4lde_von_Ernst_Henseler.jpg
+Graphene | rec9RqwJ4SMInJDMY | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Graphen.jpg/250px-Graphen.jpg
+Graphical user interface | recYG8YHmgLkbXLEu | https://upload.wikimedia.org/wikipedia/commons/7/77/Example_of_a_GUI.png
+Graphophone | recP4A559rym4Izr5 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Graphophone1901.jpg/250px-Graphophone1901.jpg
+Great theodolite | recJsEH8CK79FvSD1 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/RamsdenRS_theodolite_of_1787.jpg/250px-RamsdenRS_theodolite_of_1787.jpg
+Greek fire | recgwhKN1fpKmfEVj | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Greekfire-madridskylitzes1.jpg/250px-Greekfire-madridskylitzes1.jpg
+Greenhouse | recRhPx1pL5XMlulo | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Botanical_Garden_V.L._Komarov_Botanical_Institute.jpg/500px-Botanical_Garden_V.L._Komarov_Botanical_Institute.jpg
+Ground stone | recsYNuWw1KPvw0wC | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/N%C3%A9olithique_0001.jpg/250px-N%C3%A9olithique_0001.jpg
+Gunpowder | recxoxJ7m8lS5MSR9 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Black_Powder-1.JPG/250px-Black_Powder-1.JPG
+Gutta-percha (modern use) | recs6ipaGB1uqP9Lw | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Palaquium_gutta_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-099.jpg/250px-Palaquium_gutta_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-099.jpg
+Gyrocompass | recYqR4Y1lgmAjO1U | https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Kreiselkompass_Schnitt_Ansch%C3%BCtz.jpg/200px-Kreiselkompass_Schnitt_Ansch%C3%BCtz.jpg
+Hand axe | recHXRvBCHQtLEqx6 | https://upload.wikimedia.org/wikipedia/commons/3/3c/Handaxe_by_John_Frere.png
+Harmonica | recN0Y9c1gPDr4YiA | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/16-hole_chrom_10-hole_diatonic.jpg/250px-16-hole_chrom_10-hole_diatonic.jpg
+Harpsichord | recvVmmUHWJWVqcFU | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Clavecin_flamand.png/200px-Clavecin_flamand.png
+Heated greenhouse | recxwi1idTk4qSy56 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Botanical_Garden_V.L._Komarov_Botanical_Institute.jpg/500px-Botanical_Garden_V.L._Komarov_Botanical_Institute.jpg
+Helicopter | rec5kVjAnjKqSrHjB | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Fw_61_V.JPG/200px-Fw_61_V.JPG
+Helicopter drone | recH9YtoxsoWlQ4D0 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Gyrodyne_QH-50_%28cropped%29.jpg/250px-Gyrodyne_QH-50_%28cropped%29.jpg
+Heliography | recAWnQDDnWuqK5xe | https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Nic%C3%A9phore_Ni%C3%A9pce_Oldest_Photograph_1825.jpg/200px-Nic%C3%A9phore_Ni%C3%A9pce_Oldest_Photograph_1825.jpg
+Helium (isolation) | reckGgTxwgBGddSaa | https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Helium_discharge_tube.jpg/250px-Helium_discharge_tube.jpg
+High-pressure sodium-vapor lamp | rechCPRBrXPNEmf0q | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/A_High_Pressure_Sodium_Light_in_Toronto.jpg/200px-A_High_Pressure_Sodium_Light_in_Toronto.jpg
+High-speed maglev | recv6MONbZcK91Iog | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/A_maglev_train_coming_out%2C_Pudong_International_Airport%2C_Shanghai.jpg/200px-A_maglev_train_coming_out%2C_Pudong_International_Airport%2C_Shanghai.jpg
+High-speed rail | recnRve9I6pkzgUPh | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/N700a-Mt.Fuji.jpg/250px-N700a-Mt.Fuji.jpg
+Hipposandal | recjWkrsYzxHK3utP | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Hipposandal-ermont.jpg/250px-Hipposandal-ermont.jpg
+Horsepower | recAVleoVX9LzMJFG | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Imperial_Horsepower.svg/200px-Imperial_Horsepower.svg.png
+Hovercraft | rechdvcD2tXvU0Zy0 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Formel1_hovercraft.jpg/250px-Formel1_hovercraft.jpg
+Howitzer | recDjoBpliPANM8Oo | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/155mm-howitzer-korea.jpg/500px-155mm-howitzer-korea.jpg
+Human genome sequencing | rec7ijXIoSxJb6hK0 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Logo_HGP.jpg/250px-Logo_HGP.jpg
+Hurdy-gurdy | recLtz8Wro94N8qFZ | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Louvet_Drehleier.JPG/250px-Louvet_Drehleier.JPG
+Hwacha | recQ5mwfv3t5sppIM | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Hwacha2.jpg/250px-Hwacha2.jpg
+Hydraulic telegraph | recaiZGn8sy3tNL82 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Greek_Hydraulic_Telegraph_of_Aeneas_relief.jpg/200px-Greek_Hydraulic_Telegraph_of_Aeneas_relief.jpg
+Hygrometer | reciczgeyfLSAPwRz | https://upload.wikimedia.org/wikipedia/commons/e/e9/Haar-Hygrometer.jpg
+Hypertext Transfer Protocol | recQwk8Upr4YLf7rI | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/HTTP_logo.svg/500px-HTTP_logo.svg.png
+I-beam | reciL6HGUmZSESdLy | https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/I-Beam_002.JPG/250px-I-Beam_002.JPG
+Ibuprofen | recyMMAlY6OlBFIno | https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Ibuprofen-3D-balls.png/200px-Ibuprofen-3D-balls.png
+Ignition magneto | recpeoi3cbbZ6difZ | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Magneto_components.png/250px-Magneto_components.png
+Implantable cardioverter-defibrillator | recPuQxzDIVGRUKeQ | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Implantable_cardioverter-defibrillator.jpg/500px-Implantable_cardioverter-defibrillator.jpg
+Impulse generator | recY5VEpDTw7IyI9A | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Cs%C3%B6ves_vill%C3%A1mfesz%C3%ADt%C5%91.png/200px-Cs%C3%B6ves_vill%C3%A1mfesz%C3%ADt%C5%91.png
+In-ovo sexing | rec6YZ37gcjj7rDQx | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Chick.jpg/250px-Chick.jpg
+Incense | rec9fnon4gPuz7ffc | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Incenselonghua.jpg/250px-Incenselonghua.jpg
+Incense clock | rec4kPvj1cIonS4n2 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/IncenseAlarmClock.JPG/250px-IncenseAlarmClock.JPG
+Induced pluripotent stem cell | recAVYieLhW2YMv54 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Human_induced_pluripotent_stem_cell_colony_%2851816035910%29.jpg/200px-Human_induced_pluripotent_stem_cell_colony_%2851816035910%29.jpg
+Induction coil | recr6QE4GDCIjDjTb | https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Induktionsapparat_hg.jpg/250px-Induktionsapparat_hg.jpg
+Inductive charging | recKcVRGLmX9ct1CZ | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Inductive_charging.svg/500px-Inductive_charging.svg.png
+Influence machine | rech4o6eH7HJnlnBW | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Electrophorus_device.png/250px-Electrophorus_device.png
+Injection molding | recUvUHLkdEwjAQYd | https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Injection_molding_diagram.svg/500px-Injection_molding_diagram.svg.png
+Inkjet printer | recfTK4hEoyAtbWhz | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Canon_PIXMA_TS207_Printer_picture.jpg/500px-Canon_PIXMA_TS207_Printer_picture.jpg
+Insulated-gate bipolar transistor | recChABq9JlL6wUC0 | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/IGBT_3300V_1200A_Mitsubishi.jpg/250px-IGBT_3300V_1200A_Mitsubishi.jpg
+Insulin | recoOo4Q49WFBJ2Qb | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Insulin_struct.png/500px-Insulin_struct.png
+Intermodal container | recrk3UdNIc6RXAZh | https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Container_01_KMJ.jpg/250px-Container_01_KMJ.jpg
+International system of units | recIBnFpolCc2j88Y | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/SI_Illustration_Base_Units_and_Constants_Colour_Full.svg/500px-SI_Illustration_Base_Units_and_Constants_Colour_Full.svg.png
+Internet forum | recKMNN32wdUNeMCO | https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Phpbb_3.0_prosilver.png/250px-Phpbb_3.0_prosilver.png
+Iron lung | rec06ggvawOhJtrAD | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Iron_lung_CDC.jpg/200px-Iron_lung_CDC.jpg
+Joule heating | rec71QjVf0wgoW0rA | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/VFPt_Solenoid_correct2.svg/200px-VFPt_Solenoid_correct2.svg.png
+Kaplan turbine | recin1FEe3BFWzL8u | https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Kaplan_turbine_bonneville.jpg/250px-Kaplan_turbine_bonneville.jpg
+Kelvin scale and absolute zero | recrVV1tYDREHBrPN | https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Temperature-scales-comparison.svg/250px-Temperature-scales-comparison.svg.png
+Kiln | recXcixSEGuMSvpHj | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Charcoal_Kilns%2C_California.JPG/250px-Charcoal_Kilns%2C_California.JPG
+Kinetoscope | recoAeqhcELRDd7m1 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Kinetoscope.jpg/250px-Kinetoscope.jpg
+Krypton | recXVmhrpisNtc8ec | https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Krypton_discharge_tube.jpg/250px-Krypton_discharge_tube.jpg
+Lacquer | recj8WxRr1wQ6pmgg | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/%E6%98%8E%E5%98%89%E9%9D%96_%E5%89%94%E7%B4%85%E5%A3%BD%E5%AD%97%E7%B4%8B%E5%85%AB%E8%A7%92%E6%BC%86%E7%9B%A4-Dish_with_character_for_longevity_%28shou%29_MET_DP704215.jpg/200px-%E6%98%8E%E5%98%89%E9%9D%96_%E5%89%94%E7%B4%85%E5%A3%BD%E5%AD%97%E7%B4%8B%E5%85%AB%E8%A7%92%E6%BC%86%E7%9B%A4-Dish_with_character_for_longevity_%28shou%29_MET_DP704215.jpg
+Lamellar armour | rec5lQvIgydHmIard | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Terracotta_Army_5.jpg/250px-Terracotta_Army_5.jpg
+Laminated glass | recRFOMfnPATkkZup | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Windshield-spiderweb.jpg/250px-Windshield-spiderweb.jpg
+LaserDisc | recnQwj1oXhDy4vuw | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/LaserDisc.jpg/250px-LaserDisc.jpg
+LASIK | recwGjp0Mb9RSzxdC | https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/US_Navy_070501-N-5319A-007_Capt._Joseph_Pasternak%2C_an_ophthalmology_surgeon_at_National_Naval_Medical_Center_Bethesda%2C_lines_up_the_laser_on_Marine_Corps_Lt._Col._Lawrence_Ryder%27s_eye_before_beginning_LASIK_IntraLase_surgery.jpg/250px-thumbnail.jpg
+Light-emitting diode | recsjEeHBL9he0YvF | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/RBG-LED.jpg/500px-RBG-LED.jpg
+Lighthouse | recpXV7BqPnBxFDjn | https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/A_coruna_torre_de_hercules_sunset_edit.jpg/250px-A_coruna_torre_de_hercules_sunset_edit.jpg
+Linear motor | recyCyMhLXH74ZcLY | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Linearmotorprinzip.png/200px-Linearmotorprinzip.png
+Liquefied gas refrigerants | recsuiMSZF6D1d814 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kuehlregal_USA.jpg/500px-Kuehlregal_USA.jpg
+Liquid nitrogen | recC2vfOJifafZdQX | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Liquidnitrogen.jpg/500px-Liquidnitrogen.jpg
+Liquid oxygen | recA7y5s0cH8JmFin | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Liquid_oxygen_in_a_beaker_%28cropped_and_retouched%29.jpg/250px-Liquid_oxygen_in_a_beaker_%28cropped_and_retouched%29.jpg
+Lithium | reclsbxa68PJkaskP | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Lithiumcut_cropped.jpg/250px-Lithiumcut_cropped.jpg
+Lithium iodide battery | reci7Zcbph5SUxMAC | NO_IMAGE_FOUND
+Lithium-ion battery | rec5qU4V5nZwK0vOF | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Nokia_Battery.jpg/500px-Nokia_Battery.jpg
+Lithium-ion electric car | recixaU7kbTZRAzE6 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Roadster_San_Diego.jpg/250px-Roadster_San_Diego.jpg
+Logarithm | recGJV7gN0ydz5IsJ | https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Mirifici_Logarithmorum_canonis_Descriptio.jpg/200px-Mirifici_Logarithmorum_canonis_Descriptio.jpg
+Lost-wax casting | recVbhTDUtdsynVTo | https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Bronze_casting_by_the_Lost_Wax_Method.png/250px-Bronze_casting_by_the_Lost_Wax_Method.png
+Lumière cinematograph | recStJyQT0tAkvOrk | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Institut_Lumi%C3%A8re_-_CINEMATOGRAPHE_Camera.jpg/250px-Institut_Lumi%C3%A8re_-_CINEMATOGRAPHE_Camera.jpg
+Lunar and lunisolar calendars | recOyPrgRLI3PoS9j | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/2025_Lunar_Calendar.png/250px-2025_Lunar_Calendar.png
+Lunar lander | rectLcU0LEX4o2U4l | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Apollo_11_Lunar_Module_Eagle_in_landing_configuration_in_lunar_orbit_from_the_Command_and_Service_Module_Columbia.jpg/250px-Apollo_11_Lunar_Module_Eagle_in_landing_configuration_in_lunar_orbit_from_the_Command_and_Service_Module_Columbia.jpg
+Lyocell | recET6L4i9HTqNuIJ | https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Lyocell_Vital_fabric.jpg/250px-Lyocell_Vital_fabric.jpg
+Magnesium | reczFPrWixE18htmo | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/CSIRO_ScienceImage_2893_Crystalised_magnesium.jpg/500px-CSIRO_ScienceImage_2893_Crystalised_magnesium.jpg
+Magnetic resonance imaging | recEk3y7wkYXuUqrJ | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/MRI_Scanner_Mark_One.jpg/250px-MRI_Scanner_Mark_One.jpg
+Magnifying glass | rec7vtq0fYV5ZUg7R | https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Nimrud_lens_British_Museum.jpg/250px-Nimrud_lens_British_Museum.jpg
+Manganese | recVVrGVv9yKVu8TR | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Manganese_electrolytic_and_1cm3_cube.jpg/500px-Manganese_electrolytic_and_1cm3_cube.jpg
+Margarine | rec6cFw2lKnFEC4gd | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Margarine.jpg/250px-Margarine.jpg
+Maser | recJMm4DvP2CvA6WH | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Charles_Townes_and_first_maser.jpg/200px-Charles_Townes_and_first_maser.jpg
+Masking tape | recultkl1cAivhHCZ | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Malerkrepp.jpg/200px-Malerkrepp.jpg
+Mechanical television | recxmbIFsbISQoSJM | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Science_and_Invention_Television_1928.jpg/500px-Science_and_Invention_Television_1928.jpg
+Media streaming | recGPPTVXPggmZ6Nk | https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/NASA_Spacesuit_Development.webm/200px--NASA_Spacesuit_Development.webm.jpg
+Mercury battery | rec13bzUWXodxl8ke | https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/%D0%A0%D0%A6-53%D0%9C.JPG/200px-%D0%A0%D0%A6-53%D0%9C.JPG
+Mercury thermometer | recp9duzWH3sjZif2 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Mercury_Thermometer.jpg/200px-Mercury_Thermometer.jpg
+Mercury-vapor lamp | recXVOYKl7sYv9ohV | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/MercuryVaporLamp.jpg/200px-MercuryVaporLamp.jpg
+Metallic nib | recU9MsdM59ajSHQn | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pointed_pen_parts.svg/250px-Pointed_pen_parts.svg.png
+Metric system | recME2vXVYpUYdkjk | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/FourMetricInstruments.JPG/500px-FourMetricInstruments.JPG
+Microkeratome | recltFaj5OjpflwbA | NO_IMAGE_FOUND
+Microlith | recDO6CSIOaysS2p1 | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Kebaran_culture_microliths_22000-18000_BP.jpg/250px-Kebaran_culture_microliths_22000-18000_BP.jpg
+Micropipette | reclZf4DkglM6UjWU | https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Pipette_gallery.jpg/250px-Pipette_gallery.jpg
+Microprocessor | reclz65jvAQGORFZj | https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/TI_TMS1000NLL_1.jpg/200px-TI_TMS1000NLL_1.jpg
+Microwave oven | recWgPH54NTC1yeOA | https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Panasonic_NN-SD69LS_20220410.jpg/250px-Panasonic_NN-SD69LS_20220410.jpg
+Milk chocolate | recYivcM1LgWLo1zO | https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Milka_Alpine_Milk_Chocolate_bar_100g_with_chunks_broken_off.jpg/200px-Milka_Alpine_Milk_Chocolate_bar_100g_with_chunks_broken_off.jpg
+Mills bomb | recwG24HQOZiznM00 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/N%C2%B05-MkII_N%C2%B023-MkII_N%C2%B036-MkI.jpg/200px-N%C2%B05-MkII_N%C2%B023-MkII_N%C2%B036-MkI.jpg
+Mimeograph | recHiZmmXdVlszsWa | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Mimeograph.svg/500px-Mimeograph.svg.png
+Miniature neon lamp | reczK3FIlNAQHY0XE | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/AC_powered_NE-2_type_neon_lamp_close-up.jpg/200px-AC_powered_NE-2_type_neon_lamp_close-up.jpg
+Mining | recPsyr2eIXVnMhia | https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Sulphur_Mining_at_Kawah_Ijen_3.jpg/500px-Sulphur_Mining_at_Kawah_Ijen_3.jpg
+Modern ballpoint pen | recOmFFMe6bWzO5Wa | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ballpoint-pen-parts.jpg/500px-Ballpoint-pen-parts.jpg
+Modern evolutionary synthesis | recnizFPQvFXxbAIK | https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Modern_Synthesis.svg/200px-Modern_Synthesis.svg.png
+Modern Portland cement | recusOphDcNonXocA | https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Portland_Cement_Bags.jpg/250px-Portland_Cement_Bags.jpg
+Molybdenum | rec7fjPq3aQ7zQpVx | https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Molybdenum_crystaline_fragment_and_1cm3_cube.jpg/250px-Molybdenum_crystaline_fragment_and_1cm3_cube.jpg
+Monte Carlo method | recXPnPyoXADhmEtp | https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Approximation_d%27une_distribution_normale.gif/500px-Approximation_d%27une_distribution_normale.gif
+Moog synthesizer | rec7wKaqMetpWcjpF | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Moog_Modular_55_img2.jpg/200px-Moog_Modular_55_img2.jpg
+Morphine | recWe0HarrmkMZBxJ | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Morphine2DCSDS.svg/250px-Morphine2DCSDS.svg.png
+Morse code | recMHHiWGRGYndedx | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/International_Morse_Code.svg/250px-International_Morse_Code.svg.png
+MOS DRAM | recNeWphtrBAevyIX | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/MT4C1024-HD.jpg/500px-MT4C1024-HD.jpg
+MOS SRAM | recajxulJoVCmYotc | https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Hyundai_RAM_HY6116AP-10.jpg/250px-Hyundai_RAM_HY6116AP-10.jpg
+Motorized air compressor | reccPOhQN1x92chYz | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Print%2C_trade-card_%28BM_D%2C2.1576%29.jpg/250px-Print%2C_trade-card_%28BM_D%2C2.1576%29.jpg
+Movable type | recyxyvYLjSW5TduV | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Metal_movable_type.jpg/250px-Metal_movable_type.jpg
+MP3 audio compression | rec4BATYFWoymUZZ0 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Mp3.svg/250px-Mp3.svg.png
+mRNA vaccine | rece6Cdg2uv6QT0AD | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Ijms-21-06582-g002.webp/250px-Ijms-21-06582-g002.webp.png
+Mudbricks | rechyaEb27nZBVa53 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Mudbricks_in_Palestine_2011.jpg/250px-Mudbricks_in_Palestine_2011.jpg
+Multistage rocket | recDQSv0wvD6q6pSE | https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Chinese_Multistage_Rocket.JPG/250px-Chinese_Multistage_Rocket.JPG
+Musical bow | recO8jORzXfbsF3F8 | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/MusicalBow.gif/200px-MusicalBow.gif
+Neocognitron | rec2DC37T67GOC24h | NO_IMAGE_FOUND
+Neon | recGwqz1aZccAuW2E | https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Neon_discharge_tube.jpg/250px-Neon_discharge_tube.jpg
+Nernst lamp | recWFyS1WHyJqX0A2 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Nernst-lamp2.jpg/250px-Nernst-lamp2.jpg
+Neuron doctrine | recjUyCfOp2GgMWBH | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/CajalCerebellum.jpg/250px-CajalCerebellum.jpg
+Neutrino | recYKJglAwulJv8P9 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/FirstNeutrinoEventAnnotated.jpg/250px-FirstNeutrinoEventAnnotated.jpg
+Nickel | receuKOX87n7bZZ3r | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Nickel_electrolytic_and_1cm3_cube.jpg/250px-Nickel_electrolytic_and_1cm3_cube.jpg
+Niobium | recdQD9Zvus89BC2L | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Niobium_crystals_and_1cm3_cube.jpg/250px-Niobium_crystals_and_1cm3_cube.jpg
+Nitrogen | rec0XKGiMl3E3IdEb | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Fluessiger_Stickstoff.jpg/250px-Fluessiger_Stickstoff.jpg
+Nitroglycerin | recOBIfCnlXIkD8Wb | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Nitroglycerin.svg/250px-Nitroglycerin.svg.png
+Nuclear fission | rec0sZecCFCEtEpVT | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Nuclear_fission_reaction.svg/200px-Nuclear_fission_reaction.svg.png
+Nuclear magnetic resonance | recNV6bF1x4qSfCtL | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/700_lab_fix.JPG/250px-700_lab_fix.JPG
+Nuclear power plant | recOBLTuJWjiS7NVP | https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/RIAN_archive_409173_World%27s_first_nuclear_power_plant_in_Obninsk.jpg/200px-RIAN_archive_409173_World%27s_first_nuclear_power_plant_in_Obninsk.jpg
+Nuclear reactor | recvHf3k2yj2KH2eG | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Time%2C_3-22_p.m%2C_December_2%2C_1942._Place%2C_Racquets_Court_under_West_Stands_of_Stagg_Field%2C_University_of_Chicago...._-_NARA_-_542144.tif/lossy-page1-200px-Time%2C_3-22_p.m%2C_December_2%2C_1942._Place%2C_Racquets_Court_under_West_Stands_of_Stagg_Field%2C_University_of_Chicago...._-_NARA_-_542144.tif.jpg
+Obsidian tool | recNUmajHXKb2OLUp | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Lipari-Obsidienne_%285%29.jpg/250px-Lipari-Obsidienne_%285%29.jpg
+Octant | recJQNGt9afRSB7Rd | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Oktant.jpg/250px-Oktant.jpg
+Offset printing | recERE6qemtQVJ45Y | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/DE-Zeitungsrollenoffsetdruck_by_Steschke.jpg/500px-DE-Zeitungsrollenoffsetdruck_by_Steschke.jpg
+OLED | recjIpu3XxvIPWqe2 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/OEL_right.JPG/250px-OEL_right.JPG
+Ondes Martenot | recIfgxEr3CT0tLK3 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Ondes_martenot.jpg/250px-Ondes_martenot.jpg
+Optical amplifier | recDEfrGdjK0TtdQ0 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/A_Guiding_Star.jpg/500px-A_Guiding_Star.jpg
+Optical fiber | rec2KoJLhH0jhh6Ju | https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Fibreoptic.jpg/250px-Fibreoptic.jpg
+Oral polio vaccine | recdsnLCxF4POUHRm | https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Poliodrops.jpg/250px-Poliodrops.jpg
+Orangery | recSGedg56jr9YHel | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/County_Cork_-_Fota_House-Orangery_-_20180910130154.jpg/200px-County_Cork_-_Fota_House-Orangery_-_20180910130154.jpg
+Organistrum | rec93meO5nf6rYsYt | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Organistrumsantiago20060414.jpg/200px-Organistrumsantiago20060414.jpg
+Ox hide bellows | reckzzsUpdCW1MtNs | https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Bellows_%28PSF%29.svg/500px-Bellows_%28PSF%29.svg.png
+Ozone | recLNdElQmvaGNeoQ | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ozone-1%2C3-dipole.svg/250px-Ozone-1%2C3-dipole.svg.png
+Pacemaker | rec0XhUdk8OZtw3nh | NO_IMAGE_FOUND
+Pager | recFFVJYxBDNPvmPq | https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Swissphone_RES.Q_Hybrid_with_GSM_and_GPS_module.jpg/200px-Swissphone_RES.Q_Hybrid_with_GSM_and_GPS_module.jpg
+PageRank | recrgwN873oMU93ka | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/PageRanks-Example.svg/250px-PageRanks-Example.svg.png
+Pan flute | recsQqKBH4ZzJ3qDS | https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/ChileanPanpipes-cutout.jpg/250px-ChileanPanpipes-cutout.jpg
+Pantelegraph | recWL7ELj6XHCYoAY | https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Pantelegraph.png/250px-Pantelegraph.png
+Paper money | recaxqaqFOtUbPEfG | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Hue-tzu_%28Song_Dynasty_government_issue%29%2C_1023_-_John_E._Sandrock.jpg/250px-Hue-tzu_%28Song_Dynasty_government_issue%29%2C_1023_-_John_E._Sandrock.jpg
+Papyrus | recBb0F6hzKNRo6mE | https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Papyrus.jpg/250px-Papyrus.jpg
+Paracetamol | rec8OvrakvbrP0Y3I | https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Paracetamol-skeletal.svg/250px-Paracetamol-skeletal.svg.png
+Paraffin wax | rectmVHmh9mhYUCLL | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Paraffin.jpg/250px-Paraffin.jpg
+Parchment | recBwL3jYTindKDIG | https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Parchment_from_goatskin.jpg/200px-Parchment_from_goatskin.jpg
+Pasteurization | recuhq2832ryzYwES | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Pasteurized_milk_-Japan.jpg/250px-Pasteurized_milk_-Japan.jpg
+Patio process | recwEPwaSuTUH0rO0 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Hacienda_Nueva_de_Fresnillo.jpg/250px-Hacienda_Nueva_de_Fresnillo.jpg
+Paul-Wyatt cotton mills | recMZyaD6pGVFvnPH | https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Paul_1758_Patent_Drawing.jpg/200px-Paul_1758_Patent_Drawing.jpg
+Pelton wheel | recvVZpJvGKXngcEJ | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Peltonturbine-1.jpg/200px-Peltonturbine-1.jpg
+PET-CT | recvVlNzXBgtoK0PA | https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Viewer_medecine_nucleaire_keosys.JPG/200px-Viewer_medecine_nucleaire_keosys.JPG
+Petroleum as fuel | recjJk4jVasEkLmDt | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Petroleum_sample.jpg/500px-Petroleum_sample.jpg
+Petzval lens | recG3G9TjSGtSibC2 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Petzval.png/200px-Petzval.png
+Phage display | recx24Ywq44rQsUWz | https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Phage_display.png/250px-Phage_display.png
+Phase-contrast microscope | recMnyCOstBnWe48s | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Phase_contrast_microscope.jpg/200px-Phase_contrast_microscope.jpg
+Phoenician joint | recp9fHXVktP5k9Mi | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mazarron_I_%28cropped%29.jpg/250px-Mazarron_I_%28cropped%29.jpg
+Phonautograph | recPSbNMzTmP2fTxD | https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Phonautograph_1859.jpg/200px-Phonautograph_1859.jpg
+Phosphorus | recezQ1bdvORd8S46 | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Phosphor_rot.jpg/250px-Phosphor_rot.jpg
+Photolithography | rec3EW0X75ZuNPrrR | NO_IMAGE_FOUND
+Photomultiplier tube | recf3a8chx5EZC0xT | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Dynodes.jpg/250px-Dynodes.jpg
+Photon and photoelectric effect | rec8krKEJBvagKopd | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Photoelectric_effect_in_a_solid_-_diagram.svg/250px-Photoelectric_effect_in_a_solid_-_diagram.svg.png
+Photonic-crystal fiber | recVVh0DIRtZowe3M | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Photonic-crystal-fiber-from-NRL.jpg/250px-Photonic-crystal-fiber-from-NRL.jpg
+Photovoltaic effect | recLbe5SB3DqTwSi9 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Mafate_Marla_solar_panel_dsc00633.jpg/250px-Mafate_Marla_solar_panel_dsc00633.jpg
+Physautotype | recexWZT0xwgJJ3tb | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Niepce_table.jpg/250px-Niepce_table.jpg
+Pine tar | rectLkkWbXc7e7qyR | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Wood_tar.jpg/250px-Wood_tar.jpg
+Pivoted scissors | rechr8cDQ05dBnQAs | https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Standard_household_scissors.jpg/500px-Standard_household_scissors.jpg
+Planar process | recwqzZipT5j9Nzth | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/74LS244_F_8314_annotated_sm.jpg/200px-74LS244_F_8314_annotated_sm.jpg
+Planer | recsIZq2Atie7ymde | https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Planing_machine_with_electric_motor_drive_%28Rankin_Kennedy%2C_Modern_Engines%2C_Vol_VI%29.jpg/250px-Planing_machine_with_electric_motor_drive_%28Rankin_Kennedy%2C_Modern_Engines%2C_Vol_VI%29.jpg
+Plasma globe | rec5RDpiWxy3OOzek | https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Plasma_globe_60th.jpg/250px-Plasma_globe_60th.jpg
+Platinum | recJFZK6HS8pD9fZ3 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Platinum_crystals.jpg/500px-Platinum_crystals.jpg
+Plumbing | recOkUUE20mcN7ZBG | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Pipes_various.jpg/250px-Pipes_various.jpg
+Plutonium | recvsKso3pvmTVUzh | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Plutonium_ring.jpg/500px-Plutonium_ring.jpg
+Plywood | recdmcKivChrW5WdI | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Spruce_plywood.JPG/250px-Spruce_plywood.JPG
+Pneumatic drill | recInk9VMBdNypyP3 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Pneumatic_drill.jpeg/250px-Pneumatic_drill.jpeg
+Pneumatic motor | recXEkiH3CMRwdQbS | https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Victor_Tatin_aeroplane_1879.jpg/500px-Victor_Tatin_aeroplane_1879.jpg
+Pneumatic tube | recfgNwMHwN4157Vx | https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Washington%2C_D.C._Miss_Helen_Ringwald_works_with_the_pneumatic_tubes.jpg/200px-Washington%2C_D.C._Miss_Helen_Ringwald_works_with_the_pneumatic_tubes.jpg
+Pointed arch bridge | recKaDf88QIiXdcHE | NO_IMAGE_FOUND
+Polonium | rec3bR4ZK3toNaGJ5 | NO_IMAGE_FOUND
+Polymerase chain reaction | rec5WSiuAN5Ooypox | https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/PCR_tubes.png/250px-PCR_tubes.png
+Polyphonic synthesizer | recgJPtymNNAm2BQf | https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Novachord_frontS.jpg/200px-Novachord_frontS.jpg
+Portable defibrillator | rec0Qe37UdlIxN2rd | NO_IMAGE_FOUND
+Portable engine | recIsWUvedqBHauyK | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Steam_lokomobile_2_%28aka%29.jpg/250px-Steam_lokomobile_2_%28aka%29.jpg
+Portland cement | recOn4VX2GghIC3oJ | https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Portland_Cement_Bags.jpg/250px-Portland_Cement_Bags.jpg
+Positron emission tomography | recfI9kIjj5SCrS35 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Positron_emission_tomography.png/250px-Positron_emission_tomography.png
+Post windmill | rec2ZJfu9pvBl82iQ | https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Brill_windmill_April_2017.jpg/250px-Brill_windmill_April_2017.jpg
+Potassium | rec3qkqAOpecHd0e5 | https://upload.wikimedia.org/wikipedia/commons/a/a4/Potassium-2.jpg
+Pound canal lock | recGMpcInxIRIytrb | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Chesterfield_Canal_pound.jpg/200px-Chesterfield_Canal_pound.jpg
+Power loom | rec2wWtjFGD4ErBy2 | NO_IMAGE_FOUND
+Powered printing press | recIDA6a3WH8xwv0D | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/PrintMus_038.jpg/500px-PrintMus_038.jpg
+Pre-cut cardboard box | recBwDO0J5r7zmcKp | https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Box.agr.jpg/250px-Box.agr.jpg
+Precession of the equinoxes | recQ3dmAnQfhTSnt9 | https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Earth_precession.svg/200px-Earth_precession.svg.png
+Pressure cooker | recpXcklJMdruxkY7 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Papin%27s_digester.gif/200px-Papin%27s_digester.gif
+Pressurized aircraft cabin | recVF7n9g81oWacbu | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Boeing_737_fuselage_train_hull_3473.jpg/500px-Boeing_737_fuselage_train_hull_3473.jpg
+Programmable electronic computer | recdvUcxi2EKvzQOi | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Colossus.jpg/250px-Colossus.jpg
+Programmable synthesizer | reciswJub8wYrR2S0 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/RCA_Mark_II_Sound_Synthesizer.jpg/200px-RCA_Mark_II_Sound_Synthesizer.jpg
+Protein sequencing | recMYpuDSoWtbzuQC | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Man_using_a_Beckman-Spinco_Protein-Peptide_Sequencer_bg257f292.tiff/lossy-page1-200px-Man_using_a_Beckman-Spinco_Protein-Peptide_Sequencer_bg257f292.tiff.jpg
+Proto-soap | recBxVXx19hZW0lcT | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Handmade_soap_cropped_and_simplified.jpg/500px-Handmade_soap_cropped_and_simplified.jpg
+Proximity fuze | recqd2Giu6ORF5qra | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MK53_fuze.jpg/200px-MK53_fuze.jpg
+Prussian blue | recGCQxFTstT9nfva | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Pigment_Berliner_Blau.JPG/200px-Pigment_Berliner_Blau.JPG
+Psaltery | recM4nAqXvDahsgKW | https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Chiesa_di_San_Maurizio_-_Salterio_-_Scuola_Veniziana_-_1700.jpg/250px-Chiesa_di_San_Maurizio_-_Salterio_-_Scuola_Veniziana_-_1700.jpg
+Public-key cryptography | recyFoCJSmVq5L3mB | https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Public-key-crypto-1.svg/250px-Public-key-crypto-1.svg.png
+Pulley | rec66seTd3sA9Pnqe | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/PulleyShip.JPG/250px-PulleyShip.JPG
+Pump organ | recfeKmQ1KfT3wS26 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/John_Church_and_Co._reed_organ.jpg/250px-John_Church_and_Co._reed_organ.jpg
+Quadcopter camera drone | rec1JzVnUN7DmCDi7 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Quadcopter_camera_drone_in_flight.jpg/500px-Quadcopter_camera_drone_in_flight.jpg
+Quark | recrOA1bqObbrgizd | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Quark_structure_proton.svg/500px-Quark_structure_proton.svg.png
+Quern-stone | rec4wPGcMnxkKzx8b | https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Basalt_quern.jpg/250px-Basalt_quern.jpg
+Quill | rechm6ldFimJWjVhx | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg/200px-%D7%A7%D7%9C%D7%A3%2C_%D7%A0%D7%95%D7%A6%D7%94_%D7%95%D7%93%D7%99%D7%95.jpg
+Quipu | recWV7kTzJ8RH6WRT | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Inca_Quipu.jpg/250px-Inca_Quipu.jpg
+Rabbit pregnancy test | rect4poYmtt2z0gVS | NO_IMAGE_FOUND
+Radiocarbon dating | recVOykfEIgHg86MQ | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/The_Temple_Scroll_%2811Q20%29_-_Google_Art_Project.jpg/250px-The_Temple_Scroll_%2811Q20%29_-_Google_Art_Project.jpg
+Radioimmunoassay | recXQgD39OiuXaRGl | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Radioimmunoassay_process.png/250px-Radioimmunoassay_process.png
+Raft | recP5duPnB6m03TIy | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Huck_and_jim_on_raft.jpg/200px-Huck_and_jim_on_raft.jpg
+Railway semaphore signal | recfA35VqE4Ku5WYb | https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Castleton_East_Junction_signal_box_59_signal_%281%29.jpg/250px-Castleton_East_Junction_signal_box_59_signal_%281%29.jpg
+Rapid transit | recJkQ7RcP013BwMF | https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Constructing_the_Metropolitan_Railway.jpg/250px-Constructing_the_Metropolitan_Railway.jpg
+Reading stone | recTSZmQEgOM6zByD | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2015-08_archeon_reading_stone.JPG/250px-2015-08_archeon_reading_stone.JPG
+Recombinant DNA | reckl8hBNGHujmM96 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Recombinant_formation_of_plasmids.svg/250px-Recombinant_formation_of_plasmids.svg.png
+Rectified linear unit | rec9nisqIZSD2GAd8 | https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/ReLU_and_GELU.svg/250px-ReLU_and_GELU.svg.png
+Rectifier? | recNi8nGh91A4dJTs | https://upload.wikimedia.org/wikipedia/commons/a/a3/Rectifier.jpg
+Reed pen | recXl3E8yhqL4f0Yr | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Reed_Pens.jpg/200px-Reed_Pens.jpg
+Reflective LLM | recEjVbYXNLRGJsIs | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Diagram_of_reflexion.svg/500px-Diagram_of_reflexion.svg.png
+Reservoir | rec3GyvK9ApWWa5Sq | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/%D0%AF%D0%B7%D0%BE%D0%B2%D0%B8%D1%80_%D0%9A%D1%8A%D1%80%D0%B4%D0%B6%D0%B0%D0%BB%D0%B8_%D0%9D%D1%83%D0%BB%D0%B0%D1%82%D0%B0.jpg/500px-%D0%AF%D0%B7%D0%BE%D0%B2%D0%B8%D1%80_%D0%9A%D1%8A%D1%80%D0%B4%D0%B6%D0%B0%D0%BB%D0%B8_%D0%9D%D1%83%D0%BB%D0%B0%D1%82%D0%B0.jpg
+Resonant inductive coupling | recFKqWP8vSau8sN4 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Magnetic_phase_synchronus_coupling.svg/500px-Magnetic_phase_synchronus_coupling.svg.png
+Reusable spacecraft | recNHqTJiT3LFAUNe | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/STS120LaunchHiRes-edit1.jpg/500px-STS120LaunchHiRes-edit1.jpg
+RF CMOS | recZDeFkXDKZ1KvJw | https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Broadcom_BCM2050KMLG_%2849724268213%29.jpg/250px-Broadcom_BCM2050KMLG_%2849724268213%29.jpg
+Rock-cut stepwell | rec2p7b85iPn7WJjJ | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Rani_ki_vav_02.jpg/200px-Rani_ki_vav_02.jpg
+Roman cement | recJzKrqU6dojGydx | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/The_South_Door_of_Lichfield_Cathedral_-_geograph.org.uk_-_1640308.jpg/250px-The_South_Door_of_Lichfield_Cathedral_-_geograph.org.uk_-_1640308.jpg
+Roman concrete | recdOyVMRZUpkaNHc | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Rome-Pantheon-Interieur1.jpg/250px-Rome-Pantheon-Interieur1.jpg
+Rømer scale | recBZj0HLnigP82G9 | NO_IMAGE_FOUND
+Rope | recMCcI3J3s5oopdU | https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Cordage_en_chanvre.jpg/250px-Cordage_en_chanvre.jpg
+Rotary kiln | receTOdS3uX8Ro0gG | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Lime_plant%2C_Wyoming.jpg/250px-Lime_plant%2C_Wyoming.jpg
+Rotary printing press | recJ7k7kUX9eYoh05 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Hoe%27s_six-cylinder_press.png/500px-Hoe%27s_six-cylinder_press.png
+Rotary quern | rec4yVmQacxsjnSO1 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Basalt_quern.jpg/250px-Basalt_quern.jpg
+Rowing oars | rec32h7KVPAhIdl4m | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/OarCollection01.JPG/200px-OarCollection01.JPG
+Rubber | recA6Peu0ZRy5euO2 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Mesoamerica_-_manopla_and_ball.jpg/250px-Mesoamerica_-_manopla_and_ball.jpg
+Rust-resistant iron | recSpSCflkN2X1kQs | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/QtubIronPillar.JPG/250px-QtubIronPillar.JPG
+Safety bicycle | recnrph0YROT8CXd7 | https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Rover_safety_bicycle_of_1885_%28right%29.jpg/200px-Rover_safety_bicycle_of_1885_%28right%29.jpg
+Safety lamp | recLW0PEz81VDnUCV | NO_IMAGE_FOUND
+Salt print | rec50n6nRKiUbKL60 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Edinburgh_Ale_by_Hill_%26_Adamson_c1844.png/200px-Edinburgh_Ale_by_Hill_%26_Adamson_c1844.png
+Saltpeter | recLfwMLqPonrxAWv | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Potassium_nitrate.jpg/250px-Potassium_nitrate.jpg
+Saxophone | recTUNM3En4XgSQOc | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Yamaha_Saxophone_YAS-62.tif/lossy-page1-500px-Yamaha_Saxophone_YAS-62.tif.jpg
+Scalpel | recMRCISqjm10JKAl | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Various_scalpels.png/200px-Various_scalpels.png
+Scintillation counter | rechU4TvVIplOOyYj | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/PhotoMultiplierTubeAndScintillator.svg/200px-PhotoMultiplierTubeAndScintillator.svg.png
+Screw press | recfoDoXAanCScSRx | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/GoldsmithPress.jpg/250px-GoldsmithPress.jpg
+Screw-cutting lathe | recCFbzrz5bCEUkAu | https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Maudslay_screw-cutting_lathes_of_circa_1797_and_1800.png/200px-Maudslay_screw-cutting_lathes_of_circa_1797_and_1800.png
+Scroll | recn0XkL7WCJOonmY | https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Scroll.jpg/250px-Scroll.jpg
+Scythed chariot | recEwyr1oAvzPQqPF | https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/The_charge_of_the_Persian_scythed_chariots_at_the_battle_of_Gaugamela_by_Andre_Castaigne_%281898-1899%29.jpg/250px-The_charge_of_the_Persian_scythed_chariots_at_the_battle_of_Gaugamela_by_Andre_Castaigne_%281898-1899%29.jpg
+Search engine | recjFuIok96cujmkm | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Archie_search_engine.png/250px-Archie_search_engine.png
+Seed drill | rectKWhYnKPWvNMOe | https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/7263_Canterbury_Agricultural_College_farm.jpg/250px-7263_Canterbury_Agricultural_College_farm.jpg
+Segmental arched bridge | recEczp7H045LXBBg | NO_IMAGE_FOUND
+Selective laser melting | rech5nSRC4IjX66h3 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Selective_laser_melting.jpg/200px-Selective_laser_melting.jpg
+Selective laser sintering | recqkbpprNM87k9M1 | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/3dprinter.jpg/250px-3dprinter.jpg
+Semiconductors | recJJjMUnHTaINGfn | NO_IMAGE_FOUND
+Sewn boat building | recoGZ3PRqJXrs58g | https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Halsn%C3%B8y-brest_2012-3000px.jpg/250px-Halsn%C3%B8y-brest_2012-3000px.jpg
+Sextant | recKniotfJGNQSPlx | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Sextant.jpg/200px-Sextant.jpg
+Sheng | recW7wWSSngnONHhp | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Sheng_MET_DP216617.jpg/250px-Sheng_MET_DP216617.jpg
+Shukhov cracking process | rec7oBA26L33X9ylY | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Russian_Cracking.jpg/200px-Russian_Cracking.jpg
+Signal lamp | rec2wg0JrjlVC0Nsh | https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Signal_lamp_training.jpg/250px-Signal_lamp_training.jpg
+Silica gel | recXZ50iEIDo3coUa | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Silica_gel_pb092529.jpg/500px-Silica_gel_pb092529.jpg
+Silicon | recORlweoiyBQ7zyS | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/SiliconCroda.jpg/500px-SiliconCroda.jpg
+Silver | recDeezPLrzwLQHSj | https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Silver_crystal.jpg/500px-Silver_crystal.jpg
+Silver–cadmium battery | recrDNFnGd5BXn9PN | NO_IMAGE_FOUND
+Simple suspension bridge (New World) | recjpWgKdwzM8dvjE | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Yaxchilan_Pile.JPG/200px-Yaxchilan_Pile.JPG
+Smartphone | recuj2R1Nq0oIOxF1 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/IBM_Simon_Personal_Communicator.png/250px-IBM_Simon_Personal_Communicator.png
+Smokeless gunpowder | recn73dWjIqb19kRr | https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/N110_ruuti.jpg/250px-N110_ruuti.jpg
+SMS | recQ5FyutgIBQmeTW | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/SMS_test.jpg/500px-SMS_test.jpg
+Snaphance | recTuDB4PF5OxgYgY | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Snaphaunce_guns-Sweedish-mid17cent.jpg/200px-Snaphaunce_guns-Sweedish-mid17cent.jpg
+Snaplock | rec7LXcflfKnypKM6 | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Snaphaunce_sparking.gif/200px-Snaphaunce_sparking.gif
+Snow goggles | recR7udJwXe04nPuh | https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Inuit_snow_goggles.jpg/250px-Inuit_snow_goggles.jpg
+Soap | recrmjAr9izeRrn1X | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Handmade_soap_cropped_and_simplified.jpg/500px-Handmade_soap_cropped_and_simplified.jpg
+Sodium | recYdSk2DFPRy1jlX | https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Na_%28Sodium%29.jpg/500px-Na_%28Sodium%29.jpg
+Sodium–sulfur battery | recVhC2DKTVR7PwpG | NO_IMAGE_FOUND
+Solar cooker | recAqlyQJZgSg8BEB | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Parabolic_Solar_Cooker.jpg/250px-Parabolic_Solar_Cooker.jpg
+Solar sail | recudNrELUD6gEpz7 | https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/IKAROS_solar_sail.jpg/250px-IKAROS_solar_sail.jpg
+Solar thermal power station  | recD4YU1sg2SRBM0S | https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Calefon_solar_termosifonico_compacto.jpg/500px-Calefon_solar_termosifonico_compacto.jpg
+Solid-state drive | recOWEdmOpEnvoZJZ | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_Dysk_SSD_Patriot_P210_2TB.jpg/500px-2023_Dysk_SSD_Patriot_P210_2TB.jpg
+Soluble cellulose acetate | recI199wHs4Q2DNHr | https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/ILFORD_HP5_PLUS_SAFETY_FILM.JPG/250px-ILFORD_HP5_PLUS_SAFETY_FILM.JPG
+Sound film | recVmKBT7nPHEYOlK | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Gaumont1902.jpg/250px-Gaumont1902.jpg
+South-pointing chariot | rectk3kii6o0MOJjE | https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/South-pointing_chariot_%28Science_Museum_model%29.jpg/250px-South-pointing_chariot_%28Science_Museum_model%29.jpg
+Soybean paste and soy sauce | recdhf7efnNv0N9z3 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Soy_sauce_2.jpg/250px-Soy_sauce_2.jpg
+Space blanket | recaQftuwQIbH4ibm | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/RescueFoil.jpg/250px-RescueFoil.jpg
+Space capsule | recLcBLQ5vxJEX04p | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Crew_Dragon_at_the_ISS_for_Demo_Mission_1_%28cropped%29.jpg/250px-Crew_Dragon_at_the_ISS_for_Demo_Mission_1_%28cropped%29.jpg
+Spandex | recYhrtiUrFfbZ3pH | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cycling_kit_full_body_alt_3_%28cropped%29.jpg/250px-Cycling_kit_full_body_alt_3_%28cropped%29.jpg
+Spear-thrower | recNancMHt5WjT9Fa | https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Nativo_do_Novo_Mundo_lan%C3%A7ando_flecha_com_o_propulsor_ou_est%C3%B3lica.jpg/200px-Nativo_do_Novo_Mundo_lan%C3%A7ando_flecha_com_o_propulsor_ou_est%C3%B3lica.jpg
+Speculum metal mirror | recDiTZ41qR2v91Bn | https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/40-foot_telescope_mirror.jpg/250px-40-foot_telescope_mirror.jpg
+Spinning jenny | rec0Hdf38gjhkQQs4 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Spinning_jenny.jpg/250px-Spinning_jenny.jpg
+Spiral stairs | recgEqCFexUAL2Q2H | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Trajans-Column-lower-animated.svg/200px-Trajans-Column-lower-animated.svg.png
+Spirit level | rec9dXnMB1qfxgssj | https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/DetalleNivelDeBurbuja.jpg/500px-DetalleNivelDeBurbuja.jpg
+Stainless steel | rechN8hqrp6uMUzg8 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Sink_and_taps_in_the_men%27s_locker_room_3_BW.jpg/200px-Sink_and_taps_in_the_men%27s_locker_room_3_BW.jpg
+Standard Model of particle physics
+ | reccil28VpscCbzNK | https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Standard_Model_of_Elementary_Particles.svg/500px-Standard_Model_of_Elementary_Particles.svg.png
+Statistical language model | recCjYXw0pqrSgGYq | NO_IMAGE_FOUND
+Steam hammer | rec9n8w3W4lEHzZoH | https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Dampfhammer2_brockhaus.jpg/250px-Dampfhammer2_brockhaus.jpg
+Steamboat | recFrX23jyV5sY0Rb | https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/D%27AbbansSteamshipModel.jpg/250px-D%27AbbansSteamshipModel.jpg
+Steamboat transport | recc0VqoZmInkh8jZ | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Clermont_replica.jpg/200px-Clermont_replica.jpg
+Steel-framed building | reciPzVGzgAtO3JdH | https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Rand_McNally_Building_1889.jpg/200px-Rand_McNally_Building_1889.jpg
+Stem cell | recmQ2Kbv8ONACsdc | https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/MSC_high_magnification.jpg/250px-MSC_high_magnification.jpg
+Stepped reckoner | recTtPs3PdprEHTz0 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Leibnitzrechenmaschine.jpg/200px-Leibnitzrechenmaschine.jpg
+Stereolithography | recaqfTOoNJjiKw1i | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Schematic_representation_of_Stereolithography.png/500px-Schematic_representation_of_Stereolithography.png
+Stirling engine | recLC0VJiWHkhGpmZ | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/HPS_Eigenbau2.jpg/250px-HPS_Eigenbau2.jpg
+Stocking frame | recqohgVMZNHi4kHg | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Stocking_Frame.jpg/250px-Stocking_Frame.jpg
+Strong focusing | recu1dVBtxDuh12Rh | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Aust.-Synchrotron%2C-Sextupole-Focusing-Magnet%2C-14.06.2007.jpg/250px-Aust.-Synchrotron%2C-Sextupole-Focusing-Magnet%2C-14.06.2007.jpg
+Strontium | rec6aiU56CX2pN27x | https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Strontium_destilled_crystals.jpg/500px-Strontium_destilled_crystals.jpg
+Submarine | rec1BaOgcpshMXfYK | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/FultonNautilus1.JPG/500px-FultonNautilus1.JPG
+Sugar beet | recGHzf3vJdQpmBGH | https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/276_Beta_vulgaris_L.jpg/200px-276_Beta_vulgaris_L.jpg
+Sulfur | rec1NkcdH39MKKKM5 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Sulfur_-_El_Desierto_mine%2C_San_Pablo_de_Napa%2C_Daniel_Campos_Province%2C_Potos%C3%AD%2C_Bolivia.jpg/500px-Sulfur_-_El_Desierto_mine%2C_San_Pablo_de_Napa%2C_Daniel_Campos_Province%2C_Potos%C3%AD%2C_Bolivia.jpg
+Sulfur lamp | recCcYZPhOoxdfXcI | https://upload.wikimedia.org/wikipedia/commons/2/20/Lampa_siarkowa.jpg
+Sulfur matches | rec0W4KkDK6zKB9Xw | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Streichholz.jpg/500px-Streichholz.jpg
+Sulfuric acid | recPYuOehj4QphRqb | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Sulphuric_acid_96_percent_extra_pure.jpg/500px-Sulphuric_acid_96_percent_extra_pure.jpg
+Sundial | recOx2UaNqZ45Koxh | https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Ancient-egyptian-sundial.jpg/200px-Ancient-egyptian-sundial.jpg
+Sunscreen | recevyLALmlUmzNTZ | https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sunscreen_on_back_under_normal_and_UV_light.jpg/200px-Sunscreen_on_back_under_normal_and_UV_light.jpg
+Supercomputer | recOG0rws8hExnEsm | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/UNIVAC_LARC-BRL61-0959.jpg/200px-UNIVAC_LARC-BRL61-0959.jpg
+Superconducting magnet | recm8OLkG54MGKbea | https://upload.wikimedia.org/wikipedia/commons/7/7f/20T_superconducting_magnet.png
+Superconductors | recHuxJUUpLEoawMd | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stickstoff_gek%C3%BChlter_Supraleiter_schwebt_%C3%BCber_Dauermagneten_2009-06-21.jpg/500px-Stickstoff_gek%C3%BChlter_Supraleiter_schwebt_%C3%BCber_Dauermagneten_2009-06-21.jpg
+Supersonic flight | rec8CNfH9PlVJYng5 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Bell_X-1_46-062_%28in_flight%29.jpg/200px-Bell_X-1_46-062_%28in_flight%29.jpg
+Synchrotron | reczoMaAhVLcUYJWB | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/University_of_Michigan_synchrotron.jpg/250px-University_of_Michigan_synchrotron.jpg
+Synchrotron with superconducting magnets | recnKP3IcXGjh5uAa | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fermilab.jpg/250px-Fermilab.jpg
+Synthetic insulin | recdhUxmMDReVpg9L | https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Inzul%C3%ADn.jpg/250px-Inzul%C3%ADn.jpg
+System of measurement | reccMhJ38LbR9qwcM | https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sumerian_Calendar_ISO_B0.svg/500px-Sumerian_Calendar_ISO_B0.svg.png
+Tank | recwx8Eqqc7k1lW7P | https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Mark_I_series_tank.jpg/500px-Mark_I_series_tank.jpg
+Teeth-cleaning twig | recxnZvNxw1VtMz6O | https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Bunches_of_teeth_cleaning_twigs.jpg/200px-Bunches_of_teeth_cleaning_twigs.jpg
+Telegraph sounder | recUBJhjbhH5RxyRv | https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Telegraph_Sounder.JPG/200px-Telegraph_Sounder.JPG
+Telescope | recPKJHmIdosqqsMq | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Emblemata_1624.jpg/200px-Emblemata_1624.jpg
+Tesla coil | recQlldacEp5adW7s | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Lightning_simulator_questacon02.jpg/250px-Lightning_simulator_questacon02.jpg
+Theodolite | recf7tbAk4Ci5T44k | https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/SovietTheodolite.jpg/200px-SovietTheodolite.jpg
+Thermionic diode | recKItfXl2xCDbTgI | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Fleming_valves.jpg/250px-Fleming_valves.jpg
+Thermoscope | recvYfXyRp9NM54Uv | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Mus%C3%A9e_des_Arts_et_M%C3%A9tiers_thermoscope_de_galil%C3%A9e_1592.JPG/200px-Mus%C3%A9e_des_Arts_et_M%C3%A9tiers_thermoscope_de_galil%C3%A9e_1592.JPG
+Thermostat | recXx61Wt4qsPP8DK | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Drebbel_Van_Sichem_ca_1631_groot.jpg/500px-Drebbel_Van_Sichem_ca_1631_groot.jpg
+Thin-film solar cell | recmZWJgDgf6XyLDk | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Thin_Film_Flexible_Solar_PV_Installation_2.JPG/200px-Thin_Film_Flexible_Solar_PV_Installation_2.JPG
+Thorium | recGGrQTEKKz4gql5 | https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Thorium_sample_0.1g.jpg/250px-Thorium_sample_0.1g.jpg
+Three-field crop rotation | recaQfTqUKmEbRAKe | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Three_Field_System.svg/250px-Three_Field_System.svg.png
+Three-point hitch | rec7DcFBQoal2DDaE | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Ursus_C360_PICT0076.jpg/500px-Ursus_C360_PICT0076.jpg
+Three-strip color film | recCxBKxpWDAtJhZL | https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/%22Technicolor_is_natural_color%22_Paul_Whiteman_stars_in_the_King_of_Jazz_-_from%2C_The_Film_Daily%2C_Jul-Dec_1930_%28page_218_crop%29.jpg/500px-%22Technicolor_is_natural_color%22_Paul_Whiteman_stars_in_the_King_of_Jazz_-_from%2C_The_Film_Daily%2C_Jul-Dec_1930_%28page_218_crop%29.jpg
+Throwing stick | recywQ7P6oYVkfTKx | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Aboriginal_craft.jpg/250px-Aboriginal_craft.jpg
+Thyratron | recu7jVYs2DT7GkjI | https://upload.wikimedia.org/wikipedia/commons/b/ba/Thyratronsmall.jpg
+Thyristor | recYTcoOEGbanm3N3 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/SCR1369.jpg/250px-SCR1369.jpg
+Tin bronze | recbQV3dGtjYmGu2K | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Bull%27s_head_ornament_for_a_lyre_MET_DP260070.jpg/250px-Bull%27s_head_ornament_for_a_lyre_MET_DP260070.jpg
+Titanium | reccQNH3RYUJ1K6Wc | https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Titan-crystal_bar.JPG/200px-Titan-crystal_bar.JPG
+Tobacco | recrqDwiSXpoCDxHt | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/DunhillEarlyMorningPipeMurrays.jpg/250px-DunhillEarlyMorningPipeMurrays.jpg
+Toe stirrup | recBPNhVPnKwomPrh | https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/EnduranceStirrup.jpg/250px-EnduranceStirrup.jpg
+Toilet paper | recjmQqa7fP2tlnF7 | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Toiletpapier_%28Gobran111%29.jpg/500px-Toiletpapier_%28Gobran111%29.jpg
+Tokamak | recmvcMKvh07TwlOj | https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/2017_TOCAMAC_Fusion_Chamber_N0689.jpg/250px-2017_TOCAMAC_Fusion_Chamber_N0689.jpg
+Touchscreen | recHOnfXr5TP6Rmje | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Hear_Music_touchscreen.jpg/500px-Hear_Music_touchscreen.jpg
+Touchstone | rec17fieXtl53lRxl | https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Pierre_de_touche.jpg/250px-Pierre_de_touche.jpg
+Tower ship | rec9taH6qPGK8Dd2K | https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Songrivership3.jpg/500px-Songrivership3.jpg
+Traction trebuchet | rec5QEAuOGObdTFbR | https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Warring_States_Traction_Trebuchet_Model.jpg/250px-Warring_States_Traction_Trebuchet_Model.jpg
+Traffic light | recAtuHB8UzL4BWde | https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/TrafficSignalInstallationUS1940.jpg/250px-TrafficSignalInstallationUS1940.jpg
+Transformer read-only storage | recK1jyDVHUDhBofd | https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/IBM_360_20_TROS.jpg/250px-IBM_360_20_TROS.jpg
+Transistor computer | reck0ed5DJTkfMvN6 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/IBM_1620_data_processing_machine_on_display%2C_Seattle_World%27s_Fair%2C_1962.jpg/200px-IBM_1620_data_processing_machine_on_display%2C_Seattle_World%27s_Fair%2C_1962.jpg
+Transistor radio | recL1ctl7p8LAM7Il | https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Emerson_Model_888_Pioneer_8-Transistor_AM_Radio%2C_Made_in_the_USA%2C_Circa_1958_%2821973868670%29.jpg/250px-Emerson_Model_888_Pioneer_8-Transistor_AM_Radio%2C_Made_in_the_USA%2C_Circa_1958_%2821973868670%29.jpg
+Transistorized electronic calculator | recxpIsFWX0BfNHyV | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/The_Childrens_Museum_of_Indianapolis_-_Friden_model_132_calculator.jpg/250px-The_Childrens_Museum_of_Indianapolis_-_Friden_model_132_calculator.jpg
+Triode | reci8RJPgsJlaeqqq | https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Triode_tube_1906.jpg/250px-Triode_tube_1906.jpg
+Trip hammer | recYNcjQrQwMTh1yc | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Hammer_und_Schleiferei_zum_Kini_Schwanzhammer-9546.jpg/250px-Hammer_und_Schleiferei_zum_Kini_Schwanzhammer-9546.jpg
+Trireme | recY2qhnzs5WI4ji2 | https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Greek_Galleys.jpg/250px-Greek_Galleys.jpg
+Tuned radio frequency receiver | rec6K64WNhqDdjqtI | https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/1920s_TRF_radio_manufactured_by_Signal.jpg/250px-1920s_TRF_radio_manufactured_by_Signal.jpg
+Tungsten | recABqJFgF0jee4VA | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Wolfram_evaporated_crystals_and_1cm3_cube.jpg/200px-Wolfram_evaporated_crystals_and_1cm3_cube.jpg
+Tunnel boring machine | recqyg62TtSMAW0Ou | https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/A_d%C3%A9li_pajzs_a_keresztez%C5%91kamr%C3%A1ban.jpg/500px-A_d%C3%A9li_pajzs_a_keresztez%C5%91kamr%C3%A1ban.jpg
+Tunnel diode | recUsgtT7JSD8nthm | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/GE_1N3716_tunnel_diode.jpg/250px-GE_1N3716_tunnel_diode.jpg
+Tunnelling shield | recFgN4rk38b9SvA1 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Thames_tunnel_shield.png/200px-Thames_tunnel_shield.png
+Turbojet | rec4OaSJOCc4ZXiBq | https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Jumo_004.jpg/250px-Jumo_004.jpg
+Turing machine | recuak1YZZfPmWAPY | https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Turing_Machine_Model_Davey_2012.jpg/250px-Turing_Machine_Model_Davey_2012.jpg
+TV remote control | recGZG2dZddYkFGfr | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/1955_Zenith_Flash-Matic_%28cropped%29.jpg/250px-1955_Zenith_Flash-Matic_%28cropped%29.jpg
+Two-color additive color film | recW2xuViEKVMwxmR | https://upload.wikimedia.org/wikipedia/en/thumb/3/3a/G._A._Smith%2C_Two_Clowns.jpg/250px-G._A._Smith%2C_Two_Clowns.jpg
+Umami | recgzWdi27u0nR38l | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Soy_sauce_with_wasabi.jpg/500px-Soy_sauce_with_wasabi.jpg
+Uranium-235 | recYmUFgPcOT1c3ez | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/HEUraniumC.jpg/250px-HEUraniumC.jpg
+Usenet | recMMphZ6nCKRbDXJ | https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Slrn.png/250px-Slrn.png
+Vacuum pan | recCDm4pS080nT8VY | https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Great_Exhibition%2C_Vacuum_Sugar_Apparatus%2C_HF_Talbot%2C_1851.jpg/250px-Great_Exhibition%2C_Vacuum_Sugar_Apparatus%2C_HF_Talbot%2C_1851.jpg
+Vending machine | recLOiOy2BHuXTfx1 | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/CandiesVendingMachine1952.jpg/200px-CandiesVendingMachine1952.jpg
+Video game | recPphd9qDZbdMMFm | NO_IMAGE_FOUND
+Vihuela | recyrUm7vpRX3EYjP | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bernardino_di_Betto_Pinturicchio.jpg/200px-Bernardino_di_Betto_Pinturicchio.jpg
+Vinyl | recu3HV6tpGIY0LsA | https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Pure_Polyvinyl_Chloride_powder.jpg/250px-Pure_Polyvinyl_Chloride_powder.jpg
+Viola da gamba | recWVpw0yFKPukeEG | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Viola_Da_Gamba_Front_and_Side.png/250px-Viola_Da_Gamba_Front_and_Side.png
+Vocoder | recHfrObxYLPgsEcH | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Kraftwerk_Vocoder_custom_made_in_early1970s.JPG/250px-Kraftwerk_Vocoder_custom_made_in_early1970s.JPG
+Von Neumann architecture | recsPFzAs5UfJ3OEw | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Von_Neumann_Architecture.svg/250px-Von_Neumann_Architecture.svg.png
+Vulcanized rubber | recyBchzgkHw9bYYt | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/VulcanizationMold1941.jpg/250px-VulcanizationMold1941.jpg
+Wagonway | recospOrwP7P5q8lh | https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Wagonway.jpg/250px-Wagonway.jpg
+War wagon | rec8FLOEnivGfswcy | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Husitsky_bojovy_vuz_replika.jpg/250px-Husitsky_bojovy_vuz_replika.jpg
+Water clock | receVuMYsANawp66Z | https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/AGMA_Clepsydre.jpg/200px-AGMA_Clepsydre.jpg
+Water frame | reczorKUJ2m1pinED | https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Spinning_frame01.jpg/200px-Spinning_frame01.jpg
+Water glass | recvV1FXItz0Bvykn | NO_IMAGE_FOUND
+Water organ | recbyHxUAFpVQeSpR | https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Mosaique_Zliten.jpg/250px-Mosaique_Zliten.jpg
+Water wheel (Greece) | recaaXoED9rdPYQg5 | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Brucker_Wasserrad_01.webm/500px--Brucker_Wasserrad_01.webm.jpg
+Water-powered blast furnace | recFVj1MTL4N7aNQt | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Yuan_Dynasty_-_waterwheels_and_smelting.png/200px-Yuan_Dynasty_-_waterwheels_and_smelting.png
+Waterproof concrete | rec5YTTKKNl69i4cQ | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Bloczek_betonowy.jpg/500px-Bloczek_betonowy.jpg
+Watt steam engine | recVbSrGh9M9qevU5 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Maquina_vapor_Watt_ETSIIM.jpg/250px-Maquina_vapor_Watt_ETSIIM.jpg
+Wax tablet | recMCtfgHY09wqvau | https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Table_with_was_and_stylus_Roman_times.jpg/250px-Table_with_was_and_stylus_Roman_times.jpg
+Wearable pacemaker | recZfGwp4zy6GbP56 | NO_IMAGE_FOUND
+Weather forecasting | recLKB0v6EfV3y5Al | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Day5pressureforecast.png/250px-Day5pressureforecast.png
+Wheelbarrow | rec2wIqGyGZfjHbvV | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/2008-07-15_Construction_wheelbarrow_at_Duke.jpg/250px-2008-07-15_Construction_wheelbarrow_at_Duke.jpg
+Wi-Fi | recv0yGb7i6ClBiev | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/WiFi_Logo.svg/250px-WiFi_Logo.svg.png
+Wide-area computer network | recZzRAtLx9u0yYNh | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Arpanet_logical_map%2C_march_1977.png/250px-Arpanet_logical_map%2C_march_1977.png
+Wiki | recP9D28mzRjQEvnY | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Wikitext-wiki_markup-wikipedia.png/200px-Wikitext-wiki_markup-wikipedia.png
+Wire wheel | recvh65Mt51y00ExG | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Penny_Farthing_Ordinary_Coventry_Transport_Museum.jpg/200px-Penny_Farthing_Ordinary_Coventry_Transport_Museum.jpg
+Wireless computer network | recD3TNQuhZ8Q8lSq | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Wifi.svg/200px-Wifi.svg.png
+Wireless telegraphy | recMClvTgVyIdv9h1 | https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/SCR188.jpg/200px-SCR188.jpg
+Woodblock printing | rec5hb9KwCCI4rnCW | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Jingangjing.jpg/200px-Jingangjing.jpg
+World map | recEB5zwEUKONbvpF | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/The_Babylonian_map_of_the_world%2C_from_Sippar%2C_Mesopotamia..JPG/250px-The_Babylonian_map_of_the_world%2C_from_Sippar%2C_Mesopotamia..JPG
+Writing (China) | recKJm63LbTOMJnNc | https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Shang_Inscribed_Ox_Scapula_%28for_divination%29.jpg/250px-Shang_Inscribed_Ox_Scapula_%28for_divination%29.jpg
+Writing (Egypt) | recZ9wjq1O5pNHzfq | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Hieroglyphs_from_the_tomb_of_Seti_I.jpg/250px-Hieroglyphs_from_the_tomb_of_Seti_I.jpg
+Writing (Mesoamerica) | rec5FJCme59AHoWar | https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Cascajal-text.svg/250px-Cascajal-text.svg.png
+X-ray crystallography | recLO0ZdbhfsBjaVe | https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Freezed_XRD.jpg/500px-Freezed_XRD.jpg
+Xenon | recMetvZnWY8OiiiO | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Xenon_discharge_tube.jpg/250px-Xenon_discharge_tube.jpg
+Xun lei chong | recrGa2prbFPQdmW8 | https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/%E8%BF%85%E9%9B%B7%E9%8A%83%E5%85%A8%E5%BD%A2.png/250px-%E8%BF%85%E9%9B%B7%E9%8A%83%E5%85%A8%E5%BD%A2.png
+Yttrium | rec0SjqMQXTDYq26C | https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Yttrium_sublimed_dendritic_and_1cm3_cube.jpg/200px-Yttrium_sublimed_dendritic_and_1cm3_cube.jpg
+Zeppelin | recOlQHoGeA87yBQF | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/USS_Los_Angeles_moored_to_USS_Patoka%2C_1931.jpg/250px-USS_Los_Angeles_moored_to_USS_Patoka%2C_1931.jpg
+Zinc smelting | recYKVrOV7jrg63p4 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Zinc_fragment_sublimed_and_1cm3_cube.jpg/500px-Zinc_fragment_sublimed_and_1cm3_cube.jpg
+Zipper | recMmsG3tsB0yR4Av | https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Judson_clasp_locker_patent_1893.png/250px-Judson_clasp_locker_patent_1893.png
+Zirconium | rec4QZpuQ0g1te814 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Zirconium_crystal_bar_and_1cm3_cube.jpg/500px-Zirconium_crystal_bar_and_1cm3_cube.jpg
+Zoopraxiscope | recwGgCVSY1xp7TrQ | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zoopraxiscope_16485u.jpg/250px-Zoopraxiscope_16485u.jpg
