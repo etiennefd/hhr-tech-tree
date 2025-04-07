@@ -2734,21 +2734,37 @@ export function TechTreeViewer() {
       }
     });
     
-    // Add relevant connections
-    data.links.forEach((link, index) => {
-      // Add connection if both nodes are visible
-      if (visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target)) {
-        visibleConnectionIndices.add(index);
+    // Handle connections differently based on device type
+    if (isMobile) {
+      // On mobile, only show connections touching the selected node
+      if (selectedNodeId) {
+        data.links.forEach((link, index) => {
+          if (link.source === selectedNodeId || link.target === selectedNodeId) {
+            visibleConnectionIndices.add(index);
+            // Make sure both endpoints are visible
+            visibleNodeIds.add(link.source);
+            visibleNodeIds.add(link.target);
+          }
+        });
       }
-      // Or if it's in viewport (even if no nodes are visible, add both source and target)
-      else if (isConnectionInViewport(link, index)) {
-        visibleConnectionIndices.add(index);
-        
-        // Always add both source and target nodes to ensure the connection has its endpoints
-        visibleNodeIds.add(link.source);
-        visibleNodeIds.add(link.target);
-      }
-    });
+      // If no node is selected, don't show any connections on mobile
+    } else {
+      // On desktop, use original logic to show all relevant connections
+      data.links.forEach((link, index) => {
+        // Add connection if both nodes are visible
+        if (visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target)) {
+          visibleConnectionIndices.add(index);
+        }
+        // Or if it's in viewport (even if no nodes are visible, add both source and target)
+        else if (isConnectionInViewport(link, index)) {
+          visibleConnectionIndices.add(index);
+          
+          // Always add both source and target nodes to ensure the connection has its endpoints
+          visibleNodeIds.add(link.source);
+          visibleNodeIds.add(link.target);
+        }
+      });
+    }
     
     // Get final arrays
     const newVisibleNodes = data.nodes.filter(node => visibleNodeIds.has(node.id));
@@ -2777,7 +2793,8 @@ export function TechTreeViewer() {
     getNodeConnectionIndices,
     stableHighlightedAncestorsString,
     stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString
+    stableFilteredNodeIdsString,
+    isMobile
   ]);
 
   // Add effect to log general performance metrics
