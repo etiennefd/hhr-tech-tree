@@ -154,7 +154,7 @@ def main():
     # Print results
     print(f"Data Validation Results\n{'='*30}")
     
-    print(f"Total inventions: {len(inventions)}")
+    print(f"Total dated inventions: {len(inventions)}")
     print(f"Total connections: {len(connections)}")
     
     print(f"\nTime paradoxes (From invention is later than To invention): {len(issues['time_paradoxes'])}")
