@@ -1948,11 +1948,14 @@ export function TechTreeViewer() {
     
   }, [filters, data.nodes, data.links, prefetchNode, cleanLocationForTooltip]);
 
-  // Update handleNodeHover to limit prefetching
+  // Update handleNodeHover to limit prefetching and handle mobile devices differently
   const handleNodeHover = useCallback(
     (node: TechNode) => {
-      setHoveredNode(node);
-      setHoveredNodeId(node.id);
+      // On mobile, don't update hover state as we'll go straight to selection
+      if (!isMobile) {
+        setHoveredNode(node);
+        setHoveredNodeId(node.id);
+      }
 
       // Only prefetch immediate neighbors
       const connectedNodeIds = data.links
@@ -1966,7 +1969,7 @@ export function TechTreeViewer() {
         prefetchNode(nodeId);
       }
     },
-    [data.links, prefetchNode]
+    [data.links, prefetchNode, isMobile]
   );
 
   // Add cleanup for prefetch cache
@@ -2746,8 +2749,37 @@ export function TechTreeViewer() {
             visibleNodeIds.add(link.target);
           }
         });
+      } 
+      // If a link is selected, show it even on mobile
+      else if (selectedLinkIndex !== null) {
+        const selectedLink = data.links[selectedLinkIndex];
+        if (selectedLink) {
+          visibleConnectionIndices.add(selectedLinkIndex);
+          // Make sure both endpoints are visible
+          visibleNodeIds.add(selectedLink.source);
+          visibleNodeIds.add(selectedLink.target);
+        }
       }
-      // If no node is selected, don't show any connections on mobile
+      // If field filtering is active (but not location filtering), show connections between filtered nodes
+      else if (filters.fields.size > 0 && !filters.countries.size && !filters.cities.size) {
+        // First identify filtered nodes
+        const filteredNodes = new Set<string>();
+        data.nodes.forEach(node => {
+          if (isNodeFiltered(node)) {
+            filteredNodes.add(node.id);
+          }
+        });
+        
+        // Then add connections between filtered nodes
+        data.links.forEach((link, index) => {
+          if (filteredNodes.has(link.source) && filteredNodes.has(link.target)) {
+            visibleConnectionIndices.add(index);
+            visibleNodeIds.add(link.source);
+            visibleNodeIds.add(link.target);
+          }
+        });
+      }
+      // If no node is selected, don't show any other connections on mobile
     } else {
       // On desktop, use original logic to show all relevant connections
       data.links.forEach((link, index) => {
@@ -2794,7 +2826,8 @@ export function TechTreeViewer() {
     stableHighlightedAncestorsString,
     stableHighlightedDescendantsString,
     stableFilteredNodeIdsString,
-    isMobile
+    isMobile,
+    filters
   ]);
 
   // Add effect to log general performance metrics
@@ -3273,9 +3306,16 @@ export function TechTreeViewer() {
                     if (node.id === selectedNodeId) {
                       setSelectedNodeId(null);
                     } else {
+                      // On mobile, clicking a node immediately selects it
                       setSelectedNodeId(node.id);
                       setSelectedLinkIndex(null);
                       setSelectedLinkKey(null);
+                      
+                      // On mobile, also update hover state to show tooltip
+                      if (isMobile) {
+                        setHoveredNode(node);
+                        setHoveredNodeId(node.id);
+                      }
                     }
                   }}
                   onMouseEnter={() => {
@@ -3284,7 +3324,8 @@ export function TechTreeViewer() {
                     }
                   }}
                   onMouseLeave={() => {
-                    if (node.id !== selectedNodeId) {
+                    // On mobile, don't clear hover state on mouse leave
+                    if (!isMobile && node.id !== selectedNodeId) {
                       setHoveredNode(null);
                       setHoveredNodeId(null);
                     }
