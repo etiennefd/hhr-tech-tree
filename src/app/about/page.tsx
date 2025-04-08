@@ -153,6 +153,8 @@ export default function AboutPage() {
             <li><a href="https://airtable.com/appmQuONO382L03FY/pagNcBGN2JzHckpTP/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Report a problem</a></li>
           </ul>
 
+          <p>Hosting the tree incurs some costs. If you want to support the project financially, the easiest way is to get a paid subscription to <a href="https://www.hopefulmons.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>my Substack</a>. Let me know if you'd prefer other options!</p>
+
           <h2 className="text-2xl font-bold mt-8 mb-4" style={{ color: darkerBlue }}>
             Additional resources
           </h2>
