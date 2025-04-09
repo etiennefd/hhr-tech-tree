@@ -1106,6 +1106,25 @@ export function TechTreeViewer() {
     setIsClient(true);
   }, []);
 
+  // Auto-select Stone tool on initial load to trigger image preloading
+  const hasAutoSelectedRef = useRef(false);
+  useEffect(() => {
+    if (isClient && !isLoading && data.nodes.length > 0 && !hasAutoSelectedRef.current) {
+      const stoneToolNode = data.nodes.find((node: TechNode) => 
+        node.title.toLowerCase() === "stone tool"
+      );
+      
+      if (stoneToolNode) {
+        // Mark as executed so this only runs once
+        hasAutoSelectedRef.current = true;
+        
+        // Quickly select and deselect to trigger image loading
+        setSelectedNodeId(stoneToolNode.id);
+        setSelectedNodeId(null);
+      }
+    }
+  }, [isClient, isLoading, data.nodes]);
+
   // Add handler for clicks outside nodes
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
