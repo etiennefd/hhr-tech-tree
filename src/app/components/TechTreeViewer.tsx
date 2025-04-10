@@ -1137,6 +1137,38 @@ export function TechTreeViewer() {
   //   }
   // }, [isClient, isLoading, data.nodes]);
 
+// Add near the top of TechTreeViewer
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    console.time('totalLoadTime');
+    
+    // Track when the first data fetch starts
+    console.time('dataFetchTime');
+    
+    // Track when first API request completes
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+      const startTime = performance.now();
+      const result = originalFetch.apply(this, args);
+      result.then(() => {
+        console.log(`Fetch completed: ${args[0]} in ${performance.now() - startTime}ms`);
+      });
+      return result;
+    };
+    
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }
+}, []);
+
+// Add in the loadData function
+const loadData = async () => {
+  console.time('loadDataFunction');
+  // existing code...
+  console.timeEnd('loadDataFunction');
+};
+
   // Add handler for clicks outside nodes
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
