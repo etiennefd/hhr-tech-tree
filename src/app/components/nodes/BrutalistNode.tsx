@@ -126,18 +126,18 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   // Bold, industrial colors for fields
   const fieldColors = {
     // Food & Agriculture (Vibrant Greens)
-    Food: "#2AAE4A", // Bright grass green
+    Food: "#277d1e",
     Agriculture: "#34B441", // Fresh leaf green
 
     // Life Sciences (Teals and Aquas)
-    Biology: "#00A499", // Rich teal
+    Biology: "#00a478", // Rich teal
     Medicine: "#00A5B3", // Medical blue
-    Sanitation: "#0098A6", // Clean aqua
+    Sanitation: "#00bdcf", // Clean aqua
 
     // Physical Sciences (Deep Purples)
-    Physics: "#7B44BC", // Rich purple
+    Physics: "#6b3ba1",
     Chemistry: "#8E4BC9", // Bright purple
-    Astronomy: "#6B3AAD", // Deep purple
+    Astronomy: "#371c91",
     Meteorology: "#3C7EBF", // Sky blue
     Optics: "#5C6BC0", // Bright indigo
 
@@ -145,7 +145,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Electricity: "#0099FF", // Electric blue
     Electronics: "#29A69B", // Circuit board teal
     Energy: "#FFB627", // Energy yellow
-    Lighting: "#FFB01F", // Bright amber
+    Lighting: "#ffdc2b", // Bright amber
 
     // Construction/Materials (Metallics and Earth)
     Construction: "#C17817", // Rust orange
@@ -157,7 +157,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
     // Transportation/Movement
     Transportation: "#D35400", // Transportation orange
-    Flying: "#4BA3E3", // Sky blue
+    Flying: "#87cfeb", // Sky blue
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
     Cartography: "#3A75C5", // Map blue
