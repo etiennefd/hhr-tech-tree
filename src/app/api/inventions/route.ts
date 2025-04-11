@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import Airtable from "airtable";
-import fs from "fs/promises";
-import path from "path";
 import { formatLocation, cleanCommaList } from "../../utils/location";
 import { FieldSet, Record as AirtableRecord } from "airtable";
 
@@ -10,186 +8,7 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
 );
 
 // Constants
-const FETCH_TIMEOUT = 5000;
-const MAX_RETRIES = 2;
 const CONCURRENT_REQUESTS = 10;
-const CACHE_FILE = path.join(process.cwd(), "wikipedia-image-cache.json");
-
-// Environment-specific cache durations
-const isDevelopment = process.env.NODE_ENV === 'development';
-const CACHE_DURATION = isDevelopment
-  ? 60 * 60 * 1000            // 1 hour for development
-  : 7 * 24 * 60 * 60 * 1000;  // 7 days for production
-
-// Cache management functions
-async function loadImageCache() {
-  try {
-    const data = await fs.readFile(CACHE_FILE, "utf8");
-    const cache = JSON.parse(data);
-
-    // Filter out expired entries
-    const now = Date.now();
-    const validCache: Record<string, { url: string; timestamp: number }> = {};
-    for (const [key, entry] of Object.entries(cache) as [
-      string,
-      { url: string; timestamp: number }
-    ][]) {
-      if (now - entry.timestamp < CACHE_DURATION) {
-        validCache[key] = entry;
-      }
-    }
-    return validCache;
-  } catch (error) {
-    // If file doesn't exist or is invalid, return empty cache
-    console.error("Error loading cache:", error);
-    return {};
-  }
-}
-
-async function saveImageCache(
-  cache: Record<string, { url: string; timestamp: number }>
-) {
-  try {
-    await fs.writeFile(CACHE_FILE, JSON.stringify(cache, null, 2));
-  } catch (error) {
-    console.error("Error saving cache:", error);
-  }
-}
-
-async function fetchWithTimeout(url: string, timeout: number) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-  try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: {
-        "User-Agent": "TechTreeViewer/1.0 (educational project)",
-      },
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    throw error;
-  }
-}
-
-async function getWikimediaImage(
-  wikipediaUrl: string,
-  cache: Record<string, { url: string; timestamp: number; credits?: { title: string; artist?: string; license?: string; descriptionUrl?: string } }>,
-  retryCount = 0
-) {
-  if (!wikipediaUrl) return null;
-
-  // Extract title from URL
-  const title = wikipediaUrl.split("/wiki/")[1];
-  if (!title) return null;
-
-  // Check cache first
-  if (cache[title]) {
-    return cache[title].url;
-  }
-
-  try {
-    // First, get the image URL
-    const response = await fetchWithTimeout(
-      `https://en.wikipedia.org/w/api.php?` +
-        `action=query&prop=pageimages&format=json&pithumbsize=200&titles=${encodeURIComponent(
-          title
-        )}&origin=*`,
-      FETCH_TIMEOUT
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    const page = Object.values(data.query.pages)[0] as {
-      thumbnail?: {
-        source: string;
-      };
-    };
-
-    if (page?.thumbnail?.source) {
-      const imageUrl = page.thumbnail.source;
-      
-      // Now fetch image info to get credits
-      try {
-        // Extract the filename from the URL
-        const filenameMatch = imageUrl.match(/\/([^\/]+)\/200px-([^\/]+)$/);
-        if (filenameMatch) {
-          const filename = decodeURIComponent(filenameMatch[2]);
-          
-          const imageInfoResponse = await fetchWithTimeout(
-            `https://commons.wikimedia.org/w/api.php?` +
-              `action=query&prop=imageinfo&iiprop=extmetadata&format=json&titles=File:${encodeURIComponent(
-                filename
-              )}&origin=*`,
-            FETCH_TIMEOUT
-          );
-          
-          if (imageInfoResponse.ok) {
-            const imageInfoData = await imageInfoResponse.json();
-            const imagePage = Object.values(imageInfoData.query?.pages || {})[0] as {
-              imageinfo?: Array<{
-                extmetadata?: {
-                  ImageDescription?: { value: string };
-                  Artist?: { value: string };
-                  License?: { value: string };
-                  DescriptionUrl?: { value: string };
-                }
-              }>
-            };
-            
-            const metadata = imagePage?.imageinfo?.[0]?.extmetadata;
-            const credits = {
-              title: metadata?.ImageDescription?.value || title,
-              artist: metadata?.Artist?.value || undefined,
-              license: metadata?.License?.value || undefined,
-              descriptionUrl: metadata?.DescriptionUrl?.value || undefined
-            };
-            
-            // Update cache with image URL and credits
-            cache[title] = {
-              url: imageUrl,
-              timestamp: Date.now(),
-              credits
-            };
-            
-            return imageUrl;
-          }
-        }
-      } catch (creditError) {
-        console.error(`Error fetching image credits for ${title}:`, creditError);
-      }
-      
-      // If credits fetch fails, still cache the image URL
-      cache[title] = {
-        url: imageUrl,
-        timestamp: Date.now()
-      };
-      
-      return imageUrl;
-    }
-
-    return null;
-  } catch (error) {
-    console.error(`Error fetching Wikimedia image for ${title}:`, error);
-
-    if (retryCount < MAX_RETRIES) {
-      console.log(
-        `Retrying fetch for ${title} (attempt ${retryCount + 1}/${MAX_RETRIES})`
-      );
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1000 * Math.pow(2, retryCount))
-      );
-      return getWikimediaImage(wikipediaUrl, cache, retryCount + 1);
-    }
-
-    return null;
-  }
-}
 
 // Helper function to process items in parallel with controlled concurrency
 async function processBatch<T, R>(
@@ -214,9 +33,6 @@ export async function GET(request: Request) {
   const detail = searchParams.get("detail") === "true";
 
   try {
-    // Load cache
-    const imageCache = await loadImageCache();
-
     // Fetch records from Airtable
     const [innovationRecords, connectionRecords] = (await Promise.all([
       base("Innovations")
@@ -289,13 +105,7 @@ export async function GET(request: Request) {
             title: String(record.get("Name") || ""),
             subtitle: String(record.get("Secondary name") || ""),
             tier: String(record.get("Tier") || ""),
-            image:
-              String(record.get("Image URL") || "") ||
-              (await getWikimediaImage(
-                String(record.get("Wikipedia") || ""),
-                imageCache
-              )) ||
-              "/placeholder-invention.png",
+            image: String(record.get("Image URL") || "/placeholder-invention.png"),
             year,
             dateDetails: String(record.get("Date details") || ""),
             type: String(record.get("Type of innovation") || ""),
@@ -320,7 +130,6 @@ export async function GET(request: Request) {
             countryModern: cleanCommaList(
               String(record.get("Country (modern borders)") || "")
             ),
-            // Add formatted location
             formattedLocation: formatLocation(
               String(record.get("City") || ""),
               String(record.get("Country (historical)") || "")
@@ -373,25 +182,14 @@ export async function GET(request: Request) {
         };
       });
 
-    await saveImageCache(imageCache);
-
     return NextResponse.json({
       nodes: validNodes,
       links,
       _debug: {
-        timing: {
-          airtableFetch: 0,
-          cacheLoad: 0,
-          nodeProcessing: 0,
-          connectionProcessing: 0,
-          cacheSave: 0,
-          total: 0,
-        },
         counts: {
           totalRecords: innovationRecords.length,
           validNodes: validNodes.length,
           connections: links.length,
-          cachedImages: Object.keys(imageCache).length,
         },
       },
     });
