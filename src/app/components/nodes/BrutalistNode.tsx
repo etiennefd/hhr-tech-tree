@@ -232,6 +232,8 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const handleImageLoad = () => {
     if (imageUrl !== "/placeholder-invention.png") {
       hasLoadedRef.current = true;
+      // Log when an actual image (not a placeholder) is loaded
+      console.log(`Node image loaded: ${node.title} - ${imageUrl}`);
     }
     setImageLoaded(true);
   };
