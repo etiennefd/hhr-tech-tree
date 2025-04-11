@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-// Global flag to track if any images have been loaded
-declare global {
-  interface Window {
-    nodeImagesPreloaded?: boolean;
-  }
-}
-
 interface Node {
   year: number;
   title: string;
@@ -239,14 +232,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const handleImageLoad = () => {
     if (imageUrl !== "/placeholder-invention.png") {
       hasLoadedRef.current = true;
-      
-      // If this is the Stone tool node, mark that images have been loaded to trigger others
-      if (node.title.toLowerCase() === "stone tool") {
-        console.log("[Image] Stone tool loaded, triggering other images");
-        if (typeof window !== 'undefined') {
-          (window as any).nodeImagesPreloaded = true;
-        }
-      }
     }
     setImageLoaded(true);
   };
@@ -284,9 +269,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       >
         {/* Image section with improved loading */}
         <div className="border-b border-black p-0 relative h-20">
-          {(isVisible || isSelected || isAdjacent || 
-            node.title.toLowerCase() === "stone tool" || 
-            (typeof window !== 'undefined' && (window as any).nodeImagesPreloaded)) && (
+          {(isVisible || isSelected || isAdjacent) && (
             <Image
               src={imageUrl}
               alt={node.title}
@@ -305,7 +288,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
               }}
-              priority={isSelected || isAdjacent || node.title.toLowerCase() === "stone tool"}
+              priority={isSelected || isAdjacent}
             />
           )}
           {!imageLoaded && (
