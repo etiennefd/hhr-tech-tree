@@ -663,7 +663,7 @@ export function TechTreeViewer() {
         Flying: 1250,
         Sailing: 1300,
         Space: 1350,
-        Cartography: 1400,
+        Geography: 1400,
 
         // Computing/Math (1600-1800)
         Mathematics: 1450,

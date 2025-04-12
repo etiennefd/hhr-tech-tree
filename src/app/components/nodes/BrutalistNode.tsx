@@ -119,41 +119,41 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   // Bold, industrial colors for fields
   const fieldColors = {
     // Food & Agriculture (Vibrant Greens)
-    Food: "#2AAE4A", // Bright grass green
-    Agriculture: "#34B441", // Fresh leaf green
+    Food: "#277d1e", // deep green
+    Agriculture: "#359c2c", // Fresh leaf green
 
     // Life Sciences (Teals and Aquas)
-    Biology: "#00A499", // Rich teal
+    Biology: "#2cbd00",
     Medicine: "#00A5B3", // Medical blue
-    Sanitation: "#0098A6", // Clean aqua
+    Sanitation: "#00bdcf",
 
     // Physical Sciences (Deep Purples)
-    Physics: "#7B44BC", // Rich purple
+    Physics: "#6b3ba1",
     Chemistry: "#8E4BC9", // Bright purple
-    Astronomy: "#6B3AAD", // Deep purple
-    Meteorology: "#3C7EBF", // Sky blue
+    Astronomy: "#371c91",
+    Meteorology: "#3c9cbf",
     Optics: "#5C6BC0", // Bright indigo
 
     // Energy & Electronics (Circuit Boards and Energy)
     Electricity: "#0099FF", // Electric blue
-    Electronics: "#29A69B", // Circuit board teal
+    Electronics: "#33a371",
     Energy: "#FFB627", // Energy yellow
-    Lighting: "#FFB01F", // Bright amber
+    Lighting: "#ffdc2b", // Bright amber
 
     // Construction/Materials (Metallics and Earth)
-    Construction: "#C17817", // Rust orange
+    Construction: "#c14d17", // brick
     Mining: "#B87D3D", // Copper brown
     Metallurgy: "#8C8C8C", // Brushed steel
-    Manufacturing: "#D3791E", // Machine orange
-    Textiles: "#D67242", // Terracotta
+    Manufacturing: "#a36018",
+    Textiles: "#b58c55",
     Hydraulics: "#4A90B6", // Industrial blue
 
     // Transportation/Movement
-    Transportation: "#D35400", // Transportation orange
-    Flying: "#4BA3E3", // Sky blue
+    Transportation: "#de6f00",
+    Flying: "#87cfeb", // sky blue
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
-    Cartography: "#3A75C5", // Map blue
+    Geography: "#5ed5ff", // map ocean blue
 
     // Computing/Math (Modern Grays and Blues)
     Mathematics: "#6B7B8C", // Slate blue
@@ -163,17 +163,17 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
     // Safety/Protection/Governance
     Security: "#E94F37", // Alert red
-    Weaponry: "#D64933", // Signal red
-    Finance: "#2F4F4F", // Dark sage green
+    Weaponry: "#d63333",
+    Finance: "#2f6333",
     Governance: "#536B78", // Authority gray
 
     // Culture & Communication (Distinct Pinks)
-    Communication: "#B07996", // Greyish pink
+    Communication: "#c97fa7",
     "Visual media": "#DA70D6", // Orchid
     Recreation: "#FF69B4", // Hot pink
     Music: "#C71585", // Medium violet red
 
-    Misc: "#555555", // Medium gray
+    Misc: "#919191",
   };
 
   // Move addSoftHyphens inside useMemo to handle dependencies properly
