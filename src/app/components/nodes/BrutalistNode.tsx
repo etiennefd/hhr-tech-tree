@@ -160,7 +160,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Flying: "#87cfeb",
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
-    Cartography: "#5ed5ff",
+    Geography: "#5ed5ff",
 
     // Computing/Math (Modern Grays and Blues)
     Mathematics: "#6B7B8C", // Slate blue
