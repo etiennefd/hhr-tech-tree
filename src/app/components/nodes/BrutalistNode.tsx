@@ -126,7 +126,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   // Bold, industrial colors for fields
   const fieldColors = {
     // Food & Agriculture (Vibrant Greens)
-    Food: "#277d1e",
+    Food: "#277d1e", // deep green
     Agriculture: "#359c2c", // Fresh leaf green
 
     // Life Sciences (Teals and Aquas)
@@ -148,19 +148,19 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Lighting: "#ffdc2b", // Bright amber
 
     // Construction/Materials (Metallics and Earth)
-    Construction: "#C17817", // Rust orange
+    Construction: "#c14d17", // brick
     Mining: "#B87D3D", // Copper brown
     Metallurgy: "#8C8C8C", // Brushed steel
-    Manufacturing: "#D3791E", // Machine orange
-    Textiles: "#D67242", // Terracotta
+    Manufacturing: "#a36018",
+    Textiles: "#b58c55",
     Hydraulics: "#4A90B6", // Industrial blue
 
     // Transportation/Movement
     Transportation: "#de6f00",
-    Flying: "#87cfeb",
+    Flying: "#87cfeb", // sky blue
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
-    Geography: "#5ed5ff",
+    Geography: "#5ed5ff", // map ocean blue
 
     // Computing/Math (Modern Grays and Blues)
     Mathematics: "#6B7B8C", // Slate blue
@@ -180,7 +180,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Recreation: "#FF69B4", // Hot pink
     Music: "#C71585", // Medium violet red
 
-    Misc: "#555555", // Medium gray
+    Misc: "#919191",
   };
 
   // Move addSoftHyphens inside useMemo to handle dependencies properly
