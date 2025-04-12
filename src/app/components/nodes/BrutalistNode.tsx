@@ -127,10 +127,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const fieldColors = {
     // Food & Agriculture (Vibrant Greens)
     Food: "#277d1e",
-    Agriculture: "#34B441", // Fresh leaf green
+    Agriculture: "#359c2c", // Fresh leaf green
 
     // Life Sciences (Teals and Aquas)
-    Biology: "#00a478",
+    Biology: "#2cbd00",
     Medicine: "#00A5B3", // Medical blue
     Sanitation: "#00bdcf",
 
@@ -143,7 +143,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
     // Energy & Electronics (Circuit Boards and Energy)
     Electricity: "#0099FF", // Electric blue
-    Electronics: "#29A69B", // Circuit board teal
+    Electronics: "#33a371",
     Energy: "#FFB627", // Energy yellow
     Lighting: "#ffdc2b", // Bright amber
 
@@ -157,10 +157,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
     // Transportation/Movement
     Transportation: "#de6f00",
-    Flying: "#87cfeb", // Sky blue
+    Flying: "#87cfeb",
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
-    Cartography: "#3A75C5", // Map blue
+    Cartography: "#5ed5ff",
 
     // Computing/Math (Modern Grays and Blues)
     Mathematics: "#6B7B8C", // Slate blue
@@ -171,7 +171,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     // Safety/Protection/Governance
     Security: "#E94F37", // Alert red
     Weaponry: "#d63333",
-    Finance: "#2F4F4F", // Dark sage green
+    Finance: "#2f6333",
     Governance: "#536B78", // Authority gray
 
     // Culture & Communication (Distinct Pinks)
