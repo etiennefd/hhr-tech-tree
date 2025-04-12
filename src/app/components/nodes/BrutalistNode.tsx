@@ -130,15 +130,15 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Agriculture: "#34B441", // Fresh leaf green
 
     // Life Sciences (Teals and Aquas)
-    Biology: "#00a478", // Rich teal
+    Biology: "#00a478",
     Medicine: "#00A5B3", // Medical blue
-    Sanitation: "#00bdcf", // Clean aqua
+    Sanitation: "#00bdcf",
 
     // Physical Sciences (Deep Purples)
     Physics: "#6b3ba1",
     Chemistry: "#8E4BC9", // Bright purple
     Astronomy: "#371c91",
-    Meteorology: "#3C7EBF", // Sky blue
+    Meteorology: "#3c9cbf",
     Optics: "#5C6BC0", // Bright indigo
 
     // Energy & Electronics (Circuit Boards and Energy)
@@ -156,7 +156,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Hydraulics: "#4A90B6", // Industrial blue
 
     // Transportation/Movement
-    Transportation: "#D35400", // Transportation orange
+    Transportation: "#de6f00",
     Flying: "#87cfeb", // Sky blue
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
@@ -170,12 +170,12 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
     // Safety/Protection/Governance
     Security: "#E94F37", // Alert red
-    Weaponry: "#D64933", // Signal red
+    Weaponry: "#d63333",
     Finance: "#2F4F4F", // Dark sage green
     Governance: "#536B78", // Authority gray
 
     // Culture & Communication (Distinct Pinks)
-    Communication: "#B07996", // Greyish pink
+    Communication: "#c97fa7",
     "Visual media": "#DA70D6", // Orchid
     Recreation: "#FF69B4", // Hot pink
     Music: "#C71585", // Medium violet red
