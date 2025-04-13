@@ -256,7 +256,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       ref={nodeRef}
       className={`
         relative 
-        transition-all
         cursor-pointer 
         tech-node
         ${isSelected ? "z-20" : isAdjacent ? "z-15" : "z-10"}
@@ -279,7 +278,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         border border-black
         bg-white
         ${isSelected ? "ring-2 ring-black" : ""}
-        transition-all
         relative
       `}
       >
