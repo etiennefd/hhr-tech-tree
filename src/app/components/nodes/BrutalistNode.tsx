@@ -243,7 +243,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       ref={nodeRef}
       className={`
         relative 
-        transition-all
         cursor-pointer 
         tech-node
         ${isSelected ? "z-20" : isAdjacent ? "z-15" : "z-10"}
@@ -266,9 +265,22 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         border border-black
         bg-white
         ${isSelected ? "ring-2 ring-black" : ""}
-        transition-all
+        relative
       `}
       >
+        {/* Add X button for selected state */}
+        {isSelected && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering node click
+              onClick(); // Use the same onClick handler which will deselect when already selected
+            }}
+            className="absolute -top-2 -right-2 w-5 h-5 bg-white border border-black z-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
+            aria-label="Deselect node"
+          >
+            <span className="text-xs font-bold">×</span>
+          </button>
+        )}
         {/* Image section with improved loading */}
         <div className="border-b border-black p-0 relative h-20">
           {(isVisible || isSelected || isAdjacent) && (
