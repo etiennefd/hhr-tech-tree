@@ -35,6 +35,8 @@ def extract_filename_from_url(url: str) -> Union[str, None]:
         match = re.search(r'\/([^\/]+?)(?:\/\d+px-[^\/]+)?$', decoded_url)
         if match:
             filename = match.group(1)
+            # Remove any query parameters (e.g., ?timestamp=...)
+            filename = filename.split('?')[0]
             # Sometimes the filename itself is duplicated in thumb URLs, remove the size prefix if present
             filename = re.sub(r'^\d+px-', '', filename)
             return filename
@@ -156,7 +158,7 @@ def main():
         records = airtable.get_all(
              fields=[IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD],
              # Formula example: Fetch records with an image URL but no credits yet
-             # formula=f"AND({{Image URL}} != '', {{Image credits}} = '')"
+             formula=f"AND({{Image URL}} != '', {{Image credits}} = '')"
              # Fetch all for now, script will check URL format
         )
         print(f"Found {len(records)} records.")
@@ -174,8 +176,6 @@ def main():
         processed_count += 1
         record_id = record['id']
         image_url = record.get('fields', {}).get(IMAGE_URL_FIELD)
-        # existing_credits = record.get('fields', {}).get(CREDITS_FIELD)
-        # existing_credits_url = record.get('fields', {}).get(CREDITS_URL_FIELD)
 
         print(f"\nProcessing record {processed_count}/{len(records)}: {record_id}")
         print(f"  Image URL: {image_url}")
@@ -185,13 +185,6 @@ def main():
             print("  Skipping: No valid Wikimedia URL found.")
             skipped_count += 1
             continue
-
-        # --- Uncomment below if you only want to update records without existing credits ---
-        # if existing_credits or existing_credits_url:
-        #     print("  Skipping: Credits already exist.")
-        #     skipped_count += 1
-        #     continue
-        # -----------------------------------------------------------------------------------
 
         filename = extract_filename_from_url(image_url)
         if not filename:
