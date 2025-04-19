@@ -154,10 +154,9 @@ def main():
         airtable = Airtable(AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME, AIRTABLE_API_KEY)
         print("Fetching records...")
         # Fetch only records that have an Image URL and might need credits updated
-        # Adjust formula if needed, e.g., to only fetch records where credits ARE empty
         records = airtable.get_all(
              fields=[IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD],
-             # Formula example: Fetch records with an image URL but no credits yet
+             # Uncomment below to update only records without existing credits
              formula=f"AND({{Image URL}} != '', {{Image credits}} = '')"
              # Fetch all for now, script will check URL format
         )
