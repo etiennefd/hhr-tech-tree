@@ -99,13 +99,22 @@ export async function GET(request: Request) {
       validRecords,
       async (record) => {
         const year = Number(record.get("Date"));
+        const nodeTitle = String(record.get("Name") || "");
+        let imageUrl = "/placeholder-invention.png";
+
+        if (nodeTitle.toLowerCase() === "stone tool") {
+          imageUrl = "/tool-in-situ-being-unearthed-at-excavation_3_edit.jpg";
+        } else {
+          imageUrl = String(record.get("Image URL") || "/placeholder-invention.png");
+        }
+
         try {
           return {
             id: record.id,
             title: String(record.get("Name") || ""),
             subtitle: String(record.get("Secondary name") || ""),
             tier: String(record.get("Tier") || ""),
-            image: String(record.get("Image URL") || "/placeholder-invention.png"),
+            image: imageUrl,
             year,
             dateDetails: String(record.get("Date details") || ""),
             type: String(record.get("Type of innovation") || ""),
