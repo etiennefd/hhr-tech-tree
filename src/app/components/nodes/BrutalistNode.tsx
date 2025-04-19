@@ -77,6 +77,16 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const retryCountRef = useRef(0);
   const originalUrlRef = useRef(validateImage(node.image));
 
+  // Map for special node titles and their dedicated images
+  const specialNodeImages: { [key: string]: string } = {
+    "Stone tool": "/tool-in-situ-being-unearthed-at-excavation_3_edit.jpg",
+    "Oldowan stone tool": "/Pierre_taillée_Melka_Kunture_Éthiopie.jpg",
+    "Acheulean stone tool": "/Bifaz_cordiforme.jpg",
+  };
+
+  // Check if the current node has a special image
+  const specialImage = specialNodeImages[node.title];
+
   // Reset loading state when image URL changes
   useEffect(() => {
     if (imageUrl) {
@@ -298,43 +308,64 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         )}
         {/* Image section with improved loading states */}
         <div className="border-b border-black p-0 relative h-20">
-          {imageUrl && (
+          {specialImage ? (
+            // Special case: render the dedicated image directly
             <Image
-              src={imageUrl}
+              src={specialImage}
               alt={node.title}
               fill
               sizes="160px"
-              loading="eager"
+              loading="eager" // Load eagerly as it's a special case
               quality={75}
-              className={`object-cover transition-opacity duration-300 ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-              onError={handleImageError}
-              onLoad={handleImageLoad}
-              style={{
-                filter: "grayscale(20%) contrast(110%)",
-                mixBlendMode: "multiply",
-              }}
-              priority={isSelected || isAdjacent}
-            />
-          )}
-          {/* Show loading state while image is loading */}
-          {!imageLoaded && !imageError && (
-            <div className="absolute inset-0 bg-gray-100 animate-pulse" />
-          )}
-          {/* Only show placeholder if we've tried loading and failed */}
-          {imageError && (
-            <Image
-              src="/placeholder-invention.png"
-              alt="Placeholder"
-              fill
-              sizes="160px"
               className="object-cover"
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
               }}
+              priority={isSelected || isAdjacent} // Still prioritize if selected/adjacent
             />
+          ) : (
+            // Original logic for all other nodes
+            <>
+              {imageUrl && (
+                <Image
+                  src={imageUrl}
+                  alt={node.title}
+                  fill
+                  sizes="160px"
+                  loading="eager"
+                  quality={75}
+                  className={`object-cover transition-opacity duration-300 ${
+                    imageLoaded ? "opacity-100" : "opacity-0"
+                  }`}
+                  onError={handleImageError}
+                  onLoad={handleImageLoad}
+                  style={{
+                    filter: "grayscale(20%) contrast(110%)",
+                    mixBlendMode: "multiply",
+                  }}
+                  priority={isSelected || isAdjacent}
+                />
+              )}
+              {/* Show loading state while image is loading */}
+              {!imageLoaded && !imageError && (
+                <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+              )}
+              {/* Only show placeholder if we've tried loading and failed */}
+              {imageError && (
+                <Image
+                  src="/placeholder-invention.png"
+                  alt="Placeholder"
+                  fill
+                  sizes="160px"
+                  className="object-cover"
+                  style={{
+                    filter: "grayscale(20%) contrast(110%)",
+                    mixBlendMode: "multiply",
+                  }}
+                />
+              )}
+            </>
           )}
         </div>
 
