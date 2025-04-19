@@ -29,6 +29,8 @@ import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 import Link from 'next/link';
 import { SpatialIndex } from "@/utils/SpatialIndex";
+// Import useSearchParams
+import { useSearchParams } from 'next/navigation';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -484,6 +486,9 @@ function DebugOverlay({
 }
 
 export function TechTreeViewer() {
+  // Get search params
+  const searchParams = useSearchParams();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -2010,6 +2015,26 @@ const loadData = async () => {
     });
     
   }, [filters, data.nodes, data.links, prefetchNode, cleanLocationForTooltip]);
+
+  // Effect to handle initial node selection from URL parameter
+  const hasScrolledToInitialNode = useRef(false);
+  useEffect(() => {
+    // Only run once after data is loaded and if we haven't scrolled yet
+    if (!isLoading && data.nodes.length > 0 && !hasScrolledToInitialNode.current) {
+      const initialNodeId = searchParams.get('initialNodeId');
+      if (initialNodeId) {
+        const nodeToSelect = data.nodes.find(node => node.id === initialNodeId);
+        if (nodeToSelect) {
+          console.log(`[Initial Load] Found initial node ID: ${initialNodeId}, selecting: ${nodeToSelect.title}`);
+          // Use a slight delay to ensure the layout is stable before scrolling
+          setTimeout(() => {
+             handleNodeClick(nodeToSelect.title);
+             hasScrolledToInitialNode.current = true; // Mark as done
+          }, 100); // 100ms delay, adjust if needed
+        }
+      }
+    }
+  }, [isLoading, data.nodes, searchParams, handleNodeClick]); // Add dependencies
 
   // Update handleNodeHover to limit prefetching and handle mobile devices differently
   const handleNodeHover = useCallback(
