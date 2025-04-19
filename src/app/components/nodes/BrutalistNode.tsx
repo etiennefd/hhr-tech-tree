@@ -41,17 +41,17 @@ const formatTitle = (title: string) => {
 };
 
 // Helper function to validate image URLs
-const validateImage = (url?: string): string => {
-  if (!url) return "/placeholder-invention.png";
+const validateImage = (url?: string): string | undefined => {
+  if (!url) return undefined;
 
   // Basic URL validation
   if (typeof url !== 'string' || url.length < 5) {
-    return "/placeholder-invention.png";
+    return undefined;
   }
   
   // Check if image URL is valid (must start with / or http:// or https://)
   if (!url.startsWith('/') && !url.startsWith('http://') && !url.startsWith('https://')) {
-    return "/placeholder-invention.png";
+    return undefined;
   }
 
   return url;
@@ -70,10 +70,20 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>(() => validateImage(node.image));
-  const hasLoadedRef = useRef(false); // Track successful loads with ref to persist across re-renders
+  const [imageError, setImageError] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(() => validateImage(node.image));
+  const hasLoadedRef = useRef(false);
+  const initialLoadRef = useRef(true);
   const retryCountRef = useRef(0);
   const originalUrlRef = useRef(validateImage(node.image));
+
+  // Reset loading state when image URL changes
+  useEffect(() => {
+    if (imageUrl) {
+      setImageLoaded(false);
+      setImageError(false);
+    }
+  }, [imageUrl]);
 
   // Set up intersection observer
   useEffect(() => {
@@ -98,6 +108,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  // Set initial load flag to false after the first render cycle
+  useEffect(() => {
+    initialLoadRef.current = false;
   }, []);
 
   // Stable effect for handling image URL changes from parent
@@ -211,31 +226,31 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
   // Error handler for image loading
   const handleImageError = () => {
-    if (retryCountRef.current < 1 && imageUrl !== "/placeholder-invention.png") {
+    if (retryCountRef.current < 1 && imageUrl !== undefined) {
       // Try once more with the original source after a delay
       retryCountRef.current++;
       setTimeout(() => {
-        if (originalUrlRef.current !== "/placeholder-invention.png") {
+        if (originalUrlRef.current !== undefined) {
           setImageUrl(originalUrlRef.current);
         }
       }, 1000);
     } else {
       // Give up and use placeholder
-      if (imageUrl !== "/placeholder-invention.png") {
-        setImageUrl("/placeholder-invention.png");
+      if (imageUrl !== undefined) {
+        setImageUrl(undefined);
       }
-      setImageLoaded(true);
+      setImageError(true);
     }
   };
 
   // Success handler for image loading
   const handleImageLoad = () => {
-    if (imageUrl !== "/placeholder-invention.png") {
+    if (imageUrl !== undefined) {
       hasLoadedRef.current = true;
+      setImageLoaded(true);
       // Log when an actual image (not a placeholder) is loaded
       console.log(`Node image loaded: ${node.title} - ${imageUrl}`);
     }
-    setImageLoaded(true);
   };
 
   return (
@@ -281,9 +296,9 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
             <span className="text-xs font-bold">×</span>
           </button>
         )}
-        {/* Image section with improved loading */}
+        {/* Image section with improved loading states */}
         <div className="border-b border-black p-0 relative h-20">
-          {(isVisible || isSelected || isAdjacent) && (
+          {imageUrl && (
             <Image
               src={imageUrl}
               alt={node.title}
@@ -291,8 +306,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               sizes="160px"
               loading="eager"
               quality={75}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJiEyNS0tLzIvNz1AQFNAU0BGTUVHS2ZXV2uDg4T/2wBDARUXFyQdJB0kTkNMTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               className={`object-cover transition-opacity duration-300 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
@@ -305,8 +318,23 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               priority={isSelected || isAdjacent}
             />
           )}
-          {!imageLoaded && (
+          {/* Show loading state while image is loading */}
+          {!imageLoaded && !imageError && (
             <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+          )}
+          {/* Only show placeholder if we've tried loading and failed */}
+          {imageError && (
+            <Image
+              src="/placeholder-invention.png"
+              alt="Placeholder"
+              fill
+              sizes="160px"
+              className="object-cover"
+              style={{
+                filter: "grayscale(20%) contrast(110%)",
+                mixBlendMode: "multiply",
+              }}
+            />
           )}
         </div>
 
