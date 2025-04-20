@@ -1587,6 +1587,7 @@ const loadData = async () => {
               type: "node",
               node,
               text: node.title,
+              // Use original formatYear call
               subtext: `${formatYear(node.year)} ${
                 node.subtitle ? ` – ${node.subtitle}` : ""
               }`,
@@ -1607,6 +1608,7 @@ const loadData = async () => {
                 type: "person",
                 node,
                 text: node.inventors.join(", "),
+                // Use original formatYear call
                 subtext: `Invented ${node.title} (${formatYear(node.year)})`,
                 matchScore: 5,
               });
@@ -1623,6 +1625,7 @@ const loadData = async () => {
                 type: "organization",
                 node,
                 text: node.organizations.join(", "),
+                // Use original formatYear call
                 subtext: `Developed ${node.title} (${formatYear(node.year)})`,
                 matchScore: 3,
               });
