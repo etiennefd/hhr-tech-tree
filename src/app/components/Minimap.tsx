@@ -1,4 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
+
+// Define the threshold here as well
+const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
 
 interface TechTreeMinimapProps {
   nodes: Array<{
@@ -8,6 +11,7 @@ interface TechTreeMinimapProps {
     year: number;
   }>;
   containerWidth: number;
+  parentContainerWidth: number;
   totalHeight: number;
   viewportWidth: number;
   viewportHeight: number;
@@ -26,6 +30,7 @@ interface TechTreeMinimapProps {
 const TechTreeMinimap = ({
   nodes,
   containerWidth,
+  parentContainerWidth,
   totalHeight,
   viewportWidth,
   viewportHeight,
@@ -48,22 +53,24 @@ const TechTreeMinimap = ({
   const isDragging = useRef(false);
   const [scale, setScale] = useState(1);
 
-  // Key years to display
-  const keyYears = [
-    -100000, // Early human history
-    -10000,
-    -1000,
-    0,
-    500,
-    1000,
-    1500,
-    1750,
-    1800,
-    1850,
-    1900,
-    1950,
-    2000,
+  // Calculate if the screen is small based on the passed parent width
+  const isSmallScreen = useMemo(() => {
+    return parentContainerWidth > 0 && parentContainerWidth < SMALL_SCREEN_WIDTH_THRESHOLD;
+  }, [parentContainerWidth]);
+
+  // Key years to display (original list)
+  const originalKeyYears = [
+    -100000, -10000, -1000, 0, 500, 1000, 1500,
+    1750, 1800, 1850, 1900, 1950, 2000,
   ];
+
+  // Filter key years based on screen size
+  const keyYears = useMemo(() => {
+    if (isSmallScreen) {
+      return originalKeyYears.filter(year => year !== 1000);
+    }
+    return originalKeyYears;
+  }, [isSmallScreen]);
 
   // Calculate scaling factors for the minimap layout
   useEffect(() => {
@@ -89,12 +96,17 @@ const TechTreeMinimap = ({
     x: scrollLeft * scale,
     y: scrollTop * scale,
   };
-  // Format year label
-  const formatYear = (year: number) => {
-    if (year === 0) return "1";
-    if (year < 0) return `${Math.abs(year)} BCE`;
+
+  // Format year label with small screen logic
+  const formatYear = useCallback((year: number) => {
+    if (year === 0) return "1"; // Year 0 doesn't exist
+    const absYear = Math.abs(year);
+    if (year < 0) {
+      return isSmallScreen ? `-${absYear}` : `${absYear} BCE`;
+    }
     return `${year}`;
-  };
+  }, [isSmallScreen]);
+
   // Calculate x position for a year
   const getXPosition = (year: number) => {
     if (!nodes.length) return 0;

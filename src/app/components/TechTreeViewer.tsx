@@ -42,6 +42,9 @@ const YEAR_NEOLITHIC = -10000;
 const YEAR_UPPER_PALEOLITHIC = -50000;
 const YEAR_MIDDLE_PALEOLITHIC = -100000;
 
+// Define a screen width threshold for small screens
+const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
+
 // Timeline intervals for each period
 const INTERVAL_INDUSTRIAL = 1;
 const INTERVAL_EARLY_MODERN = 5;
@@ -569,6 +572,19 @@ export function TechTreeViewer() {
       scrollPositionsCache.current.clear();
     };
   }, []);
+
+  // Calculate if the screen is small based on width
+  const isSmallScreen = useMemo(() => {
+    // Ensure width is positive before checking
+    return containerDimensions.width > 0 && containerDimensions.width < SMALL_SCREEN_WIDTH_THRESHOLD;
+  }, [containerDimensions.width]);
+
+  // Log the detected dimensions and screen size category for debugging
+  useEffect(() => {
+    if (isClient) { // Only log on the client
+      console.log(`[Screen Check] Width: ${containerDimensions.width}, Height: ${containerDimensions.height}, isSmallScreen: ${isSmallScreen}`);
+    }
+  }, [containerDimensions.width, containerDimensions.height, isSmallScreen, isClient]);
 
   const getXPosition = useCallback(
     (year: number) => {
@@ -1571,7 +1587,7 @@ const loadData = async () => {
               type: "node",
               node,
               text: node.title,
-              subtext: `${formatYear(node.year)}${
+              subtext: `${formatYear(node.year)} ${
                 node.subtitle ? ` – ${node.subtitle}` : ""
               }`,
               matchScore: score,
@@ -1619,6 +1635,7 @@ const loadData = async () => {
       results.sort((a, b) => b.matchScore - a.matchScore);
       setSearchResults(results.slice(0, 10));
     },
+    // Restore original dependencies
     [searchIndex, data.nodes, formatYear]
   );
 
@@ -3293,25 +3310,28 @@ const loadData = async () => {
 
               return (
                 <div className="relative" style={{ width: '100%', height: '100%' }}>
-                  {timelineYears.map((year) => (
-                    <div
-                      key={year}
-                      className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
-                      style={{
-                        left: `${getXPosition(year)}px`,
-                        transform: "translateX(-50%)",
-                        top: isMobile ? '16px' : '16px',
-                        textDecorationLine: 'none',
-                        WebkitTextDecorationLine: 'none',
-                        textDecoration: 'none',
-                        WebkitUserSelect: 'none',
-                        userSelect: 'none',
-                        WebkitTouchCallout: 'none',
-                      }}
-                    >
-                      <span style={{ pointerEvents: 'none' }}>{formatYear(year)}</span>
-                    </div>
-                  ))}
+                  {timelineYears.map((year) => {
+                    return (
+                      <div
+                        key={year}
+                        className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
+                        style={{
+                          left: `${getXPosition(year)}px`,
+                          transform: "translateX(-50%)",
+                          top: isMobile ? '16px' : '16px',
+                          textDecorationLine: 'none',
+                          WebkitTextDecorationLine: 'none',
+                          textDecoration: 'none',
+                          WebkitUserSelect: 'none',
+                          userSelect: 'none',
+                          WebkitTouchCallout: 'none',
+                        }}
+                      >
+                        {/* Use original formatYear call */}
+                        <span style={{ pointerEvents: 'none' }}>{formatYear(year)}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })()}
@@ -3456,6 +3476,7 @@ const loadData = async () => {
                       }}
                     >
                       <p className="text-xs mb-1">
+                        {/* Use original formatYear call */}
                         <strong>Date:</strong> {formatYear(node.year)}
                         {node.dateDetails && ` – ${node.dateDetails}`}
                       </p>
@@ -3783,33 +3804,32 @@ const loadData = async () => {
             </div>
           </div>
         </div>
-        {/* Only show minimap on non-mobile devices */}
-        {!isMobile && (
-          <TechTreeMinimap
-            nodes={data.nodes.map(
-              (node): MinimapNode => ({
-                id: node.id,
-                x: getXPosition(node.year),
-                y: node.y || 0,
-                year: node.year,
-              })
-            )}
-            containerWidth={containerWidth}
-            totalHeight={totalHeight}
-            viewportWidth={containerDimensions.width}
-            viewportHeight={containerDimensions.height}
-            scrollLeft={scrollPosition.left}
-            scrollTop={scrollPosition.top}
-            onViewportChange={handleViewportChange}
-            filteredNodeIds={filteredNodeIds}
-            selectedNodeId={selectedNodeId}
-            hoveredNodeId={hoveredNodeId}
-            selectedConnectionNodeIds={selectedConnectionNodeIds}
-            adjacentNodeIds={adjacentNodeIds}
-            highlightedAncestors={highlightedAncestors}
-            highlightedDescendants={highlightedDescendants}
-          />
-        )}
+        {/* Show minimap on all devices now */}
+        <TechTreeMinimap
+          nodes={data.nodes.map(
+            (node): MinimapNode => ({
+              id: node.id,
+              x: getXPosition(node.year),
+              y: node.y || 0,
+              year: node.year,
+            })
+          )}
+          containerWidth={containerWidth} // Keep existing containerWidth for internal calculations
+          parentContainerWidth={containerDimensions.width} // Pass the viewer's width
+          totalHeight={totalHeight}
+          viewportWidth={containerDimensions.width}
+          viewportHeight={containerDimensions.height}
+          scrollLeft={scrollPosition.left}
+          scrollTop={scrollPosition.top}
+          onViewportChange={handleViewportChange}
+          filteredNodeIds={filteredNodeIds}
+          selectedNodeId={selectedNodeId}
+          hoveredNodeId={hoveredNodeId}
+          selectedConnectionNodeIds={selectedConnectionNodeIds}
+          adjacentNodeIds={adjacentNodeIds}
+          highlightedAncestors={highlightedAncestors}
+          highlightedDescendants={highlightedDescendants}
+        />
       </div>
       {/* Only render debug overlay in development mode */}
       {process.env.NODE_ENV === 'development' && showDebugOverlay && (
