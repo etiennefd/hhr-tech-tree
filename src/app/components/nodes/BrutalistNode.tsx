@@ -315,7 +315,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               alt={node.title}
               fill
               sizes="160px"
-              loading="eager" // Load eagerly as it's a special case
               quality={75}
               className="object-cover"
               style={{
@@ -333,7 +332,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                   alt={node.title}
                   fill
                   sizes="160px"
-                  loading="eager"
                   quality={75}
                   className={`object-cover transition-opacity duration-300 ${
                     imageLoaded ? "opacity-100" : "opacity-0"
