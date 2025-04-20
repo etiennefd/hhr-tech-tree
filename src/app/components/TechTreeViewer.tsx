@@ -1211,17 +1211,23 @@ const loadData = async () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Update the handleNodeClick function to include performance tracking
+  // Update handleNodeClick function to include performance tracking
   const handleNodeClick = useCallback(
     (title: string, isFromTooltip: boolean = false) => {
       performanceMarks.start('nodeClick');
-      
+
       const node = data.nodes.find((n) => n.title === title);
       if (!node) return;
 
       // If clicking the same node, just deselect it
       if (selectedNodeId === node.id) {
         setSelectedNodeId(null);
+        // Explicitly clear hover state on deselect
+        setHoveredNode(null);
+        setHoveredNodeId(null);
+        // Clear highlights as well
+        setHighlightedAncestors(new Set());
+        setHighlightedDescendants(new Set());
         performanceMarks.end('nodeClick');
         performanceMarks.log('nodeClick');
         return;
@@ -1233,10 +1239,14 @@ const loadData = async () => {
       setSelectedLinkIndex(null);
       setSelectedLinkKey(null);
       setHoveredLinkIndex(null);
-      setHoveredNode(null);
-      setHoveredNodeId(null);
       setHighlightedAncestors(new Set());
       setHighlightedDescendants(new Set());
+
+      // If mobile, explicitly set hover state to show tooltip immediately
+      if (isMobile) {
+        setHoveredNode(node);
+        setHoveredNodeId(node.id);
+      }
 
       // Calculate scroll position once
       const xPosition = getXPosition(node.year);
@@ -1257,7 +1267,7 @@ const loadData = async () => {
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
     },
-    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height]
+    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile] // Added isMobile dependency
   );
 
   // Helper function to check if a node is adjacent to selected node
@@ -3390,22 +3400,7 @@ const loadData = async () => {
                   node={node}
                   isSelected={node.id === selectedNodeId}
                   isAdjacent={isAdjacentToSelected(node.id)}
-                  onClick={() => {
-                    if (node.id === selectedNodeId) {
-                      setSelectedNodeId(null);
-                    } else {
-                      // On mobile, clicking a node immediately selects it
-                      setSelectedNodeId(node.id);
-                      setSelectedLinkIndex(null);
-                      setSelectedLinkKey(null);
-                      
-                      // On mobile, also update hover state to show tooltip
-                      if (isMobile) {
-                        setHoveredNode(node);
-                        setHoveredNodeId(node.id);
-                      }
-                    }
-                  }}
+                  onClick={() => handleNodeClick(node.title)} // Use the centralized handler
                   onMouseEnter={() => {
                     if (node.id !== selectedNodeId) {
                       handleNodeHover(node);
