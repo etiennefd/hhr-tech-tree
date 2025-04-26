@@ -145,7 +145,7 @@ export function SearchBox({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
-            placeholder="Search"
+            placeholder="Search techs/years/people"
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />
           {/* Add close button on mobile */}
