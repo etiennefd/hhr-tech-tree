@@ -3808,31 +3808,33 @@ const loadData = async () => {
           </div>
         </div>
         {/* Show minimap on all devices now */}
-        <TechTreeMinimap
-          nodes={data.nodes.map(
-            (node): MinimapNode => ({
-              id: node.id,
-              x: getXPosition(node.year),
-              y: node.y || 0,
-              year: node.year,
-            })
-          )}
-          containerWidth={containerWidth} // Keep existing containerWidth for internal calculations
-          parentContainerWidth={containerDimensions.width} // Pass the viewer's width
-          totalHeight={totalHeight}
-          viewportWidth={containerDimensions.width}
-          viewportHeight={containerDimensions.height}
-          scrollLeft={scrollPosition.left}
-          scrollTop={scrollPosition.top}
-          onViewportChange={handleViewportChange}
-          filteredNodeIds={filteredNodeIds}
-          selectedNodeId={selectedNodeId}
-          hoveredNodeId={hoveredNodeId}
-          selectedConnectionNodeIds={selectedConnectionNodeIds}
-          adjacentNodeIds={adjacentNodeIds}
-          highlightedAncestors={highlightedAncestors}
-          highlightedDescendants={highlightedDescendants}
-        />
+        <div className="sticky bottom-10 md:bottom-0 left-0 right-0 z-10 h-16 bg-yellow-50"> {/* Added md:bottom-0 for responsiveness */}
+          <TechTreeMinimap
+            nodes={data.nodes.map(
+              (node): MinimapNode => ({
+                id: node.id,
+                x: getXPosition(node.year),
+                y: node.y || 0,
+                year: node.year,
+              })
+            )}
+            containerWidth={containerWidth} // Keep existing containerWidth for internal calculations
+            parentContainerWidth={containerDimensions.width} // Pass the viewer's width
+            totalHeight={totalHeight}
+            viewportWidth={containerDimensions.width}
+            viewportHeight={containerDimensions.height}
+            scrollLeft={scrollPosition.left}
+            scrollTop={scrollPosition.top}
+            onViewportChange={handleViewportChange}
+            filteredNodeIds={filteredNodeIds}
+            selectedNodeId={selectedNodeId}
+            hoveredNodeId={hoveredNodeId}
+            selectedConnectionNodeIds={selectedConnectionNodeIds}
+            adjacentNodeIds={adjacentNodeIds}
+            highlightedAncestors={highlightedAncestors}
+            highlightedDescendants={highlightedDescendants}
+          />
+        </div>
       </div>
       {/* Only render debug overlay in development mode */}
       {process.env.NODE_ENV === 'development' && showDebugOverlay && (
