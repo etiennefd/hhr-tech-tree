@@ -42,6 +42,10 @@ const YEAR_NEOLITHIC = -10000;
 const YEAR_UPPER_PALEOLITHIC = -50000;
 const YEAR_MIDDLE_PALEOLITHIC = -100000;
 
+// Define fixed timeline boundaries for early rendering
+const TIMELINE_MIN_YEAR = -3300000;
+const TIMELINE_MAX_YEAR = 2024; // Or adjust to a future year if needed
+
 // Define a screen width threshold for small screens
 const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
 
@@ -588,6 +592,8 @@ export function TechTreeViewer() {
 
   const getXPosition = useCallback(
     (year: number) => {
+      // Still calculate minYear from data for node positioning
+      // Return 0 if data isn't loaded yet to avoid errors
       if (!data.nodes.length) return 0;
       const minYear = Math.min(...data.nodes.map((n) => n.year));
       return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
@@ -3290,7 +3296,7 @@ const loadData = async () => {
             backfaceVisibility: 'hidden'
           }}
         >
-          {/* Timeline */}
+          {/* Timeline - Render this immediately */}
           <div
             className="h-12 bg-yellow-50 border-b timeline flex-shrink-0"
             style={{
@@ -3304,13 +3310,10 @@ const loadData = async () => {
               touchAction: "none"
             }}
           >
-            {/* Timeline content */}
+            {/* Timeline content - Use fixed years */}
             {(() => {
-              if (!data.nodes.length) return null;
-              const years = data.nodes.map((n) => n.year);
-              const minYear = Math.min(...years);
-              const maxYear = Math.max(...years);
-              const timelineYears = getTimelineYears(minYear, maxYear);
+              // Use fixed years for immediate rendering
+              const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, TIMELINE_MAX_YEAR);
 
               return (
                 <div className="relative" style={{ width: '100%', height: '100%' }}>
@@ -3320,7 +3323,8 @@ const loadData = async () => {
                         key={year}
                         className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
                         style={{
-                          left: `${getXPosition(year)}px`,
+                          // Use direct calculation with fixed minYear
+                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px`,
                           transform: "translateX(-50%)",
                           top: isMobile ? '16px' : '16px',
                           textDecorationLine: 'none',
@@ -3808,34 +3812,38 @@ const loadData = async () => {
             </div>
           </div>
         </div>
-        {/* Show minimap on all devices now */}
-        <div className="sticky bottom-10 md:bottom-0 left-0 right-0 z-10 h-16 bg-yellow-50"> {/* Added md:bottom-0 for responsiveness */}
-          <TechTreeMinimap
-            nodes={data.nodes.map(
-              (node): MinimapNode => ({
-                id: node.id,
-                x: getXPosition(node.year),
-                y: node.y || 0,
-                year: node.year,
-              })
-            )}
-            containerWidth={containerWidth} // Keep existing containerWidth for internal calculations
-            parentContainerWidth={containerDimensions.width} // Pass the viewer's width
-            totalHeight={totalHeight}
-            viewportWidth={containerDimensions.width}
-            viewportHeight={containerDimensions.height}
-            scrollLeft={scrollPosition.left}
-            scrollTop={scrollPosition.top}
-            onViewportChange={handleViewportChange}
-            filteredNodeIds={filteredNodeIds}
-            selectedNodeId={selectedNodeId}
-            hoveredNodeId={hoveredNodeId}
-            selectedConnectionNodeIds={selectedConnectionNodeIds}
-            adjacentNodeIds={adjacentNodeIds}
-            highlightedAncestors={highlightedAncestors}
-            highlightedDescendants={highlightedDescendants}
-          />
-        </div>
+        {/* Minimap - Conditionally render based on data? Or leave as is? */}
+        {/* Let's leave the minimap conditional on data for now, as it needs node positions */}
+        {data.nodes.length > 0 && (
+          <div className="sticky bottom-10 md:bottom-0 left-0 right-0 z-10 h-16 bg-yellow-50">
+            <TechTreeMinimap
+              nodes={data.nodes.map(
+                (node): MinimapNode => ({
+                  id: node.id,
+                  // Ensure getXPosition returns 0 if data isn't ready
+                  x: getXPosition(node.year),
+                  y: node.y || 0,
+                  year: node.year,
+                })
+              )}
+              containerWidth={containerWidth} // Keep existing containerWidth for internal calculations
+              parentContainerWidth={containerDimensions.width} // Pass the viewer's width
+              totalHeight={totalHeight}
+              viewportWidth={containerDimensions.width}
+              viewportHeight={containerDimensions.height}
+              scrollLeft={scrollPosition.left}
+              scrollTop={scrollPosition.top}
+              onViewportChange={handleViewportChange}
+              filteredNodeIds={filteredNodeIds}
+              selectedNodeId={selectedNodeId}
+              hoveredNodeId={hoveredNodeId}
+              selectedConnectionNodeIds={selectedConnectionNodeIds}
+              adjacentNodeIds={adjacentNodeIds}
+              highlightedAncestors={highlightedAncestors}
+              highlightedDescendants={highlightedDescendants}
+            />
+          </div>
+        )}
       </div>
       {/* Only render debug overlay in development mode */}
       {process.env.NODE_ENV === 'development' && showDebugOverlay && (
