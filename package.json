@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--no-deprecation' next dev --turbopack -H 0.0.0.0",
-    "build": "NODE_OPTIONS='--no-deprecation' next build",
+    "build": "tsx src/scripts/fetch-and-save-inventions.ts && NODE_OPTIONS='--no-deprecation' next build",
     "start": "NODE_OPTIONS='--no-deprecation' next start",
     "lint": "NODE_OPTIONS='--no-deprecation' next lint"
   },
