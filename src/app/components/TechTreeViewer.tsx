@@ -3369,13 +3369,7 @@ const loadData = async () => {
 
   // 4. Optimize initial render
   if (!isClient) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-yellow-50">
-        <div className="text-lg font-mono tracking-wide animate-pulse">
-          Loading visualization...
-        </div>
-      </div>
-    );
+    return null;
   }
 
   // 5. Defer non-critical UI elements
