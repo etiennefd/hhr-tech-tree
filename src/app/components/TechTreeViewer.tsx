@@ -1129,7 +1129,7 @@ export function TechTreeViewer() {
                  spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
                }
              });
-             (data.links || []).forEach((link: Link, index: number) => {
+             (data.links || []).forEach((link, index) => {
                const sourceNode = currentPositionedNodes.find(n => n.id === link.source);
                const targetNode = currentPositionedNodes.find(n => n.id === link.target);
                if (sourceNode?.x !== undefined && sourceNode?.y !== undefined &&
@@ -1188,7 +1188,7 @@ export function TechTreeViewer() {
       isMounted = false;
       controller.abort();
     };
-  }, [calculateNodePositions]);
+  }, []); // Changed from [calculateNodePositions]
 
   // Make sure containerDimensions are initialized with window size
   useEffect(() => {
