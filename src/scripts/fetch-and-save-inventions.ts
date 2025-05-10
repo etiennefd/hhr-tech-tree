@@ -3,9 +3,17 @@ import { FieldSet, Record as AirtableRecord } from "airtable";
 import { writeFile } from "fs/promises";
 import path from "path";
 
-// Load environment variables if using dotenv
-import dotenv from 'dotenv';
-dotenv.config({ path: path.resolve(process.cwd(), '.env.local') }); // Adjust path if your .env is elsewhere
+// Conditionally import and configure dotenv only if not in production
+if (process.env.NODE_ENV !== 'production') {
+  // Dynamically import dotenv to avoid issues if it's not installed in production
+  try {
+    const dotenv = await import('dotenv');
+    dotenv.config({ path: path.resolve(process.cwd(), '.env.local') }); // Ensure it loads .env.local if you use that
+    console.log("Loaded .env.local for development");
+  } catch (e) {
+    console.warn("dotenv not found or failed to load, proceeding without it.");
+  }
+}
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID ?? ""

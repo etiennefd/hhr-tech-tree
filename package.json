@@ -27,6 +27,7 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
+    "dotenv": "^16.5.0",
     "eslint": "^9.22.0",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
