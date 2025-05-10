@@ -9,6 +9,17 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
 
 // Constants
 const CONCURRENT_REQUESTS = 10;
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+
+// Cache storage
+let basicDataCache: { data: any | null; timestamp: number } = {
+  data: null,
+  timestamp: 0,
+};
+let detailedDataCache: { data: any | null; timestamp: number } = {
+  data: null,
+  timestamp: 0,
+};
 
 // Helper function to process items in parallel with controlled concurrency
 async function processBatch<T, R>(
@@ -31,22 +42,72 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const detail = searchParams.get("detail") === "true";
+  const now = Date.now();
+
+  // Try to serve from cache first
+  if (detail) {
+    if (
+      detailedDataCache.data &&
+      now - detailedDataCache.timestamp < CACHE_DURATION_MS
+    ) {
+      console.log("[API Cache] Serving detailed data from cache.");
+      return NextResponse.json(detailedDataCache.data);
+    }
+  } else {
+    if (
+      basicDataCache.data &&
+      now - basicDataCache.timestamp < CACHE_DURATION_MS
+    ) {
+      console.log("[API Cache] Serving basic data from cache.");
+      return NextResponse.json(basicDataCache.data);
+    }
+  }
+
+  console.log(
+    `[API Cache] ${
+      detail ? "Detailed" : "Basic"
+    } data cache miss or expired. Fetching fresh data from Airtable.`
+  );
 
   try {
-    // Fetch records from Airtable
-    const [innovationRecords, connectionRecords] = (await Promise.all([
-      base("Innovations")
-        .select({
-          view: "Used for deployment, do not edit directly",
-          sort: [{ field: "Date", direction: "desc" }],
-        })
-        .all(),
-      base("Connections")
-        .select({
-          view: "Used for deployment, do not edit directly",
-        })
-        .all(),
-    ])) as [CustomAirtableRecord[], CustomAirtableRecord[]];
+    let innovationRecords: CustomAirtableRecord[];
+    let connectionRecords: CustomAirtableRecord[];
+
+    if (!detail) {
+      // Fetch only necessary fields for basic data
+      console.log("[API Airtable] Fetching basic data fields from Airtable.");
+      [innovationRecords, connectionRecords] = (await Promise.all([
+        base("Innovations")
+          .select({
+            view: "Used for deployment, do not edit directly",
+            sort: [{ field: "Date", direction: "desc" }],
+            fields: ["Name", "Date", "Field(s)", "Type of innovation"], // Minimal fields for basic nodes
+          })
+          .all(),
+        base("Connections")
+          .select({
+            view: "Used for deployment, do not edit directly",
+            fields: ["From", "To", "Type"], // Minimal fields for basic links
+          })
+          .all(),
+      ])) as [CustomAirtableRecord[], CustomAirtableRecord[]];
+    } else {
+      // Fetch all fields for detailed data
+      console.log("[API Airtable] Fetching all fields for detailed data from Airtable.");
+      [innovationRecords, connectionRecords] = (await Promise.all([
+        base("Innovations")
+          .select({
+            view: "Used for deployment, do not edit directly",
+            sort: [{ field: "Date", direction: "desc" }],
+          })
+          .all(),
+        base("Connections")
+          .select({
+            view: "Used for deployment, do not edit directly",
+          })
+          .all(),
+      ])) as [CustomAirtableRecord[], CustomAirtableRecord[]];
+    }
 
     const validRecords = innovationRecords.filter((record) => {
       const dateValue = record.get("Date");
@@ -87,14 +148,18 @@ export async function GET(request: Request) {
             type: String(record.get("Type") || "default"),
           };
         });
-
-      return NextResponse.json({
+      
+      const responseData = {
         nodes: basicNodes,
         links: basicLinks,
-      });
+      };
+      basicDataCache = { data: responseData, timestamp: now };
+      console.log("[API Cache] Basic data cached.");
+      return NextResponse.json(responseData);
     }
 
     // For detailed data, process everything as before
+    console.log("[API Processing] Processing detailed nodes.");
     const nodes = await processBatch(
       validRecords,
       async (record) => {
@@ -157,6 +222,7 @@ export async function GET(request: Request) {
     const validNodes = nodes.filter(Boolean);
 
     // Process full connection data
+    console.log("[API Processing] Processing detailed connections.");
     const links = connectionRecords
       .filter((record) => {
         const fromId = record.get("From");
@@ -191,17 +257,20 @@ export async function GET(request: Request) {
         };
       });
 
-    return NextResponse.json({
+    const responseData = {
       nodes: validNodes,
       links,
       _debug: {
         counts: {
-          totalRecords: innovationRecords.length,
+          totalRecords: innovationRecords.length, // This will reflect the number of records fetched (selective or all)
           validNodes: validNodes.length,
           connections: links.length,
         },
       },
-    });
+    };
+    detailedDataCache = { data: responseData, timestamp: now };
+    console.log("[API Cache] Detailed data cached.");
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error("Error details:", error);
     return NextResponse.json(
