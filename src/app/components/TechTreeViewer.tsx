@@ -496,6 +496,11 @@ export function TechTreeViewer() {
   // Get search params
   const searchParams = useSearchParams();
 
+  // Add a log at the very start of the component function
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer component init`);
+  }
+
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -843,30 +848,57 @@ export function TechTreeViewer() {
     const controller = new AbortController();
 
     const loadData = async () => {
+      // Add a log at the start of loadData
+      if (process.env.NODE_ENV === 'development') {
+        console.time("TechTreeViewer:loadData total time");
+        console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Start`);
+      }
       let cachedData = null;
       try {
         // Check cache first for immediate display
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Checking cache...`);
+          console.time("TechTreeViewer:cacheManager.get");
+        }
         cachedData = await cacheManager.get();
+        if (process.env.NODE_ENV === 'development') {
+          console.timeEnd("TechTreeViewer:cacheManager.get");
+          console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Cache check complete. Found data:`, !!cachedData);
+        }
 
         if (!cachedData) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - No cached data found. Setting isLoading to true.`);
+          }
           setIsLoading(true);
         }
 
         if (cachedData?.detailData) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Found detailed data in cache. Processing...`);
+            console.time("TechTreeViewer:processCachedDetailData");
+          }
           // If we have detailed data in cache, use it and skip basic data fetch
           const validatedNodes = cachedData.detailData.nodes?.map((node: TechNode) => ({
             ...node,
             image: validateImageUrl(node.image)
           })) || [];
           
+          if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:calculateNodePositions (cachedDetailData)");
           const positionedDetailNodes = calculateNodePositions(validatedNodes);
+          if (process.env.NODE_ENV === 'development') console.timeEnd("TechTreeViewer:calculateNodePositions (cachedDetailData)");
+          
           setData({ 
             nodes: positionedDetailNodes, 
             links: cachedData.detailData.links || [] 
           });
           currentNodesRef.current = positionedDetailNodes;
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data from cached detailed data. Nodes: ${positionedDetailNodes.length}, Links: ${(cachedData.detailData.links || []).length}`);
+          }
 
           // Reset and populate spatial index
+          if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:spatialIndex (cachedDetailData)");
           spatialIndexRef.current = new SpatialIndex(100);
           positionedDetailNodes.forEach((node: TechNode) => {
             if (node.x !== undefined && node.y !== undefined) {
@@ -887,58 +919,113 @@ export function TechTreeViewer() {
               );
             }
           });
+          if (process.env.NODE_ENV === 'development') {
+            console.timeEnd("TechTreeViewer:spatialIndex (cachedDetailData)");
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Spatial index populated from cached detailed data.`);
+          }
           setIsLoading(false);
+          if (process.env.NODE_ENV === 'development') {
+            console.timeEnd("TechTreeViewer:processCachedDetailData");
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Finished processing cached detailed data. isLoading: false.`);
+          }
         } else if (cachedData?.basicData) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Found basic data in cache. Processing...`);
+            console.time("TechTreeViewer:processCachedBasicData");
+          }
           // If we only have basic data, use it temporarily
           const validatedNodes = cachedData.basicData.nodes?.map((node: TechNode) => ({
             ...node,
             image: validateImageUrl(node.image)
           })) || [];
           
+          if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:calculateNodePositions (cachedBasicData)");
           const positionedNodes = calculateNodePositions(validatedNodes);
+          if (process.env.NODE_ENV === 'development') console.timeEnd("TechTreeViewer:calculateNodePositions (cachedBasicData)");
+
           setData({ 
             nodes: positionedNodes, 
             links: cachedData.basicData.links || [] 
           });
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data from cached basic data. Nodes: ${positionedNodes.length}, Links: ${(cachedData.basicData.links || []).length}`);
+          }
           setIsLoading(false);
+          if (process.env.NODE_ENV === 'development') {
+            console.timeEnd("TechTreeViewer:processCachedBasicData");
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Finished processing cached basic data. isLoading: false.`);
+          }
         }
 
         // If we don't have detailed cached data, fetch fresh basic data
         if (!cachedData?.detailData) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - No detailed data in cache. Fetching basic data from /api/inventions...`);
+            console.time("TechTreeViewer:fetchBasicData");
+          }
           const basicResponse = await fetchWithRetry("/api/inventions", 3, 1000);
           const basicData = await basicResponse.json();
+          if (process.env.NODE_ENV === 'development') {
+            console.timeEnd("TechTreeViewer:fetchBasicData");
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Fetched basic data. Nodes: ${basicData.nodes?.length}, Links: ${basicData.links?.length}`);
+          }
 
-          if (!isMounted) return;
+          if (!isMounted) {
+            if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Component unmounted after basic fetch. Aborting.`);
+            return;
+          }
 
           // Only update if we don't have detailed data yet
           if (!cachedData?.detailData) {
+            if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:processFetchedBasicData");
             const validatedNodes = basicData.nodes?.map((node: TechNode) => ({
               ...node,
               image: validateImageUrl(node.image)
             })) || [];
             
+            if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:calculateNodePositions (fetchedBasicData)");
             const positionedNodes = calculateNodePositions(validatedNodes);
+            if (process.env.NODE_ENV === 'development') console.timeEnd("TechTreeViewer:calculateNodePositions (fetchedBasicData)");
+            
             setData({ 
               nodes: positionedNodes, 
               links: basicData.links || [] 
             });
             setIsLoading(false);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data from fetched basic data. isLoading: false.`);
+              console.timeEnd("TechTreeViewer:processFetchedBasicData");
+            }
 
             // Cache basic data
+            if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:cacheManager.set (basicData)");
             await cacheManager.set({
               version: CACHE_VERSION,
               timestamp: Date.now(),
               basicData,
             });
+            if (process.env.NODE_ENV === 'development') console.timeEnd("TechTreeViewer:cacheManager.set (basicData)");
           }
         }
 
         // Always fetch fresh detailed data
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Fetching detailed data from /api/inventions?detail=true...`);
+          console.time("TechTreeViewer:fetchDetailedData");
+        }
         const detailResponse = await fetchWithRetry("/api/inventions?detail=true", 3, 1000);
         const detailData = await detailResponse.json();
+        if (process.env.NODE_ENV === 'development') {
+          console.timeEnd("TechTreeViewer:fetchDetailedData");
+          console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Fetched detailed data. Nodes: ${detailData.nodes?.length}, Links: ${detailData.links?.length}`);
+        }
 
-        if (!isMounted) return;
+        if (!isMounted) {
+          if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Component unmounted after detailed fetch. Aborting.`);
+          return;
+        }
 
+        if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:processFetchedDetailData");
         const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
           ...node,
           image: validateImageUrl(node.image)
@@ -958,15 +1045,22 @@ export function TechTreeViewer() {
             );
           }
         );
+        if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Detailed data has changes: ${hasChanges}`);
 
         // Only update if there are actual changes
         if (hasChanges) {
+          if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:calculateNodePositions (fetchedDetailData)");
           const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
+          if (process.env.NODE_ENV === 'development') console.timeEnd("TechTreeViewer:calculateNodePositions (fetchedDetailData)");
+
           setData({ 
             nodes: positionedDetailNodes, 
             links: detailData.links || [] 
           });
           currentNodesRef.current = positionedDetailNodes;
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data from fetched detailed data (due to changes).`);
+          }
                     
           // Find data bounds
           let minX = Infinity;
@@ -989,8 +1083,10 @@ export function TechTreeViewer() {
           const width = maxX - minX;
           const height = maxY - minY;
           const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
+          if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Calculated optimal cell size: ${cellSize}`);
           
           // Create fresh spatial index with optimal cell size
+          if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:spatialIndex (fetchedDetailData)");
           spatialIndexRef.current = new SpatialIndex(cellSize);
           
           // Add all nodes to spatial index
@@ -1014,21 +1110,74 @@ export function TechTreeViewer() {
               );
             }
           });
+          if (process.env.NODE_ENV === 'development') {
+            console.timeEnd("TechTreeViewer:spatialIndex (fetchedDetailData)");
+            console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Spatial index populated from fetched detailed data.`);
+          }
+        } else {
+          // Ensure spatial index is populated even if no data changes, if it wasn't populated from cache.
+          // This can happen if only basic cache existed, then fresh detailed data matched the basic data.
+          if (!cachedData?.detailData) {
+             if (process.env.NODE_ENV === 'development') {
+                console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - No changes in detailed data, but no detailed cache existed. Populating spatial index with current data.`);
+                console.time("TechTreeViewer:spatialIndex (noChangeDetailData)");
+             }
+             const currentPositionedNodes = data.nodes; // Use already positioned nodes
+             spatialIndexRef.current = new SpatialIndex(100); // Default cell size
+             currentPositionedNodes.forEach(node => {
+               if (node.x !== undefined && node.y !== undefined) {
+                 spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
+               }
+             });
+             (data.links || []).forEach((link: Link, index: number) => {
+               const sourceNode = currentPositionedNodes.find(n => n.id === link.source);
+               const targetNode = currentPositionedNodes.find(n => n.id === link.target);
+               if (sourceNode?.x !== undefined && sourceNode?.y !== undefined &&
+                   targetNode?.x !== undefined && targetNode?.y !== undefined) {
+                 spatialIndexRef.current.addConnection(
+                   index,
+                   { x: sourceNode.x, y: sourceNode.y },
+                   { x: targetNode.x, y: targetNode.y }
+                 );
+               }
+             });
+             if (process.env.NODE_ENV === 'development') {
+                console.timeEnd("TechTreeViewer:spatialIndex (noChangeDetailData)");
+             }
+          }
         }
 
         // Cache complete fresh data with validated nodes
+        if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:cacheManager.set (detailData)");
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
           basicData: { ...detailData, nodes: validatedDetailNodes },
           detailData: { ...detailData, nodes: validatedDetailNodes },
         });
+        if (process.env.NODE_ENV === 'development') {
+          console.timeEnd("TechTreeViewer:cacheManager.set (detailData)");
+          console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Cached complete fresh detailed data.`);
+          console.timeEnd("TechTreeViewer:processFetchedDetailData");
+        }
       } catch (error: unknown) {
-        if (error instanceof Error && error.name === "AbortError") return;
-        console.warn("Error loading data:", error);
-        setIsLoading(false);
+        if (error instanceof Error && error.name === "AbortError") {
+          if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - AbortError caught. Component likely unmounted.`);
+          return;
+        }
+        // Ensure console.warn is used here as per original code
+        console.warn(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Error during data loading:`, error);
+        setIsLoading(false); // Ensure loading is set to false on error
+        if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - isLoading set to false due to error.`);
         if (!cachedData) {
           setData({ nodes: [], links: [] });
+          if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data to empty due to error and no cached data.`);
+        }
+      } finally {
+        // Add a log at the end of loadData
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - End`);
+          console.timeEnd("TechTreeViewer:loadData total time");
         }
       }
     };
@@ -1191,9 +1340,9 @@ useEffect(() => {
 
 // Add in the loadData function
 const loadData = async () => {
-  console.time('loadDataFunction');
+  // console.time('loadDataFunction'); // Original console.time, now superseded by the one at the start of the function
   // existing code...
-  console.timeEnd('loadDataFunction');
+  // console.timeEnd('loadDataFunction'); // Original console.timeEnd
 };
 
   // Add handler for clicks outside nodes
