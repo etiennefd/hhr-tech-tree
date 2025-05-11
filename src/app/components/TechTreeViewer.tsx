@@ -1580,7 +1580,7 @@ const loadData = async () => {
         fields: new Set([
           "title:" + node.title.toLowerCase(),
           ...(node.subtitle ? ["subtitle:" + node.subtitle.toLowerCase()] : []),
-          ...(node.inventors?.map((inv) => "inventor:" + inv.toLowerCase()) ||
+          ...(node.inventors?.filter(inv => inv.toLowerCase() !== 'unknown').map((inv) => "inventor:" + inv.toLowerCase()) ||
             []),
           ...(node.organizations?.map((org) => "org:" + org.toLowerCase()) ||
             []),
@@ -1669,15 +1669,14 @@ const loadData = async () => {
 
           // Check other fields only if necessary
           if (!addedNodes.has(nodeId)) {
-            if (
-              node.inventors?.some((inv) =>
-                inv.toLowerCase().includes(query.toLowerCase())
-              )
-            ) {
+            const actualInventors = node.inventors?.filter(inv => inv.toLowerCase() !== 'unknown') || [];
+            const matchingInventors = actualInventors.filter(inv => inv.toLowerCase().includes(query.toLowerCase()));
+
+            if (matchingInventors.length > 0) {
               results.push({
                 type: "person",
                 node,
-                text: node.inventors.join(", "),
+                text: matchingInventors.join(", "),
                 // Use original formatYear call
                 subtext: `Invented ${node.title} (${formatYear(node.year)})`,
                 matchScore: 5,
