@@ -70,6 +70,11 @@ const INFO_BOX_HEIGHT = 500;
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
 
+// Helper function to escape regex special characters
+function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -1650,13 +1655,25 @@ const loadData = async () => {
           let score = 0;
           const lowerTitle = node.title.toLowerCase();
           const lowerSubtitle = node.subtitle?.toLowerCase() || "";
+          const lowerTrimmedQuery = query.toLowerCase().trim();
 
-          // Prioritize exact matches in title/subtitle
-          if (lowerTitle.includes(query.toLowerCase())) {
-            score += 10;
+          // Prioritize matches in title/subtitle with new scoring
+          const titleFullWordRegex = new RegExp(`\\b${escapeRegExp(lowerTrimmedQuery)}\\b`);
+          if (titleFullWordRegex.test(lowerTitle)) {
+            score += 15; // Highest score for full word match
+          } else if (lowerTitle.startsWith(lowerTrimmedQuery)) {
+            score += 10; // Medium score for startsWith
+          } else if (lowerTitle.includes(lowerTrimmedQuery)) {
+            score += 5; // Base score for includes
           }
-          if (lowerSubtitle.includes(query.toLowerCase())) {
-            score += 5;
+
+          const subtitleFullWordRegex = new RegExp(`\\b${escapeRegExp(lowerTrimmedQuery)}\\b`);
+          if (subtitleFullWordRegex.test(lowerSubtitle)) {
+            score += 8; // Highest score for subtitle full word match
+          } else if (lowerSubtitle.startsWith(lowerTrimmedQuery)) {
+            score += 5; // Medium score for subtitle startsWith
+          } else if (lowerSubtitle.includes(lowerTrimmedQuery)) {
+            score += 2; // Base score for subtitle includes
           }
 
           if (score > 0) {
