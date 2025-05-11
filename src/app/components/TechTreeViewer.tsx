@@ -2817,16 +2817,14 @@ const loadData = async () => {
   const visibleElements = useMemo<VisibleElements>(() => {
     const startTime = performance.now();
     performanceMarks.start('visibleElements');
-    
-    // Create stable viewport values for comparison
+
     const stableViewport = {
       left: Math.floor(deferredViewportState.left / 100) * 100,
       right: Math.ceil(deferredViewportState.right / 100) * 100,
       top: Math.floor(deferredViewportState.top / 100) * 100,
       bottom: Math.ceil(deferredViewportState.bottom / 100) * 100
     };
-    
-    // Create current frame data for comparison
+
     const currentFrameData = {
       selectedNodeId,
       selectedLinkIndex,
@@ -2835,8 +2833,7 @@ const loadData = async () => {
       filteredNodeIds: stableFilteredNodeIdsString,
       viewport: stableViewport
     };
-    
-    // Skip if nothing has changed
+
     if (lastFrameData.current &&
         currentFrameData.selectedNodeId === lastFrameData.current.selectedNodeId &&
         currentFrameData.selectedLinkIndex === lastFrameData.current.selectedLinkIndex &&
@@ -2847,198 +2844,159 @@ const loadData = async () => {
         currentFrameData.viewport.right === lastFrameData.current.viewport.right &&
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
-        previousCalculation.current.visibleNodes.length > 0) {
+        previousCalculation.current.visibleNodes.length > 0 &&
+        previousCalculation.current.visibleConnections.length > 0 // Ensure previous calc has connections too
+        ) {
       memoEffectiveness.track(true);
       performanceMarks.end('visibleElements');
       return previousCalculation.current;
     }
-    
-    // Log what triggered the recalculation
-    const changes = [];
-    if (lastFrameData.current) {
-      if (currentFrameData.selectedNodeId !== lastFrameData.current.selectedNodeId) changes.push('selectedNode');
-      if (currentFrameData.selectedLinkIndex !== lastFrameData.current.selectedLinkIndex) changes.push('selectedLink');
-      if (currentFrameData.highlightedAncestors !== lastFrameData.current.highlightedAncestors) changes.push('ancestors');
-      if (currentFrameData.highlightedDescendants !== lastFrameData.current.highlightedDescendants) changes.push('descendants');
-      if (currentFrameData.filteredNodeIds !== lastFrameData.current.filteredNodeIds) changes.push('filters');
-      if (currentFrameData.viewport.left !== lastFrameData.current.viewport.left ||
-          currentFrameData.viewport.right !== lastFrameData.current.viewport.right ||
-          currentFrameData.viewport.top !== lastFrameData.current.viewport.top ||
-          currentFrameData.viewport.bottom !== lastFrameData.current.viewport.bottom) changes.push('viewport');
-    }
-        
+
     memoEffectiveness.track(false);
     lastCalculationTime.current = startTime;
     lastFrameData.current = currentFrameData;
 
-    // Create sets for O(1) lookups
-    const visibleNodeIds = new Set<string>();
-    const visibleConnectionIndices = new Set<number>();
-    
-    // First, add nodes that must be visible regardless of viewport
-    const addRequiredNode = (nodeId: string) => {
-      if (!nodeId) return;
-      visibleNodeIds.add(nodeId);
-      // Add immediate neighbors for context
+    // --- Phase 1: Determine baseVisibleNodeIds (common start for mobile/desktop) ---
+    const baseVisibleNodeIds = new Set<string>();
+
+    const addRequiredNodeToSet = (nodeId: string | null | undefined, targetSet: Set<string>) => {
+      if (!nodeId || targetSet.has(nodeId)) return;
+      targetSet.add(nodeId);
+      // Add immediate neighbors for context, but don't recurse deeply here
       const connections = getNodeConnectionIndices(nodeId);
       connections.forEach(index => {
         const link = data.links[index];
-        if (link.source === nodeId) {
-          visibleNodeIds.add(link.target);
-        } else {
-          visibleNodeIds.add(link.source);
+        if (link) {
+          if (link.source === nodeId && !targetSet.has(link.target)) targetSet.add(link.target);
+          else if (link.target === nodeId && !targetSet.has(link.source)) targetSet.add(link.source);
         }
       });
     };
+    
+    addRequiredNodeToSet(selectedNodeId, baseVisibleNodeIds);
 
-    // Add selected node and its immediate connections
-    if (selectedNodeId) {
-      addRequiredNode(selectedNodeId);
-    }
-    
-    // Add nodes from selected link
     if (selectedLinkIndex !== null) {
-      const selectedLink = data.links[selectedLinkIndex];
-      if (selectedLink) {
-        visibleNodeIds.add(selectedLink.source);
-        visibleNodeIds.add(selectedLink.target);
-        visibleConnectionIndices.add(selectedLinkIndex);
-      }
+        const selectedLink = data.links[selectedLinkIndex];
+        if (selectedLink) {
+            if (!baseVisibleNodeIds.has(selectedLink.source)) baseVisibleNodeIds.add(selectedLink.source);
+            if (!baseVisibleNodeIds.has(selectedLink.target)) baseVisibleNodeIds.add(selectedLink.target);
+        }
     }
-    
-    // Add highlighted nodes
-    highlightedAncestors.forEach(addRequiredNode);
-    highlightedDescendants.forEach(addRequiredNode);
-    
-    // Add filtered nodes only if they're in or near viewport
+
+    highlightedAncestors.forEach(nodeId => addRequiredNodeToSet(nodeId, baseVisibleNodeIds));
+    highlightedDescendants.forEach(nodeId => addRequiredNodeToSet(nodeId, baseVisibleNodeIds));
+
     if (filteredNodeIds.size > 0) {
       data.nodes.forEach(node => {
         if (filteredNodeIds.has(node.id) && isNodeInViewport(node)) {
-          visibleNodeIds.add(node.id);
+          if (!baseVisibleNodeIds.has(node.id)) baseVisibleNodeIds.add(node.id);
         }
       });
     }
-    
-    // Add nodes in viewport
+
     data.nodes.forEach(node => {
-      if (!visibleNodeIds.has(node.id) && isNodeInViewport(node)) {
-        visibleNodeIds.add(node.id);
+      if (isNodeInViewport(node)) {
+        if (!baseVisibleNodeIds.has(node.id)) baseVisibleNodeIds.add(node.id);
       }
     });
 
-    // Add cached nodes only if they're near the viewport
-    const CACHE_VIEWPORT_BUFFER = 700; // pixels
-    const extendedViewport = {
-      left: stableViewport.left - CACHE_VIEWPORT_BUFFER,
-      right: stableViewport.right + CACHE_VIEWPORT_BUFFER,
-      top: stableViewport.top - CACHE_VIEWPORT_BUFFER,
-      bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER
+    const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
+    const extendedNodeViewport = {
+      left: stableViewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
+      right: stableViewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
+      top: stableViewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
+      bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
     };
-
-    data.nodes.forEach(node => {
-      if (!visibleNodeIds.has(node.id) && 
-          cachedNodeIds.has(node.id) && 
-          node.x !== undefined && 
-          node.y !== undefined &&
-          node.x >= extendedViewport.left &&
-          node.x <= extendedViewport.right &&
-          node.y >= extendedViewport.top &&
-          node.y <= extendedViewport.bottom) {
-        visibleNodeIds.add(node.id);
-      }
+    cachedNodeIds.forEach(nodeId => {
+        const node = data.nodes.find(n => n.id === nodeId);
+        if (node && node.x !== undefined && node.y !== undefined &&
+            node.x >= extendedNodeViewport.left && node.x <= extendedNodeViewport.right &&
+            node.y >= extendedNodeViewport.top && node.y <= extendedNodeViewport.bottom) {
+            if (!baseVisibleNodeIds.has(node.id)) baseVisibleNodeIds.add(node.id);
+        }
     });
-    
-    // Handle connections differently based on device type
+
+    let finalVisibleNodeIds: Set<string>;
+    let finalVisibleConnectionIndices: Set<number>;
+
     if (isMobile) {
-      // On mobile, only show connections touching the selected node
-      if (selectedNodeId) {
-        data.links.forEach((link, index) => {
-          if (link.source === selectedNodeId || link.target === selectedNodeId) {
-            visibleConnectionIndices.add(index);
-            // Make sure both endpoints are visible
-            visibleNodeIds.add(link.source);
-            visibleNodeIds.add(link.target);
-          }
-        });
-      } 
-      // If a link is selected, show it even on mobile
-      else if (selectedLinkIndex !== null) {
-        const selectedLink = data.links[selectedLinkIndex];
-        if (selectedLink) {
-          visibleConnectionIndices.add(selectedLinkIndex);
-          // Make sure both endpoints are visible
-          visibleNodeIds.add(selectedLink.source);
-          visibleNodeIds.add(selectedLink.target);
+        // --- Mobile Logic ---
+        finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds); // For mobile, node visibility is based on these base calculations
+
+        const currentFrameDrivenConnectionIndices = new Set<number>();
+        if (selectedNodeId) {
+            getNodeConnectionIndices(selectedNodeId).forEach(index => currentFrameDrivenConnectionIndices.add(index));
+        } else if (selectedLinkIndex !== null && selectedLinkIndex >= 0 && selectedLinkIndex < data.links.length) {
+            currentFrameDrivenConnectionIndices.add(selectedLinkIndex);
+        } else if (filteredNodeIds.size > 0) {
+            data.links.forEach((link, index) => {
+                // For filtered state, connection is visible if both endpoints match filters AND are in finalVisibleNodeIds
+                if (filteredNodeIds.has(link.source) && filteredNodeIds.has(link.target) &&
+                    finalVisibleNodeIds.has(link.source) && finalVisibleNodeIds.has(link.target)) {
+                    currentFrameDrivenConnectionIndices.add(index);
+                }
+            });
+        } else { // Default mobile: EITHER endpoint visible
+            data.links.forEach((link, index) => {
+                if (finalVisibleNodeIds.has(link.source) || finalVisibleNodeIds.has(link.target)) {
+                    currentFrameDrivenConnectionIndices.add(index);
+                }
+            });
         }
-      }
-      // If field filtering is active (but not location filtering), show connections between filtered nodes
-      else if (filters.fields.size > 0 && !filters.countries.size && !filters.cities.size) {
-        // First identify filtered nodes
-        const filteredNodes = new Set<string>();
-        data.nodes.forEach(node => {
-          if (isNodeFiltered(node)) {
-            filteredNodes.add(node.id);
-          }
-        });
-        
-        // Then add connections between filtered nodes
-        data.links.forEach((link, index) => {
-          if (filteredNodes.has(link.source) && filteredNodes.has(link.target)) {
-            visibleConnectionIndices.add(index);
-            visibleNodeIds.add(link.source);
-            visibleNodeIds.add(link.target);
-          }
-        });
-      }
-      // If no node is selected, don't show any other connections on mobile
+
+        // Apply Stickiness for Mobile
+        finalVisibleConnectionIndices = new Set<number>(currentFrameDrivenConnectionIndices);
+        if (previousCalculation.current.visibleConnections) {
+            previousCalculation.current.visibleConnections.forEach(prevLink => {
+                const prevLinkIndex = data.links.findIndex(l => l.source === prevLink.source && l.target === prevLink.target && l.type === prevLink.type); // Add more specific link attributes if necessary for uniqueness
+                if (prevLinkIndex !== -1 && !finalVisibleConnectionIndices.has(prevLinkIndex)) { // If it was visible and not driven by current logic
+                    if (finalVisibleNodeIds.has(prevLink.source) || finalVisibleNodeIds.has(prevLink.target)) { // And at least one endpoint is still visible
+                        finalVisibleConnectionIndices.add(prevLinkIndex);
+                    }
+                }
+            });
+        }
     } else {
-      // On desktop, use original logic to show all relevant connections
-      data.links.forEach((link, index) => {
-        // Add connection if both nodes are visible
-        if (visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target)) {
-          visibleConnectionIndices.add(index);
-        }
-        // Or if it's in viewport (even if no nodes are visible, add both source and target)
-        else if (isConnectionInViewport(link, index)) {
-          visibleConnectionIndices.add(index);
-          
-          // Always add both source and target nodes to ensure the connection has its endpoints
-          visibleNodeIds.add(link.source);
-          visibleNodeIds.add(link.target);
-        }
-      });
+        // --- Desktop Logic ---
+        finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
+        // Enhance desktop node visibility with endpoints of viewport-crossing connections
+        data.links.forEach((link) => {
+            const sourceNode = data.nodes.find(n => n.id === link.source);
+            const targetNode = data.nodes.find(n => n.id === link.target);
+            if (sourceNode && targetNode && isConnectionInViewport(link, data.links.indexOf(link))) {
+                if(!finalVisibleNodeIds.has(link.source)) finalVisibleNodeIds.add(link.source);
+                if(!finalVisibleNodeIds.has(link.target)) finalVisibleNodeIds.add(link.target);
+            }
+        });
+
+        finalVisibleConnectionIndices = new Set<number>();
+        data.links.forEach((link, index) => {
+            const sourceNode = data.nodes.find(n => n.id === link.source);
+            const targetNode = data.nodes.find(n => n.id === link.target);
+            if (sourceNode && targetNode &&
+                ((finalVisibleNodeIds.has(link.source) && finalVisibleNodeIds.has(link.target)) || isConnectionInViewport(link, index))) {
+                finalVisibleConnectionIndices.add(index);
+            }
+        });
     }
     
-    // Get final arrays
-    const newVisibleNodes = data.nodes.filter(node => visibleNodeIds.has(node.id));
-    const newVisibleConnections = data.links.filter((_, index) => visibleConnectionIndices.has(index));
-
-    performanceMarks.end('visibleElements');
+    const newVisibleNodes = data.nodes.filter(node => finalVisibleNodeIds.has(node.id));
+    const newVisibleConnections = data.links.filter((_, index) => finalVisibleConnectionIndices.has(index));
     
-    // Store the result for future use
+    performanceMarks.end('visibleElements');
+
     const result = {
       visibleNodes: newVisibleNodes,
       visibleConnections: newVisibleConnections
     };
     previousCalculation.current = result;
-    
+
     return result;
   }, [
-    data.nodes,
-    data.links,
-    selectedNodeId,
-    selectedLinkIndex,
-    deferredViewportState,
-    isNodeInViewport,
-    isConnectionInViewport,
-    cachedNodeIds,
-    cachedConnectionIndices,
-    getNodeConnectionIndices,
-    stableHighlightedAncestorsString,
-    stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString,
-    isMobile,
-    filters
+    data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
+    isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
+    stableHighlightedAncestorsString, stableHighlightedDescendantsString,
+    stableFilteredNodeIdsString, isMobile, filters
   ]);
 
   // Add effect to log general performance metrics
