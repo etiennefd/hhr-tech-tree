@@ -67,6 +67,9 @@ const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
 
+// Search result limits
+const MAX_SEARCH_RESULTS = 30;
+
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -1634,7 +1637,7 @@ const loadData = async () => {
 
       // Continue with text search
       for (const [nodeId, { node, searchableText, fields }] of searchIndex) {
-        if (results.length >= 10) break;
+        if (results.length >= MAX_SEARCH_RESULTS) break;
         if (addedNodes.has(nodeId)) continue;
 
         const matchesAllTerms = searchTerms.every(
@@ -1709,7 +1712,7 @@ const loadData = async () => {
       }
 
       results.sort((a, b) => b.matchScore - a.matchScore);
-      setSearchResults(results.slice(0, 10));
+      setSearchResults(results.slice(0, MAX_SEARCH_RESULTS));
     },
     // Restore original dependencies
     [searchIndex, data.nodes, formatYear]
