@@ -1242,7 +1242,7 @@ useEffect(() => {
       const startTime = performance.now();
       const result = originalFetch.apply(this, args);
       result.then(() => {
-        console.log(`Fetch completed: ${args[0]} in ${performance.now() - startTime}ms`);
+        // console.log(`Fetch completed: ${args[0]} in ${performance.now() - startTime}ms`);
       });
       return result;
     };

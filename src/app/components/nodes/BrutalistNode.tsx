@@ -259,7 +259,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       hasLoadedRef.current = true;
       setImageLoaded(true);
       // Log when an actual image (not a placeholder) is loaded
-      console.log(`Node image loaded: ${node.title} - ${imageUrl}`);
+      // console.log(`Node image loaded: ${node.title} - ${imageUrl}`);
     }
   };
 
