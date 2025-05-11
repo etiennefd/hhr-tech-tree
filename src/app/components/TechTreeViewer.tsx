@@ -537,6 +537,10 @@ export function TechTreeViewer() {
   const nodesContainerRef = useRef<HTMLDivElement>(null);
   const connectionsContainerRef = useRef<SVGSVGElement>(null);
   
+  // Refs for search and filter box containers to manage wheel events
+  const searchBoxContainerRef = useRef<HTMLDivElement>(null);
+  const filterBoxContainerRef = useRef<HTMLDivElement>(null);
+
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
     left: 0,
@@ -3251,6 +3255,57 @@ const loadData = async () => {
     };
   }, [visibleViewport, data.links, cachedConnectionIndices, isConnectionInViewport]);
 
+  // Effect to manage wheel events on search and filter boxes
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      const targetElement = e.target as HTMLElement;
+      const isScrollingList = targetElement.closest('.scrollable-results-list');
+
+
+      if (!isScrollingList) {
+        e.preventDefault(); 
+      } else {
+      }
+    };
+
+    const handleContainerTouchMove = (e: TouchEvent) => {
+      const targetElement = e.target as HTMLElement;
+      const isTouchingScrollableList = targetElement.closest('.scrollable-results-list');
+
+
+      if (!isTouchingScrollableList) {
+        e.preventDefault();
+      } else {
+      }
+    };
+
+    const searchBoxEl = searchBoxContainerRef.current;
+    const filterBoxEl = filterBoxContainerRef.current;
+
+
+    if (isClient && !isLoading) {
+      if (searchBoxEl) {
+        searchBoxEl.addEventListener('wheel', handleWheel, { passive: false });
+        searchBoxEl.addEventListener('touchmove', handleContainerTouchMove, { passive: false });
+      }
+      if (filterBoxEl) {
+        filterBoxEl.addEventListener('wheel', handleWheel, { passive: false });
+        filterBoxEl.addEventListener('touchmove', handleContainerTouchMove, { passive: false });
+      }
+    }
+
+    return () => {
+      if (searchBoxEl) {
+        searchBoxEl.removeEventListener('wheel', handleWheel);
+        searchBoxEl.removeEventListener('touchmove', handleContainerTouchMove);
+      }
+      if (filterBoxEl) {
+        filterBoxEl.removeEventListener('wheel', handleWheel);
+        filterBoxEl.removeEventListener('touchmove', handleContainerTouchMove);
+      }
+    };
+  }, [isClient, isLoading]); // Updated dependency array
+
   // Function to handle node hover for prefetching
   const handleNodeHoverForPrefetch = useCallback((title: string) => {
     // Find the node by title
@@ -3302,7 +3357,11 @@ const loadData = async () => {
           <Suspense fallback={null}>
             <Suspense fallback={null}>
               {isClient && (
-                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30">
+                <div 
+                  ref={searchBoxContainerRef}
+                  className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30"
+                  style={{ overscrollBehavior: 'contain' }} // Removed overflow: 'hidden'
+                >
                   <DynamicSearchBox
                     onSearch={handleSearch}
                     results={searchResults}
@@ -3313,7 +3372,11 @@ const loadData = async () => {
             </Suspense>
             <Suspense fallback={null}>
               {isClient && (
-                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20">
+                <div 
+                  ref={filterBoxContainerRef}
+                  className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20"
+                  style={{ overscrollBehavior: 'contain' }} // Removed overflow: 'hidden'
+                >
                   <DynamicFilterBox
                     filters={filters}
                     onFilterChange={setFilters}

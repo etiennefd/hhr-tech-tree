@@ -27,6 +27,7 @@ export function SearchBox({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   
   // Add debounce timer ref
@@ -64,6 +65,28 @@ export function SearchBox({
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
+    };
+  }, []);
+
+  // Effect to handle wheel and touchmove events on input for preventing page scroll
+  useEffect(() => {
+    const inputElement = inputRef.current;
+    if (!inputElement) return;
+
+    const handleInputWheel = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    const handleInputTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    inputElement.addEventListener('wheel', handleInputWheel, { passive: false });
+    inputElement.addEventListener('touchmove', handleInputTouchMove, { passive: false });
+
+    return () => {
+      inputElement.removeEventListener('wheel', handleInputWheel);
+      inputElement.removeEventListener('touchmove', handleInputTouchMove);
     };
   }, []);
 
@@ -140,6 +163,7 @@ export function SearchBox({
         <div className="relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={handleInputChange}
@@ -160,7 +184,7 @@ export function SearchBox({
         </div>
 
         {isOpen && results.length > 0 && (
-          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50">
+          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list">
             {results.map((result, index) => (
               <div
                 key={`${result.type}-${result.text}-${index}`}
