@@ -132,12 +132,10 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     if (!inputElement) return;
 
     const handleInputWheel = (e: WheelEvent) => {
-      console.log('[FilterBox Input Wheel - Manual Listener] Event detected, preventing page default.', e.deltaY);
       e.preventDefault();
     };
 
     const handleInputTouchMove = (e: TouchEvent) => {
-      console.log('[FilterBox Input TouchMove - Manual Listener] Event detected, preventing page default.');
       e.preventDefault();
     };
 

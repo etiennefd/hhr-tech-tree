@@ -74,12 +74,10 @@ export function SearchBox({
     if (!inputElement) return;
 
     const handleInputWheel = (e: WheelEvent) => {
-      console.log('[SearchBox Input Wheel - Manual Listener] Event detected, preventing page default.', e.deltaY);
       e.preventDefault();
     };
 
     const handleInputTouchMove = (e: TouchEvent) => {
-      console.log('[SearchBox Input TouchMove - Manual Listener] Event detected, preventing page default.');
       e.preventDefault();
     };
 

@@ -3261,18 +3261,10 @@ const loadData = async () => {
       const targetElement = e.target as HTMLElement;
       const isScrollingList = targetElement.closest('.scrollable-results-list');
 
-      console.log(
-        '[TechTreeViewer Wheel Event] Listener on outer container.', 
-        'DeltaY:', e.deltaY, 
-        'Target:', targetElement.className,
-        'IsScrollingList:', !!isScrollingList
-      );
 
       if (!isScrollingList) {
-        console.log('[TechTreeViewer Wheel Event] Target is NOT scrollable list. Preventing page scroll.');
         e.preventDefault(); 
       } else {
-        console.log('[TechTreeViewer Wheel Event] Target IS scrollable list. Allowing list scroll.');
       }
     };
 
@@ -3280,42 +3272,29 @@ const loadData = async () => {
       const targetElement = e.target as HTMLElement;
       const isTouchingScrollableList = targetElement.closest('.scrollable-results-list');
 
-      console.log(
-        '[TechTreeViewer TouchMove Event] Listener on outer container.',
-        'Target:', targetElement.className,
-        'IsTouchingScrollableList:', !!isTouchingScrollableList
-      );
 
       if (!isTouchingScrollableList) {
-        console.log('[TechTreeViewer TouchMove Event] Target is NOT scrollable list. Preventing page scroll.');
         e.preventDefault();
       } else {
-        console.log('[TechTreeViewer TouchMove Event] Target IS scrollable list. Allowing list touch scroll.');
       }
     };
 
     const searchBoxEl = searchBoxContainerRef.current;
     const filterBoxEl = filterBoxContainerRef.current;
 
-    console.log('[Effect] Checking refs for listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl, 'isClient:', isClient, 'isLoading:', isLoading);
 
     if (isClient && !isLoading) {
       if (searchBoxEl) {
-        console.log('[Effect] Attaching wheel listener to SearchBoxEl');
         searchBoxEl.addEventListener('wheel', handleWheel, { passive: false });
-        console.log('[Effect] Attaching touchmove listener to SearchBoxEl');
         searchBoxEl.addEventListener('touchmove', handleContainerTouchMove, { passive: false });
       }
       if (filterBoxEl) {
-        console.log('[Effect] Attaching wheel listener to FilterBoxEl');
         filterBoxEl.addEventListener('wheel', handleWheel, { passive: false });
-        console.log('[Effect] Attaching touchmove listener to FilterBoxEl');
         filterBoxEl.addEventListener('touchmove', handleContainerTouchMove, { passive: false });
       }
     }
 
     return () => {
-      console.log('[Effect] Cleaning up listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl);
       if (searchBoxEl) {
         searchBoxEl.removeEventListener('wheel', handleWheel);
         searchBoxEl.removeEventListener('touchmove', handleContainerTouchMove);
