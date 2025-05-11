@@ -537,6 +537,10 @@ export function TechTreeViewer() {
   const nodesContainerRef = useRef<HTMLDivElement>(null);
   const connectionsContainerRef = useRef<SVGSVGElement>(null);
   
+  // Refs for search and filter box containers to manage wheel events
+  const searchBoxContainerRef = useRef<HTMLDivElement>(null);
+  const filterBoxContainerRef = useRef<HTMLDivElement>(null);
+
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
     left: 0,
@@ -3251,6 +3255,59 @@ const loadData = async () => {
     };
   }, [visibleViewport, data.links, cachedConnectionIndices, isConnectionInViewport]);
 
+  // Effect to manage wheel events on search and filter boxes
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      const targetElement = e.target as HTMLElement;
+      const isScrollingList = targetElement.closest('.scrollable-results-list');
+
+      console.log(
+        '[Manual Wheel Event] Listener on outer container.', 
+        'DeltaY:', e.deltaY, 
+        'Target:', targetElement,
+        'Target ClassName:', targetElement.className,
+        'IsScrollingList:', !!isScrollingList,
+        'CurrentTarget:', e.currentTarget
+      );
+
+      if (!isScrollingList) {
+        console.log('[Manual Wheel Event] Target is NOT the scrollable list or its child. Preventing page scroll.');
+        e.preventDefault(); 
+      } else {
+        console.log('[Manual Wheel Event] Target IS the scrollable list or its child. Allowing list to scroll.');
+        // Do not preventDefault, allow the list's native scroll
+      }
+      // e.stopPropagation(); // Keep commented out for now
+    };
+
+    const searchBoxEl = searchBoxContainerRef.current;
+    const filterBoxEl = filterBoxContainerRef.current;
+
+    console.log('[Effect] Checking refs for wheel listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl, 'isClient:', isClient, 'isLoading:', isLoading);
+
+    // Only proceed if the component is client-side, not loading, and refs are available
+    if (isClient && !isLoading) {
+      if (searchBoxEl) {
+        console.log('[Effect] Attaching wheel listener to SearchBoxEl');
+        searchBoxEl.addEventListener('wheel', handleWheel, { passive: false });
+      }
+      if (filterBoxEl) {
+        console.log('[Effect] Attaching wheel listener to FilterBoxEl');
+        filterBoxEl.addEventListener('wheel', handleWheel, { passive: false });
+      }
+    }
+
+    return () => {
+      console.log('[Effect] Cleaning up wheel listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl);
+      if (searchBoxEl) {
+        searchBoxEl.removeEventListener('wheel', handleWheel);
+      }
+      if (filterBoxEl) {
+        filterBoxEl.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, [isClient, isLoading]); // Updated dependency array
+
   // Function to handle node hover for prefetching
   const handleNodeHoverForPrefetch = useCallback((title: string) => {
     // Find the node by title
@@ -3302,7 +3359,11 @@ const loadData = async () => {
           <Suspense fallback={null}>
             <Suspense fallback={null}>
               {isClient && (
-                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30">
+                <div 
+                  ref={searchBoxContainerRef}
+                  className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30"
+                  style={{ overscrollBehavior: 'contain' }} // Removed overflow: 'hidden'
+                >
                   <DynamicSearchBox
                     onSearch={handleSearch}
                     results={searchResults}
@@ -3313,7 +3374,11 @@ const loadData = async () => {
             </Suspense>
             <Suspense fallback={null}>
               {isClient && (
-                <div className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20">
+                <div 
+                  ref={filterBoxContainerRef}
+                  className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20"
+                  style={{ overscrollBehavior: 'contain' }} // Removed overflow: 'hidden'
+                >
                   <DynamicFilterBox
                     filters={filters}
                     onFilterChange={setFilters}

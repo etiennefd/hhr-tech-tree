@@ -182,6 +182,15 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
+            onWheel={(e) => {
+              console.log('[FilterBox Input Wheel] Event detected, preventing page default.', e.deltaY);
+              e.preventDefault(); // Prevent page scroll
+              // e.stopPropagation(); // Allow event to bubble for list scrolling
+            }}
+            onTouchMove={(e) => {
+              console.log('[FilterBox Input TouchMove] Event detected, preventing default.');
+              e.preventDefault();
+            }}
             placeholder="Filter by field/location"
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />
@@ -217,7 +226,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
 
         {/* Suggestions Dropdown */}
         {isOpen && suggestions.length > 0 && (
-          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50">
+          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list">
             {suggestions.map((suggestion, index) => (
               <div
                 key={`${suggestion.type}-${suggestion.value}`}

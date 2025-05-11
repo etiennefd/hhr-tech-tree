@@ -145,6 +145,15 @@ export function SearchBox({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
+            onWheel={(e) => {
+              console.log('[SearchBox Input Wheel] Event detected, preventing page default.', e.deltaY);
+              e.preventDefault(); // Prevent page scroll
+              // e.stopPropagation(); // Allow event to bubble for list scrolling
+            }}
+            onTouchMove={(e) => {
+              console.log('[SearchBox Input TouchMove] Event detected, preventing default.');
+              e.preventDefault();
+            }}
             placeholder="Search techs/years/people"
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />
@@ -160,7 +169,7 @@ export function SearchBox({
         </div>
 
         {isOpen && results.length > 0 && (
-          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50">
+          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list">
             {results.map((result, index) => (
               <div
                 key={`${result.type}-${result.text}-${index}`}
