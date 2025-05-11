@@ -126,22 +126,29 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Effect to handle wheel event on input for preventing page scroll
+  // Effect to handle wheel and touchmove events on input for preventing page scroll
   useEffect(() => {
+    const inputElement = inputRef.current;
+    if (!inputElement) return;
+
     const handleInputWheel = (e: WheelEvent) => {
       console.log('[FilterBox Input Wheel - Manual Listener] Event detected, preventing page default.', e.deltaY);
       e.preventDefault();
-      // e.stopPropagation(); // Optional: consider if this is needed
     };
 
-    const inputElement = inputRef.current;
-    if (inputElement) {
-      inputElement.addEventListener('wheel', handleInputWheel, { passive: false });
-      return () => {
-        inputElement.removeEventListener('wheel', handleInputWheel);
-      };
-    }
-  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+    const handleInputTouchMove = (e: TouchEvent) => {
+      console.log('[FilterBox Input TouchMove - Manual Listener] Event detected, preventing page default.');
+      e.preventDefault();
+    };
+
+    inputElement.addEventListener('wheel', handleInputWheel, { passive: false });
+    inputElement.addEventListener('touchmove', handleInputTouchMove, { passive: false });
+
+    return () => {
+      inputElement.removeEventListener('wheel', handleInputWheel);
+      inputElement.removeEventListener('touchmove', handleInputTouchMove);
+    };
+  }, []);
 
   // Get type label
   const getTypeLabel = (type: keyof FilterState): string => {
@@ -201,10 +208,6 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
-            onTouchMove={(e) => {
-              console.log('[FilterBox Input TouchMove] Event detected, preventing default.');
-              e.preventDefault();
-            }}
             placeholder="Filter by field/location"
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />

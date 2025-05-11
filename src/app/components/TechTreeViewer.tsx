@@ -3262,48 +3262,67 @@ const loadData = async () => {
       const isScrollingList = targetElement.closest('.scrollable-results-list');
 
       console.log(
-        '[Manual Wheel Event] Listener on outer container.', 
+        '[TechTreeViewer Wheel Event] Listener on outer container.', 
         'DeltaY:', e.deltaY, 
-        'Target:', targetElement,
-        'Target ClassName:', targetElement.className,
-        'IsScrollingList:', !!isScrollingList,
-        'CurrentTarget:', e.currentTarget
+        'Target:', targetElement.className,
+        'IsScrollingList:', !!isScrollingList
       );
 
       if (!isScrollingList) {
-        console.log('[Manual Wheel Event] Target is NOT the scrollable list or its child. Preventing page scroll.');
+        console.log('[TechTreeViewer Wheel Event] Target is NOT scrollable list. Preventing page scroll.');
         e.preventDefault(); 
       } else {
-        console.log('[Manual Wheel Event] Target IS the scrollable list or its child. Allowing list to scroll.');
-        // Do not preventDefault, allow the list's native scroll
+        console.log('[TechTreeViewer Wheel Event] Target IS scrollable list. Allowing list scroll.');
       }
-      // e.stopPropagation(); // Keep commented out for now
+    };
+
+    const handleContainerTouchMove = (e: TouchEvent) => {
+      const targetElement = e.target as HTMLElement;
+      const isTouchingScrollableList = targetElement.closest('.scrollable-results-list');
+
+      console.log(
+        '[TechTreeViewer TouchMove Event] Listener on outer container.',
+        'Target:', targetElement.className,
+        'IsTouchingScrollableList:', !!isTouchingScrollableList
+      );
+
+      if (!isTouchingScrollableList) {
+        console.log('[TechTreeViewer TouchMove Event] Target is NOT scrollable list. Preventing page scroll.');
+        e.preventDefault();
+      } else {
+        console.log('[TechTreeViewer TouchMove Event] Target IS scrollable list. Allowing list touch scroll.');
+      }
     };
 
     const searchBoxEl = searchBoxContainerRef.current;
     const filterBoxEl = filterBoxContainerRef.current;
 
-    console.log('[Effect] Checking refs for wheel listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl, 'isClient:', isClient, 'isLoading:', isLoading);
+    console.log('[Effect] Checking refs for listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl, 'isClient:', isClient, 'isLoading:', isLoading);
 
-    // Only proceed if the component is client-side, not loading, and refs are available
     if (isClient && !isLoading) {
       if (searchBoxEl) {
         console.log('[Effect] Attaching wheel listener to SearchBoxEl');
         searchBoxEl.addEventListener('wheel', handleWheel, { passive: false });
+        console.log('[Effect] Attaching touchmove listener to SearchBoxEl');
+        searchBoxEl.addEventListener('touchmove', handleContainerTouchMove, { passive: false });
       }
       if (filterBoxEl) {
         console.log('[Effect] Attaching wheel listener to FilterBoxEl');
         filterBoxEl.addEventListener('wheel', handleWheel, { passive: false });
+        console.log('[Effect] Attaching touchmove listener to FilterBoxEl');
+        filterBoxEl.addEventListener('touchmove', handleContainerTouchMove, { passive: false });
       }
     }
 
     return () => {
-      console.log('[Effect] Cleaning up wheel listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl);
+      console.log('[Effect] Cleaning up listeners. SearchBoxEl:', searchBoxEl, 'FilterBoxEl:', filterBoxEl);
       if (searchBoxEl) {
         searchBoxEl.removeEventListener('wheel', handleWheel);
+        searchBoxEl.removeEventListener('touchmove', handleContainerTouchMove);
       }
       if (filterBoxEl) {
         filterBoxEl.removeEventListener('wheel', handleWheel);
+        filterBoxEl.removeEventListener('touchmove', handleContainerTouchMove);
       }
     };
   }, [isClient, isLoading]); // Updated dependency array

@@ -68,22 +68,29 @@ export function SearchBox({
     };
   }, []);
 
-  // Effect to handle wheel event on input for preventing page scroll
+  // Effect to handle wheel and touchmove events on input for preventing page scroll
   useEffect(() => {
+    const inputElement = inputRef.current;
+    if (!inputElement) return;
+
     const handleInputWheel = (e: WheelEvent) => {
       console.log('[SearchBox Input Wheel - Manual Listener] Event detected, preventing page default.', e.deltaY);
       e.preventDefault();
-      // e.stopPropagation(); // Optional: consider if this is needed
     };
 
-    const inputElement = inputRef.current;
-    if (inputElement) {
-      inputElement.addEventListener('wheel', handleInputWheel, { passive: false });
-      return () => {
-        inputElement.removeEventListener('wheel', handleInputWheel);
-      };
-    }
-  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+    const handleInputTouchMove = (e: TouchEvent) => {
+      console.log('[SearchBox Input TouchMove - Manual Listener] Event detected, preventing page default.');
+      e.preventDefault();
+    };
+
+    inputElement.addEventListener('wheel', handleInputWheel, { passive: false });
+    inputElement.addEventListener('touchmove', handleInputTouchMove, { passive: false });
+
+    return () => {
+      inputElement.removeEventListener('wheel', handleInputWheel);
+      inputElement.removeEventListener('touchmove', handleInputTouchMove);
+    };
+  }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -164,10 +171,6 @@ export function SearchBox({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
-            onTouchMove={(e) => {
-              console.log('[SearchBox Input TouchMove] Event detected, preventing default.');
-              e.preventDefault();
-            }}
             placeholder="Search techs/years/people"
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />
