@@ -27,6 +27,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Get suggestions based on query
@@ -125,6 +126,23 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Effect to handle wheel event on input for preventing page scroll
+  useEffect(() => {
+    const handleInputWheel = (e: WheelEvent) => {
+      console.log('[FilterBox Input Wheel - Manual Listener] Event detected, preventing page default.', e.deltaY);
+      e.preventDefault();
+      // e.stopPropagation(); // Optional: consider if this is needed
+    };
+
+    const inputElement = inputRef.current;
+    if (inputElement) {
+      inputElement.addEventListener('wheel', handleInputWheel, { passive: false });
+      return () => {
+        inputElement.removeEventListener('wheel', handleInputWheel);
+      };
+    }
+  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+
   // Get type label
   const getTypeLabel = (type: keyof FilterState): string => {
     switch (type) {
@@ -177,16 +195,12 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
         <div className="relative">
           <Filter className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
-            onWheel={(e) => {
-              console.log('[FilterBox Input Wheel] Event detected, preventing page default.', e.deltaY);
-              e.preventDefault(); // Prevent page scroll
-              // e.stopPropagation(); // Allow event to bubble for list scrolling
-            }}
             onTouchMove={(e) => {
               console.log('[FilterBox Input TouchMove] Event detected, preventing default.');
               e.preventDefault();
