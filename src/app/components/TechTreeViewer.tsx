@@ -584,6 +584,9 @@ export function TechTreeViewer() {
   const [cachedConnectionIndices, setCachedConnectionIndices] = useState<Set<number>>(new Set());
   const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
 
+  // Add state for prefetched node details
+  const [prefetchedNodeDetails, setPrefetchedNodeDetails] = useState<Map<string, Partial<TechNode>>>(new Map());
+
   // Add scroll positions cache
   const scrollPositionsCache = useRef<Map<string, { x: number; y: number }>>(new Map());
 
@@ -1911,6 +1914,9 @@ useEffect(() => {
     if (isPrefetching.current || prefetchQueue.current.length === 0) return;
     
     isPrefetching.current = true;
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[PerfDebug][Prefetch] Starting to process queue of size:', prefetchQueue.current.length);
+    }
     
     try {
       const nodeId = prefetchQueue.current.shift()!;
@@ -1919,6 +1925,9 @@ useEffect(() => {
       if (prefetchedNodes.current.has(nodeId) || !nodeId) {
         isPrefetching.current = false;
         processPrefetchQueue(); // Process next item
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[PerfDebug][Prefetch] Skipped (already prefetched or invalid): ${nodeId}`);
+        }
         return;
       }
       
@@ -1928,7 +1937,16 @@ useEffect(() => {
       const encodedNodeId = encodeURIComponent(nodeId);
       const apiUrl = `/api/inventions/${encodedNodeId}`;
       
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][Prefetch] Fetching node: ${nodeId} from ${apiUrl}`);
+        performanceMarks.start(`prefetch-${nodeId}`);
+      }
       const response = await fetch(apiUrl);
+      if (process.env.NODE_ENV === 'development') {
+        performanceMarks.end(`prefetch-${nodeId}`);
+        performanceMarks.log(`prefetch-${nodeId}`);
+      }
+
       if (!response.ok) {
         if (response.status !== 404) {  // Don't log 404s as they're expected
           console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
@@ -1951,13 +1969,15 @@ useEffect(() => {
         }
       }
       
-      // Update the node data in the state
-      setData((prevData) => ({
-        ...prevData,
-        nodes: prevData.nodes.map((node) =>
-          node.id === nodeId ? { ...node, ...nodeData } : node
-        ),
-      }));
+      // Update the prefetchedNodeDetails state
+      setPrefetchedNodeDetails(prevDetails => {
+        const newDetails = new Map(prevDetails);
+        newDetails.set(nodeId, nodeData);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[PerfDebug][Prefetch] Stored prefetched details for ${nodeId}. Details keys: ${Object.keys(nodeData).join(', ')}`);
+        }
+        return newDetails;
+      });
       
     } catch (error) {
       console.warn('Error in prefetch processing:', error);
@@ -1965,6 +1985,9 @@ useEffect(() => {
       isPrefetching.current = false;
       // Continue processing the queue
       processPrefetchQueue();
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[PerfDebug][Prefetch] Finished processing queue item, remaining:', prefetchQueue.current.length);
+      }
     }
   }, []);
 
@@ -1973,13 +1996,24 @@ useEffect(() => {
     // Skip if already prefetched, already in queue, or if nodeId is invalid
     if (prefetchedNodes.current.has(nodeId) || 
         prefetchQueue.current.includes(nodeId) || 
-        !nodeId) return;
+        !nodeId) {
+      if (process.env.NODE_ENV === 'development' && nodeId) { // Log only if it's a valid attempt
+        // console.log(`[PerfDebug][Prefetch] Attempt to prefetch ${nodeId} skipped (already prefetched or in queue).`);
+      }
+      return;
+    }
     
     // Add to queue based on priority
     if (priority) {
       prefetchQueue.current.unshift(nodeId); // Add to front of queue
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][Prefetch] Added to QUEUE (Priority): ${nodeId}. Queue size: ${prefetchQueue.current.length}`);
+      }
     } else {
       prefetchQueue.current.push(nodeId); // Add to end of queue
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][Prefetch] Added to QUEUE: ${nodeId}. Queue size: ${prefetchQueue.current.length}`);
+      }
     }
     
     // Start processing the queue if not already processing
@@ -1989,9 +2023,11 @@ useEffect(() => {
   // Function to prefetch important nodes proactively
   const prefetchImportantNodes = useCallback(() => {
     const nodesToPrefetch = new Set<string>();
+    let triggerReason = "Unknown";
     
     // 1. Prefetch the selected node with high priority
     if (selectedNodeId) {
+      triggerReason = `selectedNodeId: ${selectedNodeId}`;
       prefetchNode(selectedNodeId, true);
       
       // 2. Prefetch nodes connected to the selected node with high priority
@@ -2009,21 +2045,31 @@ useEffect(() => {
       const [source, target] = selectedLinkKey.split('-');
       nodesToPrefetch.add(source);
       nodesToPrefetch.add(target);
+      triggerReason = `selectedLinkKey: ${selectedLinkKey}`;
     }
     
     // 4. Prefetch highlighted ancestors and descendants with high priority
     // Use for...of instead of forEach to avoid TypeScript errors
     for (const nodeId of highlightedAncestors) {
       nodesToPrefetch.add(nodeId);
+      if (triggerReason === "Unknown" || triggerReason.startsWith("selectedNodeId")) triggerReason = `highlightedAncestors (for ${selectedNodeId || 'unknown'})`;
     }
     
     for (const nodeId of highlightedDescendants) {
       nodesToPrefetch.add(nodeId);
+      if (triggerReason === "Unknown" || triggerReason.startsWith("selectedNodeId")) triggerReason = `highlightedDescendants (for ${selectedNodeId || 'unknown'})`;
     }
     
     // Prefetch all the important nodes with high priority
+    let prefetchedCount = 0;
     for (const nodeId of nodesToPrefetch) {
+      // prefetchNode already checks if it's already prefetched or in queue, so no need to check here
       prefetchNode(nodeId, true);
+      prefetchedCount++;
+    }
+
+    if (process.env.NODE_ENV === 'development' && prefetchedCount > 0) {
+      console.log(`[PerfDebug][Prefetch] prefetchImportantNodes triggered by ${triggerReason}. Added ${prefetchedCount} important nodes to queue (high priority).`);
     }
     
   }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
@@ -2031,6 +2077,9 @@ useEffect(() => {
   // Add this effect to prefetch data for connected nodes when a node is selected
   useEffect(() => {
     // Call the prefetchImportantNodes function to proactively prefetch important nodes
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[PerfDebug][Prefetch] useEffect for selectedNodeId/highlights triggered.');
+    }
     prefetchImportantNodes();
     
     // The rest of the existing code can stay as a fallback
@@ -2073,6 +2122,9 @@ useEffect(() => {
   // Add this effect to prefetch data for nodes connected by a selected link
   useEffect(() => {
     if (selectedLinkKey === null) return;
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[PerfDebug][Prefetch] useEffect for selectedLinkKey triggered: ${selectedLinkKey}`);
+    }
     
     // Get node IDs from the selectedLinkKey
     const [source, target] = selectedLinkKey.split('-');
@@ -2090,6 +2142,9 @@ useEffect(() => {
     if (!hasActiveFilters) return;
     
     console.log(`[Filter Prefetch] Active filters: Fields=${filters.fields.size}, Countries=${filters.countries.size}, Cities=${filters.cities.size}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[PerfDebug][Prefetch] useEffect for filters triggered. Fields: ${filters.fields.size}, Countries: ${filters.countries.size}, Cities: ${filters.cities.size}`);
+    }
     
     // Find nodes that match the current filters
     const matchingNodes = data.nodes.filter(node => {
@@ -2128,6 +2183,9 @@ useEffect(() => {
     // Execute all prefetch requests
     Promise.all(prefetchPromises).then(() => {
       console.log(`[Filter Prefetch] Successfully prefetched filtered nodes`);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][Prefetch] Successfully prefetched ${prefetchPromises.length} nodes due to filter change.`);
+      }
     }).catch(error => {
       console.warn('Error prefetching filtered nodes:', error);
     });
@@ -2206,9 +2264,14 @@ useEffect(() => {
         // Limit the number of simultaneous prefetch requests
         .slice(0, 5);
 
+      let prefetchedOnHoverCount = 0;
       // Use for...of instead of forEach to avoid TypeScript errors
       for (const nodeId of connectedNodeIds) {
         prefetchNode(nodeId);
+        prefetchedOnHoverCount++;
+      }
+      if (process.env.NODE_ENV === 'development' && prefetchedOnHoverCount > 0) {
+        console.log(`[PerfDebug][Prefetch] Hovering ${node.title} (ID: ${node.id}). Added ${prefetchedOnHoverCount} neighbors to prefetch queue.`);
       }
     },
     [data.links, prefetchNode, isMobile]
@@ -2603,6 +2666,10 @@ useEffect(() => {
     const throttledUpdate = throttle(() => {
       const { hContainer, vContainer } = findContainers();
       
+      if (process.env.NODE_ENV === 'development') {
+        // console.log('[PerfDebug][Viewport] throttledUpdate called.');
+      }
+
       if (!hContainer) {
         console.log('[ScrollDebug] Horizontal container missing, trying again shortly...');
         setTimeout(findContainers, 100);
@@ -2642,6 +2709,9 @@ useEffect(() => {
       };
 
       lastViewportUpdate.current = now;
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][Viewport] Updating viewport state. Scroll L:${horizontalScroll.toFixed(0)} T:${verticalScroll.toFixed(0)}. New Viewport L:${newViewport.left.toFixed(0)} T:${newViewport.top.toFixed(0)} R:${newViewport.right.toFixed(0)} B:${newViewport.bottom.toFixed(0)}`);
+      }
       
       // Update both viewport states
       setVisibleViewport(newViewport);
@@ -2669,6 +2739,9 @@ useEffect(() => {
       const { hContainer, vContainer } = findContainers();
       if (hContainer && vContainer) {
         observer.disconnect();
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[PerfDebug][Viewport] MutationObserver found containers and disconnected. Attaching scroll listeners.');
+        }
         
         // Attach event listeners directly to the containers
         hContainer.addEventListener('scroll', () => throttledUpdate());
@@ -2961,6 +3034,12 @@ useEffect(() => {
 
     if (isMobile) {
         // --- Mobile Logic ---
+        if (process.env.NODE_ENV === 'development') {
+          performanceMarks.start('visibleElements-mobile');
+          console.log('[PerfDebug] Mobile visibleElements: START');
+          console.log('[PerfDebug] Mobile baseVisibleNodeIds count:', baseVisibleNodeIds.size);
+        }
+
         finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds); // For mobile, node visibility is based on these base calculations
 
         const currentFrameDrivenConnectionIndices = new Set<number>();
@@ -2983,6 +3062,9 @@ useEffect(() => {
                 }
             });
         }
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[PerfDebug] Mobile currentFrameDrivenConnectionIndices count:', currentFrameDrivenConnectionIndices.size);
+        }
 
         // Apply Stickiness for Mobile
         finalVisibleConnectionIndices = new Set<number>(currentFrameDrivenConnectionIndices);
@@ -2995,6 +3077,13 @@ useEffect(() => {
                     }
                 }
             });
+        }
+        if (process.env.NODE_ENV === 'development') {
+          performanceMarks.end('visibleElements-mobile');
+          performanceMarks.log('visibleElements-mobile');
+          console.log('[PerfDebug] Mobile finalVisibleNodeIds count:', finalVisibleNodeIds.size);
+          console.log('[PerfDebug] Mobile finalVisibleConnectionIndices count (after stickiness):', finalVisibleConnectionIndices.size);
+          console.log('[PerfDebug] Mobile visibleElements: END');
         }
     } else {
         // --- Desktop Logic ---
@@ -3170,29 +3259,32 @@ useEffect(() => {
           setCachedConnectionIndices(new Set(connectionsToCache));
         }
         
-        // Log cache update
-        // console.log('[Cache] Updated cache:', {
-        //   nodes: {
-        //     total: data.nodes.length,
-        //     cached: nodesToCache.size,
-        //     inViewport: nodesToCache.size,
-        //     changed: hasNodeChanges
-        //   },
-        //   connections: {
-        //     total: data.links.length,
-        //     cached: connectionsToCache.size,
-        //     inViewport: connectionsToCache.size,
-        //     changed: hasConnectionChanges
-        //   },
-        //   viewport: {
-        //     visible: visibleViewport,
-        //     extended: extendedViewport
-        //   },
-        //   context: {
-        //     selectedNode: selectedNodeId,
-        //     highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
-        //   }
-        // });
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[PerfDebug][CacheMgmt] Cache management effect triggered. Viewport L:${visibleViewport.left.toFixed(0)} T:${visibleViewport.top.toFixed(0)} R:${visibleViewport.right.toFixed(0)} B:${visibleViewport.bottom.toFixed(0)}. Extended L:${extendedViewport.left.toFixed(0)} T:${extendedViewport.top.toFixed(0)} R:${extendedViewport.right.toFixed(0)} B:${extendedViewport.bottom.toFixed(0)}`);
+          console.log(`[PerfDebug][CacheMgmt] Updated caches. Nodes iterated: ${data.nodes.length}, Links iterated: ${data.links.length}. Nodes actually cached: ${nodesToCache.size} (changed: ${hasNodeChanges}). Connections actually cached: ${connectionsToCache.size} (changed: ${hasConnectionChanges}).`);
+          // console.log('[Cache] Updated cache:', {
+          //   nodes: {
+          //     total: data.nodes.length,
+          //     cached: nodesToCache.size,
+          //     inViewport: nodesToCache.size,
+          //     changed: hasNodeChanges
+          //   },
+          //   connections: {
+          //     total: data.links.length,
+          //     cached: connectionsToCache.size,
+          //     inViewport: connectionsToCache.size,
+          //     changed: hasConnectionChanges
+          //   },
+          //   viewport: {
+          //     visible: visibleViewport,
+          //     extended: extendedViewport
+          //   },
+          //   context: {
+          //     selectedNode: selectedNodeId,
+          //     highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
+          //   }
+          // });
+        }
       });
     }
   }, [
@@ -3210,15 +3302,23 @@ useEffect(() => {
   // Add an effect to prefetch visible nodes when the viewport changes
   useEffect(() => {
     if (!data.nodes.length) return;
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[PerfDebug][Prefetch] Viewport prefetch effect triggered. Viewport L:${visibleViewport.left.toFixed(0)} T:${visibleViewport.top.toFixed(0)} R:${visibleViewport.right.toFixed(0)} B:${visibleViewport.bottom.toFixed(0)}`);
+    }
     
     // Get nodes that are currently in the viewport
-    const visibleNodeIds = data.nodes
+    const visibleNodeIdsInEffect = data.nodes
       .filter(node => isNodeInViewport(node))
       .map(node => node.id);
     
     // Prefetch these nodes (with normal priority)
-    for (const nodeId of visibleNodeIds) {
-      prefetchNode(nodeId);
+    let count = 0;
+    for (const nodeId of visibleNodeIdsInEffect) {
+      prefetchNode(nodeId); // prefetchNode already logs additions to queue
+      count++;
+    }
+    if (process.env.NODE_ENV === 'development' && count > 0) {
+      console.log(`[PerfDebug][Prefetch] Viewport effect: Attempted to queue ${count} nodes for prefetch. Current queue size: ${prefetchQueue.current.length}`);
     }
     
   }, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]);
@@ -3570,392 +3670,413 @@ useEffect(() => {
 
             {/* Nodes */}
             <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
-              {visibleNodes.map((node) => (
-                <BrutalistNode
-                  key={node.id}
-                  node={node}
-                  isSelected={node.id === selectedNodeId}
-                  isAdjacent={isAdjacentToSelected(node.id)}
-                  onClick={() => handleNodeClick(node.title)} // Use the centralized handler
-                  onMouseEnter={() => {
-                    if (node.id !== selectedNodeId) {
-                      handleNodeHover(node);
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    // On mobile, don't clear hover state on mouse leave
-                    if (!isMobile && node.id !== selectedNodeId) {
-                      setHoveredNode(null);
-                      setHoveredNodeId(null);
-                    }
-                  }}
-                  width={NODE_WIDTH}
-                  style={{
-                    position: "absolute",
-                    left: `${getXPosition(node.year)}px`,
-                    top: `${node.y}px`,
-                    opacity: getNodeOpacity(node),
-                    transition: "opacity 0.2s ease-in-out",
-                  }}
-                />
-              ))}
+              {visibleNodes.map((node) => {
+                const details = prefetchedNodeDetails.get(node.id);
+                // Create a new node object that merges base node data with any prefetched details
+                const displayNode = { ...node, ...(details || {}) };
+
+                return (
+                  <BrutalistNode
+                    key={node.id} // key should still be from the original stable node id
+                    node={displayNode} // Pass the merged node data
+                    isSelected={node.id === selectedNodeId}
+                    isAdjacent={isAdjacentToSelected(node.id)}
+                    onClick={() => handleNodeClick(node.title)} // Use the centralized handler
+                    onMouseEnter={() => {
+                      if (node.id !== selectedNodeId) {
+                        handleNodeHover(node);
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      // On mobile, don't clear hover state on mouse leave
+                      if (!isMobile && node.id !== selectedNodeId) {
+                        setHoveredNode(null);
+                        setHoveredNodeId(null);
+                      }
+                    }}
+                    width={NODE_WIDTH}
+                    style={{
+                      position: "absolute",
+                      left: `${getXPosition(node.year)}px`,
+                      top: `${node.y}px`,
+                      opacity: getNodeOpacity(node),
+                      transition: "opacity 0.2s ease-in-out",
+                    }}
+                  />
+                );
+              })}
             </div>
 
             {/* Tooltips */}
             <div className="relative" style={{ zIndex: 100 }}>
-              {visibleNodes.map(
-                (node) =>
-                  (hoveredNode?.id === node.id ||
-                    selectedNodeId === node.id) && (
-                    <div
-                      key={`tooltip-${node.id}`}
-                      className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
-                      style={{
-                        left: `${getXPosition(node.year)}px`,
-                        top: `${(node.y ?? 0) + 100}px`,
-                        transform: "translate(-50%, 0)",
-                        width: "14rem",
-                        zIndex: 100,
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                      onMouseEnter={() => {
-                        // Keep the hover state active when hovering the tooltip
-                        setHoveredNode(node);
-                        setHoveredNodeId(node.id);
-                      }}
-                      onMouseLeave={() => {
-                        // Only clear hover state if the node isn't selected
-                        if (selectedNodeId !== node.id) {
-                          setHoveredNode(null);
-                          setHoveredNodeId(null);
-                        }
-                      }}
-                    >
-                      <p className="text-xs mb-1">
-                        {/* Use original formatYear call */}
-                        <strong>Date:</strong> {formatYear(node.year)}
-                        {node.dateDetails && ` – ${node.dateDetails}`}
-                      </p>
-                      {node.inventors &&
-                        node.inventors.length > 0 &&
-                        node.inventors.filter((inv) => inv !== "unknown")
-                          .length > 0 && (
-                          <p className="text-xs mb-1">
-                            <strong>
-                              {node.type === "Discovery"
-                                ? `Discoverer${
-                                    node.inventors.length > 1 ? "s" : ""
-                                  }`
-                                : `Inventor${
-                                    node.inventors.length > 1 ? "s" : ""
-                                  }`}
-                              :
-                            </strong>{" "}
-                            {node.inventors.includes("unknown")
-                              ? "possibly " +
-                                node.inventors
-                                  .filter((inv) => inv !== "unknown")
-                                  .join(", ")
-                              : node.inventors.join(", ")}
-                          </p>
-                        )}
-                      {node.organizations &&
-                        node.organizations.length > 0 && (
-                          <p className="text-xs mb-1">
-                            <strong>
-                              {node.organizations.length > 1
-                                ? "Organizations"
-                                : "Organization"}
-                              :
-                            </strong>{" "}
-                            {node.organizations.join(", ")}
-                          </p>
-                        )}
-                      {node.formattedLocation && (
+              {visibleNodes.map((baseLoopNode) => { // Renamed to avoid conflict with 'node' below
+                  // Get the selected or hovered node ID
+                  const targetNodeId = selectedNodeId || hoveredNode?.id;
+
+                  // Only render tooltip if this node is the selected/hovered one
+                  if (targetNodeId !== baseLoopNode.id) return null;
+
+                  // Merge base node data with prefetched details for the tooltip
+                  const prefetchedDetails = prefetchedNodeDetails.get(baseLoopNode.id);
+                  // This 'node' is the one used throughout the tooltip content
+                  const node = { ...baseLoopNode, ...(prefetchedDetails || {}) }; 
+
+                  // The original condition for rendering the tooltip, using the merged 'node'
+                  // but checking against the original hoveredNode.id or selectedNodeId for triggering
+                  if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
+                    return (
+                      <div
+                        key={`tooltip-${node.id}`} // key uses merged node id, or baseLoopNode.id for stability
+                        className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
+                        style={{
+                          left: `${getXPosition(node.year)}px`,
+                          top: `${(node.y ?? 0) + 100}px`,
+                          transform: "translate(-50%, 0)",
+                          width: "14rem",
+                          zIndex: 100,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseEnter={() => {
+                          // Keep the hover state active when hovering the tooltip
+                          setHoveredNode(node);
+                          setHoveredNodeId(node.id);
+                        }}
+                        onMouseLeave={() => {
+                          // Only clear hover state if the node isn't selected
+                          if (selectedNodeId !== node.id) {
+                            setHoveredNode(null);
+                            setHoveredNodeId(null);
+                          }
+                        }}
+                      >
                         <p className="text-xs mb-1">
-                          <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
+                          {/* Use original formatYear call */}
+                          <strong>Date:</strong> {formatYear(node.year)}
+                          {node.dateDetails && ` – ${node.dateDetails}`}
                         </p>
-                      )}
-                      {node.details && (
-                        <p className="text-xs mb-2">{node.details}</p>
-                      )}
+                        {node.inventors &&
+                          node.inventors.length > 0 &&
+                          node.inventors.filter((inv) => inv !== "unknown")
+                            .length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.type === "Discovery"
+                                  ? `Discoverer${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`
+                                  : `Inventor${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`}
+                                  :
+                                </strong>{" "}
+                                {node.inventors.includes("unknown")
+                                  ? "possibly " +
+                                    node.inventors
+                                      .filter((inv) => inv !== "unknown")
+                                      .join(", ")
+                                  : node.inventors.join(", ")}
+                            </p>
+                          )}
+                        {node.organizations &&
+                          node.organizations.length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.organizations.length > 1
+                                  ? "Organizations"
+                                  : "Organization"}
+                                :
+                              </strong>{" "}
+                              {node.organizations.join(", ")}
+                            </p>
+                          )}
+                        {node.formattedLocation && (
+                          <p className="text-xs mb-1">
+                            <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
+                          </p>
+                        )}
+                        {node.details && (
+                          <p className="text-xs mb-2">{node.details}</p>
+                        )}
 
-                      {/* Updated connections section */}
-                      {(() => {
-                        const { ancestors, children, replaced, replacedBy } = getNodeConnections(
-                          node.id
-                        );
-                        return (
-                          <>
-                            {ancestors.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Built upon:</strong>
-                                <div className="ml-2">
-                                  {ancestors.map((ancestor: TechNode, index: number) => {
-                                    // Find the link to check its type
-                                    const link = data.links.find(
-                                      l => l.source === ancestor.id && l.target === node.id
-                                    );
-                                    // Only show (possibly) for speculative connections
-                                    const suffix = link?.type === "Speculative" ? " (possibly)" : "";
-                                    
-                                    return (
+                        {/* Updated connections section */}
+                        {(() => {
+                          const { ancestors, children, replaced, replacedBy } = getNodeConnections(
+                            node.id
+                          );
+                          return (
+                            <>
+                              {ancestors.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Built upon:</strong>
+                                  <div className="ml-2">
+                                    {ancestors.map((ancestor: TechNode, index: number) => {
+                                      // Find the link to check its type
+                                      const link = data.links.find(
+                                        l => l.source === ancestor.id && l.target === node.id
+                                      );
+                                      // Only show (possibly) for speculative connections
+                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
+                                      
+                                      return (
+                                        <div
+                                          key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                          className="flex"
+                                        >
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(ancestor.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {ancestor.title}{suffix}
+                                          </button>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {children.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Led to:</strong>
+                                  <div className="ml-2">
+                                    {children.map((child: TechNode, index: number) => {
+                                      // Find the link to check its type
+                                      const link = data.links.find(
+                                        l => l.source === node.id && l.target === child.id
+                                      );
+                                      // Only show (possibly) for speculative connections
+                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
+                                      
+                                      return (
+                                        <div
+                                          key={`child-${node.id}-${child.id}-${index}`}
+                                          className="flex"
+                                        >
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(child.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {child.title}{suffix}
+                                          </button>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {replaced.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Replaced:</strong>
+                                  <div className="ml-2">
+                                    {replaced.map((replacedNode: TechNode, index: number) => (
                                       <div
-                                        key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                        key={`replaced-${node.id}-${replacedNode.id}-${index}`}
                                         className="flex"
                                       >
                                         <span className="flex-shrink-0 mr-1">•</span>
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNodeClick(ancestor.title, true);
+                                            handleNodeClick(replacedNode.title, true);
                                           }}
                                           className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                           type="button"
                                         >
-                                          {ancestor.title}{suffix}
+                                          {replacedNode.title}
                                         </button>
                                       </div>
-                                    );
-                                  })}
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
 
-                            {children.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Led to:</strong>
-                                <div className="ml-2">
-                                  {children.map((child: TechNode, index: number) => {
-                                    // Find the link to check its type
-                                    const link = data.links.find(
-                                      l => l.source === node.id && l.target === child.id
-                                    );
-                                    // Only show (possibly) for speculative connections
-                                    const suffix = link?.type === "Speculative" ? " (possibly)" : "";
-                                    
-                                    return (
+                              {replacedBy.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Replaced by:</strong>
+                                  <div className="ml-2">
+                                    {replacedBy.map((replacedByNode: TechNode, index: number) => (
                                       <div
-                                        key={`child-${node.id}-${child.id}-${index}`}
+                                        key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
                                         className="flex"
                                       >
                                         <span className="flex-shrink-0 mr-1">•</span>
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNodeClick(child.title, true);
+                                            handleNodeClick(replacedByNode.title, true);
                                           }}
                                           className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                           type="button"
                                         >
-                                          {child.title}{suffix}
+                                          {replacedByNode.title}
                                         </button>
                                       </div>
-                                    );
-                                  })}
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
+
+                        {/* Update the tooltip section with modified click handlers */}
+                        {(() => {
+                          const nodeId = selectedNodeId || hoveredNode?.id;
+                          if (!nodeId) return null;
+
+                          // Only show ancestry controls if not on mobile
+                          if (isMobile) {
+                            return node.wikipedia && (
+                              <div className="text-xs mt-2">
+                                <div>
+                                  View on{" "}
+                                  <a
+                                    href={node.wikipedia}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    Wikipedia
+                                  </a>
                                 </div>
                               </div>
-                            )}
+                            );
+                          }
 
-                            {replaced.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Replaced:</strong>
-                                <div className="ml-2">
-                                  {replaced.map((replacedNode: TechNode, index: number) => (
-                                    <div
-                                      key={`replaced-${node.id}-${replacedNode.id}-${index}`}
-                                      className="flex"
-                                    >
-                                      <span className="flex-shrink-0 mr-1">•</span>
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleNodeClick(replacedNode.title, true);
-                                        }}
-                                        className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                        type="button"
-                                      >
-                                        {replacedNode.title}
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                          // Check if the node has any potential ancestors or descendants without calculating them
+                          const hasAncestors = data.links.some(
+                            link => link.target === nodeId && 
+                            !["Independently invented", "Concurrent development"].includes(link.type)
+                          );
+                          const hasDescendants = data.links.some(
+                            link => link.source === nodeId && 
+                            !["Independently invented", "Concurrent development"].includes(link.type)
+                          );
 
-                            {replacedBy.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Replaced by:</strong>
-                                <div className="ml-2">
-                                  {replacedBy.map((replacedByNode: TechNode, index: number) => (
-                                    <div
-                                      key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
-                                      className="flex"
-                                    >
-                                      <span className="flex-shrink-0 mr-1">•</span>
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleNodeClick(replacedByNode.title, true);
-                                        }}
-                                        className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                        type="button"
-                                      >
-                                        {replacedByNode.title}
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </>
-                        );
-                      })()}
-
-                      {/* Update the tooltip section with modified click handlers */}
-                      {(() => {
-                        const nodeId = selectedNodeId || hoveredNode?.id;
-                        if (!nodeId) return null;
-
-                        // Only show ancestry controls if not on mobile
-                        if (isMobile) {
-                          return node.wikipedia && (
+                          return (
                             <div className="text-xs mt-2">
-                              <div>
-                                View on{" "}
-                                <a
-                                  href={node.wikipedia}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="text-blue-600 hover:underline cursor-pointer"
-                                >
-                                  Wikipedia
-                                </a>
-                              </div>
+                              {/* Show ancestry controls if there are potential ancestors or descendants */}
+                              {(hasAncestors || hasDescendants) && (
+                                <div className="mb-1">
+                                  {hasAncestors && hasDescendants ? (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate ancestors only when clicked
+                                          const ancestors = getAllAncestors(nodeId);
+                                          ancestors.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedAncestors(ancestors);
+                                          setHighlightedDescendants(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        ancestors
+                                      </button>
+                                      {" / "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate descendants only when clicked
+                                          const descendants = getAllDescendants(nodeId);
+                                          descendants.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedDescendants(descendants);
+                                          setHighlightedAncestors(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        descendants
+                                      </button>
+                                    </>
+                                  ) : hasAncestors ? (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate ancestors only when clicked
+                                          const ancestors = getAllAncestors(nodeId);
+                                          ancestors.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedAncestors(ancestors);
+                                          setHighlightedDescendants(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        ancestors
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate descendants only when clicked
+                                          const descendants = getAllDescendants(nodeId);
+                                          descendants.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedDescendants(descendants);
+                                          setHighlightedAncestors(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        descendants
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              )}
+
+                              {node.wikipedia && (
+                                <div>
+                                  View on{" "}
+                                  <a
+                                    href={node.wikipedia}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    Wikipedia
+                                  </a>
+                                </div>
+                              )}
                             </div>
                           );
-                        }
-
-                        // Check if the node has any potential ancestors or descendants without calculating them
-                        const hasAncestors = data.links.some(
-                          link => link.target === nodeId && 
-                          !["Independently invented", "Concurrent development"].includes(link.type)
-                        );
-                        const hasDescendants = data.links.some(
-                          link => link.source === nodeId && 
-                          !["Independently invented", "Concurrent development"].includes(link.type)
-                        );
-
-                        return (
-                          <div className="text-xs mt-2">
-                            {/* Show ancestry controls if there are potential ancestors or descendants */}
-                            {(hasAncestors || hasDescendants) && (
-                              <div className="mb-1">
-                                {hasAncestors && hasDescendants ? (
-                                  <>
-                                    Highlight all{" "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate ancestors only when clicked
-                                        const ancestors = getAllAncestors(nodeId);
-                                        ancestors.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedAncestors(ancestors);
-                                        setHighlightedDescendants(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      ancestors
-                                    </button>
-                                    {" / "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate descendants only when clicked
-                                        const descendants = getAllDescendants(nodeId);
-                                        descendants.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedDescendants(descendants);
-                                        setHighlightedAncestors(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      descendants
-                                    </button>
-                                  </>
-                                ) : hasAncestors ? (
-                                  <>
-                                    Highlight all{" "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate ancestors only when clicked
-                                        const ancestors = getAllAncestors(nodeId);
-                                        ancestors.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedAncestors(ancestors);
-                                        setHighlightedDescendants(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      ancestors
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    Highlight all{" "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate descendants only when clicked
-                                        const descendants = getAllDescendants(nodeId);
-                                        descendants.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedDescendants(descendants);
-                                        setHighlightedAncestors(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      descendants
-                                    </button>
-                                  </>
-                                )}
-                              </div>
-                            )}
-
-                            {node.wikipedia && (
-                              <div>
-                                View on{" "}
-                                <a
-                                  href={node.wikipedia}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="text-blue-600 hover:underline cursor-pointer"
-                                >
-                                  Wikipedia
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })()}
-                    </div>
-                  )
+                        })()}
+                      </div>
+                    );
+                  }
+                  return null; // Ensure a value is returned if the condition isn't met
+                }
               )}
             </div>
           </div>
