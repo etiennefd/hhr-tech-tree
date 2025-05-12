@@ -3305,15 +3305,6 @@ const loadData = async () => {
     );
   }
 
-  // Add loading overlay
-  const loadingOverlay = isLoading ? (
-    <div className="fixed inset-0 flex items-center justify-center bg-yellow-50/30 z-[9999]">
-      <div className="text-lg font-mono tracking-wide animate-pulse">
-        Loading visualization...
-      </div>
-    </div>
-  ) : null;
-
   // 4. Optimize initial render
   if (!isClient) {
     return null;
@@ -3322,9 +3313,6 @@ const loadData = async () => {
   // 5. Defer non-critical UI elements
   return (
     <div className="h-screen bg-yellow-50">
-      {/* Render the loading overlay */} 
-      {loadingOverlay}
-
       {/* Defer loading of controls until after main content */}
       {!isLoading && (
         <div
