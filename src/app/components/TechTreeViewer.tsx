@@ -587,6 +587,21 @@ export function TechTreeViewer() {
   // Add state for prefetched node details
   const [prefetchedNodeDetails, setPrefetchedNodeDetails] = useState<Map<string, Partial<TechNode>>>(new Map());
 
+  // Ref to store the previous viewport for the prefetch effect
+  const prevViewportForPrefetchRef = useRef<typeof visibleViewport | null>(null);
+
+  // Add a stable, quantized viewport for the prefetch effect trigger
+  const stableViewportForPrefetchTrigger = useMemo(() => {
+    // Quantize the viewport to reduce sensitivity of the prefetch effect
+    const QUANTUM = 200; // px; adjust as needed
+    return {
+      left: Math.floor(visibleViewport.left / QUANTUM) * QUANTUM,
+      right: Math.ceil(visibleViewport.right / QUANTUM) * QUANTUM,
+      top: Math.floor(visibleViewport.top / QUANTUM) * QUANTUM,
+      bottom: Math.ceil(visibleViewport.bottom / QUANTUM) * QUANTUM,
+    };
+  }, [visibleViewport]);
+
   // Add scroll positions cache
   const scrollPositionsCache = useRef<Map<string, { x: number; y: number }>>(new Map());
 
@@ -3302,15 +3317,28 @@ useEffect(() => {
   // Add an effect to prefetch visible nodes when the viewport changes
   useEffect(() => {
     if (!data.nodes.length) return;
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[PerfDebug][Prefetch] Viewport prefetch effect triggered. Viewport L:${visibleViewport.left.toFixed(0)} T:${visibleViewport.top.toFixed(0)} R:${visibleViewport.right.toFixed(0)} B:${visibleViewport.bottom.toFixed(0)}`);
+
+    // Guard: Only run if the STABLE viewport has actually changed
+    if (prevViewportForPrefetchRef.current &&
+        prevViewportForPrefetchRef.current.left === stableViewportForPrefetchTrigger.left &&
+        prevViewportForPrefetchRef.current.right === stableViewportForPrefetchTrigger.right &&
+        prevViewportForPrefetchRef.current.top === stableViewportForPrefetchTrigger.top &&
+        prevViewportForPrefetchRef.current.bottom === stableViewportForPrefetchTrigger.bottom) {
+      // if (process.env.NODE_ENV === 'development') {
+      //   console.log('[PerfDebug][Prefetch] Viewport prefetch effect skipped (STABLE viewport unchanged).');
+      // }
+      return;
     }
-    
-    // Get nodes that are currently in the viewport
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[PerfDebug][Prefetch] Viewport prefetch effect triggered. Stable Viewport L:${stableViewportForPrefetchTrigger.left.toFixed(0)} T:${stableViewportForPrefetchTrigger.top.toFixed(0)} R:${stableViewportForPrefetchTrigger.right.toFixed(0)} B:${stableViewportForPrefetchTrigger.bottom.toFixed(0)} (Actual Viewport L:${visibleViewport.left.toFixed(0)} T:${visibleViewport.top.toFixed(0)} R:${visibleViewport.right.toFixed(0)} B:${visibleViewport.bottom.toFixed(0)})`);
+    }
+
+    // Get nodes that are currently in the viewport (using the actual, not stable, viewport for isNodeInViewport check)
     const visibleNodeIdsInEffect = data.nodes
-      .filter(node => isNodeInViewport(node))
+      .filter(node => isNodeInViewport(node)) // isNodeInViewport uses deferredViewportState which is based on actual visibleViewport
       .map(node => node.id);
-    
+
     // Prefetch these nodes (with normal priority)
     let count = 0;
     for (const nodeId of visibleNodeIdsInEffect) {
@@ -3320,8 +3348,11 @@ useEffect(() => {
     if (process.env.NODE_ENV === 'development' && count > 0) {
       console.log(`[PerfDebug][Prefetch] Viewport effect: Attempted to queue ${count} nodes for prefetch. Current queue size: ${prefetchQueue.current.length}`);
     }
-    
-  }, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]);
+
+    // Update the ref with the current STABLE viewport for the next run
+    prevViewportForPrefetchRef.current = { ...stableViewportForPrefetchTrigger };
+
+  }, [data.nodes, isNodeInViewport, prefetchNode, stableViewportForPrefetchTrigger]); // Dependency changed to stableViewportForPrefetchTrigger
 
   // Add an effect to manage the cache of connections
   useEffect(() => {
