@@ -154,6 +154,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
               ),
               wikipedia: String(record.get("Wikipedia") || ""),
               details: String(record.get("Details") || ""),
+              imagePosition: String(record.get("Image position") || 'center'),
               // Add any other fields that are part of your detailed node structure
             };
           } catch (error) {

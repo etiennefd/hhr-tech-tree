@@ -6,6 +6,7 @@ interface Node {
   title: string;
   subtitle?: string;
   image?: string;
+  imagePosition?: string;
   fields: string[];
   wikipedia?: string;
 }
@@ -320,6 +321,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
+                objectPosition: node.imagePosition || 'center',
               }}
               priority={isSelected || isAdjacent} // Still prioritize if selected/adjacent
             />
@@ -341,6 +343,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                   style={{
                     filter: "grayscale(20%) contrast(110%)",
                     mixBlendMode: "multiply",
+                    objectPosition: node.imagePosition || 'center',
                   }}
                   priority={isSelected || isAdjacent}
                 />
@@ -360,6 +363,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                   style={{
                     filter: "grayscale(20%) contrast(110%)",
                     mixBlendMode: "multiply",
+                    objectPosition: node.imagePosition || 'center',
                   }}
                 />
               )}
@@ -421,6 +425,8 @@ export default React.memo(BrutalistNode, (prevProps, nextProps) => {
     prevProps.isAdjacent === nextProps.isAdjacent &&
     prevProps.node.title === nextProps.node.title &&
     prevProps.node.year === nextProps.node.year &&
+    prevProps.node.image === nextProps.node.image &&
+    prevProps.node.imagePosition === nextProps.node.imagePosition &&
     prevProps.width === nextProps.width &&
     prevProps.style?.opacity === nextProps.style?.opacity
   );

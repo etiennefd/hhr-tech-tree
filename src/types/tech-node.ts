@@ -12,6 +12,7 @@ export interface TechNode {
   organizations?: string[];
   wikipedia?: string;
   image?: string;
+  imagePosition?: string;
   x?: number;
   y?: number;
   
