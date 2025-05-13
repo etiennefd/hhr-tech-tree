@@ -3981,10 +3981,11 @@ const loadData = async () => {
       {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
         <button
           onClick={handleJumpToNearest}
-          className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20 px-4 py-2 bg-transparent text-blue-700 border border-blue-700 rounded text-sm hover:bg-blue-100 active:bg-blue-200 transition-colors duration-150"
+          className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20 px-4 py-2 bg-transparent rounded text-sm hover:bg-blue-100 active:bg-blue-200 transition-colors duration-150"
           style={{
-             color: '#005f9e',
-             borderColor: '#005f9e',
+             color: '#91B4C5', // Match minimap color
+             borderColor: 'transparent',
+             borderWidth: '0px',
              backdropFilter: 'blur(2px)', 
           }}
         >
