@@ -549,6 +549,9 @@ export function TechTreeViewer() {
   const searchBoxContainerRef = useRef<HTMLDivElement>(null);
   const filterBoxContainerRef = useRef<HTMLDivElement>(null);
 
+  // Add ref for the jump button
+  const jumpButtonRef = useRef<HTMLButtonElement>(null);
+
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
     left: 0,
@@ -3317,6 +3320,28 @@ const loadData = async () => {
     };
   }, [isClient, isLoading]); // Updated dependency array
 
+  // Effect to disable scrolling on the jump button
+  useEffect(() => {
+    const jumpButtonElement = jumpButtonRef.current;
+
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+      e.preventDefault();
+    };
+
+    if (jumpButtonElement) {
+      jumpButtonElement.addEventListener('wheel', preventScroll, { passive: false });
+      jumpButtonElement.addEventListener('touchmove', preventScroll, { passive: false });
+    }
+
+    // Cleanup function
+    return () => {
+      if (jumpButtonElement) {
+        jumpButtonElement.removeEventListener('wheel', preventScroll);
+        jumpButtonElement.removeEventListener('touchmove', preventScroll);
+      }
+    };
+  }, [isLoading, visibleNodes.length, data.nodes.length]); // Rerun when button visibility might change
+
   // Function to handle node hover for prefetching
   const handleNodeHoverForPrefetch = useCallback((title: string) => {
     // Find the node by title
@@ -3980,6 +4005,7 @@ const loadData = async () => {
       {/* Jump to Nearest Tech Button */}
       {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
         <button
+          ref={jumpButtonRef} // Add the ref here
           onClick={handleJumpToNearest}
           className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20 px-4 py-2 bg-transparent rounded text-sm transition-colors duration-150"
           style={{
