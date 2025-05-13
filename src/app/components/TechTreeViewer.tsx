@@ -1368,6 +1368,40 @@ const loadData = async () => {
     [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile] // Added isMobile dependency
   );
 
+  const handleJumpToNearest = useCallback(() => {
+    if (!data.nodes.length || !horizontalScrollContainerRef.current || !containerDimensions.width || !containerDimensions.height) return;
+
+    const viewportCenterX = scrollPosition.left + containerDimensions.width / 2;
+    const viewportCenterY = scrollPosition.top + containerDimensions.height / 2;
+
+    let nearestNode: TechNode | null = null;
+    let minDistanceSq = Infinity;
+
+    data.nodes.forEach((node: TechNode) => {
+      if (node.y === undefined) return; // y is essential for positioning
+
+      const nodeX = getXPosition(node.year); // x is derived via getXPosition
+      const distanceSq = Math.pow(nodeX - viewportCenterX, 2) + Math.pow(node.y - viewportCenterY, 2);
+
+      if (distanceSq < minDistanceSq) {
+        minDistanceSq = distanceSq;
+        nearestNode = node;
+      }
+    });
+
+    if (nearestNode !== null && (nearestNode as TechNode).y !== undefined) {
+      const nn = nearestNode as TechNode; // Assign to a new const with the asserted type
+      const targetScrollLeft = getXPosition(nn.year) - containerDimensions.width / 2;
+      const targetScrollTop = nn.y! - containerDimensions.height / 2; // Use non-null assertion
+
+      horizontalScrollContainerRef.current.scrollTo({
+        left: Math.max(0, targetScrollLeft),
+        top: Math.max(0, targetScrollTop),
+        behavior: 'smooth',
+      });
+    }
+  }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition]);
+
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
     (nodeId: string) => {
@@ -3942,6 +3976,20 @@ const loadData = async () => {
           visibleConnections={visibleConnections.length}
           onClose={() => setShowDebugOverlay(false)}
         />
+      )}
+      {/* Jump to Nearest Tech Button */}
+      {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
+        <button
+          onClick={handleJumpToNearest}
+          className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20 px-4 py-2 bg-transparent text-blue-700 border border-blue-700 rounded text-sm hover:bg-blue-100 active:bg-blue-200 transition-colors duration-150"
+          style={{
+             color: '#005f9e',
+             borderColor: '#005f9e',
+             backdropFilter: 'blur(2px)', 
+          }}
+        >
+          Jump to nearest tech
+        </button>
       )}
     </div>
   );
