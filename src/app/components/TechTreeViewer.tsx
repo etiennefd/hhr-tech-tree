@@ -1230,38 +1230,6 @@ export function TechTreeViewer() {
     setIsClient(true);
   }, []);
 
-  // Auto-select Stone tool on initial load to trigger image preloading
-  const hasAutoSelectedRef = useRef(false);
-  // useEffect(() => {
-    // Only run when data has fully loaded and component is mounted
-    // if (isClient && !isLoading && data.nodes.length > 0 && !hasAutoSelectedRef.current) {
-    //   console.log("[AutoSelect] Attempting to trigger image preloading");
-    //   const stoneToolNode = data.nodes.find((node: TechNode) => 
-    //     node.title.toLowerCase() === "stone tool"
-    //   );
-      
-      // if (stoneToolNode) {
-      //   // Mark as executed so this only runs once
-      //   hasAutoSelectedRef.current = true;
-      //   console.log("[AutoSelect] Found Stone tool node, selecting", stoneToolNode.id);
-        
-      //   // Small delay before selecting to ensure component is fully rendered
-      //   setTimeout(() => {
-      //     console.log("[AutoSelect] Selecting node now");
-      //     // Select the node to trigger image loading
-      //     setSelectedNodeId(stoneToolNode.id);
-          
-      //     // Longer delay to ensure the selection is processed and images start loading
-      //     setTimeout(() => {
-      //       console.log("[AutoSelect] Deselecting node");
-      //       setSelectedNodeId(null);
-      //     }, 300); // Increased to 300ms to give more time for image loading to start
-      //   }, 100);
-      // }
-  //   }
-  // }, [isClient, isLoading, data.nodes]);
-
-// Add near the top of TechTreeViewer
 useEffect(() => {
   if (typeof window !== 'undefined') {
     console.time('totalLoadTime');
@@ -1285,13 +1253,6 @@ useEffect(() => {
     };
   }
 }, []);
-
-// Add in the loadData function
-const loadData = async () => {
-  // console.time('loadDataFunction'); // Original console.time, now superseded by the one at the start of the function
-  // existing code...
-  // console.timeEnd('loadDataFunction'); // Original console.timeEnd
-};
 
   // Add handler for clicks outside nodes
   useEffect(() => {
@@ -1330,7 +1291,6 @@ const loadData = async () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Update handleNodeClick function to include performance tracking
   const handleNodeClick = useCallback(
     (title: string, isFromTooltip: boolean = false) => {
       performanceMarks.start('nodeClick');
