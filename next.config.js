@@ -18,7 +18,7 @@ const nextConfig = {
         pathname: '/**',
       }
     ],
-    minimumCacheTTL: 60 * 60 * 24, // 24 hours
+    minimumCacheTTL: 60 * 60 * 24 * 31, // 31 days
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     formats: ['image/webp'],
