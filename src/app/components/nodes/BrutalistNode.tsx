@@ -355,11 +355,12 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               {/* Only show placeholder if we've tried loading and failed */}
               {imageError && (
                 <Image
-                  src="/placeholder-invention.png"
+                  src="/placeholder-invention.jpg"
                   alt="Placeholder"
                   fill
                   sizes="160px"
                   className="object-cover"
+                  unoptimized
                   style={{
                     filter: "grayscale(20%) contrast(110%)",
                     mixBlendMode: "multiply",

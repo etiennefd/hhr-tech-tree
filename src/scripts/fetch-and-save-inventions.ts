@@ -109,12 +109,12 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
         async (record) => {
           const year = Number(record.get("Date"));
           const nodeTitle = String(record.get("Name") || "");
-          let imageUrl = "/placeholder-invention.png";
+          let imageUrl = "/placeholder-invention.jpg";
 
           if (nodeTitle.toLowerCase() === "stone tool") {
             imageUrl = "/tool-in-situ-being-unearthed-at-excavation_3_edit.jpg";
           } else {
-            imageUrl = String(record.get("Image URL") || "/placeholder-invention.png");
+            imageUrl = String(record.get("Image URL") || "/placeholder-invention.jpg");
           }
 
           try {
