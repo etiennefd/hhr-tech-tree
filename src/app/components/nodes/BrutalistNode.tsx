@@ -323,7 +323,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 mixBlendMode: "multiply",
                 objectPosition: node.imagePosition || 'center',
               }}
-              priority={isSelected || isAdjacent} // Still prioritize if selected/adjacent
             />
           ) : (
             // Original logic for all other nodes
@@ -345,7 +344,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     mixBlendMode: "multiply",
                     objectPosition: node.imagePosition || 'center',
                   }}
-                  priority={isSelected || isAdjacent}
                 />
               )}
               {/* Show loading state while image is loading */}
