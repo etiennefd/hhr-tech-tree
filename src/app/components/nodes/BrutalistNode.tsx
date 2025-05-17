@@ -6,6 +6,7 @@ interface Node {
   title: string;
   subtitle?: string;
   image?: string;
+  localImage?: string;
   imagePosition?: string;
   fields: string[];
   wikipedia?: string;
@@ -130,14 +131,20 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   useEffect(() => {
     // Only update the image URL if we haven't already successfully loaded one
     // and if the original URL changes
-    const newValidUrl = validateImage(node.image);
+    const newValidUrl = validateImage(node.localImage || node.image);
     
     if (!hasLoadedRef.current && originalUrlRef.current !== newValidUrl) {
       originalUrlRef.current = newValidUrl;
       setImageUrl(newValidUrl);
       retryCountRef.current = 0;
+      // Add debug logging
+      console.log(`Node "${node.title}" using image:`, {
+        localImage: node.localImage,
+        originalImage: node.image,
+        finalUrl: newValidUrl
+      });
     }
-  }, [node.image]);
+  }, [node.image, node.localImage]);
 
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;
@@ -344,6 +351,8 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     mixBlendMode: "multiply",
                     objectPosition: node.imagePosition || 'center',
                   }}
+                  // Use unoptimized for local images since they're already optimized
+                  unoptimized={imageUrl.startsWith('/tech-images/')}
                 />
               )}
               {/* Show loading state while image is loading */}

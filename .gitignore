@@ -41,3 +41,6 @@ next-env.d.ts
 
 # Data files
 src/app/api/inventions/techtree-data.json
+
+# Local tech images
+public/tech-images/

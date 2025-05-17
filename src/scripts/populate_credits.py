@@ -6,6 +6,9 @@ from airtable import Airtable
 from dotenv import load_dotenv
 import time
 from typing import Union
+from PIL import Image
+import io
+import hashlib
 
 # --- Configuration ---
 load_dotenv(dotenv_path='.env.local')
@@ -15,13 +18,74 @@ AIRTABLE_TABLE_NAME = "Innovations" # Make sure this matches your table name
 IMAGE_URL_FIELD = "Image URL"       # The field containing Wikimedia image URLs
 CREDITS_FIELD = "Image credits"     # The field to store the text credits
 CREDITS_URL_FIELD = "Image credits URL" # The field to store the credit source URL
+LOCAL_IMAGE_FIELD = "Local image"   # New field to store the local image path
 
 # Wikimedia API constants
 WIKIMEDIA_API_URL = "https://commons.wikimedia.org/w/api.php"
 FETCH_TIMEOUT = 10 # seconds
 REQUEST_DELAY = 0.5 # seconds between API calls to be polite
 
+# Image processing constants
+IMAGES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'public', 'tech-images')
+IMAGE_SIZE = (160, 160)
+IMAGE_QUALITY = 75
+
+# Ensure images directory exists
+os.makedirs(IMAGES_DIR, exist_ok=True)
+
+# Add tech-images to .gitignore if not already there
+GITIGNORE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.gitignore')
+if os.path.exists(GITIGNORE_PATH):
+    with open(GITIGNORE_PATH, 'r') as f:
+        gitignore_content = f.read()
+    
+    if 'public/tech-images' not in gitignore_content:
+        with open(GITIGNORE_PATH, 'a') as f:
+            f.write('\n# Local tech images\npublic/tech-images/\n')
+else:
+    with open(GITIGNORE_PATH, 'w') as f:
+        f.write('# Local tech images\npublic/tech-images/\n')
+
 # --- Helper Functions ---
+
+def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
+    """Downloads and optimizes an image, returns the local path."""
+    try:
+        # Generate a filename from the title
+        safe_title = re.sub(r'[^a-z0-9]', '-', title.lower())
+        filename = f"{safe_title}.webp"
+        local_path = os.path.join(IMAGES_DIR, filename)
+
+        # Skip if image already exists
+        if os.path.exists(local_path):
+            print(f"    Image already exists: {filename}")
+            return f"/tech-images/{filename}"
+
+        # Download the image
+        response = requests.get(url, timeout=FETCH_TIMEOUT)
+        response.raise_for_status()
+
+        # Open and optimize the image
+        img = Image.open(io.BytesIO(response.content))
+        
+        # Convert to RGB if necessary (for PNG with transparency)
+        if img.mode in ('RGBA', 'LA'):
+            background = Image.new('RGB', img.size, (255, 255, 255))
+            background.paste(img, mask=img.split()[-1])
+            img = background
+        elif img.mode != 'RGB':
+            img = img.convert('RGB')
+
+        # Resize and save as WebP
+        img.thumbnail(IMAGE_SIZE, Image.Resampling.LANCZOS)
+        img.save(local_path, 'WEBP', quality=IMAGE_QUALITY)
+
+        print(f"    Downloaded and optimized: {filename}")
+        return f"/tech-images/{filename}"
+
+    except Exception as e:
+        print(f"    Error processing image: {e}")
+        return None
 
 def extract_filename_from_url(url: str) -> Union[str, None]:
     """Extracts the filename from various Wikimedia URL formats."""
@@ -153,14 +217,29 @@ def main():
     try:
         airtable = Airtable(AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME, AIRTABLE_API_KEY)
         print("Fetching records...")
-        # Fetch only records that have an Image URL and might need credits updated
+        # First, try to get the fields to check if Local image exists
+        try:
+            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name"]  # Changed Title to Name
+            records = airtable.get_all(fields=fields, max_records=1)
+            
+            # Debug: Print available fields from first record
+            if records:
+                print("\nAvailable fields in first record:")
+                for field in records[0].get('fields', {}).keys():
+                    print(f"  - {field}")
+        except Exception as e:
+            if 'UNKNOWN_FIELD_NAME' in str(e):
+                print("Note: 'Local image' field not found in Airtable. Please add it first.")
+                return
+            else:
+                raise e
+
+        # Now fetch all records that have an Image URL but no Local image
         records = airtable.get_all(
-             fields=[IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD],
-             # Uncomment below to update only records without existing credits
-             formula=f"AND({{Image URL}} != '', {{Image credits}} = '')"
-             # Fetch all for now, script will check URL format
+            fields=fields,
+            formula=f"AND({{Image URL}} != '', {{Local image}} = '')"
         )
-        print(f"Found {len(records)} records.")
+        print(f"Found {len(records)} records without local images.")
     except Exception as e:
         print(f"Error connecting to or fetching from Airtable: {e}")
         return
@@ -175,13 +254,21 @@ def main():
         processed_count += 1
         record_id = record['id']
         image_url = record.get('fields', {}).get(IMAGE_URL_FIELD)
+        title = record.get('fields', {}).get('Name', '')  # Changed Title to Name
 
         print(f"\nProcessing record {processed_count}/{len(records)}: {record_id}")
+        print(f"  Title: {title}")  # Debug: Print the title
         print(f"  Image URL: {image_url}")
 
         # Skip if no image URL or if it doesn't look like a Wikimedia URL
         if not image_url or 'wikimedia.org' not in image_url:
             print("  Skipping: No valid Wikimedia URL found.")
+            skipped_count += 1
+            continue
+
+        # Skip if no title
+        if not title:
+            print("  Skipping: No title found for the record.")
             skipped_count += 1
             continue
 
@@ -194,17 +281,27 @@ def main():
         print(f"  Extracted filename: {filename}")
         credits_data = get_wikimedia_credits(filename)
 
-        if credits_data:
+        # Download and optimize the image
+        local_image_path = download_and_optimize_image(image_url, title)
+
+        if credits_data or local_image_path:
             update_payload = {}
             needs_update = False
-            if credits_data.get("credits"):
-                 update_payload[CREDITS_FIELD] = credits_data["credits"]
-                 needs_update = True
-                 print(f"    -> Credits: {credits_data['credits']}")
-            if credits_data.get("url"):
-                 update_payload[CREDITS_URL_FIELD] = credits_data["url"]
-                 needs_update = True
-                 print(f"    -> Credits URL: {credits_data['url']}")
+
+            if credits_data:
+                if credits_data.get("credits"):
+                    update_payload[CREDITS_FIELD] = credits_data["credits"]
+                    needs_update = True
+                    print(f"    -> Credits: {credits_data['credits']}")
+                if credits_data.get("url"):
+                    update_payload[CREDITS_URL_FIELD] = credits_data["url"]
+                    needs_update = True
+                    print(f"    -> Credits URL: {credits_data['url']}")
+
+            if local_image_path and LOCAL_IMAGE_FIELD in fields:
+                update_payload[LOCAL_IMAGE_FIELD] = local_image_path
+                needs_update = True
+                print(f"    -> Local image: {local_image_path}")
 
             if needs_update:
                 updates.append({
@@ -214,14 +311,12 @@ def main():
                 updated_count += 1
                 print("  Added to batch update.")
             else:
-                 print("  Skipping update: No new credit info found.")
-                 skipped_count += 1
+                print("  Skipping update: No new info found.")
+                skipped_count += 1
         else:
             error_count += 1
-            print("  Skipping: Error fetching or processing credits.")
+            print("  Skipping: Error fetching or processing data.")
 
-        # Airtable rate limits are typically 5 requests per second per base.
-        # Batch updates help, but adding a small delay per record fetch is safer.
         time.sleep(REQUEST_DELAY)
 
         # Send batch updates every 10 records
@@ -233,11 +328,8 @@ def main():
                 updates = []
             except Exception as e:
                 print(f"--- Batch update failed: {e} ---")
-                # Decide how to handle failure: stop script, log errors, etc.
-                # For now, just print and continue
-                error_count += len(updates) # Count these as errors for summary
-                updates = [] # Clear batch even on error
-
+                error_count += len(updates)
+                updates = []
 
     # Send any remaining updates
     if updates:
@@ -247,7 +339,7 @@ def main():
             print(f"--- Final batch update successful ({len(updates)} records) ---")
         except Exception as e:
             print(f"--- Final batch update failed: {e} ---")
-            error_count += len(updates) # Count these as errors for summary
+            error_count += len(updates)
 
     print("\n--- Script Finished ---")
     print(f"Total Records Processed: {processed_count}")
