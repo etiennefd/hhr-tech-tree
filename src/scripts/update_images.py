@@ -28,8 +28,11 @@ REQUEST_DELAY = 0.5 # seconds between API calls to be polite
 
 # Image processing constants
 IMAGES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'public', 'tech-images')
-IMAGE_SIZE = (160, 160)
-IMAGE_QUALITY = 75
+DISPLAY_WIDTH = 160  # Display width
+DISPLAY_HEIGHT = 80  # Display height
+MIN_WIDTH = DISPLAY_WIDTH * 2  # Source width (2x for retina)
+MIN_HEIGHT = DISPLAY_HEIGHT * 2  # Source height (2x for retina)
+IMAGE_QUALITY = 85  # High quality for better results
 
 # Create a session with proper headers
 session = requests.Session()
@@ -72,18 +75,32 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
 
         # Calculate new size maintaining aspect ratio
         width, height = img.size
-        new_width = IMAGE_SIZE[0]  # 160px
-        new_height = int(height * (new_width / width))
-        new_size = (new_width, new_height)
-
-        # Resize image
-        img = img.resize(new_size, Image.Resampling.LANCZOS)
+        print(f"    Original size: {width}x{height}")
         
-        # Save as WebP
-        img.save(local_path, 'WEBP', quality=IMAGE_QUALITY)
+        # Calculate scaling factors for both width and height
+        width_scale = MIN_WIDTH / width
+        height_scale = MIN_HEIGHT / height
+        
+        # Use the larger scale to ensure both minimum dimensions are met
+        scale = max(width_scale, height_scale)
+        
+        # Calculate new dimensions
+        new_width = int(width * scale)
+        new_height = int(height * scale)
+        
+        # Resize image with high-quality settings
+        img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        
+        # Apply subtle sharpening to enhance details
+        from PIL import ImageEnhance
+        enhancer = ImageEnhance.Sharpness(img)
+        img = enhancer.enhance(1.2)  # Slight sharpening
+        
+        # Save as WebP with high quality
+        img.save(local_path, 'WEBP', quality=IMAGE_QUALITY, method=6)  # method=6 for best compression
 
         print(f"    Downloaded and optimized: {filename}")
-        print(f"    Original size: {width}x{height}, New size: {new_width}x{new_height}")
+        print(f"    New size: {new_width}x{new_height} (min: {MIN_WIDTH}x{MIN_HEIGHT}, display: {DISPLAY_WIDTH}x{DISPLAY_HEIGHT})")
         return f"/tech-images/{filename}"
 
     except Exception as e:
