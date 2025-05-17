@@ -64,12 +64,11 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
         filename = f"{safe_title}.webp"
         local_path = os.path.join(IMAGES_DIR, filename)
 
-        # Skip if image already exists
-        if os.path.exists(local_path):
-            print(f"    Image already exists: {filename}")
-            return f"/tech-images/{filename}"
+        # Always download and process the image, even if it exists
+        # This ensures we get the latest version if the URL has changed
+        print(f"    Downloading image from: {url}")
 
-        # Download the image using the session
+        # Download the image
         response = session.get(url, timeout=FETCH_TIMEOUT)
         response.raise_for_status()
 
@@ -84,11 +83,20 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
         elif img.mode != 'RGB':
             img = img.convert('RGB')
 
-        # Resize and save as WebP
-        img.thumbnail(IMAGE_SIZE, Image.Resampling.LANCZOS)
+        # Calculate new size maintaining aspect ratio
+        width, height = img.size
+        new_width = IMAGE_SIZE[0]  # 160px
+        new_height = int(height * (new_width / width))
+        new_size = (new_width, new_height)
+
+        # Resize image
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
+        
+        # Save as WebP
         img.save(local_path, 'WEBP', quality=IMAGE_QUALITY)
 
         print(f"    Downloaded and optimized: {filename}")
+        print(f"    Original size: {width}x{height}, New size: {new_width}x{new_height}")
         return f"/tech-images/{filename}"
 
     except Exception as e:
@@ -366,14 +374,18 @@ def main():
                     print(f"    -> Credits URL: {credits_data['url']}")
 
             if local_image_path and LOCAL_IMAGE_FIELD in fields:
-                # In --all mode, only update if the local image path is different
-                if args.all and current_local == local_image_path:
-                    print("  Skipping: Local image is already up to date.")
-                    skipped_count += 1
-                    continue
-                update_payload[LOCAL_IMAGE_FIELD] = local_image_path
-                needs_update = True
-                print(f"    -> Local image: {local_image_path}")
+                # Always update the local image path in --all mode
+                # This ensures we get the latest image even if the path is the same
+                if args.all:
+                    update_payload[LOCAL_IMAGE_FIELD] = local_image_path
+                    needs_update = True
+                    print(f"    -> Local image: {local_image_path}")
+                else:
+                    # In --new mode, only update if there's no current local image
+                    if not current_local:
+                        update_payload[LOCAL_IMAGE_FIELD] = local_image_path
+                        needs_update = True
+                        print(f"    -> Local image: {local_image_path}")
 
             if needs_update:
                 updates.append({
