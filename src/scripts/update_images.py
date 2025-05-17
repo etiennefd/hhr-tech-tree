@@ -9,6 +9,7 @@ from typing import Union
 from PIL import Image
 import io
 import hashlib
+import argparse
 
 # --- Configuration ---
 load_dotenv(dotenv_path='.env.local')
@@ -209,6 +210,14 @@ def get_wikimedia_credits(filename: str) -> Union[dict, None]:
 # --- Main Script ---
 
 def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Update images from Airtable records.')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--all', action='store_true', help='Update all images, including those that already have a local image')
+    group.add_argument('--new', action='store_true', help='Update only records that have no local image')
+    
+    args = parser.parse_args()
+
     if not AIRTABLE_API_KEY or not AIRTABLE_BASE_ID:
         print("Error: AIRTABLE_API_KEY and AIRTABLE_BASE_ID must be set in .env file")
         return
@@ -219,7 +228,7 @@ def main():
         print("Fetching records...")
         # First, try to get the fields to check if Local image exists
         try:
-            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name"]  # Changed Title to Name
+            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name"]
             records = airtable.get_all(fields=fields, max_records=1)
             
             # Debug: Print available fields from first record
@@ -234,12 +243,22 @@ def main():
             else:
                 raise e
 
-        # Now fetch all records that have an Image URL but no Local image
-        records = airtable.get_all(
-            fields=fields,
-            formula=f"AND({{Image URL}} != '', {{Local image}} = '')"
-        )
-        print(f"Found {len(records)} records without local images.")
+        # Fetch records based on the selected mode
+        if args.new:
+            # Only fetch records without local images
+            records = airtable.get_all(
+                fields=fields,
+                formula=f"AND({{Image URL}} != '', {{Local image}} = '')"
+            )
+            print(f"Found {len(records)} records without local images.")
+        else:  # args.all
+            # Fetch all records with an image URL
+            records = airtable.get_all(
+                fields=fields,
+                formula=f"{{Image URL}} != ''"
+            )
+            print(f"Found {len(records)} records with image URLs.")
+
     except Exception as e:
         print(f"Error connecting to or fetching from Airtable: {e}")
         return
@@ -254,11 +273,14 @@ def main():
         processed_count += 1
         record_id = record['id']
         image_url = record.get('fields', {}).get(IMAGE_URL_FIELD)
-        title = record.get('fields', {}).get('Name', '')  # Changed Title to Name
+        title = record.get('fields', {}).get('Name', '')
+        current_local = record.get('fields', {}).get(LOCAL_IMAGE_FIELD)
 
         print(f"\nProcessing record {processed_count}/{len(records)}: {record_id}")
-        print(f"  Title: {title}")  # Debug: Print the title
+        print(f"  Title: {title}")
         print(f"  Image URL: {image_url}")
+        if current_local:
+            print(f"  Current local image: {current_local}")
 
         # Skip if no image URL or if it doesn't look like a Wikimedia URL
         if not image_url or 'wikimedia.org' not in image_url:
@@ -299,6 +321,11 @@ def main():
                     print(f"    -> Credits URL: {credits_data['url']}")
 
             if local_image_path and LOCAL_IMAGE_FIELD in fields:
+                # In --all mode, only update if the local image path is different
+                if args.all and current_local == local_image_path:
+                    print("  Skipping: Local image is already up to date.")
+                    skipped_count += 1
+                    continue
                 update_payload[LOCAL_IMAGE_FIELD] = local_image_path
                 needs_update = True
                 print(f"    -> Local image: {local_image_path}")
