@@ -251,21 +251,37 @@ def main():
             else:
                 raise e
 
-        # Fetch records based on the selected mode
-        if args.new:
-            # Only fetch records without local images
-            records = airtable.get_all(
-                fields=fields,
-                formula=f"AND({{Image URL}} != '', {{Local image}} = '')"
-            )
-            print(f"Found {len(records)} records without local images.")
-        else:  # args.all
-            # Fetch all records with an image URL
-            records = airtable.get_all(
-                fields=fields,
-                formula=f"{{Image URL}} != ''"
-            )
-            print(f"Found {len(records)} records with image URLs.")
+        # Fetch records based on the selected mode and whether we're in credits-only mode
+        if args.credits_only:
+            if args.new:
+                # In credits-only mode, fetch records that have no credits
+                records = airtable.get_all(
+                    fields=fields,
+                    formula=f"AND({{Image URL}} != '', {{Image credits}} = '')"
+                )
+                print(f"Found {len(records)} records without credits.")
+            else:  # args.all
+                # In credits-only mode, fetch all records with image URLs
+                records = airtable.get_all(
+                    fields=fields,
+                    formula=f"{{Image URL}} != ''"
+                )
+                print(f"Found {len(records)} records with image URLs.")
+        else:
+            if args.new:
+                # Normal mode: fetch records without local images
+                records = airtable.get_all(
+                    fields=fields,
+                    formula=f"AND({{Image URL}} != '', {{Local image}} = '')"
+                )
+                print(f"Found {len(records)} records without local images.")
+            else:  # args.all
+                # Normal mode: fetch all records with image URLs
+                records = airtable.get_all(
+                    fields=fields,
+                    formula=f"{{Image URL}} != ''"
+                )
+                print(f"Found {len(records)} records with image URLs.")
 
     except Exception as e:
         print(f"Error connecting to or fetching from Airtable: {e}")
@@ -283,12 +299,15 @@ def main():
         image_url = record.get('fields', {}).get(IMAGE_URL_FIELD)
         title = record.get('fields', {}).get('Name', '')
         current_local = record.get('fields', {}).get(LOCAL_IMAGE_FIELD)
+        current_credits = record.get('fields', {}).get(CREDITS_FIELD)
 
         print(f"\nProcessing record {processed_count}/{len(records)}: {record_id}")
         print(f"  Title: {title}")
         print(f"  Image URL: {image_url}")
         if current_local:
             print(f"  Current local image: {current_local}")
+        if current_credits:
+            print(f"  Current credits: {current_credits}")
 
         # Skip if no image URL or if it doesn't look like a Wikimedia URL
         if not image_url or 'wikimedia.org' not in image_url:
