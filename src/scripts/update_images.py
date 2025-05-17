@@ -31,6 +31,13 @@ IMAGES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file
 IMAGE_SIZE = (160, 160)
 IMAGE_QUALITY = 75
 
+# Create a session with proper headers
+session = requests.Session()
+session.headers.update({
+    'User-Agent': 'TechTree/1.0 (https://historicaltechtree.com; etienne@historicaltechtree.com) Python/3.x',
+    'Accept': 'image/webp,image/*,*/*;q=0.8'
+})
+
 # Ensure images directory exists
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
@@ -62,8 +69,8 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
             print(f"    Image already exists: {filename}")
             return f"/tech-images/{filename}"
 
-        # Download the image
-        response = requests.get(url, timeout=FETCH_TIMEOUT)
+        # Download the image using the session
+        response = session.get(url, timeout=FETCH_TIMEOUT)
         response.raise_for_status()
 
         # Open and optimize the image
@@ -121,7 +128,7 @@ def get_wikimedia_credits(filename: str) -> Union[dict, None]:
         "origin": "*" # Required for CORS
     }
     try:
-        response = requests.get(WIKIMEDIA_API_URL, params=params, timeout=FETCH_TIMEOUT)
+        response = session.get(WIKIMEDIA_API_URL, params=params, timeout=FETCH_TIMEOUT)
         response.raise_for_status()
         data = response.json()
 
