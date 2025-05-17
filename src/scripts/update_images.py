@@ -222,6 +222,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--all', action='store_true', help='Update all images, including those that already have a local image')
     group.add_argument('--new', action='store_true', help='Update only records that have no local image')
+    parser.add_argument('--credits-only', action='store_true', help='Only update credits, skip image downloads')
     
     args = parser.parse_args()
 
@@ -310,8 +311,10 @@ def main():
         print(f"  Extracted filename: {filename}")
         credits_data = get_wikimedia_credits(filename)
 
-        # Download and optimize the image
-        local_image_path = download_and_optimize_image(image_url, title)
+        # Only download and optimize image if not in credits-only mode
+        local_image_path = None
+        if not args.credits_only:
+            local_image_path = download_and_optimize_image(image_url, title)
 
         if credits_data or local_image_path:
             update_payload = {}
