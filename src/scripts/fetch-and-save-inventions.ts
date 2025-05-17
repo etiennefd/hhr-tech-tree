@@ -124,6 +124,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
               subtitle: String(record.get("Secondary name") || ""),
               tier: String(record.get("Tier") || ""),
               image: imageUrl,
+              localImage: String(record.get("Local image") || ""),
               year,
               dateDetails: String(record.get("Date details") || ""),
               type: String(record.get("Type of innovation") || ""),

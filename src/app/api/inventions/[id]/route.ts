@@ -40,6 +40,7 @@ export async function GET(request: Request) {
       subtitle: String(record.get("Secondary name") || ""),
       tier: String(record.get("Tier") || ""),
       image: String(record.get("Image URL") || "") || "/placeholder-invention.jpg",
+      localImage: String(record.get("Local image") || ""),
       year,
       dateDetails: String(record.get("Date details") || ""),
       type: String(record.get("Type of innovation") || ""),
