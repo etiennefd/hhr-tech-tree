@@ -96,26 +96,31 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
         return None
 
 def extract_filename_from_url(url: str) -> Union[str, None]:
-    """Extracts the filename from various Wikimedia URL formats."""
-    if not url or 'wikimedia.org' not in url:
+    """Extracts the filename from various URL formats."""
+    if not url:
         return None
     try:
         # Decode URL encoding first
         decoded_url = unquote(url)
 
-        # Match common patterns like /commons/a/ab/Filename.jpg or /commons/thumb/a/ab/Filename.jpg/120px-Filename.jpg
-        match = re.search(r'\/([^\/]+?)(?:\/\d+px-[^\/]+)?$', decoded_url)
-        if match:
-            filename = match.group(1)
-            # Remove any query parameters (e.g., ?timestamp=...)
-            filename = filename.split('?')[0]
-            # Sometimes the filename itself is duplicated in thumb URLs, remove the size prefix if present
-            filename = re.sub(r'^\d+px-', '', filename)
-            return filename
+        if 'wikimedia.org' in url:
+            # Match common patterns like /commons/a/ab/Filename.jpg or /commons/thumb/a/ab/Filename.jpg/120px-Filename.jpg
+            match = re.search(r'\/([^\/]+?)(?:\/\d+px-[^\/]+)?$', decoded_url)
+            if match:
+                filename = match.group(1)
+                # Remove any query parameters (e.g., ?timestamp=...)
+                filename = filename.split('?')[0]
+                # Sometimes the filename itself is duplicated in thumb URLs, remove the size prefix if present
+                filename = re.sub(r'^\d+px-', '', filename)
+                return filename
+        elif 'patentimages.storage.googleapis.com' in url:
+            # For patent images, use the last part of the URL as the filename
+            match = re.search(r'\/([^\/]+)$', decoded_url)
+            if match:
+                return match.group(1)
     except Exception as e:
         print(f"    Error parsing filename from URL {url}: {e}")
     return None
-
 
 def get_wikimedia_credits(filename: str) -> Union[dict, None]:
     """Fetches image credits from Wikimedia Commons API."""
@@ -213,6 +218,17 @@ def get_wikimedia_credits(filename: str) -> Union[dict, None]:
         print(f"    Error processing credits for File:{filename}: {e}")
         return None
 
+def get_image_credits(filename: str, url: str) -> Union[dict, None]:
+    """Fetches image credits based on the source."""
+    if 'wikimedia.org' in url:
+        return get_wikimedia_credits(filename)
+    elif 'patentimages.storage.googleapis.com' in url:
+        # For patent images, return a standard credit
+        return {
+            "credits": f'Patent drawing from Google Patents',
+            "url": url  # Use the original URL as the credits URL
+        }
+    return None
 
 # --- Main Script ---
 
@@ -309,9 +325,9 @@ def main():
         if current_credits:
             print(f"  Current credits: {current_credits}")
 
-        # Skip if no image URL or if it doesn't look like a Wikimedia URL
-        if not image_url or 'wikimedia.org' not in image_url:
-            print("  Skipping: No valid Wikimedia URL found.")
+        # Skip if no image URL or if it's not from a supported source
+        if not image_url or ('wikimedia.org' not in image_url and 'patentimages.storage.googleapis.com' not in image_url):
+            print("  Skipping: No valid image URL found (must be from Wikimedia or Google Patents).")
             skipped_count += 1
             continue
 
@@ -328,7 +344,7 @@ def main():
             continue
 
         print(f"  Extracted filename: {filename}")
-        credits_data = get_wikimedia_credits(filename)
+        credits_data = get_image_credits(filename, image_url)
 
         # Only download and optimize image if not in credits-only mode
         local_image_path = None
