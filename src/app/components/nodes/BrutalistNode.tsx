@@ -137,12 +137,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       originalUrlRef.current = newValidUrl;
       setImageUrl(newValidUrl);
       retryCountRef.current = 0;
-      // Add debug logging
-      console.log(`Node "${node.title}" using image:`, {
-        localImage: node.localImage,
-        originalImage: node.image,
-        finalUrl: newValidUrl
-      });
     }
   }, [node.image, node.localImage]);
 
