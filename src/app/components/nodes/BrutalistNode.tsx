@@ -324,6 +324,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 mixBlendMode: "multiply",
                 objectPosition: node.imagePosition || 'center',
               }}
+              unoptimized={specialImage.startsWith('/')}
             />
           ) : (
             // Original logic for all other nodes
@@ -346,7 +347,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     objectPosition: node.imagePosition || 'center',
                   }}
                   // Use unoptimized for local images since they're already optimized
-                  unoptimized={imageUrl.startsWith('/tech-images/')}
+                  unoptimized={imageUrl.startsWith('/')}
                 />
               )}
               {/* Show loading state while image is loading */}
