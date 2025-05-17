@@ -41,19 +41,6 @@ session.headers.update({
 # Ensure images directory exists
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
-# Add tech-images to .gitignore if not already there
-GITIGNORE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.gitignore')
-if os.path.exists(GITIGNORE_PATH):
-    with open(GITIGNORE_PATH, 'r') as f:
-        gitignore_content = f.read()
-    
-    if 'public/tech-images' not in gitignore_content:
-        with open(GITIGNORE_PATH, 'a') as f:
-            f.write('\n# Local tech images\npublic/tech-images/\n')
-else:
-    with open(GITIGNORE_PATH, 'w') as f:
-        f.write('# Local tech images\npublic/tech-images/\n')
-
 # --- Helper Functions ---
 
 def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
