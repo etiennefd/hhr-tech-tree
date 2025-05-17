@@ -316,8 +316,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
               src={specialImage}
               alt={node.title}
               fill
-              sizes="160px"
-              quality={75}
               className="object-cover"
               style={{
                 filter: "grayscale(20%) contrast(110%)",
@@ -334,8 +332,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                   src={imageUrl}
                   alt={node.title}
                   fill
-                  sizes="160px"
-                  quality={75}
                   className={`object-cover transition-opacity duration-300 ${
                     imageLoaded ? "opacity-100" : "opacity-0"
                   }`}
@@ -360,7 +356,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                   src="/placeholder-invention.jpg"
                   alt="Placeholder"
                   fill
-                  sizes="160px"
                   className="object-cover"
                   unoptimized
                   style={{
