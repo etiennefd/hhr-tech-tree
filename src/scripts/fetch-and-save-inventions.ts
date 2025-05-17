@@ -20,11 +20,38 @@ const OUTPUT_FILE_PATH = path.join(
 // Adjust the import path based on your project structure.
 
 function formatLocation(city: string, countryHistorical: string): string {
-  // Placeholder - replace with your actual implementation
-  if (city && countryHistorical) return `${city}, ${countryHistorical}`;
-  if (city) return city;
-  if (countryHistorical) return countryHistorical;
-  return ""; // Ensure all paths return a value
+  // Clean and split the input strings
+  const cleanList = (str: string): string[] => 
+    str.split(',')
+       .map(item => item.trim())
+       .filter(Boolean);
+
+  const cities = cleanList(city);
+  const countries = cleanList(countryHistorical);
+
+  // If no valid data, return empty string
+  if (!cities.length && !countries.length) {
+    return '';
+  }
+
+  // If only countries are present, join them with semicolons
+  if (!cities.length) {
+    return countries.join('; ');
+  }
+
+  // If only one country, show all cities with that country
+  if (countries.length === 1) {
+    const country = countries[0];
+    if (cities.length === 1) {
+      return `${cities[0]}, ${country}`;
+    } else {
+      const citiesString = cities.join(', ');
+      return `${citiesString}, ${country}`;
+    }
+  }
+
+  // If multiple countries, only show countries
+  return countries.join('; ');
 }
 
 function cleanCommaList(listString: string): string {
