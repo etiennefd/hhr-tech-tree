@@ -3991,7 +3991,7 @@ const loadData = async () => {
         )}
       </div>
       {/* Only render debug overlay in development mode */}
-      {process.env.NODE_ENV === 'development' && showDebugOverlay && (
+      {/* {process.env.NODE_ENV === 'development' && showDebugOverlay && (
         <DebugOverlay
           viewport={visibleViewport}
           scrollPosition={scrollPosition}
@@ -4001,7 +4001,7 @@ const loadData = async () => {
           visibleConnections={visibleConnections.length}
           onClose={() => setShowDebugOverlay(false)}
         />
-      )}
+      )} */}
       {/* Jump to Nearest Tech Button */}
       {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
         <button
