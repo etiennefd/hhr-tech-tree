@@ -2389,13 +2389,22 @@ const loadData = async () => {
   // Add this effect to detect mobile devices
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+      const userAgent = navigator.userAgent;
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(userAgent));
+      // Add iPad detection with more precise checks
+      const isIPad = /iPad/i.test(userAgent) || 
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ||
+                    (window.innerWidth >= 768 && window.innerWidth <= 1024 && /Macintosh/i.test(userAgent));
+      setIsIPad(isIPad);
     };
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Add state for iPad detection
+  const [isIPad, setIsIPad] = useState(false);
 
   // Remove these unused handlers
   const handleEscapeKey = useCallback((e: KeyboardEvent) => {
@@ -3958,9 +3967,8 @@ const loadData = async () => {
           </div>
         </div>
         {/* Minimap - Conditionally render based on data? Or leave as is? */}
-        {/* Let's leave the minimap conditional on data for now, as it needs node positions */}
         {data.nodes.length > 0 && (
-          <div className="sticky bottom-10 md:bottom-0 left-0 right-0 z-10 h-16 bg-yellow-50">
+          <div className={`sticky left-0 right-0 z-10 h-16 bg-yellow-50 ${isIPad ? 'bottom-20' : 'bottom-0'}`}>
             <TechTreeMinimap
               nodes={data.nodes.map(
                 (node): MinimapNode => ({

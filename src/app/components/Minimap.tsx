@@ -163,7 +163,11 @@ const TechTreeMinimap = ({
   return (
     <div
       className="sticky bottom-0 left-0 right-0 overflow-hidden bg-yellow-50 minimap"
-      style={{ height: MINIMAP_HEIGHT, zIndex: 1000 }}
+      style={{ 
+        height: MINIMAP_HEIGHT, 
+        zIndex: 1000,
+        position: 'relative'
+      }}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Year labels */}
