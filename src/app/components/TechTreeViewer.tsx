@@ -3968,7 +3968,14 @@ const loadData = async () => {
         </div>
         {/* Minimap - Conditionally render based on data? Or leave as is? */}
         {data.nodes.length > 0 && (
-          <div className={`sticky left-0 right-0 z-10 h-16 bg-yellow-50 ${isIPad ? 'bottom-20' : 'bottom-0'}`}>
+          <div 
+            className="fixed left-0 right-0 z-10 h-16 bg-yellow-50"
+            style={{
+              bottom: '0px',
+              position: 'fixed',
+              width: '100%'
+            }}
+          >
             <TechTreeMinimap
               nodes={data.nodes.map(
                 (node): MinimapNode => ({
