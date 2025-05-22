@@ -715,6 +715,7 @@ export function TechTreeViewer() {
         Computing: 1600,
 
         // Safety/Protection/Governance (1800-2100)
+        Safety: 1600,
         Security: 1650,
         Weaponry: 1700,
         Finance: 1750,
