@@ -145,63 +145,62 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
 
   // Bold, industrial colors for fields
   const fieldColors = {
-    // Food & Agriculture (Vibrant Greens)
+    // Food & Agriculture
     Food: "#277d1e", // deep green
     Agriculture: "#359c2c", // Fresh leaf green
 
-    // Life Sciences (Teals and Aquas)
-    Biology: "#2cbd00",
+    // Life Sciences
+    Biology: "#2cbd00", // Bright green
     Medicine: "#00A5B3", // Medical blue
-    Sanitation: "#00bdcf",
+    Sanitation: "#00bdcf", // Aquamarine
 
-    // Physical Sciences (Deep Purples)
-    Physics: "#6b3ba1",
+    // Physical Sciences
+    Physics: "#6b3ba1", // Purple
     Chemistry: "#8E4BC9", // Bright purple
-    Astronomy: "#371c91",
-    Meteorology: "#3c9cbf",
+    Astronomy: "#371c91", // Deep purple
+    Meteorology: "#3c9cbf", // Teal
     Optics: "#5C6BC0", // Bright indigo
 
-    // Energy & Electronics (Circuit Boards and Energy)
+    // Energy & Electronics
     Electricity: "#0099FF", // Electric blue
-    Electronics: "#33a371",
-    Energy: "#FFB627", // Energy yellow
-    Lighting: "#ffdc2b", // Bright amber
+    Electronics: "#33a371", // Circuit board green
+    Energy: "#FFB627", // Amber
+    Lighting: "#ffdc2b", // Yellow
 
-    // Construction/Materials (Metallics and Earth)
-    Construction: "#c14d17", // brick
-    Mining: "#B87D3D", // Copper brown
+    // Construction/Materials
+    Construction: "#c14d17", // Brick orange
+    Mining: "#996329", // Copper brown
     Metallurgy: "#8C8C8C", // Brushed steel
-    Manufacturing: "#a36018",
-    Textiles: "#b58c55",
+    Manufacturing: "#8a5011", // Brown
+    Textiles: "#b58c55", // Burlap
     Hydraulics: "#4A90B6", // Industrial blue
 
     // Transportation/Movement
-    Transportation: "#de6f00",
-    Flying: "#87cfeb", // sky blue
+    Transportation: "#de6f00", // Burnt orange
+    Flying: "#87cfeb", // Sky blue
     Sailing: "#1C7CD5", // Ocean blue
     Space: "#2C1654", // Deep space purple
-    Geography: "#5ed5ff", // map ocean blue
+    Geography: "#5ed5ff", // Map ocean blue
 
-    // Computing/Math (Modern Grays and Blues)
+    // Computing/Math
     Mathematics: "#6B7B8C", // Slate blue
     Measurement: "#607D8B", // Steel blue
     Timekeeping: "#546E7A", // Clock gray
-    Computing: "#435863", // Tech gray
+    Computing: "#435863", // Dark gray
+    Finance: "#2f6333", // Dark green
 
-    // Safety/Protection/Governance
+    // Safety/Weapons
     Safety: "#ff8400", // Bright orange
     Security: "#E94F37", // Alert red
-    Weaponry: "#d63333",
-    Finance: "#2f6333",
-    Governance: "#536B78", // Authority gray
+    Weaponry: "#d63333", // Red
 
-    // Culture & Communication (Distinct Pinks)
-    Communication: "#c97fa7",
+    // Culture & Communication
+    Communication: "#c97fa7", // Grayish pink
     "Visual media": "#DA70D6", // Orchid
     Recreation: "#FF69B4", // Hot pink
     Music: "#C71585", // Medium violet red
 
-    Misc: "#919191",
+    Misc: "#919191", // Gray
   };
 
   // Move addSoftHyphens inside useMemo to handle dependencies properly

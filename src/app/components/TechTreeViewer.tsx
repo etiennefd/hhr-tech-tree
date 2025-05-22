@@ -671,64 +671,62 @@ export function TechTreeViewer() {
 
       // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
       const VERTICAL_BANDS: Record<string, number> = {
-        // Food & Agriculture (0-300)
-        Food: Math.max(150, ABSOLUTE_MIN_Y),
-        Agriculture: Math.max(200, ABSOLUTE_MIN_Y),
+        // Food & Agriculture
+        Food: Math.max(100, ABSOLUTE_MIN_Y),
+        Agriculture: Math.max(150, ABSOLUTE_MIN_Y),
 
-        // Life Sciences (300-500)
-        Biology: Math.max(250, ABSOLUTE_MIN_Y),
-        Medicine: Math.max(300, ABSOLUTE_MIN_Y),
-        Sanitation: 350,
+        // Life Sciences
+        Biology: Math.max(200, ABSOLUTE_MIN_Y),
+        Medicine: Math.max(250, ABSOLUTE_MIN_Y),
+        Sanitation: 300,
 
-        // Physical Sciences (500-800)
-        Physics: 450,
-        Chemistry: 500,
-        Astronomy: 550,
-        Meteorology: 600,
-        Optics: 650,
+        // Physical Sciences
+        Physics: 400,
+        Chemistry: 450,
+        Astronomy: 500,
+        Meteorology: 550,
+        Optics: 600,
 
-        // Energy & Electronics (800-1000)
-        Electricity: 700,
-        Electronics: 750,
-        Energy: 800,
-        Lighting: 850,
+        // Energy & Electronics
+        Electricity: 650,
+        Electronics: 700,
+        Energy: 750,
+        Lighting: 800,
 
-        // Construction/Materials (1000-1300)
-        Construction: 900,
-        Mining: 950,
-        Metallurgy: 1000,
-        Manufacturing: 1050,
-        Textiles: 1100,
-        Hydraulics: 1150,
+        // Construction/Materials
+        Construction: 850,
+        Mining: 900,
+        Metallurgy: 950,
+        Manufacturing: 1000,
+        Textiles: 1050,
+        Hydraulics: 1100,
 
-        // Transportation/Movement (1300-1600)
-        Transportation: 1200,
-        Flying: 1250,
-        Sailing: 1300,
-        Space: 1350,
-        Geography: 1400,
+        // Transportation/Movement
+        Transportation: 1150,
+        Flying: 1200,
+        Sailing: 1250,
+        Geography: 1350,
 
-        // Computing/Math (1600-1800)
-        Mathematics: 1450,
-        Measurement: 1500,
-        Timekeeping: 1550,
-        Computing: 1600,
+        // Computing/Math
+        Mathematics: 1400,
+        Measurement: 1450,
+        Timekeeping: 1500,
+        Computing: 1550,
+        Finance: 1600,
 
-        // Safety/Protection/Governance (1800-2100)
-        Safety: 1600,
-        Security: 1650,
-        Weaponry: 1700,
-        Finance: 1750,
-        Governance: 1800,
+        // Safety/Weapons
+        Safety: 1650,
+        Security: 1700,
+        Weaponry: 1750,
 
-        // Culture (2100-2400)
-        Communication: 1850,
-        "Visual media": 1900,
-        Recreation: 1950,
-        Music: 2000,
+        // Culture
+        Communication: 1800,
+        "Visual media": 1850,
+        Recreation: 1900,
+        Music: 1950,
 
         // Miscellaneous
-        Misc: 2050,
+        Misc: 2000,
       };
 
       // Group nodes by year
