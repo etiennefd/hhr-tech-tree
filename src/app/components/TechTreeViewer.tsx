@@ -39,6 +39,19 @@ import {
   TechTreeMinimapNode, 
   TechTreeVisibleElements 
 } from "@/types/techTreeTypes";
+import {
+  escapeRegExp,
+  cleanLocationForTooltip,
+  validateImageUrl,
+  fetchWithRetry,
+  throttle
+} from '@/utils/helpers';
+import {
+  performanceMarks,
+  renderCounter,
+  memoEffectiveness,
+  logPerformance
+} from '@/utils/performance';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -77,11 +90,6 @@ const INFO_BOX_HEIGHT = 500;
 
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
-
-// Helper function to escape regex special characters
-function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); // $& means the whole matched string
-}
 
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
@@ -194,148 +202,6 @@ function calculateXPosition(
   }
 
   return PADDING + spaces * YEAR_WIDTH;
-}
-
-// Add this helper function near other utility functions, before the TechTreeViewer component
-const cleanLocationForTooltip = (location: string | undefined): string | undefined => {
-  if (!location) return undefined;
-  return location.replace(/ \(unspecified\)/g, '');
-};
-
-// Add this helper function near other utility functions, before the TechTreeViewer component
-const validateImageUrl = (imageUrl: string | null | undefined): string | undefined => {
-  // If imageUrl is null or undefined, return undefined
-  if (imageUrl === null || imageUrl === undefined) {
-    return undefined;
-  }
-  
-  // Check if image URL is valid
-  if (typeof imageUrl !== 'string' || 
-      imageUrl.length < 2 || 
-      (!imageUrl.startsWith('/') && 
-       !imageUrl.startsWith('http://') && 
-       !imageUrl.startsWith('https://'))) {
-    // Invalid image URL
-    console.warn(`Invalid image URL: "${imageUrl}"`);
-    return undefined; // or return a default image path
-  }
-  return imageUrl;
-};
-
-// Add retry logic helper
-const fetchWithRetry = async (url: string, retries = 3, delay = 1000) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        return response;
-      }
-      if (response.status === 429) {
-        // Rate limited - wait longer before retry
-        await new Promise(resolve => setTimeout(resolve, delay * (i + 1)));
-        continue;
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    } catch (error) {
-      if (i === retries - 1) throw error; // Last retry failed
-      await new Promise(resolve => setTimeout(resolve, delay));
-    }
-  }
-  throw new Error('Max retries reached');
-};
-
-// Add throttle utility function
-const throttle = <T extends (...args: any[]) => void>(func: T, limit: number): T => {
-  let inThrottle = false;
-  return ((...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => {
-        inThrottle = false;
-      }, limit);
-    }
-  }) as T;
-};
-
-// Add these performance tracking utilities near the top of the file, after imports
-const performanceMarks = {
-  start: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      performance.mark(`${name}-start`);
-    }
-  },
-  end: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      performance.mark(`${name}-end`);
-      performance.measure(name, `${name}-start`, `${name}-end`);
-    }
-  },
-  log: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      const entries = performance.getEntriesByName(name);
-      if (entries.length > 0) {
-        const lastEntry = entries[entries.length - 1];
-        console.log(`[Performance] ${name}: ${lastEntry.duration.toFixed(2)}ms`);
-      }
-    }
-  },
-  clear: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      performance.clearMarks(`${name}-start`);
-      performance.clearMarks(`${name}-end`);
-      performance.clearMeasures(name);
-    }
-  }
-};
-
-// Add render counter
-const renderCounter = {
-  count: 0,
-  increment: () => {
-    if (process.env.NODE_ENV === 'development') {
-      renderCounter.count++;
-      console.log(`[Performance] Render count: ${renderCounter.count}`);
-    }
-  },
-  reset: () => {
-    if (process.env.NODE_ENV === 'development') {
-      renderCounter.count = 0;
-    }
-  }
-};
-
-// Add memoization effectiveness tracker
-const memoEffectiveness = {
-  hits: 0,
-  misses: 0,
-  track: (hit: boolean) => {
-    if (process.env.NODE_ENV === 'development') {
-      if (hit) memoEffectiveness.hits++;
-      else memoEffectiveness.misses++;
-      const total = memoEffectiveness.hits + memoEffectiveness.misses;
-      const hitRate = (memoEffectiveness.hits / total) * 100;
-      // console.log(`[Performance] Memo effectiveness: ${hitRate.toFixed(1)}% (${memoEffectiveness.hits}/${total})`);
-    }
-  },
-  reset: () => {
-    if (process.env.NODE_ENV === 'development') {
-      memoEffectiveness.hits = 0;
-      memoEffectiveness.misses = 0;
-    }
-  }
-};
-
-// Add these near the top of the file, after imports
-const PERFORMANCE_LOG_INTERVAL = 1000; // Log at most once per second
-let lastPerformanceLog = 0;
-
-function logPerformance(operation: string, data: Record<string, any>) {
-  const now = performance.now();
-  if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
-    console.log(`[TechTree] ${operation}:`, data);
-    lastPerformanceLog = now;
-  }
 }
 
 export function TechTreeViewer() {
