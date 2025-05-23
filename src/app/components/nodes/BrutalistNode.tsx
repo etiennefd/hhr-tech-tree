@@ -181,6 +181,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     Transportation: "#de6f00", // Burnt orange
     Flying: "#87cfeb", // Sky blue
     Sailing: "#1C7CD5", // Ocean blue
+    Diving: "#004373", // Deep blue
     Space: "#2C1654", // Deep space purple
     Geography: "#5ed5ff", // Map ocean blue
 

@@ -705,29 +705,30 @@ export function TechTreeViewer() {
         Transportation: 1150,
         Flying: 1200,
         Sailing: 1250,
-        Space: 1300,
-        Geography: 1350,
+        Diving: 1300,
+        Space: 1350,
+        Geography: 1400,
 
         // Computing/Math
-        Mathematics: 1400,
-        Measurement: 1450,
-        Timekeeping: 1500,
-        Computing: 1550,
-        Finance: 1600,
+        Mathematics: 1450,
+        Measurement: 1500,
+        Timekeeping: 1550,
+        Computing: 1600,
+        Finance: 1650,
 
         // Safety/Weapons
-        Safety: 1650,
-        Security: 1700,
-        Weaponry: 1750,
+        Safety: 1700,
+        Security: 1750,
+        Weaponry: 1800,
 
         // Culture
-        Communication: 1800,
-        "Visual media": 1850,
-        Recreation: 1900,
-        Music: 1950,
+        Communication: 1850,
+        "Visual media": 1900,
+        Recreation: 1950,
+        Music: 2000,
 
         // Miscellaneous
-        Misc: 2000,
+        Misc: 2050,
       };
 
       // Group nodes by year
