@@ -667,7 +667,7 @@ export function TechTreeViewer() {
       const yearGroups = new Map();
 
       // Ensure minimum distance from top of viewport
-      const ABSOLUTE_MIN_Y = 50;
+      const ABSOLUTE_MIN_Y = 100;
 
       // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
       const VERTICAL_BANDS: Record<string, number> = {
