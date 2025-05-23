@@ -33,6 +33,12 @@ import { SpatialIndex } from "@/utils/SpatialIndex";
 import { useSearchParams } from 'next/navigation';
 import { DebugOverlay } from "@/components/debug/DebugOverlay";
 import IntroBox from "@/components/intro/IntroBox";
+import { 
+  TechTreeLink, 
+  TechTreeNodePosition, 
+  TechTreeMinimapNode, 
+  TechTreeVisibleElements 
+} from "@/types/techTreeTypes";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -102,30 +108,6 @@ const DynamicFilterBox = dynamic(
     loading: () => null,
   }
 );
-
-interface Link {
-  source: string;
-  target: string;
-  type: ConnectionType;
-  details?: string;
-}
-
-interface NodePosition {
-  y: number;
-  height: number;
-}
-
-interface MinimapNode {
-  id: string;
-  x: number;
-  y: number;
-  year: number;
-}
-
-interface VisibleElements {
-  visibleNodes: TechNode[];
-  visibleConnections: Link[];
-}
 
 function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
@@ -373,7 +355,7 @@ export function TechTreeViewer() {
     width: 0,
     height: 0,
   });
-  const [data, setData] = useState<{ nodes: TechNode[]; links: Link[] }>({
+  const [data, setData] = useState<{ nodes: TechNode[]; links: TechTreeLink[] }>({
     nodes: [],
     links: [],
   });
@@ -615,7 +597,7 @@ export function TechTreeViewer() {
 
       yearGroups.forEach((nodesInYear, year) => {
         const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-        const usedPositions: NodePosition[] = []; // Will store {y, height} objects
+        const usedPositions: TechTreeNodePosition[] = []; // Will store {y, height} objects
         const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
         nodesInYear.sort((a: TechNode, b: TechNode) => {
@@ -1261,10 +1243,10 @@ useEffect(() => {
   }, []);
 
   // Helper function to get a unique key for a connection
-  const getLinkKey = useCallback((link: Link) => `${link.source}-${link.target}`, []);
+  const getLinkKey = useCallback((link: TechTreeLink) => `${link.source}-${link.target}`, []);
 
   const shouldHighlightLink = useCallback(
-    (link: Link, index: number) => {
+    (link: TechTreeLink, index: number) => {
       // If a node is selected
       if (selectedNodeId) {
         return link.source === selectedNodeId || link.target === selectedNodeId;
@@ -1306,7 +1288,7 @@ useEffect(() => {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
-      const validConnectionTypes = (link: Link) =>
+      const validConnectionTypes = (link: TechTreeLink) =>
         !["Independently invented", "Concurrent development"].includes(
           link.type
         );
@@ -1665,7 +1647,7 @@ useEffect(() => {
   );
 
   const isLinkVisible = useCallback(
-    (link: Link): boolean => {
+    (link: TechTreeLink): boolean => {
       const sourceNode = data.nodes.find((n) => n.id === link.source);
       const targetNode = data.nodes.find((n) => n.id === link.target);
 
@@ -2378,7 +2360,7 @@ useEffect(() => {
 
   // Simplified isConnectionInViewport function
   const isConnectionInViewport = useCallback(
-    (link: Link, index: number) => {
+    (link: TechTreeLink, index: number) => {
       // Get the source and target nodes
       const sourceNode = data.nodes.find(n => n.id === link.source);
       const targetNode = data.nodes.find(n => n.id === link.target);
@@ -2638,7 +2620,7 @@ useEffect(() => {
 
   // Add this memoized function for calculating link opacity
   const getLinkOpacity = useCallback(
-    (link: Link, index: number) => {
+    (link: TechTreeLink, index: number) => {
       // If a node is selected
       if (selectedNodeId) {
         // If this is a connection between highlighted nodes
