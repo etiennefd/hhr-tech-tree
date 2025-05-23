@@ -3982,7 +3982,7 @@ const loadData = async () => {
                   id: node.id,
                   // Ensure getXPosition returns 0 if data isn't ready
                   x: getXPosition(node.year),
-                  y: node.y || 0,
+                  y: isSmallScreen ? (node.y || 0) * 1.5 : (node.y || 0),
                   year: node.year,
                 })
               )}
