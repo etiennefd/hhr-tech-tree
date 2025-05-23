@@ -29,6 +29,7 @@ const formatTitle = (title: string) => {
     'mRNA': 'mRNA',
     'p–n': 'p–n',
     'Technetium-99m': 'TECHNETIUM-99m',
+    'pH': 'pH',
     // Add more special cases as needed
   };
 
