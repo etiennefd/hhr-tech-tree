@@ -31,8 +31,8 @@ import Link from 'next/link';
 import { SpatialIndex } from "@/utils/SpatialIndex";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
-import { DebugOverlay } from "@/components/debug/DebugOverlay";
-import IntroBox from "@/components/intro/IntroBox";
+import { DebugOverlay } from "@/app/components/utils/DebugOverlay";
+import IntroBox from "@/app/components/utils/IntroBox";
 import { 
   TechTreeLink, 
   TechTreeNodePosition, 
@@ -45,13 +45,13 @@ import {
   validateImageUrl,
   fetchWithRetry,
   throttle
-} from '@/utils/helpers';
+} from './utils/helpers';
 import {
   performanceMarks,
   renderCounter,
   memoEffectiveness,
   logPerformance
-} from '@/utils/performance';
+} from './utils/performance';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
