@@ -1,4 +1,4 @@
-import { ConnectionType } from "../components/connections/CurvedConnections";
+import { ConnectionType } from "../app/components/connections/CurvedConnections";
 import { TechNode } from "./tech-node";
 
 export interface TechTreeLink {
