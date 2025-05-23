@@ -31,6 +31,7 @@ import Link from 'next/link';
 import { SpatialIndex } from "@/utils/SpatialIndex";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
+import { DebugOverlay } from "@/components/debug/DebugOverlay";
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -436,68 +437,6 @@ function logPerformance(operation: string, data: Record<string, any>) {
     console.log(`[TechTree] ${operation}:`, data);
     lastPerformanceLog = now;
   }
-}
-
-// Add this component for debugging - will show in corner of screen only in dev mode
-function DebugOverlay({
-  viewport,
-  scrollPosition,
-  totalNodes,
-  visibleNodes,
-  totalConnections,
-  visibleConnections,
-  onClose
-}: {
-  viewport: any;
-  scrollPosition: any;
-  totalNodes: number;
-  visibleNodes: number;
-  totalConnections: number;
-  visibleConnections: number;
-  onClose: () => void;
-}) {
-  // Only render in development mode
-  if (process.env.NODE_ENV !== 'development') return null;
-  
-  return (
-    <div 
-      style={{
-        position: 'fixed',
-        bottom: '70px',
-        left: '10px',
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        color: 'white',
-        padding: '8px',
-        borderRadius: '4px',
-        fontSize: '12px',
-        zIndex: 9999,
-        maxWidth: '400px',
-        fontFamily: 'monospace'
-      }}
-    >
-      <button 
-        onClick={onClose}
-        style={{
-          position: 'absolute',
-          top: '2px',
-          right: '2px',
-          background: 'transparent',
-          border: 'none',
-          color: 'white',
-          fontSize: '14px',
-          cursor: 'pointer',
-          padding: '2px 6px',
-          lineHeight: 1
-        }}
-      >
-        ×
-      </button>
-      <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
-      <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
-      <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
-      <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
-    </div>
-  );
 }
 
 export function TechTreeViewer() {
@@ -4119,7 +4058,7 @@ useEffect(() => {
         )}
       </div>
       {/* Only render debug overlay in development mode */}
-      {/* {process.env.NODE_ENV === 'development' && showDebugOverlay && (
+      {process.env.NODE_ENV === 'development' && showDebugOverlay && (
         <DebugOverlay
           viewport={visibleViewport}
           scrollPosition={scrollPosition}
@@ -4129,7 +4068,7 @@ useEffect(() => {
           visibleConnections={visibleConnections.length}
           onClose={() => setShowDebugOverlay(false)}
         />
-      )} */}
+      )}
       {/* Jump to Nearest Tech Button */}
       {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
         <button
