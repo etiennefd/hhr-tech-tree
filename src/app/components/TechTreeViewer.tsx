@@ -705,6 +705,7 @@ export function TechTreeViewer() {
         Transportation: 1150,
         Flying: 1200,
         Sailing: 1250,
+        Space: 1300,
         Geography: 1350,
 
         // Computing/Math

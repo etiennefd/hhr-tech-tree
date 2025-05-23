@@ -28,6 +28,7 @@ const formatTitle = (title: string) => {
   const specialCases: { [key: string]: string } = {
     'mRNA': 'mRNA',
     'p–n': 'p–n',
+    '99m': '99m',
     // Add more special cases as needed
   };
 
