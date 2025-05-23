@@ -2660,7 +2660,7 @@ useEffect(() => {
   const FRAME_DURATION = 16.67; // ms (60fps)
   const calculationTrigger = useRef<'selection' | 'highlight' | 'filter' | 'viewport' | 'cache' | 'initial' | 'unknown'>('initial');
   const deferredViewport = useDeferredValue(visibleViewport);
-  const previousCalculation = useRef<VisibleElements>({
+  const previousCalculation = useRef<TechTreeVisibleElements>({
     visibleNodes: [],
     visibleConnections: []
   });
@@ -2746,7 +2746,7 @@ useEffect(() => {
   );
 
   // Update visibleElements memo with performance logging
-  const visibleElements = useMemo<VisibleElements>(() => {
+  const visibleElements = useMemo<TechTreeVisibleElements>(() => {
     const startTime = performance.now();
     performanceMarks.start('visibleElements');
 
@@ -3928,7 +3928,7 @@ useEffect(() => {
           >
             <TechTreeMinimap
               nodes={data.nodes.map(
-                (node): MinimapNode => ({
+                (node): TechTreeMinimapNode => ({
                   id: node.id,
                   // Ensure getXPosition returns 0 if data isn't ready
                   x: getXPosition(node.year),
