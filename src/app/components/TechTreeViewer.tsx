@@ -2304,10 +2304,52 @@ useEffect(() => {
     [deferredViewportState, data.nodes]
   );
 
+  // Add debounced viewport update
+  const viewportUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const VIEWPORT_UPDATE_DEBOUNCE = 100; // ms
+
+  const debouncedViewportUpdate = useCallback((newViewport: typeof visibleViewport) => {
+    if (viewportUpdateTimeoutRef.current) {
+      clearTimeout(viewportUpdateTimeoutRef.current);
+    }
+
+    viewportUpdateTimeoutRef.current = setTimeout(() => {
+      setVisibleViewport(newViewport);
+      // Also update the deferred viewport state for visibility calculations
+      setDeferredViewport(newViewport);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][Viewport] Debounced viewport update applied. L:${newViewport.left.toFixed(0)} T:${newViewport.top.toFixed(0)} R:${newViewport.right.toFixed(0)} B:${newViewport.bottom.toFixed(0)}`);
+      }
+    }, VIEWPORT_UPDATE_DEBOUNCE);
+  }, []);
+
+  // Modify the viewport update handler
+  const updateViewportState = useCallback((scrollLeft: number, scrollTop: number) => {
+    const newViewport = {
+      left: scrollLeft,
+      right: scrollLeft + containerDimensions.width,
+      top: scrollTop,
+      bottom: scrollTop + containerDimensions.height
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[PerfDebug][Viewport] Updating viewport state. Scroll L:${scrollLeft.toFixed(0)} T:${scrollTop.toFixed(0)}. New Viewport L:${newViewport.left.toFixed(0)} T:${newViewport.top.toFixed(0)} R:${newViewport.right.toFixed(0)} B:${newViewport.bottom.toFixed(0)}`);
+    }
+
+    debouncedViewportUpdate(newViewport);
+  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
+
+  // Add cleanup for the debounce timeout
+  useEffect(() => {
+    return () => {
+      if (viewportUpdateTimeoutRef.current) {
+        clearTimeout(viewportUpdateTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // Update the scroll handler to find containers at the right time
   useEffect(() => {
-    const VIEWPORT_UPDATE_THROTTLE = 100; // ms
-    
     // Store local references to avoid read-only ref issues
     let hContainer: HTMLDivElement | null = null;
     let vContainer: HTMLDivElement | null = null;
@@ -2328,10 +2370,6 @@ useEffect(() => {
                        document.querySelector('div[style*="overflow-x"]');
         if (foundH) {
           hContainer = foundH as HTMLDivElement;
-          console.log('[ContainerDebug] Found horizontal container:', {
-            class: hContainer.className,
-            id: hContainer.id
-          });
         }
       }
       
@@ -2348,77 +2386,16 @@ useEffect(() => {
       return { hContainer, vContainer };
     };
     
-    // Create throttled update function for scroll events
-    const throttledUpdate = throttle(() => {
+    // Create scroll handler with debounced viewport update
+    const handleScroll = () => {
       const { hContainer, vContainer } = findContainers();
+      if (!hContainer) return;
       
-      if (process.env.NODE_ENV === 'development') {
-        // console.log('[PerfDebug][Viewport] throttledUpdate called.');
-      }
-
-      if (!hContainer) {
-        console.log('[ScrollDebug] Horizontal container missing, trying again shortly...');
-        setTimeout(findContainers, 100);
-        return;
-      }
+      const scrollLeft = hContainer.scrollLeft;
+      const scrollTop = vContainer ? vContainer.scrollTop : window.scrollY;
       
-      const now = performance.now();
-      if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
-      
-      // Get horizontal scroll from the horizontal container
-      const horizontalScroll = hContainer.scrollLeft;
-      
-      // Get vertical scroll from either the vertical container OR the window if container not found
-      let verticalScroll = 0;
-      if (vContainer) {
-        verticalScroll = vContainer.scrollTop;
-      } else {
-        // Fall back to window scroll position if vertical container not found
-        verticalScroll = window.scrollY || document.documentElement.scrollTop;
-      }
-      
-      // Update the scrollPosition state for the minimap
-      setScrollPosition({
-        left: horizontalScroll,
-        top: verticalScroll
-      });
-      
-      // Calculate viewport based on scroll position and container dimensions
-      const width = containerDimensions.width || window.innerWidth;
-      const height = containerDimensions.height || window.innerHeight;
-      
-      const newViewport = {
-        left: horizontalScroll,
-        right: horizontalScroll + width,
-        top: verticalScroll,
-        bottom: verticalScroll + height,
-      };
-
-      lastViewportUpdate.current = now;
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][Viewport] Updating viewport state. Scroll L:${horizontalScroll.toFixed(0)} T:${verticalScroll.toFixed(0)}. New Viewport L:${newViewport.left.toFixed(0)} T:${newViewport.top.toFixed(0)} R:${newViewport.right.toFixed(0)} B:${newViewport.bottom.toFixed(0)}`);
-      }
-      
-      // Update both viewport states
-      setVisibleViewport(newViewport);
-      requestAnimationFrame(() => {
-        setDeferredViewport(newViewport);
-      });
-    }, VIEWPORT_UPDATE_THROTTLE);
-    
-    // Add a global scroll listener to catch all scroll events
-    const globalScrollHandler = (e: Event) => {
-      // Log all scroll events for debugging
-      const target = e.target as HTMLElement;
-      throttledUpdate();
+      updateViewportState(scrollLeft, scrollTop);
     };
-    
-    // Try to find containers on mount
-    findContainers();
-    
-    // Attach to document/window for global scroll events
-    window.addEventListener('scroll', throttledUpdate, true);
-    document.addEventListener('scroll', globalScrollHandler, true);
     
     // Set up a MutationObserver to watch for container availability
     const observer = new MutationObserver(() => {
@@ -2430,11 +2407,11 @@ useEffect(() => {
         }
         
         // Attach event listeners directly to the containers
-        hContainer.addEventListener('scroll', () => throttledUpdate());
-        vContainer.addEventListener('scroll', () => throttledUpdate());
+        hContainer.addEventListener('scroll', handleScroll);
+        vContainer.addEventListener('scroll', handleScroll);
         
         // Force an update now that we have containers
-        throttledUpdate();
+        handleScroll();
       }
     });
     
@@ -2442,23 +2419,21 @@ useEffect(() => {
     observer.observe(document.body, { childList: true, subtree: true });
     
     // Also watch for resize events
-    window.addEventListener('resize', throttledUpdate);
+    window.addEventListener('resize', handleScroll);
     
     return () => {
       // Clean up event listeners
       const { hContainer, vContainer } = findContainers();
       if (hContainer) {
-        hContainer.removeEventListener('scroll', throttledUpdate);
+        hContainer.removeEventListener('scroll', handleScroll);
       }
       if (vContainer) {
-        vContainer.removeEventListener('scroll', throttledUpdate);
+        vContainer.removeEventListener('scroll', handleScroll);
       }
-      window.removeEventListener('scroll', throttledUpdate, true);
-      document.removeEventListener('scroll', globalScrollHandler, true);
-      window.removeEventListener('resize', throttledUpdate);
+      window.removeEventListener('resize', handleScroll);
       observer.disconnect();
     };
-  }, [containerDimensions]);
+  }, [containerDimensions, updateViewportState]);
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
