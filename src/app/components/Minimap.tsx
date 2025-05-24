@@ -51,8 +51,9 @@ const TechTreeMinimap = ({
   }, [parentContainerWidth]);
 
   const MINIMAP_HEIGHT = isSmallScreen ? 96 : 64; // Increased total height for small screens
-  const MINIMAP_CONTENT_HEIGHT = isSmallScreen ? 72 : 48; // Increased height for small screens
+  const MINIMAP_CONTENT_HEIGHT = 48; // Height of the minimap content area
   const LABEL_HEIGHT = 10; // Space for labels
+  const SMALL_SCREEN_MINIMAP_VERTICAL_SCALE = 2; // How much more vertically compressed the minimap is on small screens
   const engineeringBlue = "#91B4C5";
   const minimapRef = useRef(null);
   const isDragging = useRef(false);
@@ -83,14 +84,14 @@ const TechTreeMinimap = ({
     // Calculate scale based on actual available space
     const horizontalScale = availableWidth / containerWidth;
     // Scale vertically more on small screens
-    const verticalScale = (MINIMAP_CONTENT_HEIGHT / totalHeight) * (isSmallScreen ? 1.5 : 1);
+    const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
     setScale(Math.min(horizontalScale, verticalScale));
   }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen]);
 
   // Calculate minimap viewport dimensions
   const baseWidth = viewportWidth * scale;
   const aspectRatio = viewportWidth / viewportHeight;
-  const verticalScale = isSmallScreen ? 1.5 : 1;
+  const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
 
   const minimapViewport = {
     width: baseWidth,
