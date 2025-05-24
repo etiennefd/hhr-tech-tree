@@ -482,7 +482,7 @@ export function TechTreeViewer() {
             basePosition = Math.max(
               ABSOLUTE_MIN_Y,
               (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
-                (seededRandom(baseSeedString) - 0.5) * 100
+                (seededRandom(baseSeedString) - 0.5) * 200  // Increased from 100 to 200 for more spread
             );
           }
 
@@ -510,7 +510,7 @@ export function TechTreeViewer() {
             const direction = attempts % 2 === 0 ? 1 : -1;
 
             if (step > searchRadius) {
-              finalPosition = basePosition + direction * searchRadius;
+              finalPosition = basePosition + direction * searchRadius * 1.5;  // Increased from 1 to 1.5
             } else {
               finalPosition = basePosition + direction * step;
             }
