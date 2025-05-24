@@ -128,7 +128,8 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
       console.time("ProcessInnovations");
       const validInnovationRecords = innovationRecords.filter((record) => {
         const dateValue = record.get("Date");
-        return dateValue && !isNaN(Number(dateValue));
+        const year = Number(dateValue);
+        return dateValue && !isNaN(year) && year !== 9999;
       });
 
       const processedNodes = await processBatch(
