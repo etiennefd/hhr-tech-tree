@@ -2118,6 +2118,55 @@ useEffect(() => {
     [deferredViewportState, scrollPosition]
   );
 
+  // Add strict visibility check with minimal buffer
+  const isNodeStrictlyInViewport = useCallback(
+    (node: TechNode) => {
+      // Nodes without position data can't be in viewport
+      if (node.x === undefined || node.y === undefined) {
+        return false;
+      }
+
+      // Use a small buffer for better user experience
+      const buffer = 10; // Much smaller buffer than the display buffer
+      const strictViewport = {
+        left: deferredViewportState.left - buffer,
+        right: deferredViewportState.right + buffer,
+        top: deferredViewportState.top - buffer,
+        bottom: deferredViewportState.bottom + buffer,
+      };
+
+      // Calculate node bounds (using NODE_WIDTH and estimated height)
+      const nodeLeft = node.x - NODE_WIDTH / 2;
+      const nodeRight = node.x + NODE_WIDTH / 2;
+      const nodeTop = node.y;
+      const nodeBottom = node.y + 200; // Approximate node height
+
+      // Calculate intersection area
+      const intersectionLeft = Math.max(nodeLeft, strictViewport.left);
+      const intersectionRight = Math.min(nodeRight, strictViewport.right);
+      const intersectionTop = Math.max(nodeTop, strictViewport.top);
+      const intersectionBottom = Math.min(nodeBottom, strictViewport.bottom);
+
+      // If there's no intersection, node is not visible
+      if (intersectionLeft >= intersectionRight || intersectionTop >= intersectionBottom) {
+        return false;
+      }
+
+      // Calculate intersection area
+      const intersectionArea = (intersectionRight - intersectionLeft) * (intersectionBottom - intersectionTop);
+      const nodeArea = NODE_WIDTH * 200; // Approximate node area
+
+      // Node is considered visible if at least 30% of its area is in viewport
+      return intersectionArea / nodeArea > 0.3;
+    },
+    [deferredViewportState]
+  );
+
+  // Add memoized strictly visible nodes
+  const strictlyVisibleNodes = useMemo(() => {
+    return data.nodes.filter(node => isNodeStrictlyInViewport(node));
+  }, [data.nodes, isNodeStrictlyInViewport]);
+
   // Simplified isConnectionInViewport function
   const isConnectionInViewport = useCallback(
     (link: TechTreeLink, index: number) => {
@@ -3676,19 +3725,20 @@ useEffect(() => {
           scrollPosition={scrollPosition}
           totalNodes={data.nodes.length}
           visibleNodes={visibleNodes.length}
+          strictlyVisibleNodes={strictlyVisibleNodes.length}
           totalConnections={data.links.length}
           visibleConnections={visibleConnections.length}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}
-      {/* Jump to Nearest Tech Button */}
-      {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
+      {/* Jump to Nearest Tech Button - Update the condition */}
+      {!isLoading && strictlyVisibleNodes.length === 0 && data.nodes.length > 0 && (
         <button
-          ref={jumpButtonRef} // Add the ref here
+          ref={jumpButtonRef}
           onClick={handleJumpToNearest}
           className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-20 px-4 py-2 bg-transparent rounded text-sm transition-colors duration-150"
           style={{
-             color: '#91B4C5', // Match minimap color
+             color: '#91B4C5',
              borderColor: 'transparent',
              borderWidth: '0px',
              backdropFilter: 'blur(2px)', 
