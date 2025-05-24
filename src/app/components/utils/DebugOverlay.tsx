@@ -5,6 +5,7 @@ interface DebugOverlayProps {
   scrollPosition: any;
   totalNodes: number;
   visibleNodes: number;
+  strictlyVisibleNodes: number;
   totalConnections: number;
   visibleConnections: number;
   onClose: () => void;
@@ -15,6 +16,7 @@ export function DebugOverlay({
   scrollPosition,
   totalNodes,
   visibleNodes,
+  strictlyVisibleNodes,
   totalConnections,
   visibleConnections,
   onClose
@@ -58,6 +60,7 @@ export function DebugOverlay({
       <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
       <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
       <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
+      <div><strong>Strictly visible nodes:</strong> {strictlyVisibleNodes}/{totalNodes}</div>
       <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
     </div>
   );
