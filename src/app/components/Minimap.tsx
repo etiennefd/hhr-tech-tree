@@ -45,18 +45,19 @@ const TechTreeMinimap = ({
   highlightedAncestors = new Set(),
   highlightedDescendants = new Set(),
 }: TechTreeMinimapProps) => {
-  const MINIMAP_HEIGHT = 64; // Increased total height
-  const MINIMAP_CONTENT_HEIGHT = 48; // Original height for the node content
-  const LABEL_HEIGHT = 10; // Space for labels
-  const engineeringBlue = "#91B4C5";
-  const minimapRef = useRef(null);
-  const isDragging = useRef(false);
-  const [scale, setScale] = useState(1);
-
   // Calculate if the screen is small based on the passed parent width
   const isSmallScreen = useMemo(() => {
     return parentContainerWidth > 0 && parentContainerWidth < SMALL_SCREEN_WIDTH_THRESHOLD;
   }, [parentContainerWidth]);
+
+  const MINIMAP_HEIGHT = isSmallScreen ? 96 : 64; // Increased total height for small screens
+  const MINIMAP_CONTENT_HEIGHT = 48; // Height of the minimap content area
+  const LABEL_HEIGHT = 10; // Space for labels
+  const SMALL_SCREEN_MINIMAP_VERTICAL_SCALE = 2; // How much more vertically compressed the minimap is on small screens
+  const engineeringBlue = "#91B4C5";
+  const minimapRef = useRef(null);
+  const isDragging = useRef(false);
+  const [scale, setScale] = useState(1);
 
   // Key years to display (original list)
   const originalKeyYears = [
@@ -82,19 +83,21 @@ const TechTreeMinimap = ({
     
     // Calculate scale based on actual available space
     const horizontalScale = availableWidth / containerWidth;
-    const verticalScale = MINIMAP_CONTENT_HEIGHT / totalHeight;
+    // Scale vertically more on small screens
+    const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
     setScale(Math.min(horizontalScale, verticalScale));
-  }, [containerWidth, totalHeight, viewportWidth, viewportHeight]);
+  }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen]);
 
   // Calculate minimap viewport dimensions
   const baseWidth = viewportWidth * scale;
   const aspectRatio = viewportWidth / viewportHeight;
+  const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
 
   const minimapViewport = {
     width: baseWidth,
-    height: baseWidth / aspectRatio,
+    height: (baseWidth / aspectRatio) / verticalScale,
     x: scrollLeft * scale,
-    y: scrollTop * scale,
+    y: scrollTop * scale * verticalScale,
   };
 
   // Format year label with small screen logic
@@ -122,12 +125,13 @@ const TechTreeMinimap = ({
     e.stopPropagation();
     
     if (!minimapRef.current) return;
+    
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
     const targetX = x / scale - viewportWidth / 2;
-    const targetY = y / scale - viewportHeight / 2;
+    const targetY = y / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
       onViewportChange(Math.max(0, targetX), Math.max(0, targetY));
@@ -147,7 +151,7 @@ const TechTreeMinimap = ({
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
     const x = (e.clientX - rect.left) / scale - viewportWidth / 2;
-    const y = (e.clientY - rect.top) / scale - viewportHeight / 2;
+    const y = (e.clientY - rect.top) / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
       onViewportChange(Math.max(0, x), Math.max(0, y));
@@ -210,7 +214,7 @@ const TechTreeMinimap = ({
         {/* Node dots */}
         {nodes.map((node) => {
           const nodeX = node.x * scale;
-          const nodeY = node.y * scale;
+          const nodeY = node.y * scale * verticalScale;
           const hasActiveFilters = filteredNodeIds.size > 0;
           const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
           const isSelected = node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);

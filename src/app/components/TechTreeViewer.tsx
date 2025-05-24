@@ -3645,13 +3645,12 @@ useEffect(() => {
               nodes={data.nodes.map(
                 (node): TechTreeMinimapNode => ({
                   id: node.id,
-                  // Ensure getXPosition returns 0 if data isn't ready
                   x: getXPosition(node.year),
                   y: node.y || 0,
                   year: node.year,
                 })
               )}
-              containerWidth={containerWidth} // Keep existing containerWidth for internal calculations
+              containerWidth={containerWidth}
               parentContainerWidth={containerDimensions.width} // Pass the viewer's width
               totalHeight={totalHeight}
               viewportWidth={containerDimensions.width}
