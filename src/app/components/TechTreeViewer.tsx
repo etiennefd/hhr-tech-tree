@@ -2293,7 +2293,7 @@ useEffect(() => {
 
   // Add debounced viewport update
   const viewportUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const VIEWPORT_UPDATE_DEBOUNCE = 100; // ms
+  const VIEWPORT_UPDATE_DEBOUNCE = 50; // ms
 
   const debouncedViewportUpdate = useCallback((newViewport: typeof visibleViewport) => {
     if (viewportUpdateTimeoutRef.current) {
