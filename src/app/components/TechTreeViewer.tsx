@@ -52,6 +52,7 @@ import {
   memoEffectiveness,
   logPerformance
 } from './utils/performance';
+import { useRouter } from 'next/navigation';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -207,12 +208,65 @@ function calculateXPosition(
 export function TechTreeViewer() {
   // Get search params
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // Add a log at the very start of the component function
+  // Client-side initialization
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Add state for drag navigation
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragStartScroll, setDragStartScroll] = useState({ left: 0, top: 0 });
+
+  // Add mouse event handlers for drag navigation
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    // Only start drag if left mouse button is pressed
+    if (e.button !== 0) return;
+    
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    setDragStartScroll({
+      left: horizontalScrollContainerRef.current?.scrollLeft || 0,
+      top: horizontalScrollContainerRef.current?.scrollTop || 0
+    });
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging || !horizontalScrollContainerRef.current) return;
+
+    const dx = dragStart.x - e.clientX;
+    const dy = dragStart.y - e.clientY;
+
+    horizontalScrollContainerRef.current.scrollTo({
+      left: dragStartScroll.left + dx,
+      top: dragStartScroll.top + dy,
+      behavior: 'auto'
+    });
+  }, [isDragging, dragStart, dragStartScroll]);
+
+  const handleMouseUp = useCallback(() => {
+    if (!isDragging) return;
+    setIsDragging(false);
+  }, [isDragging]);
+
+  // Add effect to handle mouse events
+  useEffect(() => {
+    if (isClient) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isClient, handleMouseMove, handleMouseUp]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const [showDebugOverlay, setShowDebugOverlay] = useState(true);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -903,25 +957,20 @@ export function TechTreeViewer() {
     []
   );
 
-  // Client-side initialization
   useEffect(() => {
-    setIsClient(true);
+    if (typeof window !== 'undefined') {
+      // Track when first API request completes
+      const originalFetch = window.fetch;
+      window.fetch = function(...args) {
+        const result = originalFetch.apply(this, args);
+        return result;
+      };
+      
+      return () => {
+        window.fetch = originalFetch;
+      };
+    }
   }, []);
-
-useEffect(() => {
-  if (typeof window !== 'undefined') {
-    // Track when first API request completes
-    const originalFetch = window.fetch;
-    window.fetch = function(...args) {
-      const result = originalFetch.apply(this, args);
-      return result;
-    };
-    
-    return () => {
-      window.fetch = originalFetch;
-    };
-  }
-}, []);
 
   // Add handler for clicks outside nodes
   useEffect(() => {
@@ -3126,6 +3175,7 @@ useEffect(() => {
           msOverflowStyle: "none",  // Hide scrollbar in IE/Edge
           scrollbarWidth: "none",   // Hide scrollbar in Firefox
         }}
+        onMouseDown={handleMouseDown}
         onScroll={throttle((e) => {
           const horizontalScroll = e.currentTarget.scrollLeft;
           const verticalScroll = e.currentTarget.scrollTop;
