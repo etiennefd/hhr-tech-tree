@@ -795,29 +795,15 @@ export function TechTreeViewer() {
           basicData: { ...detailData, nodes: validatedDetailNodes },
           detailData: { ...detailData, nodes: validatedDetailNodes },
         });
-        if (process.env.NODE_ENV === 'development') {
-          // console.timeEnd("TechTreeViewer:cacheManager.set (detailData)");
-          // console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Cached complete fresh detailed data.`);
-          // console.timeEnd("TechTreeViewer:processFetchedDetailData");
-        }
       } catch (error: unknown) {
         if (error instanceof Error && error.name === "AbortError") {
-          // if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - AbortError caught. Component likely unmounted.`);
           return;
         }
         // Ensure console.warn is used here as per original code
         console.warn(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Error during data loading:`, error);
         setIsLoading(false); // Ensure loading is set to false on error
-        // if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - isLoading set to false due to error.`);
         if (!cachedData) {
           setData({ nodes: [], links: [] });
-          // if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data to empty due to error and no cached data.`);
-        }
-      } finally {
-        // Add a log at the end of loadData
-        if (process.env.NODE_ENV === 'development') {
-          // console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - End`);
-          // console.timeEnd("TechTreeViewer:loadData total time");
         }
       }
     };
@@ -932,11 +918,7 @@ useEffect(() => {
     // Track when first API request completes
     const originalFetch = window.fetch;
     window.fetch = function(...args) {
-      const startTime = performance.now();
       const result = originalFetch.apply(this, args);
-      result.then(() => {
-        // console.log(`Fetch completed: ${args[0]} in ${performance.now() - startTime}ms`);
-      });
       return result;
     };
     
@@ -967,7 +949,6 @@ useEffect(() => {
       
       // Only log on actual clicks that change selection state
       if (!isInteractive) {
-        console.log('[Click] Clearing selection');
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
         setSelectedLinkKey(null);
@@ -1587,9 +1568,6 @@ useEffect(() => {
     if (isPrefetching.current || prefetchQueue.current.length === 0) return;
     
     isPrefetching.current = true;
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[PerfDebug][Prefetch] Starting to process queue of size:', prefetchQueue.current.length);
-    }
     
     try {
       const nodeId = prefetchQueue.current.shift()!;
@@ -1598,9 +1576,6 @@ useEffect(() => {
       if (prefetchedNodes.current.has(nodeId) || !nodeId) {
         isPrefetching.current = false;
         processPrefetchQueue(); // Process next item
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[PerfDebug][Prefetch] Skipped (already prefetched or invalid): ${nodeId}`);
-        }
         return;
       }
       
@@ -1609,16 +1584,7 @@ useEffect(() => {
       // Ensure nodeId is properly encoded for URLs
       const encodedNodeId = encodeURIComponent(nodeId);
       const apiUrl = `/api/inventions/${encodedNodeId}`;
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][Prefetch] Fetching node: ${nodeId} from ${apiUrl}`);
-        performanceMarks.start(`prefetch-${nodeId}`);
-      }
       const response = await fetch(apiUrl);
-      if (process.env.NODE_ENV === 'development') {
-        performanceMarks.end(`prefetch-${nodeId}`);
-        performanceMarks.log(`prefetch-${nodeId}`);
-      }
 
       if (!response.ok) {
         if (response.status !== 404) {  // Don't log 404s as they're expected
@@ -1646,9 +1612,6 @@ useEffect(() => {
       setPrefetchedNodeDetails(prevDetails => {
         const newDetails = new Map(prevDetails);
         newDetails.set(nodeId, nodeData);
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[PerfDebug][Prefetch] Stored prefetched details for ${nodeId}. Details keys: ${Object.keys(nodeData).join(', ')}`);
-        }
         return newDetails;
       });
       
@@ -1658,9 +1621,6 @@ useEffect(() => {
       isPrefetching.current = false;
       // Continue processing the queue
       processPrefetchQueue();
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[PerfDebug][Prefetch] Finished processing queue item, remaining:', prefetchQueue.current.length);
-      }
     }
   }, []);
 
@@ -1670,23 +1630,14 @@ useEffect(() => {
     if (prefetchedNodes.current.has(nodeId) || 
         prefetchQueue.current.includes(nodeId) || 
         !nodeId) {
-      if (process.env.NODE_ENV === 'development' && nodeId) { // Log only if it's a valid attempt
-        // console.log(`[PerfDebug][Prefetch] Attempt to prefetch ${nodeId} skipped (already prefetched or in queue).`);
-      }
       return;
     }
     
     // Add to queue based on priority
     if (priority) {
       prefetchQueue.current.unshift(nodeId); // Add to front of queue
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][Prefetch] Added to QUEUE (Priority): ${nodeId}. Queue size: ${prefetchQueue.current.length}`);
-      }
     } else {
       prefetchQueue.current.push(nodeId); // Add to end of queue
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][Prefetch] Added to QUEUE: ${nodeId}. Queue size: ${prefetchQueue.current.length}`);
-      }
     }
     
     // Start processing the queue if not already processing
@@ -1696,11 +1647,9 @@ useEffect(() => {
   // Function to prefetch important nodes proactively
   const prefetchImportantNodes = useCallback(() => {
     const nodesToPrefetch = new Set<string>();
-    let triggerReason = "Unknown";
     
     // 1. Prefetch the selected node with high priority
     if (selectedNodeId) {
-      triggerReason = `selectedNodeId: ${selectedNodeId}`;
       prefetchNode(selectedNodeId, true);
       
       // 2. Prefetch nodes connected to the selected node with high priority
@@ -1718,19 +1667,16 @@ useEffect(() => {
       const [source, target] = selectedLinkKey.split('-');
       nodesToPrefetch.add(source);
       nodesToPrefetch.add(target);
-      triggerReason = `selectedLinkKey: ${selectedLinkKey}`;
     }
     
     // 4. Prefetch highlighted ancestors and descendants with high priority
     // Use for...of instead of forEach to avoid TypeScript errors
     for (const nodeId of highlightedAncestors) {
       nodesToPrefetch.add(nodeId);
-      if (triggerReason === "Unknown" || triggerReason.startsWith("selectedNodeId")) triggerReason = `highlightedAncestors (for ${selectedNodeId || 'unknown'})`;
     }
     
     for (const nodeId of highlightedDescendants) {
       nodesToPrefetch.add(nodeId);
-      if (triggerReason === "Unknown" || triggerReason.startsWith("selectedNodeId")) triggerReason = `highlightedDescendants (for ${selectedNodeId || 'unknown'})`;
     }
     
     // Prefetch all the important nodes with high priority
@@ -1741,18 +1687,11 @@ useEffect(() => {
       prefetchedCount++;
     }
 
-    if (process.env.NODE_ENV === 'development' && prefetchedCount > 0) {
-      console.log(`[PerfDebug][Prefetch] prefetchImportantNodes triggered by ${triggerReason}. Added ${prefetchedCount} important nodes to queue (high priority).`);
-    }
-    
   }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
 
   // Add this effect to prefetch data for connected nodes when a node is selected
   useEffect(() => {
     // Call the prefetchImportantNodes function to proactively prefetch important nodes
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[PerfDebug][Prefetch] useEffect for selectedNodeId/highlights triggered.');
-    }
     prefetchImportantNodes();
     
     // The rest of the existing code can stay as a fallback
@@ -1795,9 +1734,6 @@ useEffect(() => {
   // Add this effect to prefetch data for nodes connected by a selected link
   useEffect(() => {
     if (selectedLinkKey === null) return;
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[PerfDebug][Prefetch] useEffect for selectedLinkKey triggered: ${selectedLinkKey}`);
-    }
     
     // Get node IDs from the selectedLinkKey
     const [source, target] = selectedLinkKey.split('-');
@@ -1813,12 +1749,7 @@ useEffect(() => {
     // Skip if no filters are applied
     const hasActiveFilters = filters.fields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
     if (!hasActiveFilters) return;
-    
-    console.log(`[Filter Prefetch] Active filters: Fields=${filters.fields.size}, Countries=${filters.countries.size}, Cities=${filters.cities.size}`);
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[PerfDebug][Prefetch] useEffect for filters triggered. Fields: ${filters.fields.size}, Countries: ${filters.countries.size}, Cities: ${filters.cities.size}`);
-    }
-    
+        
     // Find nodes that match the current filters
     const matchingNodes = data.nodes.filter(node => {
       // Check if node matches field filters
@@ -1838,27 +1769,17 @@ useEffect(() => {
       
       return matchesFields && matchesCountries && matchesCity;
     });
-    
-    console.log(`[Filter Prefetch] Found ${matchingNodes.length} matching nodes`);
-    
+
     // Limit the number of nodes to prefetch to avoid overwhelming the API
     const nodesToPrefetch = matchingNodes.slice(0, 20);
-    
-    console.log(`[Filter Prefetch] Prefetching ${nodesToPrefetch.length} nodes`);
-    
+        
     // Prefetch the matching nodes in parallel
     const prefetchPromises = nodesToPrefetch
       .filter(node => !prefetchedNodes.current.has(node.id))
       .map(node => prefetchNode(node.id));
-    
-    console.log(`[Filter Prefetch] Sending ${prefetchPromises.length} prefetch requests`);
-    
+        
     // Execute all prefetch requests
     Promise.all(prefetchPromises).then(() => {
-      console.log(`[Filter Prefetch] Successfully prefetched filtered nodes`);
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][Prefetch] Successfully prefetched ${prefetchPromises.length} nodes due to filter change.`);
-      }
     }).catch(error => {
       console.warn('Error prefetching filtered nodes:', error);
     });
@@ -1910,7 +1831,6 @@ useEffect(() => {
       if (initialNodeId) {
         const nodeToSelect = data.nodes.find(node => node.id === initialNodeId);
         if (nodeToSelect) {
-          console.log(`[Initial Load] Found initial node ID: ${initialNodeId}, selecting: ${nodeToSelect.title}`);
           // Use a slight delay to ensure the layout is stable before scrolling
           setTimeout(() => {
              handleNodeClick(nodeToSelect.title);
@@ -1942,9 +1862,6 @@ useEffect(() => {
       for (const nodeId of connectedNodeIds) {
         prefetchNode(nodeId);
         prefetchedOnHoverCount++;
-      }
-      if (process.env.NODE_ENV === 'development' && prefetchedOnHoverCount > 0) {
-        console.log(`[PerfDebug][Prefetch] Hovering ${node.title} (ID: ${node.id}). Added ${prefetchedOnHoverCount} neighbors to prefetch queue.`);
       }
     },
     [data.links, prefetchNode, isMobile]
@@ -2172,12 +2089,6 @@ useEffect(() => {
         bottom: verticalScroll + containerDimensions.height,
       };
 
-      console.log('[Debug] Initial viewport set:', {
-        viewport: newViewport,
-        containerDimensions,
-        scroll: { horizontalScroll, verticalScroll }
-      });
-
       setVisibleViewport(newViewport);
     }
   }, [containerDimensions.width, containerDimensions.height]);
@@ -2304,9 +2215,6 @@ useEffect(() => {
       setVisibleViewport(newViewport);
       // Also update the deferred viewport state for visibility calculations
       setDeferredViewport(newViewport);
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][Viewport] Debounced viewport update applied. L:${newViewport.left.toFixed(0)} T:${newViewport.top.toFixed(0)} R:${newViewport.right.toFixed(0)} B:${newViewport.bottom.toFixed(0)}`);
-      }
     }, VIEWPORT_UPDATE_DEBOUNCE);
   }, []);
 
@@ -2318,10 +2226,6 @@ useEffect(() => {
       top: scrollTop,
       bottom: scrollTop + containerDimensions.height
     };
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[PerfDebug][Viewport] Updating viewport state. Scroll L:${scrollLeft.toFixed(0)} T:${scrollTop.toFixed(0)}. New Viewport L:${newViewport.left.toFixed(0)} T:${newViewport.top.toFixed(0)} R:${newViewport.right.toFixed(0)} B:${newViewport.bottom.toFixed(0)}`);
-    }
 
     debouncedViewportUpdate(newViewport);
   }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
@@ -2389,9 +2293,6 @@ useEffect(() => {
       const { hContainer, vContainer } = findContainers();
       if (hContainer && vContainer) {
         observer.disconnect();
-        if (process.env.NODE_ENV === 'development') {
-          console.log('[PerfDebug][Viewport] MutationObserver found containers and disconnected. Attaching scroll listeners.');
-        }
         
         // Attach event listeners directly to the containers
         hContainer.addEventListener('scroll', handleScroll);
@@ -2500,8 +2401,6 @@ useEffect(() => {
     // Only trigger if selection actually changed
     if (selectedNodeId !== lastSelectionState.current.nodeId || 
         selectedLinkIndex !== lastSelectionState.current.linkIndex) {
-      const timestamp = new Date().toLocaleTimeString();
-      console.log(`[${timestamp}] Selection changed - Node: ${selectedNodeId} (was ${lastSelectionState.current.nodeId}), Link: ${selectedLinkIndex} (was ${lastSelectionState.current.linkIndex})`);
       calculationTrigger.current = 'selection';
       lastSelectionState.current = { nodeId: selectedNodeId, linkIndex: selectedLinkIndex };
       
@@ -2682,12 +2581,6 @@ useEffect(() => {
 
     if (isMobile) {
         // --- Mobile Logic ---
-        if (process.env.NODE_ENV === 'development') {
-          performanceMarks.start('visibleElements-mobile');
-          console.log('[PerfDebug] Mobile visibleElements: START');
-          console.log('[PerfDebug] Mobile baseVisibleNodeIds count:', baseVisibleNodeIds.size);
-        }
-
         finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds); // For mobile, node visibility is based on these base calculations
 
         const currentFrameDrivenConnectionIndices = new Set<number>();
@@ -2710,9 +2603,6 @@ useEffect(() => {
                 }
             });
         }
-        if (process.env.NODE_ENV === 'development') {
-          console.log('[PerfDebug] Mobile currentFrameDrivenConnectionIndices count:', currentFrameDrivenConnectionIndices.size);
-        }
 
         // Apply Stickiness for Mobile
         finalVisibleConnectionIndices = new Set<number>(currentFrameDrivenConnectionIndices);
@@ -2725,13 +2615,6 @@ useEffect(() => {
                     }
                 }
             });
-        }
-        if (process.env.NODE_ENV === 'development') {
-          performanceMarks.end('visibleElements-mobile');
-          performanceMarks.log('visibleElements-mobile');
-          console.log('[PerfDebug] Mobile finalVisibleNodeIds count:', finalVisibleNodeIds.size);
-          console.log('[PerfDebug] Mobile finalVisibleConnectionIndices count (after stickiness):', finalVisibleConnectionIndices.size);
-          console.log('[PerfDebug] Mobile visibleElements: END');
         }
     } else {
         // --- Desktop Logic ---
@@ -2790,7 +2673,7 @@ useEffect(() => {
           rate: memoEffectiveness.hits / (memoEffectiveness.hits + memoEffectiveness.misses)
         }
       });
-    }, 5000); // Log every 5 seconds
+    }, 10000); // Log every 10 seconds
 
     return () => clearInterval(logInterval);
   }, [data.nodes.length, data.links.length, cachedNodeIds.size, cachedConnectionIndices.size]);
@@ -2842,9 +2725,6 @@ useEffect(() => {
   useEffect(() => {
     // Skip if viewport hasn't significantly changed
     if (!hasViewportSignificantlyChanged(visibleViewport)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[PerfDebug][CacheMgmt] Skipping cache update - viewport change below threshold`);
-      }
       return;
     }
 
@@ -2936,33 +2816,6 @@ useEffect(() => {
         if (hasConnectionChanges) {
           setCachedConnectionIndices(new Set(connectionsToCache));
         }
-        
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[PerfDebug][CacheMgmt] Cache management effect triggered. Viewport L:${visibleViewport.left.toFixed(0)} T:${visibleViewport.top.toFixed(0)} R:${visibleViewport.right.toFixed(0)} B:${visibleViewport.bottom.toFixed(0)}. Extended L:${extendedViewport.left.toFixed(0)} T:${extendedViewport.top.toFixed(0)} R:${extendedViewport.right.toFixed(0)} B:${extendedViewport.bottom.toFixed(0)}`);
-          console.log(`[PerfDebug][CacheMgmt] Updated caches. Nodes iterated: ${data.nodes.length}, Links iterated: ${data.links.length}. Nodes actually cached: ${nodesToCache.size} (changed: ${hasNodeChanges}). Connections actually cached: ${connectionsToCache.size} (changed: ${hasConnectionChanges}).`);
-          // console.log('[Cache] Updated cache:', {
-          //   nodes: {
-          //     total: data.nodes.length,
-          //     cached: nodesToCache.size,
-          //     inViewport: nodesToCache.size,
-          //     changed: hasNodeChanges
-          //   },
-          //   connections: {
-          //     total: data.links.length,
-          //     cached: connectionsToCache.size,
-          //     inViewport: connectionsToCache.size,
-          //     changed: hasConnectionChanges
-          //   },
-          //   viewport: {
-          //     visible: visibleViewport,
-          //     extended: extendedViewport
-          //   },
-          //   context: {
-          //     selectedNode: selectedNodeId,
-          //     highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
-          //   }
-          // });
-        }
       });
     }
   }, [
@@ -3005,18 +2858,11 @@ useEffect(() => {
 
   // Skip if viewport hasn't significantly changed
   if (!hasPrefetchViewportSignificantlyChanged(visibleViewport)) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[PerfDebug][Prefetch] Skipping prefetch - viewport change below threshold`);
-    }
     return;
   }
 
   // Update the last prefetch viewport reference
   lastPrefetchViewportRef.current = { ...visibleViewport };
-
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[PerfDebug][Prefetch] Viewport prefetch effect triggered. Viewport L:${visibleViewport.left.toFixed(0)} T:${visibleViewport.top.toFixed(0)} R:${visibleViewport.right.toFixed(0)} B:${visibleViewport.bottom.toFixed(0)}`);
-  }
 
   // Get nodes that are currently in the viewport
   const visibleNodeIdsInEffect = data.nodes
@@ -3028,9 +2874,6 @@ useEffect(() => {
   for (const nodeId of visibleNodeIdsInEffect) {
     prefetchNode(nodeId);
     count++;
-  }
-  if (process.env.NODE_ENV === 'development' && count > 0) {
-    console.log(`[PerfDebug][Prefetch] Viewport effect: Attempted to queue ${count} nodes for prefetch. Current queue size: ${prefetchQueue.current.length}`);
   }
 
 }, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]); // Use visibleViewport for consistency

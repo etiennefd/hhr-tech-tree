@@ -75,12 +75,6 @@ export const throttle = <T extends (...args: any[]) => void>(func: T, limit: num
   }) as T;
 };
 
-export function logPerformance(operation: string, data: Record<string, any>) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Performance] ${operation}:`, data);
-  }
-}
-
 export const seededRandom = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

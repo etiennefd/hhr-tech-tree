@@ -18,7 +18,6 @@ export const performanceMarks = {
       const entries = performance.getEntriesByName(name);
       if (entries.length > 0) {
         const lastEntry = entries[entries.length - 1];
-        console.log(`[Performance] ${name}: ${lastEntry.duration.toFixed(2)}ms`);
       }
     }
   },
@@ -39,7 +38,6 @@ export const renderCounter = {
   increment: () => {
     if (process.env.NODE_ENV === 'development') {
       renderCounter.count++;
-      console.log(`[Performance] Render count: ${renderCounter.count}`);
     }
   },
   reset: () => {
@@ -65,9 +63,6 @@ export const memoEffectiveness = {
     if (process.env.NODE_ENV === 'development') {
       const total = memoEffectiveness.hits + memoEffectiveness.misses;
       const hitRate = total > 0 ? (memoEffectiveness.hits / total) * 100 : 0;
-      console.log(
-        `[Performance] Memo hit rate: ${hitRate.toFixed(1)}% (${memoEffectiveness.hits}/${total})`
-      );
     }
   },
   reset: () => {
