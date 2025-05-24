@@ -95,7 +95,7 @@ const TechTreeMinimap = ({
 
   const minimapViewport = {
     width: baseWidth,
-    height: baseWidth / aspectRatio,
+    height: (baseWidth / aspectRatio) / verticalScale,
     x: scrollLeft * scale,
     y: scrollTop * scale * verticalScale,
   };
