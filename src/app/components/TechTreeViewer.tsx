@@ -1268,13 +1268,6 @@ useEffect(() => {
   }
 }, []);
 
-// Add in the loadData function
-const loadData = async () => {
-  // console.time('loadDataFunction'); // Original console.time, now superseded by the one at the start of the function
-  // existing code...
-  // console.timeEnd('loadDataFunction'); // Original console.timeEnd
-};
-
   // Add handler for clicks outside nodes
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
