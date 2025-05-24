@@ -77,12 +77,10 @@ export async function GET(request: Request) {
 
     if (detail) {
       // For detailed requests, return all data
-      console.log("[API] Serving detailed data from techtree-data.json");
       return NextResponse.json(allData);
     }
 
     // For basic data, derive it from the full data
-    console.log("[API] Serving basic data derived from techtree-data.json");
     const basicNodes = allData.nodes.map((node) => ({
       id: node.id,
       title: node.title,

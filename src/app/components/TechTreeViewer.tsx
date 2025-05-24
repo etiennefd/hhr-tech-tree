@@ -31,6 +31,27 @@ import Link from 'next/link';
 import { SpatialIndex } from "@/utils/SpatialIndex";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
+import { DebugOverlay } from "@/app/components/utils/DebugOverlay";
+import IntroBox from "@/app/components/utils/IntroBox";
+import { 
+  TechTreeLink, 
+  TechTreeNodePosition, 
+  TechTreeMinimapNode, 
+  TechTreeVisibleElements 
+} from "@/types/techTreeTypes";
+import {
+  escapeRegExp,
+  cleanLocationForTooltip,
+  validateImageUrl,
+  fetchWithRetry,
+  throttle
+} from './utils/helpers';
+import {
+  performanceMarks,
+  renderCounter,
+  memoEffectiveness,
+  logPerformance
+} from './utils/performance';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -70,11 +91,6 @@ const INFO_BOX_HEIGHT = 500;
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
 
-// Helper function to escape regex special characters
-function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -100,30 +116,6 @@ const DynamicFilterBox = dynamic(
     loading: () => null,
   }
 );
-
-interface Link {
-  source: string;
-  target: string;
-  type: ConnectionType;
-  details?: string;
-}
-
-interface NodePosition {
-  y: number;
-  height: number;
-}
-
-interface MinimapNode {
-  id: string;
-  x: number;
-  y: number;
-  year: number;
-}
-
-interface VisibleElements {
-  visibleNodes: TechNode[];
-  visibleConnections: Link[];
-}
 
 function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
@@ -212,294 +204,6 @@ function calculateXPosition(
   return PADDING + spaces * YEAR_WIDTH;
 }
 
-const IntroBox = memo(() => {
-  const [counts, setCounts] = useState({ nodes: 0, links: 0 });
-  const darkerBlue = "#6B98AE";
-  const linkStyle = { color: darkerBlue, textDecoration: "underline" };
-  const numberStyle = { 
-    color: darkerBlue, 
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" 
-  };
-
-  // Get counts from cache and data
-  useEffect(() => {
-    const getCounts = async () => {
-      try {
-        // First try to get cached data
-        const cachedData = await cacheManager.get();
-        if (cachedData?.detailData) {
-          setCounts({
-            nodes: cachedData.detailData.nodes?.length || 0,
-            links: cachedData.detailData.links?.length || 0
-          });
-        } else if (cachedData?.basicData) {
-          setCounts({
-            nodes: cachedData.basicData.nodes?.length || 0,
-            links: cachedData.basicData.links?.length || 0
-          });
-        }
-
-        // Then fetch fresh data
-        const response = await fetch("/api/inventions");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const freshData = await response.json();
-        setCounts({
-          nodes: freshData.nodes?.length || 0,
-          links: freshData.links?.length || 0
-        });
-      } catch (error) {
-        console.warn("Failed to fetch counts:", error);
-        // Don't update counts if there's an error - keep using cached data
-      }
-    };
-    getCounts();
-  }, []);
-
-  return (
-    <div className="absolute left-4 top-12 p-6 w-[375px] z-50">
-      <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>
-        HISTORICAL TECH TREE
-      </h1>
-      <p className="text-sm mb-4" style={{ color: darkerBlue }}>
-        A project by{" "}
-        <a
-          href="https://www.hopefulmons.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={linkStyle}
-        >
-          Étienne Fortier-Dubois
-        </a>
-      </p>
-
-      <p className="text-sm mb-4" style={{ color: darkerBlue }}>
-        The tech tree is an interactive visualization of technological history from 3
-        million years ago to today. A work in progress, it currently contains{" "}
-        <span style={numberStyle}>{counts.nodes}</span> technologies and{" "}
-        <span style={numberStyle}>{counts.links}</span> connections
-        between them.
-      </p>
-
-      <div className="text-sm space-x-4">
-        <Link href="/about" style={linkStyle}>
-          Read more
-        </Link>
-        <Link href="https://airtable.com/appmQuONO382L03FY/paggvkJsCPLV4kREr/form" style={linkStyle} target="_blank" rel="noopener noreferrer">
-          Contribute
-        </Link>
-      </div>
-    </div>
-  );
-});
-
-IntroBox.displayName = "IntroBox";
-
-// Add this helper function near other utility functions, before the TechTreeViewer component
-const cleanLocationForTooltip = (location: string | undefined): string | undefined => {
-  if (!location) return undefined;
-  return location.replace(/ \(unspecified\)/g, '');
-};
-
-// Add this helper function near other utility functions, before the TechTreeViewer component
-const validateImageUrl = (imageUrl: string | null | undefined): string | undefined => {
-  // If imageUrl is null or undefined, return undefined
-  if (imageUrl === null || imageUrl === undefined) {
-    return undefined;
-  }
-  
-  // Check if image URL is valid
-  if (typeof imageUrl !== 'string' || 
-      imageUrl.length < 2 || 
-      (!imageUrl.startsWith('/') && 
-       !imageUrl.startsWith('http://') && 
-       !imageUrl.startsWith('https://'))) {
-    // Invalid image URL
-    console.warn(`Invalid image URL: "${imageUrl}"`);
-    return undefined; // or return a default image path
-  }
-  return imageUrl;
-};
-
-// Add retry logic helper
-const fetchWithRetry = async (url: string, retries = 3, delay = 1000) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        return response;
-      }
-      if (response.status === 429) {
-        // Rate limited - wait longer before retry
-        await new Promise(resolve => setTimeout(resolve, delay * (i + 1)));
-        continue;
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    } catch (error) {
-      if (i === retries - 1) throw error; // Last retry failed
-      await new Promise(resolve => setTimeout(resolve, delay));
-    }
-  }
-  throw new Error('Max retries reached');
-};
-
-// Add throttle utility function
-const throttle = <T extends (...args: any[]) => void>(func: T, limit: number): T => {
-  let inThrottle = false;
-  return ((...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => {
-        inThrottle = false;
-      }, limit);
-    }
-  }) as T;
-};
-
-// Add these performance tracking utilities near the top of the file, after imports
-const performanceMarks = {
-  start: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      performance.mark(`${name}-start`);
-    }
-  },
-  end: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      performance.mark(`${name}-end`);
-      performance.measure(name, `${name}-start`, `${name}-end`);
-    }
-  },
-  log: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      const entries = performance.getEntriesByName(name);
-      if (entries.length > 0) {
-        const lastEntry = entries[entries.length - 1];
-        console.log(`[Performance] ${name}: ${lastEntry.duration.toFixed(2)}ms`);
-      }
-    }
-  },
-  clear: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      performance.clearMarks(`${name}-start`);
-      performance.clearMarks(`${name}-end`);
-      performance.clearMeasures(name);
-    }
-  }
-};
-
-// Add render counter
-const renderCounter = {
-  count: 0,
-  increment: () => {
-    if (process.env.NODE_ENV === 'development') {
-      renderCounter.count++;
-      console.log(`[Performance] Render count: ${renderCounter.count}`);
-    }
-  },
-  reset: () => {
-    if (process.env.NODE_ENV === 'development') {
-      renderCounter.count = 0;
-    }
-  }
-};
-
-// Add memoization effectiveness tracker
-const memoEffectiveness = {
-  hits: 0,
-  misses: 0,
-  track: (hit: boolean) => {
-    if (process.env.NODE_ENV === 'development') {
-      if (hit) memoEffectiveness.hits++;
-      else memoEffectiveness.misses++;
-      const total = memoEffectiveness.hits + memoEffectiveness.misses;
-      const hitRate = (memoEffectiveness.hits / total) * 100;
-      // console.log(`[Performance] Memo effectiveness: ${hitRate.toFixed(1)}% (${memoEffectiveness.hits}/${total})`);
-    }
-  },
-  reset: () => {
-    if (process.env.NODE_ENV === 'development') {
-      memoEffectiveness.hits = 0;
-      memoEffectiveness.misses = 0;
-    }
-  }
-};
-
-// Add these near the top of the file, after imports
-const PERFORMANCE_LOG_INTERVAL = 1000; // Log at most once per second
-let lastPerformanceLog = 0;
-
-function logPerformance(operation: string, data: Record<string, any>) {
-  const now = performance.now();
-  if (now - lastPerformanceLog > PERFORMANCE_LOG_INTERVAL) {
-    console.log(`[TechTree] ${operation}:`, data);
-    lastPerformanceLog = now;
-  }
-}
-
-// Add this component for debugging - will show in corner of screen only in dev mode
-function DebugOverlay({
-  viewport,
-  scrollPosition,
-  totalNodes,
-  visibleNodes,
-  totalConnections,
-  visibleConnections,
-  onClose
-}: {
-  viewport: any;
-  scrollPosition: any;
-  totalNodes: number;
-  visibleNodes: number;
-  totalConnections: number;
-  visibleConnections: number;
-  onClose: () => void;
-}) {
-  // Only render in development mode
-  if (process.env.NODE_ENV !== 'development') return null;
-  
-  return (
-    <div 
-      style={{
-        position: 'fixed',
-        bottom: '70px',
-        left: '10px',
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        color: 'white',
-        padding: '8px',
-        borderRadius: '4px',
-        fontSize: '12px',
-        zIndex: 9999,
-        maxWidth: '400px',
-        fontFamily: 'monospace'
-      }}
-    >
-      <button 
-        onClick={onClose}
-        style={{
-          position: 'absolute',
-          top: '2px',
-          right: '2px',
-          background: 'transparent',
-          border: 'none',
-          color: 'white',
-          fontSize: '14px',
-          cursor: 'pointer',
-          padding: '2px 6px',
-          lineHeight: 1
-        }}
-      >
-        ×
-      </button>
-      <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
-      <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
-      <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
-      <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
-    </div>
-  );
-}
-
 export function TechTreeViewer() {
   // Get search params
   const searchParams = useSearchParams();
@@ -517,7 +221,7 @@ export function TechTreeViewer() {
     width: 0,
     height: 0,
   });
-  const [data, setData] = useState<{ nodes: TechNode[]; links: Link[] }>({
+  const [data, setData] = useState<{ nodes: TechNode[]; links: TechTreeLink[] }>({
     nodes: [],
     links: [],
   });
@@ -583,6 +287,11 @@ export function TechTreeViewer() {
   // Add this near the other state variables
   const [cachedConnectionIndices, setCachedConnectionIndices] = useState<Set<number>>(new Set());
   const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
+
+  // Add state for prefetched node details
+  const [prefetchedNodeDetails, setPrefetchedNodeDetails] = useState<Map<string, Partial<TechNode>>>(new Map());
+
+
 
   // Add scroll positions cache
   const scrollPositionsCache = useRef<Map<string, { x: number; y: number }>>(new Map());
@@ -742,7 +451,7 @@ export function TechTreeViewer() {
 
       yearGroups.forEach((nodesInYear, year) => {
         const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-        const usedPositions: NodePosition[] = []; // Will store {y, height} objects
+        const usedPositions: TechTreeNodePosition[] = []; // Will store {y, height} objects
         const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
         nodesInYear.sort((a: TechNode, b: TechNode) => {
@@ -1086,29 +795,15 @@ export function TechTreeViewer() {
           basicData: { ...detailData, nodes: validatedDetailNodes },
           detailData: { ...detailData, nodes: validatedDetailNodes },
         });
-        if (process.env.NODE_ENV === 'development') {
-          // console.timeEnd("TechTreeViewer:cacheManager.set (detailData)");
-          // console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Cached complete fresh detailed data.`);
-          // console.timeEnd("TechTreeViewer:processFetchedDetailData");
-        }
       } catch (error: unknown) {
         if (error instanceof Error && error.name === "AbortError") {
-          // if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - AbortError caught. Component likely unmounted.`);
           return;
         }
         // Ensure console.warn is used here as per original code
         console.warn(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Error during data loading:`, error);
         setIsLoading(false); // Ensure loading is set to false on error
-        // if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - isLoading set to false due to error.`);
         if (!cachedData) {
           setData({ nodes: [], links: [] });
-          // if (process.env.NODE_ENV === 'development') console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Set data to empty due to error and no cached data.`);
-        }
-      } finally {
-        // Add a log at the end of loadData
-        if (process.env.NODE_ENV === 'development') {
-          // console.log(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - End`);
-          // console.timeEnd("TechTreeViewer:loadData total time");
         }
       }
     };
@@ -1213,38 +908,6 @@ export function TechTreeViewer() {
     setIsClient(true);
   }, []);
 
-  // Auto-select Stone tool on initial load to trigger image preloading
-  const hasAutoSelectedRef = useRef(false);
-  // useEffect(() => {
-    // Only run when data has fully loaded and component is mounted
-    // if (isClient && !isLoading && data.nodes.length > 0 && !hasAutoSelectedRef.current) {
-    //   console.log("[AutoSelect] Attempting to trigger image preloading");
-    //   const stoneToolNode = data.nodes.find((node: TechNode) => 
-    //     node.title.toLowerCase() === "stone tool"
-    //   );
-      
-      // if (stoneToolNode) {
-      //   // Mark as executed so this only runs once
-      //   hasAutoSelectedRef.current = true;
-      //   console.log("[AutoSelect] Found Stone tool node, selecting", stoneToolNode.id);
-        
-      //   // Small delay before selecting to ensure component is fully rendered
-      //   setTimeout(() => {
-      //     console.log("[AutoSelect] Selecting node now");
-      //     // Select the node to trigger image loading
-      //     setSelectedNodeId(stoneToolNode.id);
-          
-      //     // Longer delay to ensure the selection is processed and images start loading
-      //     setTimeout(() => {
-      //       console.log("[AutoSelect] Deselecting node");
-      //       setSelectedNodeId(null);
-      //     }, 300); // Increased to 300ms to give more time for image loading to start
-      //   }, 100);
-      // }
-  //   }
-  // }, [isClient, isLoading, data.nodes]);
-
-// Add near the top of TechTreeViewer
 useEffect(() => {
   if (typeof window !== 'undefined') {
     console.time('totalLoadTime');
@@ -1255,11 +918,7 @@ useEffect(() => {
     // Track when first API request completes
     const originalFetch = window.fetch;
     window.fetch = function(...args) {
-      const startTime = performance.now();
       const result = originalFetch.apply(this, args);
-      result.then(() => {
-        // console.log(`Fetch completed: ${args[0]} in ${performance.now() - startTime}ms`);
-      });
       return result;
     };
     
@@ -1290,7 +949,6 @@ useEffect(() => {
       
       // Only log on actual clicks that change selection state
       if (!isInteractive) {
-        console.log('[Click] Clearing selection');
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
         setSelectedLinkKey(null);
@@ -1306,7 +964,6 @@ useEffect(() => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Update handleNodeClick function to include performance tracking
   const handleNodeClick = useCallback(
     (title: string, isFromTooltip: boolean = false) => {
       performanceMarks.start('nodeClick');
@@ -1421,10 +1078,10 @@ useEffect(() => {
   }, []);
 
   // Helper function to get a unique key for a connection
-  const getLinkKey = useCallback((link: Link) => `${link.source}-${link.target}`, []);
+  const getLinkKey = useCallback((link: TechTreeLink) => `${link.source}-${link.target}`, []);
 
   const shouldHighlightLink = useCallback(
-    (link: Link, index: number) => {
+    (link: TechTreeLink, index: number) => {
       // If a node is selected
       if (selectedNodeId) {
         return link.source === selectedNodeId || link.target === selectedNodeId;
@@ -1466,7 +1123,7 @@ useEffect(() => {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
-      const validConnectionTypes = (link: Link) =>
+      const validConnectionTypes = (link: TechTreeLink) =>
         !["Independently invented", "Concurrent development"].includes(
           link.type
         );
@@ -1825,7 +1482,7 @@ useEffect(() => {
   );
 
   const isLinkVisible = useCallback(
-    (link: Link): boolean => {
+    (link: TechTreeLink): boolean => {
       const sourceNode = data.nodes.find((n) => n.id === link.source);
       const targetNode = data.nodes.find((n) => n.id === link.target);
 
@@ -1927,8 +1584,8 @@ useEffect(() => {
       // Ensure nodeId is properly encoded for URLs
       const encodedNodeId = encodeURIComponent(nodeId);
       const apiUrl = `/api/inventions/${encodedNodeId}`;
-      
       const response = await fetch(apiUrl);
+
       if (!response.ok) {
         if (response.status !== 404) {  // Don't log 404s as they're expected
           console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
@@ -1951,13 +1608,12 @@ useEffect(() => {
         }
       }
       
-      // Update the node data in the state
-      setData((prevData) => ({
-        ...prevData,
-        nodes: prevData.nodes.map((node) =>
-          node.id === nodeId ? { ...node, ...nodeData } : node
-        ),
-      }));
+      // Update the prefetchedNodeDetails state
+      setPrefetchedNodeDetails(prevDetails => {
+        const newDetails = new Map(prevDetails);
+        newDetails.set(nodeId, nodeData);
+        return newDetails;
+      });
       
     } catch (error) {
       console.warn('Error in prefetch processing:', error);
@@ -1973,7 +1629,9 @@ useEffect(() => {
     // Skip if already prefetched, already in queue, or if nodeId is invalid
     if (prefetchedNodes.current.has(nodeId) || 
         prefetchQueue.current.includes(nodeId) || 
-        !nodeId) return;
+        !nodeId) {
+      return;
+    }
     
     // Add to queue based on priority
     if (priority) {
@@ -2022,10 +1680,13 @@ useEffect(() => {
     }
     
     // Prefetch all the important nodes with high priority
+    let prefetchedCount = 0;
     for (const nodeId of nodesToPrefetch) {
+      // prefetchNode already checks if it's already prefetched or in queue, so no need to check here
       prefetchNode(nodeId, true);
+      prefetchedCount++;
     }
-    
+
   }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
 
   // Add this effect to prefetch data for connected nodes when a node is selected
@@ -2088,9 +1749,7 @@ useEffect(() => {
     // Skip if no filters are applied
     const hasActiveFilters = filters.fields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
     if (!hasActiveFilters) return;
-    
-    console.log(`[Filter Prefetch] Active filters: Fields=${filters.fields.size}, Countries=${filters.countries.size}, Cities=${filters.cities.size}`);
-    
+        
     // Find nodes that match the current filters
     const matchingNodes = data.nodes.filter(node => {
       // Check if node matches field filters
@@ -2110,24 +1769,17 @@ useEffect(() => {
       
       return matchesFields && matchesCountries && matchesCity;
     });
-    
-    console.log(`[Filter Prefetch] Found ${matchingNodes.length} matching nodes`);
-    
+
     // Limit the number of nodes to prefetch to avoid overwhelming the API
     const nodesToPrefetch = matchingNodes.slice(0, 20);
-    
-    console.log(`[Filter Prefetch] Prefetching ${nodesToPrefetch.length} nodes`);
-    
+        
     // Prefetch the matching nodes in parallel
     const prefetchPromises = nodesToPrefetch
       .filter(node => !prefetchedNodes.current.has(node.id))
       .map(node => prefetchNode(node.id));
-    
-    console.log(`[Filter Prefetch] Sending ${prefetchPromises.length} prefetch requests`);
-    
+        
     // Execute all prefetch requests
     Promise.all(prefetchPromises).then(() => {
-      console.log(`[Filter Prefetch] Successfully prefetched filtered nodes`);
     }).catch(error => {
       console.warn('Error prefetching filtered nodes:', error);
     });
@@ -2179,7 +1831,6 @@ useEffect(() => {
       if (initialNodeId) {
         const nodeToSelect = data.nodes.find(node => node.id === initialNodeId);
         if (nodeToSelect) {
-          console.log(`[Initial Load] Found initial node ID: ${initialNodeId}, selecting: ${nodeToSelect.title}`);
           // Use a slight delay to ensure the layout is stable before scrolling
           setTimeout(() => {
              handleNodeClick(nodeToSelect.title);
@@ -2206,9 +1857,11 @@ useEffect(() => {
         // Limit the number of simultaneous prefetch requests
         .slice(0, 5);
 
+      let prefetchedOnHoverCount = 0;
       // Use for...of instead of forEach to avoid TypeScript errors
       for (const nodeId of connectedNodeIds) {
         prefetchNode(nodeId);
+        prefetchedOnHoverCount++;
       }
     },
     [data.links, prefetchNode, isMobile]
@@ -2436,12 +2089,6 @@ useEffect(() => {
         bottom: verticalScroll + containerDimensions.height,
       };
 
-      console.log('[Debug] Initial viewport set:', {
-        viewport: newViewport,
-        containerDimensions,
-        scroll: { horizontalScroll, verticalScroll }
-      });
-
       setVisibleViewport(newViewport);
     }
   }, [containerDimensions.width, containerDimensions.height]);
@@ -2478,7 +2125,7 @@ useEffect(() => {
 
   // Simplified isConnectionInViewport function
   const isConnectionInViewport = useCallback(
-    (link: Link, index: number) => {
+    (link: TechTreeLink, index: number) => {
       // Get the source and target nodes
       const sourceNode = data.nodes.find(n => n.id === link.source);
       const targetNode = data.nodes.find(n => n.id === link.target);
@@ -2555,10 +2202,45 @@ useEffect(() => {
     [deferredViewportState, data.nodes]
   );
 
+  // Add debounced viewport update
+  const viewportUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const VIEWPORT_UPDATE_DEBOUNCE = 50; // ms
+
+  const debouncedViewportUpdate = useCallback((newViewport: typeof visibleViewport) => {
+    if (viewportUpdateTimeoutRef.current) {
+      clearTimeout(viewportUpdateTimeoutRef.current);
+    }
+
+    viewportUpdateTimeoutRef.current = setTimeout(() => {
+      setVisibleViewport(newViewport);
+      // Also update the deferred viewport state for visibility calculations
+      setDeferredViewport(newViewport);
+    }, VIEWPORT_UPDATE_DEBOUNCE);
+  }, []);
+
+  // Modify the viewport update handler
+  const updateViewportState = useCallback((scrollLeft: number, scrollTop: number) => {
+    const newViewport = {
+      left: scrollLeft,
+      right: scrollLeft + containerDimensions.width,
+      top: scrollTop,
+      bottom: scrollTop + containerDimensions.height
+    };
+
+    debouncedViewportUpdate(newViewport);
+  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
+
+  // Add cleanup for the debounce timeout
+  useEffect(() => {
+    return () => {
+      if (viewportUpdateTimeoutRef.current) {
+        clearTimeout(viewportUpdateTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // Update the scroll handler to find containers at the right time
   useEffect(() => {
-    const VIEWPORT_UPDATE_THROTTLE = 100; // ms
-    
     // Store local references to avoid read-only ref issues
     let hContainer: HTMLDivElement | null = null;
     let vContainer: HTMLDivElement | null = null;
@@ -2579,10 +2261,6 @@ useEffect(() => {
                        document.querySelector('div[style*="overflow-x"]');
         if (foundH) {
           hContainer = foundH as HTMLDivElement;
-          console.log('[ContainerDebug] Found horizontal container:', {
-            class: hContainer.className,
-            id: hContainer.id
-          });
         }
       }
       
@@ -2599,70 +2277,16 @@ useEffect(() => {
       return { hContainer, vContainer };
     };
     
-    // Create throttled update function for scroll events
-    const throttledUpdate = throttle(() => {
+    // Create scroll handler with debounced viewport update
+    const handleScroll = () => {
       const { hContainer, vContainer } = findContainers();
+      if (!hContainer) return;
       
-      if (!hContainer) {
-        console.log('[ScrollDebug] Horizontal container missing, trying again shortly...');
-        setTimeout(findContainers, 100);
-        return;
-      }
+      const scrollLeft = hContainer.scrollLeft;
+      const scrollTop = vContainer ? vContainer.scrollTop : window.scrollY;
       
-      const now = performance.now();
-      if (now - lastViewportUpdate.current < VIEWPORT_UPDATE_THROTTLE) return;
-      
-      // Get horizontal scroll from the horizontal container
-      const horizontalScroll = hContainer.scrollLeft;
-      
-      // Get vertical scroll from either the vertical container OR the window if container not found
-      let verticalScroll = 0;
-      if (vContainer) {
-        verticalScroll = vContainer.scrollTop;
-      } else {
-        // Fall back to window scroll position if vertical container not found
-        verticalScroll = window.scrollY || document.documentElement.scrollTop;
-      }
-      
-      // Update the scrollPosition state for the minimap
-      setScrollPosition({
-        left: horizontalScroll,
-        top: verticalScroll
-      });
-      
-      // Calculate viewport based on scroll position and container dimensions
-      const width = containerDimensions.width || window.innerWidth;
-      const height = containerDimensions.height || window.innerHeight;
-      
-      const newViewport = {
-        left: horizontalScroll,
-        right: horizontalScroll + width,
-        top: verticalScroll,
-        bottom: verticalScroll + height,
-      };
-
-      lastViewportUpdate.current = now;
-      
-      // Update both viewport states
-      setVisibleViewport(newViewport);
-      requestAnimationFrame(() => {
-        setDeferredViewport(newViewport);
-      });
-    }, VIEWPORT_UPDATE_THROTTLE);
-    
-    // Add a global scroll listener to catch all scroll events
-    const globalScrollHandler = (e: Event) => {
-      // Log all scroll events for debugging
-      const target = e.target as HTMLElement;
-      throttledUpdate();
+      updateViewportState(scrollLeft, scrollTop);
     };
-    
-    // Try to find containers on mount
-    findContainers();
-    
-    // Attach to document/window for global scroll events
-    window.addEventListener('scroll', throttledUpdate, true);
-    document.addEventListener('scroll', globalScrollHandler, true);
     
     // Set up a MutationObserver to watch for container availability
     const observer = new MutationObserver(() => {
@@ -2671,11 +2295,11 @@ useEffect(() => {
         observer.disconnect();
         
         // Attach event listeners directly to the containers
-        hContainer.addEventListener('scroll', () => throttledUpdate());
-        vContainer.addEventListener('scroll', () => throttledUpdate());
+        hContainer.addEventListener('scroll', handleScroll);
+        vContainer.addEventListener('scroll', handleScroll);
         
         // Force an update now that we have containers
-        throttledUpdate();
+        handleScroll();
       }
     });
     
@@ -2683,23 +2307,21 @@ useEffect(() => {
     observer.observe(document.body, { childList: true, subtree: true });
     
     // Also watch for resize events
-    window.addEventListener('resize', throttledUpdate);
+    window.addEventListener('resize', handleScroll);
     
     return () => {
       // Clean up event listeners
       const { hContainer, vContainer } = findContainers();
       if (hContainer) {
-        hContainer.removeEventListener('scroll', throttledUpdate);
+        hContainer.removeEventListener('scroll', handleScroll);
       }
       if (vContainer) {
-        vContainer.removeEventListener('scroll', throttledUpdate);
+        vContainer.removeEventListener('scroll', handleScroll);
       }
-      window.removeEventListener('scroll', throttledUpdate, true);
-      document.removeEventListener('scroll', globalScrollHandler, true);
-      window.removeEventListener('resize', throttledUpdate);
+      window.removeEventListener('resize', handleScroll);
       observer.disconnect();
     };
-  }, [containerDimensions]);
+  }, [containerDimensions, updateViewportState]);
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
@@ -2728,7 +2350,7 @@ useEffect(() => {
 
   // Add this memoized function for calculating link opacity
   const getLinkOpacity = useCallback(
-    (link: Link, index: number) => {
+    (link: TechTreeLink, index: number) => {
       // If a node is selected
       if (selectedNodeId) {
         // If this is a connection between highlighted nodes
@@ -2768,7 +2390,7 @@ useEffect(() => {
   const FRAME_DURATION = 16.67; // ms (60fps)
   const calculationTrigger = useRef<'selection' | 'highlight' | 'filter' | 'viewport' | 'cache' | 'initial' | 'unknown'>('initial');
   const deferredViewport = useDeferredValue(visibleViewport);
-  const previousCalculation = useRef<VisibleElements>({
+  const previousCalculation = useRef<TechTreeVisibleElements>({
     visibleNodes: [],
     visibleConnections: []
   });
@@ -2779,8 +2401,6 @@ useEffect(() => {
     // Only trigger if selection actually changed
     if (selectedNodeId !== lastSelectionState.current.nodeId || 
         selectedLinkIndex !== lastSelectionState.current.linkIndex) {
-      const timestamp = new Date().toLocaleTimeString();
-      console.log(`[${timestamp}] Selection changed - Node: ${selectedNodeId} (was ${lastSelectionState.current.nodeId}), Link: ${selectedLinkIndex} (was ${lastSelectionState.current.linkIndex})`);
       calculationTrigger.current = 'selection';
       lastSelectionState.current = { nodeId: selectedNodeId, linkIndex: selectedLinkIndex };
       
@@ -2854,7 +2474,7 @@ useEffect(() => {
   );
 
   // Update visibleElements memo with performance logging
-  const visibleElements = useMemo<VisibleElements>(() => {
+  const visibleElements = useMemo<TechTreeVisibleElements>(() => {
     const startTime = performance.now();
     performanceMarks.start('visibleElements');
 
@@ -3053,7 +2673,7 @@ useEffect(() => {
           rate: memoEffectiveness.hits / (memoEffectiveness.hits + memoEffectiveness.misses)
         }
       });
-    }, 5000); // Log every 5 seconds
+    }, 10000); // Log every 10 seconds
 
     return () => clearInterval(logInterval);
   }, [data.nodes.length, data.links.length, cachedNodeIds.size, cachedConnectionIndices.size]);
@@ -3082,8 +2702,32 @@ useEffect(() => {
     return () => clearInterval(interval);
   }, []);
 
+  // Add viewport change detection for cache management
+  const lastViewportForCacheRef = useRef<{
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  } | null>(null);
+  const VIEWPORT_CHANGE_THRESHOLD = 100; // Only update cache if viewport changed by more than 100px
+
+  const hasViewportSignificantlyChanged = (newViewport: typeof visibleViewport): boolean => {
+    if (!lastViewportForCacheRef.current) return true;
+    
+    const old = lastViewportForCacheRef.current;
+    return Math.abs(newViewport.left - old.left) > VIEWPORT_CHANGE_THRESHOLD ||
+           Math.abs(newViewport.right - old.right) > VIEWPORT_CHANGE_THRESHOLD ||
+           Math.abs(newViewport.top - old.top) > VIEWPORT_CHANGE_THRESHOLD ||
+           Math.abs(newViewport.bottom - old.bottom) > VIEWPORT_CHANGE_THRESHOLD;
+  };
+
   // Add effect to manage the cache of nodes and connections
   useEffect(() => {
+    // Skip if viewport hasn't significantly changed
+    if (!hasViewportSignificantlyChanged(visibleViewport)) {
+      return;
+    }
+
     const CACHE_VIEWPORT_BUFFER = 2000; // Larger buffer for cache than for visibility
     const extendedViewport = {
       left: visibleViewport.left - CACHE_VIEWPORT_BUFFER,
@@ -3091,6 +2735,9 @@ useEffect(() => {
       top: visibleViewport.top - CACHE_VIEWPORT_BUFFER,
       bottom: visibleViewport.bottom + CACHE_VIEWPORT_BUFFER
     };
+    
+    // Update the last viewport reference
+    lastViewportForCacheRef.current = { ...visibleViewport };
     
     // Get nodes that should be cached
     const nodesToCache = new Set<string>();
@@ -3169,30 +2816,6 @@ useEffect(() => {
         if (hasConnectionChanges) {
           setCachedConnectionIndices(new Set(connectionsToCache));
         }
-        
-        // Log cache update
-        // console.log('[Cache] Updated cache:', {
-        //   nodes: {
-        //     total: data.nodes.length,
-        //     cached: nodesToCache.size,
-        //     inViewport: nodesToCache.size,
-        //     changed: hasNodeChanges
-        //   },
-        //   connections: {
-        //     total: data.links.length,
-        //     cached: connectionsToCache.size,
-        //     inViewport: connectionsToCache.size,
-        //     changed: hasConnectionChanges
-        //   },
-        //   viewport: {
-        //     visible: visibleViewport,
-        //     extended: extendedViewport
-        //   },
-        //   context: {
-        //     selectedNode: selectedNodeId,
-        //     highlightedNodes: highlightedAncestors.size + highlightedDescendants.size
-        //   }
-        // });
       });
     }
   }, [
@@ -3208,20 +2831,52 @@ useEffect(() => {
   ]);
 
   // Add an effect to prefetch visible nodes when the viewport changes
-  useEffect(() => {
-    if (!data.nodes.length) return;
-    
-    // Get nodes that are currently in the viewport
-    const visibleNodeIds = data.nodes
-      .filter(node => isNodeInViewport(node))
-      .map(node => node.id);
-    
-    // Prefetch these nodes (with normal priority)
-    for (const nodeId of visibleNodeIds) {
-      prefetchNode(nodeId);
-    }
-    
-  }, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]);
+
+
+  // Add prefetch viewport tracking
+const lastPrefetchViewportRef = useRef<{
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+} | null>(null);
+const PREFETCH_VIEWPORT_THRESHOLD = 200; // Only prefetch if viewport changed by more than 200px
+
+const hasPrefetchViewportSignificantlyChanged = (newViewport: typeof visibleViewport): boolean => {
+  if (!lastPrefetchViewportRef.current) return true;
+  
+  const old = lastPrefetchViewportRef.current;
+  return Math.abs(newViewport.left - old.left) > PREFETCH_VIEWPORT_THRESHOLD ||
+         Math.abs(newViewport.right - old.right) > PREFETCH_VIEWPORT_THRESHOLD ||
+         Math.abs(newViewport.top - old.top) > PREFETCH_VIEWPORT_THRESHOLD ||
+         Math.abs(newViewport.bottom - old.bottom) > PREFETCH_VIEWPORT_THRESHOLD;
+};
+
+// Modify the prefetch effect to use the same viewport as the main viewport
+useEffect(() => {
+  if (!data.nodes.length) return;
+
+  // Skip if viewport hasn't significantly changed
+  if (!hasPrefetchViewportSignificantlyChanged(visibleViewport)) {
+    return;
+  }
+
+  // Update the last prefetch viewport reference
+  lastPrefetchViewportRef.current = { ...visibleViewport };
+
+  // Get nodes that are currently in the viewport
+  const visibleNodeIdsInEffect = data.nodes
+    .filter((node: TechNode) => isNodeInViewport(node))
+    .map((node: TechNode) => node.id);
+
+  // Prefetch these nodes (with normal priority)
+  let count = 0;
+  for (const nodeId of visibleNodeIdsInEffect) {
+    prefetchNode(nodeId);
+    count++;
+  }
+
+}, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]); // Use visibleViewport for consistency
 
   // Add an effect to manage the cache of connections
   useEffect(() => {
@@ -3570,392 +3225,413 @@ useEffect(() => {
 
             {/* Nodes */}
             <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
-              {visibleNodes.map((node) => (
-                <BrutalistNode
-                  key={node.id}
-                  node={node}
-                  isSelected={node.id === selectedNodeId}
-                  isAdjacent={isAdjacentToSelected(node.id)}
-                  onClick={() => handleNodeClick(node.title)} // Use the centralized handler
-                  onMouseEnter={() => {
-                    if (node.id !== selectedNodeId) {
-                      handleNodeHover(node);
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    // On mobile, don't clear hover state on mouse leave
-                    if (!isMobile && node.id !== selectedNodeId) {
-                      setHoveredNode(null);
-                      setHoveredNodeId(null);
-                    }
-                  }}
-                  width={NODE_WIDTH}
-                  style={{
-                    position: "absolute",
-                    left: `${getXPosition(node.year)}px`,
-                    top: `${node.y}px`,
-                    opacity: getNodeOpacity(node),
-                    transition: "opacity 0.2s ease-in-out",
-                  }}
-                />
-              ))}
+              {visibleNodes.map((node) => {
+                const details = prefetchedNodeDetails.get(node.id);
+                // Create a new node object that merges base node data with any prefetched details
+                const displayNode = { ...node, ...(details || {}) };
+
+                return (
+                  <BrutalistNode
+                    key={node.id} // key should still be from the original stable node id
+                    node={displayNode} // Pass the merged node data
+                    isSelected={node.id === selectedNodeId}
+                    isAdjacent={isAdjacentToSelected(node.id)}
+                    onClick={() => handleNodeClick(node.title)} // Use the centralized handler
+                    onMouseEnter={() => {
+                      if (node.id !== selectedNodeId) {
+                        handleNodeHover(node);
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      // On mobile, don't clear hover state on mouse leave
+                      if (!isMobile && node.id !== selectedNodeId) {
+                        setHoveredNode(null);
+                        setHoveredNodeId(null);
+                      }
+                    }}
+                    width={NODE_WIDTH}
+                    style={{
+                      position: "absolute",
+                      left: `${getXPosition(node.year)}px`,
+                      top: `${node.y}px`,
+                      opacity: getNodeOpacity(node),
+                      transition: "opacity 0.2s ease-in-out",
+                    }}
+                  />
+                );
+              })}
             </div>
 
             {/* Tooltips */}
             <div className="relative" style={{ zIndex: 100 }}>
-              {visibleNodes.map(
-                (node) =>
-                  (hoveredNode?.id === node.id ||
-                    selectedNodeId === node.id) && (
-                    <div
-                      key={`tooltip-${node.id}`}
-                      className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
-                      style={{
-                        left: `${getXPosition(node.year)}px`,
-                        top: `${(node.y ?? 0) + 100}px`,
-                        transform: "translate(-50%, 0)",
-                        width: "14rem",
-                        zIndex: 100,
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                      onMouseEnter={() => {
-                        // Keep the hover state active when hovering the tooltip
-                        setHoveredNode(node);
-                        setHoveredNodeId(node.id);
-                      }}
-                      onMouseLeave={() => {
-                        // Only clear hover state if the node isn't selected
-                        if (selectedNodeId !== node.id) {
-                          setHoveredNode(null);
-                          setHoveredNodeId(null);
-                        }
-                      }}
-                    >
-                      <p className="text-xs mb-1">
-                        {/* Use original formatYear call */}
-                        <strong>Date:</strong> {formatYear(node.year)}
-                        {node.dateDetails && ` – ${node.dateDetails}`}
-                      </p>
-                      {node.inventors &&
-                        node.inventors.length > 0 &&
-                        node.inventors.filter((inv) => inv !== "unknown")
-                          .length > 0 && (
-                          <p className="text-xs mb-1">
-                            <strong>
-                              {node.type === "Discovery"
-                                ? `Discoverer${
-                                    node.inventors.length > 1 ? "s" : ""
-                                  }`
-                                : `Inventor${
-                                    node.inventors.length > 1 ? "s" : ""
-                                  }`}
-                              :
-                            </strong>{" "}
-                            {node.inventors.includes("unknown")
-                              ? "possibly " +
-                                node.inventors
-                                  .filter((inv) => inv !== "unknown")
-                                  .join(", ")
-                              : node.inventors.join(", ")}
-                          </p>
-                        )}
-                      {node.organizations &&
-                        node.organizations.length > 0 && (
-                          <p className="text-xs mb-1">
-                            <strong>
-                              {node.organizations.length > 1
-                                ? "Organizations"
-                                : "Organization"}
-                              :
-                            </strong>{" "}
-                            {node.organizations.join(", ")}
-                          </p>
-                        )}
-                      {node.formattedLocation && (
+              {visibleNodes.map((baseLoopNode) => { // Renamed to avoid conflict with 'node' below
+                  // Get the selected or hovered node ID
+                  const targetNodeId = selectedNodeId || hoveredNode?.id;
+
+                  // Only render tooltip if this node is the selected/hovered one
+                  if (targetNodeId !== baseLoopNode.id) return null;
+
+                  // Merge base node data with prefetched details for the tooltip
+                  const prefetchedDetails = prefetchedNodeDetails.get(baseLoopNode.id);
+                  // This 'node' is the one used throughout the tooltip content
+                  const node = { ...baseLoopNode, ...(prefetchedDetails || {}) }; 
+
+                  // The original condition for rendering the tooltip, using the merged 'node'
+                  // but checking against the original hoveredNode.id or selectedNodeId for triggering
+                  if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
+                    return (
+                      <div
+                        key={`tooltip-${node.id}`} // key uses merged node id, or baseLoopNode.id for stability
+                        className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
+                        style={{
+                          left: `${getXPosition(node.year)}px`,
+                          top: `${(node.y ?? 0) + 100}px`,
+                          transform: "translate(-50%, 0)",
+                          width: "14rem",
+                          zIndex: 100,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseEnter={() => {
+                          // Keep the hover state active when hovering the tooltip
+                          setHoveredNode(node);
+                          setHoveredNodeId(node.id);
+                        }}
+                        onMouseLeave={() => {
+                          // Only clear hover state if the node isn't selected
+                          if (selectedNodeId !== node.id) {
+                            setHoveredNode(null);
+                            setHoveredNodeId(null);
+                          }
+                        }}
+                      >
                         <p className="text-xs mb-1">
-                          <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
+                          {/* Use original formatYear call */}
+                          <strong>Date:</strong> {formatYear(node.year)}
+                          {node.dateDetails && ` – ${node.dateDetails}`}
                         </p>
-                      )}
-                      {node.details && (
-                        <p className="text-xs mb-2">{node.details}</p>
-                      )}
+                        {node.inventors &&
+                          node.inventors.length > 0 &&
+                          node.inventors.filter((inv) => inv !== "unknown")
+                            .length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.type === "Discovery"
+                                  ? `Discoverer${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`
+                                  : `Inventor${
+                                      node.inventors.length > 1 ? "s" : ""
+                                    }`}
+                                  :
+                                </strong>{" "}
+                                {node.inventors.includes("unknown")
+                                  ? "possibly " +
+                                    node.inventors
+                                      .filter((inv) => inv !== "unknown")
+                                      .join(", ")
+                                  : node.inventors.join(", ")}
+                            </p>
+                          )}
+                        {node.organizations &&
+                          node.organizations.length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.organizations.length > 1
+                                  ? "Organizations"
+                                  : "Organization"}
+                                :
+                              </strong>{" "}
+                              {node.organizations.join(", ")}
+                            </p>
+                          )}
+                        {node.formattedLocation && (
+                          <p className="text-xs mb-1">
+                            <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
+                          </p>
+                        )}
+                        {node.details && (
+                          <p className="text-xs mb-2">{node.details}</p>
+                        )}
 
-                      {/* Updated connections section */}
-                      {(() => {
-                        const { ancestors, children, replaced, replacedBy } = getNodeConnections(
-                          node.id
-                        );
-                        return (
-                          <>
-                            {ancestors.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Built upon:</strong>
-                                <div className="ml-2">
-                                  {ancestors.map((ancestor: TechNode, index: number) => {
-                                    // Find the link to check its type
-                                    const link = data.links.find(
-                                      l => l.source === ancestor.id && l.target === node.id
-                                    );
-                                    // Only show (possibly) for speculative connections
-                                    const suffix = link?.type === "Speculative" ? " (possibly)" : "";
-                                    
-                                    return (
+                        {/* Updated connections section */}
+                        {(() => {
+                          const { ancestors, children, replaced, replacedBy } = getNodeConnections(
+                            node.id
+                          );
+                          return (
+                            <>
+                              {ancestors.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Built upon:</strong>
+                                  <div className="ml-2">
+                                    {ancestors.map((ancestor: TechNode, index: number) => {
+                                      // Find the link to check its type
+                                      const link = data.links.find(
+                                        l => l.source === ancestor.id && l.target === node.id
+                                      );
+                                      // Only show (possibly) for speculative connections
+                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
+                                      
+                                      return (
+                                        <div
+                                          key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                          className="flex"
+                                        >
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(ancestor.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {ancestor.title}{suffix}
+                                          </button>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {children.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Led to:</strong>
+                                  <div className="ml-2">
+                                    {children.map((child: TechNode, index: number) => {
+                                      // Find the link to check its type
+                                      const link = data.links.find(
+                                        l => l.source === node.id && l.target === child.id
+                                      );
+                                      // Only show (possibly) for speculative connections
+                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
+                                      
+                                      return (
+                                        <div
+                                          key={`child-${node.id}-${child.id}-${index}`}
+                                          className="flex"
+                                        >
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(child.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {child.title}{suffix}
+                                          </button>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {replaced.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Replaced:</strong>
+                                  <div className="ml-2">
+                                    {replaced.map((replacedNode: TechNode, index: number) => (
                                       <div
-                                        key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                        key={`replaced-${node.id}-${replacedNode.id}-${index}`}
                                         className="flex"
                                       >
                                         <span className="flex-shrink-0 mr-1">•</span>
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNodeClick(ancestor.title, true);
+                                            handleNodeClick(replacedNode.title, true);
                                           }}
                                           className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                           type="button"
                                         >
-                                          {ancestor.title}{suffix}
+                                          {replacedNode.title}
                                         </button>
                                       </div>
-                                    );
-                                  })}
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
 
-                            {children.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Led to:</strong>
-                                <div className="ml-2">
-                                  {children.map((child: TechNode, index: number) => {
-                                    // Find the link to check its type
-                                    const link = data.links.find(
-                                      l => l.source === node.id && l.target === child.id
-                                    );
-                                    // Only show (possibly) for speculative connections
-                                    const suffix = link?.type === "Speculative" ? " (possibly)" : "";
-                                    
-                                    return (
+                              {replacedBy.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Replaced by:</strong>
+                                  <div className="ml-2">
+                                    {replacedBy.map((replacedByNode: TechNode, index: number) => (
                                       <div
-                                        key={`child-${node.id}-${child.id}-${index}`}
+                                        key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
                                         className="flex"
                                       >
                                         <span className="flex-shrink-0 mr-1">•</span>
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNodeClick(child.title, true);
+                                            handleNodeClick(replacedByNode.title, true);
                                           }}
                                           className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
                                           type="button"
                                         >
-                                          {child.title}{suffix}
+                                          {replacedByNode.title}
                                         </button>
                                       </div>
-                                    );
-                                  })}
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
+
+                        {/* Update the tooltip section with modified click handlers */}
+                        {(() => {
+                          const nodeId = selectedNodeId || hoveredNode?.id;
+                          if (!nodeId) return null;
+
+                          // Only show ancestry controls if not on mobile
+                          if (isMobile) {
+                            return node.wikipedia && (
+                              <div className="text-xs mt-2">
+                                <div>
+                                  View on{" "}
+                                  <a
+                                    href={node.wikipedia}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    Wikipedia
+                                  </a>
                                 </div>
                               </div>
-                            )}
+                            );
+                          }
 
-                            {replaced.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Replaced:</strong>
-                                <div className="ml-2">
-                                  {replaced.map((replacedNode: TechNode, index: number) => (
-                                    <div
-                                      key={`replaced-${node.id}-${replacedNode.id}-${index}`}
-                                      className="flex"
-                                    >
-                                      <span className="flex-shrink-0 mr-1">•</span>
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleNodeClick(replacedNode.title, true);
-                                        }}
-                                        className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                        type="button"
-                                      >
-                                        {replacedNode.title}
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                          // Check if the node has any potential ancestors or descendants without calculating them
+                          const hasAncestors = data.links.some(
+                            link => link.target === nodeId && 
+                            !["Independently invented", "Concurrent development"].includes(link.type)
+                          );
+                          const hasDescendants = data.links.some(
+                            link => link.source === nodeId && 
+                            !["Independently invented", "Concurrent development"].includes(link.type)
+                          );
 
-                            {replacedBy.length > 0 && (
-                              <div className="text-xs mb-1">
-                                <strong>Replaced by:</strong>
-                                <div className="ml-2">
-                                  {replacedBy.map((replacedByNode: TechNode, index: number) => (
-                                    <div
-                                      key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
-                                      className="flex"
-                                    >
-                                      <span className="flex-shrink-0 mr-1">•</span>
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleNodeClick(replacedByNode.title, true);
-                                        }}
-                                        className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                        type="button"
-                                      >
-                                        {replacedByNode.title}
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </>
-                        );
-                      })()}
-
-                      {/* Update the tooltip section with modified click handlers */}
-                      {(() => {
-                        const nodeId = selectedNodeId || hoveredNode?.id;
-                        if (!nodeId) return null;
-
-                        // Only show ancestry controls if not on mobile
-                        if (isMobile) {
-                          return node.wikipedia && (
+                          return (
                             <div className="text-xs mt-2">
-                              <div>
-                                View on{" "}
-                                <a
-                                  href={node.wikipedia}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="text-blue-600 hover:underline cursor-pointer"
-                                >
-                                  Wikipedia
-                                </a>
-                              </div>
+                              {/* Show ancestry controls if there are potential ancestors or descendants */}
+                              {(hasAncestors || hasDescendants) && (
+                                <div className="mb-1">
+                                  {hasAncestors && hasDescendants ? (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate ancestors only when clicked
+                                          const ancestors = getAllAncestors(nodeId);
+                                          ancestors.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedAncestors(ancestors);
+                                          setHighlightedDescendants(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        ancestors
+                                      </button>
+                                      {" / "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate descendants only when clicked
+                                          const descendants = getAllDescendants(nodeId);
+                                          descendants.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedDescendants(descendants);
+                                          setHighlightedAncestors(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        descendants
+                                      </button>
+                                    </>
+                                  ) : hasAncestors ? (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate ancestors only when clicked
+                                          const ancestors = getAllAncestors(nodeId);
+                                          ancestors.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedAncestors(ancestors);
+                                          setHighlightedDescendants(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        ancestors
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      Highlight all{" "}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          // Calculate descendants only when clicked
+                                          const descendants = getAllDescendants(nodeId);
+                                          descendants.delete(nodeId);
+                                          // First ensure the node is selected
+                                          if (!selectedNodeId) {
+                                            setSelectedNodeId(nodeId);
+                                          }
+                                          setHighlightedDescendants(descendants);
+                                          setHighlightedAncestors(new Set());
+                                        }}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                      >
+                                        descendants
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              )}
+
+                              {node.wikipedia && (
+                                <div>
+                                  View on{" "}
+                                  <a
+                                    href={node.wikipedia}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                  >
+                                    Wikipedia
+                                  </a>
+                                </div>
+                              )}
                             </div>
                           );
-                        }
-
-                        // Check if the node has any potential ancestors or descendants without calculating them
-                        const hasAncestors = data.links.some(
-                          link => link.target === nodeId && 
-                          !["Independently invented", "Concurrent development"].includes(link.type)
-                        );
-                        const hasDescendants = data.links.some(
-                          link => link.source === nodeId && 
-                          !["Independently invented", "Concurrent development"].includes(link.type)
-                        );
-
-                        return (
-                          <div className="text-xs mt-2">
-                            {/* Show ancestry controls if there are potential ancestors or descendants */}
-                            {(hasAncestors || hasDescendants) && (
-                              <div className="mb-1">
-                                {hasAncestors && hasDescendants ? (
-                                  <>
-                                    Highlight all{" "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate ancestors only when clicked
-                                        const ancestors = getAllAncestors(nodeId);
-                                        ancestors.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedAncestors(ancestors);
-                                        setHighlightedDescendants(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      ancestors
-                                    </button>
-                                    {" / "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate descendants only when clicked
-                                        const descendants = getAllDescendants(nodeId);
-                                        descendants.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedDescendants(descendants);
-                                        setHighlightedAncestors(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      descendants
-                                    </button>
-                                  </>
-                                ) : hasAncestors ? (
-                                  <>
-                                    Highlight all{" "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate ancestors only when clicked
-                                        const ancestors = getAllAncestors(nodeId);
-                                        ancestors.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedAncestors(ancestors);
-                                        setHighlightedDescendants(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      ancestors
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    Highlight all{" "}
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Calculate descendants only when clicked
-                                        const descendants = getAllDescendants(nodeId);
-                                        descendants.delete(nodeId);
-                                        // First ensure the node is selected
-                                        if (!selectedNodeId) {
-                                          setSelectedNodeId(nodeId);
-                                        }
-                                        setHighlightedDescendants(descendants);
-                                        setHighlightedAncestors(new Set());
-                                      }}
-                                      className="text-blue-600 hover:underline cursor-pointer"
-                                    >
-                                      descendants
-                                    </button>
-                                  </>
-                                )}
-                              </div>
-                            )}
-
-                            {node.wikipedia && (
-                              <div>
-                                View on{" "}
-                                <a
-                                  href={node.wikipedia}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="text-blue-600 hover:underline cursor-pointer"
-                                >
-                                  Wikipedia
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })()}
-                    </div>
-                  )
+                        })()}
+                      </div>
+                    );
+                  }
+                  return null; // Ensure a value is returned if the condition isn't met
+                }
               )}
             </div>
           </div>
@@ -3972,7 +3648,7 @@ useEffect(() => {
           >
             <TechTreeMinimap
               nodes={data.nodes.map(
-                (node): MinimapNode => ({
+                (node): TechTreeMinimapNode => ({
                   id: node.id,
                   // Ensure getXPosition returns 0 if data isn't ready
                   x: getXPosition(node.year),
@@ -4000,7 +3676,7 @@ useEffect(() => {
         )}
       </div>
       {/* Only render debug overlay in development mode */}
-      {/* {process.env.NODE_ENV === 'development' && showDebugOverlay && (
+      {process.env.NODE_ENV === 'development' && showDebugOverlay && (
         <DebugOverlay
           viewport={visibleViewport}
           scrollPosition={scrollPosition}
@@ -4010,7 +3686,7 @@ useEffect(() => {
           visibleConnections={visibleConnections.length}
           onClose={() => setShowDebugOverlay(false)}
         />
-      )} */}
+      )}
       {/* Jump to Nearest Tech Button */}
       {!isLoading && visibleNodes.length === 0 && data.nodes.length > 0 && (
         <button
