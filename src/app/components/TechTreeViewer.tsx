@@ -2857,8 +2857,35 @@ useEffect(() => {
     return () => clearInterval(interval);
   }, []);
 
+  // Add viewport change detection for cache management
+  const lastViewportForCacheRef = useRef<{
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  } | null>(null);
+  const VIEWPORT_CHANGE_THRESHOLD = 100; // Only update cache if viewport changed by more than 100px
+
+  const hasViewportSignificantlyChanged = (newViewport: typeof visibleViewport): boolean => {
+    if (!lastViewportForCacheRef.current) return true;
+    
+    const old = lastViewportForCacheRef.current;
+    return Math.abs(newViewport.left - old.left) > VIEWPORT_CHANGE_THRESHOLD ||
+           Math.abs(newViewport.right - old.right) > VIEWPORT_CHANGE_THRESHOLD ||
+           Math.abs(newViewport.top - old.top) > VIEWPORT_CHANGE_THRESHOLD ||
+           Math.abs(newViewport.bottom - old.bottom) > VIEWPORT_CHANGE_THRESHOLD;
+  };
+
   // Add effect to manage the cache of nodes and connections
   useEffect(() => {
+    // Skip if viewport hasn't significantly changed
+    if (!hasViewportSignificantlyChanged(visibleViewport)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[PerfDebug][CacheMgmt] Skipping cache update - viewport change below threshold`);
+      }
+      return;
+    }
+
     const CACHE_VIEWPORT_BUFFER = 2000; // Larger buffer for cache than for visibility
     const extendedViewport = {
       left: visibleViewport.left - CACHE_VIEWPORT_BUFFER,
@@ -2866,6 +2893,9 @@ useEffect(() => {
       top: visibleViewport.top - CACHE_VIEWPORT_BUFFER,
       bottom: visibleViewport.bottom + CACHE_VIEWPORT_BUFFER
     };
+    
+    // Update the last viewport reference
+    lastViewportForCacheRef.current = { ...visibleViewport };
     
     // Get nodes that should be cached
     const nodesToCache = new Set<string>();
