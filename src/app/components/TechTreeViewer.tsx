@@ -910,11 +910,6 @@ export function TechTreeViewer() {
 
 useEffect(() => {
   if (typeof window !== 'undefined') {
-    console.time('totalLoadTime');
-    
-    // Track when the first data fetch starts
-    console.time('dataFetchTime');
-    
     // Track when first API request completes
     const originalFetch = window.fetch;
     window.fetch = function(...args) {
