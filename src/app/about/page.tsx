@@ -126,7 +126,7 @@ export default function AboutPage() {
                   2.1. Definition of technology
                 </h3>
                 <p className="mb-4">
-                  A technology is, in the ideal case, a piece of knowledge (an idea) that is created intentionally by humans for a practical purpose (not for its own sake) and is implemented in some kind of physical substrate.
+                  In the ideal case, a technology is <strong>a piece of knowledge (an idea) that is created intentionally by humans for a practical purpose (not for its own sake) and is implemented in some kind of physical substrate</strong>.
                 </p>
                 <ul className="list-disc pl-6 space-y-3">
                   <li>
@@ -140,10 +140,10 @@ export default function AboutPage() {
                     biological traits (not human and not intentional), and philosophical, theological, or political ideas (not physical and often not practical).
                   </li>
                   <li>
-                    An illustrative example comes from music. Musical instruments are technologies, since they&apos;re constructed for the practical purpose of making music; but music itself, including specific music pieces, genres, and techniques for playing or composing, is done for its own sake, so is not considered a technology. For more discussion of this, see my article <a href="https://www.hopefulmons.com/p/what-counts-as-a-technology" target="_blank" rel="noopener noreferrer" style={linkStyle}>What Counts as a Technology?</a>
+                    An illustrative example comes from music. Musical instruments are technologies, since they&apos;re constructed for the practical purpose of making music; but the components of music itself, such as specific works, genres, recordings, and techniques for playing or composing, are done for their own sake, so are not considered technologies. For further discussion, see my article <a href="https://www.hopefulmons.com/p/what-counts-as-a-technology" target="_blank" rel="noopener noreferrer" style={linkStyle}>What Counts as a Technology?</a>
                   </li>
                   <li>
-                    Scientific and mathematical discoveries are an edge case. Some particularly important ones are included in the tree when they help understand the history, but unlike for more typical technologies, I have no intention of comprehensiveness for them.
+                    Scientific and mathematical discoveries are an edge case. Some particularly important ones are included in the tree when they are linked to technologies and as a result help understand the overall history. There is no intention of comprehensiveness for discoveries, however, since that would make the project intractable.
                   </li>
                 </ul>
               </div>
