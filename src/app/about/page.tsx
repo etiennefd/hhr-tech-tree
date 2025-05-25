@@ -65,7 +65,7 @@ export default function AboutPage() {
           </div>
 
           <section id="introduction">
-            <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
+            <h2 className="text-2xl font-bold mb-6 font-mono" style={{ color: darkerBlue }}>
               1. Introduction
             </h2>
 
@@ -99,7 +99,7 @@ export default function AboutPage() {
           </section>
 
           <section id="assumptions" className="mt-12">
-            <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
+            <h2 className="text-2xl font-bold mb-6 font-mono" style={{ color: darkerBlue }}>
               2. Assumptions and design choices
             </h2>
 
@@ -121,7 +121,7 @@ export default function AboutPage() {
 
             <div className="space-y-8 mt-6">
               <div>
-                <h3 id="definition" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="definition" className="text-xl font-bold mb-4 font-mono" style={{ color: darkerBlue }}>
                   2.1. Definition of technology
                 </h3>
                 <p className="mb-4">
@@ -148,7 +148,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <h3 id="discretization" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="discretization" className="text-xl font-bold mb-4 font-mono" style={{ color: darkerBlue }}>
                   2.2. Discretization
                 </h3>
                 <p className="mb-4">
@@ -168,7 +168,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <h3 id="dates" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="dates" className="text-xl font-bold mb-4 font-mono" style={{ color: darkerBlue }}>
                   2.3. Dates
                 </h3>
                 <p className="mb-4">
@@ -189,7 +189,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <h3 id="connections" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="connections" className="text-xl font-bold mb-4 font-mono" style={{ color: darkerBlue }}>
                   2.4. Connections
                 </h3>
                 <p className="mb-4">
@@ -210,11 +210,11 @@ export default function AboutPage() {
           </section>
 
           <section id="contributing" className="mt-12">
-            <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
+            <h2 className="text-2xl font-bold mb-6 font-mono" style={{ color: darkerBlue }}>
               3. Contributing
             </h2>
 
-            <h3 id="suggesting" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+            <h3 id="suggesting" className="text-xl font-bold mb-4 font-mono" style={{ color: darkerBlue }}>
               3.1. Suggesting content
             </h3>
 
@@ -232,7 +232,7 @@ export default function AboutPage() {
               <li><a href="https://airtable.com/appmQuONO382L03FY/pagNcBGN2JzHckpTP/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Report a problem</a></li>
             </ul>
 
-            <h3 id="financial" className="text-xl font-bold mb-4 mt-8" style={{ color: darkerBlue }}>
+            <h3 id="financial" className="text-xl font-bold mb-4 mt-8 font-mono" style={{ color: darkerBlue }}>
               3.2. Financial support
             </h3>
 
@@ -242,7 +242,7 @@ export default function AboutPage() {
           </section>
 
           <section id="resources" className="mt-12">
-            <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
+            <h2 className="text-2xl font-bold mb-6 font-mono" style={{ color: darkerBlue }}>
               4. Additional resources
             </h2>
 
