@@ -220,11 +220,23 @@ export function TechTreeViewer() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragStartScroll, setDragStartScroll] = useState({ left: 0, top: 0 });
+  const dragStartedFromNode = useRef(false);
+  const wasDragging = useRef(false);
 
   // Add mouse event handlers for drag navigation
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     // Only start drag if left mouse button is pressed
     if (e.button !== 0) return;
+    
+    // Check if the click started on a node
+    const target = e.target as HTMLElement;
+    dragStartedFromNode.current = target.closest('[data-node-id]') !== null;
+    wasDragging.current = false;
+    
+    // Prevent text selection and node interaction
+    e.preventDefault();
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'grabbing';
     
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
@@ -237,15 +249,23 @@ export function TechTreeViewer() {
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging || !horizontalScrollContainerRef.current) return;
 
+    // Mark that we've started dragging
+    wasDragging.current = true;
+
+    // Prevent any interactions while dragging
+    e.preventDefault();
+    
     const dx = dragStart.x - e.clientX;
     const dy = dragStart.y - e.clientY;
 
-    // Direct scroll update without any animation
     horizontalScrollContainerRef.current.scrollLeft = dragStartScroll.left + dx;
     horizontalScrollContainerRef.current.scrollTop = dragStartScroll.top + dy;
   }, [isDragging, dragStart, dragStartScroll]);
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = useCallback((e: MouseEvent) => {
+    // Restore normal selection and cursor
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
     setIsDragging(false);
   }, []);
 
@@ -255,9 +275,24 @@ export function TechTreeViewer() {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       
+      // Add click handler to prevent node selection after drag
+      const handleClick = (e: MouseEvent) => {
+        if (wasDragging.current) {
+          e.preventDefault();
+          e.stopPropagation();
+          wasDragging.current = false;
+        }
+      };
+      
+      document.addEventListener('click', handleClick, true);
+      
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('click', handleClick, true);
+        // Clean up styles in case component unmounts during drag
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
       };
     }
   }, [isClient, handleMouseMove, handleMouseUp]);
