@@ -36,7 +36,7 @@ export default function AboutPage() {
           </Link>
         </div>
 
-        <h1 className="text-4xl font-bold mb-8" style={{ color: darkerBlue }}>
+        <h1 className="text-4xl font-bold mb-8 uppercase" style={{ color: darkerBlue }}>
           About the Historical Tech Tree
         </h1>
 
