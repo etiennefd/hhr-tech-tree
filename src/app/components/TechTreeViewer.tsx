@@ -52,6 +52,7 @@ import {
   memoEffectiveness,
   logPerformance
 } from './utils/performance';
+import { useRouter } from 'next/navigation';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -207,12 +208,97 @@ function calculateXPosition(
 export function TechTreeViewer() {
   // Get search params
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // Add a log at the very start of the component function
+  // Client-side initialization
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Add state for drag navigation
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragStartScroll, setDragStartScroll] = useState({ left: 0, top: 0 });
+  const dragStartedFromNode = useRef(false);
+  const wasDragging = useRef(false);
+
+  // Add mouse event handlers for drag navigation
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    // Only start drag if left mouse button is pressed
+    if (e.button !== 0) return;
+    
+    // Check if the click started on a node
+    const target = e.target as HTMLElement;
+    dragStartedFromNode.current = target.closest('[data-node-id]') !== null;
+    wasDragging.current = false;
+    
+    // Prevent text selection and node interaction
+    e.preventDefault();
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'grabbing';
+    
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    setDragStartScroll({
+      left: horizontalScrollContainerRef.current?.scrollLeft || 0,
+      top: horizontalScrollContainerRef.current?.scrollTop || 0
+    });
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging || !horizontalScrollContainerRef.current) return;
+
+    // Mark that we've started dragging
+    wasDragging.current = true;
+
+    // Prevent any interactions while dragging
+    e.preventDefault();
+    
+    const dx = dragStart.x - e.clientX;
+    const dy = dragStart.y - e.clientY;
+
+    horizontalScrollContainerRef.current.scrollLeft = dragStartScroll.left + dx;
+    horizontalScrollContainerRef.current.scrollTop = dragStartScroll.top + dy;
+  }, [isDragging, dragStart, dragStartScroll]);
+
+  const handleMouseUp = useCallback((e: MouseEvent) => {
+    // Restore normal selection and cursor
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+    setIsDragging(false);
+  }, []);
+
+  // Add effect to handle mouse events
+  useEffect(() => {
+    if (isClient) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      // Add click handler to prevent node selection after drag
+      const handleClick = (e: MouseEvent) => {
+        if (wasDragging.current) {
+          e.preventDefault();
+          e.stopPropagation();
+          wasDragging.current = false;
+        }
+      };
+      
+      document.addEventListener('click', handleClick, true);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('click', handleClick, true);
+        // Clean up styles in case component unmounts during drag
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+      };
+    }
+  }, [isClient, handleMouseMove, handleMouseUp]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isError] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const [showDebugOverlay, setShowDebugOverlay] = useState(true);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -903,25 +989,20 @@ export function TechTreeViewer() {
     []
   );
 
-  // Client-side initialization
   useEffect(() => {
-    setIsClient(true);
+    if (typeof window !== 'undefined') {
+      // Track when first API request completes
+      const originalFetch = window.fetch;
+      window.fetch = function(...args) {
+        const result = originalFetch.apply(this, args);
+        return result;
+      };
+      
+      return () => {
+        window.fetch = originalFetch;
+      };
+    }
   }, []);
-
-useEffect(() => {
-  if (typeof window !== 'undefined') {
-    // Track when first API request completes
-    const originalFetch = window.fetch;
-    window.fetch = function(...args) {
-      const result = originalFetch.apply(this, args);
-      return result;
-    };
-    
-    return () => {
-      window.fetch = originalFetch;
-    };
-  }
-}, []);
 
   // Add handler for clicks outside nodes
   useEffect(() => {
@@ -3126,6 +3207,7 @@ useEffect(() => {
           msOverflowStyle: "none",  // Hide scrollbar in IE/Edge
           scrollbarWidth: "none",   // Hide scrollbar in Firefox
         }}
+        onMouseDown={handleMouseDown}
         onScroll={throttle((e) => {
           const horizontalScroll = e.currentTarget.scrollLeft;
           const verticalScroll = e.currentTarget.scrollTop;
