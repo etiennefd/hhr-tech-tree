@@ -1,4 +1,18 @@
 import Link from 'next/link'
+import { execSync } from 'child_process'
+
+function getLastUpdatedDate() {
+  try {
+    const date = execSync(
+      'git log -1 --format="%ad" --date=format:"%B %d, %Y" src/app/about/page.tsx',
+      { encoding: 'utf-8' }
+    ).trim()
+    return date
+  } catch (error) {
+    console.error('Error getting last updated date:', error)
+    return 'Unknown date'
+  }
+}
 
 export default function AboutPage() {
   const darkerBlue = "#6B98AE";
@@ -10,6 +24,8 @@ export default function AboutPage() {
       opacity: 0.8
     }
   };
+
+  const lastUpdated = getLastUpdatedDate()
 
   return (
     <div className="min-h-screen bg-yellow-50">
@@ -180,7 +196,7 @@ export default function AboutPage() {
             </h3>
 
             <p>
-              At the time of publicly releasing this project on May 26th, 2025, the tree contained about 1,750 technologies and 2,000 connections 
+              At the time of publicly releasing this project on May 26, 2025, the tree contained about 1,750 technologies and 2,000 connections 
               between them. They were all compiled manually by myself. Going forward, the tree is open to contributions from 
               visitors, with the goal of coming up with the most complete possible diagram of technology, though whether it 
               can one day be &quot;fully&quot; complete is an open question.
@@ -214,10 +230,13 @@ export default function AboutPage() {
             </ul>
           </section>
 
-          <div className="mt-12 pt-6 border-t border-gray-300">
+          <div className="mt-12 pt-6 border-t border-gray-300 flex justify-between items-center">
             <Link href="/" className="inline-block" style={linkStyle}>
               ← Back to the tech tree
             </Link>
+            <p className="text-sm text-gray-500 italic">
+              Last updated: {lastUpdated}
+            </p>
           </div>
         </div>
       </div>
