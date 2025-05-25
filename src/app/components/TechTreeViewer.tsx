@@ -3198,14 +3198,16 @@ useEffect(() => {
 
       <div
         ref={horizontalScrollContainerRef}
-        className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50 [&::-webkit-scrollbar]:hidden"
+        className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50"
         style={{ 
           overscrollBehavior: "none",
           touchAction: "pan-x pan-y pinch-zoom",
           WebkitOverflowScrolling: "touch",
           WebkitTapHighlightColor: "transparent",
-          msOverflowStyle: "none",  // Hide scrollbar in IE/Edge
-          scrollbarWidth: "none",   // Hide scrollbar in Firefox
+          scrollbarWidth: "thin",   // Show thin scrollbar in Firefox
+          scrollbarColor: "#91B4C5 #fefce8", // Thumb and track colors
+          position: 'relative',
+          zIndex: 20 // Higher than minimap's z-index of 10
         }}
         onMouseDown={handleMouseDown}
         onScroll={throttle((e) => {
