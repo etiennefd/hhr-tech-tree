@@ -116,7 +116,7 @@ export default function AboutPage() {
                     biological traits (not human and not intentional), and philosophical, theological, or political ideas (not physical and often not practical).
                   </li>
                   <li>
-                    An illustrative example comes from music. Musical instruments are technologies, since they're constructed for the practical purpose of making music; but music itself, including specific music pieces, genres, and techniques for playing or composing, is done for its own sake, so is not considered a technology. For more discussion of this, see my article <a href="https://www.hopefulmons.com/p/what-counts-as-a-technology" target="_blank" rel="noopener noreferrer" style={linkStyle}>What Counts as a Technology?</a>
+                    An illustrative example comes from music. Musical instruments are technologies, since they&apos;re constructed for the practical purpose of making music; but music itself, including specific music pieces, genres, and techniques for playing or composing, is done for its own sake, so is not considered a technology. For more discussion of this, see my article <a href="https://www.hopefulmons.com/p/what-counts-as-a-technology" target="_blank" rel="noopener noreferrer" style={linkStyle}>What Counts as a Technology?</a>
                   </li>
                   <li>
                     Scientific and mathematical discoveries are an edge case. Some particularly important ones are included in the tree when they help understand the history, but unlike for more typical technologies, I have no intention of comprehensiveness for them.
