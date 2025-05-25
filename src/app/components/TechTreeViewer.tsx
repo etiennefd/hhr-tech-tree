@@ -240,17 +240,14 @@ export function TechTreeViewer() {
     const dx = dragStart.x - e.clientX;
     const dy = dragStart.y - e.clientY;
 
-    horizontalScrollContainerRef.current.scrollTo({
-      left: dragStartScroll.left + dx,
-      top: dragStartScroll.top + dy,
-      behavior: 'auto'
-    });
+    // Direct scroll update without any animation
+    horizontalScrollContainerRef.current.scrollLeft = dragStartScroll.left + dx;
+    horizontalScrollContainerRef.current.scrollTop = dragStartScroll.top + dy;
   }, [isDragging, dragStart, dragStartScroll]);
 
   const handleMouseUp = useCallback(() => {
-    if (!isDragging) return;
     setIsDragging(false);
-  }, [isDragging]);
+  }, []);
 
   // Add effect to handle mouse events
   useEffect(() => {
