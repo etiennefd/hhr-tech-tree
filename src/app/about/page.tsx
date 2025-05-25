@@ -41,7 +41,30 @@ export default function AboutPage() {
         </h1>
 
         <div className="prose prose-lg max-w-none text-gray-700 space-y-8">
-          <section>
+          <div className="bg-yellow-100/50 p-6 rounded-lg mb-8">
+            <ul className="space-y-2 font-mono">
+              <li><a href="#introduction" style={linkStyle}>1. Introduction</a></li>
+              <li>
+                <a href="#assumptions" style={linkStyle}>2. Assumptions and design choices</a>
+                <ul className="ml-6 mt-2 space-y-1">
+                  <li><a href="#definition" style={linkStyle}>2.1. Definition of technology</a></li>
+                  <li><a href="#discretization" style={linkStyle}>2.2. Discretization</a></li>
+                  <li><a href="#dates" style={linkStyle}>2.3. Dates</a></li>
+                  <li><a href="#connections" style={linkStyle}>2.4. Connections</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="#contributing" style={linkStyle}>3. Contributing</a>
+                <ul className="ml-6 mt-2 space-y-1">
+                  <li><a href="#suggesting" style={linkStyle}>3.1. Suggesting content</a></li>
+                  <li><a href="#financial" style={linkStyle}>3.2. Financial support</a></li>
+                </ul>
+              </li>
+              <li><a href="#resources" style={linkStyle}>4. Additional resources</a></li>
+            </ul>
+          </div>
+
+          <section id="introduction">
             <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
               1. Introduction
             </h2>
@@ -75,7 +98,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          <section className="mt-12">
+          <section id="assumptions" className="mt-12">
             <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
               2. Assumptions and design choices
             </h2>
@@ -98,7 +121,7 @@ export default function AboutPage() {
 
             <div className="space-y-8 mt-6">
               <div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="definition" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
                   2.1. Definition of technology
                 </h3>
                 <p className="mb-4">
@@ -125,7 +148,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="discretization" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
                   2.2. Discretization
                 </h3>
                 <p className="mb-4">
@@ -145,7 +168,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="dates" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
                   2.3. Dates
                 </h3>
                 <p className="mb-4">
@@ -166,7 +189,7 @@ export default function AboutPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+                <h3 id="connections" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
                   2.4. Connections
                 </h3>
                 <p className="mb-4">
@@ -186,12 +209,12 @@ export default function AboutPage() {
             </div>
           </section>
 
-          <section className="mt-12">
+          <section id="contributing" className="mt-12">
             <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
               3. Contributing
             </h2>
 
-            <h3 className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
+            <h3 id="suggesting" className="text-xl font-bold mb-4" style={{ color: darkerBlue }}>
               3.1. Suggesting content
             </h3>
 
@@ -209,7 +232,7 @@ export default function AboutPage() {
               <li><a href="https://airtable.com/appmQuONO382L03FY/pagNcBGN2JzHckpTP/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Report a problem</a></li>
             </ul>
 
-            <h3 className="text-xl font-bold mb-4 mt-8" style={{ color: darkerBlue }}>
+            <h3 id="financial" className="text-xl font-bold mb-4 mt-8" style={{ color: darkerBlue }}>
               3.2. Financial support
             </h3>
 
@@ -218,7 +241,7 @@ export default function AboutPage() {
             </p>
           </section>
 
-          <section className="mt-12">
+          <section id="resources" className="mt-12">
             <h2 className="text-2xl font-bold mb-6" style={{ color: darkerBlue }}>
               4. Additional resources
             </h2>
