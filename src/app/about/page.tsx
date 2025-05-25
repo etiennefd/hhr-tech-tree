@@ -60,7 +60,8 @@ export default function AboutPage() {
                   <li><a href="#financial" style={linkStyle}>3.2. Financial support</a></li>
                 </ul>
               </li>
-              <li><a href="#resources" style={linkStyle}>4. Additional resources</a></li>
+              <li><a href="#image-credits" style={linkStyle}>4. Image credits</a></li>
+              <li><a href="#see-also" style={linkStyle}>5. See also</a></li>
             </ul>
           </div>
 
@@ -241,13 +242,28 @@ export default function AboutPage() {
             </p>
           </section>
 
-          <section id="resources" className="mt-12">
+          <section id="image-credits" className="mt-12">
             <h2 className="text-2xl font-bold mb-6 font-mono" style={{ color: darkerBlue }}>
-              4. Additional resources
+              4. Image credits
+            </h2>
+
+            <div className="space-y-4">
+              <p>
+                The vast majority of the images used to illustrate technologies are from Wikimedia Commons, and are in the public domain or under Creative Commons licenses. 
+              </p>
+
+              <p>
+                You can view the credits and links to the original images on the <Link href="/image-credits" style={linkStyle}>Image credits</Link> page.
+              </p>
+            </div>
+          </section>
+
+          <section id="see-also" className="mt-12">
+            <h2 className="text-2xl font-bold mb-6 font-mono" style={{ color: darkerBlue }}>
+              5. See also
             </h2>
 
             <ul className="list-disc pl-6 space-y-2">
-              <li><Link href="/image-credits" style={linkStyle}>Image credits</Link></li>
               <li>Original announcement (soon)</li>
               <li>Article in Asterisk Magazine (soon)</li>
             </ul>
