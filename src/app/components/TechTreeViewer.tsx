@@ -323,6 +323,9 @@ export function TechTreeViewer() {
   const [highlightedDescendants, setHighlightedDescendants] = useState<Set<string>>(new Set());
   const currentNodesRef = useRef<TechNode[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [isIPad, setIsIPad] = useState(false);
+  // Add state for connection visibility mode
+  const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   // Initialize spatial index with smaller cell size
@@ -2109,22 +2112,18 @@ export function TechTreeViewer() {
   // Add this effect to detect mobile devices
   useEffect(() => {
     const checkMobile = () => {
-      const userAgent = navigator.userAgent;
-      setIsMobile(/iPhone|iPad|iPod|Android/i.test(userAgent));
-      // Add iPad detection with more precise checks
-      const isIPad = /iPad/i.test(userAgent) || 
-                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ||
-                    (window.innerWidth >= 768 && window.innerWidth <= 1024 && /Macintosh/i.test(userAgent));
-      setIsIPad(isIPad);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isMobileDevice = width <= SMALL_SCREEN_WIDTH_THRESHOLD;
+      const isIPadDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      setIsMobile(isMobileDevice);
+      setIsIPad(isIPadDevice);
     };
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Add state for iPad detection
-  const [isIPad, setIsIPad] = useState(false);
 
   // Remove these unused handlers
   const handleEscapeKey = useCallback((e: KeyboardEvent) => {
@@ -2542,6 +2541,7 @@ export function TechTreeViewer() {
     highlightedDescendants: string;
     filteredNodeIds: string;
     viewport: { left: number; right: number; top: number; bottom: number };
+    showAllConnections: boolean; // Add to frame data for memo comparison
   } | null>(null);
 
   // Add this helper function to get connections for a node
@@ -2614,7 +2614,8 @@ export function TechTreeViewer() {
       highlightedAncestors: stableHighlightedAncestorsString,
       highlightedDescendants: stableHighlightedDescendantsString,
       filteredNodeIds: stableFilteredNodeIdsString,
-      viewport: stableViewport
+      viewport: stableViewport,
+      showAllConnections // Add to frame data for memo comparison
     };
 
     if (lastFrameData.current &&
@@ -2627,6 +2628,7 @@ export function TechTreeViewer() {
         currentFrameData.viewport.right === lastFrameData.current.viewport.right &&
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
+        currentFrameData.showAllConnections === lastFrameData.current.showAllConnections &&
         previousCalculation.current.visibleNodes.length > 0 &&
         previousCalculation.current.visibleConnections.length > 0) {
       memoEffectiveness.track(true);
@@ -2697,75 +2699,55 @@ export function TechTreeViewer() {
         }
     });
 
-    let finalVisibleNodeIds: Set<string>;
-    let finalVisibleConnectionIndices: Set<number>;
+    const finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
     let nodeVisibleConnections = 0;
     let stickyVisibleConnections = 0;
     let invisibleViewportConnections = 0;
 
-    if (isMobile) {
-        // --- Mobile Logic ---
-        finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
+    const currentFrameDrivenConnectionIndices = new Set<number>();
+    const previousVisibleConnections = new Set(previousCalculation.current.visibleConnections.map(link => 
+      data.links.findIndex(l => l.source === link.source && l.target === link.target && l.type === link.type)
+    ).filter(index => index !== -1));
 
-        const currentFrameDrivenConnectionIndices = new Set<number>();
-        const previousVisibleConnections = new Set(previousCalculation.current.visibleConnections.map(link => 
-          data.links.findIndex(l => l.source === link.source && l.target === link.target && l.type === link.type)
-        ).filter(index => index !== -1));
-
-        // First pass: Find connections where either node is visible
-        data.links.forEach((link, index) => {
-            if (finalVisibleNodeIds.has(link.source) || finalVisibleNodeIds.has(link.target)) {
-                currentFrameDrivenConnectionIndices.add(index);
-                nodeVisibleConnections++;
-            }
-        });
-
-        // Second pass: Find connections that were previously visible and are still in viewport
-        previousVisibleConnections.forEach(index => {
-            if (!currentFrameDrivenConnectionIndices.has(index)) {
-                const link = data.links[index];
-                if (link && isConnectionInViewport(link, index)) {
-                    currentFrameDrivenConnectionIndices.add(index);
-                    stickyVisibleConnections++;
-                }
-            }
-        });
-
-        // Third pass: Count invisible connections in viewport
-        data.links.forEach((link, index) => {
-            if (!currentFrameDrivenConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
-                invisibleViewportConnections++;
-            }
-        });
-
-        finalVisibleConnectionIndices = currentFrameDrivenConnectionIndices;
+    if (showAllConnections) {
+      // Show all connections in viewport
+      data.links.forEach((link, index) => {
+        if (isConnectionInViewport(link, index)) {
+          currentFrameDrivenConnectionIndices.add(index);
+          nodeVisibleConnections++;
+        }
+      });
     } else {
-        // --- Desktop Logic ---
-        finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
-        // Enhance desktop node visibility with endpoints of viewport-crossing connections
-        data.links.forEach((link) => {
-            const sourceNode = data.nodes.find(n => n.id === link.source);
-            const targetNode = data.nodes.find(n => n.id === link.target);
-            if (sourceNode && targetNode && isConnectionInViewport(link, data.links.indexOf(link))) {
-                if(!finalVisibleNodeIds.has(link.source)) finalVisibleNodeIds.add(link.source);
-                if(!finalVisibleNodeIds.has(link.target)) finalVisibleNodeIds.add(link.target);
-            }
-        });
+      // Use the optimized visibility logic
+      // First pass: Find connections where either node is visible
+      data.links.forEach((link, index) => {
+          if (finalVisibleNodeIds.has(link.source) || finalVisibleNodeIds.has(link.target)) {
+              currentFrameDrivenConnectionIndices.add(index);
+              nodeVisibleConnections++;
+          }
+      });
 
-        finalVisibleConnectionIndices = new Set<number>();
-        data.links.forEach((link, index) => {
-            const sourceNode = data.nodes.find(n => n.id === link.source);
-            const targetNode = data.nodes.find(n => n.id === link.target);
-            if (sourceNode && targetNode &&
-                ((finalVisibleNodeIds.has(link.source) && finalVisibleNodeIds.has(link.target)) || isConnectionInViewport(link, index))) {
-                finalVisibleConnectionIndices.add(index);
-                nodeVisibleConnections++;
-            }
-        });
+      // Second pass: Find connections that were previously visible and are still in viewport
+      previousVisibleConnections.forEach(index => {
+          if (!currentFrameDrivenConnectionIndices.has(index)) {
+              const link = data.links[index];
+              if (link && isConnectionInViewport(link, index)) {
+                  currentFrameDrivenConnectionIndices.add(index);
+                  stickyVisibleConnections++;
+              }
+          }
+      });
+
+      // Third pass: Count invisible connections in viewport
+      data.links.forEach((link, index) => {
+          if (!currentFrameDrivenConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
+              invisibleViewportConnections++;
+          }
+      });
     }
     
     const newVisibleNodes = data.nodes.filter(node => finalVisibleNodeIds.has(node.id));
-    const newVisibleConnections = data.links.filter((_, index) => finalVisibleConnectionIndices.has(index));
+    const newVisibleConnections = data.links.filter((_, index) => currentFrameDrivenConnectionIndices.has(index));
     
     performanceMarks.end('visibleElements');
 
@@ -2783,7 +2765,7 @@ export function TechTreeViewer() {
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
     stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, isMobile, filters
+    stableFilteredNodeIdsString, filters, showAllConnections // Add showAllConnections to dependencies
   ]);
 
   // Add effect to log general performance metrics
@@ -3816,13 +3798,15 @@ useEffect(() => {
           viewport={visibleViewport}
           scrollPosition={scrollPosition}
           totalNodes={data.nodes.length}
-          visibleNodes={visibleNodes.length}
+          visibleNodes={visibleElements.visibleNodes.length}
           strictlyVisibleNodes={strictlyVisibleNodes.length}
           totalConnections={data.links.length}
-          visibleConnections={visibleConnections.length}
-          nodeVisibleConnections={nodeVisibleConnections}
-          stickyVisibleConnections={stickyVisibleConnections}
-          invisibleViewportConnections={invisibleViewportConnections}
+          visibleConnections={visibleElements.visibleConnections.length}
+          nodeVisibleConnections={visibleElements.nodeVisibleConnections}
+          stickyVisibleConnections={visibleElements.stickyVisibleConnections}
+          invisibleViewportConnections={visibleElements.invisibleViewportConnections}
+          showAllConnections={showAllConnections}
+          onToggleConnections={() => setShowAllConnections(!showAllConnections)}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}

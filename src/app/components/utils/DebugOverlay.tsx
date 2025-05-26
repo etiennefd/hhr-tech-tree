@@ -20,7 +20,9 @@ interface DebugOverlayProps {
   nodeVisibleConnections: number;
   stickyVisibleConnections: number;
   invisibleViewportConnections: number;
+  showAllConnections: boolean;
   onClose: () => void;
+  onToggleConnections: () => void;
 }
 
 export function DebugOverlay({
@@ -34,7 +36,9 @@ export function DebugOverlay({
   nodeVisibleConnections,
   stickyVisibleConnections,
   invisibleViewportConnections,
-  onClose
+  showAllConnections,
+  onClose,
+  onToggleConnections
 }: DebugOverlayProps) {
   const bufferedViewport = {
     left: viewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
@@ -90,6 +94,23 @@ export function DebugOverlay({
         <div>- {stickyVisibleConnections} visible because visible last frame</div>
       </div>
       <div style={{ marginLeft: '12px' }}>• {invisibleViewportConnections} invisible despite being in viewport</div>
+      <button
+        onClick={onToggleConnections}
+        style={{
+          position: 'absolute',
+          top: '2px',
+          right: '2px',
+          background: 'transparent',
+          border: 'none',
+          color: 'white',
+          fontSize: '14px',
+          cursor: 'pointer',
+          padding: '2px 6px',
+          lineHeight: 1
+        }}
+      >
+        {showAllConnections ? 'Show Optimized Connections' : 'Show All Connections'}
+      </button>
     </div>
   );
 } 
