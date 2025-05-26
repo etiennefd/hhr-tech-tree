@@ -2518,7 +2518,10 @@ export function TechTreeViewer() {
   const deferredViewport = useDeferredValue(visibleViewport);
   const previousCalculation = useRef<TechTreeVisibleElements>({
     visibleNodes: [],
-    visibleConnections: []
+    visibleConnections: [],
+    nodeVisibleConnections: 0,
+    stickyVisibleConnections: 0,
+    invisibleViewportConnections: 0
   });
   const lastSelectionState = useRef({ nodeId: null as string | null, linkIndex: null as number | null });
 
