@@ -2630,8 +2630,7 @@ export function TechTreeViewer() {
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
         previousCalculation.current.visibleNodes.length > 0 &&
-        previousCalculation.current.visibleConnections.length > 0 // Ensure previous calc has connections too
-        ) {
+        previousCalculation.current.visibleConnections.length > 0) {
       memoEffectiveness.track(true);
       performanceMarks.end('visibleElements');
       return previousCalculation.current;
@@ -2703,44 +2702,46 @@ export function TechTreeViewer() {
 
     let finalVisibleNodeIds: Set<string>;
     let finalVisibleConnectionIndices: Set<number>;
+    let nodeVisibleConnections = 0;
+    let stickyVisibleConnections = 0;
+    let invisibleViewportConnections = 0;
 
     if (isMobile) {
         // --- Mobile Logic ---
-        finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds); // For mobile, node visibility is based on these base calculations
+        finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
 
         const currentFrameDrivenConnectionIndices = new Set<number>();
-        if (selectedNodeId) {
-            getNodeConnectionIndices(selectedNodeId).forEach(index => currentFrameDrivenConnectionIndices.add(index));
-        } else if (selectedLinkIndex !== null && selectedLinkIndex >= 0 && selectedLinkIndex < data.links.length) {
-            currentFrameDrivenConnectionIndices.add(selectedLinkIndex);
-        } else if (filteredNodeIds.size > 0) {
-            data.links.forEach((link, index) => {
-                // For filtered state, connection is visible if both endpoints match filters AND are in finalVisibleNodeIds
-                if (filteredNodeIds.has(link.source) && filteredNodeIds.has(link.target) &&
-                    finalVisibleNodeIds.has(link.source) && finalVisibleNodeIds.has(link.target)) {
-                    currentFrameDrivenConnectionIndices.add(index);
-                }
-            });
-        } else { // Default mobile: EITHER endpoint visible
-            data.links.forEach((link, index) => {
-                if (finalVisibleNodeIds.has(link.source) || finalVisibleNodeIds.has(link.target)) {
-                    currentFrameDrivenConnectionIndices.add(index);
-                }
-            });
-        }
+        const previousVisibleConnections = new Set(previousCalculation.current.visibleConnections.map(link => 
+          data.links.findIndex(l => l.source === link.source && l.target === link.target && l.type === link.type)
+        ).filter(index => index !== -1));
 
-        // Apply Stickiness for Mobile
-        finalVisibleConnectionIndices = new Set<number>(currentFrameDrivenConnectionIndices);
-        if (previousCalculation.current.visibleConnections) {
-            previousCalculation.current.visibleConnections.forEach(prevLink => {
-                const prevLinkIndex = data.links.findIndex(l => l.source === prevLink.source && l.target === prevLink.target && l.type === prevLink.type); // Add more specific link attributes if necessary for uniqueness
-                if (prevLinkIndex !== -1 && !finalVisibleConnectionIndices.has(prevLinkIndex)) { // If it was visible and not driven by current logic
-                    if (finalVisibleNodeIds.has(prevLink.source) || finalVisibleNodeIds.has(prevLink.target)) { // And at least one endpoint is still visible
-                        finalVisibleConnectionIndices.add(prevLinkIndex);
-                    }
+        // First pass: Find connections where either node is visible
+        data.links.forEach((link, index) => {
+            if (finalVisibleNodeIds.has(link.source) || finalVisibleNodeIds.has(link.target)) {
+                currentFrameDrivenConnectionIndices.add(index);
+                nodeVisibleConnections++;
+            }
+        });
+
+        // Second pass: Find connections that were previously visible and are still in viewport
+        previousVisibleConnections.forEach(index => {
+            if (!currentFrameDrivenConnectionIndices.has(index)) {
+                const link = data.links[index];
+                if (link && isConnectionInViewport(link, index)) {
+                    currentFrameDrivenConnectionIndices.add(index);
+                    stickyVisibleConnections++;
                 }
-            });
-        }
+            }
+        });
+
+        // Third pass: Count invisible connections in viewport
+        data.links.forEach((link, index) => {
+            if (!currentFrameDrivenConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
+                invisibleViewportConnections++;
+            }
+        });
+
+        finalVisibleConnectionIndices = currentFrameDrivenConnectionIndices;
     } else {
         // --- Desktop Logic ---
         finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
@@ -2761,6 +2762,7 @@ export function TechTreeViewer() {
             if (sourceNode && targetNode &&
                 ((finalVisibleNodeIds.has(link.source) && finalVisibleNodeIds.has(link.target)) || isConnectionInViewport(link, index))) {
                 finalVisibleConnectionIndices.add(index);
+                nodeVisibleConnections++;
             }
         });
     }
@@ -2772,7 +2774,10 @@ export function TechTreeViewer() {
 
     const result = {
       visibleNodes: newVisibleNodes,
-      visibleConnections: newVisibleConnections
+      visibleConnections: newVisibleConnections,
+      nodeVisibleConnections,
+      stickyVisibleConnections,
+      invisibleViewportConnections
     };
     previousCalculation.current = result;
 
@@ -2811,7 +2816,13 @@ export function TechTreeViewer() {
   }, [data.links]);
 
   // Destructure the memoized values
-  const { visibleNodes, visibleConnections } = visibleElements;
+  const {
+    visibleNodes,
+    visibleConnections,
+    nodeVisibleConnections,
+    stickyVisibleConnections,
+    invisibleViewportConnections
+  } = visibleElements;
 
   // Remove the old memos
   // const visibleNodes = useMemo(...)
@@ -3812,6 +3823,9 @@ useEffect(() => {
           strictlyVisibleNodes={strictlyVisibleNodes.length}
           totalConnections={data.links.length}
           visibleConnections={visibleConnections.length}
+          nodeVisibleConnections={nodeVisibleConnections}
+          stickyVisibleConnections={stickyVisibleConnections}
+          invisibleViewportConnections={invisibleViewportConnections}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}

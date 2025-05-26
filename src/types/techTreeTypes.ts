@@ -23,4 +23,7 @@ export interface TechTreeMinimapNode {
 export interface TechTreeVisibleElements {
   visibleNodes: TechNode[];
   visibleConnections: TechTreeLink[];
+  nodeVisibleConnections: number;
+  stickyVisibleConnections: number;
+  invisibleViewportConnections: number;
 } 

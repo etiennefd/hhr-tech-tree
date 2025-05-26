@@ -8,6 +8,9 @@ interface DebugOverlayProps {
   strictlyVisibleNodes: number;
   totalConnections: number;
   visibleConnections: number;
+  nodeVisibleConnections: number;
+  stickyVisibleConnections: number;
+  invisibleViewportConnections: number;
   onClose: () => void;
 }
 
@@ -19,6 +22,9 @@ export function DebugOverlay({
   strictlyVisibleNodes,
   totalConnections,
   visibleConnections,
+  nodeVisibleConnections,
+  stickyVisibleConnections,
+  invisibleViewportConnections,
   onClose
 }: DebugOverlayProps) {
   // Only render in development mode
@@ -62,6 +68,9 @@ export function DebugOverlay({
       <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
       <div><strong>Strictly visible nodes:</strong> {strictlyVisibleNodes}/{totalNodes}</div>
       <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
+      <div><strong>Node-visible connections:</strong> {nodeVisibleConnections}</div>
+      <div><strong>Sticky-visible connections:</strong> {stickyVisibleConnections}</div>
+      <div><strong>Invisible viewport connections:</strong> {invisibleViewportConnections}</div>
     </div>
   );
 } 
