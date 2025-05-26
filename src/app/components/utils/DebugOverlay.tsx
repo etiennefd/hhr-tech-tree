@@ -1,8 +1,16 @@
 import React from 'react';
 
 interface DebugOverlayProps {
-  viewport: any;
-  scrollPosition: any;
+  viewport: {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+  };
+  scrollPosition: {
+    left: number;
+    top: number;
+  };
   totalNodes: number;
   visibleNodes: number;
   strictlyVisibleNodes: number;
@@ -68,9 +76,11 @@ export function DebugOverlay({
       <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
       <div><strong>Strictly visible nodes:</strong> {strictlyVisibleNodes}/{totalNodes}</div>
       <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
-      <div><strong>Node-visible connections:</strong> {nodeVisibleConnections}</div>
-      <div><strong>Sticky-visible connections:</strong> {stickyVisibleConnections}</div>
-      <div><strong>Invisible viewport connections:</strong> {invisibleViewportConnections}</div>
+      <div style={{ marginLeft: '12px' }}>
+        <div>• {nodeVisibleConnections} visible because nodes are visible</div>
+        <div>• {stickyVisibleConnections} visible because they were visible last frame</div>
+        <div>• {invisibleViewportConnections} invisible despite being in viewport</div>
+      </div>
     </div>
   );
 } 
