@@ -1,4 +1,5 @@
 import React from 'react';
+import { CACHE_VIEWPORT_BUFFER_FOR_NODES } from '../TechTreeViewer';
 
 interface DebugOverlayProps {
   viewport: {
@@ -35,6 +36,13 @@ export function DebugOverlay({
   invisibleViewportConnections,
   onClose
 }: DebugOverlayProps) {
+  const bufferedViewport = {
+    left: viewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
+    right: viewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
+    top: viewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
+    bottom: viewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
+  };
+
   // Only render in development mode
   if (process.env.NODE_ENV !== 'development') return null;
   
@@ -72,15 +80,16 @@ export function DebugOverlay({
         ×
       </button>
       <div><strong>Scroll:</strong> L={scrollPosition.left.toFixed(0)} T={scrollPosition.top.toFixed(0)}</div>
-      <div><strong>Viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
-      <div><strong>Visible nodes:</strong> {visibleNodes}/{totalNodes}</div>
-      <div><strong>Strictly visible nodes:</strong> {strictlyVisibleNodes}/{totalNodes}</div>
-      <div><strong>Visible connections:</strong> {visibleConnections}/{totalConnections}</div>
-      <div style={{ marginLeft: '12px' }}>
-        <div>• {nodeVisibleConnections} visible because nodes are visible</div>
-        <div>• {stickyVisibleConnections} visible because they were visible last frame</div>
-        <div>• {invisibleViewportConnections} invisible despite being in viewport</div>
+      <div><strong>Strict viewport:</strong> [{viewport.left.toFixed(0)},{viewport.top.toFixed(0)}] to [{viewport.right.toFixed(0)},{viewport.bottom.toFixed(0)}]</div>
+      <div style={{ marginLeft: '12px' }}>• {strictlyVisibleNodes}/{totalNodes} visible nodes</div>
+      <div><strong>Buffered viewport:</strong> [{bufferedViewport.left.toFixed(0)},{bufferedViewport.top.toFixed(0)}] to [{bufferedViewport.right.toFixed(0)},{bufferedViewport.bottom.toFixed(0)}]</div>
+      <div style={{ marginLeft: '12px' }}>• {visibleNodes}/{totalNodes} nodes in buffered viewport</div>
+      <div style={{ marginLeft: '12px' }}>• {visibleConnections}/{totalConnections} connections in buffered viewport</div>
+      <div style={{ marginLeft: '24px' }}>
+        <div>- {nodeVisibleConnections} visible because nodes in viewport</div>
+        <div>- {stickyVisibleConnections} visible because visible last frame</div>
       </div>
+      <div style={{ marginLeft: '12px' }}>• {invisibleViewportConnections} invisible despite being in viewport</div>
     </div>
   );
 } 

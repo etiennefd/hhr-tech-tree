@@ -88,6 +88,7 @@ const VERTICAL_SPACING = 50;
 const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
+export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
@@ -2684,7 +2685,6 @@ export function TechTreeViewer() {
       }
     });
 
-    const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
     const extendedNodeViewport = {
       left: stableViewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
       right: stableViewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
