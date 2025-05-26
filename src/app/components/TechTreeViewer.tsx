@@ -17,17 +17,14 @@ import React, {
   useRef,
   Suspense,
   memo,
-  useDeferredValue,
 } from "react";
 import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
-import type { ConnectionType } from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import { SearchResult } from "./SearchBox";
 import { TechNode } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
-import Link from 'next/link';
 import { SpatialIndex } from "@/utils/SpatialIndex";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
@@ -48,7 +45,6 @@ import {
 } from './utils/helpers';
 import {
   performanceMarks,
-  renderCounter,
   memoEffectiveness,
   logPerformance
 } from './utils/performance';
@@ -2513,9 +2509,7 @@ export function TechTreeViewer() {
   // Add these near other state/ref declarations
   const lastCalculationTime = useRef(0);
   const lastCalculationFrame = useRef(0);
-  const FRAME_DURATION = 16.67; // ms (60fps)
   const calculationTrigger = useRef<'selection' | 'highlight' | 'filter' | 'viewport' | 'cache' | 'initial' | 'unknown'>('initial');
-  const deferredViewport = useDeferredValue(visibleViewport);
   const previousCalculation = useRef<TechTreeVisibleElements>({
     visibleNodes: [],
     visibleConnections: [],
