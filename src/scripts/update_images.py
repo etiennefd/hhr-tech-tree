@@ -6,7 +6,7 @@ from airtable import Airtable
 from dotenv import load_dotenv
 import time
 from typing import Union
-from PIL import Image
+from PIL import Image, ImageOps
 import io
 import hashlib
 import argparse
@@ -64,6 +64,9 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
 
         # Open and optimize the image
         img = Image.open(io.BytesIO(response.content))
+        
+        # Apply EXIF orientation if present
+        img = ImageOps.exif_transpose(img)
         
         # Convert to RGB if necessary (for PNG with transparency)
         if img.mode in ('RGBA', 'LA'):
