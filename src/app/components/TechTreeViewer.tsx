@@ -53,7 +53,7 @@ import { useRouter } from 'next/navigation';
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
 const YEAR_EARLY_MODERN = 1500;
-const YEAR_LATE_ANTIQUITY = -200;
+const YEAR_LATE_ANTIQUITY_AND_MEDIEVAL = -200;
 const YEAR_MIDDLE_ANTIQUITY = -1000;
 const YEAR_EARLY_ANTIQUITY = -5000;
 const YEAR_NEOLITHIC = -10000;
@@ -70,7 +70,7 @@ const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
 // Timeline intervals for each period
 const INTERVAL_INDUSTRIAL = 1;
 const INTERVAL_EARLY_MODERN = 5;
-const INTERVAL_LATE_ANTIQUITY = 20;
+const INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL = 20;
 const INTERVAL_MIDDLE_ANTIQUITY = 50;
 const INTERVAL_EARLY_ANTIQUITY = 100;
 const INTERVAL_NEOLITHIC = 500;
@@ -119,8 +119,8 @@ function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
   if (year >= YEAR_EARLY_MODERN)
     return Math.floor(year / INTERVAL_EARLY_MODERN) * INTERVAL_EARLY_MODERN;
-  if (year >= YEAR_LATE_ANTIQUITY)
-    return Math.floor(year / INTERVAL_LATE_ANTIQUITY) * INTERVAL_LATE_ANTIQUITY;
+  if (year >= YEAR_LATE_ANTIQUITY_AND_MEDIEVAL)
+    return Math.floor(year / INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL) * INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL;
   if (year >= YEAR_MIDDLE_ANTIQUITY)
     return (
       Math.floor(year / INTERVAL_MIDDLE_ANTIQUITY) * INTERVAL_MIDDLE_ANTIQUITY
@@ -154,7 +154,7 @@ function getTimelineYears(minYear: number, maxYear: number): number[] {
 
     if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
     else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
-    else if (current >= YEAR_LATE_ANTIQUITY) current += INTERVAL_LATE_ANTIQUITY;
+    else if (current >= YEAR_LATE_ANTIQUITY_AND_MEDIEVAL) current += INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL;
     else if (current >= YEAR_MIDDLE_ANTIQUITY)
       current += INTERVAL_MIDDLE_ANTIQUITY;
     else if (current >= YEAR_EARLY_ANTIQUITY)
@@ -185,7 +185,7 @@ function calculateXPosition(
   while (current < alignedYear) {
     if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
     else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
-    else if (current >= YEAR_LATE_ANTIQUITY) current += INTERVAL_LATE_ANTIQUITY;
+    else if (current >= YEAR_LATE_ANTIQUITY_AND_MEDIEVAL) current += INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL;
     else if (current >= YEAR_MIDDLE_ANTIQUITY)
       current += INTERVAL_MIDDLE_ANTIQUITY;
     else if (current >= YEAR_EARLY_ANTIQUITY)
