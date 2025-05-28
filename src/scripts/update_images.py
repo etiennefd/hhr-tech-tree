@@ -46,7 +46,7 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 
 # --- Helper Functions ---
 
-def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
+def download_and_optimize_image(url: str, title: str, rotation: int = 0) -> Union[str, None]:
     """Downloads and optimizes an image, returns the local path."""
     try:
         # Generate a filename from the title
@@ -67,6 +67,11 @@ def download_and_optimize_image(url: str, title: str) -> Union[str, None]:
         
         # Apply EXIF orientation if present
         img = ImageOps.exif_transpose(img)
+        
+        # Apply manual rotation if specified
+        if rotation:
+            print(f"    Rotating image by {rotation} degrees")
+            img = img.rotate(rotation, expand=True, resample=Image.Resampling.BICUBIC)
         
         # Convert to RGB if necessary (for PNG with transparency)
         if img.mode in ('RGBA', 'LA'):
@@ -267,7 +272,7 @@ def main():
         print("Fetching records...")
         # First, try to get the fields to check if Local image exists
         try:
-            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name"]
+            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name", "Image rotation"]
             records = airtable.get_all(fields=fields, max_records=1)
             
             # Debug: Print available fields from first record
@@ -364,7 +369,8 @@ def main():
         # Only download and optimize image if not in credits-only mode
         local_image_path = None
         if not args.credits_only:
-            local_image_path = download_and_optimize_image(image_url, title)
+            rotation = record.get('fields', {}).get('Image rotation', 0)
+            local_image_path = download_and_optimize_image(image_url, title, rotation)
 
         if credits_data or local_image_path:
             update_payload = {}
