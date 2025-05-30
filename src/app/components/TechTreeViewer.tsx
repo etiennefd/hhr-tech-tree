@@ -328,6 +328,42 @@ export function TechTreeViewer() {
   const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
+  // Add settings menu state
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'selected'>('optimized');
+  const [showImages, setShowImages] = useState(true);
+  const settingsMenuRef = useRef<HTMLDivElement>(null);
+
+  // Add click-outside handler for settings menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target as Node)) {
+        setShowSettingsMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Add scroll prevention for settings button
+  useEffect(() => {
+    const settingsButton = document.querySelector('.settings-button');
+    if (!settingsButton) return;
+
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
+    settingsButton.addEventListener('wheel', preventScroll, { passive: false });
+    settingsButton.addEventListener('touchmove', preventScroll, { passive: false });
+
+    return () => {
+      settingsButton.removeEventListener('wheel', preventScroll);
+      settingsButton.removeEventListener('touchmove', preventScroll);
+    };
+  }, []);
+
   // Initialize spatial index with smaller cell size
   const spatialIndexRef = useRef(new SpatialIndex(100)); // Reduced from 250 to 100
   
@@ -3575,6 +3611,85 @@ useEffect(() => {
           Jump to nearest tech
         </button>
       )}
+      {/* Settings Button and Menu */}
+      <div className="fixed bottom-20 right-4 z-30">
+        <button
+          className="settings-button bg-white/80 backdrop-blur border border-[#91B4C5] rounded-none p-2 text-[#91B4C5] hover:bg-white/90 transition-colors"
+          onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+          style={{ overscrollBehavior: 'contain' }}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        {showSettingsMenu && (
+          <div className="settings-menu absolute bottom-full right-0 mb-2 bg-white border border-black p-3 min-w-[200px]">
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Show connections</div>
+              <div className="flex gap-2">
+                <button
+                  className={`px-2 py-1 text-sm border ${
+                    connectionMode === 'all' ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
+                  }`}
+                  onClick={() => setConnectionMode('all')}
+                >
+                  All
+                </button>
+                <button
+                  className={`px-2 py-1 text-sm border ${
+                    connectionMode === 'optimized' ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
+                  }`}
+                  onClick={() => setConnectionMode('optimized')}
+                >
+                  Optimized
+                </button>
+                <button
+                  className={`px-2 py-1 text-sm border ${
+                    connectionMode === 'selected' ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
+                  }`}
+                  onClick={() => setConnectionMode('selected')}
+                >
+                  Only selected
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div className="text-sm font-medium mb-2">Images</div>
+              <div className="flex gap-2">
+                <button
+                  className={`px-2 py-1 text-sm border ${
+                    showImages ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
+                  }`}
+                  onClick={() => setShowImages(true)}
+                >
+                  Show
+                </button>
+                <button
+                  className={`px-2 py-1 text-sm border ${
+                    !showImages ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
+                  }`}
+                  onClick={() => setShowImages(false)}
+                >
+                  Hide
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
