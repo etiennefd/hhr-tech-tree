@@ -3614,7 +3614,7 @@ useEffect(() => {
       {/* Settings Button and Menu */}
       <div className="fixed bottom-20 right-4 z-30">
         <button
-          className="settings-button bg-white/80 backdrop-blur border border-[#91B4C5] rounded-none p-2 text-[#91B4C5] hover:bg-white/90 transition-colors"
+          className="settings-button p-2 text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
           onClick={() => setShowSettingsMenu(!showSettingsMenu)}
           style={{ overscrollBehavior: 'contain' }}
         >
