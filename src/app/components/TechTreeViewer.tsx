@@ -3642,47 +3642,50 @@ useEffect(() => {
             <div className="space-y-4">
               {/* Connections Mode */}
               <div>
-                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-2">Connections</div>
+                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-2">Display options</div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">Mode</span>
-                  <div className="flex items-center space-x-2">
+                  <span className="text-sm">Connections</span>
+                  <div className="flex border border-[#91B4C5]">
                     <button
-                      className={`w-8 h-4 relative transition-colors ${
-                        connectionMode === 'optimized' ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
-                      }`}
-                      onClick={() => setConnectionMode('optimized')}
-                    >
-                      <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
-                        connectionMode === 'optimized' ? 'left-4' : 'left-0.5'
-                      } bg-white`} />
-                    </button>
-                    <span className="text-xs text-[#91B4C5]">Optimized</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-2">
-                  <span className="text-sm">Show All</span>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      className={`w-8 h-4 relative transition-colors ${
-                        connectionMode === 'all' ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
+                      className={`px-2 py-1 text-xs transition-colors ${
+                        connectionMode === 'all' 
+                          ? 'bg-[#91B4C5] text-white' 
+                          : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
                       }`}
                       onClick={() => setConnectionMode('all')}
                     >
-                      <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
-                        connectionMode === 'all' ? 'left-4' : 'left-0.5'
-                      } bg-white`} />
+                      All
                     </button>
-                    <span className="text-xs text-[#91B4C5]">All</span>
+                    <button
+                      className={`px-2 py-1 text-xs transition-colors border-l border-r border-[#91B4C5] ${
+                        connectionMode === 'optimized' 
+                          ? 'bg-[#91B4C5] text-white' 
+                          : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
+                      }`}
+                      onClick={() => setConnectionMode('optimized')}
+                    >
+                      Optimized
+                    </button>
+                    <button
+                      className={`px-2 py-1 text-xs transition-colors ${
+                        connectionMode === 'selected' 
+                          ? 'bg-[#91B4C5] text-white' 
+                          : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
+                      }`}
+                      onClick={() => setConnectionMode('selected')}
+                    >
+                      Selected
+                    </button>
                   </div>
                 </div>
               </div>
 
               {/* Images Toggle */}
               <div>
-                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-2">Display</div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Images</span>
                   <div className="flex items-center space-x-2">
+                    <span className="text-xs text-[#91B4C5]">Hide</span>
                     <button
                       className={`w-8 h-4 relative transition-colors ${
                         showImages ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
@@ -3693,7 +3696,7 @@ useEffect(() => {
                         showImages ? 'left-4' : 'left-0.5'
                       } bg-white`} />
                     </button>
-                    <span className="text-xs text-[#91B4C5]">{showImages ? 'On' : 'Off'}</span>
+                    <span className="text-xs text-[#91B4C5]">Show</span>
                   </div>
                 </div>
               </div>
