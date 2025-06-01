@@ -3635,56 +3635,67 @@ useEffect(() => {
         </button>
 
         {showSettingsMenu && (
-          <div className="settings-menu absolute bottom-full right-0 mb-2 bg-white border border-black p-3 min-w-[200px]">
-            <div className="mb-4">
-              <div className="text-sm font-medium mb-2">Show connections</div>
-              <div className="flex gap-2">
-                <button
-                  className={`px-2 py-1 text-sm border ${
-                    connectionMode === 'all' ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
-                  }`}
-                  onClick={() => setConnectionMode('all')}
-                >
-                  All
-                </button>
-                <button
-                  className={`px-2 py-1 text-sm border ${
-                    connectionMode === 'optimized' ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
-                  }`}
-                  onClick={() => setConnectionMode('optimized')}
-                >
-                  Optimized
-                </button>
-                <button
-                  className={`px-2 py-1 text-sm border ${
-                    connectionMode === 'selected' ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
-                  }`}
-                  onClick={() => setConnectionMode('selected')}
-                >
-                  Only selected
-                </button>
+          <div 
+            ref={settingsMenuRef}
+            className="absolute bottom-full right-0 mb-2 bg-white/80 backdrop-blur border border-[#91B4C5] p-3 min-w-[200px] font-mono"
+          >
+            <div className="space-y-4">
+              {/* Connections Mode */}
+              <div>
+                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-2">Connections</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Mode</span>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      className={`w-8 h-4 relative transition-colors ${
+                        connectionMode === 'optimized' ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
+                      }`}
+                      onClick={() => setConnectionMode('optimized')}
+                    >
+                      <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
+                        connectionMode === 'optimized' ? 'left-4' : 'left-0.5'
+                      } bg-white`} />
+                    </button>
+                    <span className="text-xs text-[#91B4C5]">Optimized</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-sm">Show All</span>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      className={`w-8 h-4 relative transition-colors ${
+                        connectionMode === 'all' ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
+                      }`}
+                      onClick={() => setConnectionMode('all')}
+                    >
+                      <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
+                        connectionMode === 'all' ? 'left-4' : 'left-0.5'
+                      } bg-white`} />
+                    </button>
+                    <span className="text-xs text-[#91B4C5]">All</span>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <div className="text-sm font-medium mb-2">Images</div>
-              <div className="flex gap-2">
-                <button
-                  className={`px-2 py-1 text-sm border ${
-                    showImages ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
-                  }`}
-                  onClick={() => setShowImages(true)}
-                >
-                  Show
-                </button>
-                <button
-                  className={`px-2 py-1 text-sm border ${
-                    !showImages ? 'bg-[#91B4C5] text-white' : 'border-[#91B4C5] text-[#91B4C5]'
-                  }`}
-                  onClick={() => setShowImages(false)}
-                >
-                  Hide
-                </button>
+              {/* Images Toggle */}
+              <div>
+                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-2">Display</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Images</span>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      className={`w-8 h-4 relative transition-colors ${
+                        showImages ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
+                      }`}
+                      onClick={() => setShowImages(!showImages)}
+                    >
+                      <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
+                        showImages ? 'left-4' : 'left-0.5'
+                      } bg-white`} />
+                    </button>
+                    <span className="text-xs text-[#91B4C5]">{showImages ? 'On' : 'Off'}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
