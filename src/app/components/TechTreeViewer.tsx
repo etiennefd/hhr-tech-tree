@@ -3637,15 +3637,15 @@ useEffect(() => {
         {showSettingsMenu && (
           <div 
             ref={settingsMenuRef}
-            className="absolute bottom-full right-0 mb-2 bg-white/80 backdrop-blur border border-[#91B4C5] p-3 min-w-[200px] font-mono"
+            className="absolute bottom-full right-0 mb-2 bg-white/80 backdrop-blur border border-[#91B4C5] p-4 min-w-[200px] font-mono"
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Connections Mode */}
               <div>
-                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-2">Display options</div>
+                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Display options</div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Connections</span>
-                  <div className="flex border border-[#91B4C5]">
+                  <div className="flex border border-[#91B4C5] ml-4">
                     <button
                       className={`px-2 py-1 text-xs transition-colors ${
                         connectionMode === 'all' 
@@ -3684,7 +3684,7 @@ useEffect(() => {
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Images</span>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3 ml-4">
                     <span className="text-xs text-[#91B4C5]">Hide</span>
                     <button
                       className={`w-8 h-4 relative transition-colors ${
