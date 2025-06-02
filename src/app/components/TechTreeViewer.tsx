@@ -341,6 +341,7 @@ export function TechTreeViewer() {
 
   // Add ref for the jump button
   const jumpButtonRef = useRef<HTMLButtonElement>(null);
+  const prefetchedNodeDetails = useRef<Map<string, Partial<TechNode>>>(new Map());
 
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
@@ -373,11 +374,6 @@ export function TechTreeViewer() {
   // Add this near the other state variables
   const [cachedConnectionIndices, setCachedConnectionIndices] = useState<Set<number>>(new Set());
   const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
-
-  // Add state for prefetched node details
-  const [prefetchedNodeDetails, setPrefetchedNodeDetails] = useState<Map<string, Partial<TechNode>>>(new Map());
-
-
 
   // Add scroll positions cache
   const scrollPositionsCache = useRef<Map<string, { x: number; y: number }>>(new Map());
@@ -655,28 +651,15 @@ export function TechTreeViewer() {
     const controller = new AbortController();
 
     const loadData = async () => {
-      // Add a log at the start of loadData
-      if (process.env.NODE_ENV === 'development') {
-      }
-      let cachedData = null;
+      let isMounted = true;
+      const controller = new AbortController();
+
       try {
-        // Check cache first for immediate display
-        if (process.env.NODE_ENV === 'development') {
-        }
-        cachedData = await cacheManager.get();
-        if (process.env.NODE_ENV === 'development') {
-        }
-
-        if (!cachedData) {
-          if (process.env.NODE_ENV === 'development') {
-          }
-          setIsLoading(true);
-        }
-
+        // Check cache first
+        const cachedData = await cacheManager.get();
+        
         if (cachedData?.detailData) {
-          if (process.env.NODE_ENV === 'development') {
-          }
-          // If we have detailed data in cache, use it and skip basic data fetch
+          // If we have detailed data in cache, use it
           const validatedNodes = cachedData.detailData.nodes?.map((node: TechNode) => ({
             ...node,
             image: validateImageUrl(node.image)
@@ -689,8 +672,6 @@ export function TechTreeViewer() {
             links: cachedData.detailData.links || [] 
           });
           currentNodesRef.current = positionedDetailNodes;
-          if (process.env.NODE_ENV === 'development') {
-          }
 
           // Reset and populate spatial index
           spatialIndexRef.current = new SpatialIndex(100);
@@ -699,199 +680,69 @@ export function TechTreeViewer() {
               spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
             }
           });
-          if (process.env.NODE_ENV === 'development') {
-          }
           setIsLoading(false);
-          if (process.env.NODE_ENV === 'development') {
-          }
-        } else if (cachedData?.basicData) {
-          if (process.env.NODE_ENV === 'development') {
-          }
-          // If we only have basic data, use it temporarily
-          const validatedNodes = cachedData.basicData.nodes?.map((node: TechNode) => ({
-            ...node,
-            image: validateImageUrl(node.image)
-          })) || [];
-          
-          const positionedNodes = calculateNodePositions(validatedNodes);
-
-          setData({ 
-            nodes: positionedNodes, 
-            links: cachedData.basicData.links || [] 
-          });
-          if (process.env.NODE_ENV === 'development') {
-          }
-          setIsLoading(false);
-          if (process.env.NODE_ENV === 'development') {
-          }
+          return; // Exit early if we have detailed cached data
         }
 
-        // If we don't have detailed cached data, fetch fresh basic data
-        if (!cachedData?.detailData) {
-          if (process.env.NODE_ENV === 'development') {
-          }
-          const basicResponse = await fetchWithRetry("/api/inventions", 3, 1000);
-          const basicData = await basicResponse.json();
-          if (process.env.NODE_ENV === 'development') {
-          }
+        setIsLoading(true);
 
-          if (!isMounted) {
-            return;
-          }
-
-          // Only update if we don't have detailed data yet
-          if (!cachedData?.detailData) {
-            const validatedNodes = basicData.nodes?.map((node: TechNode) => ({
-              ...node,
-              image: validateImageUrl(node.image)
-            })) || [];
-            
-            const positionedNodes = calculateNodePositions(validatedNodes);
-            
-            setData({ 
-              nodes: positionedNodes, 
-              links: basicData.links || [] 
-            });
-            setIsLoading(false);
-            if (process.env.NODE_ENV === 'development') {
-            }
-
-            // Cache basic data
-            await cacheManager.set({
-              version: CACHE_VERSION,
-              timestamp: Date.now(),
-              basicData,
-            });
-          }
-        }
-
-        // Always fetch fresh detailed data
-        if (process.env.NODE_ENV === 'development') {
-        }
+        // If we don't have detailed cached data, fetch fresh data
         const detailResponse = await fetchWithRetry("/api/inventions?detail=true", 3, 1000);
         const detailData = await detailResponse.json();
-        if (process.env.NODE_ENV === 'development') {
-        }
 
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
 
         const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
           ...node,
           image: validateImageUrl(node.image)
         })) || [];
 
-        // Compare current and new data before updating
-        const hasChanges = validatedDetailNodes.some(
-          (newNode: TechNode, index: number) => {
-            const currentNode = currentNodesRef.current[index];
-            if (!currentNode) return true;
+        const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
 
-            return (
-              newNode.title !== currentNode.title ||
-              newNode.year !== currentNode.year ||
-              newNode.fields.join(",") !== currentNode.fields.join(",") ||
-              newNode.image !== currentNode.image
-            );
-          }
-        );
+        setData({ 
+          nodes: positionedDetailNodes, 
+          links: detailData.links || [] 
+        });
+        currentNodesRef.current = positionedDetailNodes;
 
-        // Only update if there are actual changes
-        if (hasChanges) {
-          const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
-
-          setData({ 
-            nodes: positionedDetailNodes, 
-            links: detailData.links || [] 
-          });
-          currentNodesRef.current = positionedDetailNodes;
-          if (process.env.NODE_ENV === 'development') {
-          }
-                    
-          // Find data bounds
-          let minX = Infinity;
-          let maxX = -Infinity;
-          let minY = Infinity;
-          let maxY = -Infinity;
-          
-          positionedDetailNodes.forEach(node => {
-            if (node.x !== undefined) {
-              minX = Math.min(minX, node.x);
-              maxX = Math.max(maxX, node.x);
-            }
-            if (node.y !== undefined) {
-              minY = Math.min(minY, node.y);
-              maxY = Math.max(maxY, node.y);
-            }
-          });
-          
-          // Calculate optimal cell size (aim for ~100-200 cells total)
-          const width = maxX - minX;
-          const height = maxY - minY;
-          const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
-          
-          // Create fresh spatial index with optimal cell size
-          spatialIndexRef.current = new SpatialIndex(cellSize);
-          
-          // Add all nodes to spatial index
-          positionedDetailNodes.forEach(node => {
-            if (node.x !== undefined && node.y !== undefined) {
-              spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
-            }
-          });
-          if (process.env.NODE_ENV === 'development') {
-          }
-        } else {
-          // Ensure spatial index is populated even if no data changes, if it wasn't populated from cache.
-          // This can happen if only basic cache existed, then fresh detailed data matched the basic data.
-          if (!cachedData?.detailData) {
-             if (process.env.NODE_ENV === 'development') {
-             }
-             const currentPositionedNodes = data.nodes; // Use already positioned nodes
-             spatialIndexRef.current = new SpatialIndex(100); // Default cell size
-             currentPositionedNodes.forEach(node => {
-               if (node.x !== undefined && node.y !== undefined) {
-                 spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
-               }
-             });
-             (data.links || []).forEach((link, index) => {
-               const sourceNode = currentPositionedNodes.find(n => n.id === link.source);
-               const targetNode = currentPositionedNodes.find(n => n.id === link.target);
-               if (sourceNode?.x !== undefined && sourceNode?.y !== undefined &&
-                   targetNode?.x !== undefined && targetNode?.y !== undefined) {
-                 spatialIndexRef.current.addConnection(
-                   index,
-                   { x: sourceNode.x, y: sourceNode.y },
-                   { x: targetNode.x, y: targetNode.y }
-                 );
-               }
-             });
-             if (process.env.NODE_ENV === 'development') {
-                // console.timeEnd("TechTreeViewer:spatialIndex (noChangeDetailData)");
-             }
-          }
-        }
-
-        // Cache complete fresh data with validated nodes
-        // if (process.env.NODE_ENV === 'development') console.time("TechTreeViewer:cacheManager.set (detailData)");
+        // Cache the detailed data
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
-          basicData: { ...detailData, nodes: validatedDetailNodes },
-          detailData: { ...detailData, nodes: validatedDetailNodes },
+          basicData: detailData,
+          detailData: detailData
         });
+
+        // Update spatial index
+        const minX = Math.min(...positionedDetailNodes.map(n => n.x || Infinity));
+        const maxX = Math.max(...positionedDetailNodes.map(n => n.x || -Infinity));
+        const minY = Math.min(...positionedDetailNodes.map(n => n.y || Infinity));
+        const maxY = Math.max(...positionedDetailNodes.map(n => n.y || -Infinity));
+        
+        const width = maxX - minX;
+        const height = maxY - minY;
+        const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
+        
+        spatialIndexRef.current = new SpatialIndex(cellSize);
+        positionedDetailNodes.forEach(node => {
+          if (node.x !== undefined && node.y !== undefined) {
+            spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
+          }
+        });
+
       } catch (error: unknown) {
-        if (error instanceof Error && error.name === "AbortError") {
-          return;
-        }
-        // Ensure console.warn is used here as per original code
-        console.warn(`[${new Date().toLocaleTimeString()}] TechTreeViewer:loadData - Error during data loading:`, error);
-        setIsLoading(false); // Ensure loading is set to false on error
-        if (!cachedData) {
-          setData({ nodes: [], links: [] });
+        if (error instanceof Error && error.name === 'AbortError') return;
+        console.error('Error loading data:', error);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
         }
       }
+
+      return () => {
+        isMounted = false;
+        controller.abort();
+      };
     };
 
     loadData();
@@ -1641,171 +1492,27 @@ export function TechTreeViewer() {
 
   // Process the prefetch queue one by one to avoid overwhelming the network
   const processPrefetchQueue = useCallback(async () => {
-    if (isPrefetching.current || prefetchQueue.current.length === 0) return;
-    
-    isPrefetching.current = true;
-    
-    try {
-      const nodeId = prefetchQueue.current.shift()!;
-      
-      // Skip if already prefetched or if nodeId is invalid
-      if (prefetchedNodes.current.has(nodeId) || !nodeId) {
-        isPrefetching.current = false;
-        processPrefetchQueue(); // Process next item
-        return;
-      }
-      
-      prefetchedNodes.current.add(nodeId);
-      
-      // Ensure nodeId is properly encoded for URLs
-      const encodedNodeId = encodeURIComponent(nodeId);
-      const apiUrl = `/api/inventions/${encodedNodeId}`;
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        if (response.status !== 404) {  // Don't log 404s as they're expected
-          console.warn(`Failed to prefetch node ${nodeId}: ${response.status}`);
-        }
-        isPrefetching.current = false;
-        processPrefetchQueue(); // Process next item
-        return;
-      }
-      
-      const nodeData = await response.json();
-      
-      // Simple validation for image URL
-      if (nodeData.image && typeof nodeData.image === 'string') {
-        // Check if image URL is valid (must start with / or http:// or https://)
-        if (!nodeData.image.startsWith('/') && 
-            !nodeData.image.startsWith('http://') && 
-            !nodeData.image.startsWith('https://')) {
-          // Invalid image URL, remove it
-          nodeData.image = null;
-        }
-      }
-      
-      // Update the prefetchedNodeDetails state
-      setPrefetchedNodeDetails(prevDetails => {
-        const newDetails = new Map(prevDetails);
-        newDetails.set(nodeId, nodeData);
-        return newDetails;
-      });
-      
-    } catch (error) {
-      console.warn('Error in prefetch processing:', error);
-    } finally {
-      isPrefetching.current = false;
-      // Continue processing the queue
-      processPrefetchQueue();
-    }
+    // No-op since we have all data
   }, []);
 
   // Update the prefetchNode function to use the queue
   const prefetchNode = useCallback((nodeId: string, priority = false) => {
-    // Skip if already prefetched, already in queue, or if nodeId is invalid
-    if (prefetchedNodes.current.has(nodeId) || 
-        prefetchQueue.current.includes(nodeId) || 
-        !nodeId) {
-      return;
-    }
-    
-    // Add to queue based on priority
-    if (priority) {
-      prefetchQueue.current.unshift(nodeId); // Add to front of queue
-    } else {
-      prefetchQueue.current.push(nodeId); // Add to end of queue
-    }
-    
-    // Start processing the queue if not already processing
-    processPrefetchQueue();
-  }, [processPrefetchQueue]);
+    // No-op since we have all data
+  }, []);
 
   // Function to prefetch important nodes proactively
   const prefetchImportantNodes = useCallback(() => {
-    const nodesToPrefetch = new Set<string>();
-    
-    // 1. Prefetch the selected node with high priority
-    if (selectedNodeId) {
-      prefetchNode(selectedNodeId, true);
-      
-      // 2. Prefetch nodes connected to the selected node with high priority
-      data.links.forEach(link => {
-        if (link.source === selectedNodeId) {
-          nodesToPrefetch.add(link.target);
-        } else if (link.target === selectedNodeId) {
-          nodesToPrefetch.add(link.source);
-        }
-      });
-    }
-    
-    // 3. Prefetch nodes connected to a selected link with high priority
-    if (selectedLinkKey !== null) {
-      const [source, target] = selectedLinkKey.split('-');
-      nodesToPrefetch.add(source);
-      nodesToPrefetch.add(target);
-    }
-    
-    // 4. Prefetch highlighted ancestors and descendants with high priority
-    // Use for...of instead of forEach to avoid TypeScript errors
-    for (const nodeId of highlightedAncestors) {
-      nodesToPrefetch.add(nodeId);
-    }
-    
-    for (const nodeId of highlightedDescendants) {
-      nodesToPrefetch.add(nodeId);
-    }
-    
-    // Prefetch all the important nodes with high priority
-    let prefetchedCount = 0;
-    for (const nodeId of nodesToPrefetch) {
-      // prefetchNode already checks if it's already prefetched or in queue, so no need to check here
-      prefetchNode(nodeId, true);
-      prefetchedCount++;
-    }
-
-  }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
+    // No-op since we have all data
+  }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants]);
 
   // Add this effect to prefetch data for connected nodes when a node is selected
   useEffect(() => {
-    // Call the prefetchImportantNodes function to proactively prefetch important nodes
-    prefetchImportantNodes();
-    
-    // The rest of the existing code can stay as a fallback
-    if (!selectedNodeId) return;
-    
-    // Get all connected node IDs
-    const connectedNodeIds = new Set<string>();
-    
-    // Add all directly connected nodes
-    data.links.forEach(link => {
-      if (link.source === selectedNodeId) {
-        connectedNodeIds.add(link.target);
-      } else if (link.target === selectedNodeId) {
-        connectedNodeIds.add(link.source);
-      }
-    });
-    
-    // Add highlighted ancestors and descendants
-    if (highlightedAncestors.size > 0) {
-      highlightedAncestors.forEach(id => connectedNodeIds.add(id));
-    }
-    
-    if (highlightedDescendants.size > 0) {
-      highlightedDescendants.forEach(id => connectedNodeIds.add(id));
-    }
-    
-    // Prefetch data for all connected nodes in parallel
-    // This will load all connected nodes immediately rather than one by one
-    const prefetchPromises = Array.from(connectedNodeIds)
-      .filter(nodeId => !prefetchedNodes.current.has(nodeId))
-      .slice(0, 5);
+    // No-op since we have all data
+  }, [prefetchImportantNodes]);
 
-    // Use for...of instead of forEach to avoid TypeScript errors
-    for (const nodeId of prefetchPromises) {
-      prefetchNode(nodeId);
-    }
-    
-  }, [selectedNodeId, data.links, highlightedAncestors, highlightedDescendants, prefetchNode]);
+  useEffect(() => {
+    // No-op since we have all data
+  }, [data.nodes, prefetchNode]);
 
   // Add this effect to prefetch data for nodes connected by a selected link
   useEffect(() => {
@@ -3344,7 +3051,7 @@ useEffect(() => {
             {/* Nodes */}
             <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
               {visibleNodes.map((node) => {
-                const details = prefetchedNodeDetails.get(node.id);
+                const details = prefetchedNodeDetails.current.get(node.id);
                 // Create a new node object that merges base node data with any prefetched details
                 const displayNode = { ...node, ...(details || {}) };
 
@@ -3390,7 +3097,7 @@ useEffect(() => {
                   if (targetNodeId !== baseLoopNode.id) return null;
 
                   // Merge base node data with prefetched details for the tooltip
-                  const prefetchedDetails = prefetchedNodeDetails.get(baseLoopNode.id);
+                  const prefetchedDetails = prefetchedNodeDetails.current.get(baseLoopNode.id);
                   // This 'node' is the one used throughout the tooltip content
                   const node = { ...baseLoopNode, ...(prefetchedDetails || {}) }; 
 
@@ -3429,7 +3136,7 @@ useEffect(() => {
                         </p>
                         {node.inventors &&
                           node.inventors.length > 0 &&
-                          node.inventors.filter((inv) => inv !== "unknown")
+                          node.inventors.filter((inv: string) => inv !== "unknown")
                             .length > 0 && (
                             <p className="text-xs mb-1">
                               <strong>
@@ -3440,12 +3147,12 @@ useEffect(() => {
                                   : `Inventor${
                                       node.inventors.length > 1 ? "s" : ""
                                     }`}
-                                  :
-                                </strong>{" "}
+                                    :
+                                  </strong>{" "}
                                 {node.inventors.includes("unknown")
                                   ? "possibly " +
                                     node.inventors
-                                      .filter((inv) => inv !== "unknown")
+                                      .filter((inv: string) => inv !== "unknown")
                                       .join(", ")
                                   : node.inventors.join(", ")}
                             </p>

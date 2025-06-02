@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     const year = Number(record.get("Date"));
     
     // Return the processed node data
-    return NextResponse.json({
+    const node = {
       id: record.id,
       title: String(record.get("Name") || ""),
       subtitle: String(record.get("Secondary name") || ""),
@@ -64,7 +64,17 @@ export async function GET(request: Request) {
       impact: String(record.get("Impact") || ""),
       wikipedia: String(record.get("Wikipedia") || ""),
       sources: String(record.get("Sources") || ""),
-    });
+    };
+
+    const response = NextResponse.json(node);
+    
+    // Add more aggressive caching headers since data is static
+    response.headers.set(
+      'Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000' // Cache for 1 year
+    );
+
+    return response;
   } catch (error) {
     console.error(`Error fetching invention with ID ${id}:`, error);
     return NextResponse.json(

@@ -77,7 +77,13 @@ export async function GET(request: Request) {
 
     if (detail) {
       // For detailed requests, return all data
-      return NextResponse.json(allData);
+      const response = NextResponse.json(allData);
+      // Add caching headers
+      response.headers.set(
+        'Cache-Control',
+        'public, s-maxage=31536000, stale-while-revalidate=31536000' // Cache for 1 year
+      );
+      return response;
     }
 
     // For basic data, derive it from the full data
@@ -98,10 +104,16 @@ export async function GET(request: Request) {
       // Do not include link.details for basic view
     }));
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       nodes: basicNodes,
       links: basicLinks,
     });
+    // Add caching headers
+    response.headers.set(
+      'Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000' // Cache for 1 year
+    );
+    return response;
   } catch (error) {
     console.error("Error in API route /api/inventions:", error);
     return NextResponse.json(
