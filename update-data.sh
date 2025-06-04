@@ -29,4 +29,15 @@ python src/scripts/update_images.py --new
 echo "Updating tech tree data..."
 NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/fetch-and-save-inventions.ts
 
+# Trigger a rebuild if in production
+if [ "$NODE_ENV" = "production" ]; then
+    echo "Triggering rebuild..."
+    # If using Vercel, trigger a deployment
+    if [ -n "$VERCEL_GIT_COMMIT_SHA" ]; then
+        echo "Triggering Vercel deployment..."
+        curl -X POST "https://api.vercel.com/v1/integrations/deploy/$VERCEL_DEPLOYMENT_ID" \
+            -H "Authorization: Bearer $VERCEL_TOKEN"
+    fi
+fi
+
 echo "Done!" 

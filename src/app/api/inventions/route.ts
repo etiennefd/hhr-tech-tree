@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readFile } from "fs/promises";
+import { readFile, stat } from "fs/promises";
 import path from "path";
 // Removed Airtable and related imports as we are reading from a local file
 // import Airtable from "airtable";
@@ -68,56 +68,35 @@ async function getTechTreeData(): Promise<TechTreeData> {
   }
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const detail = searchParams.get("detail") === "true";
-
+// Add function to check if data needs updating
+async function shouldUpdateData(lastUpdate: number): Promise<boolean> {
   try {
-    const allData = await getTechTreeData();
+    const stats = await stat(DATA_FILE_PATH);
+    return stats.mtimeMs > lastUpdate;
+  } catch (error) {
+    console.error("Failed to check data file stats:", error);
+    return false;
+  }
+}
 
-    if (detail) {
-      // For detailed requests, return all data
-      const response = NextResponse.json(allData);
-      // Add caching headers
-      response.headers.set(
-        'Cache-Control',
-        'public, s-maxage=31536000, stale-while-revalidate=31536000' // Cache for 1 year
-      );
-      return response;
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const detail = searchParams.get('detail') === 'true';
+    const lastUpdate = Number(searchParams.get('t')) || 0;
+
+    // Check if data needs updating
+    if (lastUpdate > 0 && await shouldUpdateData(lastUpdate)) {
+      // Clear the cache to force a fresh load
+      loadedData = null;
     }
 
-    // For basic data, derive it from the full data
-    const basicNodes = allData.nodes.map((node) => ({
-      id: node.id,
-      title: node.title,
-      year: node.year,
-      fields: node.fields || [], // Ensure fields is always an array
-      type: node.type || "",
-      // Add other minimal fields if your frontend expects them for basic view
-      // e.g., image: node.image for placeholder rendering if needed
-    }));
-
-    const basicLinks = allData.links.map((link) => ({
-      source: link.source,
-      target: link.target,
-      type: link.type,
-      // Do not include link.details for basic view
-    }));
-
-    const response = NextResponse.json({
-      nodes: basicNodes,
-      links: basicLinks,
-    });
-    // Add caching headers
-    response.headers.set(
-      'Cache-Control',
-      'public, s-maxage=31536000, stale-while-revalidate=31536000' // Cache for 1 year
-    );
-    return response;
+    const data = await getTechTreeData();
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Error in API route /api/inventions:", error);
+    console.error("Error in GET /api/inventions:", error);
     return NextResponse.json(
-      { error: "Internal Server Error retrieving tech tree data" },
+      { error: "Failed to fetch tech tree data" },
       { status: 500 }
     );
   }

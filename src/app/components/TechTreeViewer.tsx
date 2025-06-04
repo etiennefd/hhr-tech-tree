@@ -655,7 +655,49 @@ export function TechTreeViewer() {
       const controller = new AbortController();
 
       try {
-        // Check cache first
+        // In development, always fetch fresh data
+        if (process.env.NODE_ENV === 'development') {
+          setIsLoading(true);
+          const detailResponse = await fetchWithRetry("/api/inventions?detail=true", 3, 1000);
+          const detailData = await detailResponse.json();
+
+          if (!isMounted) return;
+
+          const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
+            ...node,
+            image: validateImageUrl(node.image)
+          })) || [];
+
+          const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
+
+          setData({ 
+            nodes: positionedDetailNodes, 
+            links: detailData.links || [] 
+          });
+          currentNodesRef.current = positionedDetailNodes;
+
+          // Update spatial index
+          const minX = Math.min(...positionedDetailNodes.map(n => n.x || Infinity));
+          const maxX = Math.max(...positionedDetailNodes.map(n => n.x || -Infinity));
+          const minY = Math.min(...positionedDetailNodes.map(n => n.y || Infinity));
+          const maxY = Math.max(...positionedDetailNodes.map(n => n.y || -Infinity));
+          
+          const width = maxX - minX;
+          const height = maxY - minY;
+          const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
+          
+          spatialIndexRef.current = new SpatialIndex(cellSize);
+          positionedDetailNodes.forEach(node => {
+            if (node.x !== undefined && node.y !== undefined) {
+              spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
+            }
+          });
+
+          setIsLoading(false);
+          return;
+        }
+
+        // In production, check cache first
         const cachedData = await cacheManager.get();
         
         if (cachedData?.detailData) {
