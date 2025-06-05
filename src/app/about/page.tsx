@@ -264,6 +264,7 @@ export default function AboutPage() {
             </h2>
 
             <ul className="list-disc pl-6 space-y-2">
+              <li><Link href="/changelog" style={linkStyle}>Changelog</Link> starting 2 June 2025</li>
               <li>Original announcement (soon)</li>
               <li>Article in Asterisk Magazine (soon)</li>
             </ul>
