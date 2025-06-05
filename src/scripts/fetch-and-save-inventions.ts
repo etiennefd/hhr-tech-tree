@@ -184,6 +184,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
               wikipedia: String(record.get("Wikipedia") || ""),
               details: String(record.get("Details") || ""),
               imagePosition: String(record.get("Image position") || 'center'),
+              dateAdded: String(record.get("Date added") || ""),
               // Add any other fields that are part of your detailed node structure
             };
           } catch (error) {
@@ -234,6 +235,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
                 : String(toValue ?? ""),
             type: String(record.get("Type") || "default"),
             details: String(record.get("Details") || ""),
+            dateAdded: String(record.get("Date added") || ""),
             // Add any other fields for links
           };
         });

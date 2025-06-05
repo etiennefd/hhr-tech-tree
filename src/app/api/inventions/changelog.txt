@@ -1,0 +1,52 @@
+5 June 2025
+- Added tech: Leavened bread
+- Added tech: Domestication of potatoes
+- Added connection: Restriction enzymes -> DNA profiling
+- Added connection: Domestication of wheat -> Leavened bread
+- Added connection: Leavened bread -> Electric toaster
+
+4 June 2025
+- Added tech: Advanced Encryption Standard
+- Added tech: Data Encryption Standard
+- Added tech: Hardware security module
+- Added tech: Modern cryptography
+- Added tech: One-time pad
+- Added tech: Frequency analysis
+- Added tech: Dhow
+- Added tech: Domestication of coconuts
+- Added connection: One-time pad -> Modern cryptography
+- Added connection: Information theory -> Modern cryptography
+- Added connection: Modern cryptography -> Public-key cryptography
+- Added connection: Automatic teller machine -> Hardware security module
+- Added connection: Public-key cryptography -> Digital currency
+- Added connection: Hardware security module -> Data Encryption Standard
+- Added connection: Data Encryption Standard -> Advanced Encryption Standard
+- Added connection: Modern cryptography -> Hardware security module
+- Added connection: Modern cryptography -> Data Encryption Standard
+- Added connection: Braille -> Optacon
+- Added connection: Lashed-lug boat building -> Dhow
+- Added connection: Domestication of coconuts -> Dhow
+- Added connection: Lateen and settee sail -> Dhow
+
+3 June 2025
+- Added tech: Paper clip
+- Added tech: Aniline
+- Added tech: Paddy field
+- Added connection: Domestication of rice -> Paddy field
+- Added connection: Indigo dye -> Aniline
+- Added connection: Aniline -> Paracetamol
+
+2 June 2025
+- Added tech: Laser cutting
+- Added tech: Carbon-dioxide laser
+- Added tech: Nd:YAG laser
+- Added connection: Eyeglasses -> Telescope
+- Added connection: Microlith -> Sickle
+- Added connection: Hafting -> Sickle
+- Added connection: Laser -> Carbon-dioxide laser
+- Added connection: Laser -> Nd:YAG laser
+- Added connection: Neodymium -> Nd:YAG laser
+- Added connection: Nd:YAG laser -> Laser cutting
+- Added connection: Carbon-dioxide laser -> Laser cutting
+
+Prior to 1 June 2025, there were 2061 connections and 1800 techs.

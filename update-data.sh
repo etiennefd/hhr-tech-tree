@@ -29,6 +29,10 @@ python src/scripts/update_images.py --new
 echo "Updating tech tree data..."
 NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/fetch-and-save-inventions.ts
 
+# Generate changelog
+echo "Generating changelog..."
+NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/generate-changelog.ts
+
 # Trigger a rebuild if in production
 if [ "$NODE_ENV" = "production" ]; then
     echo "Triggering rebuild..."
