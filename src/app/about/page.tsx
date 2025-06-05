@@ -265,8 +265,8 @@ export default function AboutPage() {
 
             <ul className="list-disc pl-6 space-y-2">
               <li><Link href="/changelog" style={linkStyle}>Changelog</Link> starting 2 June 2025</li>
-              <li>Original announcement (soon)</li>
-              <li>Article in Asterisk Magazine (soon)</li>
+              <li><a href="https://www.hopefulmons.com/p/announcing-the-historical-tech-tree" target="_blank" rel="noopener noreferrer" style={linkStyle}>Original announcement</a></li>
+              <li><a href="https://asteriskmag.com/issues/10/the-universal-tech-tree" target="_blank" rel="noopener noreferrer" style={linkStyle}>Article in Asterisk Magazine</a> </li>
             </ul>
           </section>
 
