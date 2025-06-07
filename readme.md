@@ -4,7 +4,7 @@ Visit [historicaltechtree.com](https://www.historicaltechtree.com/) to see the t
 
 **Code**: This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-**Data**: The dataset ote technologies and connections, and associated data files, are not covered by the MIT license and remain under copyright. All rights reserved.
+**Data**: The dataset of technologies and connections, and associated data files, are not covered by the MIT license and remain under copyright. All rights reserved.
 
 ## Development notes
 
