@@ -115,4 +115,3 @@
 9 November 2024
 - v0.0: Start of app development
 
-Prior to 1 June 2025, there were 2060 connections and 1800 techs.

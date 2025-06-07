@@ -161,7 +161,6 @@ async function generateChangelog() {
     // Count techs and connections that existed before June 1st, 2025
     const legacyTechs = data.nodes.filter(node => !node.dateAdded).length;
     const legacyConnections = data.links.filter(link => !link.dateAdded).length;
-    changelogText += `Prior to 1 June 2025, there were ${legacyConnections} connections and ${legacyTechs} techs.`;
 
     // Write changelog to file
     const changelogPath = path.join(process.cwd(), 'src', 'app', 'api', 'inventions', 'changelog.txt');
