@@ -16,6 +16,7 @@
 - Added tech: Deuterium
 - Added tech: Somatic cell nuclear transfer
 - Added tech: Hunter process
+- Added tech: Bayonet
 - Added connection: Mammal cloning -> Induced pluripotent stem cell
 - Added connection: Titanium -> Hunter process
 - Added connection: Magnesium -> Kroll process
@@ -48,6 +49,7 @@
 - Added connection: Quantum tunneling -> Quantum annealing
 - Added connection: Flux qubit -> Quantum annealing
 - Added connection: Josephson junction -> Flux qubit
+- Added connection: Arquebus and matchlock -> Bayonet
 
 6 June 2025
 - Added tech: Domestication of millet
@@ -113,4 +115,4 @@
 9 November 2024
 - v0.0: Start of app development
 
-Prior to 1 June 2025, there were 2061 connections and 1800 techs.
+Prior to 1 June 2025, there were 2060 connections and 1800 techs.
