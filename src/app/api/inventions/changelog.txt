@@ -4,6 +4,7 @@
 - Added tech: Charge qubit
 - Added tech: Flux qubit
 - Added tech: Mammal cloning
+- Added tech: Artificial heart
 - Added tech: SQUID
 - Added tech: Dilution refrigerator
 - Added tech: Josephson junction
@@ -14,6 +15,7 @@
 - Added tech: Tritium
 - Added tech: Nuclear fusion
 - Added tech: Deuterium
+- Added tech: Electric chainsaw
 - Added tech: Somatic cell nuclear transfer
 - Added tech: Hunter process
 - Added tech: Indium
@@ -52,6 +54,7 @@
 - Added connection: Josephson junction -> Flux qubit
 - Added connection: Arquebus and matchlock -> Bayonet
 - Added connection: Indium -> Blue LED
+- Added connection: Chromatography -> DNA ligase
 
 6 June 2025
 - Added tech: Domestication of millet
