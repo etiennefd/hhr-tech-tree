@@ -1,8 +1,60 @@
+7 June 2025
+- Added tech: Quantum annealing
+- Added tech: Transmon
+- Added tech: Charge qubit
+- Added tech: Flux qubit
+- Added tech: Mammal cloning
+- Added tech: SQUID
+- Added tech: Dilution refrigerator
+- Added tech: Josephson junction
+- Added tech: Animal cloning from adult cells
+- Added tech: Animal cloning
+- Added tech: Kroll process
+- Added tech: Helium-3
+- Added tech: Tritium
+- Added tech: Nuclear fusion
+- Added tech: Deuterium
+- Added tech: Somatic cell nuclear transfer
+- Added tech: Hunter process
+- Added connection: Mammal cloning -> Induced pluripotent stem cell
+- Added connection: Titanium -> Hunter process
+- Added connection: Magnesium -> Kroll process
+- Added connection: Hunter process -> Kroll process
+- Added connection: Kroll process -> Lithium battery pacemaker
+- Added connection: Josephson junction -> SQUID
+- Added connection: Superconductors -> Josephson junction
+- Added connection: Magnetometer -> SQUID
+- Added connection: Quantum tunneling -> Josephson junction
+- Added connection: Somatic cell nuclear transfer -> Animal cloning
+- Added connection: Animal cloning from adult cells -> Mammal cloning
+- Added connection: Animal cloning -> Animal cloning from adult cells
+- Added connection: Frog pregnancy test -> Animal cloning from adult cells
+- Added connection: Transmon -> Quantum computer
+- Added connection: Dilution refrigerator -> Quantum computer
+- Added connection: Charge qubit -> Transmon
+- Added connection: Josephson junction -> Charge qubit
+- Added connection: Cyclotron -> Nuclear fusion
+- Added connection: Quantum tunneling -> Nuclear fusion
+- Added connection: Nuclear fusion -> Helium-3
+- Added connection: Nuclear fusion -> Hydrogen bomb
+- Added connection: Helium-3 -> Dilution refrigerator
+- Added connection: Isotopes -> Helium-3
+- Added connection: Isotopes -> Deuterium
+- Added connection: Deuterium -> Nuclear fusion
+- Added connection: Nuclear fusion -> Tokamak
+- Added connection: Hampson–Linde air liquefaction -> Deuterium
+- Added connection: Isotopes -> Tritium
+- Added connection: Mass spectrometer -> Deuterium
+- Added connection: Quantum tunneling -> Quantum annealing
+- Added connection: Flux qubit -> Quantum annealing
+- Added connection: Josephson junction -> Flux qubit
+
 6 June 2025
 - Added tech: Domestication of millet
 - Added connection: Irrigation -> Shaduf
 
 5 June 2025
+- v1.0.1: Create changelog
 - Added tech: Ostwald nitric acid process
 - Added tech: Leavened bread
 - Added tech: Domestication of potatoes
@@ -54,5 +106,11 @@
 - Added connection: Neodymium -> Nd:YAG laser
 - Added connection: Nd:YAG laser -> Laser cutting
 - Added connection: Carbon-dioxide laser -> Laser cutting
+
+26 May 2025
+- v1.0: First public release
+
+9 November 2024
+- v0.0: Start of app development
 
 Prior to 1 June 2025, there were 2061 connections and 1800 techs.
