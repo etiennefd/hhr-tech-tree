@@ -16,6 +16,7 @@
 - Added tech: Deuterium
 - Added tech: Somatic cell nuclear transfer
 - Added tech: Hunter process
+- Added tech: Indium
 - Added tech: Bayonet
 - Added connection: Mammal cloning -> Induced pluripotent stem cell
 - Added connection: Titanium -> Hunter process
@@ -50,6 +51,7 @@
 - Added connection: Flux qubit -> Quantum annealing
 - Added connection: Josephson junction -> Flux qubit
 - Added connection: Arquebus and matchlock -> Bayonet
+- Added connection: Indium -> Blue LED
 
 6 June 2025
 - Added tech: Domestication of millet
