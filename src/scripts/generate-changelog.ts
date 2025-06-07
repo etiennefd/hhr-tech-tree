@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import Airtable from 'airtable';
 
 interface TechNode {
   id: string;
@@ -19,6 +20,12 @@ interface TechTreeData {
   links: TechLink[];
 }
 
+interface AppMilestone {
+  version: string;
+  description: string;
+  date: string;
+}
+
 function formatDate(dateStr: string): string {
   // Parse the date and adjust for timezone
   const [year, month, day] = dateStr.split('-').map(Number);
@@ -28,12 +35,59 @@ function formatDate(dateStr: string): string {
 
 async function generateChangelog() {
   try {
+    // Conditionally import and configure dotenv only if not in production
+    if (process.env.NODE_ENV !== 'production') {
+      // Dynamically import dotenv to avoid issues if it's not installed in production
+      try {
+        const dotenv = await import('dotenv');
+        dotenv.config({ path: path.resolve(process.cwd(), '.env.local') }); // Ensure it loads .env.local if you use that
+        console.log("Loaded .env.local for development");
+      } catch (e) {
+        console.warn("dotenv not found or failed to load, proceeding without it.");
+      }
+    }
+
+    // Initialize Airtable
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+      process.env.AIRTABLE_BASE_ID ?? ""
+    );
+
+    // Fetch app development milestones
+    const milestoneRecords = await base("Milestones")
+      .select({
+        view: "Grid view",
+        sort: [{ field: "Date", direction: "desc" }],
+      })
+      .all();
+
+    const milestones: AppMilestone[] = milestoneRecords.map(record => ({
+      version: String(record.get("Version") || ""),
+      description: String(record.get("Description") || ""),
+      date: String(record.get("Date") || "")
+    }));
+
     // Read the tech tree data
     const dataPath = path.join(process.cwd(), 'src', 'app', 'api', 'inventions', 'techtree-data.json');
     const data: TechTreeData = JSON.parse(await fs.readFile(dataPath, 'utf-8'));
 
     // Create maps to store items by date
-    const itemsByDate = new Map<string, { techs: string[], connections: Array<{ from: string, to: string }> }>();
+    const itemsByDate = new Map<string, { 
+      techs: string[], 
+      connections: Array<{ from: string, to: string }>,
+      milestones: Array<{ version: string, description: string }>
+    }>();
+
+    // Process app development milestones
+    milestones.forEach(milestone => {
+      const dateStr = formatDate(milestone.date);
+      if (!itemsByDate.has(dateStr)) {
+        itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [] });
+      }
+      itemsByDate.get(dateStr)?.milestones.push({
+        version: milestone.version,
+        description: milestone.description
+      });
+    });
 
     // Process techs
     data.nodes.forEach((node) => {
@@ -41,7 +95,7 @@ async function generateChangelog() {
         const dateStr = formatDate(node.dateAdded);
         
         if (!itemsByDate.has(dateStr)) {
-          itemsByDate.set(dateStr, { techs: [], connections: [] });
+          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [] });
         }
         itemsByDate.get(dateStr)?.techs.push(node.title);
       }
@@ -53,7 +107,7 @@ async function generateChangelog() {
         const dateStr = formatDate(link.dateAdded);
         
         if (!itemsByDate.has(dateStr)) {
-          itemsByDate.set(dateStr, { techs: [], connections: [] });
+          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [] });
         }
 
         const sourceNode = data.nodes.find(n => n.id === link.source);
@@ -84,6 +138,11 @@ async function generateChangelog() {
       const items = itemsByDate.get(date);
       if (items) {
         changelogText += `${date}\n`;
+        
+        // Add app development milestones first
+        items.milestones.forEach(milestone => {
+          changelogText += `- ${milestone.version}: ${milestone.description}\n`;
+        });
         
         // Add techs
         items.techs.forEach(tech => {
