@@ -1,9 +1,15 @@
+6 June 2025
+- Added tech: Domestication of millet
+- Added connection: Irrigation -> Shaduf
+
 5 June 2025
+- Added tech: Ostwald nitric acid process
 - Added tech: Leavened bread
 - Added tech: Domestication of potatoes
 - Added connection: Restriction enzymes -> DNA profiling
 - Added connection: Domestication of wheat -> Leavened bread
 - Added connection: Leavened bread -> Electric toaster
+- Added connection: Nitric acid -> Ostwald nitric acid process
 
 4 June 2025
 - Added tech: Advanced Encryption Standard
