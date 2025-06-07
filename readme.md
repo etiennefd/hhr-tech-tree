@@ -1,5 +1,10 @@
 Visit [historicaltechtree.com](https://www.historicaltechtree.com/) to see the tech tree. 
 
+## License
+
+**Code**: This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**Data**: The dataset and associated data files are not covered by the MIT license and remain under copyright. All rights reserved.
+
 ## Development notes
 
 To run the app on http://localhost:3000, run `npm run dev`
