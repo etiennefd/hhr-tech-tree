@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     description: "Interactive visualization of technological history",
     images: [
       {
-        url: "/og-image.png", // You'll need to create and add this image to public folder
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Historical Tech Tree Visualization",
