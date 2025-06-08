@@ -1,3 +1,31 @@
+8 June 2025
+- Added tech: Cyanoacrylate
+- Added tech: Zoom lens
+- Added tech: Vibraphone
+- Added tech: Marimbaphone
+- Added tech: Corrugated fiberboard
+- Added tech: Trumpet with pistons
+- Added tech: Tuba
+- Added tech: Repeating circle
+- Added tech: Reflecting circle
+- Added tech: Cardboard
+- Added tech: Trombone
+- Added tech: Clavichord
+- Added tech: Buisine
+- Added connection: Papermaking -> Cardboard
+- Added connection: Cardboard -> Corrugated fiberboard
+- Added connection: Corrugated fiberboard -> Pre-cut cardboard box
+- Added connection: Movie camera -> Zoom lens
+- Added connection: Reflecting circle -> Repeating circle
+- Added connection: Telescope -> Reflecting circle
+- Added connection: Octant -> Reflecting circle
+- Added connection: Trumpet -> Buisine
+- Added connection: Buisine -> Trombone
+- Added connection: Marimbaphone -> Vibraphone
+- Added connection: Buisine -> Trumpet with pistons
+- Added connection: Buisine -> Tuba
+- Added connection: Pipe organ -> Clavichord
+
 7 June 2025
 - Added tech: Quantum annealing
 - Added tech: Transmon
