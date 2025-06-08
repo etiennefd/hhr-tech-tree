@@ -57,7 +57,8 @@ export default function AboutPage() {
                 <a href="#contributing" style={linkStyle}>3. Contributing</a>
                 <ul className="ml-6 mt-2 space-y-1">
                   <li><a href="#suggesting" style={linkStyle}>3.1. Suggesting content</a></li>
-                  <li><a href="#financial" style={linkStyle}>3.2. Financial support</a></li>
+                  <li><a href="#discord" style={linkStyle}>3.2. Join the community</a></li>
+                  <li><a href="#financial" style={linkStyle}>3.3. Financial support</a></li>
                 </ul>
               </li>
               <li><a href="#image-credits" style={linkStyle}>4. Image credits</a></li>
@@ -233,8 +234,21 @@ export default function AboutPage() {
               <li><a href="https://airtable.com/appmQuONO382L03FY/pagNcBGN2JzHckpTP/form" target="_blank" rel="noopener noreferrer" style={linkStyle}>Report a problem</a></li>
             </ul>
 
+            <h3 id="discord" className="text-xl font-bold mb-4 mt-8 font-mono" style={{ color: darkerBlue }}>
+              3.2. Join the community
+            </h3>
+
+            <p>
+              Join our Discord server to connect with other tech tree enthusiasts, discuss historical technologies, 
+              and stay updated on the project's development.
+            </p>
+
+            <p className="mt-4">
+              <a href="https://discord.gg/e96JwQjUmX" target="_blank" rel="noopener noreferrer" style={linkStyle}>Join the Discord server →</a>
+            </p>
+
             <h3 id="financial" className="text-xl font-bold mb-4 mt-8 font-mono" style={{ color: darkerBlue }}>
-              3.2. Financial support
+              3.3. Financial support
             </h3>
 
             <p>
