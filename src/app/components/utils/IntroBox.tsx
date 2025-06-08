@@ -76,7 +76,7 @@ const IntroBox = memo(() => {
         <Link href="/about" style={linkStyle}>
           Read more
         </Link>
-        <Link href="https://airtable.com/appmQuONO382L03FY/paggvkJsCPLV4kREr/form" style={linkStyle} target="_blank" rel="noopener noreferrer">
+        <Link href="/about#contributing" style={linkStyle}>
           Contribute
         </Link>
       </div>
