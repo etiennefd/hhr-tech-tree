@@ -3613,8 +3613,6 @@ useEffect(() => {
           nodeVisibleConnections={visibleElements.nodeVisibleConnections}
           stickyVisibleConnections={visibleElements.stickyVisibleConnections}
           invisibleViewportConnections={visibleElements.invisibleViewportConnections}
-          showAllConnections={showAllConnections}
-          onToggleConnections={() => setShowAllConnections(!showAllConnections)}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}
