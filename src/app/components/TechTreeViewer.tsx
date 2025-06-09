@@ -202,6 +202,18 @@ function calculateXPosition(
   return PADDING + spaces * YEAR_WIDTH;
 }
 
+// Deterministic seeded random function
+function seededRandom(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  // Create a decimal between 0 and 1 using the hash
+  return (Math.abs(hash) % 1000) / 1000;
+}
+
 export function TechTreeViewer() {
   // Get search params
   const searchParams = useSearchParams();
@@ -412,18 +424,6 @@ export function TechTreeViewer() {
     (nodes: TechNode[]): TechNode[] => {
       if (!nodes.length) return [];
 
-      // Add a seeded random number generator
-      const seededRandom = (str: string) => {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-          const char = str.charCodeAt(i);
-          hash = (hash << 5) - hash + char;
-          hash = hash & hash; // Convert to 32-bit integer
-        }
-        // Create a decimal between 0 and 1 using the hash
-        return (Math.abs(hash) % 1000) / 1000;
-      };
-
       function estimateNodeHeight(node: TechNode): number {
         // Base heights for fixed elements
         const IMAGE_HEIGHT = 80; // Image container
@@ -460,65 +460,46 @@ export function TechTreeViewer() {
       // Ensure minimum distance from top of viewport
       const ABSOLUTE_MIN_Y = 100;
 
-      // Define fixed vertical bands (pixels from top) - compressed by ~2.5x
+      // Define fixed vertical bands (pixels from top)
       const VERTICAL_BANDS: Record<string, number> = {
-        // Food & Agriculture
         Food: Math.max(100, ABSOLUTE_MIN_Y),
         Agriculture: Math.max(150, ABSOLUTE_MIN_Y),
-
-        // Life Sciences
         Biology: Math.max(200, ABSOLUTE_MIN_Y),
         Medicine: Math.max(250, ABSOLUTE_MIN_Y),
         Sanitation: 300,
-
-        // Physical Sciences
         Physics: 400,
         Chemistry: 450,
         Astronomy: 500,
         Meteorology: 550,
         Optics: 600,
-
-        // Energy & Electronics
         Electricity: 650,
         Electronics: 700,
         Energy: 750,
         Lighting: 800,
-
-        // Construction/Materials
         Construction: 850,
         Mining: 900,
         Metallurgy: 950,
         Manufacturing: 1000,
         Textiles: 1050,
         Hydraulics: 1100,
-
-        // Transportation/Movement
         Transportation: 1150,
         Flying: 1200,
         Sailing: 1250,
         Diving: 1300,
         Space: 1350,
         Geography: 1400,
-
-        // Computing/Math
         Mathematics: 1450,
         Measurement: 1500,
         Timekeeping: 1550,
         Computing: 1600,
         Finance: 1650,
-
-        // Safety/Weapons
         Safety: 1700,
         Security: 1750,
         Weaponry: 1800,
-
-        // Culture
         Communication: 1850,
         "Visual media": 1900,
         Recreation: 1950,
         Music: 2000,
-
-        // Miscellaneous
         Misc: 2050,
       };
 
@@ -533,9 +514,9 @@ export function TechTreeViewer() {
 
       yearGroups.forEach((nodesInYear, year) => {
         const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
-        const usedPositions: TechTreeNodePosition[] = []; // Will store {y, height} objects
         const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
+        // Sort nodes by their primary field's band (lowest band = top)
         nodesInYear.sort((a: TechNode, b: TechNode) => {
           const aPos = a.fields?.[0]
             ? VERTICAL_BANDS[a.fields[0]] || 1200
@@ -546,87 +527,61 @@ export function TechTreeViewer() {
           return aPos - bPos;
         });
 
-        nodesInYear.forEach((node: TechNode) => {
+        // Stack nodes from the top band position, no overlap
+        let currentY: number | null = null;
+        const nodeYs: number[] = [];
+        const nodeHeights: number[] = [];
+        // First, stack deterministically
+        nodesInYear.forEach((node: TechNode, idx: number) => {
           const nodeHeight = estimateNodeHeight(node);
-
-          // Create seed string for base position
-          const baseSeedString = `base-${node.id}-${node.title}-${
-            node.year
-          }-${node.fields.join(",")}`;
-
-          // Special handling for stone tools node
           let basePosition;
           if (node.title.toLowerCase() === "stone tool") {
-            // Position stone tools node below the info box
             basePosition = INFO_BOX_HEIGHT;
           } else {
-            // Get base position from primary field, ensuring minimum Y
             basePosition = Math.max(
               ABSOLUTE_MIN_Y,
-              (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200) +
-                (seededRandom(baseSeedString) - 0.5) * 200  // Increased from 100 to 200 for more spread
+              (node.fields?.[0] ? VERTICAL_BANDS[node.fields[0]] || 1200 : 1200)
             );
           }
-
-          const isOverlapping = (testPosition: number): boolean => {
-            if (testPosition < ABSOLUTE_MIN_Y) return true;
-
-            const testBottom = testPosition + nodeHeight;
-
-            return usedPositions.some(({ y: usedY, height: usedHeight }) => {
-              const usedBottom = usedY + usedHeight;
-              return !(
-                testBottom < usedY ||
-                testPosition > usedBottom + MIN_VERTICAL_GAP
-              );
-            });
-          };
-
-          let finalPosition = basePosition;
-          let attempts = 0;
-          const maxAttempts = 20;
-          const searchRadius = MIN_VERTICAL_GAP * 2;
-
-          while (isOverlapping(finalPosition) && attempts < maxAttempts) {
-            const step = Math.ceil(attempts / 2) * (MIN_VERTICAL_GAP / 2);
-            const direction = attempts % 2 === 0 ? 1 : -1;
-
-            if (step > searchRadius) {
-              finalPosition = basePosition + direction * searchRadius * 1.5;  // Increased from 1 to 1.5
-            } else {
-              finalPosition = basePosition + direction * step;
+          let y;
+          if (currentY === null) {
+            y = basePosition;
+          } else {
+            y = Math.max(currentY + MIN_VERTICAL_GAP, basePosition);
+          }
+          nodeYs.push(y);
+          nodeHeights.push(nodeHeight);
+          currentY = y + nodeHeight;
+        });
+        // Then, apply safe jitter
+        nodesInYear.forEach((node: TechNode, idx: number) => {
+          let y = nodeYs[idx];
+          const nodeHeight = nodeHeights[idx];
+          // Use a larger jitter for more visible effect
+          const desiredJitter = 20;
+          const rand = seededRandom(node.id);
+          let jitter = -desiredJitter + rand * (2 * desiredJitter);
+          // Clamp jitter so it doesn't cause overlap
+          if (idx > 0) {
+            const prevY = nodeYs[idx - 1];
+            const prevHeight = nodeHeights[idx - 1];
+            const minY = prevY + prevHeight + MIN_VERTICAL_GAP;
+            if (y + jitter < minY) {
+              jitter = minY - y;
             }
-            finalPosition = Math.max(ABSOLUTE_MIN_Y, finalPosition);
-            attempts++;
           }
-
-          if (isOverlapping(finalPosition) && usedPositions.length > 0) {
-            const lastPosition = usedPositions[usedPositions.length - 1];
-            finalPosition = Math.max(
-              ABSOLUTE_MIN_Y,
-              lastPosition.y + lastPosition.height + MIN_VERTICAL_GAP
-            );
+          if (idx < nodesInYear.length - 1) {
+            const nextY = nodeYs[idx + 1];
+            const maxY = nextY - MIN_VERTICAL_GAP - nodeHeight;
+            if (y + jitter > maxY) {
+              jitter = maxY - y;
+            }
           }
-
-          // Use different seed string for final offset to get different randomization
-          const offsetSeedString = `offset-${node.id}-${node.title}-${
-            node.year
-          }-${node.fields.join(",")}`;
-          const randomOffset = (seededRandom(offsetSeedString) - 0.5) * 50;
-          finalPosition = Math.max(
-            ABSOLUTE_MIN_Y,
-            finalPosition + randomOffset
-          );
-
-          while (isOverlapping(finalPosition)) {
-            finalPosition += MIN_VERTICAL_GAP / 8;
-          }
-
-          usedPositions.push({ y: finalPosition, height: nodeHeight });
+          y += jitter;
           positionedNodes.push({
             ...node,
             x,
-            y: finalPosition,
+            y,
           });
         });
       });
@@ -639,9 +594,7 @@ export function TechTreeViewer() {
       setTotalHeight(maxY);
 
       return positionedNodes;
-    },
-    []
-  );
+    }, []);
 
   // EFFECTS
 
