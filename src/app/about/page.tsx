@@ -239,8 +239,8 @@ export default function AboutPage() {
             </h3>
 
             <p>
-              Join our Discord server to connect with other tech tree enthusiasts, discuss historical technologies, 
-              and stay updated on the project's development.
+              Join the Discord server to connect with other tech tree enthusiasts, discuss historical technologies, 
+              and stay updated on the project&apos;s development.
             </p>
 
             <p className="mt-4">
