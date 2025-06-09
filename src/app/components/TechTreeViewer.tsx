@@ -2497,7 +2497,7 @@ export function TechTreeViewer() {
       data.links.findIndex(l => l.source === link.source && l.target === link.target && l.type === link.type)
     ).filter(index => index !== -1));
 
-    if (showAllConnections) {
+    if (connectionMode === 'all') {
       // Show all connections in viewport
       data.links.forEach((link, index) => {
         if (isConnectionInViewport(link, index)) {
@@ -2572,7 +2572,7 @@ export function TechTreeViewer() {
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
     stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, filters, showAllConnections, connectionMode // Add showAllConnections and connectionMode to dependencies
+    stableFilteredNodeIdsString, filters, connectionMode // Add showAllConnections and connectionMode to dependencies
   ]);
 
   // Add effect to log general performance metrics
