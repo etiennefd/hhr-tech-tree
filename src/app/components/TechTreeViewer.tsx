@@ -3160,6 +3160,7 @@ useEffect(() => {
                       opacity: getNodeOpacity(node),
                       transition: "opacity 0.2s ease-in-out",
                     }}
+                    showImages={showImages}
                   />
                 );
               })}
