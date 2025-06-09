@@ -2327,6 +2327,7 @@ export function TechTreeViewer() {
     filteredNodeIds: string;
     viewport: { left: number; right: number; top: number; bottom: number };
     showAllConnections: boolean; // Add to frame data for memo comparison
+    connectionMode: 'all' | 'optimized' | 'selected'; // Add connectionMode to frame data
   } | null>(null);
 
   // Add this helper function to get connections for a node
@@ -2400,7 +2401,8 @@ export function TechTreeViewer() {
       highlightedDescendants: stableHighlightedDescendantsString,
       filteredNodeIds: stableFilteredNodeIdsString,
       viewport: stableViewport,
-      showAllConnections // Add to frame data for memo comparison
+      showAllConnections,
+      connectionMode // Add connectionMode to frame data
     };
 
     if (lastFrameData.current &&
@@ -2414,6 +2416,7 @@ export function TechTreeViewer() {
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
         currentFrameData.showAllConnections === lastFrameData.current.showAllConnections &&
+        currentFrameData.connectionMode === lastFrameData.current.connectionMode && // Add connectionMode check
         previousCalculation.current.visibleNodes.length > 0 &&
         previousCalculation.current.visibleConnections.length > 0) {
       memoEffectiveness.track(true);
@@ -2502,6 +2505,25 @@ export function TechTreeViewer() {
           nodeVisibleConnections++;
         }
       });
+    } else if (connectionMode === 'selected') {
+      // Show connections only when:
+      // 1. They're selected
+      // 2. They're attached to a selected node
+      // 3. They're part of the subgraph being filtered (ancestors/descendants)
+      // 4. They're between filtered nodes (when filters are active)
+      data.links.forEach((link, index) => {
+        const isSelected = selectedLinkIndex === index;
+        const isAttachedToSelected = selectedNodeId && (link.source === selectedNodeId || link.target === selectedNodeId);
+        const isInFilteredSubgraph = (highlightedAncestors.has(link.source) || highlightedAncestors.has(link.target) ||
+                                    highlightedDescendants.has(link.source) || highlightedDescendants.has(link.target));
+        const touchesFilteredNode = filteredNodeIds.size > 0 && 
+                                  (filteredNodeIds.has(link.source) || filteredNodeIds.has(link.target));
+        
+        if (isSelected || isAttachedToSelected || isInFilteredSubgraph || touchesFilteredNode) {
+          currentFrameDrivenConnectionIndices.add(index);
+          nodeVisibleConnections++;
+        }
+      });
     } else {
       // Use the optimized visibility logic
       // First pass: Find connections where either node is visible
@@ -2550,7 +2572,7 @@ export function TechTreeViewer() {
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
     stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, filters, showAllConnections // Add showAllConnections to dependencies
+    stableFilteredNodeIdsString, filters, showAllConnections, connectionMode // Add showAllConnections and connectionMode to dependencies
   ]);
 
   // Add effect to log general performance metrics
