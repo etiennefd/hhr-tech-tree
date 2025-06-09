@@ -3189,7 +3189,7 @@ useEffect(() => {
                         className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
                         style={{
                           left: `${getXPosition(node.year)}px`,
-                          top: `${(node.y ?? 0) + 100}px`,
+                          top: `${(node.y ?? 0) + (showImages ? 100 : 25)}px`,
                           transform: "translate(-50%, 0)",
                           width: "14rem",
                           zIndex: 100,
