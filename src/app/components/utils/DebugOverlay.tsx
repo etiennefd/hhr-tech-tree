@@ -20,9 +20,7 @@ interface DebugOverlayProps {
   nodeVisibleConnections: number;
   stickyVisibleConnections: number;
   invisibleViewportConnections: number;
-  showAllConnections: boolean;
   onClose: () => void;
-  onToggleConnections: () => void;
 }
 
 export function DebugOverlay({
@@ -36,9 +34,7 @@ export function DebugOverlay({
   nodeVisibleConnections,
   stickyVisibleConnections,
   invisibleViewportConnections,
-  showAllConnections,
-  onClose,
-  onToggleConnections
+  onClose
 }: DebugOverlayProps) {
   const bufferedViewport = {
     left: viewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
@@ -94,43 +90,6 @@ export function DebugOverlay({
         <div>- {stickyVisibleConnections} visible because visible last frame</div>
       </div>
       <div style={{ marginLeft: '12px' }}>• {invisibleViewportConnections} invisible despite being in viewport</div>
-      <div style={{
-        marginTop: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        width: '100%'
-      }}>
-        <span style={{ fontSize: '12px', color: 'white' }}>Show connections:</span>
-        <span style={{ fontSize: '12px', color: showAllConnections ? 'rgba(255,255,255,0.5)' : 'white' }}>Optimized</span>
-        <button
-          onClick={onToggleConnections}
-          style={{
-            position: 'relative',
-            width: '40px',
-            height: '20px',
-            background: showAllConnections ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.3)',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            padding: '0',
-            transition: 'all 0.2s ease-in-out'
-          }}
-        >
-          <div style={{
-            position: 'absolute',
-            left: showAllConnections ? '22px' : '2px',
-            top: '2px',
-            width: '16px',
-            height: '16px',
-            background: 'white',
-            borderRadius: '50%',
-            transition: 'left 0.2s ease-in-out'
-          }} />
-        </button>
-        <span style={{ fontSize: '12px', color: showAllConnections ? 'white' : 'rgba(255,255,255,0.5)' }}>All</span>
-      </div>
     </div>
   );
 } 
