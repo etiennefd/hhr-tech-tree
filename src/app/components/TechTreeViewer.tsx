@@ -2498,7 +2498,7 @@ export function TechTreeViewer() {
       // 3. They're part of the subgraph being filtered (ancestors/descendants)
       // 4. They're between filtered nodes (when filters are active)
       data.links.forEach((link, index) => {
-        const isSelected = selectedLinkIndex === index;
+        const isSelected = selectedLinkKey === getLinkKey(link);
         const isAttachedToSelected = selectedNodeId && (link.source === selectedNodeId || link.target === selectedNodeId);
         const isInFilteredSubgraph = (highlightedAncestors.has(link.source) || highlightedAncestors.has(link.target) ||
                                     highlightedDescendants.has(link.source) || highlightedDescendants.has(link.target));
