@@ -3708,7 +3708,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              {/* Reset View Button */}
+              {/* "Go back to top left" Button */}
               <div>
                 <div className="flex items-center justify-between">
                   <button
@@ -3718,7 +3718,7 @@ useEffect(() => {
                       setShowSettingsMenu(false);
                     }}
                   >
-                    Reset view
+                    Go back to top left
                   </button>
                 </div>
               </div>
