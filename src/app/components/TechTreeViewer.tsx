@@ -701,6 +701,17 @@ export function TechTreeViewer() {
     []
   );
 
+  // Add resetView function
+  const resetView = useCallback(() => {
+    if (horizontalScrollContainerRef.current) {
+      horizontalScrollContainerRef.current.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
+
   // EFFECTS
 
   // 3. Optimize initial data fetching
@@ -3039,7 +3050,7 @@ useEffect(() => {
         }, 100)} // Throttle to max once every 100ms
       >
         <div 
-          style={{ 
+          style={{
             width: containerWidth,
             minHeight: '100vh',
             willChange: 'transform',
@@ -3741,6 +3752,21 @@ useEffect(() => {
                     </button>
                     <span className="text-xs text-[#91B4C5]">Show</span>
                   </div>
+                </div>
+              </div>
+
+              {/* Reset View Button */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <button
+                    className="text-xs text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
+                    onClick={() => {
+                      resetView();
+                      setShowSettingsMenu(false);
+                    }}
+                  >
+                    Reset view
+                  </button>
                 </div>
               </div>
             </div>
