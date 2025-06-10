@@ -21,6 +21,7 @@ interface BrutalistNodeProps {
   onMouseLeave: () => void;
   width: number;
   style?: React.CSSProperties;
+  showImages?: boolean;
 }
 
 const formatTitle = (title: string) => {
@@ -70,6 +71,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   onMouseLeave,
   width,
   style,
+  showImages = true,
 }) => {
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -310,65 +312,67 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
           </button>
         )}
         {/* Image section with improved loading states */}
-        <div className="border-b border-black p-0 relative h-20">
-          {specialImage ? (
-            // Special case: render the dedicated image directly
-            <Image
-              src={specialImage}
-              alt={node.title}
-              fill
-              className="object-cover"
-              style={{
-                filter: "grayscale(20%) contrast(110%)",
-                mixBlendMode: "multiply",
-                objectPosition: node.imagePosition || 'center',
-              }}
-              unoptimized={specialImage.startsWith('/')}
-            />
-          ) : (
-            // Original logic for all other nodes
-            <>
-              {imageUrl && (
-                <Image
-                  src={imageUrl}
-                  alt={node.title}
-                  fill
-                  className={`object-cover transition-opacity duration-300 ${
-                    imageLoaded ? "opacity-100" : "opacity-0"
-                  }`}
-                  onError={handleImageError}
-                  onLoad={handleImageLoad}
-                  style={{
-                    filter: "grayscale(20%) contrast(110%)",
-                    mixBlendMode: "multiply",
-                    objectPosition: node.imagePosition || 'center',
-                  }}
-                  // Use unoptimized for local images since they're already optimized
-                  unoptimized={imageUrl.startsWith('/')}
-                />
-              )}
-              {/* Show loading state while image is loading */}
-              {!imageLoaded && !imageError && (
-                <div className="absolute inset-0 bg-gray-100 animate-pulse" />
-              )}
-              {/* Only show placeholder if we've tried loading and failed */}
-              {imageError && (
-                <Image
-                  src="/placeholder-invention.jpg"
-                  alt="Placeholder"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                  style={{
-                    filter: "grayscale(20%) contrast(110%)",
-                    mixBlendMode: "multiply",
-                    objectPosition: node.imagePosition || 'center',
-                  }}
-                />
-              )}
-            </>
-          )}
-        </div>
+        {showImages && (
+          <div className="border-b border-black p-0 relative h-20">
+            {specialImage ? (
+              // Special case: render the dedicated image directly
+              <Image
+                src={specialImage}
+                alt={node.title}
+                fill
+                className="object-cover"
+                style={{
+                  filter: "grayscale(20%) contrast(110%)",
+                  mixBlendMode: "multiply",
+                  objectPosition: node.imagePosition || 'center',
+                }}
+                unoptimized={specialImage.startsWith('/')}
+              />
+            ) : (
+              // Original logic for all other nodes
+              <>
+                {imageUrl && (
+                  <Image
+                    src={imageUrl}
+                    alt={node.title}
+                    fill
+                    className={`object-cover transition-opacity duration-300 ${
+                      imageLoaded ? "opacity-100" : "opacity-0"
+                    }`}
+                    onError={handleImageError}
+                    onLoad={handleImageLoad}
+                    style={{
+                      filter: "grayscale(20%) contrast(110%)",
+                      mixBlendMode: "multiply",
+                      objectPosition: node.imagePosition || 'center',
+                    }}
+                    // Use unoptimized for local images since they're already optimized
+                    unoptimized={imageUrl.startsWith('/')}
+                  />
+                )}
+                {/* Show loading state while image is loading */}
+                {!imageLoaded && !imageError && (
+                  <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+                )}
+                {/* Only show placeholder if we've tried loading and failed */}
+                {imageError && (
+                  <Image
+                    src="/placeholder-invention.jpg"
+                    alt="Placeholder"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                    style={{
+                      filter: "grayscale(20%) contrast(110%)",
+                      mixBlendMode: "multiply",
+                      objectPosition: node.imagePosition || 'center',
+                    }}
+                  />
+                )}
+              </>
+            )}
+          </div>
+        )}
 
         {/* Content section */}
         <div className="px-3 py-2">
@@ -427,6 +431,7 @@ export default React.memo(BrutalistNode, (prevProps, nextProps) => {
     prevProps.node.image === nextProps.node.image &&
     prevProps.node.imagePosition === nextProps.node.imagePosition &&
     prevProps.width === nextProps.width &&
-    prevProps.style?.opacity === nextProps.style?.opacity
+    prevProps.style?.opacity === nextProps.style?.opacity &&
+    prevProps.showImages === nextProps.showImages
   );
 });

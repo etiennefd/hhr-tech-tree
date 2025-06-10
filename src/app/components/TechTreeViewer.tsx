@@ -340,6 +340,64 @@ export function TechTreeViewer() {
   const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
+  // Add settings menu state
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'selected'>(() => {
+    // Initialize from localStorage if available, otherwise default to 'optimized'
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('techTreeConnectionMode');
+      return (saved as 'all' | 'optimized' | 'selected') || 'optimized';
+    }
+    return 'optimized';
+  });
+  const [showImages, setShowImages] = useState(() => {
+    // Initialize from localStorage if available, otherwise default to true
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('techTreeShowImages');
+      return saved !== null ? saved === 'true' : true;
+    }
+    return true;
+  });
+  const settingsMenuRef = useRef<HTMLDivElement>(null);
+
+  // Add effect to save display options to localStorage when they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('techTreeConnectionMode', connectionMode);
+      localStorage.setItem('techTreeShowImages', showImages.toString());
+    }
+  }, [connectionMode, showImages]);
+
+  // Add click-outside handler for settings menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target as Node)) {
+        setShowSettingsMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Add scroll prevention for settings button
+  useEffect(() => {
+    const settingsButton = document.querySelector('.settings-button');
+    if (!settingsButton) return;
+
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
+    settingsButton.addEventListener('wheel', preventScroll, { passive: false });
+    settingsButton.addEventListener('touchmove', preventScroll, { passive: false });
+
+    return () => {
+      settingsButton.removeEventListener('wheel', preventScroll);
+      settingsButton.removeEventListener('touchmove', preventScroll);
+    };
+  }, []);
+
   // Initialize spatial index with smaller cell size
   const spatialIndexRef = useRef(new SpatialIndex(100)); // Reduced from 250 to 100
   
@@ -595,6 +653,17 @@ export function TechTreeViewer() {
 
       return positionedNodes;
     }, []);
+
+  // Add resetView function
+  const resetView = useCallback(() => {
+    if (horizontalScrollContainerRef.current) {
+      horizontalScrollContainerRef.current.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
 
   // EFFECTS
 
@@ -2244,6 +2313,7 @@ export function TechTreeViewer() {
     filteredNodeIds: string;
     viewport: { left: number; right: number; top: number; bottom: number };
     showAllConnections: boolean; // Add to frame data for memo comparison
+    connectionMode: 'all' | 'optimized' | 'selected'; // Add connectionMode to frame data
   } | null>(null);
 
   // Add this helper function to get connections for a node
@@ -2317,7 +2387,8 @@ export function TechTreeViewer() {
       highlightedDescendants: stableHighlightedDescendantsString,
       filteredNodeIds: stableFilteredNodeIdsString,
       viewport: stableViewport,
-      showAllConnections // Add to frame data for memo comparison
+      showAllConnections,
+      connectionMode // Add connectionMode to frame data
     };
 
     if (lastFrameData.current &&
@@ -2331,6 +2402,7 @@ export function TechTreeViewer() {
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
         currentFrameData.showAllConnections === lastFrameData.current.showAllConnections &&
+        currentFrameData.connectionMode === lastFrameData.current.connectionMode && // Add connectionMode check
         previousCalculation.current.visibleNodes.length > 0 &&
         previousCalculation.current.visibleConnections.length > 0) {
       memoEffectiveness.track(true);
@@ -2411,10 +2483,29 @@ export function TechTreeViewer() {
       data.links.findIndex(l => l.source === link.source && l.target === link.target && l.type === link.type)
     ).filter(index => index !== -1));
 
-    if (showAllConnections) {
+    if (connectionMode === 'all') {
       // Show all connections in viewport
       data.links.forEach((link, index) => {
         if (isConnectionInViewport(link, index)) {
+          currentFrameDrivenConnectionIndices.add(index);
+          nodeVisibleConnections++;
+        }
+      });
+    } else if (connectionMode === 'selected') {
+      // Show connections only when:
+      // 1. They're selected
+      // 2. They're attached to a selected node
+      // 3. They're part of the subgraph being filtered (ancestors/descendants)
+      // 4. They're between filtered nodes (when filters are active)
+      data.links.forEach((link, index) => {
+        const isSelected = selectedLinkIndex === index;
+        const isAttachedToSelected = selectedNodeId && (link.source === selectedNodeId || link.target === selectedNodeId);
+        const isInFilteredSubgraph = (highlightedAncestors.has(link.source) || highlightedAncestors.has(link.target) ||
+                                    highlightedDescendants.has(link.source) || highlightedDescendants.has(link.target));
+        const touchesFilteredNode = filteredNodeIds.size > 0 && 
+                                  (filteredNodeIds.has(link.source) || filteredNodeIds.has(link.target));
+        
+        if (isSelected || isAttachedToSelected || isInFilteredSubgraph || touchesFilteredNode) {
           currentFrameDrivenConnectionIndices.add(index);
           nodeVisibleConnections++;
         }
@@ -2467,7 +2558,7 @@ export function TechTreeViewer() {
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
     stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, filters, showAllConnections // Add showAllConnections to dependencies
+    stableFilteredNodeIdsString, filters, connectionMode // Add showAllConnections and connectionMode to dependencies
   ]);
 
   // Add effect to log general performance metrics
@@ -2912,7 +3003,7 @@ useEffect(() => {
         }, 100)} // Throttle to max once every 100ms
       >
         <div 
-          style={{ 
+          style={{
             width: containerWidth,
             minHeight: '100vh',
             willChange: 'transform',
@@ -3077,6 +3168,7 @@ useEffect(() => {
                       opacity: getNodeOpacity(node),
                       transition: "opacity 0.2s ease-in-out",
                     }}
+                    showImages={showImages}
                   />
                 );
               })}
@@ -3105,7 +3197,7 @@ useEffect(() => {
                         className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
                         style={{
                           left: `${getXPosition(node.year)}px`,
-                          top: `${(node.y ?? 0) + 100}px`,
+                          top: `${(node.y ?? 0) + (showImages ? 100 : 25)}px`,
                           transform: "translate(-50%, 0)",
                           width: "14rem",
                           zIndex: 100,
@@ -3507,8 +3599,6 @@ useEffect(() => {
           nodeVisibleConnections={visibleElements.nodeVisibleConnections}
           stickyVisibleConnections={visibleElements.stickyVisibleConnections}
           invisibleViewportConnections={visibleElements.invisibleViewportConnections}
-          showAllConnections={showAllConnections}
-          onToggleConnections={() => setShowAllConnections(!showAllConnections)}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}
@@ -3528,6 +3618,114 @@ useEffect(() => {
           Jump to nearest tech
         </button>
       )}
+      {/* Settings Button and Menu */}
+      <div className="fixed bottom-20 right-4 z-30">
+        <button
+          className="settings-button p-2 text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
+          onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+          style={{ overscrollBehavior: 'contain' }}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        {showSettingsMenu && (
+          <div 
+            ref={settingsMenuRef}
+            className="absolute bottom-full right-0 mb-2 bg-white/80 backdrop-blur border border-[#91B4C5] p-4 min-w-[200px] font-mono"
+          >
+            <div className="space-y-6">
+              {/* Connections Mode */}
+              <div>
+                <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Display options</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Connections</span>
+                  <div className="flex border border-[#91B4C5] ml-4">
+                    <button
+                      className={`px-2 py-1 text-xs transition-colors ${
+                        connectionMode === 'all' 
+                          ? 'bg-[#91B4C5] text-white' 
+                          : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
+                      }`}
+                      onClick={() => setConnectionMode('all')}
+                    >
+                      All
+                    </button>
+                    <button
+                      className={`px-2 py-1 text-xs transition-colors border-l border-r border-[#91B4C5] ${
+                        connectionMode === 'optimized' 
+                          ? 'bg-[#91B4C5] text-white' 
+                          : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
+                      }`}
+                      onClick={() => setConnectionMode('optimized')}
+                    >
+                      Optimized
+                    </button>
+                    <button
+                      className={`px-2 py-1 text-xs transition-colors ${
+                        connectionMode === 'selected' 
+                          ? 'bg-[#91B4C5] text-white' 
+                          : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
+                      }`}
+                      onClick={() => setConnectionMode('selected')}
+                    >
+                      Selected
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Images Toggle */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Images</span>
+                  <div className="flex items-center space-x-3 ml-4">
+                    <span className="text-xs text-[#91B4C5]">Hide</span>
+                    <button
+                      className={`w-8 h-4 relative transition-colors ${
+                        showImages ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
+                      }`}
+                      onClick={() => setShowImages(!showImages)}
+                    >
+                      <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
+                        showImages ? 'left-4' : 'left-0.5'
+                      } bg-white`} />
+                    </button>
+                    <span className="text-xs text-[#91B4C5]">Show</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Reset View Button */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <button
+                    className="text-xs text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
+                    onClick={() => {
+                      resetView();
+                      setShowSettingsMenu(false);
+                    }}
+                  >
+                    Reset view
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
