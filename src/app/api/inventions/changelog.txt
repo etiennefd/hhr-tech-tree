@@ -1,6 +1,9 @@
 10 June 2025
 - Added tech: Photonic crystal
+- Added tech: Petroleum jelly
 - Added connection: Photonic crystal -> Photonic-crystal fiber
+- Added connection: Kerosene -> Petroleum jelly
+- Added connection: Petroleum as fuel -> Petroleum jelly
 
 9 June 2025
 - v.1.0.2: Add display settings
