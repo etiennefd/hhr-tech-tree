@@ -330,9 +330,31 @@ export function TechTreeViewer() {
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   // Add settings menu state
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'selected'>('optimized');
-  const [showImages, setShowImages] = useState(true);
+  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'selected'>(() => {
+    // Initialize from localStorage if available, otherwise default to 'optimized'
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('techTreeConnectionMode');
+      return (saved as 'all' | 'optimized' | 'selected') || 'optimized';
+    }
+    return 'optimized';
+  });
+  const [showImages, setShowImages] = useState(() => {
+    // Initialize from localStorage if available, otherwise default to true
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('techTreeShowImages');
+      return saved !== null ? saved === 'true' : true;
+    }
+    return true;
+  });
   const settingsMenuRef = useRef<HTMLDivElement>(null);
+
+  // Add effect to save display options to localStorage when they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('techTreeConnectionMode', connectionMode);
+      localStorage.setItem('techTreeShowImages', showImages.toString());
+    }
+  }, [connectionMode, showImages]);
 
   // Add click-outside handler for settings menu
   useEffect(() => {
