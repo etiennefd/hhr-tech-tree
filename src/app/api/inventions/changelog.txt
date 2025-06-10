@@ -1,3 +1,12 @@
+9 June 2025
+- Added tech: Bass guitar
+- Added tech: Double bass
+- Added tech: Marimba
+- Added connection: Marimba -> Marimbaphone
+- Added connection: Xylophone -> Marimba
+- Added connection: Double bass -> Bass guitar
+- Added connection: Electric guitar -> Bass guitar
+
 8 June 2025
 - Added tech: Cyanoacrylate
 - Added tech: Zoom lens
@@ -33,6 +42,8 @@
 - Added connection: Dulcian -> Bassoon
 - Added connection: Shawm -> Dulcian
 - Added connection: Aulos -> Shawm
+- Added connection: Violin, viola, and cello -> Double bass
+- Added connection: Viola da gamba -> Double bass
 
 7 June 2025
 - Added tech: Quantum annealing
