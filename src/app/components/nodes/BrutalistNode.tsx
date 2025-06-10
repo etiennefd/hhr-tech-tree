@@ -77,11 +77,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | undefined>(() => validateImage(node.image));
+  const [imageUrl, setImageUrl] = useState<string | undefined>(() => showImages ? validateImage(node.image) : undefined);
   const hasLoadedRef = useRef(false);
   const initialLoadRef = useRef(true);
   const retryCountRef = useRef(0);
-  const originalUrlRef = useRef(validateImage(node.image));
+  const originalUrlRef = useRef(showImages ? validateImage(node.image) : undefined);
 
   // Map for special node titles and their dedicated images
   const specialNodeImages: { [key: string]: string } = {
@@ -101,20 +101,21 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     }
   }, [imageUrl]);
 
-  // Set up intersection observer
+  // Only set up intersection observer if we're showing images
   useEffect(() => {
+    if (!showImages) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
-            // Once visible, we can disconnect the observer
             observer.disconnect();
           }
         });
       },
       {
-        rootMargin: "200px", // Start loading images earlier before they come into view
+        rootMargin: "200px",
         threshold: 0.1,
       }
     );
@@ -124,25 +125,27 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [showImages]);
 
-  // Set initial load flag to false after the first render cycle
+  // Only update image URL if we're showing images
   useEffect(() => {
-    initialLoadRef.current = false;
-  }, []);
+    if (!showImages) {
+      setImageUrl(undefined);
+      return;
+    }
 
-  // Stable effect for handling image URL changes from parent
-  useEffect(() => {
-    // Only update the image URL if we haven't already successfully loaded one
-    // and if the original URL changes
     const newValidUrl = validateImage(node.localImage || node.image);
-    
     if (!hasLoadedRef.current && originalUrlRef.current !== newValidUrl) {
       originalUrlRef.current = newValidUrl;
       setImageUrl(newValidUrl);
       retryCountRef.current = 0;
     }
-  }, [node.image, node.localImage]);
+  }, [node.image, node.localImage, showImages]);
+
+  // Set initial load flag to false after the first render cycle
+  useEffect(() => {
+    initialLoadRef.current = false;
+  }, []);
 
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;

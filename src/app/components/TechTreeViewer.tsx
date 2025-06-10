@@ -687,7 +687,8 @@ export function TechTreeViewer() {
 
           const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
             ...node,
-            image: validateImageUrl(node.image)
+            // Only validate image URLs if we're showing images
+            image: showImages ? validateImageUrl(node.image) : undefined
           })) || [];
 
           const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
@@ -726,7 +727,8 @@ export function TechTreeViewer() {
           // If we have detailed data in cache, use it
           const validatedNodes = cachedData.detailData.nodes?.map((node: TechNode) => ({
             ...node,
-            image: validateImageUrl(node.image)
+            // Only validate image URLs if we're showing images
+            image: showImages ? validateImageUrl(node.image) : undefined
           })) || [];
           
           const positionedDetailNodes = calculateNodePositions(validatedNodes);
@@ -758,7 +760,8 @@ export function TechTreeViewer() {
 
         const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
           ...node,
-          image: validateImageUrl(node.image)
+          // Only validate image URLs if we're showing images
+          image: showImages ? validateImageUrl(node.image) : undefined
         })) || [];
 
         const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
@@ -1697,21 +1700,24 @@ export function TechTreeViewer() {
         setHoveredNodeId(node.id);
       }
 
-      // Only prefetch immediate neighbors
-      const connectedNodeIds = data.links
-        .filter((link) => link.source === node.id || link.target === node.id)
-        .map((link) => (link.source === node.id ? link.target : link.source))
-        // Limit the number of simultaneous prefetch requests
-        .slice(0, 5);
+      // Only prefetch if we're showing images
+      if (showImages) {
+        // Only prefetch immediate neighbors
+        const connectedNodeIds = data.links
+          .filter((link) => link.source === node.id || link.target === node.id)
+          .map((link) => (link.source === node.id ? link.target : link.source))
+          // Limit the number of simultaneous prefetch requests
+          .slice(0, 5);
 
-      let prefetchedOnHoverCount = 0;
-      // Use for...of instead of forEach to avoid TypeScript errors
-      for (const nodeId of connectedNodeIds) {
-        prefetchNode(nodeId);
-        prefetchedOnHoverCount++;
+        let prefetchedOnHoverCount = 0;
+        // Use for...of instead of forEach to avoid TypeScript errors
+        for (const nodeId of connectedNodeIds) {
+          prefetchNode(nodeId);
+          prefetchedOnHoverCount++;
+        }
       }
     },
-    [data.links, prefetchNode, isMobile]
+    [data.links, prefetchNode, isMobile, showImages]
   );
 
   // Add cleanup for prefetch cache
@@ -2777,14 +2783,16 @@ useEffect(() => {
     .filter((node: TechNode) => isNodeInViewport(node))
     .map((node: TechNode) => node.id);
 
-  // Prefetch these nodes (with normal priority)
-  let count = 0;
-  for (const nodeId of visibleNodeIdsInEffect) {
-    prefetchNode(nodeId);
-    count++;
+  // Only prefetch if we're showing images
+  if (showImages) {
+    // Prefetch these nodes (with normal priority)
+    let count = 0;
+    for (const nodeId of visibleNodeIdsInEffect) {
+      prefetchNode(nodeId);
+      count++;
+    }
   }
-
-}, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport]); // Use visibleViewport for consistency
+}, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport, showImages]);
 
   // Add an effect to manage the cache of connections
   useEffect(() => {
