@@ -342,11 +342,11 @@ export function TechTreeViewer() {
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   // Add settings menu state
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'selected'>(() => {
+  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'minimal'>(() => {
     // Initialize from localStorage if available, otherwise default to 'optimized'
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('techTreeConnectionMode');
-      return (saved as 'all' | 'optimized' | 'selected') || 'optimized';
+      return (saved as 'all' | 'optimized' | 'minimal') || 'optimized';
     }
     return 'optimized';
   });
@@ -2313,7 +2313,7 @@ export function TechTreeViewer() {
     filteredNodeIds: string;
     viewport: { left: number; right: number; top: number; bottom: number };
     showAllConnections: boolean; // Add to frame data for memo comparison
-    connectionMode: 'all' | 'optimized' | 'selected'; // Add connectionMode to frame data
+    connectionMode: 'all' | 'optimized' | 'minimal';
   } | null>(null);
 
   // Add this helper function to get connections for a node
@@ -2491,7 +2491,7 @@ export function TechTreeViewer() {
           nodeVisibleConnections++;
         }
       });
-    } else if (connectionMode === 'selected') {
+    } else if (connectionMode === 'minimal') {
       // Show connections only when:
       // 1. They're selected
       // 2. They're attached to a selected node
@@ -3675,13 +3675,13 @@ useEffect(() => {
                     </button>
                     <button
                       className={`px-2 py-1 text-xs transition-colors ${
-                        connectionMode === 'selected' 
+                        connectionMode === 'minimal' 
                           ? 'bg-[#91B4C5] text-white' 
                           : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
                       }`}
-                      onClick={() => setConnectionMode('selected')}
+                      onClick={() => setConnectionMode('minimal')}
                     >
-                      Selected
+                      Minimal
                     </button>
                   </div>
                 </div>
