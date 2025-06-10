@@ -1,9 +1,16 @@
 10 June 2025
 - Added tech: Photonic crystal
+- Added tech: Genetic code
+- Added tech: Messenger RNA
 - Added tech: Petroleum jelly
 - Added connection: Photonic crystal -> Photonic-crystal fiber
 - Added connection: Kerosene -> Petroleum jelly
 - Added connection: Petroleum as fuel -> Petroleum jelly
+- Added connection: Messenger RNA -> mRNA vaccine
+- Added connection: DNA as the carrier of information -> Structure of DNA
+- Added connection: Structure of DNA -> Genetic code
+- Added connection: Central dogma of molecular biology -> Genetic code
+- Added connection: Central dogma of molecular biology -> Messenger RNA
 
 9 June 2025
 - v.1.0.2: Add display settings
