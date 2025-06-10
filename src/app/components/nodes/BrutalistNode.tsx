@@ -131,6 +131,9 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   useEffect(() => {
     if (!showImages) {
       setImageUrl(undefined);
+      setImageLoaded(false);
+      setImageError(false);
+      hasLoadedRef.current = false;
       return;
     }
 
@@ -141,6 +144,19 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       retryCountRef.current = 0;
     }
   }, [node.image, node.localImage, showImages]);
+
+  // Reset loading state when showImages changes
+  useEffect(() => {
+    if (showImages) {
+      setImageLoaded(false);
+      setImageError(false);
+      hasLoadedRef.current = false;
+      retryCountRef.current = 0;
+      const newValidUrl = validateImage(node.localImage || node.image);
+      setImageUrl(newValidUrl);
+      originalUrlRef.current = newValidUrl;
+    }
+  }, [showImages, node.image, node.localImage]);
 
   // Set initial load flag to false after the first render cycle
   useEffect(() => {
