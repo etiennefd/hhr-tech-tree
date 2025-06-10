@@ -1,4 +1,5 @@
 9 June 2025
+- v.1.0.2: Add display settings
 - Added tech: Bass guitar
 - Added tech: Lap steel guitar
 - Added tech: Double bass
