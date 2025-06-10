@@ -1,11 +1,14 @@
 9 June 2025
 - Added tech: Bass guitar
+- Added tech: Lap steel guitar
 - Added tech: Double bass
 - Added tech: Marimba
 - Added connection: Marimba -> Marimbaphone
 - Added connection: Xylophone -> Marimba
 - Added connection: Double bass -> Bass guitar
-- Added connection: Electric guitar -> Bass guitar
+- Added connection: Modern guitar -> Lap steel guitar
+- Added connection: Lap steel guitar -> Electric guitar
+- Added connection: Lap steel guitar -> Bass guitar
 
 8 June 2025
 - Added tech: Cyanoacrylate
