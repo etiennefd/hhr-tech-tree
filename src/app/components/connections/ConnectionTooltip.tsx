@@ -122,7 +122,7 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
 
   return (
     <div
-      className="fixed bg-white border rounded-lg p-3 shadow-lg w-64 z-50"
+      className="fixed bg-white border border-black rounded-none p-3 shadow-md w-56 z-50"
       style={{
         left: position.left,
         top: position.top,
@@ -135,7 +135,7 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     >
       <p className="text-xs mb-1.5">{renderConnectionContent()}</p>
       {details && (
-        <p className="text-xs text-gray-600 border-t pt-1.5 mt-1.5">
+        <p className="text-xs text-gray-600 border-t border-black pt-1.5 mt-1.5">
           {details}
         </p>
       )}
