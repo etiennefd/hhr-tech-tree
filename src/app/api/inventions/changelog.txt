@@ -1,3 +1,7 @@
+10 June 2025
+- Added tech: Photonic crystal
+- Added connection: Photonic crystal -> Photonic-crystal fiber
+
 9 June 2025
 - v.1.0.2: Add display settings
 - Added tech: Bass guitar
