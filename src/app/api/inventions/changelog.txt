@@ -1,11 +1,19 @@
+12 June 2025
+- Added tech: Antivirus software
+- Added connection: Home computer -> Antivirus software
+
 11 June 2025
 - Added tech: Autoclaved aerated concrete
+- Added tech: Discovery of viruses
 - Added tech: Chamberland water filter
 - Added tech: Autoclave
 - Added connection: Flute -> Western concert flute
 - Added connection: Modern Portland cement -> Autoclaved aerated concrete
 - Added connection: Pressure cooker -> Autoclave
 - Added connection: Autoclave -> Autoclaved aerated concrete
+- Added connection: Chamberland water filter -> Discovery of viruses
+- Added connection: Agar plate -> Discovery of viruses
+- Added connection: Tobacco -> Discovery of viruses
 
 10 June 2025
 - Added tech: Photonic crystal
