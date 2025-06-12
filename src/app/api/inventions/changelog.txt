@@ -1,6 +1,8 @@
 12 June 2025
 - Added tech: Antivirus software
+- Added tech: Philo's thermoscope
 - Added connection: Home computer -> Antivirus software
+- Added connection: Philo's thermoscope -> Thermoscope
 
 11 June 2025
 - Added tech: Autoclaved aerated concrete
