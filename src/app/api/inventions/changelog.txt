@@ -1,3 +1,8 @@
+13 June 2025
+- Added tech: Palm-leaf manuscript
+- Added tech: Birch bark manuscript
+- Added tech: Ivory carving
+
 12 June 2025
 - Added tech: Antivirus software
 - Added tech: Philo's thermoscope
