@@ -1,3 +1,7 @@
+14 June 2025
+- Added tech: Timpani
+- Added connection: Drum -> Timpani
+
 13 June 2025
 - Added tech: Palm-leaf manuscript
 - Added tech: Birch bark manuscript
