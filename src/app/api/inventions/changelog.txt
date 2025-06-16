@@ -1,3 +1,7 @@
+16 June 2025
+- Added tech: Tuberculosis vaccine
+- Added connection: Smallpox vaccine -> Tuberculosis vaccine
+
 14 June 2025
 - Added tech: Timpani
 - Added connection: Drum -> Timpani
