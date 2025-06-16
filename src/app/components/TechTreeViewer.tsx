@@ -1117,26 +1117,7 @@ export function TechTreeViewer() {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
-      const validConnectionTypes = (link: TechTreeLink) =>
-        !["Independently invented", "Concurrent development"].includes(
-          link.type
-        );
-
-      const ancestors = data.links
-        .filter((link) => link.target === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is TechNode => n !== undefined)
-        // Sort ancestors by year (most recent first)
-        .sort((a, b) => b.year - a.year);
-
-      const children = data.links
-        .filter((link) => link.source === nodeId && validConnectionTypes(link) && link.type !== "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is TechNode => n !== undefined)
-        // Sort children by year (earliest first)
-        .sort((a, b) => a.year - b.year);
-
-      // Add replaced and replacedBy
+      // First get all special connections
       const replaced = data.links
         .filter((link) => link.target === nodeId && link.type === "Obsolescence")
         .map((link) => data.nodes.find((n) => n.id === link.source))
@@ -1149,7 +1130,69 @@ export function TechTreeViewer() {
         .filter((n): n is TechNode => n !== undefined)
         .sort((a, b) => b.year - a.year);
 
-      return { ancestors, children, replaced, replacedBy };
+      const independentlyInvented = data.links
+        .filter((link) => 
+          (link.source === nodeId || link.target === nodeId) && 
+          link.type === "Independently invented"
+        )
+        .map((link) => {
+          const otherNodeId = link.source === nodeId ? link.target : link.source;
+          return data.nodes.find((n) => n.id === otherNodeId);
+        })
+        .filter((n): n is TechNode => n !== undefined)
+        .sort((a, b) => a.year - b.year);
+
+      const concurrentDevelopment = data.links
+        .filter((link) => 
+          (link.source === nodeId || link.target === nodeId) && 
+          link.type === "Concurrent development"
+        )
+        .map((link) => {
+          const otherNodeId = link.source === nodeId ? link.target : link.source;
+          return data.nodes.find((n) => n.id === otherNodeId);
+        })
+        .filter((n): n is TechNode => n !== undefined)
+        .sort((a, b) => a.year - b.year);
+
+      // Create sets of IDs for special connections to exclude
+      const specialNodeIds = new Set([
+        ...replaced.map(n => n.id),
+        ...replacedBy.map(n => n.id),
+        ...independentlyInvented.map(n => n.id),
+        ...concurrentDevelopment.map(n => n.id)
+      ]);
+
+      // Get regular connections, excluding any that are in special categories
+      const ancestors = data.links
+        .filter((link) => 
+          link.target === nodeId && 
+          !specialNodeIds.has(link.source) &&
+          !["Obsolescence", "Independently invented", "Concurrent development"].includes(link.type)
+        )
+        .map((link) => data.nodes.find((n) => n.id === link.source))
+        .filter((n): n is TechNode => n !== undefined)
+        // Sort ancestors by year (most recent first)
+        .sort((a, b) => b.year - a.year);
+
+      const children = data.links
+        .filter((link) => 
+          link.source === nodeId && 
+          !specialNodeIds.has(link.target) &&
+          !["Obsolescence", "Independently invented", "Concurrent development"].includes(link.type)
+        )
+        .map((link) => data.nodes.find((n) => n.id === link.target))
+        .filter((n): n is TechNode => n !== undefined)
+        // Sort children by year (earliest first)
+        .sort((a, b) => a.year - b.year);
+
+      return { 
+        ancestors, 
+        children, 
+        replaced, 
+        replacedBy,
+        independentlyInvented,
+        concurrentDevelopment
+      };
     },
     [data.links, data.nodes]
   );
@@ -3275,7 +3318,7 @@ useEffect(() => {
 
                         {/* Updated connections section */}
                         {(() => {
-                          const { ancestors, children, replaced, replacedBy } = getNodeConnections(
+                          const { ancestors, children, replaced, replacedBy, independentlyInvented, concurrentDevelopment } = getNodeConnections(
                             node.id
                           );
                           return (
@@ -3369,6 +3412,58 @@ useEffect(() => {
                                           type="button"
                                         >
                                           {replacedNode.title}
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {independentlyInvented.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Independently invented from:</strong>
+                                  <div className="ml-2">
+                                    {independentlyInvented.map((node: TechNode, index: number) => (
+                                      <div
+                                        key={`independent-${node.id}-${index}`}
+                                        className="flex"
+                                      >
+                                        <span className="flex-shrink-0 mr-1">•</span>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNodeClick(node.title, true);
+                                          }}
+                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                          type="button"
+                                        >
+                                          {node.title}
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {concurrentDevelopment.length > 0 && (
+                                <div className="text-xs mb-1">
+                                  <strong>Developed concurrently with:</strong>
+                                  <div className="ml-2">
+                                    {concurrentDevelopment.map((node: TechNode, index: number) => (
+                                      <div
+                                        key={`concurrent-${node.id}-${index}`}
+                                        className="flex"
+                                      >
+                                        <span className="flex-shrink-0 mr-1">•</span>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNodeClick(node.title, true);
+                                          }}
+                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                          type="button"
+                                        >
+                                          {node.title}
                                         </button>
                                       </div>
                                     ))}
