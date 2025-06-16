@@ -1,6 +1,9 @@
 16 June 2025
+- Added tech: Electroconvulsive therapy
+- Added tech: Convulsive therapy
 - Added tech: Tuberculosis vaccine
 - Added connection: Smallpox vaccine -> Tuberculosis vaccine
+- Added connection: Convulsive therapy -> Electroconvulsive therapy
 
 14 June 2025
 - Added tech: Timpani
