@@ -1,3 +1,7 @@
+18 June 2025
+- Added tech: Operating system
+- Added connection: Stored-program computer -> Operating system
+
 16 June 2025
 - Added tech: Electroconvulsive therapy
 - Added tech: Convulsive therapy
