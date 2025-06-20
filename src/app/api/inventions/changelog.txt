@@ -6,6 +6,7 @@
 - Added connection: Bacteriophages -> Phage therapy
 - Added connection: Smallpox vaccine -> Bacteriophages
 - Added connection: Chamberland water filter -> Bacteriophages
+- Added connection: Neon -> Isotopes
 
 18 June 2025
 - Added tech: Operating system
