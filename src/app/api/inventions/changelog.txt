@@ -1,3 +1,10 @@
+24 June 2025
+- Added tech: Baking powder
+- Added tech: Sodium bicarbonate
+- Added tech: Cream of tartar
+- Added connection: Cream of tartar -> Baking powder
+- Added connection: Sodium bicarbonate -> Baking powder
+
 20 June 2025
 - Added tech: Phage therapy
 - Added tech: Bacteriophages
