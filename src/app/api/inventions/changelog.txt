@@ -1,4 +1,8 @@
+25 June 2025
+- Added connection: Integrated circuit computer -> Computer mouse
+
 24 June 2025
+- Added tech: Computer mouse
 - Added tech: Baking powder
 - Added tech: Sodium bicarbonate
 - Added tech: Cream of tartar
