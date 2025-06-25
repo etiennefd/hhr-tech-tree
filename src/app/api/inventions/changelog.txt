@@ -1,5 +1,8 @@
 25 June 2025
+- Added tech: Portable operating system
 - Added connection: Integrated circuit computer -> Computer mouse
+- Added connection: Operating system -> Portable operating system
+- Added connection: Time-sharing -> Portable operating system
 
 24 June 2025
 - Added tech: Computer mouse
