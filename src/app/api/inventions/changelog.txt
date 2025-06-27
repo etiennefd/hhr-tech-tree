@@ -1,3 +1,17 @@
+27 June 2025
+- Added tech: Virtual assistant
+- Added tech: Stealth aircraft
+- Added connection: Multi-touch smartphone -> Virtual assistant
+- Added connection: Speech recognition software -> Virtual assistant
+- Added connection: Long short-term memory -> Virtual assistant
+- Added connection: Convolutional neural network -> Virtual assistant
+- Added connection: Virtual assistant -> Smart speaker
+- Added connection: Surface-to-air missile -> Stealth aircraft
+- Added connection: Supercomputer -> Stealth aircraft
+- Added connection: Radar -> Stealth aircraft
+- Added connection: Fighter aircraft -> Stealth aircraft
+- Added connection: Statistical language model -> Speech recognition software
+
 25 June 2025
 - Added tech: Portable operating system
 - Added connection: Integrated circuit computer -> Computer mouse
