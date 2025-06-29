@@ -1,3 +1,7 @@
+29 June 2025
+- Added tech: Measles vaccine
+- Added connection: Polio vaccine -> Measles vaccine
+
 27 June 2025
 - Added tech: Virtual assistant
 - Added tech: Stealth aircraft
