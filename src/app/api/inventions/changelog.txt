@@ -1,3 +1,7 @@
+1 July 2025
+- Added tech: Alum
+- Added connection: Alum -> Aluminium
+
 29 June 2025
 - Added tech: Measles vaccine
 - Added connection: Polio vaccine -> Measles vaccine
