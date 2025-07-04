@@ -1,3 +1,16 @@
+4 July 2025
+- Added tech: Leaded gasoline
+- Added tech: Gasoline as fuel
+- Added connection: Lead smelting -> Rechargeable battery
+- Added connection: Coal gas and gas lighting -> Four-stroke engine
+- Added connection: Kerosene -> Diesel engine
+- Added connection: Kerosene -> Gasoline as fuel
+- Added connection: Gasoline as fuel -> Leaded gasoline
+- Added connection: Gasoline as fuel -> Automobile
+- Added connection: Gasoline as fuel -> Shukhov cracking process
+- Added connection: Four-stroke engine -> Gasoline as fuel
+- Added connection: Gasoline as fuel -> Liquid-propellant rocket
+
 1 July 2025
 - Added tech: Alum
 - Added connection: Alum -> Aluminium
