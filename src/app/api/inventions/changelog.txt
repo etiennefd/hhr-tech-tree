@@ -1,3 +1,9 @@
+5 July 2025
+- Added tech: Proportional counter
+- Added tech: Geiger counter
+- Added connection: Radioactivity -> Geiger counter
+- Added connection: Geiger counter -> Proportional counter
+
 4 July 2025
 - Added tech: Leaded gasoline
 - Added tech: Gasoline as fuel
