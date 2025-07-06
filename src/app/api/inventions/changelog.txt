@@ -1,8 +1,28 @@
+6 July 2025
+- Added tech: Box kite
+- Added tech: Kite experiment
+- Added tech: Kite
+- Added connection: Kite -> Box kite
+- Added connection: Kite -> Kite experiment
+- Added connection: Kite experiment -> Lightning rod
+- Added connection: Leyden jar -> Kite experiment
+- Added connection: Box kite -> Airplane
+- Added connection: Papermaking -> Kite
+- Added connection: Motorcycle -> Rotary engine
+
 5 July 2025
 - Added tech: Proportional counter
 - Added tech: Geiger counter
+- Added tech: Radial engine
+- Added tech: Rotary engine
 - Added connection: Radioactivity -> Geiger counter
 - Added connection: Geiger counter -> Proportional counter
+- Added connection: Tin can -> Hovercraft
+- Added connection: Handheld hair dryer -> Hovercraft
+- Added connection: Four-stroke engine -> Rotary engine
+- Added connection: Rotary engine -> Radial engine
+- Added connection: Radial engine -> Hovercraft
+- Added connection: Gasoline as fuel -> Airplane
 
 4 July 2025
 - Added tech: Leaded gasoline
