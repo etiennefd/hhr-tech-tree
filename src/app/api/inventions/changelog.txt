@@ -1,3 +1,15 @@
+9 July 2025
+- Added tech: Fire-control system
+- Added tech: Dumaresq
+- Added tech: Tide-predicting machine
+- Added tech: Hydrochloric acid
+- Added tech: Aqua regia
+- Added tech: Ammonium chloride
+- Added connection: Ammonium chloride -> Aqua regia
+- Added connection: Nitric acid -> Aqua regia
+- Added connection: Ammonium chloride -> Hydrochloric acid
+- Added connection: Sulfuric acid -> Hydrochloric acid
+
 6 July 2025
 - Added tech: Box kite
 - Added tech: Kite experiment
