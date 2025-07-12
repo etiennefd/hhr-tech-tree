@@ -1,6 +1,24 @@
+12 July 2025
+- Added tech: Tachometric bombsight
+- Added tech: Vector bombsight
+- Added tech: Kelvite sounding machine
+- Added tech: Sounding machine
+- Added connection: Airplane -> Bombsight
+- Added connection: Bombsight -> Vector bombsight
+- Added connection: Vector bombsight -> Tachometric bombsight
+- Added connection: Ball-and-disk integrator -> Tachometric bombsight
+- Added connection: Tide-predicting machine -> Ball-and-disk integrator
+- Added connection: Piano -> Kelvite sounding machine
+- Added connection: Submarine communication cable -> Kelvite sounding machine
+- Added connection: Sounding machine -> Kelvite sounding machine
+
+10 July 2025
+- Added tech: Bombsight
+
 9 July 2025
 - Added tech: Fire-control system
 - Added tech: Dumaresq
+- Added tech: Ball-and-disk integrator
 - Added tech: Tide-predicting machine
 - Added tech: Hydrochloric acid
 - Added tech: Aqua regia
@@ -9,8 +27,10 @@
 - Added connection: Nitric acid -> Aqua regia
 - Added connection: Ammonium chloride -> Hydrochloric acid
 - Added connection: Sulfuric acid -> Hydrochloric acid
+- Added connection: Ball-and-disk integrator -> Fire-control system
 
 6 July 2025
+- Added tech: Automated anti-aircraft fire-control system
 - Added tech: Box kite
 - Added tech: Kite experiment
 - Added tech: Kite
@@ -21,6 +41,7 @@
 - Added connection: Box kite -> Airplane
 - Added connection: Papermaking -> Kite
 - Added connection: Motorcycle -> Rotary engine
+- Added connection: Automated anti-aircraft fire-control system -> Computer-generated imagery
 
 5 July 2025
 - Added tech: Proportional counter
