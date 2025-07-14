@@ -1,8 +1,13 @@
+13 July 2025
+- Added connection: Fire-control system -> Automated anti-aircraft fire-control system
+
 12 July 2025
+- Added tech: Interstellar probe
 - Added tech: Tachometric bombsight
 - Added tech: Vector bombsight
 - Added tech: Kelvite sounding machine
 - Added tech: Sounding machine
+- Added tech: Depth sounding
 - Added connection: Airplane -> Bombsight
 - Added connection: Bombsight -> Vector bombsight
 - Added connection: Vector bombsight -> Tachometric bombsight
@@ -10,6 +15,7 @@
 - Added connection: Tide-predicting machine -> Ball-and-disk integrator
 - Added connection: Piano -> Kelvite sounding machine
 - Added connection: Submarine communication cable -> Kelvite sounding machine
+- Added connection: Depth sounding -> Sounding machine
 - Added connection: Sounding machine -> Kelvite sounding machine
 
 10 July 2025
