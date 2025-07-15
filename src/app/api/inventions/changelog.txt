@@ -1,3 +1,17 @@
+15 July 2025
+- Added tech: Gyro gunsight
+- Added tech: Vickers range clock
+- Added tech: Reflector sight
+- Added tech: Artificial horizon
+- Added tech: Telescopic sight
+- Added connection: Slide rule -> Vector bombsight
+- Added connection: Geiger counter -> Radiocarbon dating
+- Added connection: Keplerian refracting telescope -> Telescopic sight
+- Added connection: Telescopic sight -> Reflector sight
+- Added connection: Reflector sight -> Gyro gunsight
+- Added connection: Gyroscope -> Gyro gunsight
+- Added connection: Gyroscope -> Tachometric bombsight
+
 13 July 2025
 - Added connection: Fire-control system -> Automated anti-aircraft fire-control system
 
