@@ -1,6 +1,11 @@
+16 July 2025
+- Added tech: Bread
+- Added connection: Bread -> Leavened bread
+- Added connection: Control of fire -> Bread
+- Added connection: Mortar and pestle -> Bread
+
 15 July 2025
 - Added tech: Gyro gunsight
-- Added tech: Vickers range clock
 - Added tech: Reflector sight
 - Added tech: Artificial horizon
 - Added tech: Telescopic sight
