@@ -79,6 +79,14 @@ const IntroBox = memo(() => {
         <Link href="/about#contributing" style={linkStyle}>
           Contribute
         </Link>
+        <a
+          href="https://discord.gg/e96JwQjUmX"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={linkStyle}
+        >
+          Join Discord
+        </a>
       </div>
     </div>
   );
