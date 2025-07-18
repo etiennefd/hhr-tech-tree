@@ -1,3 +1,7 @@
+17 July 2025
+- Added tech: Fuel pump
+- Added connection: Kerosene lamp -> Fuel pump
+
 16 July 2025
 - Added tech: Bread
 - Added connection: Bread -> Leavened bread
