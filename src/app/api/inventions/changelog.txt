@@ -1,3 +1,9 @@
+19 July 2025
+- Added tech: Combination lock
+- Added tech: Padlock
+- Added connection: Egyptian wooden pin tumbler lock -> Combination lock
+- Added connection: Egyptian wooden pin tumbler lock -> Padlock
+
 17 July 2025
 - Added tech: Fuel pump
 - Added connection: Kerosene lamp -> Fuel pump
