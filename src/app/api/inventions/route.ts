@@ -44,6 +44,7 @@ interface TechTreeData {
     target: string;
     type: string;
     details?: string;
+    detailsSource?: string;
     // Add any other fields present in your detailed links
   }>;
 }

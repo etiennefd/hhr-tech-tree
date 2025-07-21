@@ -6,6 +6,7 @@ export interface TechTreeLink {
   target: string;
   type: ConnectionType;
   details?: string;
+  detailsSource?: string;
 }
 
 export interface TechTreeNodePosition {

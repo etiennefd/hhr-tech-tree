@@ -15,6 +15,7 @@ interface Link {
   target: string;
   type: ConnectionType;
   details?: string;
+  detailsSource?: string;
 }
 
 interface CacheData {

@@ -3368,12 +3368,25 @@ useEffect(() => {
                                             {ancestor.title}{suffix}
                                           </button>
                                           {link.details && (
-                                            <span
-                                              className="ml-1 text-gray-500 cursor-help"
-                                              title={link.details}
-                                            >
-                                              ℹ️
-                                            </span>
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                ℹ️
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                ℹ️
+                                              </span>
+                                            )
                                           )}
                                         </div>
                                       );
@@ -3409,12 +3422,25 @@ useEffect(() => {
                                             {child.title}{suffix}
                                           </button>
                                           {link.details && (
-                                            <span
-                                              className="ml-1 text-gray-500 cursor-help"
-                                              title={link.details}
-                                            >
-                                              ℹ️
-                                            </span>
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                ℹ️
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                ℹ️
+                                              </span>
+                                            )
                                           )}
                                         </div>
                                       );
@@ -3448,12 +3474,25 @@ useEffect(() => {
                                             {replacedNode.title}
                                           </button>
                                           {link.details && (
-                                            <span
-                                              className="ml-1 text-gray-500 cursor-help"
-                                              title={link.details}
-                                            >
-                                              ℹ️
-                                            </span>
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                ℹ️
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                ℹ️
+                                              </span>
+                                            )
                                           )}
                                         </div>
                                       );
@@ -3487,12 +3526,25 @@ useEffect(() => {
                                             {connectedNode.title}
                                           </button>
                                           {link.details && (
-                                            <span
-                                              className="ml-1 text-gray-500 cursor-help"
-                                              title={link.details}
-                                            >
-                                              ℹ️
-                                            </span>
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                ℹ️
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                ℹ️
+                                              </span>
+                                            )
                                           )}
                                         </div>
                                       );
@@ -3526,12 +3578,25 @@ useEffect(() => {
                                             {connectedNode.title}
                                           </button>
                                           {link.details && (
-                                            <span
-                                              className="ml-1 text-gray-500 cursor-help"
-                                              title={link.details}
-                                            >
-                                              ℹ️
-                                            </span>
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                ℹ️
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                ℹ️
+                                              </span>
+                                            )
                                           )}
                                         </div>
                                       );
@@ -3565,12 +3630,25 @@ useEffect(() => {
                                             {replacedByNode.title}
                                           </button>
                                           {link.details && (
-                                            <span
-                                              className="ml-1 text-gray-500 cursor-help"
-                                              title={link.details}
-                                            >
-                                              ℹ️
-                                            </span>
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                ℹ️
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                ℹ️
+                                              </span>
+                                            )
                                           )}
                                         </div>
                                       );
