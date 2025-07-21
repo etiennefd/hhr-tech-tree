@@ -49,6 +49,7 @@ import {
   logPerformance
 } from './utils/performance';
 import { useRouter } from 'next/navigation';
+import { Info } from 'lucide-react';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -3431,14 +3432,14 @@ useEffect(() => {
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </a>
                                             ) : (
                                               <span
                                                 className="ml-1 text-gray-500 cursor-help"
                                                 title={link.details}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </span>
                                             )
                                           )}
@@ -3483,14 +3484,14 @@ useEffect(() => {
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </a>
                                             ) : (
                                               <span
                                                 className="ml-1 text-gray-500 cursor-help"
                                                 title={link.details}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </span>
                                             )
                                           )}
@@ -3535,14 +3536,14 @@ useEffect(() => {
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </a>
                                             ) : (
                                               <span
                                                 className="ml-1 text-gray-500 cursor-help"
                                                 title={link.details}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </span>
                                             )
                                           )}
@@ -3587,14 +3588,14 @@ useEffect(() => {
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </a>
                                             ) : (
                                               <span
                                                 className="ml-1 text-gray-500 cursor-help"
                                                 title={link.details}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </span>
                                             )
                                           )}
@@ -3639,14 +3640,14 @@ useEffect(() => {
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </a>
                                             ) : (
                                               <span
                                                 className="ml-1 text-gray-500 cursor-help"
                                                 title={link.details}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </span>
                                             )
                                           )}
