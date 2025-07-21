@@ -1,3 +1,16 @@
+21 July 2025
+- Added tech: Alexanderson alternator
+- Added tech: Arc converter
+- Added tech: Singing arc
+- Added connection: Leyden jar -> Radio waves and spark-gap transmitter
+- Added connection: Arc lamp -> Singing arc
+- Added connection: Singing arc -> Arc converter
+- Added connection: Wireless telegraphy -> Arc converter
+- Added connection: Moving coil oscillograph -> Singing arc
+- Added connection: Wireless telegraphy -> Alexanderson alternator
+- Added connection: Amplitude modulation -> Alexanderson alternator
+- Added connection: Amplitude modulation -> Arc converter
+
 19 July 2025
 - Added tech: Combination lock
 - Added tech: Padlock
