@@ -49,6 +49,7 @@ import {
   logPerformance
 } from './utils/performance';
 import { useRouter } from 'next/navigation';
+import { Info } from 'lucide-react';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -1120,15 +1121,21 @@ export function TechTreeViewer() {
       // First get all special connections
       const replaced = data.links
         .filter((link) => link.target === nodeId && link.type === "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is TechNode => n !== undefined)
-        .sort((a, b) => a.year - b.year);
+        .map((link) => ({
+          node: data.nodes.find((n) => n.id === link.source),
+          link
+        }))
+        .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
+        .sort((a, b) => a.node.year - b.node.year);
 
       const replacedBy = data.links
         .filter((link) => link.source === nodeId && link.type === "Obsolescence")
-        .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is TechNode => n !== undefined)
-        .sort((a, b) => b.year - a.year);
+        .map((link) => ({
+          node: data.nodes.find((n) => n.id === link.target),
+          link
+        }))
+        .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
+        .sort((a, b) => b.node.year - a.node.year);
 
       const independentlyInvented = data.links
         .filter((link) => 
@@ -1137,10 +1144,13 @@ export function TechTreeViewer() {
         )
         .map((link) => {
           const otherNodeId = link.source === nodeId ? link.target : link.source;
-          return data.nodes.find((n) => n.id === otherNodeId);
+          return {
+            node: data.nodes.find((n) => n.id === otherNodeId),
+            link
+          };
         })
-        .filter((n): n is TechNode => n !== undefined)
-        .sort((a, b) => a.year - b.year);
+        .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
+        .sort((a, b) => a.node.year - b.node.year);
 
       const concurrentDevelopment = data.links
         .filter((link) => 
@@ -1149,17 +1159,20 @@ export function TechTreeViewer() {
         )
         .map((link) => {
           const otherNodeId = link.source === nodeId ? link.target : link.source;
-          return data.nodes.find((n) => n.id === otherNodeId);
+          return {
+            node: data.nodes.find((n) => n.id === otherNodeId),
+            link
+          };
         })
-        .filter((n): n is TechNode => n !== undefined)
-        .sort((a, b) => a.year - b.year);
+        .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
+        .sort((a, b) => a.node.year - b.node.year);
 
       // Create sets of IDs for special connections to exclude
       const specialNodeIds = new Set([
-        ...replaced.map(n => n.id),
-        ...replacedBy.map(n => n.id),
-        ...independentlyInvented.map(n => n.id),
-        ...concurrentDevelopment.map(n => n.id)
+        ...replaced.map(item => item.node.id),
+        ...replacedBy.map(item => item.node.id),
+        ...independentlyInvented.map(item => item.node.id),
+        ...concurrentDevelopment.map(item => item.node.id)
       ]);
 
       // Get regular connections, excluding any that are in special categories
@@ -1169,10 +1182,13 @@ export function TechTreeViewer() {
           !specialNodeIds.has(link.source) &&
           !["Obsolescence", "Independently invented", "Concurrent development"].includes(link.type)
         )
-        .map((link) => data.nodes.find((n) => n.id === link.source))
-        .filter((n): n is TechNode => n !== undefined)
+        .map((link) => ({
+          node: data.nodes.find((n) => n.id === link.source),
+          link
+        }))
+        .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         // Sort ancestors by year (most recent first)
-        .sort((a, b) => b.year - a.year);
+        .sort((a, b) => b.node.year - a.node.year);
 
       const children = data.links
         .filter((link) => 
@@ -1180,10 +1196,13 @@ export function TechTreeViewer() {
           !specialNodeIds.has(link.target) &&
           !["Obsolescence", "Independently invented", "Concurrent development"].includes(link.type)
         )
-        .map((link) => data.nodes.find((n) => n.id === link.target))
-        .filter((n): n is TechNode => n !== undefined)
+        .map((link) => ({
+          node: data.nodes.find((n) => n.id === link.target),
+          link
+        }))
+        .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         // Sort children by year (earliest first)
-        .sort((a, b) => a.year - b.year);
+        .sort((a, b) => a.node.year - b.node.year);
 
       return { 
         ancestors, 
@@ -3327,18 +3346,16 @@ useEffect(() => {
                                 <div className="text-xs mb-1">
                                   <strong>Built upon:</strong>
                                   <div className="ml-2">
-                                    {ancestors.map((ancestor: TechNode, index: number) => {
-                                      // Find the link to check its type
-                                      const link = data.links.find(
-                                        l => l.source === ancestor.id && l.target === node.id
-                                      );
+                                    {ancestors.map((item, index: number) => {
+                                      const ancestor = item.node;
+                                      const link = item.link;
                                       // Only show (possibly) for speculative connections
                                       const suffix = link?.type === "Speculative" ? " (possibly)" : "";
                                       
                                       return (
                                         <div
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
-                                          className="flex"
+                                          className="flex items-center"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
                                           <button
@@ -3351,6 +3368,27 @@ useEffect(() => {
                                           >
                                             {ancestor.title}{suffix}
                                           </button>
+                                          {link.details && (
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            )
+                                          )}
                                         </div>
                                       );
                                     })}
@@ -3362,18 +3400,16 @@ useEffect(() => {
                                 <div className="text-xs mb-1">
                                   <strong>Led to:</strong>
                                   <div className="ml-2">
-                                    {children.map((child: TechNode, index: number) => {
-                                      // Find the link to check its type
-                                      const link = data.links.find(
-                                        l => l.source === node.id && l.target === child.id
-                                      );
+                                    {children.map((item, index: number) => {
+                                      const child = item.node;
+                                      const link = item.link;
                                       // Only show (possibly) for speculative connections
                                       const suffix = link?.type === "Speculative" ? " (possibly)" : "";
                                       
                                       return (
                                         <div
                                           key={`child-${node.id}-${child.id}-${index}`}
-                                          className="flex"
+                                          className="flex items-center"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
                                           <button
@@ -3386,6 +3422,27 @@ useEffect(() => {
                                           >
                                             {child.title}{suffix}
                                           </button>
+                                          {link.details && (
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            )
+                                          )}
                                         </div>
                                       );
                                     })}
@@ -3397,24 +3454,50 @@ useEffect(() => {
                                 <div className="text-xs mb-1">
                                   <strong>Replaced:</strong>
                                   <div className="ml-2">
-                                    {replaced.map((replacedNode: TechNode, index: number) => (
-                                      <div
-                                        key={`replaced-${node.id}-${replacedNode.id}-${index}`}
-                                        className="flex"
-                                      >
-                                        <span className="flex-shrink-0 mr-1">•</span>
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNodeClick(replacedNode.title, true);
-                                          }}
-                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                          type="button"
+                                    {replaced.map((item, index: number) => {
+                                      const replacedNode = item.node;
+                                      const link = item.link;
+                                      
+                                      return (
+                                        <div
+                                          key={`replaced-${node.id}-${replacedNode.id}-${index}`}
+                                          className="flex items-center"
                                         >
-                                          {replacedNode.title}
-                                        </button>
-                                      </div>
-                                    ))}
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(replacedNode.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {replacedNode.title}
+                                          </button>
+                                          {link.details && (
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            )
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
@@ -3423,24 +3506,50 @@ useEffect(() => {
                                 <div className="text-xs mb-1">
                                   <strong>Independently invented from:</strong>
                                   <div className="ml-2">
-                                    {independentlyInvented.map((node: TechNode, index: number) => (
-                                      <div
-                                        key={`independent-${node.id}-${index}`}
-                                        className="flex"
-                                      >
-                                        <span className="flex-shrink-0 mr-1">•</span>
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNodeClick(node.title, true);
-                                          }}
-                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                          type="button"
+                                    {independentlyInvented.map((item, index: number) => {
+                                      const connectedNode = item.node;
+                                      const link = item.link;
+                                      
+                                      return (
+                                        <div
+                                          key={`independent-${connectedNode.id}-${index}`}
+                                          className="flex items-center"
                                         >
-                                          {node.title}
-                                        </button>
-                                      </div>
-                                    ))}
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(connectedNode.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {connectedNode.title}
+                                          </button>
+                                          {link.details && (
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            )
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
@@ -3449,24 +3558,50 @@ useEffect(() => {
                                 <div className="text-xs mb-1">
                                   <strong>Developed concurrently with:</strong>
                                   <div className="ml-2">
-                                    {concurrentDevelopment.map((node: TechNode, index: number) => (
-                                      <div
-                                        key={`concurrent-${node.id}-${index}`}
-                                        className="flex"
-                                      >
-                                        <span className="flex-shrink-0 mr-1">•</span>
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNodeClick(node.title, true);
-                                          }}
-                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                          type="button"
+                                    {concurrentDevelopment.map((item, index: number) => {
+                                      const connectedNode = item.node;
+                                      const link = item.link;
+                                      
+                                      return (
+                                        <div
+                                          key={`concurrent-${connectedNode.id}-${index}`}
+                                          className="flex items-center"
                                         >
-                                          {node.title}
-                                        </button>
-                                      </div>
-                                    ))}
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(connectedNode.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {connectedNode.title}
+                                          </button>
+                                          {link.details && (
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            )
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
@@ -3475,24 +3610,50 @@ useEffect(() => {
                                 <div className="text-xs mb-1">
                                   <strong>Replaced by:</strong>
                                   <div className="ml-2">
-                                    {replacedBy.map((replacedByNode: TechNode, index: number) => (
-                                      <div
-                                        key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
-                                        className="flex"
-                                      >
-                                        <span className="flex-shrink-0 mr-1">•</span>
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNodeClick(replacedByNode.title, true);
-                                          }}
-                                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                          type="button"
+                                    {replacedBy.map((item, index: number) => {
+                                      const replacedByNode = item.node;
+                                      const link = item.link;
+                                      
+                                      return (
+                                        <div
+                                          key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
+                                          className="flex items-center"
                                         >
-                                          {replacedByNode.title}
-                                        </button>
-                                      </div>
-                                    ))}
+                                          <span className="flex-shrink-0 mr-1">•</span>
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleNodeClick(replacedByNode.title, true);
+                                            }}
+                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                            type="button"
+                                          >
+                                            {replacedByNode.title}
+                                          </button>
+                                          {link.details && (
+                                            link.detailsSource ? (
+                                              <a
+                                                href={link.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${link.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="ml-1 text-gray-500 cursor-help"
+                                                title={link.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            )
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               )}
