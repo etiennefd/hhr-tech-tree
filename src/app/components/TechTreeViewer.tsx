@@ -3374,18 +3374,18 @@ useEffect(() => {
                                                 href={link.detailsSource}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </a>
                                             ) : (
                                               <span
                                                 className="ml-1 text-gray-500 cursor-help"
                                                 title={link.details}
                                               >
-                                                ℹ️
+                                                <Info className="h-3 w-3" />
                                               </span>
                                             )
                                           )}
@@ -3428,7 +3428,7 @@ useEffect(() => {
                                                 href={link.detailsSource}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
@@ -3480,7 +3480,7 @@ useEffect(() => {
                                                 href={link.detailsSource}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
@@ -3532,7 +3532,7 @@ useEffect(() => {
                                                 href={link.detailsSource}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
@@ -3584,7 +3584,7 @@ useEffect(() => {
                                                 href={link.detailsSource}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
@@ -3636,7 +3636,7 @@ useEffect(() => {
                                                 href={link.detailsSource}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
                                                 title={`${link.details} (click for source)`}
                                                 onClick={(e) => e.stopPropagation()}
                                               >
