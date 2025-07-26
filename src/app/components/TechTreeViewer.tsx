@@ -2316,7 +2316,7 @@ export function TechTreeViewer() {
         return isNodeConnectedToSelectedLink(node.id) ? 1 : 0.2;
       }
       // If filters are applied
-      if (filters.fields.size || filters.countries.size || filters.cities.size) {
+      if (filters.fields.size || filters.subfields.size || filters.countries.size || filters.cities.size) {
         return isNodeFiltered(node) ? 1 : 0.2;
       }
       // Default state - fully visible
@@ -2350,7 +2350,7 @@ export function TechTreeViewer() {
         return getLinkKey(link) === selectedLinkKey ? 1 : 0.2;
       }
       // If filters are applied
-      if (filters.fields.size || filters.countries.size || filters.cities.size) {
+      if (filters.fields.size || filters.subfields.size || filters.countries.size || filters.cities.size) {
         return isLinkVisible(link) ? 1 : 0.2;
       }
       return 1;
