@@ -1,3 +1,9 @@
+26 July 2025
+- v1.0.4: Add subfields
+
+24 July 2025
+- v1.0.3: Add info icons for connection details
+
 21 July 2025
 - Added tech: Alexanderson alternator
 - Added tech: Arc converter
@@ -221,7 +227,7 @@
 - Added connection: Central dogma of molecular biology -> Messenger RNA
 
 9 June 2025
-- v.1.0.2: Add display settings
+- v1.0.2: Add display settings
 - Added tech: Bass guitar
 - Added tech: Lap steel guitar
 - Added tech: Double bass

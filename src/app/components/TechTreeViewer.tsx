@@ -329,6 +329,7 @@ export function TechTreeViewer() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [filters, setFilters] = useState<FilterState>({
     fields: new Set(),
+    subfields: new Set(),
     countries: new Set(),
     cities: new Set(),
   });
@@ -1324,6 +1325,7 @@ export function TechTreeViewer() {
         node.inventors?.join(" "),
         node.organizations?.join(" "),
         node.fields.join(" "),
+        node.subfields?.join(" "),
         node.details,
       ]
         .filter(Boolean)
@@ -1341,6 +1343,7 @@ export function TechTreeViewer() {
           ...(node.organizations?.map((org) => "org:" + org.toLowerCase()) ||
             []),
           ...node.fields.map((field) => "field:" + field.toLowerCase()),
+          ...(node.subfields?.map((subfield) => "subfield:" + subfield.toLowerCase()) || []),
         ]),
       });
     });
@@ -1509,6 +1512,14 @@ export function TechTreeViewer() {
         }
       }
 
+      // Apply subfield filters
+      if (filters.subfields.size > 0) {
+        const nodeSubfields = node.subfields || [];
+        if (!nodeSubfields.some((subfield) => filters.subfields.has(subfield))) {
+          return false;
+        }
+      }
+
       // Apply country filters
       if (filters.countries.size > 0) {
         // Combine historical and modern countries
@@ -1534,7 +1545,7 @@ export function TechTreeViewer() {
 
       return true;
     },
-    [filters.fields, filters.countries, filters.cities]
+    [filters.fields, filters.subfields, filters.countries, filters.cities]
   );
 
   const isLinkVisible = useCallback(
@@ -1552,6 +1563,7 @@ export function TechTreeViewer() {
   const getAvailableFilters = useMemo(
     () => ({
       fields: Array.from(new Set(data.nodes.flatMap((n) => n.fields))).sort(),
+      subfields: Array.from(new Set(data.nodes.flatMap((n) => n.subfields || []))).sort(),
       countries: Array.from(
         new Set(
           data.nodes.flatMap((n) => [
@@ -1586,6 +1598,7 @@ export function TechTreeViewer() {
   const filteredNodeIds = useMemo(() => {
     const hasActiveFilters =
       filters.fields.size > 0 ||
+      filters.subfields.size > 0 ||
       filters.countries.size > 0 ||
       filters.cities.size > 0;
 
@@ -1659,7 +1672,7 @@ export function TechTreeViewer() {
   // Add this effect to prefetch nodes when filters are applied
   useEffect(() => {
     // Skip if no filters are applied
-    const hasActiveFilters = filters.fields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
+    const hasActiveFilters = filters.fields.size > 0 || filters.subfields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
     if (!hasActiveFilters) return;
         
     // Find nodes that match the current filters
@@ -1667,6 +1680,10 @@ export function TechTreeViewer() {
       // Check if node matches field filters
       const matchesFields = filters.fields.size === 0 || 
         node.fields?.some(field => filters.fields.has(field));
+      
+      // Check if node matches subfield filters
+      const matchesSubfields = filters.subfields.size === 0 || 
+        node.subfields?.some(subfield => filters.subfields.has(subfield));
       
       // Check if node matches country filters
       const matchesCountries = filters.countries.size === 0 || 
@@ -1679,7 +1696,7 @@ export function TechTreeViewer() {
         (node.city && filters.cities.has(node.city)) ||
         (node.formattedLocation && filters.cities.has(cleanLocationForTooltip(node.formattedLocation) || ''));
       
-      return matchesFields && matchesCountries && matchesCity;
+      return matchesFields && matchesSubfields && matchesCountries && matchesCity;
     });
 
     // Limit the number of nodes to prefetch to avoid overwhelming the API

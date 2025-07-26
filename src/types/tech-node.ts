@@ -6,6 +6,7 @@ export interface TechNode {
   dateDetails?: string;
   type?: string;
   fields: string[];
+  subfields?: string[];
   description?: string;
   details?: string;
   inventors?: string[];

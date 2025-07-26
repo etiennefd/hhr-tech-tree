@@ -8,6 +8,7 @@ interface FilterBoxProps {
   onFilterChange: (filters: FilterState) => void;
   availableFilters: {
     fields: string[];
+    subfields: string[];
     countries: string[];
     cities: string[];
   };
@@ -49,6 +50,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
 
     // Add matches from each category
     addMatches("fields", availableFilters.fields);
+    addMatches("subfields", availableFilters.subfields);
     addMatches("countries", availableFilters.countries);
     addMatches("cities", availableFilters.cities);
 
@@ -153,6 +155,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     switch (type) {
       case "fields":
         return "Field";
+      case "subfields":
+        return "Subfield";
       case "countries":
         return "Country";
       case "cities":

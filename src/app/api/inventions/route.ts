@@ -29,6 +29,7 @@ interface TechTreeData {
     dateDetails?: string;
     type?: string;
     fields: string[];
+    subfields?: string[];
     inventors?: string[];
     organizations?: string[];
     city?: string;

@@ -160,6 +160,10 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
                 .split(",")
                 .filter(Boolean)
                 .map((f) => f.trim()),
+              subfields: String(record.get("Subfield(s)") || "")
+                .split(",")
+                .filter(Boolean)
+                .map((f) => f.trim()),
               inventors: String(record.get("Inventor(s)") || "")
                 .split(",")
                 .filter(Boolean)
