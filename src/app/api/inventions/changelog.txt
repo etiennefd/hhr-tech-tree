@@ -1,3 +1,25 @@
+27 July 2025
+- Added tech: Harpoon cannon
+- Added tech: Sperm oil and spermaceti candle
+- Added tech: Sperm whaling
+- Added tech: Whale oil
+- Added tech: Keel
+- Added tech: Shield
+- Added tech: Whaling
+- Added connection: Sperm oil and spermaceti candle -> Petroleum jelly
+- Added connection: Harpoon -> Whaling
+- Added connection: Boat -> Whaling
+- Added connection: Phoenician joint -> Keel
+- Added connection: Keel -> Cog
+- Added connection: Whaling -> Whale oil
+- Added connection: Cannon -> Harpoon cannon
+- Added connection: Harpoon -> Harpoon cannon
+- Added connection: Whaling -> Harpoon cannon
+- Added connection: Whaling -> Sperm whaling
+- Added connection: Sperm whaling -> Sperm oil and spermaceti candle
+- Added connection: Whale oil -> Sperm oil and spermaceti candle
+- Added connection: Candle -> Sperm oil and spermaceti candle
+
 26 July 2025
 - v1.0.4: Add subfields
 
