@@ -1,4 +1,6 @@
 27 July 2025
+- Added tech: Oriented strand board
+- Added tech: Particle board
 - Added tech: Harpoon cannon
 - Added tech: Sperm oil and spermaceti candle
 - Added tech: Sperm whaling
@@ -21,10 +23,10 @@
 - Added connection: Candle -> Sperm oil and spermaceti candle
 
 26 July 2025
-- v1.0.4: Add subfields
+- v1.0.4: Subfields
 
 24 July 2025
-- v1.0.3: Add info icons for connection details
+- v1.0.3: Info icons for connection details
 
 21 July 2025
 - Added tech: Alexanderson alternator
@@ -249,7 +251,7 @@
 - Added connection: Central dogma of molecular biology -> Messenger RNA
 
 9 June 2025
-- v1.0.2: Add display settings
+- v1.0.2: Display settings
 - Added tech: Bass guitar
 - Added tech: Lap steel guitar
 - Added tech: Double bass
@@ -362,7 +364,7 @@
 - Added connection: Irrigation -> Shaduf
 
 5 June 2025
-- v1.0.1: Create changelog
+- v1.0.1: Changelog start
 - Added tech: Ostwald nitric acid process
 - Added tech: Leavened bread
 - Added tech: Domestication of potatoes
