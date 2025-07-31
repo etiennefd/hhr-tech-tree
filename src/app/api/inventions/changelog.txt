@@ -1,3 +1,8 @@
+31 July 2025
+- Added connection: Coal gas and gas lighting -> Gas mantle
+- Added connection: Radio waves and spark-gap transmitter -> Resonant transformer
+- Added connection: Alternating current -> Resonant transformer
+
 27 July 2025
 - Added tech: Oriented strand board
 - Added tech: Particle board
