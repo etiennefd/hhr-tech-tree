@@ -1,4 +1,5 @@
 1 August 2025
+- Added tech: Malaria vaccine
 - Added tech: DDT insecticide
 - Added tech: DDT
 - Added tech: Coal tar
