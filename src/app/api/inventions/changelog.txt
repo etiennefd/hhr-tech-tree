@@ -1,3 +1,13 @@
+1 August 2025
+- Added tech: DDT insecticide
+- Added tech: DDT
+- Added tech: Coal tar
+- Added connection: DDT -> DDT insecticide
+- Added connection: Pine tar -> Coal tar
+- Added connection: Coal mining -> Coal tar
+- Added connection: Coke (fuel) -> Silicon carbide
+- Added connection: Silicon -> Silicone
+
 31 July 2025
 - Added connection: Coal gas and gas lighting -> Gas mantle
 - Added connection: Radio waves and spark-gap transmitter -> Resonant transformer
