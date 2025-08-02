@@ -1,3 +1,13 @@
+2 August 2025
+- Added tech: Acetone
+- Added tech: White lead
+- Added tech: Verdigris
+- Added tech: Vinegar
+- Added connection: Vinegar -> White lead
+- Added connection: Vinegar -> Verdigris
+- Added connection: Copper -> Verdigris
+- Added connection: Lead smelting -> White lead
+
 1 August 2025
 - Added tech: Malaria vaccine
 - Added tech: DDT insecticide
