@@ -1,4 +1,5 @@
 2 August 2025
+- Added tech: Banjo
 - Added tech: Acetone
 - Added tech: White lead
 - Added tech: Verdigris
@@ -7,6 +8,7 @@
 - Added connection: Vinegar -> Verdigris
 - Added connection: Copper -> Verdigris
 - Added connection: Lead smelting -> White lead
+- Added connection: Joule–Thomson effect -> Liquid oxygen
 
 1 August 2025
 - Added tech: Malaria vaccine
