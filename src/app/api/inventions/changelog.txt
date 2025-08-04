@@ -1,3 +1,10 @@
+4 August 2025
+- Added tech: Quinine
+- Added tech: Strychnine
+- Added tech: Jesuit's bark
+- Added connection: Quinine -> Synthetic dye
+- Added connection: Jesuit's bark -> Quinine
+
 2 August 2025
 - Added tech: Banjo
 - Added tech: Acetone
