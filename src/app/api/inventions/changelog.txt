@@ -4,6 +4,7 @@
 - Added tech: Jesuit's bark
 - Added connection: Quinine -> Synthetic dye
 - Added connection: Jesuit's bark -> Quinine
+- Added connection: Seaweed farming -> Agar
 
 2 August 2025
 - Added tech: Banjo
