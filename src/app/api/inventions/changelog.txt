@@ -1,3 +1,7 @@
+5 August 2025
+- Added tech: K'un-lun po
+- Added connection: Tanja sail -> K'un-lun po
+
 4 August 2025
 - Added tech: Quinine
 - Added tech: Strychnine
