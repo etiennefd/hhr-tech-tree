@@ -1,3 +1,7 @@
+7 August 2025
+- Added tech: Scanning electron microscope
+- Added connection: Electron microscope -> Scanning electron microscope
+
 5 August 2025
 - Added tech: K'un-lun po
 - Added connection: Tanja sail -> K'un-lun po
