@@ -1,4 +1,5 @@
 9 August 2025
+- Added tech: Turbocharger
 - Added tech: Galvanism
 - Added tech: Methane
 - Added connection: Copper smelting -> Voltaic pile
@@ -6,6 +7,10 @@
 - Added connection: Galvanism -> Voltaic pile
 - Added connection: Stamp seal -> Woodblock printing
 - Added connection: Writing (China) -> Woodblock printing
+- Added connection: Radial engine -> Turbocharger
+- Added connection: Weaving -> Linen
+- Added connection: Weaving -> Cotton (New World)
+- Added connection: Weaving -> Cotton (Old World)
 
 7 August 2025
 - Added tech: Scanning electron microscope
