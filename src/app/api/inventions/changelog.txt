@@ -1,3 +1,12 @@
+9 August 2025
+- Added tech: Galvanism
+- Added tech: Methane
+- Added connection: Copper smelting -> Voltaic pile
+- Added connection: Zinc smelting -> Voltaic pile
+- Added connection: Galvanism -> Voltaic pile
+- Added connection: Stamp seal -> Woodblock printing
+- Added connection: Writing (China) -> Woodblock printing
+
 7 August 2025
 - Added tech: Scanning electron microscope
 - Added connection: Electron microscope -> Scanning electron microscope
