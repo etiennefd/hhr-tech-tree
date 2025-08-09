@@ -1,7 +1,13 @@
 9 August 2025
 - Added tech: Turbocharger
+- Added tech: Foam extinguisher
+- Added tech: Firefighting foam
+- Added tech: Vanadium
 - Added tech: Galvanism
 - Added tech: Methane
+- Added tech: Nickel silver
+- Added tech: Blue and white pottery
+- Added tech: Pewter
 - Added connection: Copper smelting -> Voltaic pile
 - Added connection: Zinc smelting -> Voltaic pile
 - Added connection: Galvanism -> Voltaic pile
@@ -11,6 +17,14 @@
 - Added connection: Weaving -> Linen
 - Added connection: Weaving -> Cotton (New World)
 - Added connection: Weaving -> Cotton (Old World)
+- Added connection: Modern oil well -> Firefighting foam
+- Added connection: Firefighting foam -> Foam extinguisher
+- Added connection: Sodium bicarbonate -> Firefighting foam
+- Added connection: Cupronickel -> Nickel silver
+- Added connection: Porcelain -> Blue and white pottery
+- Added connection: Blue and white pottery -> Cobalt
+- Added connection: Tin extraction -> Pewter
+- Added connection: Lead smelting -> Pewter
 
 7 August 2025
 - Added tech: Scanning electron microscope
