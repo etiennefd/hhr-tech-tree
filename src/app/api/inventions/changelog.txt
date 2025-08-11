@@ -1,3 +1,8 @@
+11 August 2025
+- Added tech: General-purpose computing on graphics processing units
+- Added tech: Graphics processing unit
+- Added connection: Graphics processing unit -> General-purpose computing on graphics processing units
+
 9 August 2025
 - Added tech: Turbocharger
 - Added tech: Foam extinguisher
