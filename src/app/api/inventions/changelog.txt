@@ -1,3 +1,6 @@
+12 August 2025
+- Added tech: Facial recognition system
+
 11 August 2025
 - Added tech: General-purpose computing on graphics processing units
 - Added tech: Graphics processing unit
