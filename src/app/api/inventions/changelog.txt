@@ -1,5 +1,12 @@
+13 August 2025
+- Added connection: Electromagnet -> Moving-coil loudspeaker
+- Added connection: Moving-coil loudspeaker -> Noise-cancelling headphones
+
 12 August 2025
 - Added tech: Facial recognition system
+- Added tech: Moving-coil loudspeaker
+- Added tech: Cultured pearl
+- Added connection: Oyster farming -> Cultured pearl
 
 11 August 2025
 - Added tech: General-purpose computing on graphics processing units
@@ -119,7 +126,7 @@
 - Added connection: Arc lamp -> Singing arc
 - Added connection: Singing arc -> Arc converter
 - Added connection: Wireless telegraphy -> Arc converter
-- Added connection: Moving coil oscillograph -> Singing arc
+- Added connection: Moving-coil oscillograph -> Singing arc
 - Added connection: Wireless telegraphy -> Alexanderson alternator
 - Added connection: Amplitude modulation -> Alexanderson alternator
 - Added connection: Amplitude modulation -> Arc converter
