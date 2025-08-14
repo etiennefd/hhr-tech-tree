@@ -1,3 +1,9 @@
+14 August 2025
+- Added tech: Decaffeinated coffee
+- Added connection: Coffee -> Decaffeinated coffee
+- Added connection: Benzene -> Decaffeinated coffee
+- Added connection: Caffeine -> Decaffeinated coffee
+
 13 August 2025
 - Added connection: Electromagnet -> Moving-coil loudspeaker
 - Added connection: Moving-coil loudspeaker -> Noise-cancelling headphones
