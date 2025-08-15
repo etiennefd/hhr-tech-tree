@@ -1,8 +1,12 @@
 14 August 2025
 - Added tech: Decaffeinated coffee
+- Added tech: Tofu
 - Added connection: Coffee -> Decaffeinated coffee
 - Added connection: Benzene -> Decaffeinated coffee
 - Added connection: Caffeine -> Decaffeinated coffee
+- Added connection: Domestication of wheat -> Gristmill
+- Added connection: Fragmentation bomb -> Bombsight
+- Added connection: Domestication of soybeans -> Tofu
 
 13 August 2025
 - Added connection: Electromagnet -> Moving-coil loudspeaker
