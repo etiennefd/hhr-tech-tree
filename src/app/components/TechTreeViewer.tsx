@@ -3372,40 +3372,42 @@ useEffect(() => {
                                       return (
                                         <div
                                           key={`ancestor-${node.id}-${ancestor.id}-${index}`}
-                                          className="flex items-center"
+                                          className="flex items-start"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(ancestor.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {ancestor.title}{suffix}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="ml-1 text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
+                                          <div className="flex items-start flex-wrap">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(ancestor.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {ancestor.title}{suffix}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="ml-1 text-gray-500 hover:text-gray-700 cursor-help flex-shrink-0"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="ml-1 text-gray-500 cursor-help flex-shrink-0"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -3426,40 +3428,42 @@ useEffect(() => {
                                       return (
                                         <div
                                           key={`child-${node.id}-${child.id}-${index}`}
-                                          className="flex items-center"
+                                          className="flex items-start"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(child.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {child.title}{suffix}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="ml-1 text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
+                                          <div className="flex items-start flex-wrap">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(child.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {child.title}{suffix}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="ml-1 text-gray-500 hover:text-gray-700 cursor-help flex-shrink-0"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="ml-1 text-gray-500 cursor-help flex-shrink-0"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -3478,40 +3482,42 @@ useEffect(() => {
                                       return (
                                         <div
                                           key={`replaced-${node.id}-${replacedNode.id}-${index}`}
-                                          className="flex items-center"
+                                          className="flex items-start"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(replacedNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {replacedNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="ml-1 text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
+                                          <div className="flex items-start flex-wrap">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(replacedNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {replacedNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="ml-1 text-gray-500 hover:text-gray-700 cursor-help flex-shrink-0"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="ml-1 text-gray-500 cursor-help flex-shrink-0"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -3530,40 +3536,42 @@ useEffect(() => {
                                       return (
                                         <div
                                           key={`independent-${connectedNode.id}-${index}`}
-                                          className="flex items-center"
+                                          className="flex items-start"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(connectedNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {connectedNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="ml-1 text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
+                                          <div className="flex items-start flex-wrap">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(connectedNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {connectedNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="ml-1 text-gray-500 hover:text-gray-700 cursor-help flex-shrink-0"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="ml-1 text-gray-500 cursor-help flex-shrink-0"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -3582,40 +3590,42 @@ useEffect(() => {
                                       return (
                                         <div
                                           key={`concurrent-${connectedNode.id}-${index}`}
-                                          className="flex items-center"
+                                          className="flex items-start"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(connectedNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {connectedNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="ml-1 text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
+                                          <div className="flex items-start flex-wrap">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(connectedNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {connectedNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="ml-1 text-gray-500 hover:text-gray-700 cursor-help flex-shrink-0"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="ml-1 text-gray-500 cursor-help flex-shrink-0"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -3634,40 +3644,42 @@ useEffect(() => {
                                       return (
                                         <div
                                           key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
-                                          className="flex items-center"
+                                          className="flex items-start"
                                         >
                                           <span className="flex-shrink-0 mr-1">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(replacedByNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {replacedByNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="ml-1 text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="ml-1 text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
+                                          <div className="flex items-start flex-wrap">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(replacedByNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {replacedByNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="ml-1 text-gray-500 hover:text-gray-700 cursor-help flex-shrink-0"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="ml-1 text-gray-500 cursor-help flex-shrink-0"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
