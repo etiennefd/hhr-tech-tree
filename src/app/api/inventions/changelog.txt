@@ -1,3 +1,12 @@
+15 August 2025
+- Added tech: Smartwatch
+- Added tech: Digital electronic watch
+- Added connection: Telephone -> Moving-coil loudspeaker
+- Added connection: Digital electronic watch -> Smartwatch
+- Added connection: Wristwatch -> Digital electronic watch
+- Added connection: LED display -> Digital electronic watch
+- Added connection: Liquid-crystal display -> Smartwatch
+
 14 August 2025
 - Added tech: Decaffeinated coffee
 - Added tech: Tofu
