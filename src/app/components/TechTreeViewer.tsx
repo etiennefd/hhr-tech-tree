@@ -4001,6 +4001,41 @@ useEffect(() => {
                 </div>
               </div>
 
+              {/* Zoom Controls - Only show on desktop */}
+              {!isMobile && !isIPad && (
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Zoom</div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm">Level: 100%</span>
+                    <div className="flex items-center space-x-2 ml-4">
+                      <button
+                        className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                      >
+                        -
+                      </button>
+                      <button
+                        className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                      >
+                        +
+                      </button>
+                      <button
+                        className="px-2 py-1 text-xs text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                  <div className="w-full bg-[#91B4C5]/20 h-1 rounded">
+                    <div 
+                      className="bg-[#91B4C5] h-1 rounded transition-all duration-200"
+                      style={{ 
+                        width: '50%' 
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* "Go back to top left" Button */}
               <div>
                 <div className="flex items-center justify-between">
