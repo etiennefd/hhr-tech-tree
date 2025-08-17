@@ -469,11 +469,11 @@ export function TechTreeViewer() {
 
   // Zoom functions
   const handleZoomIn = useCallback(() => {
-    setZoomLevel(prev => Math.min(3.0, prev + 0.1));
+    setZoomLevel(prev => Math.min(1.0, prev + 0.1));
   }, []);
 
   const handleZoomOut = useCallback(() => {
-    setZoomLevel(prev => Math.max(0.5, prev - 0.1));
+    setZoomLevel(prev => Math.max(0.1, prev - 0.1));
   }, []);
 
   const handleZoomReset = useCallback(() => {
@@ -4028,14 +4028,14 @@ useEffect(() => {
                       <button
                         className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
                         onClick={handleZoomOut}
-                        disabled={zoomLevel <= 0.5}
+                        disabled={zoomLevel <= 0.1}
                       >
                         -
                       </button>
                       <button
-                        className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                        className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#6B98AE]/10"
                         onClick={handleZoomIn}
-                        disabled={zoomLevel >= 3.0}
+                        disabled={zoomLevel >= 1.0}
                       >
                         +
                       </button>
@@ -4051,7 +4051,7 @@ useEffect(() => {
                     <div 
                       className="bg-[#91B4C5] h-1 rounded transition-all duration-200"
                       style={{ 
-                        width: `${((zoomLevel - 0.5) / (3.0 - 0.5)) * 100}%` 
+                        width: `${((zoomLevel - 0.1) / (1.0 - 0.1)) * 100}%` 
                       }}
                     />
                   </div>
