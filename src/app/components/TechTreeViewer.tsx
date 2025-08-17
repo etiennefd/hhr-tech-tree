@@ -360,6 +360,10 @@ export function TechTreeViewer() {
     }
     return true;
   });
+  
+  // Zoom state
+  const [zoomLevel, setZoomLevel] = useState(1.0);
+  
   const settingsMenuRef = useRef<HTMLDivElement>(null);
 
   // Add effect to save display options to localStorage when they change
@@ -462,6 +466,19 @@ export function TechTreeViewer() {
     // Ensure width is positive before checking
     return containerDimensions.width > 0 && containerDimensions.width < SMALL_SCREEN_WIDTH_THRESHOLD;
   }, [containerDimensions.width]);
+
+  // Zoom functions
+  const handleZoomIn = useCallback(() => {
+    setZoomLevel(prev => Math.min(3.0, prev + 0.1));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setZoomLevel(prev => Math.max(0.5, prev - 0.1));
+  }, []);
+
+  const handleZoomReset = useCallback(() => {
+    setZoomLevel(1.0);
+  }, []);
 
   // Log the detected dimensions and screen size category for debugging
   useEffect(() => {
@@ -3255,6 +3272,7 @@ useEffect(() => {
                       opacity: getNodeOpacity(node),
                       transition: "opacity 0.2s ease-in-out",
                     }}
+                    zoomLevel={zoomLevel}
                     showImages={showImages}
                   />
                 );
@@ -4005,20 +4023,25 @@ useEffect(() => {
               {!isMobile && !isIPad && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm">Zoom: 100%</span>
+                    <span className="text-sm">Zoom: {Math.round(zoomLevel * 100)}%</span>
                     <div className="flex items-center space-x-2 ml-4">
                       <button
                         className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                        onClick={handleZoomOut}
+                        disabled={zoomLevel <= 0.5}
                       >
                         -
                       </button>
                       <button
                         className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                        onClick={handleZoomIn}
+                        disabled={zoomLevel >= 3.0}
                       >
                         +
                       </button>
                       <button
                         className="px-2 py-1 text-xs text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                        onClick={handleZoomReset}
                       >
                         Reset
                       </button>
@@ -4028,7 +4051,7 @@ useEffect(() => {
                     <div 
                       className="bg-[#91B4C5] h-1 rounded transition-all duration-200"
                       style={{ 
-                        width: '50%' 
+                        width: `${((zoomLevel - 0.5) / (3.0 - 0.5)) * 100}%` 
                       }}
                     />
                   </div>
