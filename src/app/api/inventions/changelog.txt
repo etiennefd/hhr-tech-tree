@@ -1,3 +1,17 @@
+17 August 2025
+- Added tech: Cerulean blue
+- Added tech: Cobalt blue
+- Added tech: Natron
+- Added connection: Copper smelting -> Egyptian blue
+- Added connection: Natron -> Egyptian blue
+- Added connection: Natron -> Proto-soap
+- Added connection: Natron -> Glass
+- Added connection: Cobalt blue -> Blue and white pottery
+- Added connection: Glass -> Cobalt blue
+- Added connection: Cobalt blue -> Cobalt
+- Added connection: Cobalt -> Samarium–cobalt magnet
+- Added connection: Cobalt -> Cerulean blue
+
 16 August 2025
 - Added tech: YInMn blue
 - Added tech: Maya blue
