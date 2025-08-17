@@ -1,3 +1,9 @@
+16 August 2025
+- Added tech: YInMn blue
+- Added tech: Maya blue
+- Added connection: Cotton (New World) -> Indigo dye
+- Added connection: Indigo dye -> Maya blue
+
 15 August 2025
 - Added tech: Smartwatch
 - Added tech: Digital electronic watch
@@ -6,6 +12,7 @@
 - Added connection: Wristwatch -> Digital electronic watch
 - Added connection: LED display -> Digital electronic watch
 - Added connection: Liquid-crystal display -> Smartwatch
+- Added connection: Home computer -> Smartwatch
 
 14 August 2025
 - Added tech: Decaffeinated coffee
