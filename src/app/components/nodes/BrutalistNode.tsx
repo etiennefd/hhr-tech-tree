@@ -31,6 +31,7 @@ const formatTitle = (title: string) => {
     'p–n': 'p–n',
     'Technetium-99m': 'TECHNETIUM-99m',
     'pH': 'pH',
+    'YInMn': 'YInMn',
     // Add more special cases as needed
   };
 
