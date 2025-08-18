@@ -83,11 +83,8 @@ const TechTreeMinimap = ({
     // Use the actual available width instead of viewport width
     const availableWidth = minimapRect.width;
     
-    // Calculate the unzoomed container width for consistent minimap scaling
-    const unzoomedContainerWidth = containerWidth / zoomLevel;
-    
-    // Calculate scale based on actual available space using unzoomed container width
-    const horizontalScale = availableWidth / unzoomedContainerWidth;
+    // Calculate scale based on actual available space using true container width
+    const horizontalScale = availableWidth / containerWidth;
     // Scale vertically more on small screens
     const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
     setScale(Math.min(horizontalScale, verticalScale));
@@ -97,19 +94,19 @@ const TechTreeMinimap = ({
   const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
 
   // Calculate the viewport rectangle in minimap coordinates
-  // The minimap shows the full timeline, so we need to convert the current viewport to minimap coordinates
+  // The minimap uses true positions, so we need to convert the current viewport to true coordinates
   
-  // The viewport rectangle should represent the visible area in the main view
-  // When zoomed out (zoomLevel < 1), the rectangle should be larger (more timeline visible)
-  // When zoomed in (zoomLevel > 1), the rectangle should be smaller (less timeline visible)
+  // Convert scroll position from zoomed coordinates to true coordinates
+  const trueScrollLeft = scrollLeft / zoomLevel;
+  const trueScrollTop = scrollTop;
   
-  // Convert the visible viewport from main view coordinates to minimap coordinates
+  // The viewport rectangle represents the visible area in true coordinates
   const viewportRectWidth = (viewportWidth / zoomLevel) * scale;
-  const viewportRectHeight = (viewportHeight / zoomLevel) * scale * verticalScale;
+  const viewportRectHeight = viewportHeight * scale * verticalScale;
   
-  // Convert scroll position from main view coordinates to minimap coordinates
-  const minimapScrollX = (scrollLeft / zoomLevel) * scale;
-  const minimapScrollY = scrollTop * scale * verticalScale;
+  // Position the rectangle using true coordinates
+  const minimapScrollX = trueScrollLeft * scale;
+  const minimapScrollY = trueScrollTop * scale * verticalScale;
   
   const minimapViewport = {
     width: viewportRectWidth,
@@ -149,9 +146,9 @@ const TechTreeMinimap = ({
     const y = e.clientY - rect.top;
 
     // Convert minimap click to timeline position
-    // The minimap now uses unzoomed coordinates, so we need to convert to zoomed coordinates
-    const timelineX = x / scale;
-    const targetX = timelineX * zoomLevel - viewportWidth / 2;
+    // The minimap uses true coordinates, so we need to convert to zoomed coordinates
+    const trueX = x / scale;
+    const targetX = trueX * zoomLevel - viewportWidth / 2;
     const targetY = y / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
@@ -172,9 +169,9 @@ const TechTreeMinimap = ({
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
     // Convert minimap drag to timeline position
-    // The minimap now uses unzoomed coordinates, so we need to convert to zoomed coordinates
-    const timelineX = (e.clientX - rect.left) / scale;
-    const x = timelineX * zoomLevel - viewportWidth / 2;
+    // The minimap uses true coordinates, so we need to convert to zoomed coordinates
+    const trueX = (e.clientX - rect.left) / scale;
+    const x = trueX * zoomLevel - viewportWidth / 2;
     const y = (e.clientY - rect.top) / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {

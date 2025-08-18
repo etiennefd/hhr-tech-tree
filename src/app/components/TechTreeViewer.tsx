@@ -522,15 +522,24 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions.width, containerDimensions.height, isSmallScreen, isClient]);
 
-  const getXPosition = useCallback(
+  // Calculate true (unzoomed) X position
+  const getTrueXPosition = useCallback(
     (year: number) => {
       // Still calculate minYear from data for node positioning
       // Return 0 if data isn't loaded yet to avoid errors
       if (!data.nodes.length) return 0;
       const minYear = Math.min(...data.nodes.map((n) => n.year));
-      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, zoomLevel);
+      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, 1); // Always use zoom level 1 for true positions
     },
-    [data.nodes, zoomLevel]
+    [data.nodes]
+  );
+
+  // Calculate zoomed X position for rendering
+  const getXPosition = useCallback(
+    (year: number) => {
+      return getTrueXPosition(year) * zoomLevel;
+    },
+    [getTrueXPosition, zoomLevel]
   );
 
   const calculateNodePositions = useCallback(
@@ -626,7 +635,7 @@ export function TechTreeViewer() {
       });
 
       yearGroups.forEach((nodesInYear, year) => {
-        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, zoomLevel);
+        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, 1); // Use true (unzoomed) positions
         const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
         // Sort nodes by their primary field's band (lowest band = top)
@@ -1159,15 +1168,22 @@ export function TechTreeViewer() {
     [selectedLinkKey]
   );
 
-  const containerWidth = useMemo(
+  // Calculate true (unzoomed) container width
+  const trueContainerWidth = useMemo(
     () =>
       Math.max(
         data.nodes.length
-          ? getXPosition(Math.max(...data.nodes.map((n) => n.year))) + PADDING
+          ? getTrueXPosition(Math.max(...data.nodes.map((n) => n.year))) + PADDING
           : containerDimensions.width,
         containerDimensions.width
       ),
-    [data.nodes, getXPosition, containerDimensions.width, zoomLevel]
+    [data.nodes, getTrueXPosition, containerDimensions.width]
+  );
+
+  // Calculate zoomed container width for the main view
+  const containerWidth = useMemo(
+    () => trueContainerWidth * zoomLevel,
+    [trueContainerWidth, zoomLevel]
   );
 
   const getNodeConnections = useCallback(
@@ -3918,12 +3934,12 @@ useEffect(() => {
               nodes={data.nodes.map(
                 (node): TechTreeMinimapNode => ({
                   id: node.id,
-                  x: calculateXPosition(node.year, Math.min(...data.nodes.map((n) => n.year)), PADDING, YEAR_WIDTH, 1), // Use unzoomed coordinates
+                  x: getTrueXPosition(node.year), // Use true positions directly
                   y: node.y || 0, // Y positions are not affected by zoom, so use as-is
                   year: node.year,
                 })
               )}
-              containerWidth={containerWidth}
+              containerWidth={trueContainerWidth}
               parentContainerWidth={containerDimensions.width} // Pass the viewer's width
               totalHeight={totalHeight}
               viewportWidth={containerDimensions.width}
