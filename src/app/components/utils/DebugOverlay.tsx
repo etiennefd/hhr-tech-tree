@@ -20,6 +20,7 @@ interface DebugOverlayProps {
   nodeVisibleConnections: number;
   stickyVisibleConnections: number;
   invisibleViewportConnections: number;
+  zoomLevel: number;
   onClose: () => void;
 }
 
@@ -34,13 +35,16 @@ export function DebugOverlay({
   nodeVisibleConnections,
   stickyVisibleConnections,
   invisibleViewportConnections,
+  zoomLevel,
   onClose
 }: DebugOverlayProps) {
+  // Scale the buffer with zoom level
+  const scaledBuffer = CACHE_VIEWPORT_BUFFER_FOR_NODES / zoomLevel;
   const bufferedViewport = {
-    left: viewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-    right: viewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
-    top: viewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-    bottom: viewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
+    left: viewport.left - scaledBuffer,
+    right: viewport.right + scaledBuffer,
+    top: viewport.top - scaledBuffer,
+    bottom: viewport.bottom + scaledBuffer
   };
 
   // Only render in development mode

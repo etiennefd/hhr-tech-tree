@@ -25,6 +25,7 @@ interface TechTreeMinimapProps {
   adjacentNodeIds?: Set<string>;
   highlightedAncestors: Set<string>;
   highlightedDescendants: Set<string>;
+  zoomLevel: number;
 }
 
 const TechTreeMinimap = ({
@@ -44,6 +45,7 @@ const TechTreeMinimap = ({
   adjacentNodeIds = new Set(),
   highlightedAncestors = new Set(),
   highlightedDescendants = new Set(),
+  zoomLevel,
 }: TechTreeMinimapProps) => {
   // Calculate if the screen is small based on the passed parent width
   const isSmallScreen = useMemo(() => {
@@ -130,7 +132,8 @@ const TechTreeMinimap = ({
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const targetX = x / scale - viewportWidth / 2;
+    // Account for zoom level in the minimap click calculation
+    const targetX = (x / scale - viewportWidth / 2) * zoomLevel;
     const targetY = y / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
@@ -150,7 +153,8 @@ const TechTreeMinimap = ({
     if (!isDragging.current || !minimapRef.current) return;
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
-    const x = (e.clientX - rect.left) / scale - viewportWidth / 2;
+    // Account for zoom level in the minimap drag calculation
+    const x = ((e.clientX - rect.left) / scale - viewportWidth / 2) * zoomLevel;
     const y = (e.clientY - rect.top) / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {

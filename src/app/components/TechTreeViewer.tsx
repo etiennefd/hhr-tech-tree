@@ -85,6 +85,7 @@ const VERTICAL_SPACING = 50;
 const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
+// Base buffer for viewport calculations, will be scaled with zoom
 export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 
 // Search result limits
@@ -175,7 +176,8 @@ function calculateXPosition(
   year: number,
   minYear: number,
   PADDING: number,
-  YEAR_WIDTH: number
+  YEAR_WIDTH: number,
+  zoomLevel: number = 1
 ) {
   const alignedYear = getTimelineSegment(year);
   const alignedMinYear = getTimelineSegment(minYear);
@@ -200,7 +202,9 @@ function calculateXPosition(
     spaces += 1;
   }
 
-  return PADDING + spaces * YEAR_WIDTH;
+  // Scale the YEAR_WIDTH based on zoom level
+  const scaledYearWidth = YEAR_WIDTH * zoomLevel;
+  return PADDING + spaces * scaledYearWidth;
 }
 
 // Deterministic seeded random function
@@ -480,6 +484,38 @@ export function TechTreeViewer() {
     setZoomLevel(1.0);
   }, []);
 
+  // Track previous zoom level for scroll adjustment
+  const previousZoomLevel = useRef(zoomLevel);
+  
+  // Adjust scroll position when zoom level changes to maintain focal point
+  useEffect(() => {
+    if (!horizontalScrollContainerRef.current) return;
+    
+    const container = horizontalScrollContainerRef.current;
+    const currentScrollLeft = container.scrollLeft;
+    const currentScrollTop = container.scrollTop;
+    
+    // Calculate the center point of the current viewport in timeline coordinates
+    const viewportCenterX = currentScrollLeft + containerDimensions.width / 2;
+    
+    // Convert viewport center to timeline coordinates using the previous zoom level
+    const timelineCenterX = viewportCenterX / previousZoomLevel.current;
+    
+    // Calculate new scroll position to maintain the same timeline center point with new zoom
+    const newScrollLeft = timelineCenterX * zoomLevel - containerDimensions.width / 2;
+    const newScrollTop = currentScrollTop; // Keep vertical scroll the same
+    
+    // Apply the new scroll position
+    container.scrollTo({
+      left: Math.max(0, newScrollLeft),
+      top: newScrollTop,
+      behavior: 'instant' // Use instant to avoid animation conflicts
+    });
+    
+    // Update the previous zoom level
+    previousZoomLevel.current = zoomLevel;
+  }, [zoomLevel, containerDimensions.width, containerDimensions.height]);
+
   // Log the detected dimensions and screen size category for debugging
   useEffect(() => {
     if (isClient) { // Only log on the client
@@ -492,9 +528,9 @@ export function TechTreeViewer() {
       // Return 0 if data isn't loaded yet to avoid errors
       if (!data.nodes.length) return 0;
       const minYear = Math.min(...data.nodes.map((n) => n.year));
-      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, zoomLevel);
     },
-    [data.nodes]
+    [data.nodes, zoomLevel]
   );
 
   const calculateNodePositions = useCallback(
@@ -590,7 +626,7 @@ export function TechTreeViewer() {
       });
 
       yearGroups.forEach((nodesInYear, year) => {
-        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, zoomLevel);
         const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
         // Sort nodes by their primary field's band (lowest band = top)
@@ -671,7 +707,7 @@ export function TechTreeViewer() {
       setTotalHeight(maxY);
 
       return positionedNodes;
-    }, []);
+    }, [zoomLevel]);
 
   // Add resetView function
   const resetView = useCallback(() => {
@@ -1131,7 +1167,7 @@ export function TechTreeViewer() {
           : containerDimensions.width,
         containerDimensions.width
       ),
-    [data.nodes, getXPosition, containerDimensions.width]
+    [data.nodes, getXPosition, containerDimensions.width, zoomLevel]
   );
 
   const getNodeConnections = useCallback(
@@ -2046,8 +2082,9 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 3, 350);
+      // Use a reasonable buffer for better user experience, scaled with zoom
+      const baseBuffer = Math.min(window.innerWidth / 3, 350);
+      const buffer = baseBuffer / zoomLevel; // Scale buffer with zoom
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2065,7 +2102,7 @@ export function TechTreeViewer() {
       
       return isVisible;
     },
-    [deferredViewportState, scrollPosition]
+    [deferredViewportState, scrollPosition, zoomLevel]
   );
 
   // Add strict visibility check with minimal buffer
@@ -2076,8 +2113,8 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a small buffer for better user experience
-      const buffer = 10; // Much smaller buffer than the display buffer
+      // Use a small buffer for better user experience, scaled with zoom
+      const buffer = 10 / zoomLevel; // Scale buffer with zoom
       const strictViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2109,7 +2146,7 @@ export function TechTreeViewer() {
       // Node is considered visible if at least 30% of its area is in viewport
       return intersectionArea / nodeArea > 0.3;
     },
-    [deferredViewportState]
+    [deferredViewportState, zoomLevel]
   );
 
   // Add memoized strictly visible nodes
@@ -2129,8 +2166,9 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling
-      const buffer = Math.min(window.innerWidth / 2, 500);
+      // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling, scaled with zoom
+      const baseBuffer = Math.min(window.innerWidth / 2, 500);
+      const buffer = baseBuffer / zoomLevel; // Scale buffer with zoom
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2193,7 +2231,7 @@ export function TechTreeViewer() {
       
       return isSourceInViewport || isTargetInViewport;
     },
-    [deferredViewportState, data.nodes]
+    [deferredViewportState, data.nodes, zoomLevel]
   );
 
   // Add debounced viewport update
@@ -2212,17 +2250,22 @@ export function TechTreeViewer() {
     }, VIEWPORT_UPDATE_DEBOUNCE);
   }, []);
 
-  // Modify the viewport update handler
+  // Modify the viewport update handler to account for zoom level
   const updateViewportState = useCallback((scrollLeft: number, scrollTop: number) => {
+    // When zoomed out (zoomLevel < 1), the timeline is compressed, so we need to scale the viewport
+    // When zoomed in (zoomLevel > 1), the timeline is expanded, so we need to scale the viewport
+    const zoomAdjustedLeft = scrollLeft / zoomLevel;
+    const zoomAdjustedRight = (scrollLeft + containerDimensions.width) / zoomLevel;
+    
     const newViewport = {
-      left: scrollLeft,
-      right: scrollLeft + containerDimensions.width,
+      left: zoomAdjustedLeft,
+      right: zoomAdjustedRight,
       top: scrollTop,
       bottom: scrollTop + containerDimensions.height
     };
 
     debouncedViewportUpdate(newViewport);
-  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
+  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate, zoomLevel]);
 
   // Add cleanup for the debounce timeout
   useEffect(() => {
@@ -2560,11 +2603,13 @@ export function TechTreeViewer() {
       }
     });
 
+    // Scale the buffer with zoom level
+    const scaledBuffer = CACHE_VIEWPORT_BUFFER_FOR_NODES / zoomLevel;
     const extendedNodeViewport = {
-      left: stableViewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      right: stableViewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      top: stableViewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
+      left: stableViewport.left - scaledBuffer,
+      right: stableViewport.right + scaledBuffer,
+      top: stableViewport.top - scaledBuffer,
+      bottom: stableViewport.bottom + scaledBuffer
     };
     cachedNodeIds.forEach(nodeId => {
         const node = data.nodes.find(n => n.id === nodeId);
@@ -3141,8 +3186,8 @@ useEffect(() => {
                         key={year}
                         className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
                         style={{
-                          // Use direct calculation with fixed minYear
-                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px`,
+                          // Use direct calculation with fixed minYear and zoom level
+                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH, zoomLevel)}px`,
                           transform: "translateX(-50%)",
                           top: isMobile ? '16px' : '16px',
                           textDecorationLine: 'none',
@@ -3893,6 +3938,7 @@ useEffect(() => {
               adjacentNodeIds={adjacentNodeIds}
               highlightedAncestors={highlightedAncestors}
               highlightedDescendants={highlightedDescendants}
+              zoomLevel={zoomLevel}
             />
           </div>
         )}
@@ -3910,6 +3956,7 @@ useEffect(() => {
           nodeVisibleConnections={visibleElements.nodeVisibleConnections}
           stickyVisibleConnections={visibleElements.stickyVisibleConnections}
           invisibleViewportConnections={visibleElements.invisibleViewportConnections}
+          zoomLevel={zoomLevel}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}
