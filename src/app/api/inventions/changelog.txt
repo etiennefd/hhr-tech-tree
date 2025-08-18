@@ -1,3 +1,13 @@
+18 August 2025
+- Added tech: Kermes dye
+- Added tech: Vermilion
+- Added connection: Vermilion -> Mercury
+- Added connection: Pigments -> Vermilion
+- Added connection: Pigments -> Indigo dye
+- Added connection: Pigments -> Verdigris
+- Added connection: Pigments -> White lead
+- Added connection: Pigments -> Kermes dye
+
 17 August 2025
 - Added tech: Cerulean blue
 - Added tech: Smalt
