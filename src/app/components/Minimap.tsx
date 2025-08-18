@@ -83,12 +83,15 @@ const TechTreeMinimap = ({
     // Use the actual available width instead of viewport width
     const availableWidth = minimapRect.width;
     
-    // Calculate scale based on actual available space
-    const horizontalScale = availableWidth / containerWidth;
+    // Calculate the unzoomed container width for consistent minimap scaling
+    const unzoomedContainerWidth = containerWidth / zoomLevel;
+    
+    // Calculate scale based on actual available space using unzoomed container width
+    const horizontalScale = availableWidth / unzoomedContainerWidth;
     // Scale vertically more on small screens
     const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
     setScale(Math.min(horizontalScale, verticalScale));
-  }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen]);
+  }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen, zoomLevel]);
 
   // Calculate minimap viewport dimensions
   const baseWidth = viewportWidth * scale;
@@ -132,8 +135,10 @@ const TechTreeMinimap = ({
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Account for zoom level in the minimap click calculation
-    const targetX = (x / scale - viewportWidth / 2) * zoomLevel;
+    // Convert minimap click to timeline position
+    // The minimap now uses unzoomed coordinates, so we need to convert to zoomed coordinates
+    const timelineX = x / scale;
+    const targetX = timelineX * zoomLevel - viewportWidth / 2;
     const targetY = y / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
@@ -153,8 +158,10 @@ const TechTreeMinimap = ({
     if (!isDragging.current || !minimapRef.current) return;
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
-    // Account for zoom level in the minimap drag calculation
-    const x = ((e.clientX - rect.left) / scale - viewportWidth / 2) * zoomLevel;
+    // Convert minimap drag to timeline position
+    // The minimap now uses unzoomed coordinates, so we need to convert to zoomed coordinates
+    const timelineX = (e.clientX - rect.left) / scale;
+    const x = timelineX * zoomLevel - viewportWidth / 2;
     const y = (e.clientY - rect.top) / (scale * verticalScale) - viewportHeight / 2;
 
     requestAnimationFrame(() => {

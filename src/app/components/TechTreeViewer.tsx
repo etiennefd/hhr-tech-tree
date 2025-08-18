@@ -3918,8 +3918,8 @@ useEffect(() => {
               nodes={data.nodes.map(
                 (node): TechTreeMinimapNode => ({
                   id: node.id,
-                  x: getXPosition(node.year),
-                  y: node.y || 0,
+                  x: calculateXPosition(node.year, Math.min(...data.nodes.map((n) => n.year)), PADDING, YEAR_WIDTH, 1), // Use unzoomed coordinates
+                  y: node.y || 0, // Y positions are not affected by zoom, so use as-is
                   year: node.year,
                 })
               )}
