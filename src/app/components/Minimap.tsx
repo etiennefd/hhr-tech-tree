@@ -94,15 +94,28 @@ const TechTreeMinimap = ({
   }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen, zoomLevel]);
 
   // Calculate minimap viewport dimensions
-  const baseWidth = viewportWidth * scale;
-  const aspectRatio = viewportWidth / viewportHeight;
   const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
 
+  // Calculate the viewport rectangle in minimap coordinates
+  // The minimap shows the full timeline, so we need to convert the current viewport to minimap coordinates
+  
+  // The viewport rectangle should represent the visible area in the main view
+  // When zoomed out (zoomLevel < 1), the rectangle should be larger (more timeline visible)
+  // When zoomed in (zoomLevel > 1), the rectangle should be smaller (less timeline visible)
+  
+  // Convert the visible viewport from main view coordinates to minimap coordinates
+  const viewportRectWidth = (viewportWidth / zoomLevel) * scale;
+  const viewportRectHeight = (viewportHeight / zoomLevel) * scale * verticalScale;
+  
+  // Convert scroll position from main view coordinates to minimap coordinates
+  const minimapScrollX = (scrollLeft / zoomLevel) * scale;
+  const minimapScrollY = scrollTop * scale * verticalScale;
+  
   const minimapViewport = {
-    width: baseWidth,
-    height: (baseWidth / aspectRatio) / verticalScale,
-    x: scrollLeft * scale,
-    y: scrollTop * scale * verticalScale,
+    width: viewportRectWidth,
+    height: viewportRectHeight,
+    x: minimapScrollX,
+    y: minimapScrollY,
   };
 
   // Format year label with small screen logic
