@@ -1,3 +1,13 @@
+19 August 2025
+- Added tech: Spirit duplicator
+- Added tech: Hectograph
+- Added tech: Hydrogen peroxide
+- Added tech: Cobalt blue
+- Added connection: Coal tar -> Aniline
+- Added connection: Aniline -> Spirit duplicator
+- Added connection: Aniline -> Hectograph
+- Added connection: Tin extraction -> Cerulean blue
+
 18 August 2025
 - Added tech: Kermes dye
 - Added tech: Vermilion
@@ -7,6 +17,8 @@
 - Added connection: Pigments -> Verdigris
 - Added connection: Pigments -> White lead
 - Added connection: Pigments -> Kermes dye
+- Added connection: Kermes dye -> Cochineal dye
+- Added connection: Pigments -> Cochineal dye
 
 17 August 2025
 - Added tech: Cerulean blue
