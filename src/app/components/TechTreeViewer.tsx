@@ -3265,11 +3265,11 @@ useEffect(() => {
                     key={connectionKey}
                     sourceNode={{
                       x: getXPosition(sourceNode.year),
-                      y: sourceNode.y || 150,
+                      y: (sourceNode.y || 150) * zoomLevel,
                     }}
                     targetNode={{
                       x: getXPosition(targetNode.year),
-                      y: targetNode.y || 150,
+                      y: (targetNode.y || 150) * zoomLevel,
                     }}
                     sourceIndex={data.nodes.indexOf(sourceNode)}
                     targetIndex={data.nodes.indexOf(targetNode)}
@@ -3295,6 +3295,7 @@ useEffect(() => {
                     onNodeHover={(title) => {
                       handleNodeHoverForPrefetch(title);
                     }}
+                    zoomLevel={zoomLevel}
                   />
                 );
               })}

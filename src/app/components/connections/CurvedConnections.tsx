@@ -50,6 +50,7 @@ interface CurvedConnectionsProps {
   onNodeHover?: (title: string) => void;
   sourceIndex: number;
   targetIndex: number;
+  zoomLevel?: number;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
@@ -69,6 +70,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onNodeHover,
   sourceIndex,
   targetIndex,
+  zoomLevel = 1,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -223,10 +225,11 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
   const { x: x1, y: y1 } = sourceNode;
   const { x: x2, y: y2 } = targetNode;
-  const isSameYear = Math.abs(x1 - x2) < 160; // Using NODE_WIDTH
+  const scaledNodeWidth = 160 * zoomLevel;
+  const isSameYear = Math.abs(x1 - x2) < scaledNodeWidth;
 
-  const sourcePoint = getAdjustedEndpoint(x1, y1, x2, y2, true);
-  const endPoint = getAdjustedEndpoint(x1, y1, x2, y2, false);
+  const sourcePoint = getAdjustedEndpoint(x1, y1, x2, y2, true, scaledNodeWidth);
+  const endPoint = getAdjustedEndpoint(x1, y1, x2, y2, false, scaledNodeWidth);
 
   // Get control points based on whether it's a same-year connection
   const { cx1, cy1, cx2, cy2 } = getControlPoints(
