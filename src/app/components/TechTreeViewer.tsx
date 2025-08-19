@@ -579,10 +579,10 @@ export function TechTreeViewer() {
       const positionedNodes: TechNode[] = [];
       const yearGroups = new Map();
 
-      // Ensure minimum distance from top of viewport
+      // Ensure minimum distance from top of viewport (use true positions, not scaled)
       const ABSOLUTE_MIN_Y = 100;
 
-      // Define fixed vertical bands (pixels from top)
+      // Define fixed vertical bands (pixels from top) - use true positions, not scaled
       const VERTICAL_BANDS: Record<string, number> = {
         Food: Math.max(100, ABSOLUTE_MIN_Y),
         Agriculture: Math.max(150, ABSOLUTE_MIN_Y),
@@ -3329,7 +3329,7 @@ useEffect(() => {
                     style={{
                       position: "absolute",
                       left: `${getXPosition(node.year)}px`,
-                      top: `${node.y}px`,
+                      top: `${(node.y ?? 0) * zoomLevel}px`,
                       opacity: getNodeOpacity(node),
                       transition: "opacity 0.2s ease-in-out",
                     }}
