@@ -192,7 +192,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
     const baseStyle = {
       stroke: engineeringBlue,
-      strokeWidth: isActive ? 2 : 1.5,
+      strokeWidth: (isActive ? 2 : 1.5) * zoomLevel,
       strokeOpacity: isActive ? opacity : 0.7 * opacity,
     };
 
@@ -244,7 +244,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   const angle = 0;
 
   // First calculate the arrowhead base point (slightly before the endPoint)
-  const arrowLength = 10;
+  const arrowLength = 10 * zoomLevel;
   const arrowPoint1X = endPoint.x - arrowLength * Math.cos(angle - Math.PI / 6);
   const arrowPoint2X = endPoint.x - arrowLength * Math.cos(angle + Math.PI / 6);
   const arrowPoint1Y = endPoint.y - arrowLength * Math.sin(angle - Math.PI / 6);
@@ -341,10 +341,10 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
 
         {/* Start marker (square) */}
         <rect
-          x={sourcePoint.x - 3}
-          y={sourcePoint.y - 3}
-          width={6}
-          height={6}
+          x={sourcePoint.x - 3 * zoomLevel}
+          y={sourcePoint.y - 3 * zoomLevel}
+          width={6 * zoomLevel}
+          height={6 * zoomLevel}
           fill={lineStyle.stroke}
           opacity={lineStyle.strokeOpacity}
           style={{ pointerEvents: "none" }}
@@ -355,10 +355,10 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
           connectionType
         ) ? (
           <rect
-            x={endPoint.x - 3}
-            y={endPoint.y - 3}
-            width={6}
-            height={6}
+            x={endPoint.x - 3 * zoomLevel}
+            y={endPoint.y - 3 * zoomLevel}
+            width={6 * zoomLevel}
+            height={6 * zoomLevel}
             fill={lineStyle.stroke}
             opacity={lineStyle.strokeOpacity}
             style={{ pointerEvents: "none" }}
