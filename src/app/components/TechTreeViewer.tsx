@@ -3192,7 +3192,8 @@ useEffect(() => {
             {/* Timeline content - Use fixed years */}
             {(() => {
               // Use fixed years for immediate rendering
-              const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, TIMELINE_MAX_YEAR);
+              const minYear = data.nodes.length ? Math.min(...data.nodes.map((n) => n.year)) : TIMELINE_MIN_YEAR;
+              const timelineYears = getTimelineYears(minYear, TIMELINE_MAX_YEAR);
 
               return (
                 <div className="relative" style={{ width: '100%', height: '100%' }}>
@@ -3202,8 +3203,8 @@ useEffect(() => {
                         key={year}
                         className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
                         style={{
-                          // Use direct calculation with fixed minYear and zoom level
-                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH, zoomLevel)}px`,
+                          // Use the same positioning logic as nodes for consistent alignment
+                          left: `${calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, 1) * zoomLevel}px`,
                           transform: "translateX(-50%)",
                           top: isMobile ? '16px' : '16px',
                           textDecorationLine: 'none',
