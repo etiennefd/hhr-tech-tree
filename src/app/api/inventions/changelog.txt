@@ -7,6 +7,9 @@
 - Added connection: Aniline -> Spirit duplicator
 - Added connection: Aniline -> Hectograph
 - Added connection: Tin extraction -> Cerulean blue
+- Added connection: Cobalt -> Cobalt blue
+- Added connection: Blue and white pottery -> Cobalt blue
+- Added connection: Kelvin scale and absolute zero -> International system of units
 
 18 August 2025
 - Added tech: Kermes dye
@@ -97,7 +100,6 @@
 - Added connection: Stamp seal -> Woodblock printing
 - Added connection: Writing (China) -> Woodblock printing
 - Added connection: Radial engine -> Turbocharger
-- Added connection: Weaving -> Linen
 - Added connection: Weaving -> Cotton (New World)
 - Added connection: Weaving -> Cotton (Old World)
 - Added connection: Modern oil well -> Firefighting foam
