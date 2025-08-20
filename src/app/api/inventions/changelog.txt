@@ -1,8 +1,24 @@
+20 August 2025
+- Added tech: Acrylic paint
+- Added tech: Cadmium pigments
+- Added tech: Hot-dip galvanization
+- Added tech: Cadmium
+- Added connection: Nickel -> Nickel–cadmium battery
+- Added connection: Nickel–cadmium battery -> Nickel–iron battery
+- Added connection: Zinc smelting -> Hot-dip galvanization
+- Added connection: Nickel -> Nickel–iron battery
+- Added connection: Cadmium -> Cadmium pigments
+- Added connection: Cadmium -> Nickel–cadmium battery
+- Added connection: Iron smelting and wrought iron -> Corrugated iron
+- Added connection: Iron smelting and wrought iron -> Hot-dip galvanization
+
 19 August 2025
 - Added tech: Spirit duplicator
 - Added tech: Hectograph
 - Added tech: Hydrogen peroxide
 - Added tech: Cobalt blue
+- Added tech: Lime mortar
+- Added tech: Lime and lime kiln
 - Added connection: Coal tar -> Aniline
 - Added connection: Aniline -> Spirit duplicator
 - Added connection: Aniline -> Hectograph
@@ -10,6 +26,10 @@
 - Added connection: Cobalt -> Cobalt blue
 - Added connection: Blue and white pottery -> Cobalt blue
 - Added connection: Kelvin scale and absolute zero -> International system of units
+- Added connection: Lime and lime kiln -> Lime mortar
+- Added connection: Lime and lime kiln -> Synthetic ultramarine
+- Added connection: Construction mortar -> Lime mortar
+- Added connection: Concrete -> Waterproof concrete
 
 18 August 2025
 - Added tech: Kermes dye
