@@ -1,3 +1,12 @@
+21 August 2025
+- Added tech: Video display controller
+- Added connection: Arcade video game -> Video display controller
+- Added connection: Keplerian refracting telescope -> Achromatic lens and achromatic telescope
+- Added connection: Video display controller -> GPU
+- Added connection: Home computer -> Video display controller
+- Added connection: Writing (China) -> Video display controller
+- Added connection: CMOS -> GPU
+
 20 August 2025
 - Added tech: Acrylic paint
 - Added tech: Cadmium pigments
@@ -97,12 +106,12 @@
 - Added connection: Oyster farming -> Cultured pearl
 
 11 August 2025
-- Added tech: General-purpose computing on graphics processing units
-- Added tech: Graphics processing unit
-- Added connection: Graphics processing unit -> General-purpose computing on graphics processing units
-- Added connection: General-purpose computing on graphics processing units -> AlexNet
-- Added connection: General-purpose computing on graphics processing units -> Transformer (machine learning)
-- Added connection: General-purpose computing on graphics processing units -> Generative adversarial network
+- Added tech: General-purpose computing on GPU
+- Added tech: GPU
+- Added connection: GPU -> General-purpose computing on GPU
+- Added connection: General-purpose computing on GPU -> AlexNet
+- Added connection: General-purpose computing on GPU -> Transformer (machine learning)
+- Added connection: General-purpose computing on GPU -> Generative adversarial network
 
 9 August 2025
 - Added tech: Turbocharger
