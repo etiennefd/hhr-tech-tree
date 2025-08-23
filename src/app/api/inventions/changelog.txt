@@ -1,3 +1,13 @@
+23 August 2025
+- Added tech: Phototypesetting
+- Added tech: Hot metal typesetting
+- Added connection: Hot metal typesetting -> Phototypesetting
+- Added connection: Movable type -> Hot metal typesetting
+
+22 August 2025
+- Added tech: Nomogram
+- Added connection: Water wheel (Greece) -> Fulling mill
+
 21 August 2025
 - Added tech: Video display controller
 - Added connection: Arcade video game -> Video display controller
