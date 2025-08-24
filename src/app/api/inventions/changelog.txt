@@ -1,3 +1,15 @@
+24 August 2025
+- Added tech: Disappearing-filament pyrometer
+- Added tech: Pyrometer
+- Added tech: Crucible
+- Added connection: Offset printing -> Phototypesetting
+- Added connection: Crucible -> Crucible steel
+- Added connection: Pottery -> Crucible
+- Added connection: Control of fire -> Lead smelting
+- Added connection: Crucible -> Arsenical bronze
+- Added connection: Crucible -> Brass
+- Added connection: Pyrometer -> Disappearing-filament pyrometer
+
 23 August 2025
 - Added tech: Phototypesetting
 - Added tech: Hot metal typesetting
@@ -37,7 +49,7 @@
 - Added tech: Hydrogen peroxide
 - Added tech: Cobalt blue
 - Added tech: Lime mortar
-- Added tech: Lime and lime kiln
+- Added tech: Lime
 - Added connection: Coal tar -> Aniline
 - Added connection: Aniline -> Spirit duplicator
 - Added connection: Aniline -> Hectograph
@@ -45,8 +57,8 @@
 - Added connection: Cobalt -> Cobalt blue
 - Added connection: Blue and white pottery -> Cobalt blue
 - Added connection: Kelvin scale and absolute zero -> International system of units
-- Added connection: Lime and lime kiln -> Lime mortar
-- Added connection: Lime and lime kiln -> Synthetic ultramarine
+- Added connection: Lime -> Lime mortar
+- Added connection: Lime -> Synthetic ultramarine
 - Added connection: Construction mortar -> Lime mortar
 - Added connection: Concrete -> Waterproof concrete
 
