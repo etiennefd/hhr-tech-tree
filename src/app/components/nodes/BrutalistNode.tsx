@@ -22,6 +22,7 @@ interface BrutalistNodeProps {
   width: number;
   style?: React.CSSProperties;
   showImages?: boolean;
+  zoomLevel?: number;
 }
 
 const formatTitle = (title: string) => {
@@ -73,6 +74,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   width,
   style,
   showImages = true,
+  zoomLevel = 1,
 }) => {
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -301,7 +303,8 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
       style={{
         ...style,
         width: `${width}px`,
-        transform: `translate(-${width / 2}px, -75px)`,
+        transform: `translate(-${width / 2}px, -75px) scale(${zoomLevel})`,
+        transformOrigin: '50% 50%',
         opacity: style?.opacity,
       }}
       onClick={() => {
@@ -452,6 +455,7 @@ export default React.memo(BrutalistNode, (prevProps, nextProps) => {
     prevProps.node.imagePosition === nextProps.node.imagePosition &&
     prevProps.width === nextProps.width &&
     prevProps.style?.opacity === nextProps.style?.opacity &&
-    prevProps.showImages === nextProps.showImages
+    prevProps.showImages === nextProps.showImages &&
+    prevProps.zoomLevel === nextProps.zoomLevel
   );
 });
