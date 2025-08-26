@@ -1,3 +1,13 @@
+25 August 2025
+- Added tech: Titanium white
+- Added tech: Zinc white
+- Added connection: Titanium -> Titanium white
+- Added connection: Tin extraction -> Printing press
+- Added connection: Lead smelting -> Printing press
+- Added connection: Antimony -> Printing press
+- Added connection: Brass -> Zinc white
+- Added connection: Sulfuric acid -> Titanium white
+
 24 August 2025
 - Added tech: Disappearing-filament pyrometer
 - Added tech: Pyrometer
