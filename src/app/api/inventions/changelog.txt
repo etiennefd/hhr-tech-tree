@@ -1,3 +1,12 @@
+29 August 2025
+- Added tech: Alkaline fuel cell
+- Added connection: Hydrogen -> Fuel cell
+- Added connection: Oxygen (Scheele–Priestley) -> Fuel cell
+- Added connection: Sulfuric acid -> Fuel cell
+- Added connection: Voltaic pile -> Fuel cell
+- Added connection: Fuel cell -> Alkaline fuel cell
+- Added connection: Alkaline fuel cell -> Reusable spacecraft
+
 28 August 2025
 - Added tech: Chromic acid cell
 - Added connection: Daniell cell -> Rechargeable battery
