@@ -1,11 +1,15 @@
 29 August 2025
+- Added tech: Smoke detector
 - Added tech: Alkaline fuel cell
+- Added tech: Dishwasher
 - Added connection: Hydrogen -> Fuel cell
 - Added connection: Oxygen (Scheele–Priestley) -> Fuel cell
 - Added connection: Sulfuric acid -> Fuel cell
 - Added connection: Voltaic pile -> Fuel cell
 - Added connection: Fuel cell -> Alkaline fuel cell
 - Added connection: Alkaline fuel cell -> Reusable spacecraft
+- Added connection: Porcelain -> Dishwasher
+- Added connection: Radioactivity -> Smoke detector
 
 28 August 2025
 - Added tech: Chromic acid cell
