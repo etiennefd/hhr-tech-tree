@@ -651,7 +651,7 @@ export function TechTreeViewer() {
           (node) => (node.y ?? 0) + estimateNodeHeight(node)
         )
       );
-      setTotalHeight(maxY);
+      setTotalHeight(maxY + 100); // With buffer of 100 px for tooltips
 
       return positionedNodes;
     }, []);
