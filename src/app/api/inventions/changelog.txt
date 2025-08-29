@@ -1,6 +1,17 @@
+28 August 2025
+- Added tech: Chromic acid cell
+- Added connection: Daniell cell -> Rechargeable battery
+- Added connection: Sulfuric acid -> Rechargeable battery
+- Added connection: Linen -> Rechargeable battery
+- Added connection: Daniell cell -> Chromic acid cell
+- Added connection: Chromic acid cell -> Electric pen
+- Added connection: Sulfuric acid -> Chromic acid cell
+
 26 August 2025
 - Added connection: Saddle -> Toe stirrup
 - Added connection: Saddle -> Stirrup
+- Added connection: Lime -> Limelight
+- Added connection: Sulfur -> Sulfur matches
 
 25 August 2025
 - Added tech: Titanium white
