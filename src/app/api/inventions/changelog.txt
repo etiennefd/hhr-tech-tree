@@ -1,3 +1,11 @@
+30 August 2025
+- Added tech: Mustard gas
+- Added connection: Radium -> Smoke detector
+- Added connection: Vapor-compression refrigeration system -> Hampson–Linde air liquefaction
+- Added connection: Triode -> Smoke detector
+- Added connection: Cigarette -> Smoke detector
+- Added connection: Mustard gas -> Smoke detector
+
 29 August 2025
 - Added tech: Smoke detector
 - Added tech: Alkaline fuel cell
@@ -9,7 +17,6 @@
 - Added connection: Fuel cell -> Alkaline fuel cell
 - Added connection: Alkaline fuel cell -> Reusable spacecraft
 - Added connection: Porcelain -> Dishwasher
-- Added connection: Radioactivity -> Smoke detector
 
 28 August 2025
 - Added tech: Chromic acid cell
