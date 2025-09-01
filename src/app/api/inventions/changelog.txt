@@ -1,3 +1,19 @@
+1 September 2025
+- Added tech: Compound bow
+- Added tech: Liquid crystals
+- Added tech: Composite bow
+- Added tech: Sling
+- Added connection: Sword -> Shield
+- Added connection: Hafted spear -> Shield
+- Added connection: Bow and arrow -> Shield
+- Added connection: Hafted axe -> Shield
+- Added connection: Sling -> Shield
+- Added connection: Bow and arrow -> Composite bow
+- Added connection: Hafting -> Bow and arrow
+- Added connection: Composite bow -> Compound bow
+- Added connection: Pulley -> Compound bow
+- Added connection: Liquid crystals -> Liquid-crystal display
+
 30 August 2025
 - Added tech: Mustard gas
 - Added connection: Radium -> Smoke detector
