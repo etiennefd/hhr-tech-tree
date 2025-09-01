@@ -1,6 +1,8 @@
 1 September 2025
 - Added tech: Compound bow
 - Added tech: Liquid crystals
+- Added tech: Onager
+- Added tech: Ballista
 - Added tech: Composite bow
 - Added tech: Sling
 - Added connection: Sword -> Shield
@@ -13,6 +15,12 @@
 - Added connection: Composite bow -> Compound bow
 - Added connection: Pulley -> Compound bow
 - Added connection: Liquid crystals -> Liquid-crystal display
+- Added connection: Tin bronze -> Crossbow (China)
+- Added connection: Crossbow (Greece) -> Ballista
+- Added connection: Bow and arrow -> Crossbow (China)
+- Added connection: Composite bow -> Crossbow (Greece)
+- Added connection: Ballista -> Onager
+- Added connection: Sling -> Traction trebuchet
 
 30 August 2025
 - Added tech: Mustard gas
