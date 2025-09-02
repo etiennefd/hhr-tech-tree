@@ -54,9 +54,9 @@ import { Info } from 'lucide-react';
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
 const YEAR_EARLY_MODERN = 1500;
-const YEAR_LATE_ANTIQUITY_AND_MEDIEVAL = -400;
-const YEAR_MIDDLE_ANTIQUITY = -1000;
-const YEAR_EARLY_ANTIQUITY = -5000;
+const YEAR_ANTIQUITY_AND_MEDIEVAL = -400;
+const YEAR_IRON_AGE = -1000;
+const YEAR_COPPER_AND_BRONZE_AGE = -5000;
 const YEAR_NEOLITHIC = -10000;
 const YEAR_UPPER_PALEOLITHIC = -50000;
 const YEAR_MIDDLE_PALEOLITHIC = -100000;
@@ -71,9 +71,9 @@ const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
 // Timeline intervals for each period
 const INTERVAL_INDUSTRIAL = 1;
 const INTERVAL_EARLY_MODERN = 5;
-const INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL = 20;
-const INTERVAL_MIDDLE_ANTIQUITY = 50;
-const INTERVAL_EARLY_ANTIQUITY = 100;
+const INTERVAL_ANTIQUITY_AND_MEDIEVAL = 20;
+const INTERVAL_IRON_AGE = 50;
+const INTERVAL_COPPER_AND_BRONZE_AGE = 100;
 const INTERVAL_NEOLITHIC = 500;
 const INTERVAL_UPPER_PALEOLITHIC = 1000;
 const INTERVAL_MIDDLE_PALEOLITHIC = 5000;
@@ -120,15 +120,15 @@ function getTimelineSegment(year: number) {
   if (year >= YEAR_INDUSTRIAL) return year;
   if (year >= YEAR_EARLY_MODERN)
     return Math.floor(year / INTERVAL_EARLY_MODERN) * INTERVAL_EARLY_MODERN;
-  if (year >= YEAR_LATE_ANTIQUITY_AND_MEDIEVAL)
-    return Math.floor(year / INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL) * INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL;
-  if (year >= YEAR_MIDDLE_ANTIQUITY)
+  if (year >= YEAR_ANTIQUITY_AND_MEDIEVAL)
+    return Math.floor(year / INTERVAL_ANTIQUITY_AND_MEDIEVAL) * INTERVAL_ANTIQUITY_AND_MEDIEVAL;
+  if (year >= YEAR_IRON_AGE)
     return (
-      Math.floor(year / INTERVAL_MIDDLE_ANTIQUITY) * INTERVAL_MIDDLE_ANTIQUITY
+      Math.floor(year / INTERVAL_IRON_AGE) * INTERVAL_IRON_AGE
     );
-  if (year >= YEAR_EARLY_ANTIQUITY)
+  if (year >= YEAR_COPPER_AND_BRONZE_AGE)
     return (
-      Math.floor(year / INTERVAL_EARLY_ANTIQUITY) * INTERVAL_EARLY_ANTIQUITY
+      Math.floor(year / INTERVAL_COPPER_AND_BRONZE_AGE) * INTERVAL_COPPER_AND_BRONZE_AGE
     );
   if (year >= YEAR_NEOLITHIC)
     return Math.floor(year / INTERVAL_NEOLITHIC) * INTERVAL_NEOLITHIC;
@@ -155,11 +155,11 @@ function getTimelineYears(minYear: number, maxYear: number): number[] {
 
     if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
     else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
-    else if (current >= YEAR_LATE_ANTIQUITY_AND_MEDIEVAL) current += INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL;
-    else if (current >= YEAR_MIDDLE_ANTIQUITY)
-      current += INTERVAL_MIDDLE_ANTIQUITY;
-    else if (current >= YEAR_EARLY_ANTIQUITY)
-      current += INTERVAL_EARLY_ANTIQUITY;
+    else if (current >= YEAR_ANTIQUITY_AND_MEDIEVAL) current += INTERVAL_ANTIQUITY_AND_MEDIEVAL;
+    else if (current >= YEAR_IRON_AGE)
+      current += INTERVAL_IRON_AGE;
+    else if (current >= YEAR_COPPER_AND_BRONZE_AGE)
+      current += INTERVAL_COPPER_AND_BRONZE_AGE;
     else if (current >= YEAR_NEOLITHIC) current += INTERVAL_NEOLITHIC;
     else if (current >= YEAR_UPPER_PALEOLITHIC)
       current += INTERVAL_UPPER_PALEOLITHIC;
@@ -186,11 +186,11 @@ function calculateXPosition(
   while (current < alignedYear) {
     if (current >= YEAR_INDUSTRIAL) current += INTERVAL_INDUSTRIAL;
     else if (current >= YEAR_EARLY_MODERN) current += INTERVAL_EARLY_MODERN;
-    else if (current >= YEAR_LATE_ANTIQUITY_AND_MEDIEVAL) current += INTERVAL_LATE_ANTIQUITY_AND_MEDIEVAL;
-    else if (current >= YEAR_MIDDLE_ANTIQUITY)
-      current += INTERVAL_MIDDLE_ANTIQUITY;
-    else if (current >= YEAR_EARLY_ANTIQUITY)
-      current += INTERVAL_EARLY_ANTIQUITY;
+    else if (current >= YEAR_ANTIQUITY_AND_MEDIEVAL) current += INTERVAL_ANTIQUITY_AND_MEDIEVAL;
+    else if (current >= YEAR_IRON_AGE)
+      current += INTERVAL_IRON_AGE;
+    else if (current >= YEAR_COPPER_AND_BRONZE_AGE)
+      current += INTERVAL_COPPER_AND_BRONZE_AGE;
     else if (current >= YEAR_NEOLITHIC) current += INTERVAL_NEOLITHIC;
     else if (current >= YEAR_UPPER_PALEOLITHIC)
       current += INTERVAL_UPPER_PALEOLITHIC;
