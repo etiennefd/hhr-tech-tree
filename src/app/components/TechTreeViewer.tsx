@@ -54,7 +54,7 @@ import { Info } from 'lucide-react';
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
 const YEAR_EARLY_MODERN = 1500;
-const YEAR_LATE_ANTIQUITY_AND_MEDIEVAL = -200;
+const YEAR_LATE_ANTIQUITY_AND_MEDIEVAL = -400;
 const YEAR_MIDDLE_ANTIQUITY = -1000;
 const YEAR_EARLY_ANTIQUITY = -5000;
 const YEAR_NEOLITHIC = -10000;
