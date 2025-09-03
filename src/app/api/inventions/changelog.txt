@@ -1,3 +1,13 @@
+3 September 2025
+- Added tech: Pedal harp
+- Added tech: Zither
+- Added tech: Harp
+- Added connection: Musical bow -> Harp
+- Added connection: Harp -> Pedal harp
+- Added connection: Lyre -> Harp
+- Added connection: Zither -> Psaltery
+- Added connection: Lyre -> Zither
+
 2 September 2025
 - Added connection: Domestication of the horse -> Saddle
 - Added connection: Domestication of the horse -> Hipposandal
