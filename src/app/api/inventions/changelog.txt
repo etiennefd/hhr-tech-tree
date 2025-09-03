@@ -1,5 +1,6 @@
 3 September 2025
 - Added tech: Geographic information system
+- Added tech: Photogrammetry
 - Added tech: Pedal harp
 - Added tech: Zither
 - Added tech: Harp
@@ -8,6 +9,9 @@
 - Added connection: Harp -> Lyre
 - Added connection: Zither -> Psaltery
 - Added connection: Lyre -> Zither
+- Added connection: Transistor computer -> Geographic information system
+- Added connection: Photographic camera -> Photogrammetry
+- Added connection: Photogrammetry -> Geographic information system
 
 2 September 2025
 - Added connection: Domestication of the horse -> Saddle
