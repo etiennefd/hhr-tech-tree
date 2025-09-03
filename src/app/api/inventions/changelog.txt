@@ -1,4 +1,5 @@
 3 September 2025
+- Added tech: Geographic information system
 - Added tech: Pedal harp
 - Added tech: Zither
 - Added tech: Harp
