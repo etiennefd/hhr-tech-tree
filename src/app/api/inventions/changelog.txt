@@ -1,3 +1,7 @@
+2 September 2025
+- Added connection: Domestication of the horse -> Saddle
+- Added connection: Domestication of the horse -> Hipposandal
+
 1 September 2025
 - Added tech: Compound bow
 - Added tech: Liquid crystals
