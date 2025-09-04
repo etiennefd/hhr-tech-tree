@@ -12,6 +12,7 @@
 - Added connection: Graphite pencil -> Modern pencil
 - Added connection: Coke (fuel) -> Acheson process
 - Added connection: Isotopes -> Carbon-14
+- Added connection: Graphite -> Nuclear reactor
 
 3 September 2025
 - Added tech: Geographic information system
