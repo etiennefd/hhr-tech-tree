@@ -1,3 +1,17 @@
+4 September 2025
+- Added tech: Carbon-14
+- Added tech: Modern pencil
+- Added tech: Graphite pencil
+- Added tech: Graphite
+- Added connection: Carbon-14 -> Automatic teller machine
+- Added connection: Cyclotron -> Carbon-14
+- Added connection: Carbon-14 -> Radiocarbon dating
+- Added connection: Graphite -> Carbon-14
+- Added connection: Graphite -> Graphene
+- Added connection: Graphite -> Graphite pencil
+- Added connection: Graphite pencil -> Modern pencil
+- Added connection: Coke (fuel) -> Acheson process
+
 3 September 2025
 - Added tech: Geographic information system
 - Added tech: Photogrammetry
