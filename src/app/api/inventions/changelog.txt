@@ -1,7 +1,9 @@
 6 September 2025
+- Added tech: Chemotherapy
 - Added tech: Tjasker
 - Added connection: Archimedes' screw -> Tjasker
 - Added connection: Post windmill -> Tjasker
+- Added connection: Mustard gas -> Chemotherapy
 
 5 September 2025
 - Added tech: Offshore wind farm
