@@ -1,9 +1,14 @@
 6 September 2025
+- Added tech: Tidal power station
 - Added tech: Chemotherapy
 - Added tech: Tjasker
+- Added tech: Tide mill
 - Added connection: Archimedes' screw -> Tjasker
 - Added connection: Post windmill -> Tjasker
 - Added connection: Mustard gas -> Chemotherapy
+- Added connection: Wind turbine -> Offshore wind farm
+- Added connection: Water wheel (Greece) -> Tide mill
+- Added connection: Tide mill -> Tidal power station
 
 5 September 2025
 - Added tech: Offshore wind farm
