@@ -1,4 +1,5 @@
 8 September 2025
+- Added tech: Ketamine
 - Added tech: Geothermal power plant
 - Added tech: Geothermal power
 - Added connection: Geothermal power -> Geothermal power plant
