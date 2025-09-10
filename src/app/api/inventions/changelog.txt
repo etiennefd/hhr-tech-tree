@@ -1,5 +1,9 @@
 10 September 2025
+- Added tech: Silica gel
 - Added tech: Industrial porcelain enamel
+- Added tech: Water glass
+- Added tech: Ether
+- Added tech: Ethanol (isolation)
 - Added tech: Vitreous enamel
 - Added tech: Cloisonné
 - Added connection: Glass -> Vitreous enamel
@@ -8,6 +12,15 @@
 - Added connection: Vitreous enamel -> Industrial porcelain enamel
 - Added connection: Cast iron -> Industrial porcelain enamel
 - Added connection: Iron smelting and wrought iron -> Industrial porcelain enamel
+- Added connection: Gas mask -> Silica gel
+- Added connection: Water glass -> Silica gel
+- Added connection: Vacuum pump -> Artificial refrigeration
+- Added connection: Ether -> Artificial refrigeration
+- Added connection: Sulfuric acid -> Ether
+- Added connection: Fractional distillation -> Ethanol (isolation)
+- Added connection: Alcohol fermentation -> Ethanol (isolation)
+- Added connection: Ethanol (isolation) -> Ether
+- Added connection: Salt mining -> Ethanol (isolation)
 
 8 September 2025
 - Added tech: Ketamine
