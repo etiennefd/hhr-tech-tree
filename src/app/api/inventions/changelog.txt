@@ -1,3 +1,14 @@
+10 September 2025
+- Added tech: Industrial porcelain enamel
+- Added tech: Vitreous enamel
+- Added tech: Cloisonné
+- Added connection: Glass -> Vitreous enamel
+- Added connection: Cloisonné -> Vitreous enamel
+- Added connection: Gold -> Cloisonné
+- Added connection: Vitreous enamel -> Industrial porcelain enamel
+- Added connection: Cast iron -> Industrial porcelain enamel
+- Added connection: Iron smelting and wrought iron -> Industrial porcelain enamel
+
 8 September 2025
 - Added tech: Ketamine
 - Added tech: Geothermal power plant
