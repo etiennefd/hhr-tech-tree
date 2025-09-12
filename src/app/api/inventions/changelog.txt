@@ -1,3 +1,8 @@
+12 September 2025
+- Added tech: Electric hearing aid
+- Added connection: Ear trumpet -> Electric hearing aid
+- Added connection: Carbon microphone -> Electric hearing aid
+
 11 September 2025
 - Added tech: Ear trumpet
 - Added connection: Ear trumpet -> Stethoscope
