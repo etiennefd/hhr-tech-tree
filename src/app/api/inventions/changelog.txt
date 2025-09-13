@@ -1,3 +1,11 @@
+13 September 2025
+- Added tech: Herbicide-resistant GMO
+- Added tech: Glyphosate
+- Added tech: Agent Orange
+- Added connection: Glyphosate -> Herbicide-resistant GMO
+- Added connection: Domestication of soybeans -> Herbicide-resistant GMO
+- Added connection: Genetically modified food -> Herbicide-resistant GMO
+
 12 September 2025
 - Added tech: Electric hearing aid
 - Added connection: Ear trumpet -> Electric hearing aid
