@@ -1,3 +1,14 @@
+14 September 2025
+- Added tech: Napalm
+- Added tech: Hydraulic mining
+- Added connection: Aqueduct -> Hydraulic mining
+- Added connection: Reservoir -> Hydraulic mining
+- Added connection: Mining -> Hydraulic mining
+- Added connection: Vulcanized rubber -> Napalm
+- Added connection: Gasoline as fuel -> Napalm
+- Added connection: Napalm -> Fracking
+- Added connection: Modern oil well -> Fracking
+
 13 September 2025
 - Added tech: Herbicide-resistant GMO
 - Added tech: Glyphosate
