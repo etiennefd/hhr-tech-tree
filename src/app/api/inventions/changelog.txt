@@ -1,3 +1,8 @@
+15 September 2025
+- Added tech: Fire extinguisher
+- Added connection: Pewter -> Fire extinguisher
+- Added connection: Gunpowder -> Fire extinguisher
+
 14 September 2025
 - Added tech: Napalm
 - Added tech: Hydraulic mining
