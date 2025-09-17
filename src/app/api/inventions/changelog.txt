@@ -1,3 +1,7 @@
+17 September 2025
+- Added tech: Candle clock
+- Added connection: Candle -> Candle clock
+
 16 September 2025
 - Added tech: Automatic fire sprinkler
 - Added connection: Fire extinguisher -> Automatic fire sprinkler
