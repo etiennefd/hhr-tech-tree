@@ -5,6 +5,7 @@
 - Added tech: Zinc-finger nuclease genome editing
 - Added tech: Zinc finger
 - Added connection: Zinc finger -> Zinc-finger nuclease genome editing
+- Added connection: Cellulose acetate film -> Instant film
 
 17 September 2025
 - Added tech: Candle clock
