@@ -1,3 +1,11 @@
+21 September 2025
+- Added tech: Polarizing filter
+- Added tech: Polarizing prism
+- Added tech: Iceland spar
+- Added connection: Iceland spar -> Polarizing prism
+- Added connection: Nitrocellulose film -> Polarizing filter
+- Added connection: Polarizing prism -> Polarizing filter
+
 19 September 2025
 - Added tech: Instant film
 
