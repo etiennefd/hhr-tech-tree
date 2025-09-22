@@ -1,3 +1,8 @@
+22 September 2025
+- Added tech: TALEN genome editing
+- Added connection: Zinc-finger nuclease genome editing -> TALEN genome editing
+- Added connection: Zinc-finger nuclease genome editing -> CRISPR gene editing
+
 21 September 2025
 - Added tech: Polarizing filter
 - Added tech: Polarizing prism
