@@ -1,3 +1,7 @@
+27 September 2025
+- Added tech: Tea
+- Added tech: Umbrella
+
 24 September 2025
 - Added tech: Goniometer
 - Added connection: Sector -> Goniometer
