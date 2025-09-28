@@ -1,3 +1,10 @@
+28 September 2025
+- Added tech: Head-mounted display
+- Added tech: Two-stroke engine and supercharger
+- Added connection: Two-stroke engine and supercharger -> Turbocharger
+- Added connection: Four-stroke engine -> Two-stroke engine and supercharger
+- Added connection: Integrated circuit computer -> Head-mounted display
+
 27 September 2025
 - Added tech: Tea
 - Added tech: Umbrella
