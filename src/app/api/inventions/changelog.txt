@@ -1,3 +1,8 @@
+2 October 2025
+- Added tech: Slitting mill
+- Added connection: Water wheel (Greece) -> Slitting mill
+- Added connection: Iron smelting and wrought iron -> Slitting mill
+
 28 September 2025
 - Added tech: Head-mounted display
 - Added tech: Two-stroke engine and supercharger
