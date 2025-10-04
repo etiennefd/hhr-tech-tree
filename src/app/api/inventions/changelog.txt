@@ -1,3 +1,6 @@
+4 October 2025
+- Added tech: Rammed earth
+
 2 October 2025
 - Added tech: Slitting mill
 - Added connection: Water wheel (Greece) -> Slitting mill
