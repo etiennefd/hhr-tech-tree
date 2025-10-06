@@ -1,3 +1,7 @@
+5 October 2025
+- Added tech: Small modular reactor
+- Added connection: Nuclear reactor -> Small modular reactor
+
 4 October 2025
 - Added tech: Rammed earth
 
