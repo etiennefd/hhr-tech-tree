@@ -1,3 +1,7 @@
+4 December 2025
+- Added tech: Quartz wristwatch
+- Added connection: Quartz clock -> Quartz wristwatch
+
 20 November 2025
 - Added tech: Cooling tower
 - Added tech: Condenser
