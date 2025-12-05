@@ -1,6 +1,7 @@
 4 December 2025
 - Added tech: Quartz wristwatch
 - Added connection: Quartz clock -> Quartz wristwatch
+- Added connection: Wristwatch -> Quartz wristwatch
 
 20 November 2025
 - Added tech: Cooling tower
