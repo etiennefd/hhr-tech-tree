@@ -1,3 +1,9 @@
+20 December 2025
+- Added tech: Airless tire
+- Added connection: Pneumatic tire -> Airless tire
+- Added connection: Polyurethane -> Airless tire
+- Added connection: Radial tire -> Airless tire
+
 6 December 2025
 - Added tech: Rotor ship
 
