@@ -1,3 +1,8 @@
+22 December 2025
+- Added tech: Nuclear-powered surface ship
+- Added connection: Nuclear-powered surface ship -> Small modular reactor
+- Added connection: Nuclear submarine -> Nuclear-powered surface ship
+
 20 December 2025
 - Added tech: Airless tire
 - Added connection: Pneumatic tire -> Airless tire
