@@ -1,3 +1,26 @@
+3 January 2026
+- Added tech: Polymer banknote
+- Added tech: Polypropylene
+- Added tech: Ziegler–Natta catalyst
+- Added tech: Diazomethane
+- Added tech: Propylene
+- Added tech: Bromine
+- Added tech: Ethylene
+- Added connection: Aniline -> Synthetic dye
+- Added connection: Propylene -> Polypropylene
+- Added connection: Diazomethane -> Polyethylene
+- Added connection: Sulfuric acid -> Ethylene
+- Added connection: Alcohol fermentation -> Ethylene
+- Added connection: Polyethylene -> Ziegler–Natta catalyst
+- Added connection: Ethylene -> Ziegler–Natta catalyst
+- Added connection: Ziegler–Natta catalyst -> Polypropylene
+- Added connection: Titanium -> Ziegler–Natta catalyst
+- Added connection: Bromine -> Propylene
+- Added connection: Ether -> Bromine
+- Added connection: Chlorine -> Bromine
+- Added connection: Polypropylene -> Polymer banknote
+- Added connection: Paper money -> Polymer banknote
+
 30 December 2025
 - Added tech: Oral irrigator
 - Added tech: Dental floss
