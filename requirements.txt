@@ -1,0 +1,8 @@
+airtable
+python-dotenv
+Pillow
+requests
+pyairtable
+beautifulsoup4
+networkx
+

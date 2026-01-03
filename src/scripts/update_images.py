@@ -2,7 +2,7 @@ import os
 import requests
 import re
 from urllib.parse import unquote
-from airtable import Airtable
+from pyairtable import Api
 from dotenv import load_dotenv
 import time
 from typing import Union
@@ -268,12 +268,14 @@ def main():
 
     print(f"Connecting to Airtable Base ID: {AIRTABLE_BASE_ID}, Table: {AIRTABLE_TABLE_NAME}")
     try:
-        airtable = Airtable(AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME, AIRTABLE_API_KEY)
+        api = Api(AIRTABLE_API_KEY)
+        base = api.base(AIRTABLE_BASE_ID)
+        table = base.table(AIRTABLE_TABLE_NAME)
         print("Fetching records...")
         # First, try to get the fields to check if Local image exists
         try:
             fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name", "Image rotation"]
-            records = airtable.get_all(fields=fields, max_records=1)
+            records = table.all(fields=fields, max_records=1)
             
             # Debug: Print available fields from first record
             if records:
@@ -291,14 +293,14 @@ def main():
         if args.credits_only:
             if args.new:
                 # In credits-only mode, fetch records that have no credits
-                records = airtable.get_all(
+                records = table.all(
                     fields=fields,
                     formula=f"AND({{Image URL}} != '', {{Image credits}} = '')"
                 )
                 print(f"Found {len(records)} records without credits.")
             else:  # args.all
                 # In credits-only mode, fetch all records with image URLs
-                records = airtable.get_all(
+                records = table.all(
                     fields=fields,
                     formula=f"{{Image URL}} != ''"
                 )
@@ -306,14 +308,14 @@ def main():
         else:
             if args.new:
                 # Normal mode: fetch records without local images
-                records = airtable.get_all(
+                records = table.all(
                     fields=fields,
                     formula=f"AND({{Image URL}} != '', {{Local image}} = '')"
                 )
                 print(f"Found {len(records)} records without local images.")
             else:  # args.all
                 # Normal mode: fetch all records with image URLs
-                records = airtable.get_all(
+                records = table.all(
                     fields=fields,
                     formula=f"{{Image URL}} != ''"
                 )
@@ -420,7 +422,8 @@ def main():
         if len(updates) >= 10:
             print("\n--- Sending batch update ---")
             try:
-                airtable.batch_update(updates)
+                # pyairtable batch_update expects a list of dicts with 'id' and 'fields'
+                table.batch_update(updates)
                 print(f"--- Batch update successful ({len(updates)} records) ---")
                 updates = []
             except Exception as e:
@@ -432,7 +435,7 @@ def main():
     if updates:
         print("\n--- Sending final batch update ---")
         try:
-            airtable.batch_update(updates)
+            table.batch_update(updates)
             print(f"--- Final batch update successful ({len(updates)} records) ---")
         except Exception as e:
             print(f"--- Final batch update failed: {e} ---")
