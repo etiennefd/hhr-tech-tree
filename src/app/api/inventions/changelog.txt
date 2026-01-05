@@ -1,3 +1,7 @@
+4 January 2026
+- Added tech: Atomic absorption spectroscopy
+- Added tech: Gas chromatography
+
 3 January 2026
 - Added tech: Polymer banknote
 - Added tech: Polypropylene
