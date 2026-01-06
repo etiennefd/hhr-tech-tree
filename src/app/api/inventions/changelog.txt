@@ -1,3 +1,12 @@
+6 January 2026
+- Added tech: Atomic emission spectroscopy
+- Added tech: Spectroscope
+- Added connection: Atomic emission spectroscopy -> Atomic absorption spectroscopy
+- Added connection: Spectroscope -> Atomic emission spectroscopy
+
+5 January 2026
+- Added connection: Chromatography -> Gas chromatography
+
 4 January 2026
 - Added tech: Atomic absorption spectroscopy
 - Added tech: Gas chromatography
