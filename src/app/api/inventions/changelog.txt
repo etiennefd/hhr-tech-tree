@@ -1,3 +1,11 @@
+7 January 2026
+- Added tech: Butter
+- Added tech: Cheese
+- Added connection: Butter -> Margarine
+- Added connection: Domestication of sheep -> Cheese
+- Added connection: Domestication of goats -> Butter
+- Added connection: Domestication of sheep -> Butter
+
 6 January 2026
 - Added tech: Atomic emission spectroscopy
 - Added tech: Spectroscope
