@@ -1,3 +1,6 @@
+12 January 2026
+- Added connection: Paraffin wax -> Neutron
+
 7 January 2026
 - Added tech: Butter
 - Added tech: Cheese
