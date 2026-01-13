@@ -29,17 +29,28 @@ if [ ! -d "node_modules" ]; then
     yarn install
 fi
 
+# Track errors
+IMAGE_ERRORS=0
+DATA_ERRORS=0
+CHANGELOG_ERRORS=0
+
 # Update images first
 echo "Updating images..."
-$PYTHON_CMD src/scripts/update_images.py --new
+if ! $PYTHON_CMD src/scripts/update_images.py --new; then
+    IMAGE_ERRORS=1
+fi
 
 # Run the update script
 echo "Updating tech tree data..."
-NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/fetch-and-save-inventions.ts
+if ! NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/fetch-and-save-inventions.ts; then
+    DATA_ERRORS=1
+fi
 
 # Generate changelog
 echo "Generating changelog..."
-NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/generate-changelog.ts
+if ! NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/generate-changelog.ts; then
+    CHANGELOG_ERRORS=1
+fi
 
 # Trigger a rebuild if in production
 if [ "$NODE_ENV" = "production" ]; then
@@ -52,4 +63,14 @@ if [ "$NODE_ENV" = "production" ]; then
     fi
 fi
 
-echo "Done!" 
+echo "Done!"
+
+# Report errors if any occurred
+if [ $IMAGE_ERRORS -eq 1 ] || [ $DATA_ERRORS -eq 1 ] || [ $CHANGELOG_ERRORS -eq 1 ]; then
+    echo ""
+    echo "⚠️  ERRORS DETECTED:"
+    [ $IMAGE_ERRORS -eq 1 ] && echo "  - Image processing errors (check output above for details)"
+    [ $DATA_ERRORS -eq 1 ] && echo "  - Data update errors"
+    [ $CHANGELOG_ERRORS -eq 1 ] && echo "  - Changelog generation errors"
+    echo ""
+fi 

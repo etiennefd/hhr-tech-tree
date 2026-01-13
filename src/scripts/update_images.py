@@ -264,7 +264,7 @@ def main():
 
     if not AIRTABLE_API_KEY or not AIRTABLE_BASE_ID:
         print("Error: AIRTABLE_API_KEY and AIRTABLE_BASE_ID must be set in .env file")
-        return
+        return 1
 
     print(f"Connecting to Airtable Base ID: {AIRTABLE_BASE_ID}, Table: {AIRTABLE_TABLE_NAME}")
     try:
@@ -285,7 +285,7 @@ def main():
         except Exception as e:
             if 'UNKNOWN_FIELD_NAME' in str(e):
                 print("Note: 'Local image' field not found in Airtable. Please add it first.")
-                return
+                return 1
             else:
                 raise e
 
@@ -323,13 +323,15 @@ def main():
 
     except Exception as e:
         print(f"Error connecting to or fetching from Airtable: {e}")
-        return
+        return 1
 
     updates = []
     processed_count = 0
     updated_count = 0
     skipped_count = 0
     error_count = 0
+    image_errors = []  # Track image processing errors
+    credits_errors = []  # Track image link/credits errors
 
     for record in records:
         processed_count += 1
@@ -367,12 +369,16 @@ def main():
 
         print(f"  Extracted filename: {filename}")
         credits_data = get_image_credits(filename, image_url)
+        if not credits_data:
+            credits_errors.append({"title": title, "record_id": record_id, "filename": filename})
 
         # Only download and optimize image if not in credits-only mode
         local_image_path = None
         if not args.credits_only:
             rotation = record.get('fields', {}).get('Image rotation', 0)
             local_image_path = download_and_optimize_image(image_url, title, rotation)
+            if not local_image_path:
+                image_errors.append({"title": title, "record_id": record_id, "url": image_url})
 
         if credits_data or local_image_path:
             update_payload = {}
@@ -446,6 +452,27 @@ def main():
     print(f"Records Updated: {updated_count}")
     print(f"Records Skipped: {skipped_count}")
     print(f"Errors: {error_count}")
+    
+    # Report image and credits errors
+    if image_errors or credits_errors:
+        print("\n--- ERROR SUMMARY ---")
+        if image_errors:
+            print(f"\n⚠️  Image Processing Errors ({len(image_errors)}):")
+            for err in image_errors:
+                print(f"  - {err['title']} (ID: {err['record_id']})")
+                print(f"    URL: {err['url']}")
+        if credits_errors:
+            print(f"\n⚠️  Image Link/Credits Errors ({len(credits_errors)}):")
+            for err in credits_errors:
+                print(f"  - {err['title']} (ID: {err['record_id']})")
+                print(f"    Filename: {err['filename']}")
+        print("")
+    
+    # Exit with error code if there were any errors
+    if image_errors or credits_errors or error_count > 0:
+        return 1
+    return 0
 
 if __name__ == "__main__":
-    main()
+    exit_code = main()
+    exit(exit_code if exit_code is not None else 0)
