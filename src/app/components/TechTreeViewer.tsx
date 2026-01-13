@@ -976,6 +976,8 @@ export function TechTreeViewer() {
         // Clear highlights as well
         setHighlightedAncestors(new Set());
         setHighlightedDescendants(new Set());
+        // Clear URL param on deselect
+        router.replace('/', { scroll: false });
         performanceMarks.end('nodeClick');
         performanceMarks.log('nodeClick');
         return;
@@ -989,6 +991,9 @@ export function TechTreeViewer() {
       setHoveredLinkIndex(null);
       setHighlightedAncestors(new Set());
       setHighlightedDescendants(new Set());
+
+      // Update URL with selected node for deep linking
+      router.replace(`/?node=${node.id}`, { scroll: false });
 
       // If mobile, explicitly set hover state to show tooltip immediately
       if (isMobile) {
@@ -1015,7 +1020,7 @@ export function TechTreeViewer() {
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
     },
-    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile] // Added isMobile dependency
+    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
   );
 
   const handleJumpToNearest = useCallback(() => {
@@ -1756,9 +1761,10 @@ export function TechTreeViewer() {
   useEffect(() => {
     // Only run once after data is loaded and if we haven't scrolled yet
     if (!isLoading && data.nodes.length > 0 && !hasScrolledToInitialNode.current) {
-      const initialNodeId = searchParams.get('initialNodeId');
-      if (initialNodeId) {
-        const nodeToSelect = data.nodes.find(node => node.id === initialNodeId);
+      // Support both ?node= (new) and ?initialNodeId= (legacy) params
+      const nodeId = searchParams.get('node') || searchParams.get('initialNodeId');
+      if (nodeId) {
+        const nodeToSelect = data.nodes.find(node => node.id === nodeId);
         if (nodeToSelect) {
           // Use a slight delay to ensure the layout is stable before scrolling
           setTimeout(() => {
@@ -1981,7 +1987,7 @@ export function TechTreeViewer() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Remove these unused handlers
+  // Handle Escape key to deselect and clear URL
   const handleEscapeKey = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       // Clear all selections and highlights
@@ -1993,8 +1999,10 @@ export function TechTreeViewer() {
       setHoveredLinkIndex(null);
       setHighlightedAncestors(new Set());
       setHighlightedDescendants(new Set());
+      // Clear URL param
+      router.replace('/', { scroll: false });
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleEscapeKey);
