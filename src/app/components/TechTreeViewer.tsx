@@ -1454,7 +1454,7 @@ export function TechTreeViewer() {
                 node,
                 text: matchingInventors.join(", "),
                 // Use original formatYear call
-                subtext: `Invented ${node.title} (${formatYear(node.year)})`,
+                subtext: `${node.type === "Discovery" ? "Discovered" : "Invented"} ${node.title} (${formatYear(node.year)})`,
                 matchScore: 5,
               });
               addedNodes.add(nodeId);
