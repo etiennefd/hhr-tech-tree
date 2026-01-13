@@ -1,3 +1,26 @@
+13 January 2026
+- Added tech: Disposable lighter
+- Added tech: Ferrocerium lighter
+- Added tech: Lutetium
+- Added tech: Ferrocerium
+- Added tech: Ytterbium
+- Added tech: Butane
+- Added tech: Kipp's apparatus
+- Added tech: Cerium
+- Added connection: Zinc smelting -> Döbereiner's lamp
+- Added connection: Sulfuric acid -> Döbereiner's lamp
+- Added connection: Platinum -> Döbereiner's lamp
+- Added connection: Hydrogen -> Döbereiner's lamp
+- Added connection: Glass blowing -> Kipp's apparatus
+- Added connection: Hydrogen -> Kipp's apparatus
+- Added connection: Cerium -> Ferrocerium
+- Added connection: Ferrocerium -> Ferrocerium lighter
+- Added connection: Iron smelting and wrought iron -> Ferrocerium
+- Added connection: Ytterbium -> Lutetium
+- Added connection: Petroleum as fuel -> Butane
+- Added connection: Ferrocerium lighter -> Disposable lighter
+- Added connection: Butane -> Disposable lighter
+
 12 January 2026
 - Added connection: Paraffin wax -> Neutron
 
