@@ -20,6 +20,7 @@
 - Added connection: Petroleum as fuel -> Butane
 - Added connection: Ferrocerium lighter -> Disposable lighter
 - Added connection: Butane -> Disposable lighter
+- Added connection: True flintlock -> Ferrocerium lighter
 
 12 January 2026
 - Added connection: Paraffin wax -> Neutron
