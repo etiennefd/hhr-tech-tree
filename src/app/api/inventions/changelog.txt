@@ -7,8 +7,8 @@
 - Added tech: Butane
 - Added tech: Kipp's apparatus
 - Added tech: Cerium
-- Added tech: Ice skate with sharp steel edge
-- Added tech: Ice skate
+- Added tech: Ice skates with sharp steel edge
+- Added tech: Ice skates
 - Added connection: Zinc smelting -> Döbereiner's lamp
 - Added connection: Sulfuric acid -> Döbereiner's lamp
 - Added connection: Platinum -> Döbereiner's lamp
@@ -23,8 +23,9 @@
 - Added connection: Ferrocerium lighter -> Disposable lighter
 - Added connection: Butane -> Disposable lighter
 - Added connection: True flintlock -> Ferrocerium lighter
-- Added connection: Bone tool -> Ice skate
-- Added connection: Ice skate -> Ice skate with sharp steel edge
+- Added connection: Bone tool -> Ice skates
+- Added connection: Ice skates -> Ice skates with sharp steel edge
+- Added connection: Ice skates with sharp steel edge -> Roller skates
 
 12 January 2026
 - Added connection: Paraffin wax -> Neutron
