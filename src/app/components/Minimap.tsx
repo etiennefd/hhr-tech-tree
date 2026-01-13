@@ -25,6 +25,7 @@ interface TechTreeMinimapProps {
   adjacentNodeIds?: Set<string>;
   highlightedAncestors: Set<string>;
   highlightedDescendants: Set<string>;
+  zoomLevel?: number;
 }
 
 const TechTreeMinimap = ({
@@ -44,6 +45,7 @@ const TechTreeMinimap = ({
   adjacentNodeIds = new Set(),
   highlightedAncestors = new Set(),
   highlightedDescendants = new Set(),
+  zoomLevel = 1,
 }: TechTreeMinimapProps) => {
   // Calculate if the screen is small based on the passed parent width
   const isSmallScreen = useMemo(() => {
@@ -88,16 +90,23 @@ const TechTreeMinimap = ({
     setScale(Math.min(horizontalScale, verticalScale));
   }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen]);
 
-  // Calculate minimap viewport dimensions
-  const baseWidth = viewportWidth * scale;
+  // Calculate minimap viewport dimensions (accounting for zoom)
+  // When zoomed out, we see more content, so the viewport rectangle should be larger
+  const effectiveViewportWidth = viewportWidth / zoomLevel;
+  const effectiveViewportHeight = viewportHeight / zoomLevel;
+  const baseWidth = effectiveViewportWidth * scale;
   const aspectRatio = viewportWidth / viewportHeight;
   const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
+
+  // Convert scroll position from scaled to content coordinates
+  const contentScrollLeft = scrollLeft / zoomLevel;
+  const contentScrollTop = scrollTop / zoomLevel;
 
   const minimapViewport = {
     width: baseWidth,
     height: (baseWidth / aspectRatio) / verticalScale,
-    x: scrollLeft * scale,
-    y: scrollTop * scale * verticalScale,
+    x: contentScrollLeft * scale,
+    y: contentScrollTop * scale * verticalScale,
   };
 
   // Format year label with small screen logic
@@ -123,18 +132,27 @@ const TechTreeMinimap = ({
 
   const handleMinimapClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (!minimapRef.current) return;
-    
+
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const targetX = x / scale - viewportWidth / 2;
-    const targetY = y / (scale * verticalScale) - viewportHeight / 2;
+    // Convert minimap position to content coordinates
+    const contentX = x / scale;
+    const contentY = y / (scale * verticalScale);
+
+    // Calculate target content position (center viewport on clicked point)
+    const targetContentX = contentX - effectiveViewportWidth / 2;
+    const targetContentY = contentY - effectiveViewportHeight / 2;
+
+    // Convert back to scaled scroll coordinates
+    const targetScrollX = targetContentX * zoomLevel;
+    const targetScrollY = targetContentY * zoomLevel;
 
     requestAnimationFrame(() => {
-      onViewportChange(Math.max(0, targetX), Math.max(0, targetY));
+      onViewportChange(Math.max(0, targetScrollX), Math.max(0, targetScrollY));
     });
   };
 
@@ -150,11 +168,20 @@ const TechTreeMinimap = ({
     if (!isDragging.current || !minimapRef.current) return;
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
-    const x = (e.clientX - rect.left) / scale - viewportWidth / 2;
-    const y = (e.clientY - rect.top) / (scale * verticalScale) - viewportHeight / 2;
+    // Convert minimap position to content coordinates
+    const contentX = (e.clientX - rect.left) / scale;
+    const contentY = (e.clientY - rect.top) / (scale * verticalScale);
+
+    // Calculate target content position (center viewport on dragged point)
+    const targetContentX = contentX - effectiveViewportWidth / 2;
+    const targetContentY = contentY - effectiveViewportHeight / 2;
+
+    // Convert back to scaled scroll coordinates
+    const targetScrollX = targetContentX * zoomLevel;
+    const targetScrollY = targetContentY * zoomLevel;
 
     requestAnimationFrame(() => {
-      onViewportChange(Math.max(0, x), Math.max(0, y));
+      onViewportChange(Math.max(0, targetScrollX), Math.max(0, targetScrollY));
     });
   };
 

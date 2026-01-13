@@ -90,6 +90,12 @@ export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
 
+// Zoom constants
+const MIN_ZOOM = 0.25;
+const MAX_ZOOM = 1.0;
+const ZOOM_STEP = 0.1;
+const ZOOM_WHEEL_SENSITIVITY = 0.002;
+
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
   ssr: false,
@@ -326,6 +332,8 @@ export function TechTreeViewer() {
   const [selectedLinkKey, setSelectedLinkKey] = useState<string | null>(null);
   const [totalHeight, setTotalHeight] = useState(1000);
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
+  const [zoomLevel, setZoomLevel] = useState(1.0);
+  const lastTouchDistanceRef = useRef<number | null>(null);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [filters, setFilters] = useState<FilterState>({
     fields: new Set(),
@@ -479,6 +487,60 @@ export function TechTreeViewer() {
     },
     [data.nodes]
   );
+
+  // Zoom helper functions
+  const clampZoom = useCallback((zoom: number) => {
+    return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom));
+  }, []);
+
+  const zoomToPoint = useCallback((
+    newZoom: number,
+    clientX: number,
+    clientY: number
+  ) => {
+    const container = horizontalScrollContainerRef.current;
+    if (!container) return;
+
+    const clampedZoom = clampZoom(newZoom);
+    if (clampedZoom === zoomLevel) return;
+
+    // Get container bounds
+    const rect = container.getBoundingClientRect();
+
+    // Calculate cursor position relative to container
+    const cursorX = clientX - rect.left;
+    const cursorY = clientY - rect.top;
+
+    // Calculate the content position under cursor before zoom (in unscaled coordinates)
+    const contentX = (container.scrollLeft + cursorX) / zoomLevel;
+    const contentY = (container.scrollTop + cursorY) / zoomLevel;
+
+    // Calculate new scroll position to keep content under cursor
+    const newScrollLeft = contentX * clampedZoom - cursorX;
+    const newScrollTop = contentY * clampedZoom - cursorY;
+
+    // Apply zoom
+    setZoomLevel(clampedZoom);
+
+    // Use requestAnimationFrame to ensure zoom transform is applied before scroll adjustment
+    requestAnimationFrame(() => {
+      if (container) {
+        container.scrollLeft = Math.max(0, newScrollLeft);
+        container.scrollTop = Math.max(0, newScrollTop);
+      }
+    });
+  }, [zoomLevel, clampZoom]);
+
+  const zoomFromCenter = useCallback((delta: number) => {
+    const container = horizontalScrollContainerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    zoomToPoint(zoomLevel + delta, centerX, centerY);
+  }, [zoomLevel, zoomToPoint]);
 
   const calculateNodePositions = useCallback(
     (nodes: TechNode[]): TechNode[] => {
@@ -2009,25 +2071,137 @@ export function TechTreeViewer() {
     return () => window.removeEventListener('keydown', handleEscapeKey);
   }, [handleEscapeKey]);
 
-  // Remove all touch handlers
-  // Remove all zoom-related code
+  // Handle keyboard shortcuts for zoom (Ctrl/Cmd + Plus/Minus/0)
+  useEffect(() => {
+    const handleZoomKeyboard = (e: KeyboardEvent) => {
+      // Check for Ctrl (Windows/Linux) or Cmd (Mac)
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === '-' || e.key === '_') {
+          e.preventDefault();
+          zoomFromCenter(-ZOOM_STEP);
+        } else if (e.key === '+' || e.key === '=') {
+          e.preventDefault();
+          zoomFromCenter(ZOOM_STEP);
+        } else if (e.key === '0') {
+          e.preventDefault();
+          setZoomLevel(1.0); // Reset to 100%
+        }
+      }
+    };
 
-  // Add effect to initialize viewport
+    window.addEventListener('keydown', handleZoomKeyboard);
+    return () => window.removeEventListener('keydown', handleZoomKeyboard);
+  }, [zoomFromCenter]);
+
+  // Handle wheel zoom (Ctrl+scroll or pinch on trackpad)
+  useEffect(() => {
+    const container = horizontalScrollContainerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Check for Ctrl key (Windows/Linux) or pinch gesture (macOS trackpad sends ctrlKey=true)
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Calculate zoom delta (negative deltaY = zoom in, positive = zoom out)
+        const delta = -e.deltaY * ZOOM_WHEEL_SENSITIVITY;
+        const newZoom = clampZoom(zoomLevel + delta);
+
+        zoomToPoint(newZoom, e.clientX, e.clientY);
+      }
+    };
+
+    // Use non-passive listener to allow preventDefault
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
+  }, [zoomLevel, zoomToPoint, clampZoom]);
+
+  // Handle mobile pinch-to-zoom
+  useEffect(() => {
+    const container = horizontalScrollContainerRef.current;
+    if (!container) return;
+
+    const getTouchDistance = (touches: TouchList): number => {
+      if (touches.length < 2) return 0;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    const getTouchCenter = (touches: TouchList): { x: number; y: number } => {
+      if (touches.length < 2) return { x: 0, y: 0 };
+      return {
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2,
+      };
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        lastTouchDistanceRef.current = getTouchDistance(e.touches);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2 && lastTouchDistanceRef.current !== null) {
+        const newDistance = getTouchDistance(e.touches);
+        const scale = newDistance / lastTouchDistanceRef.current;
+
+        // Only zoom if gesture is significant (prevents jitter)
+        if (Math.abs(scale - 1) > 0.01) {
+          e.preventDefault();
+
+          const center = getTouchCenter(e.touches);
+          const newZoom = clampZoom(zoomLevel * scale);
+
+          zoomToPoint(newZoom, center.x, center.y);
+          lastTouchDistanceRef.current = newDistance;
+        }
+      }
+    };
+
+    const handleTouchEnd = () => {
+      lastTouchDistanceRef.current = null;
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [zoomLevel, zoomToPoint, clampZoom]);
+
+  // Add effect to initialize viewport (accounting for zoom)
   useEffect(() => {
     if (horizontalScrollContainerRef.current && verticalScrollContainerRef.current) {
       const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
       const verticalScroll = verticalScrollContainerRef.current.scrollTop;
-      
+
+      // Convert scroll position from scaled to content coordinates
+      // When zoomed out, we see more content, so effective viewport is larger
+      const contentScrollLeft = horizontalScroll / zoomLevel;
+      const contentScrollTop = verticalScroll / zoomLevel;
+      const effectiveWidth = containerDimensions.width / zoomLevel;
+      const effectiveHeight = containerDimensions.height / zoomLevel;
+
       const newViewport = {
-        left: horizontalScroll,
-        right: horizontalScroll + containerDimensions.width,
-        top: verticalScroll,
-        bottom: verticalScroll + containerDimensions.height,
+        left: contentScrollLeft,
+        right: contentScrollLeft + effectiveWidth,
+        top: contentScrollTop,
+        bottom: contentScrollTop + effectiveHeight,
       };
 
       setVisibleViewport(newViewport);
     }
-  }, [containerDimensions.width, containerDimensions.height]);
+  }, [containerDimensions.width, containerDimensions.height, zoomLevel]);
 
   // Simplified isNodeInViewport function
   const isNodeInViewport = useCallback(
@@ -2038,7 +2212,9 @@ export function TechTreeViewer() {
       }
 
       // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 3, 350);
+      // Scale buffer inversely with zoom - when zoomed out, buffer is larger in content coords
+      const baseBuffer = Math.min(window.innerWidth / 3, 350);
+      const buffer = baseBuffer / zoomLevel;
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2053,10 +2229,10 @@ export function TechTreeViewer() {
         node.y >= bufferedViewport.top &&
         node.y <= bufferedViewport.bottom
       );
-      
+
       return isVisible;
     },
-    [deferredViewportState, scrollPosition]
+    [deferredViewportState, scrollPosition, zoomLevel]
   );
 
   // Add strict visibility check with minimal buffer
@@ -2067,8 +2243,8 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a small buffer for better user experience
-      const buffer = 10; // Much smaller buffer than the display buffer
+      // Use a small buffer for better user experience, scaled with zoom
+      const buffer = 10 / zoomLevel;
       const strictViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2100,7 +2276,7 @@ export function TechTreeViewer() {
       // Node is considered visible if at least 30% of its area is in viewport
       return intersectionArea / nodeArea > 0.3;
     },
-    [deferredViewportState]
+    [deferredViewportState, zoomLevel]
   );
 
   // Add memoized strictly visible nodes
@@ -2121,7 +2297,9 @@ export function TechTreeViewer() {
       }
 
       // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling
-      const buffer = Math.min(window.innerWidth / 2, 500);
+      // Scale buffer inversely with zoom
+      const baseBuffer = Math.min(window.innerWidth / 2, 500);
+      const buffer = baseBuffer / zoomLevel;
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2184,7 +2362,7 @@ export function TechTreeViewer() {
       
       return isSourceInViewport || isTargetInViewport;
     },
-    [deferredViewportState, data.nodes]
+    [deferredViewportState, data.nodes, zoomLevel]
   );
 
   // Add debounced viewport update
@@ -2203,17 +2381,24 @@ export function TechTreeViewer() {
     }, VIEWPORT_UPDATE_DEBOUNCE);
   }, []);
 
-  // Modify the viewport update handler
+  // Modify the viewport update handler (accounting for zoom)
   const updateViewportState = useCallback((scrollLeft: number, scrollTop: number) => {
+    // Convert scroll position from scaled to content coordinates
+    // When zoomed out, we see more content, so effective viewport is larger
+    const contentScrollLeft = scrollLeft / zoomLevel;
+    const contentScrollTop = scrollTop / zoomLevel;
+    const effectiveWidth = containerDimensions.width / zoomLevel;
+    const effectiveHeight = containerDimensions.height / zoomLevel;
+
     const newViewport = {
-      left: scrollLeft,
-      right: scrollLeft + containerDimensions.width,
-      top: scrollTop,
-      bottom: scrollTop + containerDimensions.height
+      left: contentScrollLeft,
+      right: contentScrollLeft + effectiveWidth,
+      top: contentScrollTop,
+      bottom: contentScrollTop + effectiveHeight
     };
 
     debouncedViewportUpdate(newViewport);
-  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
+  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate, zoomLevel]);
 
   // Add cleanup for the debounce timeout
   useEffect(() => {
@@ -3097,14 +3282,28 @@ useEffect(() => {
           });
         }, 100)} // Throttle to max once every 100ms
       >
-        <div 
+        {/* Scroll bounds wrapper - determines scrollable area based on zoom */}
+        <div
           style={{
-            width: containerWidth,
-            minHeight: '100vh',
-            willChange: 'transform',
-            backfaceVisibility: 'hidden'
+            width: containerWidth * zoomLevel,
+            minHeight: `calc(${totalHeight * zoomLevel}px + 100vh)`,
+            position: 'relative',
           }}
         >
+          {/* Scaled content wrapper */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: containerWidth,
+              minHeight: '100vh',
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: `scale(${zoomLevel})`,
+              transformOrigin: 'top left',
+            }}
+          >
           {/* Timeline - Render this immediately */}
           <div
             className="h-12 bg-yellow-50 border-b timeline flex-shrink-0"
@@ -3836,7 +4035,8 @@ useEffect(() => {
               )}
             </div>
           </div>
-        </div>
+          </div>{/* Close scaled content wrapper */}
+        </div>{/* Close scroll bounds wrapper */}
         {/* Minimap - Conditionally render based on data? Or leave as is? */}
         {data.nodes.length > 0 && (
           <div 
@@ -3871,6 +4071,7 @@ useEffect(() => {
               adjacentNodeIds={adjacentNodeIds}
               highlightedAncestors={highlightedAncestors}
               highlightedDescendants={highlightedDescendants}
+              zoomLevel={zoomLevel}
             />
           </div>
         )}
@@ -3907,6 +4108,62 @@ useEffect(() => {
           Jump to nearest tech
         </button>
       )}
+      {/* Zoom Controls */}
+      <div className="fixed bottom-20 right-16 z-30 flex items-center space-x-1 bg-white/60 backdrop-blur-sm rounded px-1">
+        <button
+          className="p-2 text-[#91B4C5] hover:text-[#6B98AE] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          onClick={() => zoomFromCenter(-ZOOM_STEP)}
+          disabled={zoomLevel <= MIN_ZOOM}
+          title="Zoom out (Ctrl + scroll)"
+          style={{ overscrollBehavior: 'contain' }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="7" y1="11" x2="15" y2="11"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+
+        <span className="text-xs text-[#6B98AE] font-mono min-w-[3rem] text-center select-none">
+          {Math.round(zoomLevel * 100)}%
+        </span>
+
+        <button
+          className="p-2 text-[#91B4C5] hover:text-[#6B98AE] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          onClick={() => zoomFromCenter(ZOOM_STEP)}
+          disabled={zoomLevel >= MAX_ZOOM}
+          title="Zoom in (Ctrl + scroll)"
+          style={{ overscrollBehavior: 'contain' }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="11" y1="7" x2="11" y2="15"/>
+            <line x1="7" y1="11" x2="15" y2="11"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
+
       {/* Settings Button and Menu */}
       <div className="fixed bottom-20 right-4 z-30">
         <button
