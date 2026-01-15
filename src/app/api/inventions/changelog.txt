@@ -1,3 +1,10 @@
+15 January 2026
+- Added tech: Petroleum naphtha
+- Added connection: Petroleum naphtha -> Ferrocerium lighter
+- Added connection: Fractional distillation -> Petroleum naphtha
+- Added connection: Modern oil well -> Petroleum naphtha
+- Added connection: Petroleum as fuel -> Petroleum naphtha
+
 14 January 2026
 - Added connection: Iron smelting and wrought iron -> Ice skates with sharp edge
 
