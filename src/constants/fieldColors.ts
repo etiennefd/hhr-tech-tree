@@ -26,7 +26,7 @@ export const FIELD_COLORS: Record<string, string> = {
 
   // Construction/Materials
   Construction: "#c14d17", // Brick orange
-  Mining: "#996329", // Copper brown
+  Mining: "#B8860B", // Dark goldenrod
   Metallurgy: "#8C8C8C", // Brushed steel
   Manufacturing: "#8a5011", // Brown
   Textiles: "#b58c55", // Burlap
