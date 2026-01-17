@@ -1,11 +1,16 @@
+17 January 2026
+- Added connection: Achromatic lens and achromatic telescope -> Spectroscope
+- Added connection: Telescope -> Spectroscope
+- Added connection: Glass -> Dispersive prism and color spectrum
+
 15 January 2026
 - Added tech: Petroleum naphtha
-- Added tech: Color spectrum
+- Added tech: Dispersive prism and color spectrum
 - Added connection: Petroleum naphtha -> Ferrocerium lighter
 - Added connection: Fractional distillation -> Petroleum naphtha
 - Added connection: Modern oil well -> Petroleum naphtha
 - Added connection: Petroleum as fuel -> Petroleum naphtha
-- Added connection: Color spectrum -> Spectroscope
+- Added connection: Dispersive prism and color spectrum -> Spectroscope
 
 14 January 2026
 - Added connection: Iron smelting and wrought iron -> Ice skates with sharp edge
