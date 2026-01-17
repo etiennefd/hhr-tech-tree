@@ -85,6 +85,7 @@ const VERTICAL_SPACING = 50;
 const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
+// Base buffer for viewport calculations, will be scaled with zoom
 export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 
 // Search result limits
@@ -175,7 +176,8 @@ function calculateXPosition(
   year: number,
   minYear: number,
   PADDING: number,
-  YEAR_WIDTH: number
+  YEAR_WIDTH: number,
+  zoomLevel: number = 1
 ) {
   const alignedYear = getTimelineSegment(year);
   const alignedMinYear = getTimelineSegment(minYear);
@@ -200,7 +202,9 @@ function calculateXPosition(
     spaces += 1;
   }
 
-  return PADDING + spaces * YEAR_WIDTH;
+  // Scale the YEAR_WIDTH based on zoom level
+  const scaledYearWidth = YEAR_WIDTH * zoomLevel;
+  return PADDING + spaces * scaledYearWidth;
 }
 
 // Deterministic seeded random function
@@ -360,6 +364,10 @@ export function TechTreeViewer() {
     }
     return true;
   });
+  
+  // Zoom state
+  const [zoomLevel, setZoomLevel] = useState(1.0);
+  
   const settingsMenuRef = useRef<HTMLDivElement>(null);
 
   // Add effect to save display options to localStorage when they change
@@ -463,21 +471,75 @@ export function TechTreeViewer() {
     return containerDimensions.width > 0 && containerDimensions.width < SMALL_SCREEN_WIDTH_THRESHOLD;
   }, [containerDimensions.width]);
 
+  // Zoom functions
+  const handleZoomIn = useCallback(() => {
+    setZoomLevel(prev => Math.min(1.0, prev + 0.1));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setZoomLevel(prev => Math.max(0.1, prev - 0.1));
+  }, []);
+
+  const handleZoomReset = useCallback(() => {
+    setZoomLevel(1.0);
+  }, []);
+
+  // Track previous zoom level for scroll adjustment
+  const previousZoomLevel = useRef(zoomLevel);
+  
+  // Adjust scroll position when zoom level changes to maintain focal point
+  useEffect(() => {
+    if (!horizontalScrollContainerRef.current) return;
+    
+    const container = horizontalScrollContainerRef.current;
+    const currentScrollLeft = container.scrollLeft;
+    const currentScrollTop = container.scrollTop;
+    
+    // Calculate the center point of the current viewport in timeline coordinates
+    const viewportCenterX = currentScrollLeft + containerDimensions.width / 2;
+    
+    // Convert viewport center to timeline coordinates using the previous zoom level
+    const timelineCenterX = viewportCenterX / previousZoomLevel.current;
+    
+    // Calculate new scroll position to maintain the same timeline center point with new zoom
+    const newScrollLeft = timelineCenterX * zoomLevel - containerDimensions.width / 2;
+    const newScrollTop = currentScrollTop; // Keep vertical scroll the same
+    
+    // Apply the new scroll position
+    container.scrollTo({
+      left: Math.max(0, newScrollLeft),
+      top: newScrollTop,
+      behavior: 'instant' // Use instant to avoid animation conflicts
+    });
+    
+    // Update the previous zoom level
+    previousZoomLevel.current = zoomLevel;
+  }, [zoomLevel, containerDimensions.width, containerDimensions.height]);
+
   // Log the detected dimensions and screen size category for debugging
   useEffect(() => {
     if (isClient) { // Only log on the client
     }
   }, [containerDimensions.width, containerDimensions.height, isSmallScreen, isClient]);
 
-  const getXPosition = useCallback(
+  // Calculate true (unzoomed) X position
+  const getTrueXPosition = useCallback(
     (year: number) => {
       // Still calculate minYear from data for node positioning
       // Return 0 if data isn't loaded yet to avoid errors
       if (!data.nodes.length) return 0;
       const minYear = Math.min(...data.nodes.map((n) => n.year));
-      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, 1); // Always use zoom level 1 for true positions
     },
     [data.nodes]
+  );
+
+  // Calculate zoomed X position for rendering
+  const getXPosition = useCallback(
+    (year: number) => {
+      return getTrueXPosition(year) * zoomLevel;
+    },
+    [getTrueXPosition, zoomLevel]
   );
 
   const calculateNodePositions = useCallback(
@@ -517,10 +579,10 @@ export function TechTreeViewer() {
       const positionedNodes: TechNode[] = [];
       const yearGroups = new Map();
 
-      // Ensure minimum distance from top of viewport
+      // Ensure minimum distance from top of viewport (use true positions, not scaled)
       const ABSOLUTE_MIN_Y = 100;
 
-      // Define fixed vertical bands (pixels from top)
+      // Define fixed vertical bands (pixels from top) - use true positions, not scaled
       const VERTICAL_BANDS: Record<string, number> = {
         Food: Math.max(100, ABSOLUTE_MIN_Y),
         Agriculture: Math.max(150, ABSOLUTE_MIN_Y),
@@ -573,7 +635,7 @@ export function TechTreeViewer() {
       });
 
       yearGroups.forEach((nodesInYear, year) => {
-        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+        const x = calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, 1); // Use true (unzoomed) positions
         const MIN_VERTICAL_GAP = VERTICAL_SPACING;
 
         // Sort nodes by their primary field's band (lowest band = top)
@@ -654,7 +716,7 @@ export function TechTreeViewer() {
       setTotalHeight(maxY + 100); // With buffer of 100 px for tooltips
 
       return positionedNodes;
-    }, []);
+    }, [zoomLevel]);
 
   // Add resetView function
   const resetView = useCallback(() => {
@@ -1111,15 +1173,22 @@ export function TechTreeViewer() {
     [selectedLinkKey]
   );
 
-  const containerWidth = useMemo(
+  // Calculate true (unzoomed) container width
+  const trueContainerWidth = useMemo(
     () =>
       Math.max(
         data.nodes.length
-          ? getXPosition(Math.max(...data.nodes.map((n) => n.year))) + PADDING
+          ? getTrueXPosition(Math.max(...data.nodes.map((n) => n.year))) + PADDING
           : containerDimensions.width,
         containerDimensions.width
       ),
-    [data.nodes, getXPosition, containerDimensions.width]
+    [data.nodes, getTrueXPosition, containerDimensions.width]
+  );
+
+  // Calculate zoomed container width for the main view
+  const containerWidth = useMemo(
+    () => trueContainerWidth * zoomLevel,
+    [trueContainerWidth, zoomLevel]
   );
 
   const getNodeConnections = useCallback(
@@ -2037,8 +2106,9 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 3, 350);
+      // Use a reasonable buffer for better user experience, scaled with zoom
+      const baseBuffer = Math.min(window.innerWidth / 3, 350);
+      const buffer = baseBuffer / zoomLevel; // Scale buffer with zoom
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2056,7 +2126,7 @@ export function TechTreeViewer() {
       
       return isVisible;
     },
-    [deferredViewportState, scrollPosition]
+    [deferredViewportState, scrollPosition, zoomLevel]
   );
 
   // Add strict visibility check with minimal buffer
@@ -2067,8 +2137,8 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a small buffer for better user experience
-      const buffer = 10; // Much smaller buffer than the display buffer
+      // Use a small buffer for better user experience, scaled with zoom
+      const buffer = 10 / zoomLevel; // Scale buffer with zoom
       const strictViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2100,7 +2170,7 @@ export function TechTreeViewer() {
       // Node is considered visible if at least 30% of its area is in viewport
       return intersectionArea / nodeArea > 0.3;
     },
-    [deferredViewportState]
+    [deferredViewportState, zoomLevel]
   );
 
   // Add memoized strictly visible nodes
@@ -2120,8 +2190,9 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling
-      const buffer = Math.min(window.innerWidth / 2, 500);
+      // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling, scaled with zoom
+      const baseBuffer = Math.min(window.innerWidth / 2, 500);
+      const buffer = baseBuffer / zoomLevel; // Scale buffer with zoom
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2184,7 +2255,7 @@ export function TechTreeViewer() {
       
       return isSourceInViewport || isTargetInViewport;
     },
-    [deferredViewportState, data.nodes]
+    [deferredViewportState, data.nodes, zoomLevel]
   );
 
   // Add debounced viewport update
@@ -2203,17 +2274,22 @@ export function TechTreeViewer() {
     }, VIEWPORT_UPDATE_DEBOUNCE);
   }, []);
 
-  // Modify the viewport update handler
+  // Modify the viewport update handler to account for zoom level
   const updateViewportState = useCallback((scrollLeft: number, scrollTop: number) => {
+    // When zoomed out (zoomLevel < 1), the timeline is compressed, so we need to scale the viewport
+    // When zoomed in (zoomLevel > 1), the timeline is expanded, so we need to scale the viewport
+    const zoomAdjustedLeft = scrollLeft / zoomLevel;
+    const zoomAdjustedRight = (scrollLeft + containerDimensions.width) / zoomLevel;
+    
     const newViewport = {
-      left: scrollLeft,
-      right: scrollLeft + containerDimensions.width,
+      left: zoomAdjustedLeft,
+      right: zoomAdjustedRight,
       top: scrollTop,
       bottom: scrollTop + containerDimensions.height
     };
 
     debouncedViewportUpdate(newViewport);
-  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
+  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate, zoomLevel]);
 
   // Add cleanup for the debounce timeout
   useEffect(() => {
@@ -2551,11 +2627,13 @@ export function TechTreeViewer() {
       }
     });
 
+    // Scale the buffer with zoom level
+    const scaledBuffer = CACHE_VIEWPORT_BUFFER_FOR_NODES / zoomLevel;
     const extendedNodeViewport = {
-      left: stableViewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      right: stableViewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      top: stableViewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
+      left: stableViewport.left - scaledBuffer,
+      right: stableViewport.right + scaledBuffer,
+      top: stableViewport.top - scaledBuffer,
+      bottom: stableViewport.bottom + scaledBuffer
     };
     cachedNodeIds.forEach(nodeId => {
         const node = data.nodes.find(n => n.id === nodeId);
@@ -3122,7 +3200,8 @@ useEffect(() => {
             {/* Timeline content - Use fixed years */}
             {(() => {
               // Use fixed years for immediate rendering
-              const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, TIMELINE_MAX_YEAR);
+              const minYear = data.nodes.length ? Math.min(...data.nodes.map((n) => n.year)) : TIMELINE_MIN_YEAR;
+              const timelineYears = getTimelineYears(minYear, TIMELINE_MAX_YEAR);
 
               return (
                 <div className="relative" style={{ width: '100%', height: '100%' }}>
@@ -3132,8 +3211,8 @@ useEffect(() => {
                         key={year}
                         className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
                         style={{
-                          // Use direct calculation with fixed minYear
-                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px`,
+                          // Use the same positioning logic as nodes for consistent alignment
+                          left: `${calculateXPosition(year, minYear, PADDING, YEAR_WIDTH, 1) * zoomLevel}px`,
                           transform: "translateX(-50%)",
                           top: isMobile ? '16px' : '16px',
                           textDecorationLine: 'none',
@@ -3194,11 +3273,11 @@ useEffect(() => {
                     key={connectionKey}
                     sourceNode={{
                       x: getXPosition(sourceNode.year),
-                      y: sourceNode.y || 150,
+                      y: (sourceNode.y || 150) * zoomLevel,
                     }}
                     targetNode={{
                       x: getXPosition(targetNode.year),
-                      y: targetNode.y || 150,
+                      y: (targetNode.y || 150) * zoomLevel,
                     }}
                     sourceIndex={data.nodes.indexOf(sourceNode)}
                     targetIndex={data.nodes.indexOf(targetNode)}
@@ -3224,6 +3303,7 @@ useEffect(() => {
                     onNodeHover={(title) => {
                       handleNodeHoverForPrefetch(title);
                     }}
+                    zoomLevel={zoomLevel}
                   />
                 );
               })}
@@ -3259,10 +3339,11 @@ useEffect(() => {
                     style={{
                       position: "absolute",
                       left: `${getXPosition(node.year)}px`,
-                      top: `${node.y}px`,
+                      top: `${(node.y ?? 0) * zoomLevel}px`,
                       opacity: getNodeOpacity(node),
                       transition: "opacity 0.2s ease-in-out",
                     }}
+                    zoomLevel={zoomLevel}
                     showImages={showImages}
                   />
                 );
@@ -3851,12 +3932,12 @@ useEffect(() => {
               nodes={data.nodes.map(
                 (node): TechTreeMinimapNode => ({
                   id: node.id,
-                  x: getXPosition(node.year),
-                  y: node.y || 0,
+                  x: getTrueXPosition(node.year), // Use true positions directly
+                  y: node.y || 0, // Y positions are not affected by zoom, so use as-is
                   year: node.year,
                 })
               )}
-              containerWidth={containerWidth}
+              containerWidth={trueContainerWidth}
               parentContainerWidth={containerDimensions.width} // Pass the viewer's width
               totalHeight={totalHeight}
               viewportWidth={containerDimensions.width}
@@ -3871,6 +3952,7 @@ useEffect(() => {
               adjacentNodeIds={adjacentNodeIds}
               highlightedAncestors={highlightedAncestors}
               highlightedDescendants={highlightedDescendants}
+              zoomLevel={zoomLevel}
             />
           </div>
         )}
@@ -3888,6 +3970,7 @@ useEffect(() => {
           nodeVisibleConnections={visibleElements.nodeVisibleConnections}
           stickyVisibleConnections={visibleElements.stickyVisibleConnections}
           invisibleViewportConnections={visibleElements.invisibleViewportConnections}
+          zoomLevel={zoomLevel}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}
@@ -3996,6 +4079,45 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
+
+              {/* Zoom Controls - Only show on desktop */}
+              {!isMobile && !isIPad && (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm">Zoom: {Math.round(zoomLevel * 100)}%</span>
+                    <div className="flex items-center space-x-2 ml-4">
+                      <button
+                        className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                        onClick={handleZoomOut}
+                        disabled={zoomLevel <= 0.1}
+                      >
+                        -
+                      </button>
+                      <button
+                        className="w-6 h-6 flex items-center justify-center text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#6B98AE]/10"
+                        onClick={handleZoomIn}
+                        disabled={zoomLevel >= 1.0}
+                      >
+                        +
+                      </button>
+                      <button
+                        className="px-2 py-1 text-xs text-[#91B4C5] hover:text-[#6B98AE] transition-colors border border-[#91B4C5] hover:bg-[#91B4C5]/10"
+                        onClick={handleZoomReset}
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                  <div className="w-full bg-[#91B4C5]/20 h-1 rounded">
+                    <div 
+                      className="bg-[#91B4C5] h-1 rounded transition-all duration-200"
+                      style={{ 
+                        width: `${((zoomLevel - 0.1) / (1.0 - 0.1)) * 100}%` 
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* "Go back to top left" Button */}
               <div>
