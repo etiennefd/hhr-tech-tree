@@ -2,6 +2,9 @@
 - Added connection: Achromatic lens and achromatic telescope -> Spectroscope
 - Added connection: Telescope -> Spectroscope
 - Added connection: Glass -> Dispersive prism and color spectrum
+- Added connection: Spectroscope -> Helium (discovery)
+- Added connection: Spectroscope -> Spectrophotometer
+- Added connection: Spectroscope -> X-ray crystallography
 
 15 January 2026
 - Added tech: Petroleum naphtha
