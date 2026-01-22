@@ -423,19 +423,19 @@ export function TechTreeViewer() {
   const jumpButtonRef = useRef<HTMLButtonElement>(null);
   const prefetchedNodeDetails = useRef<Map<string, Partial<TechNode>>>(new Map());
 
-  // Add state for visible viewport
+  // Add state for visible viewport (use 0 for SSR safety, will be updated on mount)
   const [visibleViewport, setVisibleViewport] = useState({
     left: 0,
-    right: window.innerWidth,  // Initialize with window dimensions instead of zeros
+    right: 0,
     top: 0,
-    bottom: window.innerHeight, // Initialize with window dimensions instead of zeros
+    bottom: 0,
   });
   // Create a deferred version of the viewport for stable calculations
   const [deferredViewportState, setDeferredViewport] = useState({
     left: 0,
-    right: window.innerWidth,
+    right: 0,
     top: 0,
-    bottom: window.innerHeight,
+    bottom: 0,
   });
 
   // Add viewport update tracking
@@ -516,17 +516,18 @@ export function TechTreeViewer() {
     const contentY = (container.scrollTop + cursorY) / zoomLevel;
 
     // Calculate new scroll position to keep content under cursor
-    const newScrollLeft = contentX * clampedZoom - cursorX;
-    const newScrollTop = contentY * clampedZoom - cursorY;
+    const newScrollLeft = Math.max(0, contentX * clampedZoom - cursorX);
+    const newScrollTop = Math.max(0, contentY * clampedZoom - cursorY);
 
-    // Apply zoom
+    // Update both zoom and scroll position atomically to prevent minimap jumping
     setZoomLevel(clampedZoom);
+    setScrollPosition({ left: newScrollLeft, top: newScrollTop });
 
-    // Use requestAnimationFrame to ensure zoom transform is applied before scroll adjustment
+    // Also update the actual scroll container
     requestAnimationFrame(() => {
       if (container) {
-        container.scrollLeft = Math.max(0, newScrollLeft);
-        container.scrollTop = Math.max(0, newScrollTop);
+        container.scrollLeft = newScrollLeft;
+        container.scrollTop = newScrollTop;
       }
     });
   }, [zoomLevel, clampZoom]);
@@ -3264,7 +3265,7 @@ useEffect(() => {
         className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50"
         style={{ 
           overscrollBehavior: "none",
-          touchAction: "pan-x pan-y pinch-zoom",
+          touchAction: "pan-x pan-y",  // Disable native pinch-zoom to enable custom zoom
           WebkitOverflowScrolling: "touch",
           WebkitTapHighlightColor: "transparent",
           scrollbarWidth: "thin",   // Show thin scrollbar in Firefox
