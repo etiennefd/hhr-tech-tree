@@ -1,5 +1,9 @@
 24 January 2026
+- Added tech: Aerosol spray can
+- Added tech: Intrauterine device
+- Added tech: Condom
 - Added tech: Rib vault
+- Added tech: Glass window
 - Added tech: Groin vault
 - Added tech: Barrel vault
 - Added connection: Flute -> Aulos
@@ -7,6 +11,7 @@
 - Added connection: Fired bricks -> Barrel vault
 - Added connection: Barrel vault -> Groin vault
 - Added connection: Groin vault -> Rib vault
+- Added connection: Glass -> Glass window
 
 17 January 2026
 - Added connection: Achromatic lens and achromatic telescope -> Spectroscope
