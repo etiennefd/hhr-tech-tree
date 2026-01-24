@@ -1,3 +1,13 @@
+24 January 2026
+- Added tech: Rib vault
+- Added tech: Groin vault
+- Added tech: Barrel vault
+- Added connection: Flute -> Aulos
+- Added connection: Construction mortar -> Barrel vault
+- Added connection: Fired bricks -> Barrel vault
+- Added connection: Barrel vault -> Groin vault
+- Added connection: Groin vault -> Rib vault
+
 17 January 2026
 - Added connection: Achromatic lens and achromatic telescope -> Spectroscope
 - Added connection: Telescope -> Spectroscope
