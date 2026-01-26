@@ -1,3 +1,15 @@
+26 January 2026
+- Added tech: Marker degradation
+- Added tech: Bunsen cell
+- Added tech: Grove cell
+- Added connection: Marker degradation -> Combined oral contraceptive pill
+- Added connection: Linen -> Condom
+- Added connection: Bunsen cell -> Fluorine (isolation)
+- Added connection: Grove cell -> Bunsen cell
+- Added connection: Daniell cell -> Grove cell
+- Added connection: Zinc smelting -> Grove cell
+- Added connection: Platinum -> Grove cell
+
 24 January 2026
 - Added tech: Aerosol spray can
 - Added tech: Intrauterine device
