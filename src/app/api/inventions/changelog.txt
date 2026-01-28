@@ -1,3 +1,11 @@
+28 January 2026
+- Added tech: Centrifugal governor
+- Added connection: Post windmill -> Centrifugal governor
+- Added connection: Watt steam engine -> Centrifugal governor
+
+27 January 2026
+- Added tech: Guillotine
+
 26 January 2026
 - Added tech: Marker degradation
 - Added tech: Bunsen cell
