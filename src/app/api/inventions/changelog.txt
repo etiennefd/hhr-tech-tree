@@ -1,5 +1,6 @@
 28 January 2026
 - Added tech: Activated sludge
+- Added tech: Water purification by sand filter
 - Added tech: Centrifugal governor
 - Added connection: Post windmill -> Centrifugal governor
 - Added connection: Watt steam engine -> Centrifugal governor
