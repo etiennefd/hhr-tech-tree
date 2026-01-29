@@ -1,3 +1,12 @@
+29 January 2026
+- Added tech: Water chlorination
+- Added tech: Sodium hypochlorite bleach
+- Added tech: Leblanc process
+- Added tech: Bleach
+- Added tech: Sodium hydroxide
+- Added connection: Chlorine -> Bleach
+- Added connection: Bleach -> Sodium hypochlorite bleach
+
 28 January 2026
 - Added tech: Activated sludge
 - Added tech: Water purification by sand filter
