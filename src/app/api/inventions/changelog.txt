@@ -1,3 +1,6 @@
+30 January 2026
+- Added connection: Lime -> Nixtamalization
+
 29 January 2026
 - Added tech: Water chlorination
 - Added tech: Waterproof raincoat
