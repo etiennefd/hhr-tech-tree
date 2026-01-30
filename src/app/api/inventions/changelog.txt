@@ -1,11 +1,25 @@
 29 January 2026
 - Added tech: Water chlorination
+- Added tech: Waterproof raincoat
 - Added tech: Sodium hypochlorite bleach
+- Added tech: Bleaching powder
 - Added tech: Leblanc process
 - Added tech: Bleach
 - Added tech: Sodium hydroxide
+- Added tech: Soda ash from plants
 - Added connection: Chlorine -> Bleach
 - Added connection: Bleach -> Sodium hypochlorite bleach
+- Added connection: Chlorine -> Water chlorination
+- Added connection: Rubber -> Waterproof raincoat
+- Added connection: Coal tar -> Waterproof raincoat
+- Added connection: Bleach -> Bleaching powder
+- Added connection: Sodium hypochlorite bleach -> Water chlorination
+- Added connection: Chlorine -> Bleaching powder
+- Added connection: Hydrochloric acid -> Chlorine
+- Added connection: Natron -> Soda ash from plants
+- Added connection: Glass -> Soda ash from plants
+- Added connection: Soda ash from plants -> Leblanc process
+- Added connection: Pottery -> Plumbing
 
 28 January 2026
 - Added tech: Activated sludge
