@@ -8,6 +8,8 @@
 - Added connection: Salt mining -> Leblanc process
 - Added connection: Sulfuric acid -> Leblanc process
 - Added connection: Coal mining -> Leblanc process
+- Added connection: Asbestos (industrial use) -> Chloralkali process
+- Added connection: Chlorine -> Chloralkali process
 
 29 January 2026
 - Added tech: Water chlorination
