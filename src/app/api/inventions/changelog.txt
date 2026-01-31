@@ -1,3 +1,9 @@
+31 January 2026
+- Added connection: Lime -> Calcium
+- Added connection: Lime -> Beet sugar factory
+- Added connection: Limestone -> Portland cement
+- Added connection: Limestone -> Gilchrist–Thomas process
+
 30 January 2026
 - Added tech: Chloralkali process
 - Added tech: Solvay process
