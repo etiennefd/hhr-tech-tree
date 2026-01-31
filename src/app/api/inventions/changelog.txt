@@ -3,6 +3,9 @@
 - Added connection: Lime -> Beet sugar factory
 - Added connection: Limestone -> Portland cement
 - Added connection: Limestone -> Gilchrist–Thomas process
+- Added connection: Lime -> Basic oxygen steelmaking
+- Added connection: Lime -> Egyptian faience
+- Added connection: Lime -> Autoclaved aerated concrete
 
 30 January 2026
 - Added tech: Chloralkali process
