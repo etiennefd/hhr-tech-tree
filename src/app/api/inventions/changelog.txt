@@ -1,6 +1,7 @@
 30 January 2026
 - Added tech: Chloralkali process
 - Added tech: Solvay process
+- Added tech: Limestone
 - Added connection: Leblanc process -> Solvay process
 - Added connection: Lime -> Nixtamalization
 - Added connection: Soda ash from plants -> Sodium hypochlorite bleach
@@ -10,6 +11,10 @@
 - Added connection: Coal mining -> Leblanc process
 - Added connection: Asbestos (industrial use) -> Chloralkali process
 - Added connection: Chlorine -> Chloralkali process
+- Added connection: Stonemasonry -> Limestone
+- Added connection: Limestone -> Lime
+- Added connection: Limestone -> Solvay process
+- Added connection: Control of fire -> Lime
 
 29 January 2026
 - Added tech: Water chlorination
