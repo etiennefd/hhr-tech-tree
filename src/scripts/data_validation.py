@@ -22,13 +22,15 @@ def load_data():
         innovations = innovations_table.all(view="Used for deployment, do not edit directly")
         connections = connections_table.all(view="Used for deployment, do not edit directly")
         
-        # Filter inventions with dates
+        # Filter inventions with dates (excluding undated and year 9999)
         valid_inventions = []
         for inv in innovations:
             try:
                 date_value = inv['fields'].get('Date')
                 if date_value and not math.isnan(float(date_value)):
-                    valid_inventions.append(inv)
+                    year = int(float(date_value))
+                    if year != 9999:
+                        valid_inventions.append(inv)
             except (ValueError, TypeError):
                 # Skip if Date is not a valid number
                 pass
