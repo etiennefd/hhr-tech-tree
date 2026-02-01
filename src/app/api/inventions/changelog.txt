@@ -1,3 +1,5 @@
+1 February 2026
+- Added tech: Lockstitch sewing machine
 31 January 2026
 - Added connection: Lime -> Calcium
 - Added connection: Lime -> Beet sugar factory
