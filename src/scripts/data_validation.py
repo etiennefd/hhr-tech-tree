@@ -63,6 +63,7 @@ def validate_data(inventions, connections):
         'no_image': [],
         'zero_outgoing': 0,
         'zero_incoming': 0,
+        'orphans': [],
         'missing_endpoint': [],
         'undated_endpoint': []
     }
@@ -138,13 +139,20 @@ def validate_data(inventions, connections):
     for inv_id, inv in invention_dict.items():
         if not inv['fields'].get('Image URL'):
             issues['no_image'].append(inv['fields'].get('Name', 'Unknown'))
-        
-        if outgoing_connections[inv_id] == 0:
+
+        has_outgoing = outgoing_connections[inv_id] > 0
+        has_incoming = incoming_connections[inv_id] > 0
+
+        if not has_outgoing:
             issues['zero_outgoing'] += 1
-            
-        if incoming_connections[inv_id] == 0:
+
+        if not has_incoming:
             issues['zero_incoming'] += 1
-    
+
+        # Orphans have neither incoming nor outgoing connections
+        if not has_outgoing and not has_incoming:
+            issues['orphans'].append(inv['fields'].get('Name', 'Unknown'))
+
     return issues
 
 def main():
@@ -171,6 +179,10 @@ def main():
     
     print(f"\nInventions with no outgoing connections: {issues['zero_outgoing']}")
     print(f"Inventions with no incoming connections: {issues['zero_incoming']}")
+
+    print(f"\nOrphans (no incoming or outgoing connections): {len(issues['orphans'])}")
+    for orphan in issues['orphans']:
+        print(f"  - {orphan}")
     
     print(f"\nInventions with no Image URL: {len(issues['no_image'])}")
     for inv in issues['no_image']:
