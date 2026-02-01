@@ -1,11 +1,15 @@
 1 February 2026
 - Added tech: Lockstitch sewing machine
+- Added tech: Stitching awl
 - Added connection: Tanned leather -> Sewing machine
 - Added connection: Sewing machine -> Lockstitch sewing machine
 - Added connection: Soap -> Sodium hydroxide
 - Added connection: Soda ash from plants -> Sodium hydroxide
 - Added connection: Lime -> Sodium hydroxide
 - Added connection: Sewing needle -> Lockstitch sewing machine
+- Added connection: Sewing needle -> Nålebinding
+- Added connection: Stitching awl -> Sewing machine
+- Added connection: Stitching awl -> Sewing needle
 
 31 January 2026
 - Added connection: Lime -> Calcium
