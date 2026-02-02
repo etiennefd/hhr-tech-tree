@@ -1,3 +1,9 @@
+2 February 2026
+- Added tech: Warp-weighted loom
+- Added connection: Rope -> Weaving
+- Added connection: Weaving -> Warp-weighted loom
+- Added connection: Linen -> Weaving
+
 1 February 2026
 - Added tech: Lockstitch sewing machine
 - Added tech: Stitching awl
