@@ -1,3 +1,9 @@
+3 February 2026
+- Added tech: Spoked wheel
+- Added connection: Wheel -> Spoked wheel
+- Added connection: Spoked wheel -> Chariot
+- Added connection: Spoked wheel -> Dandy horse
+
 2 February 2026
 - Added tech: Warp-weighted loom
 - Added connection: Rope -> Weaving
