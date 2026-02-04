@@ -174,9 +174,6 @@
 - Added connection: Ice skates -> Ice skates with sharp edge
 - Added connection: Ice skates with sharp edge -> Roller skates
 
-12 January 2026
-- Added connection: Paraffin wax -> Neutron
-
 7 January 2026
 - Added tech: Butter
 - Added tech: Cheese
