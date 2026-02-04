@@ -67,8 +67,12 @@ def validate_data(inventions, connections):
         'zero_incoming': 0,
         'orphans': [],
         'missing_endpoint': [],
-        'undated_endpoint': []
+        'undated_endpoint': [],
+        'duplicates': []
     }
+
+    # Track seen connections to detect duplicates
+    seen_connections = {}
     
     # Check connections
     for conn in connections:
@@ -97,7 +101,22 @@ def validate_data(inventions, connections):
         # Handle array or string values
         from_id = from_id[0] if isinstance(from_id, list) else from_id
         to_id = to_id[0] if isinstance(to_id, list) else to_id
-        
+
+        # Check for duplicate connections
+        connection_key = (from_id, to_id)
+        if connection_key in seen_connections:
+            # Get names for the duplicate
+            dup_from_name = all_invention_dict.get(from_id, {}).get('fields', {}).get('Name', 'Unknown')
+            dup_to_name = all_invention_dict.get(to_id, {}).get('fields', {}).get('Name', 'Unknown')
+            issues['duplicates'].append({
+                'id': connection_id,
+                'original_id': seen_connections[connection_key],
+                'from_name': dup_from_name,
+                'to_name': dup_to_name
+            })
+            continue
+        seen_connections[connection_key] = connection_id
+
         # Get names for both endpoints if possible
         from_name = "Unknown"
         to_name = "Unknown"
@@ -178,7 +197,11 @@ def main():
     print(f"\nConnections with undated endpoints: {len(issues['undated_endpoint'])}")
     for conn in issues['undated_endpoint']:
         print(f"  - Connection {conn['id']} has undated {conn['undated']} endpoint: {conn['from_name']} → {conn['to_name']}")
-    
+
+    print(f"\nDuplicate connections: {len(issues['duplicates'])}")
+    for dup in issues['duplicates']:
+        print(f"  - Connection {dup['id']} duplicates {dup['original_id']}: {dup['from_name']} → {dup['to_name']}")
+
     print(f"\nInventions with no outgoing connections: {issues['zero_outgoing']}")
     print(f"Inventions with no incoming connections: {issues['zero_incoming']}")
 
