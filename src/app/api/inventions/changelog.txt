@@ -1,3 +1,14 @@
+4 February 2026
+- Added tech: Saqiyah
+- Added tech: Noria and water wheel
+- Added connection: Noria and water wheel -> Saqiyah
+- Added connection: Animal-driven rotary mill -> Saqiyah
+- Added connection: Spoked wheel -> Noria and water wheel
+- Added connection: Irrigation -> Noria and water wheel
+- Added connection: Noria and water wheel -> Watermill
+- Added connection: Gears -> Saqiyah
+- Added connection: Irrigation -> Chain pump
+
 3 February 2026
 - Added tech: Spoked wheel
 - Added connection: Wheel -> Spoked wheel
@@ -268,7 +279,7 @@
 
 2 October 2025
 - Added tech: Slitting mill
-- Added connection: Water wheel (Greece) -> Slitting mill
+- Added connection: Watermill -> Slitting mill
 - Added connection: Iron smelting and wrought iron -> Slitting mill
 
 28 September 2025
@@ -394,7 +405,7 @@
 - Added connection: Post windmill -> Tjasker
 - Added connection: Mustard gas -> Chemotherapy
 - Added connection: Wind turbine -> Offshore wind farm
-- Added connection: Water wheel (Greece) -> Tide mill
+- Added connection: Watermill -> Tide mill
 - Added connection: Tide mill -> Tidal power station
 
 5 September 2025
@@ -524,7 +535,7 @@
 
 22 August 2025
 - Added tech: Nomogram
-- Added connection: Water wheel (Greece) -> Fulling mill
+- Added connection: Watermill -> Fulling mill
 
 21 August 2025
 - Added tech: Video display controller
