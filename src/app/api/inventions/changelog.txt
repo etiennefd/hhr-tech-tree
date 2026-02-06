@@ -1,3 +1,7 @@
+5 February 2026
+- Added connection: Leblanc process -> Claus process
+- Added connection: Sulfur -> Claus process
+
 4 February 2026
 - Added tech: Saqiyah
 - Added tech: Noria and water wheel
