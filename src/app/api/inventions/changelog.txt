@@ -1,4 +1,12 @@
-6 February 2026
+10 February 2026
+- Added tech: Ultrasonic testing
+- Added tech: Sonar
+- Added tech: Piezoelectric transducer
+- Added tech: Fessenden oscillator
+- Added tech: Treadle loom
+- Added connection: Fessenden oscillator -> Sonar
+
+7 February 2026
 - Added connection: Stonemasonry -> Ondol
 - Added connection: Control of fire -> Ondol
 
