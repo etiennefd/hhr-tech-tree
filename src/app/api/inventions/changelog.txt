@@ -1,4 +1,8 @@
+12 February 2026
+- Added connection: Ultrasonic testing -> Medical ultrasound
+
 10 February 2026
+- Added tech: Medical ultrasound
 - Added tech: Ultrasonic testing
 - Added tech: Sonar
 - Added tech: Piezoelectric transducer
