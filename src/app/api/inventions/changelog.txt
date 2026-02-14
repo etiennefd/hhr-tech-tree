@@ -1,5 +1,32 @@
+14 February 2026
+- Added tech: VHF omnidirectional range
+- Added tech: High-frequency direction finder
+- Added tech: Low-frequency radio range
+- Added tech: Adcock antenna
+- Added tech: Bellini–Tosi direction finder
+- Added tech: Radio navigation system
+- Added tech: Radio direction finding
+- Added tech: Submarine signal bell
+- Added connection: Radio direction finding -> Bellini–Tosi direction finder
+- Added connection: Radio waves and spark-gap transmitter -> Radio direction finding
+- Added connection: Bellini–Tosi direction finder -> Adcock antenna
+- Added connection: Weather forecasting -> High-frequency direction finder
+- Added connection: Adcock antenna -> High-frequency direction finder
+- Added connection: Bellini–Tosi direction finder -> High-frequency direction finder
+- Added connection: Oscilloscope -> High-frequency direction finder
+- Added connection: Cathode-ray tube -> High-frequency direction finder
+- Added connection: Piezoelectricity -> Piezoelectric transducer
+- Added connection: Low-frequency radio range -> VHF omnidirectional range
+- Added connection: Adcock antenna -> Low-frequency radio range
+- Added connection: Triode -> Bellini–Tosi direction finder
+- Added connection: Submarine signal bell -> Fessenden oscillator
+- Added connection: Zeppelin -> Radio navigation system
+- Added connection: Radio direction finding -> Radio navigation system
+- Added connection: Radio navigation system -> Low-frequency radio range
+
 12 February 2026
 - Added connection: Ultrasonic testing -> Medical ultrasound
+- Added connection: Titanium -> Kroll process
 
 10 February 2026
 - Added tech: Medical ultrasound
