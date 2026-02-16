@@ -1,3 +1,6 @@
+16 February 2026
+- Added connection: Rail transport -> Nomogram
+
 14 February 2026
 - Added tech: VHF omnidirectional range
 - Added tech: High-frequency direction finder
