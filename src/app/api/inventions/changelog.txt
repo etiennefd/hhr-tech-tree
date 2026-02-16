@@ -23,6 +23,14 @@
 - Added connection: Zeppelin -> Radio navigation system
 - Added connection: Radio direction finding -> Radio navigation system
 - Added connection: Radio navigation system -> Low-frequency radio range
+- Added connection: Electric-powered submarine -> Piezoelectric transducer
+- Added connection: Piezoelectric transducer -> Sonar
+- Added connection: Oscilloscope -> Medical ultrasound
+- Added connection: Piezoelectric transducer -> Ultrasonic testing
+- Added connection: Carbon microphone -> Submarine signal bell
+- Added connection: High-frequency direction finder -> Radar
+- Added connection: Airplane -> Low-frequency radio range
+- Added connection: Cathode-ray tube -> Radar
 
 12 February 2026
 - Added connection: Ultrasonic testing -> Medical ultrasound
