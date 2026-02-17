@@ -1,3 +1,8 @@
+17 February 2026
+- Added tech: Ocean liner
+- Added connection: Steamboat transport -> Ocean liner
+- Added connection: Ocean liner -> Fessenden oscillator
+
 16 February 2026
 - Added connection: Rail transport -> Nomogram
 
