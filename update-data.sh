@@ -13,9 +13,15 @@ else
     exit 1
 fi
 
-# Install Python dependencies
+# Use a project venv to avoid PEP 668 externally-managed-environment
+VENV_DIR=".venv"
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating Python virtual environment..."
+    $PYTHON_CMD -m venv "$VENV_DIR"
+fi
+VENV_PYTHON="$VENV_DIR/bin/python"
 echo "Installing Python dependencies..."
-$PYTHON_CMD -m pip install -q -r requirements.txt
+$VENV_PYTHON -m pip install -q -r requirements.txt
 
 # Check if yarn is installed, if not, install it
 if ! command -v yarn &> /dev/null; then
@@ -36,7 +42,7 @@ CHANGELOG_ERRORS=0
 
 # Update images first
 echo "Updating images..."
-if ! $PYTHON_CMD src/scripts/update_images.py --new; then
+if ! $VENV_PYTHON src/scripts/update_images.py --new; then
     IMAGE_ERRORS=1
 fi
 
