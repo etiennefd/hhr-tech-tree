@@ -8,6 +8,9 @@
 - Added connection: Cloud computing -> Large language model
 - Added connection: Cloud computing -> Virtual assistant
 - Added connection: Cloud computing -> Smart speaker
+- Added connection: Radio waves and spark-gap transmitter -> Radio detector
+- Added connection: Induction coil -> Radio detector
+- Added connection: Galvanometer -> Radio detector
 
 18 February 2026
 - Added tech: Vasectomy
