@@ -5,7 +5,9 @@
 - Added connection: LLM chatbot -> AI coding agent
 - Added connection: AI code completion -> AI coding agent
 - Added connection: Large language model -> AI code completion
-- Added connection: Cloud computing -> AI coding agent
+- Added connection: Cloud computing -> Large language model
+- Added connection: Cloud computing -> Virtual assistant
+- Added connection: Cloud computing -> Smart speaker
 
 18 February 2026
 - Added tech: Vasectomy
