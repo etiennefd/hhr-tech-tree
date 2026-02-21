@@ -1761,6 +1761,7 @@ export function TechTreeViewer() {
   useEffect(() => {
     // Only run once after data is loaded and if we haven't scrolled yet
     if (!isLoading && data.nodes.length > 0 && !hasScrolledToInitialNode.current) {
+      hasScrolledToInitialNode.current = true; // Mark as done immediately to prevent re-runs
       // Support both ?node= (new) and ?initialNodeId= (legacy) params
       const nodeId = searchParams.get('node') || searchParams.get('initialNodeId');
       if (nodeId) {
@@ -1769,12 +1770,11 @@ export function TechTreeViewer() {
           // Use a slight delay to ensure the layout is stable before scrolling
           setTimeout(() => {
              handleNodeClick(nodeToSelect.title);
-             hasScrolledToInitialNode.current = true; // Mark as done
           }, 100); // 100ms delay, adjust if needed
         }
       }
     }
-  }, [isLoading, data.nodes, searchParams, handleNodeClick]); // Add dependencies
+  }, [isLoading, data.nodes, searchParams, handleNodeClick]);
 
   // Update handleNodeHover to limit prefetching and handle mobile devices differently
   const handleNodeHover = useCallback(
