@@ -1,4 +1,5 @@
 21 February 2026
+- Added tech: Massively parallel sequencing
 - Added tech: Computer-aided design
 - Added tech: Light pen
 - Added connection: High-level programming language -> Spreadsheet
@@ -10,6 +11,9 @@
 - Added connection: Light pen -> Touchscreen
 - Added connection: Cathode-ray tube -> Light pen
 - Added connection: Stored-program computer -> Computer-aided design
+- Added connection: Human genome sequencing -> Massively parallel sequencing
+- Added connection: Optical fiber -> Massively parallel sequencing
+- Added connection: DNA sequencing -> Massively parallel sequencing
 
 19 February 2026
 - Added tech: AI coding agent
