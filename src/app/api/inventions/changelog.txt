@@ -9,6 +9,7 @@
 - Added connection: Stored-program computer -> Light pen
 - Added connection: Light pen -> Touchscreen
 - Added connection: Cathode-ray tube -> Light pen
+- Added connection: Stored-program computer -> Computer-aided design
 
 19 February 2026
 - Added tech: AI coding agent
