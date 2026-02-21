@@ -237,12 +237,15 @@ export function TechTreeViewer() {
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     // Only start drag if left mouse button is pressed
     if (e.button !== 0) return;
-    
-    // Check if the click started on a node
+
+    // Don't initiate drag when clicking inside a tooltip (allow text selection)
     const target = e.target as HTMLElement;
+    if (target.closest('.node-tooltip')) return;
+
+    // Check if the click started on a node
     dragStartedFromNode.current = target.closest('[data-node-id]') !== null;
     wasDragging.current = false;
-    
+
     // Prevent text selection and node interaction
     e.preventDefault();
     document.body.style.userSelect = 'none';
