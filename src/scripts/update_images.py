@@ -125,7 +125,8 @@ def extract_filename_from_url(url: str) -> Union[str, None]:
 
         if 'wikimedia.org' in url:
             # Match common patterns like /commons/a/ab/Filename.jpg or /commons/thumb/a/ab/Filename.jpg/120px-Filename.jpg
-            match = re.search(r'\/([^\/]+?)(?:\/\d+px-[^\/]+)?$', decoded_url)
+            # Also handles TIFF/multi-page thumbnails like /Filename.tif/lossy-page1-1600px-Filename.tif.jpg
+            match = re.search(r'\/([^\/]+?)(?:\/(?:(?:lossy|lossless)-page\d+-)?\d+px-[^\/]+)?$', decoded_url)
             if match:
                 filename = match.group(1)
                 # Remove any query parameters (e.g., ?timestamp=...)
