@@ -1,9 +1,14 @@
 21 February 2026
 - Added tech: Computer-aided design
+- Added tech: Light pen
 - Added connection: High-level programming language -> Spreadsheet
 - Added connection: High-level programming language -> Word processor software
 - Added connection: High-level programming language -> Graphical user interface
 - Added connection: High-level programming language -> Portable operating system
+- Added connection: Light pen -> Computer-aided design
+- Added connection: Stored-program computer -> Light pen
+- Added connection: Light pen -> Touchscreen
+- Added connection: Cathode-ray tube -> Light pen
 
 19 February 2026
 - Added tech: AI coding agent
