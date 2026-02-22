@@ -1,9 +1,11 @@
 22 February 2026
+- Added tech: Weather radar
 - Added tech: Radar network
 - Added connection: Radar network -> Computer network
 - Added connection: Fighter aircraft -> Radar network
 - Added connection: Radar -> Radar network
 - Added connection: Telephone -> Radar network
+- Added connection: Radar -> Weather radar
 
 21 February 2026
 - Added tech: Massively parallel sequencing
