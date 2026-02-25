@@ -1,3 +1,11 @@
+25 February 2026
+- Added tech: Universal Product Code
+- Added tech: Barcode
+- Added connection: Morse code -> Barcode
+- Added connection: Photomultiplier tube -> Barcode
+- Added connection: Barcode -> Universal Product Code
+- Added connection: Laser -> Universal Product Code
+
 24 February 2026
 - Added tech: Virtual reality headset
 - Added connection: Head-mounted display -> Virtual reality headset
