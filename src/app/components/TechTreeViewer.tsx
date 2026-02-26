@@ -555,7 +555,7 @@ export function TechTreeViewer() {
         Measurement: 1500,
         Timekeeping: 1550,
         Computing: 1600,
-        Finance: 1650,
+        Commerce: 1650,
         Safety: 1700,
         Security: 1750,
         Weaponry: 1800,

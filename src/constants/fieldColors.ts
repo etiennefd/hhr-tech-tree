@@ -45,7 +45,7 @@ export const FIELD_COLORS: Record<string, string> = {
   Measurement: "#607D8B", // Steel blue
   Timekeeping: "#546E7A", // Clock gray
   Computing: "#435863", // Dark gray
-  Finance: "#2f6333", // Dark green
+  Commerce: "#2f6333", // Dark green
 
   // Safety/Weapons
   Safety: "#ff8400", // Bright orange
