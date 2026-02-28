@@ -1,6 +1,12 @@
 28 February 2026
+- Added tech: Flatbed image scanner
+- Added tech: Digital image
 - Added tech: Synthetic-aperture radar
 - Added connection: Radar -> Synthetic-aperture radar
+- Added connection: Stored-program computer -> Digital image
+- Added connection: Wirephoto -> Digital image
+- Added connection: Digital image -> Flatbed image scanner
+- Added connection: Laser -> Flatbed image scanner
 
 26 February 2026
 - v1.0.5: Rename Finance to Commerce
