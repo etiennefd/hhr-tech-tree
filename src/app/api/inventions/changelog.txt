@@ -8,6 +8,11 @@
 - Added connection: Computer digital image -> Digital camera
 - Added connection: Computer digital image -> CT scan
 - Added connection: Computer digital image -> Discrete cosine transform
+- Added connection: Magnetic-core memory -> Framebuffer
+- Added connection: Electromagnet -> Magnetic-core memory
+- Added connection: Framebuffer -> Graphics software
+- Added connection: Stored-program computer -> Magnetic-core memory
+- Added connection: MOS DRAM -> Graphics software
 
 28 February 2026
 - Added tech: Omni-font optical character recognition
