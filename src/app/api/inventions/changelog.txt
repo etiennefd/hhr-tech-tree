@@ -1,12 +1,18 @@
 28 February 2026
+- Added tech: Omni-font optical character recognition
 - Added tech: Flatbed image scanner
 - Added tech: Digital image
 - Added tech: Synthetic-aperture radar
+- Added tech: Optophone
 - Added connection: Radar -> Synthetic-aperture radar
 - Added connection: Stored-program computer -> Digital image
 - Added connection: Wirephoto -> Digital image
 - Added connection: Digital image -> Flatbed image scanner
 - Added connection: Laser -> Flatbed image scanner
+- Added connection: Flatbed image scanner -> Omni-font optical character recognition
+- Added connection: Charged-coupled device -> Omni-font optical character recognition
+- Added connection: Microcomputer -> Omni-font optical character recognition
+- Added connection: Selenium photocell -> Optophone
 
 26 February 2026
 - v1.0.5: Rename Finance to Commerce
