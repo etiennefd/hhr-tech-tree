@@ -2,6 +2,9 @@
 - Added tech: Digital image
 - Added connection: Wirephoto -> Digital image
 - Added connection: Digital image -> Computer digital image
+- Added connection: Computer digital image -> Digital camera
+- Added connection: Computer digital image -> CT scan
+- Added connection: Computer digital image -> Discrete cosine transform
 
 28 February 2026
 - Added tech: Omni-font optical character recognition
