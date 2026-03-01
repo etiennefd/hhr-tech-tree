@@ -1,13 +1,18 @@
+1 March 2026
+- Added tech: Digital image
+- Added connection: Wirephoto -> Digital image
+- Added connection: Digital image -> Computer digital image
+
 28 February 2026
 - Added tech: Omni-font optical character recognition
 - Added tech: Flatbed image scanner
-- Added tech: Digital image
+- Added tech: Computer digital image
 - Added tech: Synthetic-aperture radar
 - Added tech: Optophone
 - Added connection: Radar -> Synthetic-aperture radar
-- Added connection: Stored-program computer -> Digital image
-- Added connection: Wirephoto -> Digital image
-- Added connection: Digital image -> Flatbed image scanner
+- Added connection: Stored-program computer -> Computer digital image
+- Added connection: Wirephoto -> Computer digital image
+- Added connection: Computer digital image -> Flatbed image scanner
 - Added connection: Laser -> Flatbed image scanner
 - Added connection: Flatbed image scanner -> Omni-font optical character recognition
 - Added connection: Charged-coupled device -> Omni-font optical character recognition
