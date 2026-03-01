@@ -1,4 +1,7 @@
 1 March 2026
+- Added tech: Graphics software
+- Added tech: Framebuffer
+- Added tech: Magnetic-core memory
 - Added tech: Digital image
 - Added connection: Wirephoto -> Digital image
 - Added connection: Digital image -> Computer digital image
