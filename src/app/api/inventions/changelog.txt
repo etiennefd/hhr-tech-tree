@@ -1,6 +1,12 @@
 2 March 2026
 - Added tech: Drum memory
 - Added tech: Differential analyzer
+- Added connection: Wire recording -> Drum memory
+- Added connection: Electromagnet -> Wire recording
+- Added connection: Telephone -> Wire recording
+- Added connection: Drum memory -> Magnetic-core memory
+- Added connection: Phonograph -> Wire recording
+- Added connection: Tabulating machine -> Drum memory
 
 1 March 2026
 - Added tech: Graphics software
