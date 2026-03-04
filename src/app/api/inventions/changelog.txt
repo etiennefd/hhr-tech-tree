@@ -1,3 +1,6 @@
+4 March 2026
+- Added tech: Transoceanic communication cable
+
 2 March 2026
 - Added tech: Drum memory
 - Added tech: Differential analyzer
