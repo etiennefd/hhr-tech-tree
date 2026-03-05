@@ -1,4 +1,5 @@
 5 March 2026
+- Added tech: AI protein structure prediction
 - Added tech: Quantum cryptography
 
 4 March 2026
