@@ -1,3 +1,6 @@
+5 March 2026
+- Added tech: Quantum cryptography
+
 4 March 2026
 - Added tech: Transoceanic communication cable
 
