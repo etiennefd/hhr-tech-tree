@@ -1,6 +1,9 @@
 5 March 2026
 - Added tech: AI protein structure prediction
 - Added tech: Quantum cryptography
+- Added connection: Public-key cryptography -> Quantum cryptography
+- Added connection: Submarine communication cable -> Transoceanic communication cable
+- Added connection: Transformer (machine learning) -> AI protein structure prediction
 
 4 March 2026
 - Added tech: Transoceanic communication cable
