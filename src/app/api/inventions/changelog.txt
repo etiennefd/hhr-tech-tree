@@ -1,3 +1,8 @@
+6 March 2026
+- Added tech: Radiator
+- Added tech: Central heating
+- Added connection: Central heating -> Radiator
+
 5 March 2026
 - Added tech: AI protein structure prediction
 - Added tech: Quantum cryptography
