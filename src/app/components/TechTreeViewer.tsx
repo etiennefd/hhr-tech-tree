@@ -421,16 +421,16 @@ export function TechTreeViewer() {
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
     left: 0,
-    right: window.innerWidth,  // Initialize with window dimensions instead of zeros
+    right: 0,
     top: 0,
-    bottom: window.innerHeight, // Initialize with window dimensions instead of zeros
+    bottom: 0,
   });
   // Create a deferred version of the viewport for stable calculations
   const [deferredViewportState, setDeferredViewport] = useState({
     left: 0,
-    right: window.innerWidth,
+    right: 0,
     top: 0,
-    bottom: window.innerHeight,
+    bottom: 0,
   });
 
   // Add viewport update tracking
