@@ -12,6 +12,7 @@
 - Added connection: Stonemasonry -> Chimney
 - Added connection: Hypocaust -> Chimney
 - Added connection: Sounding machine -> Transoceanic communication cable
+- Added connection: Ocean liner -> Transoceanic communication cable
 
 6 March 2026
 - Added tech: Radiator
