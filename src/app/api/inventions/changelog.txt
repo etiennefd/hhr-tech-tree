@@ -1,6 +1,8 @@
 7 March 2026
 - Added tech: Hot water central heating
 - Added connection: Hot water central heating -> Radiator
+- Added connection: Domestication of chickens -> Thermostat
+- Added connection: Protein sequencing -> AI protein structure prediction
 
 6 March 2026
 - Added tech: Radiator
