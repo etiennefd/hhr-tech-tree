@@ -1,8 +1,14 @@
 7 March 2026
 - Added tech: Hot water central heating
+- Added tech: Chimney
 - Added connection: Hot water central heating -> Radiator
 - Added connection: Domestication of chickens -> Thermostat
 - Added connection: Protein sequencing -> AI protein structure prediction
+- Added connection: Iron smelting and wrought iron -> Hot water central heating
+- Added connection: Chimney -> Franklin stove
+- Added connection: Chimney -> Central heating
+- Added connection: Stonemasonry -> Chimney
+- Added connection: Hypocaust -> Chimney
 
 6 March 2026
 - Added tech: Radiator
