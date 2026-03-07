@@ -1,7 +1,11 @@
+7 March 2026
+- Added tech: Hot water central heating
+- Added connection: Hot water central heating -> Radiator
+
 6 March 2026
 - Added tech: Radiator
 - Added tech: Central heating
-- Added connection: Central heating -> Radiator
+- Added connection: Central heating -> Hot water central heating
 
 5 March 2026
 - Added tech: AI protein structure prediction
