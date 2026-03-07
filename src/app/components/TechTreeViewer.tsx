@@ -12,6 +12,7 @@ declare global {
 import React, {
   useState,
   useEffect,
+  useLayoutEffect,
   useCallback,
   useMemo,
   useRef,
@@ -350,12 +351,10 @@ export function TechTreeViewer() {
   const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // Pinch-to-zoom (mobile only)
-  const { zoomLevel, isPinching } = usePinchZoom(horizontalScrollContainerRef, {
-    enabled: isTouchDevice,
-  });
-  isPinchingRef.current = isPinching;
+  const scrollBoundsRef = useRef<HTMLDivElement>(null);
+  const scaleWrapperRef = useRef<HTMLDivElement>(null);
+  // Ref that always holds the latest zoomLevel, for callbacks declared before the hook call
+  const zoomLevelRef = useRef(1.0);
 
   // Add settings menu state
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
@@ -902,8 +901,9 @@ export function TechTreeViewer() {
       // Our main container handles both horizontal and vertical scrolling
       // So we need to apply both coordinates to the same container
       if (horizontalScrollContainerRef.current) {
-        const scaledLeft = newScrollLeft * zoomLevel;
-        const scaledTop = newScrollTop * zoomLevel;
+        const zoom = zoomLevelRef.current;
+        const scaledLeft = newScrollLeft * zoom;
+        const scaledTop = newScrollTop * zoom;
         horizontalScrollContainerRef.current.scrollTo({
           left: scaledLeft,
           top: scaledTop,
@@ -917,7 +917,7 @@ export function TechTreeViewer() {
         });
       }
     },
-    [zoomLevel]
+    []
   );
 
   useEffect(() => {
@@ -1013,9 +1013,10 @@ export function TechTreeViewer() {
       }
 
       // Calculate scroll position once (multiply by zoomLevel for scaled coordinates)
-      const xPosition = getXPosition(node.year) * zoomLevel;
+      const zoom = zoomLevelRef.current;
+      const xPosition = getXPosition(node.year) * zoom;
       const horizontalPosition = xPosition - (window.innerWidth / 2);
-      const yPosition = (node.y ?? 0) * zoomLevel;
+      const yPosition = (node.y ?? 0) * zoom;
       const verticalPosition = yPosition - containerDimensions.height / 2 + 150;
 
       // Start scrolling AFTER selection state is updated
@@ -1031,7 +1032,7 @@ export function TechTreeViewer() {
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
     },
-    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router, zoomLevel]
+    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
   );
 
   const handleJumpToNearest = useCallback(() => {
@@ -1057,8 +1058,9 @@ export function TechTreeViewer() {
 
     if (nearestNode !== null && (nearestNode as TechNode).y !== undefined) {
       const nn = nearestNode as TechNode; // Assign to a new const with the asserted type
-      const targetScrollLeft = getXPosition(nn.year) * zoomLevel - containerDimensions.width / 2;
-      const targetScrollTop = nn.y! * zoomLevel - containerDimensions.height / 2;
+      const zoom = zoomLevelRef.current;
+      const targetScrollLeft = getXPosition(nn.year) * zoom - containerDimensions.width / 2;
+      const targetScrollTop = nn.y! * zoom - containerDimensions.height / 2;
 
       horizontalScrollContainerRef.current.scrollTo({
         left: Math.max(0, targetScrollLeft),
@@ -1066,7 +1068,7 @@ export function TechTreeViewer() {
         behavior: 'smooth',
       });
     }
-  }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition, zoomLevel]);
+  }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition]);
 
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
@@ -1132,6 +1134,34 @@ export function TechTreeViewer() {
       ),
     [data.nodes, getXPosition, containerDimensions.width]
   );
+
+  // Pinch-to-zoom (mobile only)
+  const { zoomLevel, isPinching, zoomRef } = usePinchZoom(horizontalScrollContainerRef, {
+    enabled: isTouchDevice,
+    scrollBoundsRef,
+    scaleWrapperRef,
+    contentWidth: containerWidth,
+    contentHeight: totalHeight,
+    onPinchEnd: (scrollLeft, scrollTop) => {
+      setScrollPosition({ left: scrollLeft, top: scrollTop });
+    },
+  });
+  isPinchingRef.current = isPinching;
+  zoomLevelRef.current = zoomLevel;
+
+  // If a React re-render happens mid-pinch, React resets the inline styles to the
+  // stale zoomLevel state. Re-apply the live zoom from the ref so nothing jumps.
+  useLayoutEffect(() => {
+    if (!isPinchingRef.current) return;
+    const liveZoom = zoomRef.current ?? 1.0;
+    if (scrollBoundsRef.current) {
+      scrollBoundsRef.current.style.width = `${containerWidth * liveZoom}px`;
+      scrollBoundsRef.current.style.minHeight = `${totalHeight * liveZoom}px`;
+    }
+    if (scaleWrapperRef.current) {
+      scaleWrapperRef.current.style.transform = `scale(${liveZoom})`;
+    }
+  });
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
@@ -2272,12 +2302,14 @@ export function TechTreeViewer() {
     
     // Create scroll handler with debounced viewport update
     const handleScroll = () => {
+      // Skip viewport updates during pinch — React state syncs on pinch end
+      if (isPinchingRef.current) return;
       const { hContainer, vContainer } = findContainers();
       if (!hContainer) return;
-      
+
       const scrollLeft = hContainer.scrollLeft;
       const scrollTop = vContainer ? vContainer.scrollTop : window.scrollY;
-      
+
       updateViewportState(scrollLeft, scrollTop);
     };
     
@@ -3097,6 +3129,8 @@ useEffect(() => {
         }}
         onMouseDown={handleMouseDown}
         onScroll={throttle((e) => {
+          // Skip scroll state updates during pinch — the hook manages scroll directly
+          if (isPinchingRef.current) return;
           const horizontalScroll = e.currentTarget.scrollLeft;
           const verticalScroll = e.currentTarget.scrollTop;
           setScrollPosition({
@@ -3105,18 +3139,23 @@ useEffect(() => {
           });
         }, 100)} // Throttle to max once every 100ms
       >
-        {/* Scroll-bounds wrapper: sizes the scrollable area to match zoomed content */}
+        {/* Scroll-bounds wrapper: sizes the scrollable area to match zoomed content.
+             overflow:hidden clips the scale wrapper's layout box (which doesn't shrink
+             with CSS transform) so the scroll container sees the correct scrollable area. */}
         <div
+          ref={scrollBoundsRef}
           style={{
             width: containerWidth * zoomLevel,
             minHeight: totalHeight * zoomLevel,
+            overflow: 'hidden',
           }}
         >
         {/* Scale wrapper: applies CSS transform zoom */}
         <div
+          ref={scaleWrapperRef}
           style={{
             width: containerWidth,
-            minHeight: '100vh',
+            minHeight: totalHeight,
             willChange: 'transform',
             backfaceVisibility: 'hidden',
             transform: `scale(${zoomLevel})`,
