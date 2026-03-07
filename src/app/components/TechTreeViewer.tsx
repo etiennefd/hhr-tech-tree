@@ -50,6 +50,7 @@ import {
 } from './utils/performance';
 import { useRouter } from 'next/navigation';
 import { Info } from 'lucide-react';
+import { usePinchZoom } from '../hooks/usePinchZoom';
 
 // Timeline scale boundaries
 const YEAR_INDUSTRIAL = 1750;
@@ -222,8 +223,10 @@ export function TechTreeViewer() {
 
   // Client-side initialization
   const [isClient, setIsClient] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   useEffect(() => {
     setIsClient(true);
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
   // Add state for drag navigation
@@ -232,9 +235,11 @@ export function TechTreeViewer() {
   const [dragStartScroll, setDragStartScroll] = useState({ left: 0, top: 0 });
   const dragStartedFromNode = useRef(false);
   const wasDragging = useRef(false);
+  const isPinchingRef = useRef(false);
 
   // Add mouse event handlers for drag navigation
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (isPinchingRef.current) return;
     // Only start drag if left mouse button is pressed
     if (e.button !== 0) return;
 
@@ -250,7 +255,7 @@ export function TechTreeViewer() {
     e.preventDefault();
     document.body.style.userSelect = 'none';
     document.body.style.cursor = 'grabbing';
-    
+
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
     setDragStartScroll({
@@ -345,24 +350,25 @@ export function TechTreeViewer() {
   const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Pinch-to-zoom (mobile only)
+  const { zoomLevel, isPinching } = usePinchZoom(horizontalScrollContainerRef, {
+    enabled: isTouchDevice,
+  });
+  isPinchingRef.current = isPinching;
+
   // Add settings menu state
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'minimal'>(() => {
-    // Initialize from localStorage if available, otherwise default to 'optimized'
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('techTreeConnectionMode');
-      return (saved as 'all' | 'optimized' | 'minimal') || 'optimized';
-    }
-    return 'optimized';
-  });
-  const [showImages, setShowImages] = useState(() => {
-    // Initialize from localStorage if available, otherwise default to true
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('techTreeShowImages');
-      return saved !== null ? saved === 'true' : true;
-    }
-    return true;
-  });
+  const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'minimal'>('optimized');
+  const [showImages, setShowImages] = useState(true);
+
+  // Hydrate settings from localStorage after mount
+  useEffect(() => {
+    const savedMode = localStorage.getItem('techTreeConnectionMode');
+    if (savedMode) setConnectionMode(savedMode as 'all' | 'optimized' | 'minimal');
+    const savedImages = localStorage.getItem('techTreeShowImages');
+    if (savedImages !== null) setShowImages(savedImages === 'true');
+  }, []);
   const settingsMenuRef = useRef<HTMLDivElement>(null);
 
   // Add effect to save display options to localStorage when they change
@@ -896,20 +902,22 @@ export function TechTreeViewer() {
       // Our main container handles both horizontal and vertical scrolling
       // So we need to apply both coordinates to the same container
       if (horizontalScrollContainerRef.current) {
+        const scaledLeft = newScrollLeft * zoomLevel;
+        const scaledTop = newScrollTop * zoomLevel;
         horizontalScrollContainerRef.current.scrollTo({
-          left: newScrollLeft,
-          top: newScrollTop,
+          left: scaledLeft,
+          top: scaledTop,
           behavior: "instant",
         });
-        
+
         // Force update the scroll position state to ensure minimap sync
         setScrollPosition({
-          left: newScrollLeft,
-          top: newScrollTop
+          left: scaledLeft,
+          top: scaledTop
         });
       }
     },
-    []
+    [zoomLevel]
   );
 
   useEffect(() => {
@@ -1004,10 +1012,10 @@ export function TechTreeViewer() {
         setHoveredNodeId(node.id);
       }
 
-      // Calculate scroll position once
-      const xPosition = getXPosition(node.year);
+      // Calculate scroll position once (multiply by zoomLevel for scaled coordinates)
+      const xPosition = getXPosition(node.year) * zoomLevel;
       const horizontalPosition = xPosition - (window.innerWidth / 2);
-      const yPosition = node.y ?? 0;
+      const yPosition = (node.y ?? 0) * zoomLevel;
       const verticalPosition = yPosition - containerDimensions.height / 2 + 150;
 
       // Start scrolling AFTER selection state is updated
@@ -1023,7 +1031,7 @@ export function TechTreeViewer() {
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
     },
-    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
+    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router, zoomLevel]
   );
 
   const handleJumpToNearest = useCallback(() => {
@@ -1049,8 +1057,8 @@ export function TechTreeViewer() {
 
     if (nearestNode !== null && (nearestNode as TechNode).y !== undefined) {
       const nn = nearestNode as TechNode; // Assign to a new const with the asserted type
-      const targetScrollLeft = getXPosition(nn.year) - containerDimensions.width / 2;
-      const targetScrollTop = nn.y! - containerDimensions.height / 2; // Use non-null assertion
+      const targetScrollLeft = getXPosition(nn.year) * zoomLevel - containerDimensions.width / 2;
+      const targetScrollTop = nn.y! * zoomLevel - containerDimensions.height / 2;
 
       horizontalScrollContainerRef.current.scrollTo({
         left: Math.max(0, targetScrollLeft),
@@ -1058,7 +1066,7 @@ export function TechTreeViewer() {
         behavior: 'smooth',
       });
     }
-  }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition]);
+  }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition, zoomLevel]);
 
   // Helper function to check if a node is adjacent to selected node
   const isAdjacentToSelected = useCallback(
@@ -1495,7 +1503,7 @@ export function TechTreeViewer() {
     (result: SearchResult) => {
       if (result.type === "year" && result.year) {
         if (horizontalScrollContainerRef.current) {
-          const xPosition = getXPosition(result.year);
+          const xPosition = getXPosition(result.year) * zoomLevel;
           const horizontalPosition = xPosition - (window.innerWidth / 2);
 
           horizontalScrollContainerRef.current.scrollTo({
@@ -1507,7 +1515,7 @@ export function TechTreeViewer() {
         handleNodeClick(result.node.title);
       }
     },
-    [getXPosition, handleNodeClick]
+    [getXPosition, handleNodeClick, zoomLevel]
   );
 
   const isNodeFiltered = useCallback(
@@ -2012,25 +2020,22 @@ export function TechTreeViewer() {
     return () => window.removeEventListener('keydown', handleEscapeKey);
   }, [handleEscapeKey]);
 
-  // Remove all touch handlers
-  // Remove all zoom-related code
-
   // Add effect to initialize viewport
   useEffect(() => {
     if (horizontalScrollContainerRef.current && verticalScrollContainerRef.current) {
-      const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft;
-      const verticalScroll = verticalScrollContainerRef.current.scrollTop;
-      
+      const horizontalScroll = horizontalScrollContainerRef.current.scrollLeft / zoomLevel;
+      const verticalScroll = verticalScrollContainerRef.current.scrollTop / zoomLevel;
+
       const newViewport = {
         left: horizontalScroll,
-        right: horizontalScroll + containerDimensions.width,
+        right: horizontalScroll + containerDimensions.width / zoomLevel,
         top: verticalScroll,
-        bottom: verticalScroll + containerDimensions.height,
+        bottom: verticalScroll + containerDimensions.height / zoomLevel,
       };
 
       setVisibleViewport(newViewport);
     }
-  }, [containerDimensions.width, containerDimensions.height]);
+  }, [containerDimensions.width, containerDimensions.height, zoomLevel]);
 
   // Simplified isNodeInViewport function
   const isNodeInViewport = useCallback(
@@ -2041,7 +2046,7 @@ export function TechTreeViewer() {
       }
 
       // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 3, 350);
+      const buffer = Math.min(window.innerWidth / 3, 350) / zoomLevel;
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2059,7 +2064,7 @@ export function TechTreeViewer() {
       
       return isVisible;
     },
-    [deferredViewportState, scrollPosition]
+    [deferredViewportState, scrollPosition, zoomLevel]
   );
 
   // Add strict visibility check with minimal buffer
@@ -2071,7 +2076,7 @@ export function TechTreeViewer() {
       }
 
       // Use a small buffer for better user experience
-      const buffer = 10; // Much smaller buffer than the display buffer
+      const buffer = 10 / zoomLevel; // Much smaller buffer than the display buffer
       const strictViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2103,7 +2108,7 @@ export function TechTreeViewer() {
       // Node is considered visible if at least 30% of its area is in viewport
       return intersectionArea / nodeArea > 0.3;
     },
-    [deferredViewportState]
+    [deferredViewportState, zoomLevel]
   );
 
   // Add memoized strictly visible nodes
@@ -2124,7 +2129,7 @@ export function TechTreeViewer() {
       }
 
       // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling
-      const buffer = Math.min(window.innerWidth / 2, 500);
+      const buffer = Math.min(window.innerWidth / 2, 500) / zoomLevel;
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2187,7 +2192,7 @@ export function TechTreeViewer() {
       
       return isSourceInViewport || isTargetInViewport;
     },
-    [deferredViewportState, data.nodes]
+    [deferredViewportState, data.nodes, zoomLevel]
   );
 
   // Add debounced viewport update
@@ -2209,14 +2214,14 @@ export function TechTreeViewer() {
   // Modify the viewport update handler
   const updateViewportState = useCallback((scrollLeft: number, scrollTop: number) => {
     const newViewport = {
-      left: scrollLeft,
-      right: scrollLeft + containerDimensions.width,
-      top: scrollTop,
-      bottom: scrollTop + containerDimensions.height
+      left: scrollLeft / zoomLevel,
+      right: scrollLeft / zoomLevel + containerDimensions.width / zoomLevel,
+      top: scrollTop / zoomLevel,
+      bottom: scrollTop / zoomLevel + containerDimensions.height / zoomLevel
     };
 
     debouncedViewportUpdate(newViewport);
-  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate]);
+  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate, zoomLevel]);
 
   // Add cleanup for the debounce timeout
   useEffect(() => {
@@ -3082,7 +3087,7 @@ useEffect(() => {
         className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50"
         style={{ 
           overscrollBehavior: "none",
-          touchAction: "pan-x pan-y pinch-zoom",
+          touchAction: isTouchDevice ? "pan-x pan-y" : "pan-x pan-y pinch-zoom",
           WebkitOverflowScrolling: "touch",
           WebkitTapHighlightColor: "transparent",
           scrollbarWidth: "thin",   // Show thin scrollbar in Firefox
@@ -3100,12 +3105,22 @@ useEffect(() => {
           });
         }, 100)} // Throttle to max once every 100ms
       >
-        <div 
+        {/* Scroll-bounds wrapper: sizes the scrollable area to match zoomed content */}
+        <div
+          style={{
+            width: containerWidth * zoomLevel,
+            minHeight: totalHeight * zoomLevel,
+          }}
+        >
+        {/* Scale wrapper: applies CSS transform zoom */}
+        <div
           style={{
             width: containerWidth,
             minHeight: '100vh',
             willChange: 'transform',
-            backfaceVisibility: 'hidden'
+            backfaceVisibility: 'hidden',
+            transform: `scale(${zoomLevel})`,
+            transformOrigin: 'top left'
           }}
         >
           {/* Timeline - Render this immediately */}
@@ -3840,6 +3855,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
+        </div>
         {/* Minimap - Conditionally render based on data? Or leave as is? */}
         {data.nodes.length > 0 && (
           <div 
@@ -3862,10 +3878,10 @@ useEffect(() => {
               containerWidth={containerWidth}
               parentContainerWidth={containerDimensions.width} // Pass the viewer's width
               totalHeight={totalHeight}
-              viewportWidth={containerDimensions.width}
-              viewportHeight={containerDimensions.height}
-              scrollLeft={scrollPosition.left}
-              scrollTop={scrollPosition.top}
+              viewportWidth={containerDimensions.width / zoomLevel}
+              viewportHeight={containerDimensions.height / zoomLevel}
+              scrollLeft={scrollPosition.left / zoomLevel}
+              scrollTop={scrollPosition.top / zoomLevel}
               onViewportChange={handleViewportChange}
               filteredNodeIds={filteredNodeIds}
               selectedNodeId={selectedNodeId}
