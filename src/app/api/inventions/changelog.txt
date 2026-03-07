@@ -1,6 +1,8 @@
 7 March 2026
 - Added tech: Hot water central heating
 - Added tech: Chimney
+- Added connection: Transoceanic communication cable -> Syphon recorder
+- Added connection: Transoceanic communication cable -> Kelvite sounding machine
 - Added connection: Hot water central heating -> Radiator
 - Added connection: Domestication of chickens -> Thermostat
 - Added connection: Protein sequencing -> AI protein structure prediction
@@ -9,6 +11,7 @@
 - Added connection: Chimney -> Central heating
 - Added connection: Stonemasonry -> Chimney
 - Added connection: Hypocaust -> Chimney
+- Added connection: Sounding machine -> Transoceanic communication cable
 
 6 March 2026
 - Added tech: Radiator
@@ -1007,7 +1010,6 @@
 - Added connection: Ball-and-disk integrator -> Tachometric bombsight
 - Added connection: Tide-predicting machine -> Ball-and-disk integrator
 - Added connection: Piano -> Kelvite sounding machine
-- Added connection: Submarine communication cable -> Kelvite sounding machine
 - Added connection: Depth sounding -> Sounding machine
 - Added connection: Sounding machine -> Kelvite sounding machine
 
