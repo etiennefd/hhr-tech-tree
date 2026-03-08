@@ -1,3 +1,10 @@
+8 March 2026
+- Added tech: Multiple sequence alignment
+- Added connection: Mirror galvanometer -> Transoceanic communication cable
+- Added connection: DNA sequencing -> Multiple sequence alignment
+- Added connection: Multiple sequence alignment -> AI protein structure prediction
+- Added connection: X-ray crystallography -> AI protein structure prediction
+
 7 March 2026
 - Added tech: Hot water central heating
 - Added tech: Chimney
