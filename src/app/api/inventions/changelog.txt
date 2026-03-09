@@ -1,3 +1,7 @@
+9 March 2026
+- Added tech: Protein
+- Added connection: Protein -> Protein sequencing
+
 8 March 2026
 - Added tech: Multiple sequence alignment
 - Added connection: Mirror galvanometer -> Transoceanic communication cable
