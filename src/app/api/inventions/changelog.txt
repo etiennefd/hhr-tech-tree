@@ -1,3 +1,7 @@
+10 March 2026
+- Added connection: Optical fiber -> Quantum cryptography
+- Added connection: Laser -> Quantum cryptography
+
 9 March 2026
 - Added tech: Protein
 - Added connection: Protein -> Protein sequencing
