@@ -1,3 +1,9 @@
+13 March 2026
+- Added tech: Full body scanner
+- Added connection: Full body scanner -> Millimeter wave scanner
+- Added connection: X-ray -> Compton scattering
+- Added connection: Compton scattering -> Full body scanner
+
 11 March 2026
 - Added tech: Millimeter wave scanner
 
