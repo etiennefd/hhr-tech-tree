@@ -1,3 +1,8 @@
+14 March 2026
+- Added tech: Mine detector
+- Added tech: Radio-frequency metal detector
+- Added tech: Induction balance metal detector
+
 13 March 2026
 - Added tech: Full body scanner
 - Added connection: Full body scanner -> Millimeter wave scanner
