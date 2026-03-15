@@ -1,7 +1,14 @@
+15 March 2026
+- Added connection: Triode -> Induction balance metal detector
+- Added connection: High-vacuum tube -> Radio-frequency metal detector
+
 14 March 2026
-- Added tech: Mine detector
+- Added tech: Polish mine detector
 - Added tech: Radio-frequency metal detector
 - Added tech: Induction balance metal detector
+- Added connection: Radio direction finding -> Radio-frequency metal detector
+- Added connection: Induction balance metal detector -> Radio-frequency metal detector
+- Added connection: Radio-frequency metal detector -> Polish mine detector
 
 13 March 2026
 - Added tech: Full body scanner
