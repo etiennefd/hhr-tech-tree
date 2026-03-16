@@ -1,3 +1,8 @@
+16 March 2026
+- Added tech: Explosive shell gun
+- Added tech: Pressure-operated land mine
+- Added connection: Explosive shell gun -> Ironclad
+
 15 March 2026
 - Added connection: Triode -> Induction balance metal detector
 - Added connection: High-vacuum tube -> Radio-frequency metal detector
