@@ -1,3 +1,6 @@
+17 March 2026
+- Added tech: Fuse
+
 16 March 2026
 - Added tech: Safety fuse
 - Added tech: Explosive shell gun
