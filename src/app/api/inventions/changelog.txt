@@ -1,3 +1,9 @@
+19 March 2026
+- Added connection: Gunpowder -> Fuse
+- Added connection: Fuse -> Safety fuse
+- Added connection: Land mine -> Pressure-operated land mine
+- Added connection: Fuse -> Land mine
+
 17 March 2026
 - Added tech: Fuse
 
