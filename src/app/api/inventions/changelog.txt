@@ -1,13 +1,15 @@
 20 March 2026
 - Added tech: Contact fuze
 - Added tech: Caltrop
+- Added connection: Caltrop -> Land mine
+- Added connection: Snaphance -> Pressure-operated land mine
+- Added connection: Iron smelting and wrought iron -> Caltrop
 
 19 March 2026
 - Added connection: Gunpowder -> Fuse
 - Added connection: Fuse -> Safety fuse
 - Added connection: Land mine -> Pressure-operated land mine
 - Added connection: Fuse -> Land mine
-- Added connection: Caltrop -> Land mine
 
 17 March 2026
 - Added tech: Fuse
