@@ -1,3 +1,20 @@
+23 March 2026
+- Added tech: Jute
+- Added connection: Rope -> Safety fuse
+- Added connection: Jute -> Safety fuse
+- Added connection: Coal tar -> Safety fuse
+
+21 March 2026
+- Added tech: Modern land mine
+- Added tech: Mortar and artillery shell
+- Added connection: Explosive shell gun -> Induction balance metal detector
+- Added connection: Modern land mine -> Polish mine detector
+- Added connection: Pressure-operated land mine -> Modern land mine
+- Added connection: Percussion cap -> Contact fuze
+- Added connection: Fuse -> Grenade
+- Added connection: Grenade -> Mortar and artillery shell
+- Added connection: Cannon -> Mortar and artillery shell
+
 20 March 2026
 - Added tech: Contact fuze
 - Added tech: Caltrop
@@ -8,6 +25,7 @@
 19 March 2026
 - Added connection: Gunpowder -> Fuse
 - Added connection: Fuse -> Safety fuse
+- Added connection: Mortar and artillery shell -> Explosive shell gun
 - Added connection: Land mine -> Pressure-operated land mine
 - Added connection: Fuse -> Land mine
 
