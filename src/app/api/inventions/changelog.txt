@@ -1,6 +1,11 @@
+25 March 2026
+- Added tech: Ground loom
+- Added connection: Rope and twine -> Jute
+- Added connection: Weaving -> Ground loom
+
 23 March 2026
 - Added tech: Jute
-- Added connection: Rope -> Safety fuse
+- Added connection: Rope and twine -> Safety fuse
 - Added connection: Jute -> Safety fuse
 - Added connection: Coal tar -> Safety fuse
 
@@ -297,7 +302,7 @@
 
 2 February 2026
 - Added tech: Warp-weighted loom
-- Added connection: Rope -> Weaving
+- Added connection: Rope and twine -> Weaving
 - Added connection: Weaving -> Warp-weighted loom
 - Added connection: Linen -> Weaving
 
