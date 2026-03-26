@@ -1,6 +1,9 @@
 26 March 2026
 - Added tech: Cork
 - Added connection: Cork -> Cell
+- Added connection: Treadle loom -> Drawloom
+- Added connection: Ground loom -> Treadle loom
+- Added connection: Treadle loom -> Flying shuttle
 
 25 March 2026
 - Added tech: Ground loom
