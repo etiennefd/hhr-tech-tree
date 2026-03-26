@@ -1,3 +1,7 @@
+26 March 2026
+- Added tech: Cork
+- Added connection: Cork -> Cell
+
 25 March 2026
 - Added tech: Ground loom
 - Added connection: Rope and twine -> Jute
