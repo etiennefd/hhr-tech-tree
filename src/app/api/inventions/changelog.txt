@@ -1,3 +1,10 @@
+29 March 2026
+- Added tech: Magnetic stripe card
+- Added tech: Electric flatiron
+- Added connection: Magnetic tape -> Magnetic stripe card
+- Added connection: Electric flatiron -> Magnetic stripe card
+- Added connection: Credit card -> Magnetic stripe card
+
 26 March 2026
 - Added tech: Cork
 - Added connection: Cork -> Cell
