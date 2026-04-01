@@ -1,10 +1,10 @@
 31 March 2026
-- Added tech: Balanced aquarium
+- Added tech: Stable aquarium
 - Added tech: Aquarium
 - Added connection: Orangery -> Terrarium
 - Added connection: Glass window -> Orangery
-- Added connection: Terrarium -> Balanced aquarium
-- Added connection: Aquarium -> Balanced aquarium
+- Added connection: Terrarium -> Stable aquarium
+- Added connection: Aquarium -> Stable aquarium
 
 30 March 2026
 - Added tech: Terrarium
