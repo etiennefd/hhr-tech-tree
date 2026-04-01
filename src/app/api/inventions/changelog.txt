@@ -1,3 +1,10 @@
+1 April 2026
+- Added tech: Glass wool
+- Added tech: Mineral wool
+- Added connection: Glass wool -> Fiberglass
+- Added connection: Blast furnace -> Mineral wool
+- Added connection: Mineral wool -> Glass wool
+
 31 March 2026
 - Added tech: Stable aquarium
 - Added tech: Aquarium
