@@ -2,12 +2,16 @@
 - Added tech: Polished plate glass
 - Added tech: Crown glass
 - Added tech: Broad sheet glass
+- Added tech: Lapis specularis window
 - Added connection: Glass window -> Broad sheet glass
 - Added connection: Glass blowing -> Broad sheet glass
 - Added connection: Glass blowing -> Crown glass
 - Added connection: Glass window -> Crown glass
 - Added connection: Glass -> Magnifying glass
 - Added connection: Broad sheet glass -> Glasshouse
+- Added connection: Lapis specularis window -> Greenhouse
+- Added connection: Mining -> Lapis specularis window
+- Added connection: Lapis specularis window -> Glass window
 
 2 April 2026
 - Added tech: Automatic bottle-blowing machine
