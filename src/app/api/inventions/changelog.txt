@@ -6,6 +6,7 @@
 - Added connection: Glass blowing -> Broad sheet glass
 - Added connection: Glass blowing -> Crown glass
 - Added connection: Glass window -> Crown glass
+- Added connection: Glass -> Magnifying glass
 - Added connection: Broad sheet glass -> Glasshouse
 
 2 April 2026
