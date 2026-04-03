@@ -6,6 +6,7 @@
 - Added connection: Glass blowing -> Broad sheet glass
 - Added connection: Glass blowing -> Crown glass
 - Added connection: Glass window -> Crown glass
+- Added connection: Broad sheet glass -> Glasshouse
 
 2 April 2026
 - Added tech: Automatic bottle-blowing machine
@@ -23,8 +24,7 @@
 31 March 2026
 - Added tech: Stable aquarium
 - Added tech: Aquarium
-- Added connection: Orangery -> Terrarium
-- Added connection: Glass window -> Orangery
+- Added connection: Glasshouse -> Terrarium
 - Added connection: Terrarium -> Stable aquarium
 - Added connection: Aquarium -> Stable aquarium
 
