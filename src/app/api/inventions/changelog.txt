@@ -4,6 +4,8 @@
 - Added tech: Broad sheet glass
 - Added connection: Glass window -> Broad sheet glass
 - Added connection: Glass blowing -> Broad sheet glass
+- Added connection: Glass blowing -> Crown glass
+- Added connection: Glass window -> Crown glass
 
 2 April 2026
 - Added tech: Automatic bottle-blowing machine
