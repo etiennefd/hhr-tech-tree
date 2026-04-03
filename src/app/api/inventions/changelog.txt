@@ -1,3 +1,10 @@
+3 April 2026
+- Added tech: Polished plate glass
+- Added tech: Crown glass
+- Added tech: Broad sheet glass
+- Added connection: Glass window -> Broad sheet glass
+- Added connection: Glass blowing -> Broad sheet glass
+
 2 April 2026
 - Added tech: Automatic bottle-blowing machine
 - Added connection: Glass blowing -> Automatic bottle-blowing machine
