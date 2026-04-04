@@ -1,6 +1,3 @@
-4 April 2026
-- Added tech: Clear glass
-
 3 April 2026
 - Added tech: Polished plate glass
 - Added tech: Crown glass
