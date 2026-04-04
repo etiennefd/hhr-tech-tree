@@ -1,5 +1,9 @@
-3 April 2026
+4 April 2026
 - Added tech: Polished plate glass
+- Added connection: Glass -> Polished plate glass
+- Added connection: Tin-mercury amalgam mirror -> Polished plate glass
+
+3 April 2026
 - Added tech: Crown glass
 - Added tech: Broad sheet glass
 - Added tech: Lapis specularis window
