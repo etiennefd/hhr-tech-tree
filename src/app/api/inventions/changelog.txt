@@ -4,6 +4,9 @@
 - Added connection: Polished plate glass -> Float glass
 - Added connection: Broad sheet glass -> Float glass
 - Added connection: Broad sheet glass -> Fourcault drawn sheet glass
+- Added connection: Tin extraction -> Float glass
+- Added connection: Polished plate glass -> Laminated glass
+- Added connection: Polished plate glass -> Silver mirror
 
 4 April 2026
 - Added tech: Polished plate glass
