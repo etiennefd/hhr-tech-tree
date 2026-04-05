@@ -1,3 +1,10 @@
+5 April 2026
+- Added tech: Fourcault drawn sheet glass
+- Added connection: Fourcault drawn sheet glass -> Float glass
+- Added connection: Polished plate glass -> Float glass
+- Added connection: Broad sheet glass -> Float glass
+- Added connection: Broad sheet glass -> Fourcault drawn sheet glass
+
 4 April 2026
 - Added tech: Polished plate glass
 - Added connection: Glass -> Polished plate glass
