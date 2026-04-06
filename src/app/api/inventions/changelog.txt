@@ -16,6 +16,7 @@
 - Added connection: Lime -> Calcium carbide production
 - Added connection: Coke (fuel) -> Calcium carbide production
 - Added connection: Acetylene -> Oxy-fuel welding and cutting
+- Added connection: Scuba set -> Wetsuit
 
 5 April 2026
 - Added tech: Fourcault drawn sheet glass
