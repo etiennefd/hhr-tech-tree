@@ -11,6 +11,11 @@
 - Added connection: Broad sheet glass -> Machine drawn cylinder sheet glass
 - Added connection: Synthetic rubber -> Neoprene
 - Added connection: Crown glass -> Machine drawn cylinder sheet glass
+- Added connection: Acetylene -> Carbide lamp
+- Added connection: Acetylene -> Calcium carbide production
+- Added connection: Lime -> Calcium carbide production
+- Added connection: Coke (fuel) -> Calcium carbide production
+- Added connection: Acetylene -> Oxy-fuel welding and cutting
 
 5 April 2026
 - Added tech: Fourcault drawn sheet glass
