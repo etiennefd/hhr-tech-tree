@@ -1,7 +1,15 @@
 6 April 2026
+- Added tech: Wetsuit
+- Added tech: Self-contained breathing apparatus
+- Added tech: Neoprene
 - Added tech: Machine drawn cylinder sheet glass
+- Added tech: Acetylene
 - Added connection: Machine drawn cylinder sheet glass -> Float glass
+- Added connection: Potassium -> Acetylene
+- Added connection: Acetylene -> Neoprene
+- Added connection: Neoprene -> Wetsuit
 - Added connection: Broad sheet glass -> Machine drawn cylinder sheet glass
+- Added connection: Synthetic rubber -> Neoprene
 - Added connection: Crown glass -> Machine drawn cylinder sheet glass
 
 5 April 2026
