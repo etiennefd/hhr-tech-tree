@@ -17,6 +17,9 @@
 - Added connection: Coke (fuel) -> Calcium carbide production
 - Added connection: Acetylene -> Oxy-fuel welding and cutting
 - Added connection: Scuba set -> Wetsuit
+- Added connection: Gas mask -> Self-contained breathing apparatus
+- Added connection: Diving regulator -> Self-contained breathing apparatus
+- Added connection: Scuba set -> Self-contained breathing apparatus
 
 5 April 2026
 - Added tech: Fourcault drawn sheet glass
