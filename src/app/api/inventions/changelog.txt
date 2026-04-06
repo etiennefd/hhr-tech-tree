@@ -1,8 +1,13 @@
+6 April 2026
+- Added tech: Machine drawn cylinder sheet glass
+- Added connection: Machine drawn cylinder sheet glass -> Float glass
+- Added connection: Broad sheet glass -> Machine drawn cylinder sheet glass
+- Added connection: Crown glass -> Machine drawn cylinder sheet glass
+
 5 April 2026
 - Added tech: Fourcault drawn sheet glass
 - Added connection: Fourcault drawn sheet glass -> Float glass
 - Added connection: Polished plate glass -> Float glass
-- Added connection: Broad sheet glass -> Float glass
 - Added connection: Broad sheet glass -> Fourcault drawn sheet glass
 - Added connection: Tin extraction -> Float glass
 - Added connection: Polished plate glass -> Laminated glass
