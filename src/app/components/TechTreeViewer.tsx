@@ -85,6 +85,7 @@ const VERTICAL_SPACING = 50;
 const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
+const TIMELINE_HEIGHT = 48;
 export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 
 // Search result limits
@@ -345,6 +346,8 @@ export function TechTreeViewer() {
   const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollBoundsRef = useRef<HTMLDivElement>(null);
+  const scaleWrapperRef = useRef<HTMLDivElement>(null);
   // Add settings menu state
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [connectionMode, setConnectionMode] = useState<'all' | 'optimized' | 'minimal'>(() => {
@@ -1123,6 +1126,14 @@ export function TechTreeViewer() {
         containerDimensions.width
       ),
     [data.nodes, getXPosition, containerDimensions.width]
+  );
+
+  const treeZoomLevel = 1;
+  const zoomedTreeWidth = containerWidth * treeZoomLevel;
+  const zoomedTreeHeight = totalHeight * treeZoomLevel;
+  const scrollShellHeight = Math.max(
+    containerDimensions.height,
+    TIMELINE_HEIGHT + zoomedTreeHeight
   );
 
   const getNodeConnections = useCallback(
@@ -3100,55 +3111,49 @@ useEffect(() => {
           });
         }, 100)} // Throttle to max once every 100ms
       >
-        <div 
+        <div
           style={{
-            width: containerWidth,
-            minHeight: '100vh',
-            willChange: 'transform',
-            backfaceVisibility: 'hidden'
+            width: zoomedTreeWidth,
+            minHeight: `${scrollShellHeight}px`,
+            position: "relative",
           }}
         >
-          {/* Timeline - Render this immediately */}
           <div
             className="h-12 bg-yellow-50 border-b timeline flex-shrink-0"
             style={{
-              width: '100%',
+              width: `${zoomedTreeWidth}px`,
               zIndex: 100,
               position: "sticky",
               top: 0,
               minHeight: isMobile ? "48px" : undefined,
               maxHeight: isMobile ? "48px" : undefined,
               overflow: isMobile ? "hidden" : undefined,
-              touchAction: "none"
+              touchAction: "none",
             }}
           >
-            {/* Timeline content - Use fixed years */}
             {(() => {
-              // Use fixed years for immediate rendering
               const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, TIMELINE_MAX_YEAR);
 
               return (
-                <div className="relative" style={{ width: '100%', height: '100%' }}>
+                <div className="relative" style={{ width: "100%", height: "100%" }}>
                   {timelineYears.map((year) => {
                     return (
                       <div
                         key={year}
                         className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
                         style={{
-                          // Use direct calculation with fixed minYear
-                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px`,
+                          left: `${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH) * treeZoomLevel}px`,
                           transform: "translateX(-50%)",
-                          top: isMobile ? '16px' : '16px',
-                          textDecorationLine: 'none',
-                          WebkitTextDecorationLine: 'none',
-                          textDecoration: 'none',
-                          WebkitUserSelect: 'none',
-                          userSelect: 'none',
-                          WebkitTouchCallout: 'none',
+                          top: isMobile ? "16px" : "16px",
+                          textDecorationLine: "none",
+                          WebkitTextDecorationLine: "none",
+                          textDecoration: "none",
+                          WebkitUserSelect: "none",
+                          userSelect: "none",
+                          WebkitTouchCallout: "none",
                         }}
                       >
-                        {/* Use original formatYear call */}
-                        <span style={{ pointerEvents: 'none' }}>{formatYear(year)}</span>
+                        <span style={{ pointerEvents: "none" }}>{formatYear(year)}</span>
                       </div>
                     );
                   })}
@@ -3157,686 +3162,687 @@ useEffect(() => {
             })()}
           </div>
 
-          {/* Main content */}
           <div
             style={{
-              width: '100%',
-              height: `${totalHeight}px`,
-              position: "relative",
-              marginBottom: "64px",
-              willChange: 'transform',
-              backfaceVisibility: 'hidden'
+              position: "absolute",
+              top: `${TIMELINE_HEIGHT}px`,
+              left: 0,
+              width: `${zoomedTreeWidth}px`,
+              zIndex: 50,
             }}
           >
-            {/* Add IntroBox here instead */}
             <IntroBox />
+          </div>
 
-            {/* SVG connections */}
-            <svg
-              ref={connectionsContainerRef}
-              className="absolute inset-0 w-full h-full"
+          <div
+            ref={scrollBoundsRef}
+            style={{
+              width: `${zoomedTreeWidth}px`,
+              minHeight: `${zoomedTreeHeight}px`,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              ref={scaleWrapperRef}
               style={{
-                zIndex: 1,
+                width: `${containerWidth}px`,
+                minHeight: `${totalHeight}px`,
+                transform: `scale(${treeZoomLevel})`,
+                transformOrigin: "top left",
+                willChange: "transform",
+                backfaceVisibility: "hidden",
               }}
             >
-              {visibleConnections.map((link, visibleIndex) => {
-                const sourceNode = data.nodes.find(
-                  (n) => n.id === link.source
-                );
-                const targetNode = data.nodes.find(
-                  (n) => n.id === link.target
-                );
+              <div
+                style={{
+                  width: "100%",
+                  height: `${totalHeight}px`,
+                  position: "relative",
+                  marginBottom: "64px",
+                  willChange: "transform",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                {/* SVG connections */}
+                <svg
+                  ref={connectionsContainerRef}
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    zIndex: 1,
+                  }}
+                >
+                  {visibleConnections.map((link, visibleIndex) => {
+                    const sourceNode = data.nodes.find(
+                      (n) => n.id === link.source
+                    );
+                    const targetNode = data.nodes.find(
+                      (n) => n.id === link.target
+                    );
 
-                if (!sourceNode || !targetNode) return null;
-                
-                // Generate a unique key using both the link IDs and the visible index
-                const connectionKey = `connection-${link.source}-${link.target}-${visibleIndex}`;
-                
-                return (
-                  <CurvedConnections
-                    key={connectionKey}
-                    sourceNode={{
-                      x: getXPosition(sourceNode.year),
-                      y: sourceNode.y || 150,
-                    }}
-                    targetNode={{
-                      x: getXPosition(targetNode.year),
-                      y: targetNode.y || 150,
-                    }}
-                    sourceIndex={data.nodes.indexOf(sourceNode)}
-                    targetIndex={data.nodes.indexOf(targetNode)}
-                    connectionType={link.type}
-                    isHighlighted={shouldHighlightLink(link, visibleIndex)}
-                    opacity={getLinkOpacity(link, visibleIndex)}
-                    onMouseEnter={() => {
-                      setHoveredLinkIndex(visibleIndex);
-                    }}
-                    onMouseLeave={() => setHoveredLinkIndex(null)}
-                    sourceTitle={sourceNode.title}
-                    targetTitle={targetNode.title}
-                    details={link.details}
-                    isSelected={selectedLinkKey === getLinkKey(link)}
-                    onSelect={() => {
-                      setSelectedLinkKey(getLinkKey(link));
-                      setSelectedLinkIndex(visibleIndex);
-                      setSelectedNodeId(null);
-                    }}
-                    onNodeClick={(title) => {
-                      handleNodeClick(title);
-                    }}
-                    onNodeHover={(title) => {
-                      handleNodeHoverForPrefetch(title);
-                    }}
-                  />
-                );
-              })}
-            </svg>
-
-            {/* Nodes */}
-            <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
-              {visibleNodes.map((node) => {
-                const details = prefetchedNodeDetails.current.get(node.id);
-                // Create a new node object that merges base node data with any prefetched details
-                const displayNode = { ...node, ...(details || {}) };
-
-                return (
-                  <BrutalistNode
-                    key={node.id} // key should still be from the original stable node id
-                    node={displayNode} // Pass the merged node data
-                    isSelected={node.id === selectedNodeId}
-                    isAdjacent={isAdjacentToSelected(node.id)}
-                    onClick={() => handleNodeClick(node.title)} // Use the centralized handler
-                    onMouseEnter={() => {
-                      if (node.id !== selectedNodeId) {
-                        handleNodeHover(node);
-                      }
-                    }}
-                    onMouseLeave={() => {
-                      // On mobile, don't clear hover state on mouse leave
-                      if (!isMobile && node.id !== selectedNodeId) {
-                        setHoveredNode(null);
-                        setHoveredNodeId(null);
-                      }
-                    }}
-                    width={NODE_WIDTH}
-                    style={{
-                      position: "absolute",
-                      left: `${getXPosition(node.year)}px`,
-                      top: `${node.y}px`,
-                      opacity: getNodeOpacity(node),
-                      transition: "opacity 0.2s ease-in-out",
-                    }}
-                    showImages={showImages}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Tooltips */}
-            <div className="relative" style={{ zIndex: 100 }}>
-              {visibleNodes.map((baseLoopNode) => { // Renamed to avoid conflict with 'node' below
-                  // Get the selected or hovered node ID
-                  const targetNodeId = selectedNodeId || hoveredNode?.id;
-
-                  // Only render tooltip if this node is the selected/hovered one
-                  if (targetNodeId !== baseLoopNode.id) return null;
-
-                  // Merge base node data with prefetched details for the tooltip
-                  const prefetchedDetails = prefetchedNodeDetails.current.get(baseLoopNode.id);
-                  // This 'node' is the one used throughout the tooltip content
-                  const node = { ...baseLoopNode, ...(prefetchedDetails || {}) }; 
-
-                  // The original condition for rendering the tooltip, using the merged 'node'
-                  // but checking against the original hoveredNode.id or selectedNodeId for triggering
-                  if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
+                    if (!sourceNode || !targetNode) return null;
+                    
+                    const connectionKey = `connection-${link.source}-${link.target}-${visibleIndex}`;
+                    
                     return (
-                      <div
-                        key={`tooltip-${node.id}`} // key uses merged node id, or baseLoopNode.id for stability
-                        className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
-                        style={{
-                          left: `${getXPosition(node.year)}px`,
-                          top: `${(node.y ?? 0) + (showImages ? 100 : 25)}px`,
-                          transform: "translate(-50%, 0)",
-                          width: "14rem",
-                          zIndex: 100,
+                      <CurvedConnections
+                        key={connectionKey}
+                        sourceNode={{
+                          x: getXPosition(sourceNode.year),
+                          y: sourceNode.y || 150,
                         }}
-                        onClick={(e) => e.stopPropagation()}
+                        targetNode={{
+                          x: getXPosition(targetNode.year),
+                          y: targetNode.y || 150,
+                        }}
+                        sourceIndex={data.nodes.indexOf(sourceNode)}
+                        targetIndex={data.nodes.indexOf(targetNode)}
+                        connectionType={link.type}
+                        isHighlighted={shouldHighlightLink(link, visibleIndex)}
+                        opacity={getLinkOpacity(link, visibleIndex)}
                         onMouseEnter={() => {
-                          // Keep the hover state active when hovering the tooltip
-                          setHoveredNode(node);
-                          setHoveredNodeId(node.id);
+                          setHoveredLinkIndex(visibleIndex);
+                        }}
+                        onMouseLeave={() => setHoveredLinkIndex(null)}
+                        sourceTitle={sourceNode.title}
+                        targetTitle={targetNode.title}
+                        details={link.details}
+                        isSelected={selectedLinkKey === getLinkKey(link)}
+                        onSelect={() => {
+                          setSelectedLinkKey(getLinkKey(link));
+                          setSelectedLinkIndex(visibleIndex);
+                          setSelectedNodeId(null);
+                        }}
+                        onNodeClick={(title) => {
+                          handleNodeClick(title);
+                        }}
+                        onNodeHover={(title) => {
+                          handleNodeHoverForPrefetch(title);
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+
+                {/* Nodes */}
+                <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
+                  {visibleNodes.map((node) => {
+                    const details = prefetchedNodeDetails.current.get(node.id);
+                    const displayNode = { ...node, ...(details || {}) };
+
+                    return (
+                      <BrutalistNode
+                        key={node.id}
+                        node={displayNode}
+                        isSelected={node.id === selectedNodeId}
+                        isAdjacent={isAdjacentToSelected(node.id)}
+                        onClick={() => handleNodeClick(node.title)}
+                        onMouseEnter={() => {
+                          if (node.id !== selectedNodeId) {
+                            handleNodeHover(node);
+                          }
                         }}
                         onMouseLeave={() => {
-                          // Only clear hover state if the node isn't selected
-                          if (selectedNodeId !== node.id) {
+                          if (!isMobile && node.id !== selectedNodeId) {
                             setHoveredNode(null);
                             setHoveredNodeId(null);
                           }
                         }}
-                      >
-                        <p className="text-xs mb-1">
-                          {/* Use original formatYear call */}
-                          <strong>Date:</strong> {formatYear(node.year)}
-                          {node.dateDetails && ` – ${node.dateDetails}`}
-                        </p>
-                        {node.inventors &&
-                          node.inventors.length > 0 &&
-                          node.inventors.filter((inv: string) => inv !== "unknown")
-                            .length > 0 && (
-                            <p className="text-xs mb-1">
-                              <strong>
-                                {node.type === "Discovery"
-                                  ? `Discoverer${
-                                      node.inventors.length > 1 ? "s" : ""
-                                    }`
-                                  : `Inventor${
-                                      node.inventors.length > 1 ? "s" : ""
-                                    }`}
-                                    :
-                                  </strong>{" "}
+                        width={NODE_WIDTH}
+                        style={{
+                          position: "absolute",
+                          left: `${getXPosition(node.year)}px`,
+                          top: `${node.y}px`,
+                          opacity: getNodeOpacity(node),
+                          transition: "opacity 0.2s ease-in-out",
+                        }}
+                        showImages={showImages}
+                      />
+                    );
+                  })}
+                </div>
+
+                {/* Tooltips */}
+                <div className="relative" style={{ zIndex: 100 }}>
+                  {visibleNodes.map((baseLoopNode) => {
+                    const targetNodeId = selectedNodeId || hoveredNode?.id;
+                    if (targetNodeId !== baseLoopNode.id) return null;
+
+                    const prefetchedDetails = prefetchedNodeDetails.current.get(baseLoopNode.id);
+                    const node = { ...baseLoopNode, ...(prefetchedDetails || {}) };
+
+                    if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
+                      return (
+                        <div
+                          key={`tooltip-${node.id}`}
+                          className="absolute bg-white border border-black rounded-none p-3 shadow-md node-tooltip"
+                          style={{
+                            left: `${getXPosition(node.year)}px`,
+                            top: `${(node.y ?? 0) + (showImages ? 100 : 25)}px`,
+                            transform: "translate(-50%, 0)",
+                            width: "14rem",
+                            zIndex: 100,
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => {
+                            setHoveredNode(node);
+                            setHoveredNodeId(node.id);
+                          }}
+                          onMouseLeave={() => {
+                            if (selectedNodeId !== node.id) {
+                              setHoveredNode(null);
+                              setHoveredNodeId(null);
+                            }
+                          }}
+                        >
+                          <p className="text-xs mb-1">
+                            <strong>Date:</strong> {formatYear(node.year)}
+                            {node.dateDetails && ` – ${node.dateDetails}`}
+                          </p>
+                          {node.inventors &&
+                            node.inventors.length > 0 &&
+                            node.inventors.filter((inv: string) => inv !== "unknown")
+                              .length > 0 && (
+                              <p className="text-xs mb-1">
+                                <strong>
+                                  {node.type === "Discovery"
+                                    ? `Discoverer${
+                                        node.inventors.length > 1 ? "s" : ""
+                                      }`
+                                    : `Inventor${
+                                        node.inventors.length > 1 ? "s" : ""
+                                      }`}
+                                  :
+                                </strong>{" "}
                                 {node.inventors.includes("unknown")
                                   ? "possibly " +
                                     node.inventors
                                       .filter((inv: string) => inv !== "unknown")
                                       .join(", ")
                                   : node.inventors.join(", ")}
-                            </p>
-                          )}
-                        {node.organizations &&
-                          node.organizations.length > 0 && (
+                              </p>
+                            )}
+                          {node.organizations &&
+                            node.organizations.length > 0 && (
+                              <p className="text-xs mb-1">
+                                <strong>
+                                  {node.organizations.length > 1
+                                    ? "Organizations"
+                                    : "Organization"}
+                                  :
+                                </strong>{" "}
+                                {node.organizations.join(", ")}
+                              </p>
+                            )}
+                          {node.formattedLocation && (
                             <p className="text-xs mb-1">
-                              <strong>
-                                {node.organizations.length > 1
-                                  ? "Organizations"
-                                  : "Organization"}
-                                :
-                              </strong>{" "}
-                              {node.organizations.join(", ")}
+                              <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
                             </p>
                           )}
-                        {node.formattedLocation && (
-                          <p className="text-xs mb-1">
-                            <strong>Location:</strong> {cleanLocationForTooltip(node.formattedLocation)}
-                          </p>
-                        )}
-                        {node.details && (
-                          <p className="text-xs mb-2">{node.details}</p>
-                        )}
+                          {node.details && (
+                            <p className="text-xs mb-2">{node.details}</p>
+                          )}
 
-                        {/* Updated connections section */}
-                        {(() => {
-                          const { ancestors, children, replaced, replacedBy, independentlyInvented, concurrentDevelopment } = getNodeConnections(
-                            node.id
-                          );
-                          return (
-                            <>
-                              {ancestors.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Built upon:</strong>
-                                  <div className="ml-2">
-                                    {ancestors.map((item, index: number) => {
-                                      const ancestor = item.node;
-                                      const link = item.link;
-                                      // Only show (possibly) for speculative connections
-                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
-                                      
-                                      return (
-                                        <div
-                                          key={`ancestor-${node.id}-${ancestor.id}-${index}`}
-                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
-                                        >
-                                          <span className="flex-shrink-0">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(ancestor.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
+                          {/* Updated connections section */}
+                          {(() => {
+                            const { ancestors, children, replaced, replacedBy, independentlyInvented, concurrentDevelopment } = getNodeConnections(
+                              node.id
+                            );
+                            return (
+                              <>
+                                {ancestors.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Built upon:</strong>
+                                    <div className="ml-2">
+                                      {ancestors.map((item, index: number) => {
+                                        const ancestor = item.node;
+                                        const link = item.link;
+                                        const suffix = link?.type === "Speculative" ? " (possibly)" : "";
+                                        
+                                        return (
+                                          <div
+                                            key={`ancestor-${node.id}-${ancestor.id}-${index}`}
+                                            className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
                                           >
-                                            {ancestor.title}{suffix}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
-                                        </div>
-                                      );
-                                    })}
+                                            <span className="flex-shrink-0">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(ancestor.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {ancestor.title}{suffix}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="text-gray-500 cursor-help"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {children.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Led to:</strong>
+                                    <div className="ml-2">
+                                      {children.map((item, index: number) => {
+                                        const child = item.node;
+                                        const link = item.link;
+                                        const suffix = link?.type === "Speculative" ? " (possibly)" : "";
+                                        
+                                        return (
+                                          <div
+                                            key={`child-${node.id}-${child.id}-${index}`}
+                                            className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
+                                          >
+                                            <span className="flex-shrink-0">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(child.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {child.title}{suffix}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="text-gray-500 cursor-help"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {replaced.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Replaced:</strong>
+                                    <div className="ml-2">
+                                      {replaced.map((item, index: number) => {
+                                        const replacedNode = item.node;
+                                        const link = item.link;
+                                        
+                                        return (
+                                          <div
+                                            key={`replaced-${node.id}-${replacedNode.id}-${index}`}
+                                            className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
+                                          >
+                                            <span className="flex-shrink-0">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(replacedNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {replacedNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="text-gray-500 cursor-help"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {independentlyInvented.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Independently invented from:</strong>
+                                    <div className="ml-2">
+                                      {independentlyInvented.map((item, index: number) => {
+                                        const connectedNode = item.node;
+                                        const link = item.link;
+                                        
+                                        return (
+                                          <div
+                                            key={`independent-${connectedNode.id}-${index}`}
+                                            className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
+                                          >
+                                            <span className="flex-shrink-0">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(connectedNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {connectedNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="text-gray-500 cursor-help"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {concurrentDevelopment.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Developed concurrently with:</strong>
+                                    <div className="ml-2">
+                                      {concurrentDevelopment.map((item, index: number) => {
+                                        const connectedNode = item.node;
+                                        const link = item.link;
+                                        
+                                        return (
+                                          <div
+                                            key={`concurrent-${connectedNode.id}-${index}`}
+                                            className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
+                                          >
+                                            <span className="flex-shrink-0">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(connectedNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {connectedNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="text-gray-500 cursor-help"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {replacedBy.length > 0 && (
+                                  <div className="text-xs mb-1">
+                                    <strong>Replaced by:</strong>
+                                    <div className="ml-2">
+                                      {replacedBy.map((item, index: number) => {
+                                        const replacedByNode = item.node;
+                                        const link = item.link;
+                                        
+                                        return (
+                                          <div
+                                            key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
+                                            className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
+                                          >
+                                            <span className="flex-shrink-0">•</span>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleNodeClick(replacedByNode.title, true);
+                                              }}
+                                              className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
+                                              type="button"
+                                            >
+                                              {replacedByNode.title}
+                                            </button>
+                                            {link.details && (
+                                              link.detailsSource ? (
+                                                <a
+                                                  href={link.detailsSource}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                  title={`${link.details} (click for source)`}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </a>
+                                              ) : (
+                                                <span
+                                                  className="text-gray-500 cursor-help"
+                                                  title={link.details}
+                                                >
+                                                  <Info className="h-3 w-3" />
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
+
+                          {(() => {
+                            const nodeId = selectedNodeId || hoveredNode?.id;
+                            if (!nodeId) return null;
+
+                            if (isMobile) {
+                              return node.wikipedia && (
+                                <div className="text-xs mt-2">
+                                  <div>
+                                    View on{" "}
+                                    <a
+                                      href={node.wikipedia}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="text-blue-600 hover:underline cursor-pointer"
+                                    >
+                                      Wikipedia
+                                    </a>
                                   </div>
                                 </div>
-                              )}
+                              );
+                            }
 
-                              {children.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Led to:</strong>
-                                  <div className="ml-2">
-                                    {children.map((item, index: number) => {
-                                      const child = item.node;
-                                      const link = item.link;
-                                      // Only show (possibly) for speculative connections
-                                      const suffix = link?.type === "Speculative" ? " (possibly)" : "";
-                                      
-                                      return (
-                                        <div
-                                          key={`child-${node.id}-${child.id}-${index}`}
-                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
-                                        >
-                                          <span className="flex-shrink-0">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(child.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {child.title}{suffix}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
+                            const hasAncestors = data.links.some(
+                              link => link.target === nodeId &&
+                              !["Independently invented", "Concurrent development"].includes(link.type)
+                            );
+                            const hasDescendants = data.links.some(
+                              link => link.source === nodeId &&
+                              !["Independently invented", "Concurrent development"].includes(link.type)
+                            );
 
-                              {replaced.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Replaced:</strong>
-                                  <div className="ml-2">
-                                    {replaced.map((item, index: number) => {
-                                      const replacedNode = item.node;
-                                      const link = item.link;
-                                      
-                                      return (
-                                        <div
-                                          key={`replaced-${node.id}-${replacedNode.id}-${index}`}
-                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
-                                        >
-                                          <span className="flex-shrink-0">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(replacedNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {replacedNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
-
-                              {independentlyInvented.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Independently invented from:</strong>
-                                  <div className="ml-2">
-                                    {independentlyInvented.map((item, index: number) => {
-                                      const connectedNode = item.node;
-                                      const link = item.link;
-                                      
-                                      return (
-                                        <div
-                                          key={`independent-${connectedNode.id}-${index}`}
-                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
-                                        >
-                                          <span className="flex-shrink-0">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(connectedNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {connectedNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
-
-                              {concurrentDevelopment.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Developed concurrently with:</strong>
-                                  <div className="ml-2">
-                                    {concurrentDevelopment.map((item, index: number) => {
-                                      const connectedNode = item.node;
-                                      const link = item.link;
-                                      
-                                      return (
-                                        <div
-                                          key={`concurrent-${connectedNode.id}-${index}`}
-                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
-                                        >
-                                          <span className="flex-shrink-0">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(connectedNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {connectedNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
-
-                              {replacedBy.length > 0 && (
-                                <div className="text-xs mb-1">
-                                  <strong>Replaced by:</strong>
-                                  <div className="ml-2">
-                                    {replacedBy.map((item, index: number) => {
-                                      const replacedByNode = item.node;
-                                      const link = item.link;
-                                      
-                                      return (
-                                        <div
-                                          key={`replacedBy-${node.id}-${replacedByNode.id}-${index}`}
-                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
-                                        >
-                                          <span className="flex-shrink-0">•</span>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              handleNodeClick(replacedByNode.title, true);
-                                            }}
-                                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer break-words text-left"
-                                            type="button"
-                                          >
-                                            {replacedByNode.title}
-                                          </button>
-                                          {link.details && (
-                                            link.detailsSource ? (
-                                              <a
-                                                href={link.detailsSource}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-gray-500 hover:text-gray-700 cursor-help"
-                                                title={`${link.details} (click for source)`}
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </a>
-                                            ) : (
-                                              <span
-                                                className="text-gray-500 cursor-help"
-                                                title={link.details}
-                                              >
-                                                <Info className="h-3 w-3" />
-                                              </span>
-                                            )
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              )}
-                            </>
-                          );
-                        })()}
-
-                        {/* Update the tooltip section with modified click handlers */}
-                        {(() => {
-                          const nodeId = selectedNodeId || hoveredNode?.id;
-                          if (!nodeId) return null;
-
-                          // Only show ancestry controls if not on mobile
-                          if (isMobile) {
-                            return node.wikipedia && (
+                            return (
                               <div className="text-xs mt-2">
-                                <div>
-                                  View on{" "}
-                                  <a
-                                    href={node.wikipedia}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    Wikipedia
-                                  </a>
-                                </div>
+                                {(hasAncestors || hasDescendants) && (
+                                  <div className="mb-1">
+                                    {hasAncestors && hasDescendants ? (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const ancestors = getAllAncestors(nodeId);
+                                            ancestors.delete(nodeId);
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedAncestors(ancestors);
+                                            setHighlightedDescendants(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          ancestors
+                                        </button>
+                                        {" / "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const descendants = getAllDescendants(nodeId);
+                                            descendants.delete(nodeId);
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedDescendants(descendants);
+                                            setHighlightedAncestors(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          descendants
+                                        </button>
+                                      </>
+                                    ) : hasAncestors ? (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const ancestors = getAllAncestors(nodeId);
+                                            ancestors.delete(nodeId);
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedAncestors(ancestors);
+                                            setHighlightedDescendants(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          ancestors
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        Highlight all{" "}
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const descendants = getAllDescendants(nodeId);
+                                            descendants.delete(nodeId);
+                                            if (!selectedNodeId) {
+                                              setSelectedNodeId(nodeId);
+                                            }
+                                            setHighlightedDescendants(descendants);
+                                            setHighlightedAncestors(new Set());
+                                          }}
+                                          className="text-blue-600 hover:underline cursor-pointer"
+                                        >
+                                          descendants
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                )}
+
+                                {node.wikipedia && (
+                                  <div>
+                                    View on{" "}
+                                    <a
+                                      href={node.wikipedia}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="text-blue-600 hover:underline cursor-pointer"
+                                    >
+                                      Wikipedia
+                                    </a>
+                                  </div>
+                                )}
                               </div>
                             );
-                          }
-
-                          // Check if the node has any potential ancestors or descendants without calculating them
-                          const hasAncestors = data.links.some(
-                            link => link.target === nodeId && 
-                            !["Independently invented", "Concurrent development"].includes(link.type)
-                          );
-                          const hasDescendants = data.links.some(
-                            link => link.source === nodeId && 
-                            !["Independently invented", "Concurrent development"].includes(link.type)
-                          );
-
-                          return (
-                            <div className="text-xs mt-2">
-                              {/* Show ancestry controls if there are potential ancestors or descendants */}
-                              {(hasAncestors || hasDescendants) && (
-                                <div className="mb-1">
-                                  {hasAncestors && hasDescendants ? (
-                                    <>
-                                      Highlight all{" "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // Calculate ancestors only when clicked
-                                          const ancestors = getAllAncestors(nodeId);
-                                          ancestors.delete(nodeId);
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedAncestors(ancestors);
-                                          setHighlightedDescendants(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        ancestors
-                                      </button>
-                                      {" / "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // Calculate descendants only when clicked
-                                          const descendants = getAllDescendants(nodeId);
-                                          descendants.delete(nodeId);
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedDescendants(descendants);
-                                          setHighlightedAncestors(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        descendants
-                                      </button>
-                                    </>
-                                  ) : hasAncestors ? (
-                                    <>
-                                      Highlight all{" "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // Calculate ancestors only when clicked
-                                          const ancestors = getAllAncestors(nodeId);
-                                          ancestors.delete(nodeId);
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedAncestors(ancestors);
-                                          setHighlightedDescendants(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        ancestors
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <>
-                                      Highlight all{" "}
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          // Calculate descendants only when clicked
-                                          const descendants = getAllDescendants(nodeId);
-                                          descendants.delete(nodeId);
-                                          // First ensure the node is selected
-                                          if (!selectedNodeId) {
-                                            setSelectedNodeId(nodeId);
-                                          }
-                                          setHighlightedDescendants(descendants);
-                                          setHighlightedAncestors(new Set());
-                                        }}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                      >
-                                        descendants
-                                      </button>
-                                    </>
-                                  )}
-                                </div>
-                              )}
-
-                              {node.wikipedia && (
-                                <div>
-                                  View on{" "}
-                                  <a
-                                    href={node.wikipedia}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="text-blue-600 hover:underline cursor-pointer"
-                                  >
-                                    Wikipedia
-                                  </a>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    );
-                  }
-                  return null; // Ensure a value is returned if the condition isn't met
-                }
-              )}
+                          })()}
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -4032,4 +4038,3 @@ export const TechTreeViewerNoSSR = dynamic(
     ssr: false,
   }
 );
-
