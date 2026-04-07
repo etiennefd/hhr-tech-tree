@@ -1165,7 +1165,7 @@ export function TechTreeViewer() {
     const liveZoom = zoomRef.current ?? 1;
     if (scrollBoundsRef.current) {
       scrollBoundsRef.current.style.width = `${containerWidth * liveZoom}px`;
-      scrollBoundsRef.current.style.minHeight = `${totalHeight * liveZoom}px`;
+      scrollBoundsRef.current.style.height = `${totalHeight * liveZoom}px`;
     }
     if (scaleWrapperRef.current) {
       scaleWrapperRef.current.style.transform = `scale(${liveZoom})`;
@@ -3249,7 +3249,7 @@ useEffect(() => {
             ref={scrollBoundsRef}
             style={{
               width: `${zoomedTreeWidth}px`,
-              minHeight: `${zoomedTreeHeight}px`,
+              height: `${zoomedTreeHeight}px`,
               overflow: "hidden",
             }}
           >
