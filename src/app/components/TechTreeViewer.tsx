@@ -3192,6 +3192,12 @@ useEffect(() => {
                           left: `calc(${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px * var(--tree-zoom))`,
                           transform: "translateX(-50%)",
                           top: isMobile ? "16px" : "16px",
+                          fontSize:
+                            treeZoomLevel <= 0.12
+                              ? "9px"
+                              : treeZoomLevel <= 0.4
+                                ? "11px"
+                                : undefined,
                           textDecorationLine: "none",
                           WebkitTextDecorationLine: "none",
                           textDecoration: "none",
@@ -3200,7 +3206,24 @@ useEffect(() => {
                           WebkitTouchCallout: "none",
                         }}
                       >
-                        <span style={{ pointerEvents: "none" }}>{formatYear(year)}</span>
+                        <span style={{ pointerEvents: "none", display: "inline-block" }}>
+                          {year < 0 && treeZoomLevel <= 0.4 ? (
+                            <>
+                              <span style={{ display: "block" }}>{Math.abs(year)}</span>
+                              <span
+                                style={{
+                                  display: "block",
+                                  fontSize: treeZoomLevel <= 0.12 ? "8px" : "9px",
+                                  lineHeight: 1,
+                                }}
+                              >
+                                BCE
+                              </span>
+                            </>
+                          ) : (
+                            formatYear(year)
+                          )}
+                        </span>
                       </div>
                     );
                   })}
