@@ -1143,7 +1143,7 @@ export function TechTreeViewer() {
     horizontalScrollContainerRef,
     {
       enabled: isTouchDevice,
-      minZoom: 0.35,
+      minZoom: 0.1,
       maxZoom: 1,
       contentWidth: containerWidth,
       contentHeight: totalHeight,
