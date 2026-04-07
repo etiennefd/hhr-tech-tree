@@ -375,6 +375,9 @@ export function TechTreeViewer() {
     return true;
   });
   const settingsMenuRef = useRef<HTMLDivElement>(null);
+  const clearSelectedNodeUrl = useCallback(() => {
+    router.replace('/', { scroll: false });
+  }, [router]);
 
   // Add effect to save display options to localStorage when they change
   useEffect(() => {
@@ -969,12 +972,13 @@ export function TechTreeViewer() {
         setHoveredLinkIndex(null);
         setHighlightedAncestors(new Set());
         setHighlightedDescendants(new Set());
+        clearSelectedNodeUrl();
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [clearSelectedNodeUrl]);
 
   const handleNodeClick = useCallback(
     (title: string, isFromTooltip: boolean = false) => {

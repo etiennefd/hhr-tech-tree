@@ -60,7 +60,14 @@ export function usePinchZoom(
   const initialDistanceRef = useRef(0);
   const initialZoomRef = useRef(1);
   const initialCenterRef = useRef({ x: 0, y: 0 });
+  const initialPinchOffsetRef = useRef({ x: 0, y: 0 });
   const anchorContentRef = useRef({ x: 0, y: 0 });
+  const pendingFrameRef = useRef<number | null>(null);
+  const pendingRenderRef = useRef<{
+    zoom: number;
+    scrollLeft: number;
+    scrollTop: number;
+  } | null>(null);
   const internalPinchingRef = useRef(false);
   const isPinchingRef = sharedPinchingRef ?? internalPinchingRef;
 
@@ -73,6 +80,25 @@ export function usePinchZoom(
   contentHeightRef.current = contentHeight;
   contentOffsetTopRef.current = contentOffsetTop;
   onPinchEndRef.current = onPinchEnd;
+
+  const applyPendingRender = useCallback(() => {
+    pendingFrameRef.current = null;
+
+    const pendingRender = pendingRenderRef.current;
+    const container = containerRef.current;
+    const scrollBounds = scrollBoundsRef.current;
+    const scaleWrapper = scaleWrapperRef.current;
+    if (!pendingRender || !container || !scrollBounds || !scaleWrapper) return;
+
+    scrollBounds.style.width = `${contentWidthRef.current * pendingRender.zoom}px`;
+    scrollBounds.style.height = `${contentHeightRef.current * pendingRender.zoom}px`;
+    scrollBounds.style.minHeight = "0px";
+    scaleWrapper.style.transform = `scale(${pendingRender.zoom})`;
+    zoomHostRef?.current?.style.setProperty("--tree-zoom", String(pendingRender.zoom));
+
+    container.scrollLeft = pendingRender.scrollLeft;
+    container.scrollTop = pendingRender.scrollTop;
+  }, [containerRef, scaleWrapperRef, scrollBoundsRef, zoomHostRef]);
 
   const handleTouchStart = useCallback((event: TouchEvent) => {
     if (!enabled || event.touches.length !== 2) return;
@@ -96,6 +122,7 @@ export function usePinchZoom(
     const rect = container.getBoundingClientRect();
     const pinchX = initialCenterRef.current.x - rect.left;
     const pinchY = initialCenterRef.current.y - rect.top;
+    initialPinchOffsetRef.current = { x: pinchX, y: pinchY };
     anchorContentRef.current = {
       x: (container.scrollLeft + pinchX) / currentZoomRef.current,
       y:
@@ -117,30 +144,32 @@ export function usePinchZoom(
     const currentDistance = getDistance(event.touches[0], event.touches[1]);
     const scale = currentDistance / initialDistanceRef.current;
     const newZoom = clamp(initialZoomRef.current * scale, minZoom, maxZoom);
-
-    const rect = container.getBoundingClientRect();
-    const pinchX = initialCenterRef.current.x - rect.left;
-    const pinchY = initialCenterRef.current.y - rect.top;
+    const pinchX = initialPinchOffsetRef.current.x;
+    const pinchY = initialPinchOffsetRef.current.y;
 
     currentZoomRef.current = newZoom;
+    pendingRenderRef.current = {
+      zoom: newZoom,
+      scrollLeft: Math.max(0, anchorContentRef.current.x * newZoom - pinchX),
+      scrollTop: Math.max(
+        0,
+        contentOffsetTopRef.current + anchorContentRef.current.y * newZoom - pinchY
+      ),
+    };
 
-    scrollBounds.style.width = `${contentWidthRef.current * newZoom}px`;
-    scrollBounds.style.minHeight = `${contentHeightRef.current * newZoom}px`;
-    scaleWrapper.style.transform = `scale(${newZoom})`;
-    zoomHostRef?.current?.style.setProperty("--tree-zoom", String(newZoom));
-
-    container.scrollLeft = Math.max(
-      0,
-      anchorContentRef.current.x * newZoom - pinchX
-    );
-    container.scrollTop = Math.max(
-      0,
-      contentOffsetTopRef.current + anchorContentRef.current.y * newZoom - pinchY
-    );
-  }, [containerRef, isPinchingRef, maxZoom, minZoom, scaleWrapperRef, scrollBoundsRef, zoomHostRef]);
+    if (pendingFrameRef.current === null) {
+      pendingFrameRef.current = window.requestAnimationFrame(applyPendingRender);
+    }
+  }, [applyPendingRender, containerRef, isPinchingRef, maxZoom, minZoom, scaleWrapperRef, scrollBoundsRef]);
 
   const finishPinch = useCallback(() => {
     if (!isPinchingRef.current) return;
+
+    if (pendingFrameRef.current !== null) {
+      window.cancelAnimationFrame(pendingFrameRef.current);
+      pendingFrameRef.current = null;
+      applyPendingRender();
+    }
 
     isPinchingRef.current = false;
     setIsPinching(false);
@@ -150,7 +179,7 @@ export function usePinchZoom(
     if (container) {
       onPinchEndRef.current?.(container.scrollLeft, container.scrollTop);
     }
-  }, [containerRef, isPinchingRef]);
+  }, [applyPendingRender, containerRef, isPinchingRef]);
 
   const handleTouchEnd = useCallback((event: TouchEvent) => {
     if (event.touches.length < 2) {
@@ -161,6 +190,14 @@ export function usePinchZoom(
   const handleTouchCancel = useCallback(() => {
     finishPinch();
   }, [finishPinch]);
+
+  useEffect(() => {
+    return () => {
+      if (pendingFrameRef.current !== null) {
+        window.cancelAnimationFrame(pendingFrameRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!enabled) return;
