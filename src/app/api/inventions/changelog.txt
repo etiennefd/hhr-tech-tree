@@ -1,11 +1,17 @@
 8 April 2026
 - v1.1: Mobile zoom
+- Added tech: Modern autopen
+- Added tech: Polygraph autopen
+- Added tech: Pantograph
 - Added tech: Clothes iron
 - Added connection: Clothes iron -> Electric flatiron
 - Added connection: Cast iron -> Clothes iron
 - Added connection: Joule heating -> Electric flatiron
 - Added connection: Voltaic pile -> Joule heating
 - Added connection: Galvanometer -> Joule heating
+- Added connection: Pantograph -> Polygraph autopen
+- Added connection: Polygraph autopen -> Modern autopen
+- Added connection: Fountain pen -> Polygraph autopen
 
 6 April 2026
 - Added tech: Wetsuit
