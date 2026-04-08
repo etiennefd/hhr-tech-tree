@@ -65,7 +65,7 @@ const YEAR_MIDDLE_PALEOLITHIC = -100000;
 
 // Define fixed timeline boundaries for early rendering
 const TIMELINE_MIN_YEAR = -3300000;
-const TIMELINE_MAX_YEAR = 2024; // Or adjust to a future year if needed
+const DEFAULT_TIMELINE_MAX_YEAR = 2026;
 
 // Define a screen width threshold for small screens
 const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
@@ -1137,6 +1137,13 @@ export function TechTreeViewer() {
         containerDimensions.width
       ),
     [data.nodes, getXPosition, containerDimensions.width]
+  );
+  const timelineMaxYear = useMemo(
+    () =>
+      data.nodes.length
+        ? Math.max(...data.nodes.map((n) => n.year))
+        : DEFAULT_TIMELINE_MAX_YEAR,
+    [data.nodes]
   );
 
   const { zoomLevel: treeZoomLevel, isPinching, zoomRef } = usePinchZoom(
@@ -3124,7 +3131,7 @@ useEffect(() => {
             }}
           >
             {(() => {
-              const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, TIMELINE_MAX_YEAR);
+              const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, timelineMaxYear);
 
               return (
                 <div className="relative" style={{ width: "100%", height: "100%" }}>
