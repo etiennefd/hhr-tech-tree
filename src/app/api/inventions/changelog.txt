@@ -1,6 +1,9 @@
 8 April 2026
 - v1.1: Mobile zoom
 - Added tech: Modern autopen
+- Added tech: Spray-dried instant coffee
+- Added tech: Instant coffee
+- Added tech: Spray dryer
 - Added tech: Polygraph autopen
 - Added tech: Pantograph
 - Added tech: Clothes iron
@@ -13,6 +16,9 @@
 - Added connection: Polygraph autopen -> Modern autopen
 - Added connection: Fountain pen -> Polygraph autopen
 - Added connection: Pantograph -> Tabulating machine
+- Added connection: Coffee -> Instant coffee
+- Added connection: Spray dryer -> Spray-dried instant coffee
+- Added connection: Instant coffee -> Spray-dried instant coffee
 
 6 April 2026
 - Added tech: Wetsuit
