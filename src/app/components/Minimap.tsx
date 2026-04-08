@@ -90,12 +90,14 @@ const TechTreeMinimap = ({
 
   // Calculate minimap viewport dimensions
   const baseWidth = viewportWidth * scale;
-  const aspectRatio = viewportWidth / viewportHeight;
   const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
 
   const minimapViewport = {
-    width: baseWidth,
-    height: (baseWidth / aspectRatio) / verticalScale,
+    width: Math.min(baseWidth, containerWidth * scale),
+    height: Math.min(
+      viewportHeight * scale * verticalScale,
+      totalHeight * scale * verticalScale
+    ),
     x: scrollLeft * scale,
     y: scrollTop * scale * verticalScale,
   };
