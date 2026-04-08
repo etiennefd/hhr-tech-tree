@@ -41,7 +41,7 @@ export function usePinchZoom(
   containerRef: RefObject<HTMLDivElement | null>,
   {
     enabled,
-    minZoom = 0.1,
+    minZoom = 0.2,
     maxZoom = 1,
     contentWidth,
     contentHeight,
