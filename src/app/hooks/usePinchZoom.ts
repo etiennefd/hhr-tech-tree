@@ -111,6 +111,8 @@ export function usePinchZoom(
       return;
     }
 
+    event.preventDefault();
+
     isPinchingRef.current = true;
     setIsPinching(true);
     initialDistanceRef.current = getDistance(event.touches[0], event.touches[1]);
