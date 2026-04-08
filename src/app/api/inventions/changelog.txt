@@ -12,6 +12,7 @@
 - Added connection: Pantograph -> Polygraph autopen
 - Added connection: Polygraph autopen -> Modern autopen
 - Added connection: Fountain pen -> Polygraph autopen
+- Added connection: Pantograph -> Tabulating machine
 
 6 April 2026
 - Added tech: Wetsuit
