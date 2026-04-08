@@ -1145,6 +1145,24 @@ export function TechTreeViewer() {
         : DEFAULT_TIMELINE_MAX_YEAR,
     [data.nodes]
   );
+  const nodeById = useMemo(
+    () => new Map(data.nodes.map((node) => [node.id, node])),
+    [data.nodes]
+  );
+  const nodeIndexById = useMemo(
+    () => new Map(data.nodes.map((node, index) => [node.id, index])),
+    [data.nodes]
+  );
+  const linkIndexByIdentity = useMemo(
+    () =>
+      new Map(
+        data.links.map((link, index) => [
+          `${link.source}|${link.target}|${link.type}`,
+          index,
+        ])
+      ),
+    [data.links]
+  );
 
   const { zoomLevel: treeZoomLevel, isPinching, zoomRef } = usePinchZoom(
     horizontalScrollContainerRef,
@@ -2182,8 +2200,8 @@ export function TechTreeViewer() {
   const isConnectionInViewport = useCallback(
     (link: TechTreeLink, index: number) => {
       // Get the source and target nodes
-      const sourceNode = data.nodes.find(n => n.id === link.source);
-      const targetNode = data.nodes.find(n => n.id === link.target);
+      const sourceNode = nodeById.get(link.source);
+      const targetNode = nodeById.get(link.target);
       
       // If we can't find either node with valid positions, connection can't be in viewport
       if (!sourceNode?.x || !sourceNode?.y || !targetNode?.x || !targetNode?.y) {
@@ -2257,7 +2275,7 @@ export function TechTreeViewer() {
       
       return isSourceInViewport || isTargetInViewport;
     },
-    [deferredViewportState, data.nodes, treeZoomLevel]
+    [deferredViewportState, nodeById, treeZoomLevel]
   );
 
   // Add debounced viewport update
@@ -2567,7 +2585,7 @@ export function TechTreeViewer() {
       bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
     };
     cachedNodeIds.forEach(nodeId => {
-        const node = data.nodes.find(n => n.id === nodeId);
+        const node = nodeById.get(nodeId);
         if (node && node.x !== undefined && node.y !== undefined &&
             node.x >= extendedNodeViewport.left && node.x <= extendedNodeViewport.right &&
             node.y >= extendedNodeViewport.top && node.y <= extendedNodeViewport.bottom) {
@@ -2582,7 +2600,7 @@ export function TechTreeViewer() {
 
     const currentFrameDrivenConnectionIndices = new Set<number>();
     const previousVisibleConnections = new Set(previousCalculation.current.visibleConnections.map(link => 
-      data.links.findIndex(l => l.source === link.source && l.target === link.target && l.type === link.type)
+      linkIndexByIdentity.get(`${link.source}|${link.target}|${link.type}`) ?? -1
     ).filter(index => index !== -1));
 
     if (connectionMode === 'all') {
@@ -2659,7 +2677,7 @@ export function TechTreeViewer() {
   }, [
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
-    stableHighlightedAncestorsString, stableHighlightedDescendantsString,
+    linkIndexByIdentity, nodeById, stableHighlightedAncestorsString, stableHighlightedDescendantsString,
     stableFilteredNodeIdsString, filters, connectionMode // Add showAllConnections and connectionMode to dependencies
   ]);
 
@@ -3235,12 +3253,8 @@ useEffect(() => {
                   }}
                 >
                   {visibleConnections.map((link, visibleIndex) => {
-                    const sourceNode = data.nodes.find(
-                      (n) => n.id === link.source
-                    );
-                    const targetNode = data.nodes.find(
-                      (n) => n.id === link.target
-                    );
+                    const sourceNode = nodeById.get(link.source);
+                    const targetNode = nodeById.get(link.target);
 
                     if (!sourceNode || !targetNode) return null;
                     
@@ -3257,8 +3271,8 @@ useEffect(() => {
                           x: getXPosition(targetNode.year),
                           y: targetNode.y || 150,
                         }}
-                        sourceIndex={data.nodes.indexOf(sourceNode)}
-                        targetIndex={data.nodes.indexOf(targetNode)}
+                        sourceIndex={nodeIndexById.get(sourceNode.id) ?? -1}
+                        targetIndex={nodeIndexById.get(targetNode.id) ?? -1}
                         connectionType={link.type}
                         isHighlighted={shouldHighlightLink(link, visibleIndex)}
                         opacity={getLinkOpacity(link, visibleIndex)}
