@@ -1,3 +1,12 @@
+8 April 2026
+- v1.1: Mobile zoom
+- Added tech: Clothes iron
+- Added connection: Clothes iron -> Electric flatiron
+- Added connection: Cast iron -> Clothes iron
+- Added connection: Joule heating -> Electric flatiron
+- Added connection: Voltaic pile -> Joule heating
+- Added connection: Galvanometer -> Joule heating
+
 6 April 2026
 - Added tech: Wetsuit
 - Added tech: Self-contained breathing apparatus
