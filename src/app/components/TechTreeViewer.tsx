@@ -89,6 +89,9 @@ const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
 const TIMELINE_HEIGHT = 48;
 export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
+const MAX_NODE_VIEWPORT_BUFFER = 500;
+const MAX_STRICT_VIEWPORT_BUFFER = 40;
+const MAX_CONNECTION_VIEWPORT_BUFFER = 700;
 
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
@@ -352,7 +355,6 @@ export function TechTreeViewer() {
   // Add state for connection visibility mode
   const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
-  const verticalScrollContainerRef = useRef<HTMLDivElement>(null);
   const treeShellRef = useRef<HTMLDivElement>(null);
   const scrollBoundsRef = useRef<HTMLDivElement>(null);
   const scaleWrapperRef = useRef<HTMLDivElement>(null);
@@ -861,6 +863,30 @@ export function TechTreeViewer() {
 
   // Initialize viewport properly on first load and component mount
   useEffect(() => {
+    const { documentElement, body } = document;
+    const previousHtmlOverflow = documentElement.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousHtmlOverscroll = documentElement.style.overscrollBehavior;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+    const previousScrollRestoration = window.history.scrollRestoration;
+
+    documentElement.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    documentElement.style.overscrollBehavior = "none";
+    body.style.overscrollBehavior = "none";
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
+    return () => {
+      documentElement.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      documentElement.style.overscrollBehavior = previousHtmlOverscroll;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
+
+  useEffect(() => {
     if (containerDimensions.width > 0 && containerDimensions.height > 0) {
       // Initialize with proper dimensions
       const initialViewport = {
@@ -874,36 +900,6 @@ export function TechTreeViewer() {
       setDeferredViewport(initialViewport);
     }
   }, [containerDimensions]);
-
-  // Update the scrollPosition state based on onScroll event
-  useEffect(() => {
-    const handleScroll = (e: Event) => {
-      if (isPinchingRef.current) return;
-      const target = e.target as HTMLElement;
-      if (
-        target === horizontalScrollContainerRef.current ||
-        target === document.documentElement
-      ) {
-        const newScrollPosition = {
-          left:
-            horizontalScrollContainerRef.current?.scrollLeft ||
-            window.scrollX ||
-            document.documentElement.scrollLeft ||
-            0,
-          top:
-            horizontalScrollContainerRef.current?.scrollTop ||
-            window.scrollY ||
-            document.documentElement.scrollTop ||
-            0,
-        };
-
-        setScrollPosition(newScrollPosition);
-      }
-    };
-
-    document.addEventListener("scroll", handleScroll, true);
-    return () => document.removeEventListener("scroll", handleScroll, true);
-  }, []);
 
   // Add logging to handleViewportChange (minimap click handler)
   const handleViewportChange = useCallback(
@@ -997,7 +993,7 @@ export function TechTreeViewer() {
         setHighlightedAncestors(new Set());
         setHighlightedDescendants(new Set());
         // Clear URL param on deselect
-        router.replace('/', { scroll: false });
+        clearSelectedNodeUrl();
         performanceMarks.end('nodeClick');
         performanceMarks.log('nodeClick');
         return;
@@ -1040,7 +1036,7 @@ export function TechTreeViewer() {
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
     },
-    [data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
+    [clearSelectedNodeUrl, data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
   );
 
   const handleJumpToNearest = useCallback(() => {
@@ -1147,7 +1143,7 @@ export function TechTreeViewer() {
     horizontalScrollContainerRef,
     {
       enabled: isTouchDevice,
-      minZoom: 0.1,
+      minZoom: 0.2,
       maxZoom: 1,
       contentWidth: containerWidth,
       contentHeight: totalHeight,
@@ -1170,6 +1166,7 @@ export function TechTreeViewer() {
     if (scrollBoundsRef.current) {
       scrollBoundsRef.current.style.width = `${containerWidth * liveZoom}px`;
       scrollBoundsRef.current.style.height = `${totalHeight * liveZoom}px`;
+      scrollBoundsRef.current.style.minHeight = "0px";
     }
     if (scaleWrapperRef.current) {
       scaleWrapperRef.current.style.transform = `scale(${liveZoom})`;
@@ -2062,9 +2059,9 @@ export function TechTreeViewer() {
       setHighlightedAncestors(new Set());
       setHighlightedDescendants(new Set());
       // Clear URL param
-      router.replace('/', { scroll: false });
+      clearSelectedNodeUrl();
     }
-  }, [router]);
+  }, [clearSelectedNodeUrl]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleEscapeKey);
@@ -2098,7 +2095,10 @@ export function TechTreeViewer() {
       }
 
       // Use a reasonable buffer for better user experience
-      const buffer = Math.min(window.innerWidth / 3, 350) / treeZoomLevel;
+      const buffer = Math.min(
+        Math.min(window.innerWidth / 3, 350) / treeZoomLevel,
+        MAX_NODE_VIEWPORT_BUFFER
+      );
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2128,7 +2128,10 @@ export function TechTreeViewer() {
       }
 
       // Use a small buffer for better user experience
-      const buffer = 10 / treeZoomLevel; // Much smaller buffer than the display buffer
+      const buffer = Math.min(
+        10 / treeZoomLevel,
+        MAX_STRICT_VIEWPORT_BUFFER
+      ); // Much smaller buffer than the display buffer
       const strictViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2181,7 +2184,10 @@ export function TechTreeViewer() {
       }
 
       // Use a larger buffer specifically for connections to prevent them from disappearing during scrolling
-      const buffer = Math.min(window.innerWidth / 2, 500) / treeZoomLevel;
+      const buffer = Math.min(
+        Math.min(window.innerWidth / 2, 500) / treeZoomLevel,
+        MAX_CONNECTION_VIEWPORT_BUFFER
+      );
       const bufferedViewport = {
         left: deferredViewportState.left - buffer,
         right: deferredViewportState.right + buffer,
@@ -2286,86 +2292,21 @@ export function TechTreeViewer() {
 
   // Update the scroll handler to find containers at the right time
   useEffect(() => {
-    // Store local references to avoid read-only ref issues
-    let hContainer: HTMLDivElement | null = null;
-    let vContainer: HTMLDivElement | null = null;
-    
-    const findContainers = () => {
-      // First try the refs
-      if (horizontalScrollContainerRef.current) {
-        hContainer = horizontalScrollContainerRef.current;
-      }
-      if (verticalScrollContainerRef.current) {
-        vContainer = verticalScrollContainerRef.current;
-      }
-      
-      // Try to find horizontal container if not found yet
-      if (!hContainer) {
-        const foundH = document.querySelector('.overflow-x-auto') || 
-                       document.querySelector('[ref=horizontalScrollContainerRef]') ||
-                       document.querySelector('div[style*="overflow-x"]');
-        if (foundH) {
-          hContainer = foundH as HTMLDivElement;
-        }
-      }
-      
-      // Try to find vertical container if not found yet
-      if (!vContainer) {
-        const foundV = document.querySelector('.overflow-y-auto') ||
-                       document.querySelector('[ref=verticalScrollContainerRef]') ||
-                       document.querySelector('div[style*="overflow-y"]');
-        if (foundV) {
-          vContainer = foundV as HTMLDivElement;
-        }
-      }
+    const container = horizontalScrollContainerRef.current;
+    if (!container) return;
 
-      return { hContainer, vContainer };
-    };
-    
-    // Create scroll handler with debounced viewport update
     const handleScroll = () => {
       if (isPinchingRef.current) return;
-      const { hContainer, vContainer } = findContainers();
-      if (!hContainer) return;
-      
-      const scrollLeft = hContainer.scrollLeft;
-      const scrollTop = vContainer ? vContainer.scrollTop : window.scrollY;
-      
-      updateViewportState(scrollLeft, scrollTop);
+      updateViewportState(container.scrollLeft, container.scrollTop);
     };
-    
-    // Set up a MutationObserver to watch for container availability
-    const observer = new MutationObserver(() => {
-      const { hContainer, vContainer } = findContainers();
-      if (hContainer && vContainer) {
-        observer.disconnect();
-        
-        // Attach event listeners directly to the containers
-        hContainer.addEventListener('scroll', handleScroll);
-        vContainer.addEventListener('scroll', handleScroll);
-        
-        // Force an update now that we have containers
-        handleScroll();
-      }
-    });
-    
-    // Start observing the document for container creation
-    observer.observe(document.body, { childList: true, subtree: true });
-    
-    // Also watch for resize events
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
-    
+    handleScroll();
+
     return () => {
-      // Clean up event listeners
-      const { hContainer, vContainer } = findContainers();
-      if (hContainer) {
-        hContainer.removeEventListener('scroll', handleScroll);
-      }
-      if (vContainer) {
-        vContainer.removeEventListener('scroll', handleScroll);
-      }
+      container.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
-      observer.disconnect();
     };
   }, [containerDimensions, updateViewportState]);
 
@@ -3137,7 +3078,7 @@ useEffect(() => {
 
       <div
         ref={horizontalScrollContainerRef}
-        className="overflow-x-auto overflow-y-auto h-screen bg-yellow-50"
+        className="overflow-x-auto overflow-y-auto h-[100dvh] bg-yellow-50"
         style={{ 
           overscrollBehavior: "none",
           touchAction: isTouchDevice ? "pan-x pan-y" : "pan-x pan-y pinch-zoom",
@@ -3326,6 +3267,7 @@ useEffect(() => {
                           setSelectedLinkKey(getLinkKey(link));
                           setSelectedLinkIndex(visibleIndex);
                           setSelectedNodeId(null);
+                          clearSelectedNodeUrl();
                         }}
                         onNodeClick={(title) => {
                           handleNodeClick(title);
