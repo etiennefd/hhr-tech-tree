@@ -1,3 +1,10 @@
+9 April 2026
+- Added tech: Videotelephone
+- Added connection: Mechanical television -> Videotelephone
+- Added connection: Telephone -> Videotelephone
+- Added connection: Cathode-ray tube -> Videotelephone
+- Added connection: Nipkow disk -> Videotelephone
+
 8 April 2026
 - v1.1: Mobile zoom
 - Added tech: Modern autopen
@@ -19,6 +26,8 @@
 - Added connection: Coffee -> Instant coffee
 - Added connection: Spray dryer -> Spray-dried instant coffee
 - Added connection: Instant coffee -> Spray-dried instant coffee
+- Added connection: Commercial telegraphy -> Pneumatic tube mail
+- Added connection: Vacuum pump -> Pneumatic tube mail
 
 6 April 2026
 - Added tech: Wetsuit
