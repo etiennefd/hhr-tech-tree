@@ -1,3 +1,8 @@
+10 April 2026
+- Added connection: Videotelephone -> Video compression
+- Added connection: Video compression -> DVD
+- Added connection: Video compression -> Media streaming
+
 9 April 2026
 - Added tech: Video compression
 - Added tech: Videotelephone
