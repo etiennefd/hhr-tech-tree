@@ -1,3 +1,7 @@
+11 April 2026
+- Added connection: Selenium photocell -> Nipkow disk
+- Added connection: Mechanical television -> Electronic television
+
 10 April 2026
 - Added tech: Electronic CCTV and security camera
 - Added tech: Closed-circuit television
