@@ -1,14 +1,14 @@
 10 April 2026
-- Added tech: Electronic CCTV
+- Added tech: Electronic CCTV and security camera
 - Added tech: Closed-circuit television
 - Added connection: Videotelephone -> Video compression
 - Added connection: Video compression -> DVD
 - Added connection: Video compression -> Media streaming
-- Added connection: Closed-circuit television -> Electronic CCTV
+- Added connection: Closed-circuit television -> Electronic CCTV and security camera
 - Added connection: Mechanical television -> Closed-circuit television
-- Added connection: Electronic CCTV -> Ballistic missile
-- Added connection: Electronic television -> Electronic CCTV
-- Added connection: Video camera tube -> Electronic CCTV
+- Added connection: Electronic CCTV and security camera -> Ballistic missile
+- Added connection: Electronic television -> Electronic CCTV and security camera
+- Added connection: Video camera tube -> Electronic CCTV and security camera
 
 9 April 2026
 - Added tech: Video compression
