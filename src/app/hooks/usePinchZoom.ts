@@ -25,6 +25,11 @@ interface UsePinchZoomResult {
   zoomLevel: number;
   isPinching: boolean;
   zoomRef: RefObject<number>;
+  setZoomAtPoint: (
+    nextZoom: number,
+    anchor?: { x: number; y: number },
+    options?: { behavior?: ScrollBehavior }
+  ) => void;
 }
 
 function getDistance(t1: Touch, t2: Touch): number {
@@ -80,6 +85,53 @@ export function usePinchZoom(
   contentHeightRef.current = contentHeight;
   contentOffsetTopRef.current = contentOffsetTop;
   onPinchEndRef.current = onPinchEnd;
+
+  const commitZoom = useCallback(
+    (
+      nextZoom: number,
+      anchor = {
+        x: containerRef.current?.clientWidth ? containerRef.current.clientWidth / 2 : 0,
+        y: containerRef.current?.clientHeight ? containerRef.current.clientHeight / 2 : 0,
+      },
+      options?: { behavior?: ScrollBehavior }
+    ) => {
+      const container = containerRef.current;
+      const scrollBounds = scrollBoundsRef.current;
+      const scaleWrapper = scaleWrapperRef.current;
+      if (!container || !scrollBounds || !scaleWrapper) return;
+
+      const zoom = clamp(nextZoom, minZoom, maxZoom);
+      const anchorX = anchor.x;
+      const anchorY = anchor.y;
+      const previousZoom = currentZoomRef.current || 1;
+      const contentX = (container.scrollLeft + anchorX) / previousZoom;
+      const contentY =
+        (container.scrollTop + anchorY - contentOffsetTopRef.current) / previousZoom;
+
+      currentZoomRef.current = zoom;
+      scrollBounds.style.width = `${contentWidthRef.current * zoom}px`;
+      scrollBounds.style.height = `${contentHeightRef.current * zoom}px`;
+      scrollBounds.style.minHeight = "0px";
+      scaleWrapper.style.transform = `scale(${zoom})`;
+      zoomHostRef?.current?.style.setProperty("--tree-zoom", String(zoom));
+
+      const nextScrollLeft = Math.max(0, contentX * zoom - anchorX);
+      const nextScrollTop = Math.max(
+        0,
+        contentOffsetTopRef.current + contentY * zoom - anchorY
+      );
+
+      container.scrollTo({
+        left: nextScrollLeft,
+        top: nextScrollTop,
+        behavior: options?.behavior ?? "auto",
+      });
+
+      setZoomLevel(zoom);
+      onPinchEndRef.current?.(nextScrollLeft, nextScrollTop);
+    },
+    [containerRef, maxZoom, minZoom, scaleWrapperRef, scrollBoundsRef, zoomHostRef]
+  );
 
   const applyPendingRender = useCallback(() => {
     pendingFrameRef.current = null;
@@ -228,8 +280,9 @@ export function usePinchZoom(
   ]);
 
   return {
-    zoomLevel: enabled ? zoomLevel : 1,
+    zoomLevel,
     isPinching,
     zoomRef: currentZoomRef,
+    setZoomAtPoint: commitZoom,
   };
 }

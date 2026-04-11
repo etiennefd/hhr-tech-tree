@@ -88,6 +88,9 @@ const YEAR_WIDTH = 240;
 const PADDING = 120;
 const INFO_BOX_HEIGHT = 500;
 const TIMELINE_HEIGHT = 48;
+const MIN_TREE_ZOOM = 0.1;
+const MAX_TREE_ZOOM = 1;
+const DESKTOP_ZOOM_STEP = 0.1;
 export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 const MAX_NODE_VIEWPORT_BUFFER = 500;
 const MAX_STRICT_VIEWPORT_BUFFER = 40;
@@ -1164,12 +1167,12 @@ export function TechTreeViewer() {
     [data.links]
   );
 
-  const { zoomLevel: treeZoomLevel, isPinching, zoomRef } = usePinchZoom(
+  const { zoomLevel: treeZoomLevel, isPinching, zoomRef, setZoomAtPoint } = usePinchZoom(
     horizontalScrollContainerRef,
     {
       enabled: isTouchDevice,
-      minZoom: 0.2,
-      maxZoom: 1,
+      minZoom: MIN_TREE_ZOOM,
+      maxZoom: MAX_TREE_ZOOM,
       contentWidth: containerWidth,
       contentHeight: totalHeight,
       contentOffsetTop: TIMELINE_HEIGHT,
@@ -1183,6 +1186,45 @@ export function TechTreeViewer() {
     }
   );
   zoomLevelRef.current = treeZoomLevel;
+
+  const getViewportAnchor = useCallback(() => {
+    const container = horizontalScrollContainerRef.current;
+    if (!container) {
+      return {
+        x: containerDimensions.width / 2,
+        y: containerDimensions.height / 2,
+      };
+    }
+
+    return {
+      x: container.clientWidth / 2,
+      y: container.clientHeight / 2,
+    };
+  }, [containerDimensions.height, containerDimensions.width]);
+
+  const updateZoom = useCallback(
+    (
+      nextZoom: number,
+      anchor = getViewportAnchor(),
+      options?: { behavior?: ScrollBehavior }
+    ) => {
+      setZoomAtPoint(nextZoom, anchor, options);
+    },
+    [getViewportAnchor, setZoomAtPoint]
+  );
+
+  const stepZoom = useCallback(
+    (direction: 1 | -1, anchor?: { x: number; y: number }) => {
+      const targetZoom = Number(
+        Math.min(
+          MAX_TREE_ZOOM,
+          Math.max(MIN_TREE_ZOOM, treeZoomLevel + direction * DESKTOP_ZOOM_STEP)
+        ).toFixed(2)
+      );
+      updateZoom(targetZoom, anchor);
+    },
+    [treeZoomLevel, updateZoom]
+  );
 
   useLayoutEffect(() => {
     if (!isPinchingRef.current) return;
@@ -2204,7 +2246,12 @@ export function TechTreeViewer() {
       const targetNode = nodeById.get(link.target);
       
       // If we can't find either node with valid positions, connection can't be in viewport
-      if (!sourceNode?.x || !sourceNode?.y || !targetNode?.x || !targetNode?.y) {
+      if (
+        sourceNode?.x === undefined ||
+        sourceNode?.y === undefined ||
+        targetNode?.x === undefined ||
+        targetNode?.y === undefined
+      ) {
         return false;
       }
 
@@ -2334,6 +2381,74 @@ export function TechTreeViewer() {
       window.removeEventListener('resize', handleScroll);
     };
   }, [containerDimensions, updateViewportState]);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
+    const container = horizontalScrollContainerRef.current;
+    if (!container) return;
+
+    const handleWheelZoom = (event: WheelEvent) => {
+      if (isPinchingRef.current || !(event.ctrlKey || event.metaKey)) return;
+
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("[data-no-tree-zoom='true']")) return;
+
+      event.preventDefault();
+
+      const rect = container.getBoundingClientRect();
+      const anchor = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      };
+      const nextZoom = Number(
+        Math.min(
+          MAX_TREE_ZOOM,
+          Math.max(MIN_TREE_ZOOM, treeZoomLevel * Math.exp(-event.deltaY * 0.0025))
+        ).toFixed(3)
+      );
+
+      updateZoom(nextZoom, anchor);
+    };
+
+    container.addEventListener("wheel", handleWheelZoom, { passive: false });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheelZoom);
+    };
+  }, [isTouchDevice, treeZoomLevel, updateZoom]);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
+    const handleKeyboardZoom = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        target?.closest("input, textarea, select, [contenteditable='true']")
+      ) {
+        return;
+      }
+
+      if (!(event.ctrlKey || event.metaKey)) return;
+
+      if (event.key === "=" || event.key === "+") {
+        event.preventDefault();
+        stepZoom(1);
+      } else if (event.key === "-") {
+        event.preventDefault();
+        stepZoom(-1);
+      } else if (event.key === "0") {
+        event.preventDefault();
+        updateZoom(1, getViewportAnchor());
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyboardZoom);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyboardZoom);
+    };
+  }, [getViewportAnchor, isTouchDevice, stepZoom, updateZoom]);
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
@@ -3057,6 +3172,9 @@ useEffect(() => {
     return null;
   }
 
+  const zoomPercent = Math.round(treeZoomLevel * 100);
+  const activeTooltipNodeId = selectedNodeId || hoveredNode?.id;
+
   // 5. Defer non-critical UI elements
   return (
     <div className="h-screen bg-yellow-50">
@@ -3306,7 +3424,6 @@ useEffect(() => {
                   {visibleNodes.map((node) => {
                     const details = prefetchedNodeDetails.current.get(node.id);
                     const displayNode = { ...node, ...(details || {}) };
-
                     return (
                       <BrutalistNode
                         key={node.id}
@@ -3342,8 +3459,7 @@ useEffect(() => {
                 {/* Tooltips */}
                 <div className="relative" style={{ zIndex: 100 }}>
                   {visibleNodes.map((baseLoopNode) => {
-                    const targetNodeId = selectedNodeId || hoveredNode?.id;
-                    if (targetNodeId !== baseLoopNode.id) return null;
+                    if (activeTooltipNodeId !== baseLoopNode.id) return null;
 
                     const prefetchedDetails = prefetchedNodeDetails.current.get(baseLoopNode.id);
                     const node = { ...baseLoopNode, ...(prefetchedDetails || {}) };
@@ -3955,6 +4071,37 @@ useEffect(() => {
           Jump to nearest tech
         </button>
       )}
+      {/* Desktop zoom controls */}
+      {!isTouchDevice && !isLoading && (
+        <div className="fixed bottom-32 right-4 z-30 font-mono">
+          <div className="flex items-center overflow-hidden border border-[#91B4C5] bg-white/80 backdrop-blur">
+            <button
+              type="button"
+              className="px-3 py-2 text-sm text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={treeZoomLevel <= MIN_TREE_ZOOM}
+              onClick={() => stepZoom(-1)}
+            >
+              -
+            </button>
+            <button
+              type="button"
+              className="min-w-[4.5rem] border-l border-r border-[#91B4C5] px-3 py-2 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
+              onClick={() => updateZoom(1, getViewportAnchor())}
+              title="Reset zoom"
+            >
+              {zoomPercent}%
+            </button>
+            <button
+              type="button"
+              className="px-3 py-2 text-sm text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={treeZoomLevel >= MAX_TREE_ZOOM}
+              onClick={() => stepZoom(1)}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      )}
       {/* Settings Button and Menu */}
       <div className="fixed bottom-20 right-4 z-30">
         <button
@@ -3984,6 +4131,43 @@ useEffect(() => {
             className="absolute bottom-full right-0 mb-2 bg-white/80 backdrop-blur border border-[#91B4C5] p-4 min-w-[200px] font-mono"
           >
             <div className="space-y-6">
+              {!isTouchDevice && (
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Zoom</div>
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm">Scale</span>
+                    <div className="flex items-center border border-[#91B4C5]">
+                      <button
+                        type="button"
+                        className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                        disabled={treeZoomLevel <= MIN_TREE_ZOOM}
+                        onClick={() => stepZoom(-1)}
+                      >
+                        -
+                      </button>
+                      <button
+                        type="button"
+                        className="border-l border-r border-[#91B4C5] px-3 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
+                        onClick={() => updateZoom(1, getViewportAnchor())}
+                      >
+                        {zoomPercent}%
+                      </button>
+                      <button
+                        type="button"
+                        className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                        disabled={treeZoomLevel >= MAX_TREE_ZOOM}
+                        onClick={() => stepZoom(1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-[10px] uppercase tracking-wide text-[#91B4C5]/80">
+                    Cmd/Ctrl + wheel or +/- to zoom
+                  </div>
+                </div>
+              )}
+
               {/* Connections Mode */}
               <div>
                 <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Display options</div>
