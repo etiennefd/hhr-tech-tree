@@ -1,3 +1,6 @@
+12 April 2026
+- v1.1.1: Desktop zoom
+
 11 April 2026
 - Added connection: Selenium photocell -> Nipkow disk
 - Added connection: Mechanical television -> Electronic television
