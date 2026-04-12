@@ -4073,11 +4073,11 @@ useEffect(() => {
       )}
       {/* Desktop zoom controls */}
       {!isTouchDevice && !isLoading && (
-        <div className="fixed bottom-32 right-4 z-30 font-mono">
+        <div className="fixed bottom-20 right-16 z-30 -translate-y-1 font-mono">
           <div className="flex items-center overflow-hidden border border-[#91B4C5] bg-white/80 backdrop-blur">
             <button
               type="button"
-              className="px-3 py-2 text-sm text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+              className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
               disabled={treeZoomLevel <= MIN_TREE_ZOOM}
               onClick={() => stepZoom(-1)}
             >
@@ -4085,7 +4085,7 @@ useEffect(() => {
             </button>
             <button
               type="button"
-              className="min-w-[4.5rem] border-l border-r border-[#91B4C5] px-3 py-2 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
+              className="min-w-[3.75rem] border-l border-r border-[#91B4C5] px-2 py-1 text-[11px] text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
               onClick={() => updateZoom(1, getViewportAnchor())}
               title="Reset zoom"
             >
@@ -4093,7 +4093,7 @@ useEffect(() => {
             </button>
             <button
               type="button"
-              className="px-3 py-2 text-sm text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+              className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
               disabled={treeZoomLevel >= MAX_TREE_ZOOM}
               onClick={() => stepZoom(1)}
             >
