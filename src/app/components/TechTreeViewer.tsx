@@ -379,6 +379,7 @@ export function TechTreeViewer() {
     }
     return true;
   });
+  const settingsControlsRef = useRef<HTMLDivElement>(null);
   const settingsMenuRef = useRef<HTMLDivElement>(null);
   const clearSelectedNodeUrl = useCallback(() => {
     router.replace('/', { scroll: false });
@@ -394,15 +395,20 @@ export function TechTreeViewer() {
 
   // Add click-outside handler for settings menu
   useEffect(() => {
+    if (!showSettingsMenu) return;
+
     const handleClickOutside = (event: MouseEvent) => {
-      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target as Node)) {
+      if (
+        settingsControlsRef.current &&
+        !settingsControlsRef.current.contains(event.target as Node)
+      ) {
         setShowSettingsMenu(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [showSettingsMenu]);
 
   // Add scroll prevention for settings button
   useEffect(() => {
@@ -4103,10 +4109,11 @@ useEffect(() => {
         </div>
       )}
       {/* Settings Button and Menu */}
-      <div className="fixed bottom-20 right-4 z-30">
+      <div ref={settingsControlsRef} className="fixed bottom-20 right-4 z-30">
         <button
+          type="button"
           className="settings-button p-2 text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
-          onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+          onClick={() => setShowSettingsMenu((prev) => !prev)}
           style={{ overscrollBehavior: 'contain' }}
         >
           <svg 
