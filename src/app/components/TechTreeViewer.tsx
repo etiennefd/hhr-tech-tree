@@ -4131,47 +4131,47 @@ useEffect(() => {
             className="absolute bottom-full right-0 mb-2 bg-white/80 backdrop-blur border border-[#91B4C5] p-4 min-w-[200px] font-mono"
           >
             <div className="space-y-6">
-              {!isTouchDevice && (
-                <div>
-                  <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Zoom</div>
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="text-sm">Scale</span>
-                    <div className="flex items-center border border-[#91B4C5]">
-                      <button
-                        type="button"
-                        className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
-                        disabled={treeZoomLevel <= MIN_TREE_ZOOM}
-                        onClick={() => stepZoom(-1)}
-                      >
-                        -
-                      </button>
-                      <button
-                        type="button"
-                        className="border-l border-r border-[#91B4C5] px-3 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
-                        onClick={() => updateZoom(1, getViewportAnchor())}
-                      >
-                        {zoomPercent}%
-                      </button>
-                      <button
-                        type="button"
-                        className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
-                        disabled={treeZoomLevel >= MAX_TREE_ZOOM}
-                        onClick={() => stepZoom(1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div className="mt-2 text-[10px] uppercase tracking-wide text-[#91B4C5]/80">
-                    Cmd/Ctrl + wheel or +/- to zoom
-                  </div>
-                </div>
-              )}
-
               {/* Connections Mode */}
               <div>
                 <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Display options</div>
-                <div className="flex items-center justify-between">
+                <div className="space-y-4">
+                  {!isTouchDevice && (
+                    <div>
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-sm">Zoom</span>
+                        <div className="flex items-center border border-[#91B4C5]">
+                          <button
+                            type="button"
+                            className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                            disabled={treeZoomLevel <= MIN_TREE_ZOOM}
+                            onClick={() => stepZoom(-1)}
+                          >
+                            -
+                          </button>
+                          <button
+                            type="button"
+                            className="border-l border-r border-[#91B4C5] px-3 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
+                            onClick={() => updateZoom(1, getViewportAnchor())}
+                          >
+                            {zoomPercent}%
+                          </button>
+                          <button
+                            type="button"
+                            className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                            disabled={treeZoomLevel >= MAX_TREE_ZOOM}
+                            onClick={() => stepZoom(1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-[10px] uppercase tracking-wide text-[#91B4C5]/80">
+                        Cmd/Ctrl + wheel or +/- to zoom
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
                   <span className="text-sm">Connections</span>
                   <div className="flex border border-[#91B4C5] ml-4">
                     <button
@@ -4204,6 +4204,7 @@ useEffect(() => {
                     >
                       Minimal
                     </button>
+                  </div>
                   </div>
                 </div>
               </div>
