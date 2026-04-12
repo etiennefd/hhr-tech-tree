@@ -1,5 +1,7 @@
 12 April 2026
 - v1.1.1: Desktop zoom
+- Added tech: Home video security system
+- Added tech: Security alarm
 
 11 April 2026
 - Added connection: Selenium photocell -> Nipkow disk
