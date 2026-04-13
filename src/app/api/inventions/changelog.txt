@@ -1,7 +1,10 @@
 13 April 2026
+- Added tech: Grooved rolling mill
 - Added connection: Polished plate glass -> Aquarium
 - Added connection: Screw-cutting lathe -> Planer
 - Added connection: Lathe -> Screw-cutting lathe
+- Added connection: Puddling -> Grooved rolling mill
+- Added connection: Slitting mill -> Grooved rolling mill
 
 12 April 2026
 - v1.1.1: Desktop zoom
