@@ -9,6 +9,8 @@
 - Added connection: Grooved rolling mill -> I-beam
 - Added connection: Grooved rolling mill -> Corrugated iron
 - Added connection: Blast furnace -> Puddling
+- Added connection: Electronic CCTV and security camera -> Home video security system
+- Added connection: Security alarm -> Home video security system
 
 12 April 2026
 - v1.1.1: Desktop zoom
