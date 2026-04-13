@@ -1,5 +1,7 @@
 13 April 2026
 - Added connection: Polished plate glass -> Aquarium
+- Added connection: Screw-cutting lathe -> Planer
+- Added connection: Lathe -> Screw-cutting lathe
 
 12 April 2026
 - v1.1.1: Desktop zoom
