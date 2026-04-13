@@ -5,6 +5,10 @@
 - Added connection: Lathe -> Screw-cutting lathe
 - Added connection: Puddling -> Grooved rolling mill
 - Added connection: Slitting mill -> Grooved rolling mill
+- Added connection: Iron smelting and wrought iron -> I-beam
+- Added connection: Grooved rolling mill -> I-beam
+- Added connection: Grooved rolling mill -> Corrugated iron
+- Added connection: Blast furnace -> Puddling
 
 12 April 2026
 - v1.1.1: Desktop zoom
