@@ -1,7 +1,9 @@
 14 April 2026
+- Added tech: Numerical control
 - Added tech: Milling machine
 - Added connection: Lathe -> Milling machine
 - Added connection: Flintlock musket -> Milling machine
+- Added connection: Milling machine -> Numerical control
 
 13 April 2026
 - Added tech: Grooved rolling mill
