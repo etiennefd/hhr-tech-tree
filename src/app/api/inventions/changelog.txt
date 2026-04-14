@@ -1,5 +1,11 @@
+14 April 2026
+- Added tech: Milling machine
+- Added connection: Lathe -> Milling machine
+- Added connection: Flintlock musket -> Milling machine
+
 13 April 2026
 - Added tech: Grooved rolling mill
+- Added tech: Reverberatory furnace
 - Added connection: Polished plate glass -> Aquarium
 - Added connection: Screw-cutting lathe -> Planer
 - Added connection: Lathe -> Screw-cutting lathe
@@ -11,6 +17,10 @@
 - Added connection: Blast furnace -> Puddling
 - Added connection: Electronic CCTV and security camera -> Home video security system
 - Added connection: Security alarm -> Home video security system
+- Added connection: Reverberatory furnace -> Puddling
+- Added connection: Reverberatory furnace -> Open hearth furnace
+- Added connection: Tin bronze -> Reverberatory furnace
+- Added connection: Cannon -> Reverberatory furnace
 
 12 April 2026
 - v1.1.1: Desktop zoom
