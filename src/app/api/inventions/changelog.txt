@@ -9,6 +9,8 @@
 - Added connection: Ocean liner -> Servomechanism
 - Added connection: Steam-powered battleship -> Servomechanism
 - Added connection: Servomechanism -> Numerical control
+- Added connection: Punched card -> Numerical control
+- Added connection: Punched card -> Player piano
 
 13 April 2026
 - Added tech: Grooved rolling mill
