@@ -1,5 +1,7 @@
 15 April 2026
+- Added tech: Music box
 - Added connection: Tabulating machine -> Numerical control
+- Added connection: Fire-control system -> Numerical control
 
 14 April 2026
 - Added tech: Numerical control
