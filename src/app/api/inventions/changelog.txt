@@ -12,6 +12,7 @@
 - Added connection: Liquid-propellant rocket -> Electronic analog computer
 - Added connection: Amplifier -> Electronic analog computer
 - Added connection: Ball-and-disk integrator -> Electronic analog computer
+- Added connection: Dumaresq -> Fire-control system
 
 14 April 2026
 - Added tech: Numerical control
