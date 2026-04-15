@@ -5,6 +5,8 @@
 - Added connection: Servomechanism -> Ballistic missile
 - Added connection: Servomechanism -> Automated anti-aircraft fire-control system
 - Added connection: Servomechanism -> Cruise control
+- Added connection: Gyroscope -> Ballistic missile
+- Added connection: Servomechanism -> Flying bomb
 
 14 April 2026
 - Added tech: Numerical control
