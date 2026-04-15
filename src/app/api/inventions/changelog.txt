@@ -1,4 +1,5 @@
 15 April 2026
+- Added tech: Electronic analog computer
 - Added tech: Music box
 - Added connection: Tabulating machine -> Numerical control
 - Added connection: Fire-control system -> Numerical control
@@ -7,6 +8,10 @@
 - Added connection: Servomechanism -> Cruise control
 - Added connection: Gyroscope -> Ballistic missile
 - Added connection: Servomechanism -> Flying bomb
+- Added connection: Electronic analog computer -> Ballistic missile
+- Added connection: Liquid-propellant rocket -> Electronic analog computer
+- Added connection: Amplifier -> Electronic analog computer
+- Added connection: Ball-and-disk integrator -> Electronic analog computer
 
 14 April 2026
 - Added tech: Numerical control
