@@ -1,3 +1,8 @@
+16 April 2026
+- Added tech: Barrel organ
+- Added connection: Barrel organ -> Loom with punched tape
+- Added connection: Pipe organ -> Barrel organ
+
 15 April 2026
 - Added tech: Electronic analog computer
 - Added tech: Music box
