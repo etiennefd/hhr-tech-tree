@@ -13,6 +13,8 @@
 - Added connection: Cam -> Carillon
 - Added connection: Bow drill -> Lathe
 - Added connection: Wheel -> Cam
+- Added connection: Barrel organ -> Player piano
+- Added connection: Pump organ -> Player piano
 
 15 April 2026
 - Added tech: Electronic analog computer
