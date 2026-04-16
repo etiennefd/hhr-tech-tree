@@ -1,6 +1,7 @@
 16 April 2026
 - Added tech: Carillon
 - Added tech: Barrel organ
+- Added tech: Gum arabic
 - Added connection: Barrel organ -> Loom with punched tape
 - Added connection: Pipe organ -> Barrel organ
 - Added connection: Barrel organ -> Music box
@@ -15,6 +16,8 @@
 - Added connection: Wheel -> Cam
 - Added connection: Barrel organ -> Player piano
 - Added connection: Pump organ -> Player piano
+- Added connection: Limestone -> Lithography
+- Added connection: Gum arabic -> Lithography
 
 15 April 2026
 - Added tech: Electronic analog computer
