@@ -1,9 +1,16 @@
 16 April 2026
+- Added tech: Carillon
 - Added tech: Barrel organ
 - Added connection: Barrel organ -> Loom with punched tape
 - Added connection: Pipe organ -> Barrel organ
 - Added connection: Barrel organ -> Music box
 - Added connection: Pocket watch -> Music box
+- Added connection: Fully mechanical clock -> Barrel organ
+- Added connection: Fully mechanical clock -> Balance wheel
+- Added connection: Bronze bell -> Carillon
+- Added connection: Fully mechanical clock -> Carillon
+- Added connection: Cam -> Barrel organ
+- Added connection: Cam -> Carillon
 
 15 April 2026
 - Added tech: Electronic analog computer
