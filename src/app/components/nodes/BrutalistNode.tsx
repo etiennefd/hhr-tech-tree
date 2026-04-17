@@ -79,11 +79,15 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | undefined>(() => showImages ? validateImage(node.image) : undefined);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(() =>
+    showImages ? validateImage(node.localImage || node.image) : undefined
+  );
   const hasLoadedRef = useRef(false);
   const initialLoadRef = useRef(true);
   const retryCountRef = useRef(0);
-  const originalUrlRef = useRef(showImages ? validateImage(node.image) : undefined);
+  const originalUrlRef = useRef(
+    showImages ? validateImage(node.localImage || node.image) : undefined
+  );
 
   // Map for special node titles and their dedicated images
   const specialNodeImages: { [key: string]: string } = {
@@ -228,6 +232,9 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     }
   };
 
+  const imageSizes = `${Math.round(width)}px`;
+  const isLocalImage = imageUrl?.startsWith("/") ?? false;
+
   return (
     <div
       ref={nodeRef}
@@ -280,13 +287,13 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 src={specialImage}
                 alt={node.title}
                 fill
+                sizes={imageSizes}
                 className="object-cover"
                 style={{
                   filter: "grayscale(20%) contrast(110%)",
                   mixBlendMode: "multiply",
                   objectPosition: node.imagePosition || 'center',
                 }}
-                unoptimized={specialImage.startsWith('/')}
               />
             ) : (
               // Original logic for all other nodes
@@ -296,6 +303,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     src={imageUrl}
                     alt={node.title}
                     fill
+                    sizes={imageSizes}
                     className={`object-cover transition-opacity duration-300 ${
                       imageLoaded ? "opacity-100" : "opacity-0"
                     }`}
@@ -306,8 +314,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                       mixBlendMode: "multiply",
                       objectPosition: node.imagePosition || 'center',
                     }}
-                    // Use unoptimized for local images since they're already optimized
-                    unoptimized={imageUrl.startsWith('/')}
+                    unoptimized={!isLocalImage}
                   />
                 )}
                 {/* Show loading state while image is loading */}
@@ -320,8 +327,8 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     src="/placeholder-invention.jpg"
                     alt="Placeholder"
                     fill
+                    sizes={imageSizes}
                     className="object-cover"
-                    unoptimized
                     style={{
                       filter: "grayscale(20%) contrast(110%)",
                       mixBlendMode: "multiply",

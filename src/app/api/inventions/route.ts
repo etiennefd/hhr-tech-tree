@@ -51,6 +51,8 @@ interface TechTreeData {
 }
 
 let loadedData: TechTreeData | null = null;
+const CACHE_CONTROL_HEADER =
+  "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
 
 async function getTechTreeData(): Promise<TechTreeData> {
   if (loadedData && process.env.NODE_ENV === 'production') {
@@ -94,7 +96,11 @@ export async function GET(request: Request) {
     }
 
     const data = await getTechTreeData();
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control": CACHE_CONTROL_HEADER,
+      },
+    });
   } catch (error) {
     console.error("Error in GET /api/inventions:", error);
     return NextResponse.json(

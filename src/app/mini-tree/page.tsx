@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import Image from "next/image";
 import { getFieldColor } from "@/constants/fieldColors";
 
 // Types
@@ -38,6 +39,8 @@ const MiniNode: React.FC<{
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;
   const width = 160;
+  const imageSrc = node.localImage || node.image;
+  const isLocalImage = imageSrc?.startsWith("/") ?? false;
 
   return (
     <div
@@ -58,11 +61,14 @@ const MiniNode: React.FC<{
       >
         {/* Image section */}
         <div className="border-b border-black h-20 relative overflow-hidden bg-gray-100">
-          {(node.localImage || node.image) && (
-            <img
-              src={node.localImage || node.image}
+          {imageSrc && (
+            <Image
+              src={imageSrc}
               alt={node.title}
+              fill
+              sizes={`${width}px`}
               className="w-full h-full object-cover"
+              unoptimized={!isLocalImage}
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
