@@ -4,6 +4,12 @@
 - Added tech: Niello
 - Added connection: Gum arabic -> Ink
 - Added connection: Gum arabic -> Adhesive postage stamp
+- Added connection: Tin bronze -> Niello
+- Added connection: Silver -> Niello
+- Added connection: Sulfur -> Niello
+- Added connection: Copper -> Niello
+- Added connection: Crucible -> Niello
+- Added connection: Niello -> Intaglio printmaking
 
 16 April 2026
 - Added tech: Carillon
