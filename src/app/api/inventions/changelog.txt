@@ -1,6 +1,7 @@
 17 April 2026
 - Added tech: Siderography
 - Added tech: Intaglio printing
+- Added tech: Oil paint
 - Added tech: Niello
 - Added connection: Gum arabic -> Ink
 - Added connection: Gum arabic -> Adhesive postage stamp
@@ -17,6 +18,7 @@
 - Added connection: Siderography -> Adhesive postage stamp
 - Added connection: Paper money -> Siderography
 - Added connection: Crucible steel -> Siderography
+- Added connection: Domestication of flax -> Oil paint
 
 16 April 2026
 - Added tech: Carillon
