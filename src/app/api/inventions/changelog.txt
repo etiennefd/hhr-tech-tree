@@ -1,6 +1,6 @@
 17 April 2026
 - Added tech: Siderography
-- Added tech: Intaglio printmaking
+- Added tech: Intaglio printing
 - Added tech: Niello
 - Added connection: Gum arabic -> Ink
 - Added connection: Gum arabic -> Adhesive postage stamp
@@ -9,7 +9,13 @@
 - Added connection: Sulfur -> Niello
 - Added connection: Copper -> Niello
 - Added connection: Crucible -> Niello
-- Added connection: Niello -> Intaglio printmaking
+- Added connection: Niello -> Intaglio printing
+- Added connection: Copper -> Intaglio printing
+- Added connection: Papermaking -> Intaglio printing
+- Added connection: Woodblock printing -> Intaglio printing
+- Added connection: Intaglio printing -> Siderography
+- Added connection: Siderography -> Adhesive postage stamp
+- Added connection: Paper money -> Siderography
 
 16 April 2026
 - Added tech: Carillon
