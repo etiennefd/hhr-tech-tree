@@ -1,3 +1,7 @@
+17 April 2026
+- Added connection: Gum arabic -> Ink
+- Added connection: Gum arabic -> Adhesive postage stamp
+
 16 April 2026
 - Added tech: Carillon
 - Added tech: Barrel organ
