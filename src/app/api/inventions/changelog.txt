@@ -16,6 +16,7 @@
 - Added connection: Intaglio printing -> Siderography
 - Added connection: Siderography -> Adhesive postage stamp
 - Added connection: Paper money -> Siderography
+- Added connection: Crucible steel -> Siderography
 
 16 April 2026
 - Added tech: Carillon
