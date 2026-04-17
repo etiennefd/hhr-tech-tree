@@ -1,4 +1,7 @@
 17 April 2026
+- Added tech: Siderography
+- Added tech: Intaglio printmaking
+- Added tech: Niello
 - Added connection: Gum arabic -> Ink
 - Added connection: Gum arabic -> Adhesive postage stamp
 
