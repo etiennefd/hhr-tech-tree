@@ -1,5 +1,6 @@
 18 April 2026
 - Added tech: Paint tube
+- Added tech: Cathodic protection
 - Added tech: Hot-dip zinc coating
 - Added tech: Tinplate
 - Added connection: Zinc smelting -> Hot-dip zinc coating
@@ -13,6 +14,9 @@
 - Added connection: Tinplate -> Hot-dip zinc coating
 - Added connection: Ammonium chloride -> Hot-dip galvanization
 - Added connection: Sulfuric acid -> Hot-dip galvanization
+- Added connection: Cathodic protection -> Hot-dip galvanization
+- Added connection: Hot-dip zinc coating -> Hot-dip galvanization
+- Added connection: Voltaic pile -> Cathodic protection
 
 17 April 2026
 - Added tech: Siderography
