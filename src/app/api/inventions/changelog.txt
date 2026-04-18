@@ -1,3 +1,8 @@
+18 April 2026
+- Added tech: Paint tube
+- Added connection: Opium poppy cultivation -> Oil paint
+- Added connection: Oil paint -> Paint tube
+
 17 April 2026
 - Added tech: Siderography
 - Added tech: Intaglio printing
