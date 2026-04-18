@@ -23,6 +23,9 @@
 - Added connection: Copper smelting -> Copper sheathed ship
 - Added connection: Iron smelting and wrought iron -> Cathodic protection
 - Added connection: Zinc smelting -> Cathodic protection
+- Added connection: Electrostatic generator -> Galvanism
+- Added connection: Leyden jar -> Galvanism
+- Added connection: Kite experiment -> Galvanism
 
 17 April 2026
 - Added tech: Siderography
