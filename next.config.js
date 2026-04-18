@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Serve images directly instead of routing them through Vercel's optimizer.
+    // This avoids optimized image request quotas for our mostly static catalog.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

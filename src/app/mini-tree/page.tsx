@@ -68,7 +68,7 @@ const MiniNode: React.FC<{
               fill
               sizes={`${width}px`}
               className="w-full h-full object-cover"
-              unoptimized={!isLocalImage}
+              unoptimized={isLocalImage}
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
