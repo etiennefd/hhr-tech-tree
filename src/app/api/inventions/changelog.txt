@@ -1,7 +1,12 @@
 18 April 2026
 - Added tech: Paint tube
+- Added tech: Tinplate
 - Added connection: Opium poppy cultivation -> Oil paint
 - Added connection: Oil paint -> Paint tube
+- Added connection: Tin extraction -> Tinplate
+- Added connection: Iron smelting and wrought iron -> Tinplate
+- Added connection: Tinplate -> Tin can
+- Added connection: Tinplate -> Paint tube
 
 17 April 2026
 - Added tech: Siderography
