@@ -1,6 +1,7 @@
 18 April 2026
 - Added tech: Paint tube
 - Added tech: Cathodic protection
+- Added tech: Copper sheathed ship
 - Added tech: Hot-dip zinc coating
 - Added tech: Tinplate
 - Added connection: Zinc smelting -> Hot-dip zinc coating
@@ -17,6 +18,11 @@
 - Added connection: Cathodic protection -> Hot-dip galvanization
 - Added connection: Hot-dip zinc coating -> Hot-dip galvanization
 - Added connection: Voltaic pile -> Cathodic protection
+- Added connection: Copper sheathed ship -> Cathodic protection
+- Added connection: Frigate -> Copper sheathed ship
+- Added connection: Copper smelting -> Copper sheathed ship
+- Added connection: Iron smelting and wrought iron -> Cathodic protection
+- Added connection: Zinc smelting -> Cathodic protection
 
 17 April 2026
 - Added tech: Siderography
