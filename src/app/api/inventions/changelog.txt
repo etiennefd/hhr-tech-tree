@@ -1,3 +1,14 @@
+19 April 2026
+- Added connection: Numerical control -> Computer-aided design
+- Added connection: Computer-aided design -> Stereolithography
+- Added connection: Numerical control -> Stereolithography
+- Added connection: Stereolithography -> Selective laser sintering
+- Added connection: Selective laser sintering -> Selective laser melting
+- Added connection: Laser -> Stereolithography
+- Added connection: Numerical control -> Selective laser sintering
+- Added connection: Stereolithography -> Fused filament fabrication
+- Added connection: Numerical control -> Fused filament fabrication
+
 18 April 2026
 - Added tech: Paint tube
 - Added tech: Cathodic protection
