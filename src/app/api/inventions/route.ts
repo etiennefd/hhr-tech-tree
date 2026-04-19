@@ -52,7 +52,9 @@ interface TechTreeData {
 
 let loadedData: TechTreeData | null = null;
 const CACHE_CONTROL_HEADER =
-  "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
+  process.env.NODE_ENV === "production"
+    ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800"
+    : "no-store";
 
 async function getTechTreeData(): Promise<TechTreeData> {
   if (loadedData && process.env.NODE_ENV === 'production') {
