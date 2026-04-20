@@ -1,3 +1,8 @@
+20 April 2026
+- Added tech: Industrial robot
+- Added connection: Drum memory -> Industrial robot
+- Added connection: Servomechanism -> Industrial robot
+
 19 April 2026
 - Added connection: Numerical control -> Computer-aided design
 - Added connection: Computer-aided design -> Stereolithography
