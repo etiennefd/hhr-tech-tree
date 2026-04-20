@@ -1,5 +1,6 @@
 20 April 2026
 - Added tech: Industrial robot
+- Added tech: Hydraulic cylinder
 - Added connection: Drum memory -> Industrial robot
 - Added connection: Servomechanism -> Industrial robot
 
