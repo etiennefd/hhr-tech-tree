@@ -1,3 +1,11 @@
+21 April 2026
+- Added connection: Hydraulic cylinder -> Hydraulic excavator
+- Added connection: Hydraulic cylinder -> Hydraulic accumulator
+- Added connection: Hydraulic press -> Hydraulic cylinder
+- Added connection: Hydraulic cylinder -> Industrial robot
+- Added connection: Hydraulic cylinder -> Injection molding
+- Added connection: Hydraulic cylinder -> Bulldozer
+
 20 April 2026
 - Added tech: Industrial robot
 - Added tech: Hydraulic cylinder
