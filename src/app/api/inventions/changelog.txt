@@ -1,4 +1,5 @@
 21 April 2026
+- Added tech: Rose madder
 - Added connection: Hydraulic cylinder -> Hydraulic excavator
 - Added connection: Hydraulic cylinder -> Hydraulic accumulator
 - Added connection: Hydraulic press -> Hydraulic cylinder
