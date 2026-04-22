@@ -1,3 +1,6 @@
+22 April 2026
+- Added connection: Control of fire -> Cave painting
+
 21 April 2026
 - Added tech: Robotic surgery
 - Added tech: Rose madder
