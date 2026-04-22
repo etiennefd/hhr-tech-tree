@@ -1,8 +1,15 @@
 22 April 2026
+- Added tech: Fresco
+- Added tech: Tempera
 - Added tech: Paint
 - Added connection: Pigments -> Paint
 - Added connection: Paint -> Cave painting
 - Added connection: Control of fire -> Paint
+- Added connection: Paint -> Oil paint
+- Added connection: Paint -> Tempera
+- Added connection: Lime mortar and plaster -> Fresco
+- Added connection: Paint -> Fresco
+- Added connection: Domestication of chickens -> Tempera
 
 21 April 2026
 - Added tech: Robotic surgery
@@ -1138,7 +1145,7 @@
 - Added tech: Hectograph
 - Added tech: Hydrogen peroxide
 - Added tech: Cobalt blue
-- Added tech: Lime mortar
+- Added tech: Lime mortar and plaster
 - Added tech: Lime
 - Added connection: Coal tar -> Aniline
 - Added connection: Aniline -> Spirit duplicator
@@ -1147,9 +1154,9 @@
 - Added connection: Cobalt -> Cobalt blue
 - Added connection: Blue and white pottery -> Cobalt blue
 - Added connection: Kelvin scale and absolute zero -> International system of units
-- Added connection: Lime -> Lime mortar
+- Added connection: Lime -> Lime mortar and plaster
 - Added connection: Lime -> Synthetic ultramarine
-- Added connection: Construction mortar -> Lime mortar
+- Added connection: Construction mortar -> Lime mortar and plaster
 - Added connection: Concrete -> Waterproof concrete
 
 18 August 2025
