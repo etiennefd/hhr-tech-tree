@@ -1,5 +1,8 @@
 22 April 2026
-- Added connection: Control of fire -> Cave painting
+- Added tech: Paint
+- Added connection: Pigments -> Paint
+- Added connection: Paint -> Cave painting
+- Added connection: Control of fire -> Paint
 
 21 April 2026
 - Added tech: Robotic surgery
