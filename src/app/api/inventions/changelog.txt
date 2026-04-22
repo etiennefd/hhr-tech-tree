@@ -1,4 +1,5 @@
 22 April 2026
+- Added tech: Encaustic painting
 - Added tech: Fresco
 - Added tech: Tempera
 - Added tech: Paint
@@ -10,6 +11,8 @@
 - Added connection: Lime mortar and plaster -> Fresco
 - Added connection: Paint -> Fresco
 - Added connection: Domestication of chickens -> Tempera
+- Added connection: Domestication of bees -> Encaustic painting
+- Added connection: Paint -> Encaustic painting
 
 21 April 2026
 - Added tech: Robotic surgery
