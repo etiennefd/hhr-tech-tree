@@ -1,3 +1,11 @@
+23 April 2026
+- Added tech: Watercolor paint cake
+- Added connection: Domestication of bees -> Watercolor paint cake
+- Added connection: Gum arabic -> Watercolor paint cake
+- Added connection: Ink -> Watercolor paint cake
+- Added connection: Paint -> Watercolor paint cake
+- Added connection: Papermaking -> Watercolor paint cake
+
 22 April 2026
 - Added tech: Encaustic painting
 - Added tech: Fresco
