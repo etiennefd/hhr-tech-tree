@@ -1,5 +1,6 @@
 23 April 2026
 - Added tech: Watercolor paint cake
+- Added tech: Gypsum plaster
 - Added connection: Domestication of bees -> Watercolor paint cake
 - Added connection: Gum arabic -> Watercolor paint cake
 - Added connection: Ink -> Watercolor paint cake
@@ -8,6 +9,9 @@
 - Added connection: Numerical control -> Laser cutting
 - Added connection: Acrylic glass -> Acrylic paint
 - Added connection: Oil paint -> Acrylic paint
+- Added connection: Polyethylene -> Acrylic glass
+- Added connection: Control of fire -> Gypsum plaster
+- Added connection: Gypsum plaster -> Tempera
 
 22 April 2026
 - Added tech: Encaustic painting
