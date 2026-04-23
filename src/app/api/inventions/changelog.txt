@@ -6,6 +6,8 @@
 - Added connection: Paint -> Watercolor paint cake
 - Added connection: Papermaking -> Watercolor paint cake
 - Added connection: Numerical control -> Laser cutting
+- Added connection: Acrylic glass -> Acrylic paint
+- Added connection: Oil paint -> Acrylic paint
 
 22 April 2026
 - Added tech: Encaustic painting
