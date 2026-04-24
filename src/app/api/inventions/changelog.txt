@@ -1,3 +1,6 @@
+24 April 2026
+- Added connection: Tricycle and quadricycle -> Electric car
+
 23 April 2026
 - Added tech: Watercolor paint cake
 - Added tech: Gypsum plaster
