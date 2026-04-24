@@ -1,7 +1,10 @@
 24 April 2026
 - Added tech: Iron gall ink
+- Added tech: Vitriol
 - Added connection: Tricycle and quadricycle -> Electric car
 - Added connection: Ink -> Iron gall ink
+- Added connection: Vitriol -> Iron gall ink
+- Added connection: Vitriol -> Sulfuric acid
 
 23 April 2026
 - Added tech: Watercolor paint cake
