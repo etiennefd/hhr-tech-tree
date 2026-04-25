@@ -1,3 +1,10 @@
+25 April 2026
+- Added tech: Printing ink
+- Added connection: Ink -> Printing ink
+- Added connection: Oil paint -> Printing ink
+- Added connection: Printing ink -> Printing press
+- Added connection: Printing ink -> Lithography
+
 24 April 2026
 - Added tech: Iron gall ink
 - Added tech: Vitriol
