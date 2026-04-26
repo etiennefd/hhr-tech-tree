@@ -1,5 +1,8 @@
 26 April 2026
+- Added tech: Etching
 - Added connection: Ink -> Woodblock printing
+- Added connection: Engraving -> Etching
+- Added connection: Full plate armour -> Etching
 
 25 April 2026
 - Added tech: Printing ink
