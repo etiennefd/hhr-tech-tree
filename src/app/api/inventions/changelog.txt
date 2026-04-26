@@ -1,3 +1,6 @@
+26 April 2026
+- Added connection: Ink -> Woodblock printing
+
 25 April 2026
 - Added tech: Printing ink
 - Added connection: Ink -> Printing ink
