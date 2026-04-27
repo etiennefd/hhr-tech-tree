@@ -1,5 +1,6 @@
 27 April 2026
 - Added connection: Etching -> Siderography and steel engraving
+- Added connection: Difference engine -> Analytical engine
 
 26 April 2026
 - Added tech: Etching
