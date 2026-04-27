@@ -1,3 +1,6 @@
+27 April 2026
+- Added connection: Etching -> Siderography and steel engraving
+
 26 April 2026
 - Added tech: Etching
 - Added connection: Ink -> Woodblock printing
@@ -107,7 +110,7 @@
 - Added connection: Kite experiment -> Galvanism
 
 17 April 2026
-- Added tech: Siderography
+- Added tech: Siderography and steel engraving
 - Added tech: Engraving
 - Added tech: Oil paint
 - Added tech: Niello
@@ -122,10 +125,10 @@
 - Added connection: Copper -> Engraving
 - Added connection: Papermaking -> Engraving
 - Added connection: Woodblock printing -> Engraving
-- Added connection: Engraving -> Siderography
-- Added connection: Siderography -> Adhesive postage stamp
-- Added connection: Paper money -> Siderography
-- Added connection: Crucible steel -> Siderography
+- Added connection: Engraving -> Siderography and steel engraving
+- Added connection: Siderography and steel engraving -> Adhesive postage stamp
+- Added connection: Paper money -> Siderography and steel engraving
+- Added connection: Crucible steel -> Siderography and steel engraving
 - Added connection: Domestication of flax -> Oil paint
 
 16 April 2026
