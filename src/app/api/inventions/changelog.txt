@@ -1,5 +1,7 @@
 28 April 2026
 - Added tech: Mezzotint
+- Added connection: Nitric acid -> Etching
+- Added connection: Copper -> Etching
 
 27 April 2026
 - Added connection: Etching -> Siderography and steel engraving
