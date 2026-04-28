@@ -3,6 +3,9 @@
 - Added tech: Mezzotint
 - Added connection: Nitric acid -> Etching
 - Added connection: Copper -> Etching
+- Added connection: Etching -> Aquatint
+- Added connection: Mezzotint -> Aquatint
+- Added connection: Engraving -> Mezzotint
 
 27 April 2026
 - Added connection: Etching -> Siderography and steel engraving
