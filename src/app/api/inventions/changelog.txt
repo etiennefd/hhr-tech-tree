@@ -1,3 +1,6 @@
+28 April 2026
+- Added tech: Mezzotint
+
 27 April 2026
 - Added connection: Etching -> Siderography and steel engraving
 - Added connection: Difference engine -> Analytical engine
