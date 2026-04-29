@@ -2,9 +2,12 @@
 - Added tech: Waterproof disposable diaper
 - Added tech: Halftone
 - Added tech: Chalumeau
+- Added tech: Recorder
 - Added connection: Nylon -> Waterproof disposable diaper
 - Added connection: Chalumeau -> Clarinet
 - Added connection: Collodion wet-plate photography -> Halftone
+- Added connection: Flute -> Recorder
+- Added connection: Flute -> Chalumeau
 
 28 April 2026
 - Added tech: Aquatint
