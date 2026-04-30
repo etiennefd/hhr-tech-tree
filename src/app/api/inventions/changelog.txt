@@ -6,6 +6,8 @@
 - Added connection: Etching -> Photoengraving
 - Added connection: Photoengraving -> Halftone
 - Added connection: Aquatint -> Halftone
+- Added connection: Dispersive prism and color spectrum -> Color theory
+- Added connection: Color theory -> RYB color printing
 
 29 April 2026
 - Added tech: Waterproof disposable diaper
