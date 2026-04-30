@@ -1,5 +1,8 @@
 30 April 2026
 - Added tech: RYB color printing
+- Added connection: Engraving -> Photoengraving
+- Added connection: Etching -> Photoengraving
+- Added connection: Photoengraving -> Halftone
 
 29 April 2026
 - Added tech: Waterproof disposable diaper
