@@ -1,13 +1,15 @@
 30 April 2026
-- Added tech: RYB color printing
+- Added tech: Red-yellow-blue color printing
 - Added tech: Color theory
-- Added connection: Mezzotint -> RYB color printing
+- Added connection: Mezzotint -> Red-yellow-blue color printing
 - Added connection: Engraving -> Photoengraving
 - Added connection: Etching -> Photoengraving
 - Added connection: Photoengraving -> Halftone
 - Added connection: Aquatint -> Halftone
 - Added connection: Dispersive prism and color spectrum -> Color theory
-- Added connection: Color theory -> RYB color printing
+- Added connection: Color theory -> Red-yellow-blue color printing
+- Added connection: Cochineal dye -> Red-yellow-blue color printing
+- Added connection: Prussian blue -> Red-yellow-blue color printing
 
 29 April 2026
 - Added tech: Waterproof disposable diaper
