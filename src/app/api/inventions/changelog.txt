@@ -1,5 +1,6 @@
 30 April 2026
 - Added tech: RYB color printing
+- Added tech: Color theory
 - Added connection: Mezzotint -> RYB color printing
 - Added connection: Engraving -> Photoengraving
 - Added connection: Etching -> Photoengraving
