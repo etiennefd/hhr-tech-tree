@@ -1,3 +1,13 @@
+1 May 2026
+- Added tech: Subtractive color photography
+- Added connection: Color theory -> Color photography
+- Added connection: Color photography -> Subtractive color photography
+- Added connection: Red-yellow-blue color printing -> Subtractive color photography
+- Added connection: Color photography -> Color motion picture film
+- Added connection: Subtractive color photography -> Autochrome
+- Added connection: Subtractive color photography -> Three-strip color film
+- Added connection: Subtractive color photography -> Subtractive color film
+
 30 April 2026
 - Added tech: Red-yellow-blue color printing
 - Added tech: Color theory
