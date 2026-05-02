@@ -87,6 +87,9 @@ const IntroBox = memo(() => {
         >
           Join Discord
         </a>
+        <Link href="/changelog" style={linkStyle}>
+          Changelog
+        </Link>
       </div>
     </div>
   );
