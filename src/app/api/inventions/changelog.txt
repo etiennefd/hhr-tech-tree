@@ -1,3 +1,8 @@
+2 May 2026
+- Added tech: Chromolithography
+- Added connection: Lithography -> Chromolithography
+- Added connection: Red-yellow-blue color printing -> Chromolithography
+
 1 May 2026
 - Added tech: Subtractive color photography
 - Added connection: Color theory -> Color photography
