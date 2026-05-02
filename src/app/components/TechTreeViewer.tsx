@@ -693,7 +693,10 @@ export function TechTreeViewer() {
         behavior: 'smooth'
       });
     }
-  }, []);
+    if (searchParams.get('node') || searchParams.get('initialNodeId')) {
+      router.replace('/', { scroll: false });
+    }
+  }, [searchParams, router]);
 
   // EFFECTS
 
