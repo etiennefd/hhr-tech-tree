@@ -1,3 +1,12 @@
+3 May 2026
+- Added tech: Chemical vapor deposition
+- Added connection: Carbon fibers -> Chemical vapor deposition
+- Added connection: Chemical vapor deposition -> Plasma-enhanced chemical vapor deposition
+- Added connection: Chemical vapor deposition -> Metalorganic vapour-phase epitaxy
+- Added connection: Chemical vapor deposition -> Atomic layer deposition
+- Added connection: Light bulb -> Chemical vapor deposition
+- Added connection: Vacuum pump -> Chemical vapor deposition
+
 2 May 2026
 - Added tech: Chromolithography
 - Added connection: Lithography -> Chromolithography
