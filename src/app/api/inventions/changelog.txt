@@ -10,6 +10,9 @@
 - Added connection: Radium -> Spinthariscope
 - Added connection: Zinc sulfide phosphor -> Spinthariscope
 - Added connection: Compound microscope -> Spinthariscope
+- Added connection: Zinc sulfide phosphor -> Television set
+- Added connection: Zinc sulfide phosphor -> Color television
+- Added connection: Spinthariscope -> Scintillation counter
 
 3 May 2026
 - Added tech: Chemical vapor deposition
