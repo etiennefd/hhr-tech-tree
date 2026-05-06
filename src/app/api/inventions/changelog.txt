@@ -14,6 +14,7 @@
 - Added connection: Bow and bowed instruments -> Byzantine lyra
 - Added connection: Lute -> Byzantine lyra
 - Added connection: Bow and bowed instruments -> Bowed rebab
+- Added connection: Bow and bowed instruments -> Vielle
 
 5 May 2026
 - Added tech: Turpentine
