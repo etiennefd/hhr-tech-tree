@@ -1,9 +1,13 @@
 6 May 2026
 - Added tech: Protactinium
+- Added tech: Bow and bowed instruments
 - Added connection: Alembic -> Turpentine
+- Added connection: Domestication of the horse -> Bow and bowed instruments
+- Added connection: Bow and arrow -> Bow and bowed instruments
 - Added connection: Lute -> Rebab
 - Added connection: Sodium hydroxide -> Uranium
 - Added connection: Nitric acid -> Uranium
+- Added connection: Bow and bowed instruments -> Byzantine lyra
 
 5 May 2026
 - Added tech: Turpentine
