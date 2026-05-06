@@ -8,10 +8,12 @@
 - Added connection: Rosin -> Aquatint
 - Added connection: Domestication of the horse -> Bow and bowed instruments
 - Added connection: Bow and arrow -> Bow and bowed instruments
-- Added connection: Lute -> Rebab
+- Added connection: Lute -> Bowed rebab
 - Added connection: Sodium hydroxide -> Uranium
 - Added connection: Nitric acid -> Uranium
 - Added connection: Bow and bowed instruments -> Byzantine lyra
+- Added connection: Lute -> Byzantine lyra
+- Added connection: Bow and bowed instruments -> Bowed rebab
 
 5 May 2026
 - Added tech: Turpentine
