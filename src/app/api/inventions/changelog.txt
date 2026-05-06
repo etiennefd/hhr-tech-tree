@@ -2,6 +2,8 @@
 - Added tech: Protactinium
 - Added connection: Alembic -> Turpentine
 - Added connection: Lute -> Rebab
+- Added connection: Sodium hydroxide -> Uranium
+- Added connection: Nitric acid -> Uranium
 
 5 May 2026
 - Added tech: Turpentine
