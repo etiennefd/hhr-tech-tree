@@ -1,7 +1,11 @@
 6 May 2026
 - Added tech: Protactinium
 - Added tech: Bow and bowed instruments
+- Added tech: Rosin
+- Added connection: Tree resin -> Rosin
 - Added connection: Alembic -> Turpentine
+- Added connection: Rosin -> Bow and bowed instruments
+- Added connection: Rosin -> Aquatint
 - Added connection: Domestication of the horse -> Bow and bowed instruments
 - Added connection: Bow and arrow -> Bow and bowed instruments
 - Added connection: Lute -> Rebab
