@@ -1,3 +1,8 @@
+6 May 2026
+- Added tech: Protactinium
+- Added connection: Alembic -> Turpentine
+- Added connection: Lute -> Rebab
+
 5 May 2026
 - Added tech: Turpentine
 - Added tech: Tree resin
