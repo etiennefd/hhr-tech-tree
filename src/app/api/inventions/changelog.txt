@@ -1,5 +1,9 @@
-6 May 2026
+7 May 2026
 - Added tech: Protactinium
+- Added connection: Uranium -> Protactinium
+- Added connection: Periodic table -> Protactinium
+
+6 May 2026
 - Added tech: Bow and bowed instruments
 - Added tech: Rosin
 - Added connection: Tree resin -> Rosin
