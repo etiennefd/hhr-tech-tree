@@ -1,8 +1,8 @@
 8 May 2026
-- Added connection: Dome -> Pendentive dome
-- Added connection: Roman concrete -> Dome
-- Added connection: True arch -> Dome
-- Added connection: Public bath -> Dome
+- Added connection: True dome -> Pendentive dome
+- Added connection: Roman concrete -> True dome
+- Added connection: True arch -> True dome
+- Added connection: Public bath -> True dome
 
 7 May 2026
 - Added tech: Protactinium
