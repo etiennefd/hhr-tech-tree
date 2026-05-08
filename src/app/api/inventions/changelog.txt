@@ -2,6 +2,7 @@
 - Added tech: Protactinium
 - Added connection: Uranium -> Protactinium
 - Added connection: Periodic table -> Protactinium
+- Added connection: Periodic table -> Technetium
 
 6 May 2026
 - Added tech: Bow and bowed instruments
