@@ -1,3 +1,6 @@
+9 May 2026
+- Added tech: Flying buttress
+
 8 May 2026
 - Added connection: True dome -> Pendentive dome
 - Added connection: Roman concrete -> True dome
