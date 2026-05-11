@@ -1,3 +1,9 @@
+10 May 2026
+- Added tech: Geodesic dome
+- Added tech: Planetarium projector
+- Added connection: Planetarium projector -> Geodesic dome
+- Added connection: True dome -> Geodesic dome
+
 9 May 2026
 - Added tech: Flying buttress
 
