@@ -1,12 +1,17 @@
 11 May 2026
 - Added tech: Fully mechanical astronomical clock
 - Added connection: Astrolabe -> Fully mechanical astronomical clock
+- Added connection: Magic lantern -> Autochrome
 - Added connection: Armillary sphere (Greece) -> Celestial globe
 - Added connection: Fully mechanical clock -> Fully mechanical astronomical clock
 - Added connection: Fully mechanical astronomical clock -> Planetarium projector
 - Added connection: Celestial globe -> Planetarium projector
 - Added connection: Light bulb -> Planetarium projector
 - Added connection: Fully mechanical astronomical clock -> Balance wheel
+- Added connection: Subtractive color film -> Slide projector
+- Added connection: Magic lantern -> Planetarium projector
+- Added connection: Light bulb -> Slide projector
+- Added connection: Bakelite -> Slide projector
 
 10 May 2026
 - Added tech: Geodesic dome
