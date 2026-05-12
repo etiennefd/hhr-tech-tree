@@ -1,3 +1,8 @@
+12 May 2026
+- Added connection: Sprengel pump -> Argon
+- Added connection: Mercury -> Sprengel pump
+- Added connection: Telescope -> Magic lantern
+
 11 May 2026
 - Added tech: Fully mechanical astronomical clock
 - Added connection: Astrolabe -> Fully mechanical astronomical clock
