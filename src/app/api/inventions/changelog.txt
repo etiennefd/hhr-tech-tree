@@ -1,7 +1,12 @@
 12 May 2026
+- Added tech: Shadow-mask color TV set
+- Added connection: Zinc sulfide phosphor -> Shadow-mask color TV set
 - Added connection: Sprengel pump -> Argon
 - Added connection: Mercury -> Sprengel pump
 - Added connection: Telescope -> Magic lantern
+- Added connection: Color television -> Shadow-mask color TV set
+- Added connection: Television set -> Shadow-mask color TV set
+- Added connection: Terrestrial television -> Shadow-mask color TV set
 
 11 May 2026
 - Added tech: Fully mechanical astronomical clock
@@ -78,7 +83,6 @@
 - Added connection: Zinc sulfide phosphor -> Spinthariscope
 - Added connection: Compound microscope -> Spinthariscope
 - Added connection: Zinc sulfide phosphor -> Television set
-- Added connection: Zinc sulfide phosphor -> Color television
 - Added connection: Spinthariscope -> Scintillation counter
 
 3 May 2026
