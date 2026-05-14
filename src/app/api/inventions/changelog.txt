@@ -1,6 +1,8 @@
 14 May 2026
 - Added connection: Magnesium -> Argon
 - Added connection: Aqueduct -> Yakhchāl
+- Added connection: Uranium -> Radium
+- Added connection: Uranium -> Polonium
 
 13 May 2026
 - Added connection: Periodic table -> Argon
