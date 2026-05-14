@@ -1,3 +1,11 @@
+13 May 2026
+- Added connection: Periodic table -> Argon
+- Added connection: Nitrogen -> Argon
+- Added connection: Atomic emission spectroscopy -> Argon
+- Added connection: Geissler tube -> Argon
+- Added connection: Grove cell -> Argon
+- Added connection: Induction coil -> Argon
+
 12 May 2026
 - Added tech: Shadow-mask color TV set
 - Added connection: Zinc sulfide phosphor -> Shadow-mask color TV set
