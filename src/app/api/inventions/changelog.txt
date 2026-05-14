@@ -1,6 +1,11 @@
 14 May 2026
 - Added tech: Cloud seeding
 - Added tech: Pneumatic trough
+- Added connection: Hampson–Linde air liquefaction -> Neon
+- Added connection: Argon -> Neon
+- Added connection: Helium (isolation) -> Neon
+- Added connection: Periodic table -> Neon
+- Added connection: Atomic emission spectroscopy -> Neon
 - Added connection: Magnesium -> Argon
 - Added connection: Aqueduct -> Yakhchāl
 - Added connection: Uranium -> Radium
