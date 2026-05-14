@@ -5,6 +5,7 @@
 - Added connection: Uranium -> Radium
 - Added connection: Uranium -> Polonium
 - Added connection: Glass blowing -> Pneumatic trough
+- Added connection: Vacuum flask -> Hampson–Linde air liquefaction
 
 13 May 2026
 - Added connection: Periodic table -> Argon
