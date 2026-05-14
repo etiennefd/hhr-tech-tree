@@ -1,5 +1,6 @@
 14 May 2026
 - Added tech: Cloud seeding
+- Added tech: Dry ice
 - Added tech: Pneumatic trough
 - Added connection: Hampson–Linde air liquefaction -> Neon
 - Added connection: Argon -> Neon
@@ -13,6 +14,7 @@
 - Added connection: Glass blowing -> Pneumatic trough
 - Added connection: Vacuum flask -> Hampson–Linde air liquefaction
 - Added connection: Airplane -> Cloud seeding
+- Added connection: Dry ice -> Cloud seeding
 
 13 May 2026
 - Added connection: Periodic table -> Argon
