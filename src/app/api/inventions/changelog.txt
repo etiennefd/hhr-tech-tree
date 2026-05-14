@@ -1,3 +1,7 @@
+14 May 2026
+- Added connection: Magnesium -> Argon
+- Added connection: Aqueduct -> Yakhchāl
+
 13 May 2026
 - Added connection: Periodic table -> Argon
 - Added connection: Nitrogen -> Argon
