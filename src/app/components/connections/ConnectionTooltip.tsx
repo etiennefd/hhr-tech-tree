@@ -8,6 +8,7 @@ interface ConnectionTooltipProps {
   type: string;
   details?: string;
   isSelected?: boolean;
+  onClose?: () => void;
   onNodeClick?: (title: string) => void;
   onNodeHover?: (title: string) => void;
 }
@@ -20,6 +21,7 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   type,
   details,
   isSelected,
+  onClose,
   onNodeClick,
   onNodeHover,
 }) => {
@@ -133,6 +135,20 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
         e.preventDefault();
       }}
     >
+      {isSelected && onClose && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClose();
+          }}
+          className="absolute -top-2 -right-2 w-5 h-5 bg-white border border-black z-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
+          aria-label="Deselect connection"
+          type="button"
+        >
+          <span className="text-xs font-bold">×</span>
+        </button>
+      )}
       <p className="text-xs mb-1.5">{renderConnectionContent()}</p>
       {details && (
         <p className="text-xs text-gray-600 border-t border-black pt-1.5 mt-1.5">

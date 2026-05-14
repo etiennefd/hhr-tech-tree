@@ -3417,6 +3417,11 @@ useEffect(() => {
                           setSelectedNodeId(null);
                           clearSelectedNodeUrl();
                         }}
+                        onDeselect={() => {
+                          setSelectedLinkKey(null);
+                          setSelectedLinkIndex(null);
+                          setHoveredLinkIndex(null);
+                        }}
                         onNodeClick={(title) => {
                           handleNodeClick(title);
                         }}

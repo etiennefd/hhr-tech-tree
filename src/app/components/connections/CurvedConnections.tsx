@@ -45,6 +45,7 @@ interface CurvedConnectionsProps {
   details?: string;
   opacity?: number;
   onSelect?: () => void;
+  onDeselect?: () => void;
   isSelected?: boolean;
   onNodeClick: (title: string) => void;
   onNodeHover?: (title: string) => void;
@@ -64,6 +65,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   details,
   opacity = 1,
   onSelect,
+  onDeselect,
   isSelected = false,
   onNodeClick,
   onNodeHover,
@@ -108,6 +110,19 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     if (!isSelected) {
       onSelect?.();
     }
+  };
+
+  const handleTooltipClose = () => {
+    connectionPositions.delete(connectionKey);
+
+    if (lastSelectedConnectionKey === connectionKey) {
+      lastSelectedConnectionKey = null;
+    }
+
+    setIsHovered(false);
+    setMousePos(null);
+    setIsTransitioningToSelected(false);
+    onDeselect?.();
   };
 
   const getControlPoints = (
@@ -396,6 +411,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
               type={connectionType}
               details={details}
               isSelected={isSelected}
+              onClose={handleTooltipClose}
               onNodeClick={(title) => {
                 if (onNodeClick) {
                   onNodeClick(title);
@@ -439,4 +455,3 @@ const Portal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default CurvedConnections;
-
