@@ -3,11 +3,15 @@
 - Added tech: Dry ice
 - Added tech: Carbon dioxide
 - Added tech: Pneumatic trough
+- Added connection: Argon -> Helium (isolation)
 - Added connection: Hampson–Linde air liquefaction -> Neon
 - Added connection: Argon -> Neon
 - Added connection: Helium (isolation) -> Neon
 - Added connection: Periodic table -> Neon
 - Added connection: Atomic emission spectroscopy -> Neon
+- Added connection: Hampson–Linde air liquefaction -> Krypton
+- Added connection: Argon -> Krypton
+- Added connection: Atomic emission spectroscopy -> Krypton
 - Added connection: Magnesium -> Argon
 - Added connection: Aqueduct -> Yakhchāl
 - Added connection: Uranium -> Radium
@@ -16,15 +20,14 @@
 - Added connection: Vacuum flask -> Hampson–Linde air liquefaction
 - Added connection: Airplane -> Cloud seeding
 - Added connection: Dry ice -> Cloud seeding
+- Added connection: Atomic emission spectroscopy -> Helium (discovery)
+- Added connection: Atomic emission spectroscopy -> Helium (isolation)
 
 13 May 2026
 - Added connection: Periodic table -> Argon
 - Added connection: Nitrogen -> Argon
 - Added connection: Atomic emission spectroscopy -> Argon
 - Added connection: Geissler tube -> Argon
-- Added connection: Hampson–Linde air liquefaction -> Krypton
-- Added connection: Argon -> Krypton
-- Added connection: Atomic emission spectroscopy -> Krypton
 - Added connection: Grove cell -> Argon
 - Added connection: Induction coil -> Argon
 
@@ -931,7 +934,6 @@
 - Added connection: Achromatic lens and achromatic telescope -> Spectroscope
 - Added connection: Telescope -> Spectroscope
 - Added connection: Glass -> Dispersive prism and color spectrum
-- Added connection: Spectroscope -> Helium (discovery)
 - Added connection: Spectroscope -> Spectrophotometer
 - Added connection: Spectroscope -> X-ray crystallography
 
