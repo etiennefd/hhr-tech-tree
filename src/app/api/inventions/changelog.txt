@@ -26,6 +26,7 @@
 - Added connection: Atomic emission spectroscopy -> Helium (isolation)
 - Added connection: Atomic emission spectroscopy -> Xenon
 - Added connection: Sulfuric acid -> Helium (isolation)
+- Added connection: Radioactivity -> Radon
 
 13 May 2026
 - Added connection: Periodic table -> Argon
