@@ -25,6 +25,10 @@
 - Added connection: Sulfuric acid -> Liquefaction of gas
 - Added connection: Liquefied gas refrigerants -> Hampson–Linde air liquefaction
 - Added connection: Ammonium chloride -> Ammonia
+- Added connection: Ammonia -> Liquefied gas refrigerants
+- Added connection: Ammonia -> Liquefaction of gas
+- Added connection: Ammonia -> Ostwald nitric acid process
+- Added connection: Ammonia -> Haber process
 
 14 May 2026
 - Added tech: Cloud seeding
