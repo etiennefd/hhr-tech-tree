@@ -12,6 +12,11 @@
 - Added connection: Sodium bicarbonate -> Solvay process
 - Added connection: Carbon dioxide -> Dry ice
 - Added connection: Carbon dioxide -> Carbon-dioxide laser
+- Added connection: Liquefaction of gas -> Dry ice
+- Added connection: Liquefaction of gas -> Liquid oxygen
+- Added connection: Liquefaction of gas -> Liquid nitrogen
+- Added connection: Liquefaction of gas -> Liquefied gas refrigerants
+- Added connection: Glass blowing -> Liquefaction of gas
 
 14 May 2026
 - Added tech: Cloud seeding
