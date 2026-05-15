@@ -12,6 +12,8 @@
 - Added connection: Hampson–Linde air liquefaction -> Krypton
 - Added connection: Argon -> Krypton
 - Added connection: Atomic emission spectroscopy -> Krypton
+- Added connection: Krypton -> Xenon
+- Added connection: Hampson–Linde air liquefaction -> Xenon
 - Added connection: Magnesium -> Argon
 - Added connection: Aqueduct -> Yakhchāl
 - Added connection: Uranium -> Radium
@@ -22,6 +24,7 @@
 - Added connection: Dry ice -> Cloud seeding
 - Added connection: Atomic emission spectroscopy -> Helium (discovery)
 - Added connection: Atomic emission spectroscopy -> Helium (isolation)
+- Added connection: Atomic emission spectroscopy -> Xenon
 
 13 May 2026
 - Added connection: Periodic table -> Argon
