@@ -1,3 +1,17 @@
+15 May 2026
+- Added connection: Limestone -> Carbon dioxide
+- Added connection: Carbon dioxide -> Carbonated water
+- Added connection: Carbon dioxide -> Nitrogen
+- Added connection: Carbon dioxide -> Hydrogen
+- Added connection: Carbon dioxide -> Oxygen (Scheele–Priestley)
+- Added connection: Sulfuric acid -> Carbon dioxide
+- Added connection: Soda ash from plants -> Sodium bicarbonate
+- Added connection: Carbon dioxide -> Sodium bicarbonate
+- Added connection: Carbon dioxide -> Solvay process
+- Added connection: Sodium bicarbonate -> Solvay process
+- Added connection: Carbon dioxide -> Dry ice
+- Added connection: Carbon dioxide -> Carbon-dioxide laser
+
 14 May 2026
 - Added tech: Cloud seeding
 - Added tech: Dry ice
