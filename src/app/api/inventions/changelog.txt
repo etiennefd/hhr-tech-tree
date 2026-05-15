@@ -1,5 +1,7 @@
 15 May 2026
 - Added tech: Liquefaction of gas
+- Added tech: Ammonia
+- Added connection: Hampson–Linde air liquefaction -> Claude air liquefaction
 - Added connection: Limestone -> Carbon dioxide
 - Added connection: Carbon dioxide -> Carbonated water
 - Added connection: Carbon dioxide -> Nitrogen
@@ -19,6 +21,10 @@
 - Added connection: Glass blowing -> Liquefaction of gas
 - Added connection: Public gas lighting -> Gas stove
 - Added connection: Rib vault -> Flying buttress
+- Added connection: Chlorine -> Liquefaction of gas
+- Added connection: Sulfuric acid -> Liquefaction of gas
+- Added connection: Liquefied gas refrigerants -> Hampson–Linde air liquefaction
+- Added connection: Ammonium chloride -> Ammonia
 
 14 May 2026
 - Added tech: Cloud seeding
