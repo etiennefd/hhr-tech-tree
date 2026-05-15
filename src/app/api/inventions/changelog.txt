@@ -18,6 +18,7 @@
 - Added connection: Liquefaction of gas -> Liquefied gas refrigerants
 - Added connection: Glass blowing -> Liquefaction of gas
 - Added connection: Public gas lighting -> Gas stove
+- Added connection: Rib vault -> Flying buttress
 
 14 May 2026
 - Added tech: Cloud seeding
