@@ -1,3 +1,7 @@
+16 May 2026
+- Added connection: Hydrogen -> Haber process
+- Added connection: Coke (fuel) -> Haber process
+
 15 May 2026
 - Added tech: Liquefaction of gas
 - Added tech: Ammonia
