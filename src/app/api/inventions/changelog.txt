@@ -1,3 +1,9 @@
+17 May 2026
+- Added connection: Nitric acid -> Nitroglycerin
+- Added connection: Sulfuric acid -> Nitroglycerin
+- Added connection: Nitric acid -> TNT
+- Added connection: Sulfuric acid -> TNT
+
 16 May 2026
 - Added connection: Hydrogen -> Haber process
 - Added connection: Coke (fuel) -> Haber process
