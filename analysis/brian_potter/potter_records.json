@@ -1,0 +1,1510 @@
+[
+  {
+    "num": 1,
+    "name": "Voltaic Pile",
+    "year": 1800,
+    "plausible": "Flag",
+    "straightforward": "Flag",
+    "confidence": "Flag"
+  },
+  {
+    "num": 2,
+    "name": "Arc Lamp",
+    "year": 1802,
+    "plausible": "1800-1802",
+    "straightforward": "1800-1810",
+    "confidence": "High"
+  },
+  {
+    "num": 3,
+    "name": "Isolation of morphine",
+    "year": 1804,
+    "plausible": "1650-1750",
+    "straightforward": "1780-1810",
+    "confidence": "Medium"
+  },
+  {
+    "num": 4,
+    "name": "Jacquard Loom",
+    "year": 1804,
+    "plausible": "1500\u20131600",
+    "straightforward": "1700\u20131750",
+    "confidence": "Medium"
+  },
+  {
+    "num": 5,
+    "name": "High-pressure steam locomotive",
+    "year": 1804,
+    "plausible": "1780-1795",
+    "straightforward": "1800-1815",
+    "confidence": "Medium"
+  },
+  {
+    "num": 6,
+    "name": "General anaesthetic",
+    "year": 1804,
+    "plausible": "200\u2013600 AD",
+    "straightforward": "1500\u20131700",
+    "confidence": "Medium"
+  },
+  {
+    "num": 7,
+    "name": "Internal combustion engine \"Pyreolophore\"",
+    "year": 1807,
+    "plausible": "1680\u20131720",
+    "straightforward": "1750\u20131800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 8,
+    "name": "Commercial steamboat",
+    "year": 1807,
+    "plausible": "1760\u20131780",
+    "straightforward": "1790\u20131800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 9,
+    "name": "Canning process",
+    "year": 1810,
+    "plausible": "1500-1650",
+    "straightforward": "1700-1780",
+    "confidence": "Medium"
+  },
+  {
+    "num": 10,
+    "name": "Wrist Watch",
+    "year": 1810,
+    "plausible": "1675-1700",
+    "straightforward": "1750-1800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 11,
+    "name": "Cylinder steam printing press",
+    "year": 1811,
+    "plausible": "1790-1800",
+    "straightforward": "1800-1811",
+    "confidence": "Medium"
+  },
+  {
+    "num": 12,
+    "name": "Safety lamp",
+    "year": 1812,
+    "plausible": "1700\u20131750",
+    "straightforward": "1770\u20131800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 13,
+    "name": "Planing machine",
+    "year": 1814,
+    "plausible": "1750-1780",
+    "straightforward": "1790-1810",
+    "confidence": "Medium"
+  },
+  {
+    "num": 14,
+    "name": "Stethoscope",
+    "year": 1816,
+    "plausible": "400 BC \u2013 200 AD",
+    "straightforward": "1700\u20131780",
+    "confidence": "Medium"
+  },
+  {
+    "num": 15,
+    "name": "Electric telegraph",
+    "year": 1816,
+    "plausible": "1750\u20131770",
+    "straightforward": "1780\u20131800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 16,
+    "name": "Stirling hot air engine",
+    "year": 1816,
+    "plausible": "1700-1750",
+    "straightforward": "1780-1810",
+    "confidence": "Medium"
+  },
+  {
+    "num": 17,
+    "name": "Dandy horse",
+    "year": 1817,
+    "plausible": "1-500 AD",
+    "straightforward": "1500-1700"
+  },
+  {
+    "num": 18,
+    "name": "Tunneling shield",
+    "year": 1818,
+    "plausible": "1750-1790",
+    "straightforward": "1800-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 19,
+    "name": "Pattern-tracing lathe",
+    "year": 1822,
+    "plausible": "1500-1600",
+    "straightforward": "1750-1800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 20,
+    "name": "Heliography",
+    "year": 1822,
+    "plausible": "1700\u20131750",
+    "straightforward": "1780\u20131810",
+    "confidence": "Medium"
+  },
+  {
+    "num": 21,
+    "name": "Difference engine",
+    "year": 1822,
+    "plausible": "1700-1750",
+    "straightforward": "1780-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 22,
+    "name": "First lighter (Doberiner's Lamp)",
+    "year": 1823,
+    "plausible": "1790-1800",
+    "straightforward": "1810-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 23,
+    "name": "Bolt-action rifle",
+    "year": 1824,
+    "plausible": "1750-1780",
+    "straightforward": "1810-1825",
+    "confidence": "Medium"
+  },
+  {
+    "num": 24,
+    "name": "Electromagnet",
+    "year": 1824,
+    "plausible": "1820-1822",
+    "straightforward": "1822-1825",
+    "confidence": "Medium"
+  },
+  {
+    "num": 25,
+    "name": "Friction match",
+    "year": 1826,
+    "plausible": "1790\u20131810",
+    "straightforward": "1810\u20131825",
+    "confidence": "Medium"
+  },
+  {
+    "num": 26,
+    "name": "Gas Stove",
+    "year": 1826,
+    "plausible": "1790-1810",
+    "straightforward": "1810-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 27,
+    "name": "Hot-blast iron smelting",
+    "year": 1828,
+    "plausible": "1400-1500",
+    "straightforward": "1700-1750",
+    "confidence": "Medium"
+  },
+  {
+    "num": 28,
+    "name": "Reaping machine",
+    "year": 1828,
+    "plausible": "1500-1650",
+    "straightforward": "1750-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 29,
+    "name": "Commutated electrocmagnetic motor",
+    "year": 1828,
+    "plausible": "1820-1822",
+    "straightforward": "1825-1830",
+    "confidence": "Medium"
+  },
+  {
+    "num": 30,
+    "name": "Braile Tactile alphabet",
+    "year": 1829,
+    "confidence": "Flag"
+  },
+  {
+    "num": 31,
+    "name": "Compound air compressor",
+    "year": 1829,
+    "plausible": "1700-1750",
+    "straightforward": "1790-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 32,
+    "name": "Corrugated galvanized iron",
+    "year": 1829,
+    "plausible": "1750-1790",
+    "straightforward": "1800-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 33,
+    "name": "Lawn mower",
+    "year": 1830,
+    "plausible": "1500-1600",
+    "straightforward": "1750-1800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 34,
+    "name": "Electromagnetic induction",
+    "year": 1831,
+    "confidence": "Flag"
+  },
+  {
+    "num": 35,
+    "name": "First practical rotating electric motor",
+    "year": 1834,
+    "plausible": "1822-1828",
+    "straightforward": "1832-1834",
+    "confidence": "Medium"
+  },
+  {
+    "num": 36,
+    "name": "Electromechanical relay",
+    "year": 1835,
+    "plausible": "1820-1825",
+    "straightforward": "1825-1835",
+    "confidence": "High"
+  },
+  {
+    "num": 37,
+    "name": "Morse Code",
+    "year": 1837,
+    "plausible": "1700-1800",
+    "straightforward": "1820-1835",
+    "confidence": "Medium"
+  },
+  {
+    "num": 38,
+    "name": "Electrotyping",
+    "year": 1838,
+    "plausible": "1800-1810",
+    "straightforward": "1830-1838",
+    "confidence": "Medium"
+  },
+  {
+    "num": 39,
+    "name": "Steam Shovel",
+    "year": 1839,
+    "plausible": "1810-1820",
+    "straightforward": "1825-1835",
+    "confidence": "Medium"
+  },
+  {
+    "num": 40,
+    "name": "Steam Hammer",
+    "year": 1839,
+    "plausible": "1790-1810",
+    "straightforward": "1820-1835",
+    "confidence": "Medium"
+  },
+  {
+    "num": 41,
+    "name": "Photovoltaic effect",
+    "year": 1839,
+    "confidence": "Flag"
+  },
+  {
+    "num": 42,
+    "name": "Vulcanized Rubber",
+    "year": 1839,
+    "confidence": "Flag"
+  },
+  {
+    "num": 43,
+    "name": "Daguerrotype",
+    "year": 1839,
+    "plausible": "1790-1810",
+    "straightforward": "1820-1835",
+    "confidence": "Medium"
+  },
+  {
+    "num": 44,
+    "name": "\"Blueprint\" (cyanotype) process",
+    "year": 1840,
+    "plausible": "1725\u20131750",
+    "straightforward": "1790\u20131820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 45,
+    "name": "Printing telegraph",
+    "year": 1841,
+    "plausible": "1820\u20131830",
+    "straightforward": "1835\u20131840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 46,
+    "name": "Fuel Cell",
+    "year": 1842,
+    "plausible": "1820-1835",
+    "straightforward": "1835-1842",
+    "confidence": "Medium"
+  },
+  {
+    "num": 47,
+    "name": "Super-phosphate fertilizer",
+    "year": 1842,
+    "plausible": "1750-1780",
+    "straightforward": "1800-1830",
+    "confidence": "Medium"
+  },
+  {
+    "num": 48,
+    "name": "Wood-pulp paper",
+    "year": 1844,
+    "plausible": "1500\u20131650",
+    "straightforward": "1750\u20131820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 49,
+    "name": "Hypodermic needle",
+    "year": 1844,
+    "plausible": "100 BC \u2013 200 AD",
+    "straightforward": "1700\u20131800",
+    "confidence": "Medium"
+  },
+  {
+    "num": 50,
+    "name": "Modern high-strength Portland cement",
+    "year": 1845,
+    "plausible": "1750-1790",
+    "straightforward": "1810-1830",
+    "confidence": "Medium"
+  },
+  {
+    "num": 51,
+    "name": "Tunnel-boring machine",
+    "year": 1846,
+    "plausible": "1750-1800",
+    "straightforward": "1820-1840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 52,
+    "name": "Nitroglycerin",
+    "year": 1847,
+    "plausible": "1810-1825",
+    "straightforward": "1835-1845",
+    "confidence": "Medium"
+  },
+  {
+    "num": 53,
+    "name": "Pneumatic drill",
+    "year": 1848,
+    "plausible": "1750-1800",
+    "straightforward": "1820-1840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 54,
+    "name": "Pin-tumbler cylinder Lock",
+    "year": 1848,
+    "plausible": "100 BC \u2013 200 AD",
+    "straightforward": "1700\u20131780",
+    "confidence": "Medium"
+  },
+  {
+    "num": 55,
+    "name": "Metallic-cartridge repeating rifle",
+    "year": 1849,
+    "plausible": "1820-1835",
+    "straightforward": "1840-1850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 56,
+    "name": "Francis water turbine",
+    "year": 1849,
+    "plausible": "1750-1790",
+    "straightforward": "1820-1840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 57,
+    "name": "Safety pin",
+    "year": 1849,
+    "plausible": "500 BC \u2013 200 BC",
+    "straightforward": "100 BC \u2013 100 AD",
+    "confidence": "High"
+  },
+  {
+    "num": 58,
+    "name": "Hydraulic accumulator",
+    "year": 1850,
+    "plausible": "1700\u20131750",
+    "straightforward": "1790\u20131820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 59,
+    "name": "Public flush toilet",
+    "year": 1851,
+    "plausible": "1840\u20131851",
+    "straightforward": "1845\u20131855",
+    "confidence": "Flag (partly social/organizational)"
+  },
+  {
+    "num": 60,
+    "name": "Chemical-vapor deposition",
+    "year": 1852,
+    "plausible": "1750\u20131790",
+    "straightforward": "1810\u20131840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 61,
+    "name": "Safety-brake elevator",
+    "year": 1852,
+    "plausible": "1500-1600",
+    "straightforward": "1750-1820",
+    "confidence": "High"
+  },
+  {
+    "num": 62,
+    "name": "Powered dirigible flight",
+    "year": 1852,
+    "plausible": "1800-1820",
+    "straightforward": "1840-1850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 63,
+    "name": "Reinforced concrete",
+    "year": 1853,
+    "plausible": "100 BC \u2013 200 AD",
+    "straightforward": "1820\u20131850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 64,
+    "name": "Practical three-color photography",
+    "year": 1855,
+    "plausible": "1840\u20131845",
+    "straightforward": "1850\u20131860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 65,
+    "name": "Bessemer Steel Process",
+    "year": 1855,
+    "plausible": "1700-1750",
+    "straightforward": "1780-1820",
+    "confidence": "Medium"
+  },
+  {
+    "num": 66,
+    "name": "Parkesine/celluoid",
+    "year": 1856,
+    "plausible": "1840\u20131850",
+    "straightforward": "1850\u20131860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 67,
+    "name": "Vapour-compression ice machine",
+    "year": 1856,
+    "plausible": "1780-1810",
+    "straightforward": "1830-1850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 68,
+    "name": "Mauveine synthetic dye",
+    "year": 1856,
+    "plausible": "N/A (flagged)",
+    "straightforward": "N/A (flagged)",
+    "confidence": "Flag"
+  },
+  {
+    "num": 69,
+    "name": "Geissler tube",
+    "year": 1857,
+    "plausible": "1750-1780",
+    "straightforward": "1820-1840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 70,
+    "name": "Phonautograph",
+    "year": 1857,
+    "plausible": "1700-1750",
+    "straightforward": "1800-1840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 71,
+    "name": "Lead-acid rechargeable battery",
+    "year": 1859,
+    "plausible": "1800-1810",
+    "straightforward": "1830-1840",
+    "confidence": "Medium"
+  },
+  {
+    "num": 72,
+    "name": "Carbon fiber",
+    "year": 1860,
+    "plausible": "1810-1825",
+    "straightforward": "1830-1850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 73,
+    "name": "Pasteurization",
+    "year": 1864,
+    "plausible": "1780-1820",
+    "straightforward": "1840-1860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 74,
+    "name": "Siemens-martin open-hearth steel process",
+    "year": 1865,
+    "plausible": "1820-1840",
+    "straightforward": "1850-1860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 75,
+    "name": "Dynamite",
+    "year": 1867,
+    "plausible": "1847-1855",
+    "straightforward": "1860-1867",
+    "confidence": "High"
+  },
+  {
+    "num": 76,
+    "name": "Barbed wire",
+    "year": 1867,
+    "plausible": "100 BC \u2013 500 AD",
+    "straightforward": "1850\u20131867"
+  },
+  {
+    "num": 77,
+    "name": "PVC",
+    "year": 1872,
+    "plausible": "1835-1845",
+    "straightforward": "1860-1872",
+    "confidence": "Flag"
+  },
+  {
+    "num": 78,
+    "name": "Early \"stainless\" steel",
+    "year": 1872,
+    "plausible": "1830-1850",
+    "straightforward": "1860-1870",
+    "confidence": "Medium"
+  },
+  {
+    "num": 79,
+    "name": "Rotary cement kiln",
+    "year": 1873,
+    "plausible": "1830-1850",
+    "straightforward": "1860-1870",
+    "confidence": "Medium"
+  },
+  {
+    "num": 80,
+    "name": "Crookes radiometer",
+    "year": 1873,
+    "plausible": "1700-1750",
+    "straightforward": "1820-1860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 81,
+    "name": "Gramme dynamo",
+    "year": 1873,
+    "plausible": "1835-1845",
+    "straightforward": "1855-1865",
+    "confidence": "Medium"
+  },
+  {
+    "num": 82,
+    "name": "Metal detector",
+    "year": 1874,
+    "plausible": "1835-1845",
+    "straightforward": "1850-1865",
+    "confidence": "Medium"
+  },
+  {
+    "num": 83,
+    "name": "Electric tram",
+    "year": 1875,
+    "plausible": "1838-1845",
+    "straightforward": "1867-1875",
+    "confidence": "Medium"
+  },
+  {
+    "num": 84,
+    "name": "Four-stroke engine",
+    "year": 1876,
+    "plausible": "1830-1850",
+    "straightforward": "1860-1870",
+    "confidence": "Medium"
+  },
+  {
+    "num": 85,
+    "name": "Telephone",
+    "year": 1876,
+    "plausible": "1840\u20131855",
+    "straightforward": "1860\u20131870",
+    "confidence": "Medium"
+  },
+  {
+    "num": 86,
+    "name": "Phonograph",
+    "year": 1877,
+    "plausible": "1700\u20131750",
+    "straightforward": "1820\u20131860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 87,
+    "name": "Closed-circuit rebreather",
+    "year": 1878,
+    "plausible": "1790\u20131820",
+    "straightforward": "1840\u20131860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 88,
+    "name": "Pelton Wheel",
+    "year": 1878,
+    "plausible": "1500-1700",
+    "straightforward": "1750-1830",
+    "confidence": "Medium"
+  },
+  {
+    "num": 89,
+    "name": "Incandescent light bulb",
+    "year": 1879,
+    "plausible": "1825-1840",
+    "straightforward": "1865-1875",
+    "confidence": "Medium"
+  },
+  {
+    "num": 90,
+    "name": "Carbon arc welding",
+    "year": 1881,
+    "plausible": "1810\u20131830",
+    "straightforward": "1840\u20131870",
+    "confidence": "Medium"
+  },
+  {
+    "num": 91,
+    "name": "Recoil-operated machine gun",
+    "year": 1884,
+    "plausible": "1855\u20131865",
+    "straightforward": "1870\u20131880",
+    "confidence": "Medium"
+  },
+  {
+    "num": 92,
+    "name": "Poudre B Smokeless powder",
+    "year": 1884,
+    "plausible": "1850\u20131865",
+    "straightforward": "1865\u20131880",
+    "confidence": "Medium"
+  },
+  {
+    "num": 93,
+    "name": "Steam turbine",
+    "year": 1884,
+    "plausible": "1850\u20131865",
+    "straightforward": "1870\u20131880",
+    "confidence": "Medium"
+  },
+  {
+    "num": 94,
+    "name": "Closed core transformer",
+    "year": 1884,
+    "plausible": "1832-1840",
+    "straightforward": "1860-1875",
+    "confidence": "Medium"
+  },
+  {
+    "num": 95,
+    "name": "Safety bicycle",
+    "year": 1885,
+    "plausible": "1865-1875",
+    "straightforward": "1875-1885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 96,
+    "name": "Zinc-carbon dry cell",
+    "year": 1886,
+    "plausible": "1868\u20131875",
+    "straightforward": "1875\u20131885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 97,
+    "name": "Hall-Heroult process",
+    "year": 1886,
+    "plausible": "1855-1865",
+    "straightforward": "1875-1885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 98,
+    "name": "Petrol automobile",
+    "year": 1886,
+    "plausible": "1870\u20131880",
+    "straightforward": "1880\u20131886",
+    "confidence": "Medium"
+  },
+  {
+    "num": 99,
+    "name": "Bayer alumina process",
+    "year": 1887,
+    "plausible": "1810-1830",
+    "straightforward": "1855-1880",
+    "confidence": "Medium"
+  },
+  {
+    "num": 100,
+    "name": "Wind-generated electricity",
+    "year": 1887,
+    "plausible": "1835\u20131845",
+    "straightforward": "1870\u20131880",
+    "confidence": "Medium"
+  },
+  {
+    "num": 101,
+    "name": "Gold cyanidation",
+    "year": 1887,
+    "plausible": "1785\u20131810",
+    "straightforward": "1840\u20131860",
+    "confidence": "Medium"
+  },
+  {
+    "num": 102,
+    "name": "Ballpoint pen",
+    "year": 1888,
+    "plausible": "1500\u20131700",
+    "straightforward": "1800\u20131850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 103,
+    "name": "Kinetoscope motion picture viewer",
+    "year": 1888,
+    "plausible": "1885\u20131890",
+    "straightforward": "1890\u20131895",
+    "confidence": "Medium"
+  },
+  {
+    "num": 104,
+    "name": "Experimental proof of radio waves",
+    "year": 1888,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 105,
+    "name": "Practical pneumatic tyre",
+    "year": 1888,
+    "plausible": "1840\u20131850",
+    "straightforward": "1860\u20131880",
+    "confidence": "Medium"
+  },
+  {
+    "num": 106,
+    "name": "Chlorofluorocarbon refrigerant",
+    "year": 1890,
+    "plausible": "1840-1860",
+    "straightforward": "1880-1895",
+    "confidence": "Medium"
+  },
+  {
+    "num": 107,
+    "name": "Pre-cut folding cardboard box",
+    "year": 1890,
+    "plausible": "1840\u20131860",
+    "straightforward": "1870\u20131885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 108,
+    "name": "Zipper",
+    "year": 1891,
+    "plausible": "1500-1700",
+    "straightforward": "1800-1850",
+    "confidence": "Medium"
+  },
+  {
+    "num": 109,
+    "name": "Cinematograph",
+    "year": 1892,
+    "plausible": "1830-1850",
+    "straightforward": "1875-1885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 110,
+    "name": "Electric oven",
+    "year": 1892,
+    "plausible": "1845-1860",
+    "straightforward": "1880-1890",
+    "confidence": "Medium"
+  },
+  {
+    "num": 111,
+    "name": "Compression \"diesel\" engine",
+    "year": 1893,
+    "plausible": "1870-1880",
+    "straightforward": "1885-1893",
+    "confidence": "Medium"
+  },
+  {
+    "num": 112,
+    "name": "Rubber surgical gloves",
+    "year": 1893,
+    "plausible": "1845-1860",
+    "straightforward": "1870-1885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 113,
+    "name": "Wireless telegraphy",
+    "year": 1895,
+    "plausible": "1888-1890",
+    "straightforward": "1890-1895",
+    "confidence": "High"
+  },
+  {
+    "num": 114,
+    "name": "X-ray",
+    "year": 1895,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 115,
+    "name": "Cloth surgical mask",
+    "year": 1897,
+    "plausible": "1860\u20131870",
+    "straightforward": "1880\u20131890",
+    "confidence": "Medium"
+  },
+  {
+    "num": 116,
+    "name": "Polyethylene",
+    "year": 1898,
+    "plausible": "1898 (flag \u2014 historical \"discovery\" itself was an accident; practical PE depends on a phenomenon not establishable on demand)",
+    "straightforward": "1930\u20131940",
+    "confidence": "Flag"
+  },
+  {
+    "num": 117,
+    "name": "Nickel cadmium rechargeable battery",
+    "year": 1899,
+    "plausible": "1840\u20131860",
+    "straightforward": "1875\u20131890",
+    "confidence": "Medium"
+  },
+  {
+    "num": 118,
+    "name": "Zeppelin LZ-1 Rigid airship",
+    "year": 1900,
+    "plausible": "1885\u20131890",
+    "straightforward": "1895\u20131900",
+    "confidence": "Medium"
+  },
+  {
+    "num": 119,
+    "name": "Powered suction vacuum cleaner",
+    "year": 1901,
+    "plausible": "1830-1850",
+    "straightforward": "1870-1885",
+    "confidence": "Medium"
+  },
+  {
+    "num": 120,
+    "name": "First self-sustaining gas turbine",
+    "year": 1903,
+    "plausible": "1880-1895",
+    "straightforward": "1895-1905",
+    "confidence": "Medium"
+  },
+  {
+    "num": 121,
+    "name": "Laminated safety glass",
+    "year": 1903,
+    "plausible": "1865\u20131875",
+    "straightforward": "1880\u20131895",
+    "confidence": "Medium"
+  },
+  {
+    "num": 122,
+    "name": "First sustained, controlled powered flight",
+    "year": 1903,
+    "plausible": "1880\u20131890",
+    "straightforward": "1895\u20131903",
+    "confidence": "Medium"
+  },
+  {
+    "num": 123,
+    "name": "Fleming valve",
+    "year": 1904,
+    "plausible": "1883\u20131890",
+    "straightforward": "1895\u20131904",
+    "confidence": "Medium"
+  },
+  {
+    "num": 124,
+    "name": "First free helicopter flight",
+    "year": 1907,
+    "plausible": "1890\u20131900",
+    "straightforward": "1903\u20131907",
+    "confidence": "High"
+  },
+  {
+    "num": 125,
+    "name": "Bakelite",
+    "year": 1907,
+    "plausible": "1875\u20131885",
+    "straightforward": "1895\u20131905",
+    "confidence": "Medium"
+  },
+  {
+    "num": 126,
+    "name": "Ramjet concept",
+    "year": 1907,
+    "plausible": "1690-1750",
+    "straightforward": "1880-1900",
+    "confidence": "Medium"
+  },
+  {
+    "num": 127,
+    "name": "Cellophane",
+    "year": 1908,
+    "plausible": "1895-1900",
+    "straightforward": "1900-1908",
+    "confidence": "Medium"
+  },
+  {
+    "num": 128,
+    "name": "Haber-Bosch process",
+    "year": 1909,
+    "plausible": "1890\u20131900",
+    "straightforward": "1900\u20131910",
+    "confidence": "Medium"
+  },
+  {
+    "num": 129,
+    "name": "First static-image television transmission",
+    "year": 1909,
+    "plausible": "1885\u20131895",
+    "straightforward": "1900\u20131910",
+    "confidence": "Medium"
+  },
+  {
+    "num": 130,
+    "name": "Cloud chamber",
+    "year": 1911,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 131,
+    "name": "Electric slot cars",
+    "year": 1912,
+    "plausible": "1838\u20131850",
+    "straightforward": "1885\u20131895",
+    "confidence": "Medium"
+  },
+  {
+    "num": 132,
+    "name": "First articulated electric trams",
+    "year": 1912,
+    "plausible": "1890\u20131895",
+    "straightforward": "1900\u20131910",
+    "confidence": "Medium"
+  },
+  {
+    "num": 133,
+    "name": "Bergius high-pressure coal hydrogenation process",
+    "year": 1913,
+    "plausible": "1900\u20131910",
+    "straightforward": "1910\u20131915",
+    "confidence": "Medium"
+  },
+  {
+    "num": 134,
+    "name": "Kaplan axial-flow adjustable blade turbine",
+    "year": 1913,
+    "plausible": "1860\u20131875",
+    "straightforward": "1885\u20131900",
+    "confidence": "Medium"
+  },
+  {
+    "num": 135,
+    "name": "Stainless Steel",
+    "year": 1915,
+    "plausible": "1890\u20131900",
+    "straightforward": "1905\u20131915",
+    "confidence": "Medium"
+  },
+  {
+    "num": 136,
+    "name": "First practical battle tanks",
+    "year": 1915,
+    "plausible": "1900\u20131910",
+    "straightforward": "1910\u20131915",
+    "confidence": "Medium"
+  },
+  {
+    "num": 137,
+    "name": "Czocharlski crystal pulling",
+    "year": 1916,
+    "plausible": "1870-1900",
+    "straightforward": "1902-1916",
+    "confidence": "Medium"
+  },
+  {
+    "num": 138,
+    "name": "Crystal oscillator",
+    "year": 1917,
+    "plausible": "1913\u20131915",
+    "straightforward": "1915\u20131918",
+    "confidence": "Medium"
+  },
+  {
+    "num": 139,
+    "name": "Fischer-Tropsch coal-to-liquid process",
+    "year": 1925,
+    "plausible": "1905-1915",
+    "straightforward": "1915-1925",
+    "confidence": "Medium"
+  },
+  {
+    "num": 140,
+    "name": "Yagi-Uda directional antenna",
+    "year": 1926,
+    "plausible": "1900-1910",
+    "straightforward": "1915-1925",
+    "confidence": "Medium"
+  },
+  {
+    "num": 141,
+    "name": "Liquid fueled rocket launch",
+    "year": 1926,
+    "plausible": "1900\u20131910",
+    "straightforward": "1915\u20131925",
+    "confidence": "Medium"
+  },
+  {
+    "num": 142,
+    "name": "Three-point hitch",
+    "year": 1926,
+    "plausible": "1900-1915",
+    "straightforward": "1915-1925",
+    "confidence": "Medium"
+  },
+  {
+    "num": 143,
+    "name": "First public live-image television demo",
+    "year": 1926,
+    "plausible": "1890\u20131900",
+    "straightforward": "1910\u20131920",
+    "confidence": "Medium"
+  },
+  {
+    "num": 144,
+    "name": "Quartz Clock",
+    "year": 1927,
+    "plausible": "1920\u20131925",
+    "straightforward": "1925\u20131930",
+    "confidence": "Medium"
+  },
+  {
+    "num": 145,
+    "name": "Discovery of penicillin's antibiotic action",
+    "year": 1928,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 146,
+    "name": "Turbojet",
+    "year": 1928,
+    "plausible": "1905\u20131915",
+    "straightforward": "1925\u20131935",
+    "confidence": "Medium"
+  },
+  {
+    "num": 147,
+    "name": "First practical all-electric television",
+    "year": 1928,
+    "plausible": "1915-1922",
+    "straightforward": "1925-1930",
+    "confidence": "Medium"
+  },
+  {
+    "num": 148,
+    "name": "Recirculating ball screw",
+    "year": 1929,
+    "plausible": "1870\u20131890",
+    "straightforward": "1900\u20131920",
+    "confidence": "Medium"
+  },
+  {
+    "num": 149,
+    "name": "Phase-contrast microscopy",
+    "year": 1930,
+    "plausible": "1880-1895",
+    "straightforward": "1900-1915",
+    "confidence": "Medium"
+  },
+  {
+    "num": 150,
+    "name": "Electron microscope",
+    "year": 1931,
+    "plausible": "1925-1930",
+    "straightforward": "1928-1932",
+    "confidence": "Flag"
+  },
+  {
+    "num": 151,
+    "name": "FM Radio",
+    "year": 1933,
+    "plausible": "1922-1928",
+    "straightforward": "1928-1933",
+    "confidence": "Medium"
+  },
+  {
+    "num": 152,
+    "name": "Lightweight folding wheelchair",
+    "year": 1933,
+    "plausible": "1890\u20131900",
+    "straightforward": "1910\u20131920",
+    "confidence": "Medium"
+  },
+  {
+    "num": 153,
+    "name": "Nylon synthetic fiber",
+    "year": 1935,
+    "plausible": "1920\u20131928",
+    "straightforward": "1930\u20131935",
+    "confidence": "Medium"
+  },
+  {
+    "num": 154,
+    "name": "Programmable computer",
+    "year": 1938,
+    "plausible": "Flag (see explanation)",
+    "straightforward": "Flag (see explanation)",
+    "confidence": "Flag"
+  },
+  {
+    "num": 155,
+    "name": "Nuclear fission",
+    "year": 1938,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 156,
+    "name": "Defibrilator",
+    "year": 1939,
+    "plausible": "1900\u20131910",
+    "straightforward": "1925\u20131935",
+    "confidence": "Medium"
+  },
+  {
+    "num": 157,
+    "name": "Plutonium isolation",
+    "year": 1940,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 158,
+    "name": "Cavity Magnetron",
+    "year": 1940,
+    "plausible": "1925-1930",
+    "straightforward": "1935-1940",
+    "confidence": "Medium"
+  },
+  {
+    "num": 159,
+    "name": "PET Fiber",
+    "year": 1941,
+    "plausible": "1925-1935",
+    "straightforward": "1935-1941",
+    "confidence": "Medium"
+  },
+  {
+    "num": 160,
+    "name": "V-2 (A-4) long-range ballistic missile",
+    "year": 1942,
+    "plausible": "1925\u20131935",
+    "straightforward": "1935\u20131942",
+    "confidence": "Medium"
+  },
+  {
+    "num": 161,
+    "name": "Influenza vaccine",
+    "year": 1944,
+    "plausible": "1936-1940",
+    "straightforward": "1940-1945",
+    "confidence": "Medium"
+  },
+  {
+    "num": 162,
+    "name": "Atomic bomb",
+    "year": 1945,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 163,
+    "name": "Microwave oven",
+    "year": 1945,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 164,
+    "name": "Radiocarbon dating",
+    "year": 1946,
+    "plausible": "1940\u20131946",
+    "straightforward": "1945\u20131950",
+    "confidence": "Flag"
+  },
+  {
+    "num": 165,
+    "name": "Ejector seat",
+    "year": 1946,
+    "plausible": "1935-1940",
+    "straightforward": "1940-1945",
+    "confidence": "Medium"
+  },
+  {
+    "num": 166,
+    "name": "Holography",
+    "year": 1947,
+    "plausible": "1935-1945",
+    "straightforward": "1945-1960",
+    "confidence": "Medium"
+  },
+  {
+    "num": 167,
+    "name": "Hydraulic fracturing",
+    "year": 1947,
+    "plausible": "1880-1900",
+    "straightforward": "1910-1930",
+    "confidence": "Medium"
+  },
+  {
+    "num": 168,
+    "name": "Transistor",
+    "year": 1947,
+    "plausible": "1935-1942",
+    "straightforward": "1945-1950",
+    "confidence": "Medium"
+  },
+  {
+    "num": 169,
+    "name": "Atomic clock",
+    "year": 1948,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 170,
+    "name": "Basic oxygen steelmaking",
+    "year": 1948,
+    "plausible": "1900\u20131910",
+    "straightforward": "1920\u20131935",
+    "confidence": "Medium"
+  },
+  {
+    "num": 171,
+    "name": "\"Bertie the Brain\" video game",
+    "year": 1950,
+    "plausible": "1935-1942",
+    "straightforward": "1945-1950",
+    "confidence": "Medium"
+  },
+  {
+    "num": 172,
+    "name": "Tokamak fusion reactor concept",
+    "year": 1950,
+    "plausible": "N/A",
+    "straightforward": "N/A",
+    "confidence": "Flag"
+  },
+  {
+    "num": 173,
+    "name": "Float glass process",
+    "year": 1952,
+    "plausible": "1880-1910",
+    "straightforward": "1920-1940",
+    "confidence": "Medium"
+  },
+  {
+    "num": 174,
+    "name": "Thermonuclear weapon",
+    "year": 1952,
+    "plausible": "n/a",
+    "straightforward": "n/a",
+    "confidence": "Flag"
+  },
+  {
+    "num": 175,
+    "name": "Helical scan video tape recorder",
+    "year": 1953,
+    "plausible": "1945\u20131950",
+    "straightforward": "1950\u20131955",
+    "confidence": "Medium"
+  },
+  {
+    "num": 176,
+    "name": "Silicon solar PV cell",
+    "year": 1954,
+    "plausible": "1948\u20131951",
+    "straightforward": "1953\u20131955",
+    "confidence": "Medium"
+  },
+  {
+    "num": 177,
+    "name": "Hovercraft",
+    "year": 1955,
+    "plausible": "1880-1900",
+    "straightforward": "1910-1930",
+    "confidence": "Medium"
+  },
+  {
+    "num": 178,
+    "name": "Shipping container",
+    "year": 1955,
+    "confidence": "Flag"
+  },
+  {
+    "num": 179,
+    "name": "Hard-disk drive",
+    "year": 1956,
+    "plausible": "1948\u20131952",
+    "straightforward": "1953\u20131956",
+    "confidence": "Medium"
+  },
+  {
+    "num": 180,
+    "name": "Logic theorist AI program",
+    "year": 1956,
+    "plausible": "1950-1953",
+    "straightforward": "1955-1958",
+    "confidence": "Medium"
+  },
+  {
+    "num": 181,
+    "name": "Laser/optical amplifier",
+    "year": 1957,
+    "plausible": "1925-1935",
+    "straightforward": "1950-1957",
+    "confidence": "Medium"
+  },
+  {
+    "num": 182,
+    "name": "IBM 610 Single-use computer",
+    "year": 1957,
+    "plausible": "1948\u20131952",
+    "straightforward": "1954\u20131957",
+    "confidence": "Medium"
+  },
+  {
+    "num": 183,
+    "name": "Sputnik artificial satellite",
+    "year": 1957,
+    "plausible": "1945\u20131950",
+    "straightforward": "1955\u20131960",
+    "confidence": "Medium"
+  },
+  {
+    "num": 184,
+    "name": "Integrated circuit",
+    "year": 1958,
+    "plausible": "1955-1957",
+    "straightforward": "1958-1962",
+    "confidence": "Medium"
+  },
+  {
+    "num": 185,
+    "name": "MOSFET Transistor",
+    "year": 1959,
+    "plausible": "1955\u20131958",
+    "straightforward": "1958\u20131962",
+    "confidence": "Medium"
+  },
+  {
+    "num": 186,
+    "name": "First working laser",
+    "year": 1960,
+    "plausible": "1930-1940",
+    "straightforward": "1950-1960",
+    "confidence": "Medium"
+  },
+  {
+    "num": 187,
+    "name": "Electronic cigarette",
+    "year": 1963,
+    "plausible": "1890-1910",
+    "straightforward": "1920-1940",
+    "confidence": "Medium"
+  },
+  {
+    "num": 188,
+    "name": "Shinkansen high-speed rail",
+    "year": 1964,
+    "plausible": "1935\u20131945",
+    "straightforward": "1955\u20131960",
+    "confidence": "Medium"
+  },
+  {
+    "num": 189,
+    "name": "Kevlar",
+    "year": 1965,
+    "plausible": "1955\u20131962",
+    "straightforward": "1962\u20131968",
+    "confidence": "Medium"
+  },
+  {
+    "num": 190,
+    "name": "Packet-switched networks",
+    "year": 1969,
+    "plausible": "1960\u20131965",
+    "straightforward": "1965\u20131969",
+    "confidence": "Medium"
+  }
+]

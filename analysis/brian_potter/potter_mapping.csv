@@ -1,0 +1,191 @@
+potter_num,potter_name,potter_year,potter_plausible,potter_straightforward,potter_confidence,potter_gap,flag_binding_year,flag_binding_phenomenon,flag_gap,tree_title,tree_subtitle,tree_year,tree_id,date_diff_tree_minus_potter,tree_binding_predecessor,tree_gap
+1,Voltaic Pile,1800,Flag,Flag,Flag,,1791,Galvani's animal-electricity observations,9,Voltaic pile,,1799,rec1rTgVJlrNsgUhN,-1,Galvanism (1780) [Inspiration],19
+2,Arc Lamp,1802,1800-1802,1800-1810,High,2,,,,Arc lamp,,1802,reccbzk5LJbPdFDuP,0,Electric arc (1800) [Prerequisite],2
+3,Isolation of morphine,1804,1650-1750,1780-1810,Medium,154,,,,Morphine,,1804,recWe0HarrmkMZBxJ,0,(no in-edges),
+4,Jacquard Loom,1804,1500–1600,1700–1750,Medium,304,,,,Jacquard loom,,1801,recVlfEP8wCisJyYN,-3,Automatic loom (1745) [Improvement],56
+5,High-pressure steam locomotive,1804,1780-1795,1800-1815,Medium,24,,,,Steam locomotive,,1804,reckSmAadkl8VFpCl,0,High-pressure steam engine (1799) [Prerequisite],5
+6,General anaesthetic,1804,200–600 AD,1500–1700,Medium,1604,,,,Surgery under anesthesia,Tsūsensan,1804,reckbe10vObtcAFF2,0,General anesthesia (200) [Inspiration],1604
+7,"Internal combustion engine ""Pyreolophore""",1807,1680–1720,1750–1800,Medium,127,,,,Motorboat,Pyréolophore,1807,recEeHXzQa5w0IjKx,0,Hydrogen (1766) [Component],41
+8,Commercial steamboat,1807,1760–1780,1790–1800,Medium,47,,,,Steamboat transport,North River Steamboat / Clermont,1807,recc0VqoZmInkh8jZ,0,High-pressure steam engine (1799) [Component],8
+9,Canning process,1810,1500-1650,1700-1780,Medium,310,,,,Canning,,1809,recglO9404u35ZEtY,-1,(no in-edges),
+10,Wrist Watch,1810,1675-1700,1750-1800,Medium,135,,,,Wristwatch,,1810,recFH3slXIOz8mLDS,0,Pocket watch (1505) [Prerequisite],305
+11,Cylinder steam printing press,1811,1790-1800,1800-1811,Medium,21,,,,Powered printing press,,1811,recIDA6a3WH8xwv0D,0,Printing press (1439) [Improvement],372
+12,Safety lamp,1812,1700–1750,1770–1800,Medium,112,,,,Safety lamp,Clanny lamp,1812,recLW0PEz81VDnUCV,0,(no in-edges),
+13,Planing machine,1814,1750-1780,1790-1810,Medium,64,,,,Planer,,1814,recsIZq2Atie7ymde,0,Screw-cutting lathe (1800) [Prerequisite],14
+14,Stethoscope,1816,400 BC – 200 AD,1700–1780,Medium,2216,,,,Stethoscope,,1816,recZtstnMGfIJZD6z,0,Ear trumpet (1634) [Prerequisite],182
+15,Electric telegraph,1816,1750–1770,1780–1800,Medium,66,,,,Electric telegraph,,1816,recaoRGpzJXbeRFnF,0,Semaphore telegraph (1792) [Improvement],24
+16,Stirling hot air engine,1816,1700-1750,1780-1810,Medium,116,,,,Stirling engine,,1816,recLC0VJiWHkhGpmZ,0,(no in-edges),
+17,Dandy horse,1817,1-500 AD,1500-1700,,1816,,,,Dandy horse,"aka Laufmaschine, Velocipede, Draisine",1817,recoWhBoQRgK266GL,0,Spoked wheel (-2000) [Component],3817
+18,Tunneling shield,1818,1750-1790,1800-1820,Medium,68,,,,Tunnelling shield,,1818,recFgN4rk38b9SvA1,0,(no in-edges),
+19,Pattern-tracing lathe,1822,1500-1600,1750-1800,Medium,322,,,,Pattern-tracing lathe,,1822,recDWPyQVhtI2xFGd,0,Lathe (-600) [Improvement],2422
+20,Heliography,1822,1700–1750,1780–1810,Medium,122,,,,Photoengraving,Heliography,1822,recAWnQDDnWuqK5xe,0,Lithography (1796) [Inspiration],26
+21,Difference engine,1822,1700-1750,1780-1820,Medium,122,,,,Difference engine,,1822,reciO8P4WsLiFOFfC,0,(no in-edges),
+22,First lighter (Doberiner's Lamp),1823,1790-1800,1810-1820,Medium,33,,,,Döbereiner's lamp,,1823,recZxt8Ax0YaCvBgk,0,Hydrogen (1766) [Component],57
+23,Bolt-action rifle,1824,1750-1780,1810-1825,Medium,74,,,,Bolt-action rifle,,1824,recanEFJBue6D1QGc,0,(no in-edges),
+24,Electromagnet,1824,1820-1822,1822-1825,Medium,4,,,,Electromagnet,,1824,recKSDjXGqYyWLWL8,0,(no in-edges),
+25,Friction match,1826,1790–1810,1810–1825,Medium,36,,,,Friction match,,1826,recgJQIsIShZezi4D,0,Sulfur match (577) [Improvement],1249
+26,Gas Stove,1826,1790-1810,1810-1820,Medium,36,,,,Gas stove,,1826,recH64Lu3Uj83DSXo,0,Public gas lighting (1807) [Prerequisite],19
+27,Hot-blast iron smelting,1828,1400-1500,1700-1750,Medium,428,,,,Hot blast,,1828,rech844K0WMA0oQkf,0,Blast furnace (-200) [Improvement],2028
+28,Reaping machine,1828,1500-1650,1750-1820,Medium,328,,,,Reaping machine,,1828,rec9nrRy5W1UgbPIB,0,(no in-edges),
+29,Commutated electrocmagnetic motor,1828,1820-1822,1825-1830,Medium,8,,,,Commutated rotary electric motor,,1828,recjYUIf5PXzcXbLX,0,Electromagnet (1824) [Prerequisite],4
+30,Braile Tactile alphabet,1829,,,Flag,,,,,Braille,,1829,recUCIZOsH9Ws4ctn,0,(no in-edges),
+31,Compound air compressor,1829,1700-1750,1790-1820,Medium,129,,,,,,,,,,
+32,Corrugated galvanized iron,1829,1750-1790,1800-1820,Medium,79,,,,Corrugated iron,,1829,rec4ikbtP6CyH6SQ9,0,Puddling (1783) [Prerequisite],46
+33,Lawn mower,1830,1500-1600,1750-1800,Medium,330,,,,Lawn mower,,1830,recMwKH2UwvLk5Xs7,0,Scythe (-5000) [Improvement],6830
+34,Electromagnetic induction,1831,,,Flag,,,,,Electromagnetic induction,,1831,recKrJ7K87jx1EUMN,0,(no in-edges),
+35,First practical rotating electric motor,1834,1822-1828,1832-1834,Medium,12,,,,Electric motor,aka DC motor,1832,recsuW9YJ4WMN3sDJ,-2,Commutated rotary electric motor (1828) [Improvement],4
+36,Electromechanical relay,1835,1820-1825,1825-1835,High,15,,,,Electromechanical relay,,1835,recvEzWBOU5g7labA,0,Electric telegraph (1816) [Prerequisite],19
+37,Morse Code,1837,1700-1800,1820-1835,Medium,137,,,,Morse code,,1837,recMHHiWGRGYndedx,0,Electric telegraph (1816) [Prerequisite],21
+38,Electrotyping,1838,1800-1810,1830-1838,Medium,38,,,,Electrotyping,,1838,recdfYuFZx20UNCnH,0,Daniell cell (1836) [Prerequisite],2
+39,Steam Shovel,1839,1810-1820,1825-1835,Medium,29,,,,Steam shovel,,1839,rec2KVWOpAseqdG70,0,High-pressure steam engine (1799) [Component],40
+40,Steam Hammer,1839,1790-1810,1820-1835,Medium,49,,,,Steam hammer,,1839,rec9n8w3W4lEHzZoH,0,High-pressure steam engine (1799) [Component],40
+41,Photovoltaic effect,1839,,,Flag,,,,,Photovoltaic effect,,1839,recLbe5SB3DqTwSi9,0,(no in-edges),
+42,Vulcanized Rubber,1839,,,Flag,,,,,Vulcanized rubber,,1839,recyBchzgkHw9bYYt,0,Rubber (-1600) [Prerequisite],3439
+43,Daguerrotype,1839,1790-1810,1820-1835,Medium,49,,,,Daguerreotype,,1839,rec7rjH49q7mt8pCX,0,Physautotype (1832) [Improvement],7
+44,"""Blueprint"" (cyanotype) process",1840,1725–1750,1790–1820,Medium,115,,,,Blueprint,aka Cyanotype,1842,recTG788YjgwiAMDm,2,Prussian blue (1706) [Prerequisite],136
+45,Printing telegraph,1841,1820–1830,1835–1840,Medium,21,,,,Recording telegraph,aka Bain's facsimile,1843,recashgviuybcHC7w,2,Electric telegraph (1816) [Prerequisite],27
+46,Fuel Cell,1842,1820-1835,1835-1842,Medium,22,,,,Fuel cell,Grove cell,1842,recPeTRr47mt8Z4JM,0,Voltaic pile (1799) [Prerequisite],43
+47,Super-phosphate fertilizer,1842,1750-1780,1800-1830,Medium,92,,,,Superphosphate,,1842,reccflsOrl3bH6adk,0,Sulfuric acid (1100) [Prerequisite],742
+48,Wood-pulp paper,1844,1500–1650,1750–1820,Medium,344,,,,Mechanical wood pulping,,1844,reclesCUDh8mAxK6u,0,Papermaking (105) [Improvement],1739
+49,Hypodermic needle,1844,100 BC – 200 AD,1700–1800,Medium,1944,,,,Hypodermic needle,,1844,recaCPLrsvJG3CP1W,0,(no in-edges),
+50,Modern high-strength Portland cement,1845,1750-1790,1810-1830,Medium,95,,,,Modern Portland cement,,1845,recusOphDcNonXocA,0,Portland cement (1824) [Improvement],21
+51,Tunnel-boring machine,1846,1750-1800,1820-1840,Medium,96,,,,Tunnel boring machine,,1846,recqyg62TtSMAW0Ou,0,(no in-edges),
+52,Nitroglycerin,1847,1810-1825,1835-1845,Medium,37,,,,Nitroglycerin,,1846,recOBIfCnlXIkD8Wb,-1,Glycerol (1779) [Component],67
+53,Pneumatic drill,1848,1750-1800,1820-1840,Medium,98,,,,Pneumatic drill,aka Jackhammer,1848,recInk9VMBdNypyP3,0,(no in-edges),
+54,Pin-tumbler cylinder Lock,1848,100 BC – 200 AD,1700–1780,Medium,1948,,,,Yale pin-tumbler lock,,1848,recWOKE06PnrhwOYP,0,Double-acting pin tumbler lock (1805) [Improvement],43
+55,Metallic-cartridge repeating rifle,1849,1820-1835,1840-1850,Medium,29,,,,,,,,,,
+56,Francis water turbine,1849,1750-1790,1820-1840,Medium,99,,,,Francis turbine,,1848,recXapEDVKeNYqJpU,-1,Boyden turbine (1844) [Improvement],4
+57,Safety pin,1849,500 BC – 200 BC,100 BC – 100 AD,High,2349,,,,Safety pin,,1849,recVhAmxxOYdw0t7H,0,(no in-edges),
+58,Hydraulic accumulator,1850,1700–1750,1790–1820,Medium,150,,,,Hydraulic accumulator,,1850,recjj1JDS3UhnVYDR,0,Hydraulic cylinder (1846) [Prerequisite],4
+59,Public flush toilet,1851,1840–1851,1845–1855,Flag (partly social/organizational),11,,,,Public flush toilet,,1851,recGbqxkYHxQ5otDQ,0,Flush toilet (1778) [Prerequisite],73
+60,Chemical-vapor deposition,1852,1750–1790,1810–1840,Medium,102,,,,Chemical vapor deposition,,1880,reclg2E2dK7JoWXcJ,28,Carbon fibers (1860) [Byproduct],20
+61,Safety-brake elevator,1852,1500-1600,1750-1820,High,352,,,,Safety elevator,,1852,rec0JhKssriayxq1V,0,Elevator (-236) [Improvement],2088
+62,Powered dirigible flight,1852,1800-1820,1840-1850,Medium,52,,,,Dirigible,,1852,recGH1LlELXEq9KEt,0,Meusnier's dirigible (1783) [Improvement],69
+63,Reinforced concrete,1853,100 BC – 200 AD,1820–1850,Medium,1953,,,,Reinforced concrete,,1849,recnXsVzTwa0lap5C,-4,Ferrocement (1848) [Prerequisite],1
+64,Practical three-color photography,1855,1840–1845,1850–1860,Medium,15,,,,Color photography,,1861,rec7U7uFoCBwr5OFT,6,Calotype (1841) [Improvement],20
+65,Bessemer Steel Process,1855,1700-1750,1780-1820,Medium,155,,,,Bessemer process,,1856,rec4KCN3QOgszxg6W,1,Puddling (1783) [Obsolescence],73
+66,Parkesine/celluoid,1856,1840–1850,1850–1860,Medium,16,,,,Parkesine,,1855,recNoenzZodkc97zo,-1,Collodion (1846) [Prerequisite],9
+67,Vapour-compression ice machine,1856,1780-1810,1830-1850,Medium,76,,,,Vapor-compression refrigeration system,,1834,recZDLvMtvrjSxRbR,-22,Artificial refrigeration (1755) [Prerequisite],79
+68,Mauveine synthetic dye,1856,N/A (flagged),N/A (flagged),Flag,,,"Serendipitous accident, unbounded; modern organic chemistry (post-1865) would also be needed",,Synthetic dye,Mauveine,1856,recz8N9Mbm6ypGQlr,0,Aniline (1826) [Prerequisite],30
+69,Geissler tube,1857,1750-1780,1820-1840,Medium,107,,,,Geissler tube,,1857,recEN6Zu49wOSBVPe,0,Induction coil (1836) [Prerequisite],21
+70,Phonautograph,1857,1700-1750,1800-1840,Medium,157,,,,Phonautograph,,1857,recPSbNMzTmP2fTxD,0,(no in-edges),
+71,Lead-acid rechargeable battery,1859,1800-1810,1830-1840,Medium,59,,,,Rechargeable battery,Lead–acid battery,1859,reccM2UX5lqpq77e0,0,Daniell cell (1836) [Prerequisite],23
+72,Carbon fiber,1860,1810-1825,1830-1850,Medium,50,,,,Carbon fibers,,1860,recLJqr0FBV1J6qDM,0,(no in-edges),
+73,Pasteurization,1864,1780-1820,1840-1860,Medium,84,,,,Pasteurization,,1864,recuhq2832ryzYwES,0,Canning (1809) [Prerequisite],55
+74,Siemens-martin open-hearth steel process,1865,1820-1840,1850-1860,Medium,45,,,,Siemens–Martin process,,1865,reccrEBES7f5CU1gi,0,Open hearth furnace (1857) [Prerequisite],8
+75,Dynamite,1867,1847-1855,1860-1867,High,20,,,,Dynamite,,1867,recgZQvlI0C1UZmJS,0,Nitroglycerin (1846) [Prerequisite],21
+76,Barbed wire,1867,100 BC – 500 AD,1850–1867,,1967,,,,Barbed wire,,1867,recqg4961qvMX2T7V,0,(no in-edges),
+77,PVC,1872,1835-1845,1860-1872,Flag,37,,,,Vinyl,"aka Polyvinyl chloride, PVC",1872,recu3HV6tpGIY0LsA,0,(no in-edges),
+78,"Early ""stainless"" steel",1872,1830-1850,1860-1870,Medium,42,,,,Tool steel and air-hardening steel,Mushet steel,1868,rec76JAPVKrk6GRtq,-4,Bessemer process (1856) [Prerequisite],12
+79,Rotary cement kiln,1873,1830-1850,1860-1870,Medium,43,,,,Rotary kiln,,1873,receTOdS3uX8Ro0gG,0,(no in-edges),
+80,Crookes radiometer,1873,1700-1750,1820-1860,Medium,173,,,,Crookes radiometer,aka Light mill,1873,rec5wymuAOXDeZHVg,0,Sprengel pump (1865) [Link plausible but unclear],8
+81,Gramme dynamo,1873,1835-1845,1855-1865,Medium,38,,,,Electric generator,Gramme machine,1871,rec6OYA3zx7AYg2HU,-2,Electric motor (1832) [Prerequisite],39
+82,Metal detector,1874,1835-1845,1850-1865,Medium,39,,,,,,,,,,
+83,Electric tram,1875,1838-1845,1867-1875,Medium,37,,,,Electric tram,,1880,recR9vwUgxHld7Y3x,5,Electric generator (1871) [Component],9
+84,Four-stroke engine,1876,1830-1850,1860-1870,Medium,46,,,,Four-stroke engine,Otto engine,1876,recGVZMEzSR5AtIGS,0,Internal combustion engine (1859) [Improvement],17
+85,Telephone,1876,1840–1855,1860–1870,Medium,36,,,,Telephone,,1876,recFVh9QpKp4whFy4,0,Quadruplex telegraph (1874) [Prerequisite],2
+86,Phonograph,1877,1700–1750,1820–1860,Medium,177,,,,Phonograph,,1877,recPCIDBCXdR9cwKA,0,Telephone (1876) [Inspiration],1
+87,Closed-circuit rebreather,1878,1790–1820,1840–1860,Medium,88,,,,Rebreather,,1878,recPgbVyFgcbsrgcM,0,(no in-edges),
+88,Pelton Wheel,1878,1500-1700,1750-1830,Medium,378,,,,Pelton wheel,,1878,recvVZpJvGKXngcEJ,0,Reverse overshot water wheel (-25) [Improvement],1903
+89,Incandescent light bulb,1879,1825-1840,1865-1875,Medium,54,,,,Light bulb,,1879,recvvlPekZIYbZxUb,0,Sprengel pump (1865) [Prerequisite],14
+90,Carbon arc welding,1881,1810–1830,1840–1870,Medium,71,,,,Carbon arc welding,,1881,recKk1KlKmgWAVMC0,0,Electric arc (1800) [Prerequisite],81
+91,Recoil-operated machine gun,1884,1855–1865,1870–1880,Medium,29,,,,Automatic machine gun,Maxim gun,1884,recw7r6K0AobyeGJn,0,Gatling gun (1861) [Improvement],23
+92,Poudre B Smokeless powder,1884,1850–1865,1865–1880,Medium,34,,,,Smokeless gunpowder,Poudre B,1884,recn73dWjIqb19kRr,0,Nitroglycerin (1846) [Prerequisite],38
+93,Steam turbine,1884,1850–1865,1870–1880,Medium,34,,,,Steam turbine,,1884,recp0tqUSxjktsEZd,0,Electric generator (1871) [Prerequisite],13
+94,Closed core transformer,1884,1832-1840,1860-1875,Medium,52,,,,Closed-core transformer,,1884,rec7Hx6p5gLcFrz6x,0,Alternating current (1832) [Prerequisite],52
+95,Safety bicycle,1885,1865-1875,1875-1885,Medium,20,,,,Safety bicycle,,1885,recnrph0YROT8CXd7,0,Penny-farthing (1869) [Improvement],16
+96,Zinc-carbon dry cell,1886,1868–1875,1875–1885,Medium,18,,,,Dry cell,Zinc–carbon battery,1886,rec6qJZRjVlgCPFPA,0,Leclanché cell (1866) [Improvement],20
+97,Hall-Heroult process,1886,1855-1865,1875-1885,Medium,31,,,,Hall–Héroult process,,1886,recJrzDSlBfAXLufd,0,Aluminium (1824) [Prerequisite],62
+98,Petrol automobile,1886,1870–1880,1880–1886,Medium,16,,,,Automobile,Benz Patent-Motorwagen,1885,rec7qr8XbSVHl42sV,-1,Gasoline as fuel (1879) [Component],6
+99,Bayer alumina process,1887,1810-1830,1855-1880,Medium,77,,,,Bayer process,,1888,recPDNryrQSGaKJUT,1,Aluminium (1824) [Prerequisite],64
+100,Wind-generated electricity,1887,1835–1845,1870–1880,Medium,52,,,,Wind turbine,,1887,recrCDR4PgozKpnl6,0,Rechargeable battery (1859) [Prerequisite],28
+101,Gold cyanidation,1887,1785–1810,1840–1860,Medium,102,,,,Gold cyanidation,,1887,recu0xp3ouv3VlmZa,0,Gold (-4400) [Prerequisite],6287
+102,Ballpoint pen,1888,1500–1700,1800–1850,Medium,388,,,,Ballpoint pen,,1943,recOmFFMe6bWzO5Wa,55,Modern fountain pen (1884) [Prerequisite],59
+103,Kinetoscope motion picture viewer,1888,1885–1890,1890–1895,Medium,3,,,,Kinetoscope,,1891,recoAeqhcELRDd7m1,3,Théâtre optique (1888) [Speculative],3
+104,Experimental proof of radio waves,1888,N/A,N/A,Flag,,1865,Maxwell's electromagnetic theory,23,Radio waves and spark-gap transmitter,,1887,rechBqnRi9AMojstj,-1,Maxwell's equations (1873) [Prerequisite],14
+105,Practical pneumatic tyre,1888,1840–1850,1860–1880,Medium,48,,,,Pneumatic tire,aka Tyre,1887,recEq8QSukN494bFl,-1,Safety bicycle (1885) [Prerequisite],2
+106,Chlorofluorocarbon refrigerant,1890,1840-1860,1880-1895,Medium,50,,,,Chlorofluorocarbons,Freon-12,1890,recNSp2alh1LS7ipT,0,(no in-edges),
+107,Pre-cut folding cardboard box,1890,1840–1860,1870–1885,Medium,50,,,,Pre-cut cardboard box,,1890,recBwDO0J5r7zmcKp,0,Corrugated fiberboard (1871) [Component],19
+108,Zipper,1891,1500-1700,1800-1850,Medium,391,,,,Zipper,,1891,recMmsG3tsB0yR4Av,0,(no in-edges),
+109,Cinematograph,1892,1830-1850,1875-1885,Medium,62,,,,Cinematograph,,1892,recSXDVgTD6PbvnA7,0,Movie camera (1891) [Improvement],1
+110,Electric oven,1892,1845-1860,1880-1890,Medium,47,,,,Electric stove,,1892,rec4tNteQvwBc1WMi,0,Joule heating (1840) [Prerequisite],52
+111,"Compression ""diesel"" engine",1893,1870-1880,1885-1893,Medium,23,,,,Diesel engine,,1893,recRzWpLzA6m0R8jQ,0,Four-stroke engine (1876) [Improvement],17
+112,Rubber surgical gloves,1893,1845-1860,1870-1885,Medium,48,,,,,,,,,,
+113,Wireless telegraphy,1895,1888-1890,1890-1895,High,7,,,,Wireless telegraphy,aka Radiotelegraphy,1895,recMClvTgVyIdv9h1,0,Radio detector (1890) [Prerequisite],5
+114,X-ray,1895,N/A,N/A,Flag,,,"Phenomenon-discovery; cathode-ray tubes (1870s) available, but discovery itself unforeseeable",,X-ray,,1895,recBAzMnHgoMjlKQg,0,Crookes tube (1875) [Prerequisite],20
+115,Cloth surgical mask,1897,1860–1870,1880–1890,Medium,37,,,,,,,,,,
+116,Polyethylene,1898,"1898 (flag — historical ""discovery"" itself was an accident; practical PE depends on a phenomenon not establishable on demand)",1930–1940,Flag,0,1920,Staudinger macromolecule framework,-22,Polyethylene,,1898,recSFYZeqZdAM32i7,0,Diazomethane (1894) [Prerequisite],4
+117,Nickel cadmium rechargeable battery,1899,1840–1860,1875–1890,Medium,59,,,,Nickel–cadmium battery,,1899,rec4BlLTtZ1ii4dha,0,Cadmium (1817) [Component],82
+118,Zeppelin LZ-1 Rigid airship,1900,1885–1890,1895–1900,Medium,15,,,,Zeppelin,LZ 1,1900,recOlQHoGeA87yBQF,0,Ignition magneto (1898) [Component],2
+119,Powered suction vacuum cleaner,1901,1830-1850,1870-1885,Medium,71,,,,Powered vacuum cleaner,,1901,reckwC0ODoQsSyq3d,0,Four-stroke engine (1876) [Component],25
+120,First self-sustaining gas turbine,1903,1880-1895,1895-1905,Medium,23,,,,Gas turbine,,1903,recDeoMC1XC7zHP9G,0,(no in-edges),
+121,Laminated safety glass,1903,1865–1875,1880–1895,Medium,38,,,,Laminated glass,,1903,recRFOMfnPATkkZup,0,Nitrocellulose film (1889) [Byproduct],14
+122,"First sustained, controlled powered flight",1903,1880–1890,1895–1903,Medium,23,,,,Airplane,Wright Flyer,1903,recH8EjTEQcmRfuYS,0,Normalsegelapparat (1893) [Improvement],10
+123,Fleming valve,1904,1883–1890,1895–1904,Medium,21,,,,Thermionic diode,Fleming valve,1904,recKItfXl2xCDbTgI,0,Wireless telegraphy (1895) [Improvement],9
+124,First free helicopter flight,1907,1890–1900,1903–1907,High,17,,,,Cornu helicopter,,1907,recITZclGu0bbhqT1,0,V8 engine (1904) [Prerequisite],3
+125,Bakelite,1907,1875–1885,1895–1905,Medium,32,,,,Bakelite,,1907,recjSiZz8c4kPPvE9,0,(no in-edges),
+126,Ramjet concept,1907,1690-1750,1880-1900,Medium,217,,,,Ramjet,Leduc 0.10,1949,recjbl4UvI684xA3Y,42,(no in-edges),
+127,Cellophane,1908,1895-1900,1900-1908,Medium,13,,,,Cellophane,,1908,recd6eUBL030IxBMq,0,Rayon (1892) [Prerequisite],16
+128,Haber-Bosch process,1909,1890–1900,1900–1910,Medium,19,,,,Haber process,aka Haber–Bosch process,1909,rec8ERJERMoD9Cw09,0,Nitrogen (1772) [Prerequisite],137
+129,First static-image television transmission,1909,1885–1895,1900–1910,Medium,24,,,,,,,,,,
+130,Cloud chamber,1911,N/A,N/A,Flag,,1896,Radioactivity (Becquerel),15,Cloud chamber,,1911,recNXdf3y1R7ooFnT,0,(no in-edges),
+131,Electric slot cars,1912,1838–1850,1885–1895,Medium,74,,,,,,,,,,
+132,First articulated electric trams,1912,1890–1895,1900–1910,Medium,22,,,,Articulated tram,,1912,recKJaiEdQYp5K3qi,0,Electric tram (1880) [Improvement],32
+133,Bergius high-pressure coal hydrogenation process,1913,1900–1910,1910–1915,Medium,13,,,,Bergius process,,1913,recabAQLjVmLq2bFa,0,(no in-edges),
+134,Kaplan axial-flow adjustable blade turbine,1913,1860–1875,1885–1900,Medium,53,,,,Kaplan turbine,,1913,recin1FEe3BFWzL8u,0,Francis turbine (1848) [Improvement],65
+135,Stainless Steel,1915,1890–1900,1905–1915,Medium,25,,,,Stainless steel,,1913,rechN8hqrp6uMUzg8,-2,Chromium (1797) [Prerequisite],116
+136,First practical battle tanks,1915,1900–1910,1910–1915,Medium,15,,,,Tank,Mark I,1915,recwx8Eqqc7k1lW7P,0,Continuous track snow vehicle (1911) [Inspiration],4
+137,Czocharlski crystal pulling,1916,1870-1900,1902-1916,Medium,46,,,,Czochralski method,,1915,recrb3UdYAeXSEES4,-1,(no in-edges),
+138,Crystal oscillator,1917,1913–1915,1915–1918,Medium,4,,,,Crystal oscillator,,1917,reck8o2UKgurUeduI,0,Piezoelectricity (1880) [Prerequisite],37
+139,Fischer-Tropsch coal-to-liquid process,1925,1905-1915,1915-1925,Medium,20,,,,Fischer–Tropsch process,,1925,reckdZ4nt3SZv00Ol,0,Coal gas and gas lighting (1785) [Prerequisite],140
+140,Yagi-Uda directional antenna,1926,1900-1910,1915-1925,Medium,26,,,,Yagi–Uda antenna,,1926,recwkfGOKUOh37eIn,0,Radio broadcasting (1912) [Prerequisite],14
+141,Liquid fueled rocket launch,1926,1900–1910,1915–1925,Medium,26,,,,Liquid-propellant rocket,,1926,recRPwGoJO17yOfat,0,Hampson–Linde air liquefaction (1895) [Prerequisite],31
+142,Three-point hitch,1926,1900-1915,1915-1925,Medium,26,,,,Three-point hitch,,1926,rec7DcFBQoal2DDaE,0,Tractor (1889) [Prerequisite],37
+143,First public live-image television demo,1926,1890–1900,1910–1920,Medium,36,,,,Mechanical television,,1925,recxmbIFsbISQoSJM,-1,Amplifier (1912) [Prerequisite],13
+144,Quartz Clock,1927,1920–1925,1925–1930,Medium,7,,,,Quartz clock,,1927,recfAGMD1jdASemgn,0,Crystal oscillator (1917) [Prerequisite],10
+145,Discovery of penicillin's antibiotic action,1928,N/A,N/A,Flag,,,Serendipitous accident; phenomenon-discovery,,Penicillin,,1928,recLxp7SQHEmGtPlS,0,Petri dish (1887) [Byproduct],41
+146,Turbojet,1928,1905–1915,1925–1935,Medium,23,,,,Turbojet,,1930,rec4OaSJOCc4ZXiBq,2,Gas turbine (1903) [Prerequisite],27
+147,First practical all-electric television,1928,1915-1922,1925-1930,Medium,13,,,,Electronic television,,1928,receO2EsgXizPGDie,0,Video camera tube (1927) [Prerequisite],1
+148,Recirculating ball screw,1929,1870–1890,1900–1920,Medium,59,,,,,,,,,,
+149,Phase-contrast microscopy,1930,1880-1895,1900-1915,Medium,50,,,,Phase-contrast microscope,,1930,recMnyCOstBnWe48s,0,Binocular microscope (1852) [Improvement],78
+150,Electron microscope,1931,1925-1930,1928-1932,Flag,6,,,,Electron microscope,,1933,reciSYyqkMCiuO1l2,2,Wave–particle duality of matter (1924) [Prerequisite],9
+151,FM Radio,1933,1922-1928,1928-1933,Medium,11,,,,FM radio,aka Frequency modulation,1933,recUA00DDrKQCZt5f,0,Radio broadcasting (1912) [Improvement],21
+152,Lightweight folding wheelchair,1933,1890–1900,1910–1920,Medium,43,,,,,,,,,,
+153,Nylon synthetic fiber,1935,1920–1928,1930–1935,Medium,15,,,,Nylon,,1935,recq8PGppX0XjDUpR,0,Rayon (1892) [Prerequisite],43
+154,Programmable computer,1938,Flag (see explanation),Flag (see explanation),Flag,,1936,Church-Turing computability framework,2,Electromechanical programmable computer,Z1,1938,recAVPTHqgWIJEDMn,0,Floating-point arithmetic (1914) [Prerequisite],24
+155,Nuclear fission,1938,N/A,N/A,Flag,,,Phenomenon-discovery; off-limits,,Nuclear fission,,1938,rec0sZecCFCEtEpVT,0,Neutron (1932) [Prerequisite],6
+156,Defibrilator,1939,1900–1910,1925–1935,Medium,39,,,,Defibrillator,,1933,rec6gHDMVV0gd8xcj,-6,(no in-edges),
+157,Plutonium isolation,1940,N/A,N/A,Flag,,1938,Nuclear fission,2,Plutonium,,1940,recvsKso3pvmTVUzh,0,Nuclear fission (1938) [Prerequisite],2
+158,Cavity Magnetron,1940,1925-1930,1935-1940,Medium,15,,,,Cavity magnetron,,1940,recA0q7xEzH8UYiEI,0,Radar (1934) [Improvement],6
+159,PET Fiber,1941,1925-1935,1935-1941,Medium,16,,,,Polyester,Polyethylene terephthalate (PET),1941,recd5WD5yS11S8dqi,0,Nylon (1935) [Link plausible but unclear],6
+160,V-2 (A-4) long-range ballistic missile,1942,1925–1935,1935–1942,Medium,17,,,,Ballistic missile,V-2 rocket,1944,recOAQRYM24cKsFDF,2,Electronic analog computer (1941) [Component],3
+161,Influenza vaccine,1944,1936-1940,1940-1945,Medium,8,,,,,,,,,,
+162,Atomic bomb,1945,N/A,N/A,Flag,,1938,Nuclear fission,7,Atomic bomb,Trinity test,1945,recLoB7vqffVFckhw,0,Nuclear reactor (1942) [Prerequisite],3
+163,Microwave oven,1945,N/A,N/A,Flag,,1940,Cavity magnetron (Randall & Boot) + Spencer accident,5,Microwave oven,Radarange,1947,recWgPH54NTC1yeOA,2,Cavity magnetron (1940) [Prerequisite],7
+164,Radiocarbon dating,1946,1940–1946,1945–1950,Flag,6,,,,Radiocarbon dating,,1949,recVOykfEIgHg86MQ,3,Carbon-14 (1940) [Prerequisite],9
+165,Ejector seat,1946,1935-1940,1940-1945,Medium,11,,,,Ejector seat,,1946,reclyp9PPqYN2DWS9,0,Fighter aircraft (1914) [Improvement],32
+166,Holography,1947,1935-1945,1945-1960,Medium,12,,,,Holography,,1947,rec7a4hyoeiSPYv41,0,Electron microscope (1933) [Byproduct],14
+167,Hydraulic fracturing,1947,1880-1900,1910-1930,Medium,67,,,,Fracking,,1949,reckxdvj0hyFEgFm6,2,Napalm (1942) [Prerequisite],7
+168,Transistor,1947,1935-1942,1945-1950,Medium,12,,,,Transistor,Point-contact transistor,1947,recav1Xd9OvTntXl3,0,p–n junction (1939) [Prerequisite],8
+169,Atomic clock,1948,N/A,N/A,Flag,,1934,Cleeton & Williams microwave spectroscopy + quantum mechanics,14,Atomic clock,,1955,rec8wVY1kmGTKeATj,7,Nuclear magnetic resonance (1938) [Prerequisite],17
+170,Basic oxygen steelmaking,1948,1900–1910,1920–1935,Medium,48,,,,Basic oxygen steelmaking,,1948,recGmvMTixCTCP5jR,0,Siemens–Martin process (1865) [Obsolescence],83
+171,"""Bertie the Brain"" video game",1950,1935-1942,1945-1950,Medium,15,,,,Video game,Bertie the Brain,1950,recPphd9qDZbdMMFm,0,High-vacuum tube (1915) [Prerequisite],35
+172,Tokamak fusion reactor concept,1950,N/A,N/A,Flag,,1939,Bethe stellar nucleosynthesis + plasma/MHD theory,11,Tokamak,,1958,recmvcMKvh07TwlOj,8,Nuclear fusion (1934) [Prerequisite],24
+173,Float glass process,1952,1880-1910,1920-1940,Medium,72,,,,Float glass,,1952,reciOrNOMZxOyDON7,0,Fourcault drawn sheet glass (1912) [Obsolescence],40
+174,Thermonuclear weapon,1952,n/a,n/a,Flag,,1945,Working fission primary,7,Hydrogen bomb,aka Thermonuclear weapon,1951,reccvR0kk6TZ6NaUJ,-1,Monte Carlo method (1946) [Component],5
+175,Helical scan video tape recorder,1953,1945–1950,1950–1955,Medium,8,,,,Video tape recorder,Ampex VRX-1000,1956,rec6a4GcdjkLXxV6B,3,Tape recorder (1935) [Improvement],21
+176,Silicon solar PV cell,1954,1948–1951,1953–1955,Medium,6,,,,Solar cell,,1954,recmqUOra8dybHWxE,0,p–n junction (1939) [Prerequisite],15
+177,Hovercraft,1955,1880-1900,1910-1930,Medium,75,,,,Hovercraft,SR.N1,1959,rechdvcD2tXvU0Zy0,4,Handheld hair dryer (1920) [Inspiration],39
+178,Shipping container,1955,,,Flag,,,,,Intermodal container,aka Shipping container,1955,recrk3UdNIc6RXAZh,0,Conex box (1952) [Improvement],3
+179,Hard-disk drive,1956,1948–1952,1953–1956,Medium,8,,,,Hard disk drive,IBM 350,1956,recdulVDyf6LSXwsV,0,Stored-program computer (1948) [Improvement],8
+180,Logic theorist AI program,1956,1950-1953,1955-1958,Medium,6,,,,,,,,,,
+181,Laser/optical amplifier,1957,1925-1935,1950-1957,Medium,32,,,,Maser,,1953,recJMm4DvP2CvA6WH,-4,(no in-edges),
+182,IBM 610 Single-use computer,1957,1948–1952,1954–1957,Medium,9,,,,,,,,,,
+183,Sputnik artificial satellite,1957,1945–1950,1955–1960,Medium,12,,,,Artificial satellite,Sputnik 1,1957,recfcFgbS5Z7I5bz2,0,Intercontinental ballistic missile (1957) [Prerequisite],0
+184,Integrated circuit,1958,1955-1957,1958-1962,Medium,3,,,,Hybrid integrated circuit,,1958,reckzYVszSpE5c2Cr,0,Germanium (1886) [Prerequisite],72
+185,MOSFET Transistor,1959,1955–1958,1958–1962,Medium,4,,,,MOSFET,aka Metal-oxide-semiconductor field-effect transistor,1959,recCr4g543IaqeEM8,0,Transistor (1947) [Improvement],12
+186,First working laser,1960,1930-1940,1950-1960,Medium,30,,,,Laser,,1960,recoZJHD0It14tSJR,0,Maser (1953) [Prerequisite],7
+187,Electronic cigarette,1963,1890-1910,1920-1940,Medium,73,,,,Electronic cigarette,Ruyan E-cigar,2003,rec0Z8CYTbagmkBV2,40,Nichrome heating element (1905) [Prerequisite],98
+188,Shinkansen high-speed rail,1964,1935–1945,1955–1960,Medium,29,,,,High-speed rail,0 Series Shinkansen,1964,recnRve9I6pkzgUPh,0,(no in-edges),
+189,Kevlar,1965,1955–1962,1962–1968,Medium,10,,,,Kevlar,,1965,rec2f7lmCsadm2i76,0,(no in-edges),
+190,Packet-switched networks,1969,1960–1965,1965–1969,Medium,9,,,,Packet switching,,1965,recU6lS5fawdtcRYU,-4,Time-sharing (1959) [Inspiration],6
