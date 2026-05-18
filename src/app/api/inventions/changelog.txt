@@ -35,7 +35,7 @@
 - Added connection: Liquefaction of gas -> Liquid oxygen
 - Added connection: Liquefaction of gas -> Liquid nitrogen
 - Added connection: Liquefaction of gas -> Liquefied gas refrigerants
-- Added connection: Glass blowing -> Liquefaction of gas
+- Added connection: Blown glass -> Liquefaction of gas
 - Added connection: Public gas lighting -> Gas stove
 - Added connection: Rib vault -> Flying buttress
 - Added connection: Chlorine -> Liquefaction of gas
@@ -67,7 +67,7 @@
 - Added connection: Aqueduct -> Yakhchāl
 - Added connection: Uranium -> Radium
 - Added connection: Uranium -> Polonium
-- Added connection: Glass blowing -> Pneumatic trough
+- Added connection: Blown glass -> Pneumatic trough
 - Added connection: Vacuum flask -> Hampson–Linde air liquefaction
 - Added connection: Airplane -> Cloud seeding
 - Added connection: Dry ice -> Cloud seeding
@@ -527,8 +527,8 @@
 - Added tech: Broad sheet glass
 - Added tech: Lapis specularis window
 - Added connection: Glass window -> Broad sheet glass
-- Added connection: Glass blowing -> Broad sheet glass
-- Added connection: Glass blowing -> Crown glass
+- Added connection: Blown glass -> Broad sheet glass
+- Added connection: Blown glass -> Crown glass
 - Added connection: Glass window -> Crown glass
 - Added connection: Glass -> Magnifying glass
 - Added connection: Broad sheet glass -> Glasshouse
@@ -538,7 +538,7 @@
 
 2 April 2026
 - Added tech: Automatic bottle-blowing machine
-- Added connection: Glass blowing -> Automatic bottle-blowing machine
+- Added connection: Blown glass -> Automatic bottle-blowing machine
 - Added connection: Light bulb -> Automatic bottle-blowing machine
 - Added connection: Automatic bottle-blowing machine -> Glass wool
 
@@ -1018,7 +1018,7 @@
 - Added connection: Sulfuric acid -> Döbereiner's lamp
 - Added connection: Platinum -> Döbereiner's lamp
 - Added connection: Hydrogen -> Döbereiner's lamp
-- Added connection: Glass blowing -> Kipp's apparatus
+- Added connection: Blown glass -> Kipp's apparatus
 - Added connection: Hydrogen -> Kipp's apparatus
 - Added connection: Cerium -> Ferrocerium
 - Added connection: Ferrocerium -> Ferrocerium lighter
