@@ -28,7 +28,7 @@
 - Added connection: Carbon dioxide -> Carbonated water
 - Added connection: Carbon dioxide -> Nitrogen
 - Added connection: Carbon dioxide -> Hydrogen
-- Added connection: Carbon dioxide -> Oxygen (Scheele–Priestley)
+- Added connection: Carbon dioxide -> Oxygen
 - Added connection: Sulfuric acid -> Carbon dioxide
 - Added connection: Soda ash from plants -> Sodium bicarbonate
 - Added connection: Carbon dioxide -> Sodium bicarbonate
@@ -1343,7 +1343,7 @@
 - Added tech: Alkaline fuel cell
 - Added tech: Dishwasher
 - Added connection: Hydrogen -> Fuel cell
-- Added connection: Oxygen (Scheele–Priestley) -> Fuel cell
+- Added connection: Oxygen -> Fuel cell
 - Added connection: Sulfuric acid -> Fuel cell
 - Added connection: Voltaic pile -> Fuel cell
 - Added connection: Fuel cell -> Alkaline fuel cell
