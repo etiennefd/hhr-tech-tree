@@ -1,3 +1,9 @@
+18 May 2026
+- Added tech: Glycerol
+- Added connection: Glycerol -> Nitroglycerin
+- Added connection: Soap -> Glycerol
+- Added connection: Olive oil -> Glycerol
+
 17 May 2026
 - Added connection: Nitric acid -> Nitroglycerin
 - Added connection: Sulfuric acid -> Nitroglycerin
