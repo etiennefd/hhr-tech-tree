@@ -4,6 +4,11 @@
 - Added connection: Soap -> Glycerol
 - Added connection: Olive oil -> Glycerol
 - Added connection: Coal tar -> TNT
+- Added connection: Pneumatic trough -> Carbonated water
+- Added connection: Pneumatic trough -> Hydrogen
+- Added connection: Pneumatic trough -> Nitrogen
+- Added connection: Pneumatic trough -> Methane
+- Added connection: Pneumatic trough -> Oxygen
 
 17 May 2026
 - Added connection: Nitric acid -> Nitroglycerin
