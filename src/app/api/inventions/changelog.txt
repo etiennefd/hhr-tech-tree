@@ -2,8 +2,15 @@
 - Added tech: Formaldehyde
 - Added tech: Phenol
 - Added tech: Methanol
+- Added tech: Shellac
 - Added connection: Phenol -> Antiseptic surgery
 - Added connection: Coal tar -> Phenol
+- Added connection: Phenol -> Bakelite
+- Added connection: Formaldehyde -> Bakelite
+- Added connection: Shellac -> Bakelite
+- Added connection: Phenol -> Particle board
+- Added connection: Formaldehyde -> Particle board
+- Added connection: Fractional distillation -> Methanol
 
 19 May 2026
 - Added tech: Medical glove
