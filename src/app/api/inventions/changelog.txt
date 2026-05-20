@@ -1,5 +1,7 @@
 20 May 2026
+- Added tech: Formaldehyde
 - Added tech: Phenol
+- Added tech: Methanol
 - Added connection: Phenol -> Antiseptic surgery
 - Added connection: Coal tar -> Phenol
 
