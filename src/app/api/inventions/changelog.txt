@@ -1,9 +1,11 @@
 19 May 2026
 - Added tech: Medical glove
 - Added tech: Antiseptic surgery
+- Added tech: Germ theory
 - Added connection: Boyle's air pump -> Pneumatic trough
 - Added connection: Vulcanized rubber -> Medical glove
 - Added connection: Antiseptic surgery -> Medical glove
+- Added connection: Germ theory -> Antiseptic surgery
 
 18 May 2026
 - Added tech: Glycerol
