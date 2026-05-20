@@ -2,7 +2,9 @@
 - Added tech: Formaldehyde
 - Added tech: Phenol
 - Added tech: Methanol
+- Added tech: Silver halides
 - Added tech: Shellac
+- Added connection: Silver halides -> Cloud seeding
 - Added connection: Phenol -> Antiseptic surgery
 - Added connection: Coal tar -> Phenol
 - Added connection: Phenol -> Bakelite
@@ -11,6 +13,8 @@
 - Added connection: Phenol -> Particle board
 - Added connection: Formaldehyde -> Particle board
 - Added connection: Fractional distillation -> Methanol
+- Added connection: Silver halides -> Calotype
+- Added connection: Silver halides -> Daguerreotype
 
 19 May 2026
 - Added tech: Medical glove
