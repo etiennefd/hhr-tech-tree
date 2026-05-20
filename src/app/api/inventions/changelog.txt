@@ -6,6 +6,16 @@
 - Added connection: Vulcanized rubber -> Medical glove
 - Added connection: Antiseptic surgery -> Medical glove
 - Added connection: Germ theory -> Antiseptic surgery
+- Added connection: Compound microscope -> Germ theory
+- Added connection: Cell theory -> Germ theory
+- Added connection: Alcohol fermentation -> Germ theory
+- Added connection: Germ theory -> Pasteurization
+- Added connection: Germ theory -> Autoclave
+- Added connection: Germ theory -> Agar plate
+- Added connection: Germ theory -> Anthrax vaccine
+- Added connection: Germ theory -> Chamberland water filter
+- Added connection: Germ theory -> Rabies vaccine
+- Added connection: Germ theory -> Activated sludge
 
 18 May 2026
 - Added tech: Glycerol
