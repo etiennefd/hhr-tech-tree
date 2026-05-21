@@ -22,6 +22,8 @@
 - Added connection: Vulcanized rubber -> Powered model aircraft
 - Added connection: Powered model aircraft -> Airplane
 - Added connection: Bamboo-copter -> Powered model aircraft
+- Added connection: Steamboat -> Motorboat
+- Added connection: Motorboat -> Outboard motor
 
 20 May 2026
 - Added tech: Formaldehyde
