@@ -1,5 +1,6 @@
 21 May 2026
 - Added tech: Outboard motor
+- Added tech: Powered model aircraft
 - Added tech: Bamboo-copter
 - Added connection: Archimedes' screw -> Screw propeller
 - Added connection: Paddle wheel boat -> Screw propeller
@@ -17,6 +18,10 @@
 - Added connection: Screw propeller -> Outboard motor
 - Added connection: Kite -> Glider
 - Added connection: Glider -> Normalsegelapparat
+- Added connection: Glider -> Powered model aircraft
+- Added connection: Vulcanized rubber -> Powered model aircraft
+- Added connection: Powered model aircraft -> Airplane
+- Added connection: Bamboo-copter -> Powered model aircraft
 
 20 May 2026
 - Added tech: Formaldehyde
