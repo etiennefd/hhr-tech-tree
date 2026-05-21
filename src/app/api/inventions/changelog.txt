@@ -1,4 +1,5 @@
 21 May 2026
+- Added tech: Outboard motor
 - Added tech: Bamboo-copter
 - Added connection: Archimedes' screw -> Screw propeller
 - Added connection: Paddle wheel boat -> Screw propeller
