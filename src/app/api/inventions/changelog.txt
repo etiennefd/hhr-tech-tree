@@ -1,5 +1,6 @@
 20 May 2026
 - Added tech: Formaldehyde
+- Added tech: Screw propeller
 - Added tech: Phenol
 - Added tech: Methanol
 - Added tech: Silver halides
@@ -15,6 +16,7 @@
 - Added connection: Fractional distillation -> Methanol
 - Added connection: Silver halides -> Calotype
 - Added connection: Silver halides -> Daguerreotype
+- Added connection: Noria and water wheel -> Archimedes' screw
 
 19 May 2026
 - Added tech: Medical glove
