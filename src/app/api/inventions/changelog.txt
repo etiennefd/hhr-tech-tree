@@ -12,6 +12,9 @@
 - Added connection: Watermill -> Paddle wheel boat
 - Added connection: Galley -> Paddle wheel boat
 - Added connection: Steamboat transport -> Screw propeller
+- Added connection: Motorcycle -> Outboard motor
+- Added connection: Four-stroke engine -> Outboard motor
+- Added connection: Screw propeller -> Outboard motor
 
 20 May 2026
 - Added tech: Formaldehyde
