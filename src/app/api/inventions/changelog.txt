@@ -1,4 +1,5 @@
 21 May 2026
+- Added tech: Bamboo-copter
 - Added connection: Archimedes' screw -> Screw propeller
 - Added connection: Paddle wheel boat -> Screw propeller
 - Added connection: Screw propeller -> Steam-powered battleship
@@ -6,6 +7,9 @@
 - Added connection: Screw propeller -> Self-propelled torpedo
 - Added connection: Screw propeller -> Air-independent submarine
 - Added connection: Screw propeller -> Airplane
+- Added connection: Animal-driven rotary mill -> Paddle wheel boat
+- Added connection: Watermill -> Paddle wheel boat
+- Added connection: Galley -> Paddle wheel boat
 
 20 May 2026
 - Added tech: Formaldehyde
