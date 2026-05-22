@@ -7,6 +7,9 @@
 - Added connection: Silver halides -> Ultraviolet
 - Added connection: Ultraviolet -> Excimer laser
 - Added connection: Dispersive prism and color spectrum -> Ultraviolet
+- Added connection: Ultraviolet -> Blueprint
+- Added connection: Ultraviolet -> Photon and photoelectric effect
+- Added connection: Ultraviolet -> Photolithography
 
 21 May 2026
 - Added tech: Outboard motor
