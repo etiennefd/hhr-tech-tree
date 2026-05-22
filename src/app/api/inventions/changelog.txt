@@ -1,3 +1,13 @@
+22 May 2026
+- Added tech: Ultraviolet
+- Added tech: Infrared
+- Added connection: Infrared -> Ultraviolet
+- Added connection: Dispersive prism and color spectrum -> Infrared
+- Added connection: Mercury thermometer -> Infrared
+- Added connection: Silver halides -> Ultraviolet
+- Added connection: Ultraviolet -> Excimer laser
+- Added connection: Dispersive prism and color spectrum -> Ultraviolet
+
 21 May 2026
 - Added tech: Outboard motor
 - Added tech: Powered model aircraft
