@@ -1,6 +1,8 @@
 22 May 2026
+- Added tech: Photoelectric effect
 - Added tech: Ultraviolet
 - Added tech: Infrared
+- Added connection: Photoelectric effect -> Photomultiplier tube
 - Added connection: Infrared -> Ultraviolet
 - Added connection: Dispersive prism and color spectrum -> Infrared
 - Added connection: Mercury thermometer -> Infrared
@@ -8,8 +10,11 @@
 - Added connection: Ultraviolet -> Excimer laser
 - Added connection: Dispersive prism and color spectrum -> Ultraviolet
 - Added connection: Ultraviolet -> Blueprint
-- Added connection: Ultraviolet -> Photon and photoelectric effect
+- Added connection: Ultraviolet -> Photoelectric effect
 - Added connection: Ultraviolet -> Photolithography
+- Added connection: Photoelectric effect -> Photon
+- Added connection: Photovoltaic effect -> Photoelectric effect
+- Added connection: Radio waves and spark-gap transmitter -> Photoelectric effect
 
 21 May 2026
 - Added tech: Outboard motor
