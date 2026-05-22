@@ -2,6 +2,7 @@
 - Added tech: Traveling-wave tube
 - Added tech: Klystron
 - Added tech: Stimulated emission
+- Added tech: Sprayed concrete
 - Added tech: Millimeter waves
 - Added tech: Photoelectric effect
 - Added tech: Ultraviolet
