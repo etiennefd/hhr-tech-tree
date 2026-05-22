@@ -19,6 +19,8 @@
 - Added connection: Photon -> Compton scattering
 - Added connection: Photon -> Stimulated emission
 - Added connection: Stimulated emission -> Maser
+- Added connection: Photon -> Wave–particle duality of matter
+- Added connection: X-ray -> Wave–particle duality of matter
 
 21 May 2026
 - Added tech: Outboard motor
