@@ -27,6 +27,10 @@
 - Added connection: Millimeter waves -> Millimeter wave scanner
 - Added connection: Millimeter waves -> Crystal detector
 - Added connection: Radio waves and spark-gap transmitter -> Millimeter waves
+- Added connection: Triode -> Klystron
+- Added connection: Klystron -> Traveling-wave tube
+- Added connection: Klystron -> Satellite television
+- Added connection: Traveling-wave tube -> Satellite television
 
 21 May 2026
 - Added tech: Outboard motor
