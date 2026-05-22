@@ -23,6 +23,9 @@
 - Added connection: Stimulated emission -> Maser
 - Added connection: Photon -> Wave–particle duality of matter
 - Added connection: X-ray -> Wave–particle duality of matter
+- Added connection: Millimeter waves -> Millimeter wave scanner
+- Added connection: Millimeter waves -> Crystal detector
+- Added connection: Radio waves and spark-gap transmitter -> Millimeter waves
 
 21 May 2026
 - Added tech: Outboard motor
