@@ -32,6 +32,7 @@
 - Added connection: Klystron -> Traveling-wave tube
 - Added connection: Klystron -> Satellite television
 - Added connection: Traveling-wave tube -> Satellite television
+- Added connection: Traveling-wave tube -> Interstellar probe
 
 21 May 2026
 - Added tech: Outboard motor
