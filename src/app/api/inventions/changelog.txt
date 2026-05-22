@@ -1,4 +1,5 @@
 22 May 2026
+- Added tech: Stimulated emission
 - Added tech: Photoelectric effect
 - Added tech: Ultraviolet
 - Added tech: Infrared
@@ -15,6 +16,9 @@
 - Added connection: Photoelectric effect -> Photon
 - Added connection: Photovoltaic effect -> Photoelectric effect
 - Added connection: Radio waves and spark-gap transmitter -> Photoelectric effect
+- Added connection: Photon -> Compton scattering
+- Added connection: Photon -> Stimulated emission
+- Added connection: Stimulated emission -> Maser
 
 21 May 2026
 - Added tech: Outboard motor
