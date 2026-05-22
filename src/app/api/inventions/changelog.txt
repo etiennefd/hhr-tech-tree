@@ -1,5 +1,7 @@
 22 May 2026
+- Added tech: Klystron
 - Added tech: Stimulated emission
+- Added tech: Millimeter waves
 - Added tech: Photoelectric effect
 - Added tech: Ultraviolet
 - Added tech: Infrared
