@@ -1,3 +1,11 @@
+23 May 2026
+- Added tech: Radioisotope thermoelectric generator
+- Added connection: Polonium -> Radioisotope thermoelectric generator
+- Added connection: Plutonium -> Radioisotope thermoelectric generator
+- Added connection: Artificial satellite -> Radioisotope thermoelectric generator
+- Added connection: Radioisotope thermoelectric generator -> Interstellar probe
+- Added connection: Nuclear power -> Radioisotope thermoelectric generator
+
 22 May 2026
 - Added tech: Traveling-wave tube
 - Added tech: Klystron
