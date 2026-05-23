@@ -16,6 +16,11 @@
 - Added connection: Radioisotope generator -> Mars lander
 - Added connection: Mars lander -> Mars rover
 - Added connection: Space capsule and crewed spaceflight -> Space suit
+- Added connection: Ultraviolet -> Fluorescence
+- Added connection: Fluorescence -> Fluorescent lamp
+- Added connection: Fluorescence -> Green fluorescent protein
+- Added connection: Quinine -> Fluorescence
+- Added connection: Uranium -> Fluorescence
 
 22 May 2026
 - Added tech: Traveling-wave tube
