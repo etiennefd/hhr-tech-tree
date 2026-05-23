@@ -1,4 +1,5 @@
 23 May 2026
+- Added tech: Mars lander
 - Added tech: Lunar rover
 - Added tech: Radioisotope generator
 - Added connection: Polonium -> Radioisotope generator
@@ -10,6 +11,9 @@
 - Added connection: Solar cell -> Lunar rover
 - Added connection: Radioisotope generator -> Lunar rover
 - Added connection: Lunar rover -> Mars rover
+- Added connection: Lunar lander -> Mars lander
+- Added connection: Radioisotope generator -> Mars lander
+- Added connection: Mars lander -> Mars rover
 
 22 May 2026
 - Added tech: Traveling-wave tube
