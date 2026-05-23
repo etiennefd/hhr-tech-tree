@@ -1,14 +1,14 @@
 23 May 2026
 - Added tech: Lunar rover
-- Added tech: Radioisotope thermoelectric generator
-- Added connection: Polonium -> Radioisotope thermoelectric generator
-- Added connection: Plutonium -> Radioisotope thermoelectric generator
-- Added connection: Artificial satellite -> Radioisotope thermoelectric generator
-- Added connection: Radioisotope thermoelectric generator -> Interstellar probe
-- Added connection: Nuclear power -> Radioisotope thermoelectric generator
+- Added tech: Radioisotope generator
+- Added connection: Polonium -> Radioisotope generator
+- Added connection: Plutonium -> Radioisotope generator
+- Added connection: Artificial satellite -> Radioisotope generator
+- Added connection: Radioisotope generator -> Interstellar probe
+- Added connection: Nuclear power -> Radioisotope generator
 - Added connection: Lunar lander -> Lunar rover
 - Added connection: Solar cell -> Lunar rover
-- Added connection: Radioisotope thermoelectric generator -> Lunar rover
+- Added connection: Radioisotope generator -> Lunar rover
 - Added connection: Lunar rover -> Mars rover
 
 22 May 2026
