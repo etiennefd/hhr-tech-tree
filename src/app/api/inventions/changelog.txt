@@ -14,6 +14,7 @@
 - Added connection: Lunar lander -> Mars lander
 - Added connection: Radioisotope generator -> Mars lander
 - Added connection: Mars lander -> Mars rover
+- Added connection: Space capsule and crewed spaceflight -> Space suit
 
 22 May 2026
 - Added tech: Traveling-wave tube
