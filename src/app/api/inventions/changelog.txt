@@ -2,6 +2,7 @@
 - Added tech: Mars lander
 - Added tech: Lunar rover
 - Added tech: Radioisotope generator
+- Added tech: Fluorescence
 - Added connection: Polonium -> Radioisotope generator
 - Added connection: Plutonium -> Radioisotope generator
 - Added connection: Artificial satellite -> Radioisotope generator
