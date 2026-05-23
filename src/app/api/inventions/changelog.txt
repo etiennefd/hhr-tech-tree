@@ -6,6 +6,10 @@
 - Added connection: Artificial satellite -> Radioisotope thermoelectric generator
 - Added connection: Radioisotope thermoelectric generator -> Interstellar probe
 - Added connection: Nuclear power -> Radioisotope thermoelectric generator
+- Added connection: Lunar lander -> Lunar rover
+- Added connection: Solar cell -> Lunar rover
+- Added connection: Radioisotope thermoelectric generator -> Lunar rover
+- Added connection: Lunar rover -> Mars rover
 
 22 May 2026
 - Added tech: Traveling-wave tube
