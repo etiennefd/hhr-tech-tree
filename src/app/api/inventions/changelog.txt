@@ -22,6 +22,7 @@
 - Added connection: Fluorescence -> Green fluorescent protein
 - Added connection: Quinine -> Fluorescence
 - Added connection: Uranium -> Fluorescence
+- Added connection: Chlorophyll -> Fluorescence
 
 22 May 2026
 - Added tech: Traveling-wave tube
