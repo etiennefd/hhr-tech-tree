@@ -1,4 +1,5 @@
 23 May 2026
+- Added tech: Lunar rover
 - Added tech: Radioisotope thermoelectric generator
 - Added connection: Polonium -> Radioisotope thermoelectric generator
 - Added connection: Plutonium -> Radioisotope thermoelectric generator
