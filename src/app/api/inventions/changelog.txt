@@ -1,6 +1,10 @@
 24 May 2026
 - Added tech: Bolometer
+- Added tech: Wheatstone bridge
 - Added connection: Opium poppy cultivation -> Morphine
+- Added connection: Infrared -> Bolometer
+- Added connection: Mirror galvanometer -> Bolometer
+- Added connection: Platinum -> Bolometer
 
 23 May 2026
 - Added tech: Mars lander
