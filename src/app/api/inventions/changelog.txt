@@ -1,4 +1,5 @@
 24 May 2026
+- Added tech: Bolometer
 - Added connection: Opium poppy cultivation -> Morphine
 
 23 May 2026
