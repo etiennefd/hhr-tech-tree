@@ -3,6 +3,9 @@
 - Added connection: Galvanometer -> Wheatstone bridge
 - Added connection: Voltaic pile -> Galvanometer
 - Added connection: Wheatstone bridge -> Transoceanic communication cable
+- Added connection: Infrared -> Infrared LED
+- Added connection: Infrared -> Night-vision device
+- Added connection: Video camera tube -> Night-vision device
 
 24 May 2026
 - Added tech: Bolometer
