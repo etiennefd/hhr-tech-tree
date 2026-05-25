@@ -1,3 +1,7 @@
+25 May 2026
+- Added connection: Galvanometer -> Wheatstone bridge
+- Added connection: Voltaic pile -> Galvanometer
+
 24 May 2026
 - Added tech: Bolometer
 - Added tech: Wheatstone bridge
