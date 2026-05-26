@@ -6,6 +6,11 @@
 - Added connection: Surgery under anesthesia -> Surgery under ether anesthesia
 - Added connection: Ether -> Surgery under ether anesthesia
 - Added connection: Heart-lung machine -> Artificial heart
+- Added connection: ABO blood types -> Heart-lung machine
+- Added connection: Cell theory -> ABO blood types
+- Added connection: Antiseptic surgery -> Heart-lung machine
+- Added connection: Electric motor -> Heart-lung machine
+- Added connection: Autoclave -> Heart-lung machine
 
 25 May 2026
 - Added tech: Thermographic camera
