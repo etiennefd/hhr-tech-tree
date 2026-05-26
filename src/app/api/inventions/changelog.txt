@@ -1,3 +1,6 @@
+26 May 2026
+- Added connection: Bolometer -> Thermographic camera
+
 25 May 2026
 - Added tech: Thermographic camera
 - Added tech: Night-vision device
@@ -942,9 +945,6 @@
 - Added connection: Radio waves and spark-gap transmitter -> Radio detector
 - Added connection: Induction coil -> Radio detector
 - Added connection: Galvanometer -> Radio detector
-
-18 February 2026
-- Added tech: Vasectomy
 
 17 February 2026
 - Added tech: Ocean liner
