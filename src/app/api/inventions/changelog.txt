@@ -12,6 +12,8 @@
 - Added connection: Antiseptic surgery -> Heart-lung machine
 - Added connection: Electric motor -> Heart-lung machine
 - Added connection: Autoclave -> Heart-lung machine
+- Added connection: Chlorofluorocarbons -> Teflon
+- Added connection: Fluorine (isolation) -> Chlorofluorocarbons
 
 25 May 2026
 - Added tech: Thermographic camera
