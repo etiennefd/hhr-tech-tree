@@ -1,9 +1,11 @@
 26 May 2026
 - Added tech: Heart-lung machine
+- Added tech: ABO blood types
 - Added tech: Surgery under ether anesthesia
 - Added connection: Bolometer -> Thermographic camera
 - Added connection: Surgery under anesthesia -> Surgery under ether anesthesia
 - Added connection: Ether -> Surgery under ether anesthesia
+- Added connection: Heart-lung machine -> Artificial heart
 
 25 May 2026
 - Added tech: Thermographic camera
