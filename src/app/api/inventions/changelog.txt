@@ -17,6 +17,7 @@
 - Added connection: Fluorine (isolation) -> Chlorofluorocarbons
 - Added connection: Teflon -> Non-stick pan
 - Added connection: Aluminium -> Non-stick pan
+- Added connection: Teflon -> Atomic bomb
 
 25 May 2026
 - Added tech: Thermographic camera
