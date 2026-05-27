@@ -5,6 +5,7 @@
 - Added connection: Cellophane -> Hemodialysis machine
 - Added connection: Electric motor -> Hemodialysis machine
 - Added connection: Tin bronze -> Catheter
+- Added connection: Industrial robot -> Surgical robot
 
 26 May 2026
 - Added tech: Non-stick pan
@@ -471,7 +472,7 @@
 - Added connection: Paint -> Encaustic painting
 
 21 April 2026
-- Added tech: Robotic surgery
+- Added tech: Surgical robot
 - Added tech: Rose madder
 - Added connection: Hydraulic cylinder -> Hydraulic excavator
 - Added connection: Hydraulic cylinder -> Hydraulic accumulator
