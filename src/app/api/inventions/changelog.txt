@@ -4,6 +4,7 @@
 - Added connection: Electrocardiography machine -> Pacemaker
 - Added connection: Cellophane -> Hemodialysis machine
 - Added connection: Electric motor -> Hemodialysis machine
+- Added connection: Tin bronze -> Catheter
 
 26 May 2026
 - Added tech: Non-stick pan
