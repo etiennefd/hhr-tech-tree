@@ -1,4 +1,5 @@
 27 May 2026
+- Added tech: Catheter
 - Added connection: High-vacuum tube -> Pacemaker
 - Added connection: Electrocardiography machine -> Pacemaker
 - Added connection: Cellophane -> Hemodialysis machine
