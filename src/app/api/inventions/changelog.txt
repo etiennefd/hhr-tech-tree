@@ -1,6 +1,7 @@
 26 May 2026
 - Added tech: Non-stick pan
 - Added tech: Heart-lung machine
+- Added tech: Hemodialysis machine
 - Added tech: Teflon
 - Added tech: ABO blood types
 - Added tech: Surgery under ether anesthesia
@@ -18,6 +19,8 @@
 - Added connection: Teflon -> Non-stick pan
 - Added connection: Aluminium -> Non-stick pan
 - Added connection: Teflon -> Atomic bomb
+- Added connection: Sulfuric acid -> Radium
+- Added connection: Sulfuric acid -> Polonium
 
 25 May 2026
 - Added tech: Thermographic camera
