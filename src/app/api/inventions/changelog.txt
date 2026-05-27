@@ -21,6 +21,7 @@
 - Added connection: Teflon -> Atomic bomb
 - Added connection: Sulfuric acid -> Radium
 - Added connection: Sulfuric acid -> Polonium
+- Added connection: Hemodialysis machine -> Artificial heart
 
 25 May 2026
 - Added tech: Thermographic camera
