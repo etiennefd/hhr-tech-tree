@@ -1,3 +1,6 @@
+28 May 2026
+- Added tech: Slide-rest all-metal lathe
+
 27 May 2026
 - Added tech: Catheter
 - Added connection: High-vacuum tube -> Pacemaker
