@@ -1,5 +1,8 @@
 28 May 2026
 - Added tech: Slide-rest all-metal lathe
+- Added connection: Lathe -> Slide-rest all-metal lathe
+- Added connection: Screw -> Slide-rest all-metal lathe
+- Added connection: Slide-rest all-metal lathe -> Screw-cutting lathe
 
 27 May 2026
 - Added tech: Catheter
