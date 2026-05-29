@@ -1,3 +1,9 @@
+29 May 2026
+- Added tech: Infrared spectroscopy
+- Added connection: Infrared -> Infrared spectroscopy
+- Added connection: Bolometer -> Infrared spectroscopy
+- Added connection: Spectroscope -> Infrared spectroscopy
+
 28 May 2026
 - Added tech: Slide-rest all-metal lathe
 - Added connection: Lathe -> Slide-rest all-metal lathe
