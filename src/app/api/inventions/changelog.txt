@@ -5,6 +5,7 @@
 - Added connection: Spectroscope -> Infrared spectroscopy
 - Added connection: Copper -> Nickel
 - Added connection: Cobalt -> Nickel
+- Added connection: Sulfur -> Lead chamber process
 
 28 May 2026
 - Added tech: Slide-rest all-metal lathe
