@@ -424,7 +424,7 @@
 - Added tech: Aquatint
 - Added tech: Mezzotint
 - Added connection: Nitric acid -> Etching
-- Added connection: Copper -> Etching
+- Added connection: Copper smelting -> Etching
 - Added connection: Etching -> Aquatint
 - Added connection: Mezzotint -> Aquatint
 - Added connection: Engraving -> Mezzotint
@@ -551,10 +551,10 @@
 - Added connection: Tin bronze -> Niello
 - Added connection: Silver -> Niello
 - Added connection: Sulfur -> Niello
-- Added connection: Copper -> Niello
+- Added connection: Copper smelting -> Niello
 - Added connection: Crucible -> Niello
 - Added connection: Niello -> Engraving
-- Added connection: Copper -> Engraving
+- Added connection: Copper smelting -> Engraving
 - Added connection: Papermaking -> Engraving
 - Added connection: Woodblock printing -> Engraving
 - Added connection: Engraving -> Siderography and steel engraving
