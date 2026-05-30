@@ -1,5 +1,10 @@
 30 May 2026
 - Added tech: Dynamic website
+- Added connection: Relational database -> Dynamic website
+- Added connection: World Wide Web -> Dynamic website
+- Added connection: Dynamic website -> Wiki
+- Added connection: Dynamic website -> Social network service
+- Added connection: Dynamic website -> Software as a service
 
 29 May 2026
 - Added tech: Relational database
