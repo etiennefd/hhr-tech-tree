@@ -1,3 +1,65 @@
+29 May 2026
+- Added tech: Relational database
+- Added tech: Database
+- Added tech: Infrared spectroscopy
+- Added connection: Infrared -> Infrared spectroscopy
+- Added connection: Bolometer -> Infrared spectroscopy
+- Added connection: Spectroscope -> Infrared spectroscopy
+- Added connection: Copper -> Nickel
+- Added connection: Cobalt -> Nickel
+- Added connection: Sulfur -> Lead chamber process
+- Added connection: Database -> Relational database
+
+28 May 2026
+- Added tech: Slide-rest all-metal lathe
+- Added connection: Lathe -> Slide-rest all-metal lathe
+- Added connection: Screw -> Slide-rest all-metal lathe
+- Added connection: Slide-rest all-metal lathe -> Screw-cutting lathe
+
+27 May 2026
+- Added tech: Catheter
+- Added connection: High-vacuum tube -> Pacemaker
+- Added connection: Electrocardiography machine -> Pacemaker
+- Added connection: Cellophane -> Hemodialysis machine
+- Added connection: Electric motor -> Hemodialysis machine
+- Added connection: Tin bronze -> Catheter
+- Added connection: Industrial robot -> Surgical robot
+
+26 May 2026
+- Added tech: Non-stick pan
+- Added tech: Heart-lung machine
+- Added tech: Hemodialysis machine
+- Added tech: Teflon
+- Added tech: ABO blood types
+- Added tech: Surgery under ether anesthesia
+- Added connection: Bolometer -> Thermographic camera
+- Added connection: Surgery under anesthesia -> Surgery under ether anesthesia
+- Added connection: Ether -> Surgery under ether anesthesia
+- Added connection: Heart-lung machine -> Artificial heart
+- Added connection: ABO blood types -> Heart-lung machine
+- Added connection: Cell theory -> ABO blood types
+- Added connection: Antiseptic surgery -> Heart-lung machine
+- Added connection: Electric motor -> Heart-lung machine
+- Added connection: Autoclave -> Heart-lung machine
+- Added connection: Chlorofluorocarbons -> Teflon
+- Added connection: Fluorine (isolation) -> Chlorofluorocarbons
+- Added connection: Teflon -> Non-stick pan
+- Added connection: Aluminium -> Non-stick pan
+- Added connection: Teflon -> Atomic bomb
+- Added connection: Sulfuric acid -> Radium
+- Added connection: Sulfuric acid -> Polonium
+- Added connection: Hemodialysis machine -> Artificial heart
+
+25 May 2026
+- Added tech: Thermographic camera
+- Added tech: Night-vision device
+- Added connection: Galvanometer -> Wheatstone bridge
+- Added connection: Voltaic pile -> Galvanometer
+- Added connection: Wheatstone bridge -> Transoceanic communication cable
+- Added connection: Infrared -> Infrared LED
+- Added connection: Infrared -> Night-vision device
+- Added connection: Video camera tube -> Night-vision device
+
 24 May 2026
 - Added tech: Bolometer
 - Added tech: Wheatstone bridge
@@ -5,6 +67,7 @@
 - Added connection: Infrared -> Bolometer
 - Added connection: Mirror galvanometer -> Bolometer
 - Added connection: Platinum -> Bolometer
+- Added connection: Wheatstone bridge -> Bolometer
 
 23 May 2026
 - Added tech: Mars lander
@@ -365,7 +428,7 @@
 - Added tech: Aquatint
 - Added tech: Mezzotint
 - Added connection: Nitric acid -> Etching
-- Added connection: Copper -> Etching
+- Added connection: Copper smelting -> Etching
 - Added connection: Etching -> Aquatint
 - Added connection: Mezzotint -> Aquatint
 - Added connection: Engraving -> Mezzotint
@@ -427,7 +490,7 @@
 - Added connection: Paint -> Encaustic painting
 
 21 April 2026
-- Added tech: Robotic surgery
+- Added tech: Surgical robot
 - Added tech: Rose madder
 - Added connection: Hydraulic cylinder -> Hydraulic excavator
 - Added connection: Hydraulic cylinder -> Hydraulic accumulator
@@ -492,10 +555,10 @@
 - Added connection: Tin bronze -> Niello
 - Added connection: Silver -> Niello
 - Added connection: Sulfur -> Niello
-- Added connection: Copper -> Niello
+- Added connection: Copper smelting -> Niello
 - Added connection: Crucible -> Niello
 - Added connection: Niello -> Engraving
-- Added connection: Copper -> Engraving
+- Added connection: Copper smelting -> Engraving
 - Added connection: Papermaking -> Engraving
 - Added connection: Woodblock printing -> Engraving
 - Added connection: Engraving -> Siderography and steel engraving
@@ -931,9 +994,6 @@
 - Added connection: Radio waves and spark-gap transmitter -> Radio detector
 - Added connection: Induction coil -> Radio detector
 - Added connection: Galvanometer -> Radio detector
-
-18 February 2026
-- Added tech: Vasectomy
 
 17 February 2026
 - Added tech: Ocean liner
