@@ -5,6 +5,7 @@
 - Added connection: Dynamic website -> Wiki
 - Added connection: Dynamic website -> Social network service
 - Added connection: Dynamic website -> Software as a service
+- Added connection: Hard disk drive -> Database
 
 29 May 2026
 - Added tech: Relational database
