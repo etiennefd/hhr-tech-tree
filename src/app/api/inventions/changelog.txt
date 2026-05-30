@@ -1,3 +1,6 @@
+30 May 2026
+- Added tech: Dynamic website
+
 29 May 2026
 - Added tech: Relational database
 - Added tech: Database
