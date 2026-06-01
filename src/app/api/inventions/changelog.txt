@@ -7,6 +7,7 @@
 - Added connection: Time-sharing -> Virtual machine
 - Added connection: Stored-program computer -> Cloud computing
 - Added connection: Elephant taming -> War elephant
+- Added connection: Scythed chariot -> Caltrop
 
 31 May 2026
 - Added connection: Internet protocol suite -> Media streaming
