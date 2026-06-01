@@ -1,3 +1,9 @@
+1 June 2026
+- Added tech: Virtual machine
+- Added connection: Virtual machine -> Cloud computing
+- Added connection: Time-sharing -> Cloud computing
+- Added connection: Time-sharing -> Virtual machine
+
 31 May 2026
 - Added connection: Internet protocol suite -> Media streaming
 - Added connection: Internet protocol suite -> Cloud computing
