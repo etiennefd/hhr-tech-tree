@@ -1,8 +1,12 @@
 1 June 2026
 - Added tech: Virtual machine
+- Added tech: War elephant
+- Added tech: Elephant taming
 - Added connection: Virtual machine -> Cloud computing
 - Added connection: Time-sharing -> Cloud computing
 - Added connection: Time-sharing -> Virtual machine
+- Added connection: Stored-program computer -> Cloud computing
+- Added connection: Elephant taming -> War elephant
 
 31 May 2026
 - Added connection: Internet protocol suite -> Media streaming
