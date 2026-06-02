@@ -53,7 +53,6 @@ const TechTreeMinimap = ({
   const MINIMAP_HEIGHT = isSmallScreen ? 96 : 64; // Increased total height for small screens
   const MINIMAP_CONTENT_HEIGHT = 48; // Height of the minimap content area
   const LABEL_HEIGHT = 10; // Space for labels
-  const SMALL_SCREEN_MINIMAP_VERTICAL_SCALE = 2; // How much more vertically compressed the minimap is on small screens
   const engineeringBlue = "#91B4C5";
   const minimapRef = useRef(null);
   const isDragging = useRef(false);
@@ -80,26 +79,21 @@ const TechTreeMinimap = ({
     const minimapRect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
     // Use the actual available width instead of viewport width
     const availableWidth = minimapRect.width;
-    
-    // Calculate scale based on actual available space
-    const horizontalScale = availableWidth / containerWidth;
-    // Scale vertically more on small screens
-    const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
-    setScale(Math.min(horizontalScale, verticalScale));
-  }, [containerWidth, totalHeight, viewportWidth, viewportHeight, isSmallScreen]);
 
-  // Calculate minimap viewport dimensions
-  const baseWidth = viewportWidth * scale;
-  const verticalScale = isSmallScreen ? SMALL_SCREEN_MINIMAP_VERTICAL_SCALE : 1;
+    // `scale` is the HORIZONTAL scale: maps the full tree width into the minimap width.
+    setScale(availableWidth / containerWidth);
+  }, [containerWidth, viewportWidth, viewportHeight, isSmallScreen]);
+
+  // Vertical scale: maps the full tree HEIGHT into the fixed minimap content
+  // height, so every node row fits regardless of screen width (otherwise the
+  // bottom rows get clipped on wide monitors).
+  const scaleY = totalHeight > 0 ? MINIMAP_CONTENT_HEIGHT / totalHeight : 0;
 
   const minimapViewport = {
-    width: Math.min(baseWidth, containerWidth * scale),
-    height: Math.min(
-      viewportHeight * scale * verticalScale,
-      totalHeight * scale * verticalScale
-    ),
+    width: Math.min(viewportWidth * scale, containerWidth * scale),
+    height: Math.min(viewportHeight * scaleY, MINIMAP_CONTENT_HEIGHT),
     x: scrollLeft * scale,
-    y: scrollTop * scale * verticalScale,
+    y: scrollTop * scaleY,
   };
 
   // Format year label with small screen logic
@@ -133,7 +127,7 @@ const TechTreeMinimap = ({
     const y = e.clientY - rect.top;
 
     const targetX = x / scale - viewportWidth / 2;
-    const targetY = y / (scale * verticalScale) - viewportHeight / 2;
+    const targetY = (scaleY > 0 ? y / scaleY : 0) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
       onViewportChange(Math.max(0, targetX), Math.max(0, targetY));
@@ -153,7 +147,7 @@ const TechTreeMinimap = ({
     const rect = (minimapRef.current as HTMLDivElement).getBoundingClientRect();
 
     const x = (e.clientX - rect.left) / scale - viewportWidth / 2;
-    const y = (e.clientY - rect.top) / (scale * verticalScale) - viewportHeight / 2;
+    const y = (scaleY > 0 ? (e.clientY - rect.top) / scaleY : 0) - viewportHeight / 2;
 
     requestAnimationFrame(() => {
       onViewportChange(Math.max(0, x), Math.max(0, y));
@@ -216,7 +210,7 @@ const TechTreeMinimap = ({
         {/* Node dots */}
         {nodes.map((node) => {
           const nodeX = node.x * scale;
-          const nodeY = node.y * scale * verticalScale;
+          const nodeY = node.y * scaleY;
           const hasActiveFilters = filteredNodeIds.size > 0;
           const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
           const isSelected = node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);
