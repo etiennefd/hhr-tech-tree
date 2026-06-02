@@ -1,3 +1,9 @@
+2 June 2026
+- Added tech: Barding and cataphract
+- Added connection: Scale armor -> Barding and cataphract
+- Added connection: Domestication of the horse -> Barding and cataphract
+- Added connection: Lamellar armor -> Barding and cataphract
+
 1 June 2026
 - Added tech: Virtual machine
 - Added tech: War elephant
