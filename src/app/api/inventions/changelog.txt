@@ -1,5 +1,6 @@
 3 June 2026
 - Added tech: Surgical mask
+- Added tech: Endoscope
 - Added tech: Camphor
 - Added connection: Antiseptic surgery -> Surgical mask
 - Added connection: Camphor -> Celluloid
