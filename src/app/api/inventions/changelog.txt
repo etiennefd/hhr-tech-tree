@@ -1,3 +1,9 @@
+3 June 2026
+- Added tech: Surgical mask
+- Added tech: Camphor
+- Added connection: Antiseptic surgery -> Surgical mask
+- Added connection: Camphor -> Celluloid
+
 2 June 2026
 - Added tech: Barding and cataphract
 - Added connection: Scale armor -> Barding and cataphract
