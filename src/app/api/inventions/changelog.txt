@@ -1,3 +1,7 @@
+3 June 2026
+- Added tech: Surgical mask
+- Added connection: Antiseptic surgery -> Surgical mask
+
 2 June 2026
 - Added tech: Barding and cataphract
 - Added connection: Scale armor -> Barding and cataphract
