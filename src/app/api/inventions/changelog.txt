@@ -1,3 +1,6 @@
+5 June 2026
+- Added tech: Xenon arc lamp
+
 4 June 2026
 - Added tech: Electronic flashtube
 - Added connection: Electronic flashtube -> Laser
