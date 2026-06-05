@@ -11,6 +11,10 @@
 - Added connection: Electronic flashtube -> Laser
 - Added connection: Mercury-vapor lamp -> Xenon arc lamp
 - Added connection: Lumière cinematograph -> Xenon arc lamp
+- Added connection: Aluminium -> Electrolytic capacitor
+- Added connection: Leyden jar -> Electrolytic capacitor
+- Added connection: Electrolysis -> Electrolytic capacitor
+- Added connection: Rechargeable battery -> Electrolytic capacitor
 
 4 June 2026
 - Added tech: Electronic flashtube
