@@ -6,6 +6,10 @@
 - Added connection: Arc lamp -> Mercury-vapor lamp
 - Added connection: Mercury-vapor lamp -> Mercury-arc valve
 - Added connection: Sodium -> Low-pressure sodium-vapor lamp
+- Added connection: Geissler tube -> Mercury-vapor lamp
+- Added connection: Electronic flashtube -> Laser
+- Added connection: Mercury-vapor lamp -> Xenon arc lamp
+- Added connection: Lumière cinematograph -> Xenon arc lamp
 
 4 June 2026
 - Added tech: Electronic flashtube
