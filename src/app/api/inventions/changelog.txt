@@ -1,5 +1,6 @@
 5 June 2026
 - Added tech: Xenon arc lamp
+- Added tech: Electrolytic capacitor
 - Added connection: Mercury-vapor lamp -> Metal-halide lamp
 - Added connection: Arc lamp -> Xenon arc lamp
 - Added connection: Xenon -> Xenon arc lamp
