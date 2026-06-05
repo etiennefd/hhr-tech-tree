@@ -15,6 +15,7 @@
 - Added connection: Leyden jar -> Electrolytic capacitor
 - Added connection: Electrolysis -> Electrolytic capacitor
 - Added connection: Rechargeable battery -> Electrolytic capacitor
+- Added connection: Blown glass -> Leyden jar
 
 4 June 2026
 - Added tech: Electronic flashtube
