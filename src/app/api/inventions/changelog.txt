@@ -1,5 +1,7 @@
 4 June 2026
 - Added tech: Electronic flashtube
+- Added connection: Electronic flashtube -> Laser
+- Added connection: Xenon -> Laser
 
 3 June 2026
 - Added tech: Surgical mask
