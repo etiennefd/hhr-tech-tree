@@ -1,3 +1,6 @@
+4 June 2026
+- Added tech: Electronic flashtube
+
 3 June 2026
 - Added tech: Surgical mask
 - Added tech: Endoscope
