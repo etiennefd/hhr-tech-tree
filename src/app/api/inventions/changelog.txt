@@ -1,5 +1,11 @@
 5 June 2026
 - Added tech: Xenon arc lamp
+- Added connection: Mercury-vapor lamp -> Metal-halide lamp
+- Added connection: Arc lamp -> Xenon arc lamp
+- Added connection: Xenon -> Xenon arc lamp
+- Added connection: Arc lamp -> Mercury-vapor lamp
+- Added connection: Mercury-vapor lamp -> Mercury-arc valve
+- Added connection: Sodium -> Low-pressure sodium-vapor lamp
 
 4 June 2026
 - Added tech: Electronic flashtube
