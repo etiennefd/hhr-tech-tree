@@ -27,6 +27,7 @@
 - Added connection: Spoked wheel -> Phenakistiscope
 - Added connection: Sodium -> Leaded gasoline
 - Added connection: Sodium hydroxide -> Sodium
+- Added connection: Borosilicate glass -> Metal-halide lamp
 
 5 June 2026
 - Added tech: Xenon arc lamp
