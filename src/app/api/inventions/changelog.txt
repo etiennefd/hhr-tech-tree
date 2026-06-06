@@ -14,6 +14,7 @@
 - Added connection: Electrotherapy -> AC defibrillator
 - Added connection: Electrolytic capacitor -> External DC defibrillator
 - Added connection: Electrocardiography machine -> Automated external defibrillator
+- Added connection: Photographic camera -> Flash powder
 
 5 June 2026
 - Added tech: Xenon arc lamp
