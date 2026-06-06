@@ -1,5 +1,7 @@
 6 June 2026
+- Added tech: External DC defibrillator
 - Added tech: Stoneware
+- Added connection: External DC defibrillator -> Automated external defibrillator
 - Added connection: Leyden jar -> Condenser microphone
 - Added connection: Electrolytic capacitor -> MOS DRAM
 - Added connection: Electrolytic capacitor -> Electronic flashtube
@@ -8,6 +10,10 @@
 - Added connection: Kiln -> Stoneware
 - Added connection: Stoneware -> Porcelain
 - Added connection: Stoneware -> Coade stone
+- Added connection: Closed-core transformer -> AC defibrillator
+- Added connection: Electrotherapy -> AC defibrillator
+- Added connection: Electrolytic capacitor -> External DC defibrillator
+- Added connection: Electrocardiography machine -> Automated external defibrillator
 
 5 June 2026
 - Added tech: Xenon arc lamp
