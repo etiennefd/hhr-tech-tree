@@ -1,5 +1,5 @@
 6 June 2026
-- Added tech: External DC defibrillator
+- Added tech: AC defibrillator
 - Added tech: Stoneware
 - Added connection: External DC defibrillator -> Automated external defibrillator
 - Added connection: Leyden jar -> Condenser microphone
@@ -17,6 +17,11 @@
 - Added connection: Photographic camera -> Flash powder
 - Added connection: Portland cement -> Cast stone
 - Added connection: Coade stone -> Cast stone
+- Added connection: Phenakistiscope -> Electronic flashtube
+- Added connection: Mercury-arc valve -> Electronic flashtube
+- Added connection: Thyratron -> Electronic flashtube
+- Added connection: Neon lighting -> Low-pressure sodium-vapor lamp
+- Added connection: Spoked wheel -> Phenakistiscope
 
 5 June 2026
 - Added tech: Xenon arc lamp
