@@ -30,6 +30,7 @@
 - Added connection: Sodium hydroxide -> Sodium
 - Added connection: Fused quartz -> Metal-halide lamp
 - Added connection: Borosilicate glass -> Metal-halide lamp
+- Added connection: Oxyhydrogen blowpipe -> Fused quartz
 
 5 June 2026
 - Added tech: Xenon arc lamp
