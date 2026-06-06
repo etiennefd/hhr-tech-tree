@@ -1,5 +1,7 @@
 6 June 2026
+- Added tech: Metal-halide lamp
 - Added tech: AC defibrillator
+- Added tech: Low-pressure sodium-vapor lamp
 - Added tech: Borosilicate glass
 - Added tech: Stoneware
 - Added connection: External DC defibrillator -> Automated external defibrillator
@@ -23,6 +25,8 @@
 - Added connection: Thyratron -> Electronic flashtube
 - Added connection: Neon lighting -> Low-pressure sodium-vapor lamp
 - Added connection: Spoked wheel -> Phenakistiscope
+- Added connection: Sodium -> Leaded gasoline
+- Added connection: Sodium hydroxide -> Sodium
 
 5 June 2026
 - Added tech: Xenon arc lamp
