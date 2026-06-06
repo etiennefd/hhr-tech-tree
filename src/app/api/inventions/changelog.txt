@@ -4,6 +4,9 @@
 - Added connection: Electrolytic capacitor -> MOS DRAM
 - Added connection: Electrolytic capacitor -> Electronic flashtube
 - Added connection: Electrolytic capacitor -> Touchscreen
+- Added connection: Pottery -> Stoneware
+- Added connection: Kiln -> Stoneware
+- Added connection: Stoneware -> Porcelain
 
 5 June 2026
 - Added tech: Xenon arc lamp
