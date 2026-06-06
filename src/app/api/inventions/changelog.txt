@@ -1,5 +1,8 @@
 6 June 2026
 - Added connection: Leyden jar -> Condenser microphone
+- Added connection: Electrolytic capacitor -> MOS DRAM
+- Added connection: Electrolytic capacitor -> Electronic flashtube
+- Added connection: Electrolytic capacitor -> Touchscreen
 
 5 June 2026
 - Added tech: Xenon arc lamp
