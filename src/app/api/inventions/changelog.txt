@@ -15,6 +15,8 @@
 - Added connection: Electrolytic capacitor -> External DC defibrillator
 - Added connection: Electrocardiography machine -> Automated external defibrillator
 - Added connection: Photographic camera -> Flash powder
+- Added connection: Portland cement -> Cast stone
+- Added connection: Coade stone -> Cast stone
 
 5 June 2026
 - Added tech: Xenon arc lamp
@@ -26,7 +28,6 @@
 - Added connection: Mercury-vapor lamp -> Mercury-arc valve
 - Added connection: Sodium -> Low-pressure sodium-vapor lamp
 - Added connection: Geissler tube -> Mercury-vapor lamp
-- Added connection: Electronic flashtube -> Laser
 - Added connection: Mercury-vapor lamp -> Xenon arc lamp
 - Added connection: Lumière cinematograph -> Xenon arc lamp
 - Added connection: Aluminium -> Electrolytic capacitor
