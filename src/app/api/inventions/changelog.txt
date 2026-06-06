@@ -1,5 +1,6 @@
 6 June 2026
 - Added tech: AC defibrillator
+- Added tech: Borosilicate glass
 - Added tech: Stoneware
 - Added connection: External DC defibrillator -> Automated external defibrillator
 - Added connection: Leyden jar -> Condenser microphone
