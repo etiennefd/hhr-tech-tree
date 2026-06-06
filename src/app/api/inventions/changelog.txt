@@ -2,6 +2,7 @@
 - Added tech: Metal-halide lamp
 - Added tech: AC defibrillator
 - Added tech: Low-pressure sodium-vapor lamp
+- Added tech: Fused quartz
 - Added tech: Borosilicate glass
 - Added tech: Stoneware
 - Added connection: External DC defibrillator -> Automated external defibrillator
@@ -27,6 +28,7 @@
 - Added connection: Spoked wheel -> Phenakistiscope
 - Added connection: Sodium -> Leaded gasoline
 - Added connection: Sodium hydroxide -> Sodium
+- Added connection: Fused quartz -> Metal-halide lamp
 - Added connection: Borosilicate glass -> Metal-halide lamp
 
 5 June 2026
