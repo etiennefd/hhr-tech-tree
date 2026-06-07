@@ -7,6 +7,9 @@
 - Added connection: Electrolysis -> Fluorine (isolation)
 - Added connection: Fluorine (isolation) -> Zippe-type centrifuge
 - Added connection: Fluorine (isolation) -> Gaseous diffusion
+- Added connection: Potassium -> Silicon
+- Added connection: Potassium -> Aluminium
+- Added connection: Potassium -> Boron
 
 6 June 2026
 - Added tech: Metal-halide lamp
