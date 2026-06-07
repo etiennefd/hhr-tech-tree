@@ -2,6 +2,7 @@
 - Added connection: Electrolysis -> Sodium
 - Added connection: Electrolysis -> Potassium
 - Added connection: Potassium -> Sodium
+- Added connection: Xenon -> High-pressure sodium-vapor lamp
 - Added connection: Potassium -> Thorium
 
 6 June 2026
