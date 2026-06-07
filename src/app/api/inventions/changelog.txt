@@ -4,6 +4,9 @@
 - Added connection: Potassium -> Sodium
 - Added connection: Xenon -> High-pressure sodium-vapor lamp
 - Added connection: Potassium -> Thorium
+- Added connection: Electrolysis -> Fluorine (isolation)
+- Added connection: Fluorine (isolation) -> Zippe-type centrifuge
+- Added connection: Fluorine (isolation) -> Gaseous diffusion
 
 6 June 2026
 - Added tech: Metal-halide lamp
