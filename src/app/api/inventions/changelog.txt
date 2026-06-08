@@ -1,4 +1,9 @@
+8 June 2026
+- Added connection: Glass -> Borosilicate glass
+- Added connection: Borax -> Borosilicate glass
+
 7 June 2026
+- Added tech: Borax
 - Added connection: Electrolysis -> Sodium
 - Added connection: Electrolysis -> Potassium
 - Added connection: Potassium -> Sodium
@@ -10,6 +15,7 @@
 - Added connection: Potassium -> Silicon
 - Added connection: Potassium -> Aluminium
 - Added connection: Potassium -> Boron
+- Added connection: Borax -> Boron
 
 6 June 2026
 - Added tech: Metal-halide lamp
