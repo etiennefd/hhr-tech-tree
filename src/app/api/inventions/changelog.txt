@@ -1,4 +1,5 @@
 8 June 2026
+- Added tech: Moving assembly line
 - Added connection: Glass -> Borosilicate glass
 - Added connection: Borax -> Borosilicate glass
 
