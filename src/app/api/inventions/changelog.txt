@@ -1,6 +1,7 @@
 8 June 2026
 - Added tech: Moving assembly line
 - Added tech: Conveyor belt
+- Added tech: Interchangeable parts
 - Added connection: Glass -> Borosilicate glass
 - Added connection: Borax -> Borosilicate glass
 - Added connection: Continuous track vehicle -> Continuous track snow vehicle
