@@ -3,6 +3,18 @@
 - Added tech: Turret lathe
 - Added connection: Cannon -> Interchangeable parts
 - Added connection: Flintlock musket -> Interchangeable parts
+- Added connection: Interchangeable parts -> Turret lathe
+- Added connection: Turret lathe -> Automatic lathe
+- Added connection: Automatic flour mill -> Conveyor belt
+- Added connection: Automatic flour mill -> Moving assembly line
+- Added connection: Vulcanized rubber -> Conveyor belt
+- Added connection: Interchangeable parts -> Moving assembly line
+- Added connection: Electric motor -> Moving assembly line
+- Added connection: Slide-rest all-metal lathe -> Turret lathe
+- Added connection: Numerical control -> Industrial robot
+- Added connection: Cam -> Automatic lathe
+- Added connection: Cam -> Four-stroke engine
+- Added connection: Cam -> Corliss steam engine
 
 8 June 2026
 - Added tech: Moving assembly line
