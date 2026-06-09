@@ -18,6 +18,7 @@
 - Added connection: Cam -> Corliss steam engine
 - Added connection: Automobile -> Moving assembly line
 - Added connection: Interchangeable parts -> Milling machine
+- Added connection: Ultraviolet -> Sunscreen
 
 8 June 2026
 - Added tech: Moving assembly line
