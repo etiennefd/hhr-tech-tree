@@ -1,6 +1,7 @@
 9 June 2026
 - Added tech: Automatic lathe
 - Added tech: Turret lathe
+- Added connection: Slide-rest all-metal lathe -> Milling machine
 - Added connection: Cannon -> Interchangeable parts
 - Added connection: Flintlock musket -> Interchangeable parts
 - Added connection: Interchangeable parts -> Turret lathe
@@ -15,6 +16,8 @@
 - Added connection: Cam -> Automatic lathe
 - Added connection: Cam -> Four-stroke engine
 - Added connection: Cam -> Corliss steam engine
+- Added connection: Automobile -> Moving assembly line
+- Added connection: Interchangeable parts -> Milling machine
 
 8 June 2026
 - Added tech: Moving assembly line
@@ -744,7 +747,6 @@
 - Added tech: Numerical control
 - Added tech: Servomechanism
 - Added tech: Milling machine
-- Added connection: Lathe -> Milling machine
 - Added connection: Flintlock musket -> Milling machine
 - Added connection: Milling machine -> Numerical control
 - Added connection: Centrifugal governor -> Servomechanism
