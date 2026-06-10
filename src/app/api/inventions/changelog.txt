@@ -1,5 +1,9 @@
 10 June 2026
+- Added tech: Zinc oxide
 - Added connection: Fluorescence -> Sunscreen
+- Added connection: Brass -> Zinc oxide
+- Added connection: Zinc oxide -> Zinc white
+- Added connection: White lead -> Zinc white
 
 9 June 2026
 - Added tech: Automatic lathe
@@ -1711,7 +1715,6 @@
 - Added connection: Tin extraction -> Printing press
 - Added connection: Lead smelting -> Printing press
 - Added connection: Antimony -> Printing press
-- Added connection: Brass -> Zinc white
 - Added connection: Sulfuric acid -> Titanium white
 
 24 August 2025
