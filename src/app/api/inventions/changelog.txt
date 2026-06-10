@@ -1,5 +1,6 @@
 10 June 2026
 - Added tech: Zinc oxide
+- Added tech: Standardized prefabricated ship building
 - Added connection: Fluorescence -> Sunscreen
 - Added connection: Brass -> Zinc oxide
 - Added connection: Zinc oxide -> Zinc white
