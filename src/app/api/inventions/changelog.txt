@@ -4,6 +4,7 @@
 - Added connection: Brass -> Zinc oxide
 - Added connection: Zinc oxide -> Zinc white
 - Added connection: White lead -> Zinc white
+- Added connection: Copper smelting -> Brass
 
 9 June 2026
 - Added tech: Automatic lathe
