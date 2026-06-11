@@ -5,6 +5,25 @@
 - Added connection: Nylon -> Kevlar
 - Added connection: Radial tire -> Kevlar
 - Added connection: Liquid crystals -> Kevlar
+- Added connection: Gold -> Wire
+- Added connection: Silver -> Wire
+- Added connection: Wire -> Drawn wire and draw plate
+- Added connection: Drawn wire and draw plate -> Wire rope
+- Added connection: Rope and twine -> Wire rope
+- Added connection: Drawn wire and draw plate -> Barbed wire
+- Added connection: Drawn wire and draw plate -> Wire wheel
+- Added connection: Piano -> Wire recording
+- Added connection: Iron smelting and wrought iron -> Drawn wire and draw plate
+- Added connection: Drawn wire and draw plate -> Radial tire
+- Added connection: Bessemer process -> Radial tire
+- Added connection: Drawn wire and draw plate -> Psaltery
+- Added connection: Drawn wire and draw plate -> Clavichord
+- Added connection: Drawn wire and draw plate -> Lap steel guitar
+- Added connection: Drawn wire and draw plate -> Wire recording
+- Added connection: Drawn wire and draw plate -> Electric telegraph
+- Added connection: Drawn wire and draw plate -> Electromagnet
+- Added connection: Wire -> Chain mail
+- Added connection: Wire rope -> Transoceanic communication cable
 
 10 June 2026
 - Added tech: Zinc oxide
