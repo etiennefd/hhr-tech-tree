@@ -24,6 +24,8 @@
 - Added connection: Drawn wire and draw plate -> Electromagnet
 - Added connection: Wire -> Chain mail
 - Added connection: Wire rope -> Transoceanic communication cable
+- Added connection: Copper smelting -> Electromagnet
+- Added connection: Iron smelting and wrought iron -> Electromagnet
 
 10 June 2026
 - Added tech: Zinc oxide
