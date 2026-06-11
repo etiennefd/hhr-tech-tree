@@ -1,3 +1,8 @@
+11 June 2026
+- Added connection: Nylon -> Kevlar
+- Added connection: Radial tire -> Kevlar
+- Added connection: Liquid crystals -> Kevlar
+
 10 June 2026
 - Added tech: Zinc oxide
 - Added tech: Standardized prefabricated ship building
