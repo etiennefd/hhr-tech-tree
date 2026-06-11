@@ -1,4 +1,7 @@
 11 June 2026
+- Added tech: Wire rope
+- Added tech: Drawn wire and draw plate
+- Added tech: Wire
 - Added connection: Nylon -> Kevlar
 - Added connection: Radial tire -> Kevlar
 - Added connection: Liquid crystals -> Kevlar
