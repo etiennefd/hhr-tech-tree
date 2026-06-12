@@ -3,6 +3,7 @@
 - Added connection: Wire -> Chain
 - Added connection: Chain -> Endless chain drive
 - Added connection: Chain -> Electric chainsaw
+- Added connection: Electromagnetic induction -> Induction coil
 
 11 June 2026
 - Added tech: Wire rope
