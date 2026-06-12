@@ -15,6 +15,10 @@
 - Added connection: Induction coil -> Induction balance metal detector
 - Added connection: Dynamo -> Ignition magneto
 - Added connection: Ignition magneto -> Moving assembly line
+- Added connection: Dry compass -> Electromagnetism
+- Added connection: Voltaic pile -> Electromagnetism
+- Added connection: Electromagnetism -> Electromagnet
+- Added connection: Electromagnetism -> Galvanometer
 
 11 June 2026
 - Added tech: Wire rope
@@ -255,7 +259,6 @@
 - Added tech: Thermographic camera
 - Added tech: Night-vision device
 - Added connection: Galvanometer -> Wheatstone bridge
-- Added connection: Voltaic pile -> Galvanometer
 - Added connection: Wheatstone bridge -> Transoceanic communication cable
 - Added connection: Infrared -> Infrared LED
 - Added connection: Infrared -> Night-vision device
