@@ -4195,7 +4195,7 @@ useEffect(() => {
                           </button>
                         </div>
                       </div>
-                      <div className="mt-2 text-[10px] uppercase tracking-wide text-[#91B4C5]/80">
+                      <div className="mt-2 text-right text-xs text-[#91B4C5]">
                         Cmd/Ctrl + wheel or +/- to zoom
                       </div>
                     </div>
