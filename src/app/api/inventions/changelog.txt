@@ -1,4 +1,5 @@
 12 June 2026
+- Added tech: Electromagnetism
 - Added tech: Chain
 - Added connection: Wire -> Chain
 - Added connection: Chain -> Endless chain drive
@@ -7,6 +8,13 @@
 - Added connection: Electromagnet -> Electromagnetic induction
 - Added connection: Galvanometer -> Electromagnetic induction
 - Added connection: Electromagnet -> Induction coil
+- Added connection: Voltaic pile -> Electromagnet
+- Added connection: Induction coil -> Radio waves and spark-gap transmitter
+- Added connection: Induction coil -> Resonant transformer
+- Added connection: Induction coil -> Closed-core transformer
+- Added connection: Induction coil -> Induction balance metal detector
+- Added connection: Dynamo -> Ignition magneto
+- Added connection: Ignition magneto -> Moving assembly line
 
 11 June 2026
 - Added tech: Wire rope
