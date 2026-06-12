@@ -20,6 +20,8 @@
 - Added connection: Electromagnetism -> Electromagnet
 - Added connection: Electromagnetism -> Galvanometer
 - Added connection: Chlorine -> Aluminium
+- Added connection: Flintlock musket -> True flintlock
+- Added connection: True flintlock -> Interchangeable parts
 
 11 June 2026
 - Added tech: Wire rope
