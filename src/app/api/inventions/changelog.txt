@@ -4,6 +4,9 @@
 - Added connection: Chain -> Endless chain drive
 - Added connection: Chain -> Electric chainsaw
 - Added connection: Electromagnetic induction -> Induction coil
+- Added connection: Electromagnet -> Electromagnetic induction
+- Added connection: Galvanometer -> Electromagnetic induction
+- Added connection: Electromagnet -> Induction coil
 
 11 June 2026
 - Added tech: Wire rope
