@@ -1,3 +1,7 @@
+12 June 2026
+- Added tech: Chain
+- Added connection: Wire -> Chain
+
 11 June 2026
 - Added tech: Wire rope
 - Added tech: Drawn wire and draw plate
@@ -26,6 +30,7 @@
 - Added connection: Wire rope -> Transoceanic communication cable
 - Added connection: Copper smelting -> Electromagnet
 - Added connection: Iron smelting and wrought iron -> Electromagnet
+- Added connection: Plumbing -> Fountain
 
 10 June 2026
 - Added tech: Zinc oxide
