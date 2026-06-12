@@ -19,6 +19,7 @@
 - Added connection: Voltaic pile -> Electromagnetism
 - Added connection: Electromagnetism -> Electromagnet
 - Added connection: Electromagnetism -> Galvanometer
+- Added connection: Chlorine -> Aluminium
 
 11 June 2026
 - Added tech: Wire rope
