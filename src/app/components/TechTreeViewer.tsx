@@ -371,6 +371,8 @@ export function TechTreeViewer() {
     }
     return 'optimized';
   });
+  // Bumped by "Reset visible connections" to force a recalculation that drops sticky connections
+  const [connectionResetToken, setConnectionResetToken] = useState(0);
   const [showImages, setShowImages] = useState(() => {
     // Initialize from localStorage if available, otherwise default to true
     if (typeof window !== 'undefined') {
@@ -2560,6 +2562,18 @@ export function TechTreeViewer() {
     connectionMode: 'all' | 'optimized' | 'minimal';
   } | null>(null);
 
+  // Drop the sticky connections accumulated in optimized mode and force a recalculation,
+  // leaving only the connections driven by currently visible nodes
+  const resetVisibleConnections = useCallback(() => {
+    previousCalculation.current = {
+      ...previousCalculation.current,
+      visibleConnections: [],
+      stickyVisibleConnections: 0
+    };
+    lastFrameData.current = null;
+    setConnectionResetToken(token => token + 1);
+  }, []);
+
   // Add this helper function to get connections for a node
   const getNodeConnectionIndices = useCallback((nodeId: string): Set<number> => {
     if (connectionLookupCache.current.has(nodeId)) {
@@ -2802,7 +2816,8 @@ export function TechTreeViewer() {
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
     linkIndexByIdentity, nodeById, stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, filters, connectionMode // Add showAllConnections and connectionMode to dependencies
+    stableFilteredNodeIdsString, filters, connectionMode, // Add showAllConnections and connectionMode to dependencies
+    connectionResetToken // Bumped by resetVisibleConnections to drop sticky connections
   ]);
 
   // Add effect to log general performance metrics
@@ -4186,6 +4201,7 @@ useEffect(() => {
                     </div>
                   )}
 
+                  <div>
                   <div className="flex items-center justify-between">
                   <span className="text-sm">Connections</span>
                   <div className="flex border border-[#91B4C5] ml-4">
@@ -4220,6 +4236,18 @@ useEffect(() => {
                       Minimal
                     </button>
                   </div>
+                  </div>
+                  {connectionMode === 'optimized' && (
+                    <div className="mt-2 flex justify-end">
+                      <button
+                        type="button"
+                        className="text-xs text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
+                        onClick={resetVisibleConnections}
+                      >
+                        Reset visible connections
+                      </button>
+                    </div>
+                  )}
                   </div>
                 </div>
               </div>
