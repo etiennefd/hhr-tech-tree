@@ -2,12 +2,11 @@
 - Added tech: Mobile web
 
 12 June 2026
-- Added tech: Roller chain
+- Added tech: Bush roller chain
 - Added tech: Electromagnetism
 - Added tech: Chain
 - Added connection: Wire -> Chain
 - Added connection: Chain -> Endless chain drive
-- Added connection: Chain -> Electric chainsaw
 - Added connection: Electromagnetic induction -> Induction coil
 - Added connection: Electromagnet -> Electromagnetic induction
 - Added connection: Galvanometer -> Electromagnetic induction
@@ -26,6 +25,10 @@
 - Added connection: Chlorine -> Aluminium
 - Added connection: Flintlock musket -> True flintlock
 - Added connection: True flintlock -> Interchangeable parts
+- Added connection: Chain -> Bush roller chain
+- Added connection: Bush roller chain -> Electric chainsaw
+- Added connection: Bush roller chain -> Airplane
+- Added connection: Paul-Wyatt cotton mills -> Bush roller chain
 
 11 June 2026
 - Added tech: Wire rope
