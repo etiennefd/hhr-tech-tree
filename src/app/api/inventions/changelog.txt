@@ -1,5 +1,11 @@
 13 June 2026
 - Added tech: Mobile web
+- Added connection: Web browser -> Mobile web
+- Added connection: World Wide Web -> Mobile web
+- Added connection: Smartphone -> Mobile web
+- Added connection: Digital cellular network -> Mobile web
+- Added connection: Mobile web -> 3G cellular network
+- Added connection: Mobile web -> Multi-touch smartphone
 
 12 June 2026
 - Added tech: Bush roller chain
