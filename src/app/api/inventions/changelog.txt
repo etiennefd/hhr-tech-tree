@@ -1,7 +1,10 @@
 14 June 2026
 - Added tech: Derailleur
+- Added tech: Sun and planet gear
 - Added connection: Safety bicycle -> Derailleur
 - Added connection: Bush roller chain -> Derailleur
+- Added connection: Tin bronze -> Gears
+- Added connection: Gears -> Differential gear
 
 13 June 2026
 - Added tech: Always-on packet-switched cellular data
