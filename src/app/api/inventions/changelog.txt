@@ -4,7 +4,12 @@
 - Added connection: Safety bicycle -> Derailleur
 - Added connection: Bush roller chain -> Derailleur
 - Added connection: Tin bronze -> Gears
-- Added connection: Gears -> Differential gear
+- Added connection: Gears -> Sun and planet gear
+- Added connection: Gears -> Analog computer
+- Added connection: Watt steam engine -> Sun and planet gear
+- Added connection: Sun and planet gear -> Automatic transmission
+- Added connection: Sun and planet gear -> Differential gear
+- Added connection: Analog computer -> Sun and planet gear
 
 13 June 2026
 - Added tech: Always-on packet-switched cellular data
