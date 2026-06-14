@@ -1,5 +1,7 @@
 14 June 2026
 - Added tech: Derailleur
+- Added connection: Safety bicycle -> Derailleur
+- Added connection: Bush roller chain -> Derailleur
 
 13 June 2026
 - Added tech: Always-on packet-switched cellular data
