@@ -1,3 +1,6 @@
+15 June 2026
+- Added connection: Wheel -> Gears
+
 14 June 2026
 - Added tech: Derailleur
 - Added tech: Sun and planet gear
