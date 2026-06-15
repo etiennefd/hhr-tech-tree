@@ -1,5 +1,6 @@
 15 June 2026
 - Added connection: Wheel -> Gears
+- Added connection: Gears -> Endless chain drive
 
 14 June 2026
 - Added tech: Derailleur
