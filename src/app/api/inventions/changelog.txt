@@ -1,9 +1,13 @@
 16 June 2026
-- Added tech: Enzyme detergent
+- Added tech: Synthetic detergent
+- Added tech: Detergent enzyme
+- Added tech: Shortening
+- Added tech: Fat hydrogenation
+- Added tech: Catalytic hydrogenation
 - Added tech: Enzyme extraction
 - Added tech: Enzyme
 - Added connection: Enzyme -> Enzyme extraction
-- Added connection: Enzyme extraction -> Enzyme detergent
+- Added connection: Enzyme extraction -> Detergent enzyme
 - Added connection: Alcohol fermentation -> Enzyme
 - Added connection: Soybean paste and soy sauce -> Enzyme extraction
 - Added connection: Enzyme -> DNA polymerase
@@ -11,6 +15,10 @@
 - Added connection: Enzyme -> Restriction enzymes
 - Added connection: Structure of DNA -> Restriction enzymes
 - Added connection: Structure of DNA -> DNA ligase
+- Added connection: Soap -> Detergent enzyme
+- Added connection: Soap -> Synthetic detergent
+- Added connection: Coal tar -> Synthetic detergent
+- Added connection: Sulfuric acid -> Synthetic detergent
 
 15 June 2026
 - Added connection: Wheel -> Gears
