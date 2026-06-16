@@ -19,6 +19,13 @@
 - Added connection: Soap -> Synthetic detergent
 - Added connection: Coal tar -> Synthetic detergent
 - Added connection: Sulfuric acid -> Synthetic detergent
+- Added connection: Fat hydrogenation -> Shortening
+- Added connection: Margarine -> Shortening
+- Added connection: Catalytic hydrogenation -> Fat hydrogenation
+- Added connection: Fat hydrogenation -> Synthetic detergent
+- Added connection: Nickel -> Catalytic hydrogenation
+- Added connection: Contact process -> Catalytic hydrogenation
+- Added connection: Hydrogen -> Catalytic hydrogenation
 
 15 June 2026
 - Added connection: Wheel -> Gears
