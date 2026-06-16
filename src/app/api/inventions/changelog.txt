@@ -2,6 +2,10 @@
 - Added tech: Enzyme detergent
 - Added tech: Enzyme extraction
 - Added tech: Enzyme
+- Added connection: Enzyme -> Enzyme extraction
+- Added connection: Enzyme extraction -> Enzyme detergent
+- Added connection: Alcohol fermentation -> Enzyme
+- Added connection: Soybean paste and soy sauce -> Enzyme extraction
 
 15 June 2026
 - Added connection: Wheel -> Gears
