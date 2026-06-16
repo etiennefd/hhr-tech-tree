@@ -1484,10 +1484,10 @@
 - Added tech: Cerium
 - Added tech: Ice skates with sharp edge
 - Added tech: Ice skates
-- Added connection: Zinc smelting -> Döbereiner's lamp
-- Added connection: Sulfuric acid -> Döbereiner's lamp
-- Added connection: Platinum -> Döbereiner's lamp
-- Added connection: Hydrogen -> Döbereiner's lamp
+- Added connection: Zinc smelting -> Döbereiner's lamp and platinum catalysis
+- Added connection: Sulfuric acid -> Döbereiner's lamp and platinum catalysis
+- Added connection: Platinum -> Döbereiner's lamp and platinum catalysis
+- Added connection: Hydrogen -> Döbereiner's lamp and platinum catalysis
 - Added connection: Blown glass -> Kipp's apparatus
 - Added connection: Hydrogen -> Kipp's apparatus
 - Added connection: Cerium -> Ferrocerium
