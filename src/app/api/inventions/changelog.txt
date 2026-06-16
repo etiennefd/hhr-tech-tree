@@ -1,3 +1,8 @@
+16 June 2026
+- Added tech: Enzyme detergent
+- Added tech: Enzyme extraction
+- Added tech: Enzyme
+
 15 June 2026
 - Added connection: Wheel -> Gears
 - Added connection: Gears -> Endless chain drive
