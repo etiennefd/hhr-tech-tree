@@ -6,6 +6,11 @@
 - Added connection: Enzyme extraction -> Enzyme detergent
 - Added connection: Alcohol fermentation -> Enzyme
 - Added connection: Soybean paste and soy sauce -> Enzyme extraction
+- Added connection: Enzyme -> DNA polymerase
+- Added connection: Enzyme -> DNA ligase
+- Added connection: Enzyme -> Restriction enzymes
+- Added connection: Structure of DNA -> Restriction enzymes
+- Added connection: Structure of DNA -> DNA ligase
 
 15 June 2026
 - Added connection: Wheel -> Gears
