@@ -6,6 +6,7 @@
 - Added tech: Catalytic hydrogenation
 - Added tech: Enzyme extraction
 - Added tech: Enzyme
+- Added connection: Lead chamber process -> Contact process
 - Added connection: Enzyme -> Enzyme extraction
 - Added connection: Enzyme extraction -> Detergent enzyme
 - Added connection: Alcohol fermentation -> Enzyme
@@ -26,6 +27,8 @@
 - Added connection: Nickel -> Catalytic hydrogenation
 - Added connection: Contact process -> Catalytic hydrogenation
 - Added connection: Hydrogen -> Catalytic hydrogenation
+- Added connection: Döbereiner's lamp and platinum catalysis -> Contact process
+- Added connection: Platinum -> Contact process
 
 15 June 2026
 - Added connection: Wheel -> Gears
