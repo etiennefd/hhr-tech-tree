@@ -4,6 +4,9 @@
 - Added connection: Glucose syrup -> High-fructose corn syrup
 - Added connection: Enzyme extraction -> High-fructose corn syrup
 - Added connection: Domestication of maize -> High-fructose corn syrup
+- Added connection: Catalysis -> Catalytic hydrogenation
+- Added connection: Catalysis -> Fluid catalytic cracking
+- Added connection: Catalysis -> Ziegler–Natta catalyst
 
 16 June 2026
 - Added tech: Synthetic detergent
