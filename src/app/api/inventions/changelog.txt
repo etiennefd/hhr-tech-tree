@@ -1,3 +1,9 @@
+17 June 2026
+- Added tech: High-fructose corn syrup
+- Added connection: Glucose syrup -> High-fructose corn syrup
+- Added connection: Enzyme extraction -> High-fructose corn syrup
+- Added connection: Domestication of maize -> High-fructose corn syrup
+
 16 June 2026
 - Added tech: Synthetic detergent
 - Added tech: Detergent enzyme
