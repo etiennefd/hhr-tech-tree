@@ -11,6 +11,7 @@
 - Added connection: Oxygen -> Catalysis
 - Added connection: Domestication of cattle -> Smallpox vaccine
 - Added connection: Corneal contact lens -> Soft contact lens
+- Added connection: Acrylic glass -> Soft contact lens
 
 16 June 2026
 - Added tech: Synthetic detergent
