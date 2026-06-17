@@ -30,6 +30,8 @@
 - Added connection: Hydrogen -> Catalytic hydrogenation
 - Added connection: Döbereiner's lamp and platinum catalysis -> Contact process
 - Added connection: Platinum -> Contact process
+- Added connection: Domestication of potatoes -> Glucose syrup
+- Added connection: Sulfuric acid -> Glucose syrup
 
 15 June 2026
 - Added connection: Wheel -> Gears
