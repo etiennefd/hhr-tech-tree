@@ -6,6 +6,7 @@
 - Added tech: Catalytic hydrogenation
 - Added tech: Enzyme extraction
 - Added tech: Enzyme
+- Added tech: Glucose syrup
 - Added connection: Lead chamber process -> Contact process
 - Added connection: Enzyme -> Enzyme extraction
 - Added connection: Enzyme extraction -> Detergent enzyme
