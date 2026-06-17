@@ -8,6 +8,7 @@
 - Added connection: Catalysis -> Fluid catalytic cracking
 - Added connection: Catalysis -> Ziegler–Natta catalyst
 - Added connection: Oxygen -> Catalysis
+- Added connection: Domestication of cattle -> Smallpox vaccine
 
 16 June 2026
 - Added tech: Synthetic detergent
