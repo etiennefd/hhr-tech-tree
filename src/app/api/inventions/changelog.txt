@@ -1,5 +1,6 @@
 17 June 2026
 - Added tech: High-fructose corn syrup
+- Added tech: Soft contact lens
 - Added tech: Catalysis
 - Added connection: Glucose syrup -> High-fructose corn syrup
 - Added connection: Enzyme extraction -> High-fructose corn syrup
@@ -9,6 +10,7 @@
 - Added connection: Catalysis -> Ziegler–Natta catalyst
 - Added connection: Oxygen -> Catalysis
 - Added connection: Domestication of cattle -> Smallpox vaccine
+- Added connection: Corneal contact lens -> Soft contact lens
 
 16 June 2026
 - Added tech: Synthetic detergent
