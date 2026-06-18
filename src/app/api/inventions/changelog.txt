@@ -2,6 +2,7 @@
 - Added tech: Cambered skis
 - Added tech: Snowshoe
 - Added tech: Skis
+- Added tech: Pressure flaking
 - Added connection: Skis -> Cambered skis
 
 17 June 2026
