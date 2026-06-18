@@ -1,4 +1,6 @@
 18 June 2026
+- Added tech: Cambered skis
+- Added tech: Snowshoe
 - Added tech: Skis
 
 17 June 2026
