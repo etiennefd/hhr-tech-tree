@@ -1395,7 +1395,7 @@
 - Added connection: Sewing needle -> Nålebinding
 - Added connection: Stitching awl -> Sewing machine
 - Added connection: Stitching awl -> Sewing needle
-- Added connection: Acheulean stone tool -> Bone tool
+- Added connection: Hand axe -> Bone tool
 
 31 January 2026
 - Added connection: Lime -> Calcium
