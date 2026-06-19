@@ -11,6 +11,8 @@
 - Added connection: Prepared-core tool -> Blade
 - Added connection: Prepared-core tool -> Pressure flaking
 - Added connection: Blade -> Burin
+- Added connection: Blade -> Microblade
+- Added connection: Microblade -> Geometric microlith
 
 18 June 2026
 - Added tech: Cambered skis
