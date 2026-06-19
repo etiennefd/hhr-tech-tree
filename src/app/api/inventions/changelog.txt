@@ -2,9 +2,15 @@
 - v.1.1.2: Refactor of prehistoric technologies
 - Added tech: Chisel
 - Added tech: Adze
+- Added tech: Geometric microlith
 - Added tech: Burin
+- Added tech: Microblade
 - Added tech: Blade
 - Added tech: Prepared-core tool
+- Added connection: Hand axe -> Prepared-core tool
+- Added connection: Prepared-core tool -> Blade
+- Added connection: Prepared-core tool -> Pressure flaking
+- Added connection: Blade -> Burin
 
 18 June 2026
 - Added tech: Cambered skis
@@ -2491,7 +2497,6 @@
 - Added tech: Carbon-dioxide laser
 - Added tech: Nd:YAG laser
 - Added connection: Eyeglasses -> Telescope
-- Added connection: Microlith -> Sickle
 - Added connection: Hafting -> Sickle
 - Added connection: Laser -> Carbon-dioxide laser
 - Added connection: Laser -> Nd:YAG laser
