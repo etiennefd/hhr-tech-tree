@@ -13,6 +13,7 @@
 - Added connection: Domestication of barley -> Quern-stone
 - Added connection: Domestication of wheat -> Quern-stone
 - Added connection: Rotary quern -> Animal-driven rotary mill
+- Added connection: Percussion flake tool -> Limestone
 
 19 June 2026
 - v.1.1.2: Refactor of prehistoric technologies
