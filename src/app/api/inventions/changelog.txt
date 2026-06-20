@@ -8,6 +8,7 @@
 - Added connection: Ground stone tool -> Stonemasonry
 - Added connection: Ground stone tool -> Adze
 - Added connection: Ground stone tool -> Chisel
+- Added connection: Stone tool -> Ground stone tool
 
 19 June 2026
 - v.1.1.2: Refactor of prehistoric technologies
