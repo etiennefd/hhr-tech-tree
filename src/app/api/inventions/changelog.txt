@@ -6,6 +6,8 @@
 - Added connection: Burin -> Sewing needle
 - Added connection: Prepared-core tool -> Hafted spear
 - Added connection: Ground stone -> Stonemasonry
+- Added connection: Ground stone -> Adze
+- Added connection: Ground stone -> Chisel
 
 19 June 2026
 - v.1.1.2: Refactor of prehistoric technologies
