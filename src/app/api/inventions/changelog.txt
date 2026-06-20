@@ -9,6 +9,9 @@
 - Added connection: Ground stone tool -> Adze
 - Added connection: Ground stone tool -> Chisel
 - Added connection: Stone tool -> Ground stone tool
+- Added connection: Ground stone tool -> Quern-stone
+- Added connection: Domestication of barley -> Quern-stone
+- Added connection: Domestication of wheat -> Quern-stone
 
 19 June 2026
 - v.1.1.2: Refactor of prehistoric technologies
