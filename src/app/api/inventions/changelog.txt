@@ -1,3 +1,6 @@
+21 June 2026
+- Added connection: Animal-driven rotary mill -> Watermill
+
 20 June 2026
 - Added connection: Adze -> Boat
 - Added connection: Bone tool -> Adze
@@ -1448,7 +1451,6 @@
 - Added connection: Coal mining -> Leblanc process
 - Added connection: Asbestos (industrial use) -> Chloralkali process
 - Added connection: Chlorine -> Chloralkali process
-- Added connection: Stonemasonry -> Limestone
 - Added connection: Limestone -> Lime
 - Added connection: Limestone -> Solvay process
 - Added connection: Control of fire -> Lime
