@@ -1,5 +1,10 @@
+22 June 2026
+- Added connection: Watermill -> Panemone windmill
+- Added connection: Watermill -> Post windmill
+
 21 June 2026
 - Added connection: Animal-driven rotary mill -> Watermill
+- Added connection: Watermill -> Automatic flour mill
 
 20 June 2026
 - Added connection: Adze -> Boat
@@ -2015,7 +2020,6 @@
 - Added connection: Coffee -> Decaffeinated coffee
 - Added connection: Benzene -> Decaffeinated coffee
 - Added connection: Caffeine -> Decaffeinated coffee
-- Added connection: Domestication of wheat -> Gristmill
 - Added connection: Fragmentation bomb -> Bombsight
 - Added connection: Domestication of soybeans -> Tofu
 
