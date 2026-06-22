@@ -1,4 +1,5 @@
 22 June 2026
+- Added tech: Saw
 - Added connection: Watermill -> Panemone windmill
 - Added connection: Watermill -> Post windmill
 
