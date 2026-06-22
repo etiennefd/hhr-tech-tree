@@ -2,6 +2,8 @@
 - Added tech: Saw
 - Added connection: Watermill -> Panemone windmill
 - Added connection: Watermill -> Post windmill
+- Added connection: Copper smelting -> Saw
+- Added connection: Sickle -> Saw
 
 21 June 2026
 - Added connection: Animal-driven rotary mill -> Watermill
