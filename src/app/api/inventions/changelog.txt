@@ -5,6 +5,9 @@
 - Added connection: Watermill -> Post windmill
 - Added connection: Copper smelting -> Saw
 - Added connection: Sickle -> Saw
+- Added connection: Saw -> Sawmill
+- Added connection: Crank-slider mechanism -> Sawmill
+- Added connection: Watermill -> Sawmill
 
 21 June 2026
 - Added connection: Animal-driven rotary mill -> Watermill
