@@ -8,6 +8,8 @@
 - Added connection: Saw -> Sawmill
 - Added connection: Crank-slider mechanism -> Sawmill
 - Added connection: Watermill -> Sawmill
+- Added connection: Control of fire -> Spear
+- Added connection: Hand axe -> Spear
 
 21 June 2026
 - Added connection: Animal-driven rotary mill -> Watermill
