@@ -11,6 +11,7 @@
 - Added connection: Control of fire -> Spear
 - Added connection: Hand axe -> Spear
 - Added connection: Adze -> Skis
+- Added connection: Bone tool -> Stitching awl
 
 21 June 2026
 - Added connection: Animal-driven rotary mill -> Watermill
