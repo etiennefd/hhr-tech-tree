@@ -1,3 +1,6 @@
+23 June 2026
+- Added connection: Gears -> Post windmill
+
 22 June 2026
 - Added tech: Sawmill
 - Added tech: Saw
