@@ -6,6 +6,9 @@
 - Added connection: Gears -> Mechanical calculator
 - Added connection: Mortise and tenon -> Wheel
 - Added connection: Domestication of cattle -> Wheel
+- Added connection: Horse collar -> Coach
+- Added connection: Nailed horseshoe -> Coach
+- Added connection: Coach -> Horse-drawn tram
 
 23 June 2026
 - Added tech: Rotary winnowing fan
