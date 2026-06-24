@@ -4,6 +4,7 @@
 - Added connection: Cam -> Odometer (China)
 - Added connection: Gears -> Mechanical calculator
 - Added connection: Mortise and tenon -> Wheel
+- Added connection: Domestication of cattle -> Wheel
 
 23 June 2026
 - Added tech: Rotary winnowing fan
