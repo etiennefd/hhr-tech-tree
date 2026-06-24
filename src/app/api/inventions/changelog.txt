@@ -1,6 +1,7 @@
 24 June 2026
 - Added tech: Surveyor's wheel
 - Added connection: Cam -> Odometer (China)
+- Added connection: Gears -> Mechanical calculator
 
 23 June 2026
 - Added tech: Rotary winnowing fan
