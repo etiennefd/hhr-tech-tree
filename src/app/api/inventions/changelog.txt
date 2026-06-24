@@ -2,6 +2,9 @@
 - Added tech: Rotary winnowing fan
 - Added connection: Gears -> Post windmill
 - Added connection: Chisel -> Mortise and tenon
+- Added connection: Chariot -> Odometer (Western)
+- Added connection: Chariot -> Odometer (China)
+- Added connection: Gears -> Odometer (Western)
 
 22 June 2026
 - Added tech: Sawmill
