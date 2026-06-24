@@ -1,4 +1,5 @@
 23 June 2026
+- Added tech: Rotary winnowing fan
 - Added connection: Gears -> Post windmill
 - Added connection: Chisel -> Mortise and tenon
 
