@@ -5,6 +5,7 @@
 - Added connection: Chariot -> Odometer (Western)
 - Added connection: Chariot -> Odometer (China)
 - Added connection: Gears -> Odometer (Western)
+- Added connection: Gears -> Odometer (China)
 
 22 June 2026
 - Added tech: Sawmill
