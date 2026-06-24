@@ -9,6 +9,9 @@
 - Added connection: Horse collar -> Coach
 - Added connection: Nailed horseshoe -> Coach
 - Added connection: Coach -> Horse-drawn tram
+- Added connection: Odometer (Western) -> Carriage odometer
+- Added connection: Fully mechanical clock -> Carriage odometer
+- Added connection: Coach -> Carriage odometer
 
 23 June 2026
 - Added tech: Rotary winnowing fan
