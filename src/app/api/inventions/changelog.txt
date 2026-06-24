@@ -1,5 +1,6 @@
 23 June 2026
 - Added connection: Gears -> Post windmill
+- Added connection: Chisel -> Mortise and tenon
 
 22 June 2026
 - Added tech: Sawmill
