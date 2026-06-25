@@ -9,6 +9,8 @@
 - Added connection: Rotary winnowing fan -> Combine harvester
 - Added connection: Crank with connecting rod -> High-pressure steam engine
 - Added connection: Rope and twine -> Sling
+- Added connection: Rope and twine -> Snowshoe
+- Added connection: Adze -> Snowshoe
 
 24 June 2026
 - Added tech: Surveyor's wheel
