@@ -8,6 +8,7 @@
 - Added connection: Domestication of millet -> Rotary winnowing fan
 - Added connection: Rotary winnowing fan -> Combine harvester
 - Added connection: Crank with connecting rod -> High-pressure steam engine
+- Added connection: Rope and twine -> Sling
 
 24 June 2026
 - Added tech: Surveyor's wheel
