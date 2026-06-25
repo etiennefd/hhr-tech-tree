@@ -1,3 +1,6 @@
+25 June 2026
+- Added connection: Carriage odometer -> Surveyor's wheel
+
 24 June 2026
 - Added tech: Surveyor's wheel
 - Added tech: Carriage odometer
@@ -12,6 +15,7 @@
 - Added connection: Odometer (Western) -> Carriage odometer
 - Added connection: Fully mechanical clock -> Carriage odometer
 - Added connection: Coach -> Carriage odometer
+- Added connection: Carriage odometer -> Taximeter
 
 23 June 2026
 - Added tech: Rotary winnowing fan
