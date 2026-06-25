@@ -34,7 +34,7 @@
 - Added connection: Copper smelting -> Saw
 - Added connection: Sickle -> Saw
 - Added connection: Saw -> Sawmill
-- Added connection: Crank-slider mechanism -> Sawmill
+- Added connection: Crank with connecting rod -> Sawmill
 - Added connection: Watermill -> Sawmill
 - Added connection: Control of fire -> Spear
 - Added connection: Hand axe -> Spear
