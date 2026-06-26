@@ -1,3 +1,6 @@
+26 June 2026
+- Added connection: Burin -> Stamp seal
+
 25 June 2026
 - Added connection: Carriage odometer -> Surveyor's wheel
 - Added connection: Crank -> Rotary winnowing fan
