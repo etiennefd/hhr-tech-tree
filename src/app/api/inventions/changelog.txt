@@ -1,5 +1,6 @@
 26 June 2026
 - Added connection: Burin -> Stamp seal
+- Added connection: Ground stone tool -> Fish hook
 
 25 June 2026
 - Added connection: Carriage odometer -> Surveyor's wheel
