@@ -1,5 +1,6 @@
 27 June 2026
 - Added connection: Adze -> Rammed earth
+- Added connection: Stonemasonry -> Paved roads
 
 26 June 2026
 - Added connection: Burin -> Stamp seal
