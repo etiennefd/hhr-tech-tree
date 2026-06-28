@@ -1,4 +1,5 @@
 28 June 2026
+- Added tech: Asphalt road
 - Added tech: Macadam
 - Added connection: Hafting -> Hoe
 - Added connection: Bone tool -> Hoe
