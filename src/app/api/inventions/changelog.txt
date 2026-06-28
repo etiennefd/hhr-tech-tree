@@ -3,6 +3,8 @@
 - Added tech: Macadam
 - Added connection: Hafting -> Hoe
 - Added connection: Bone tool -> Hoe
+- Added connection: Macadam -> Asphalt road
+- Added connection: Bitumen -> Asphalt road
 
 27 June 2026
 - Added connection: Adze -> Rammed earth
