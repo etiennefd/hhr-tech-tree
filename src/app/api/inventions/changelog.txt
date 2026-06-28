@@ -1,5 +1,7 @@
 28 June 2026
 - Added tech: Macadam
+- Added connection: Hafting -> Hoe
+- Added connection: Bone tool -> Hoe
 
 27 June 2026
 - Added connection: Adze -> Rammed earth
