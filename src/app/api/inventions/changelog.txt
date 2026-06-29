@@ -1,3 +1,6 @@
+29 June 2026
+- Added tech: Engineered roadbed
+
 28 June 2026
 - Added tech: Asphalt road
 - Added tech: Macadam
@@ -8,7 +11,7 @@
 
 27 June 2026
 - Added connection: Adze -> Rammed earth
-- Added connection: Stonemasonry -> Paved roads
+- Added connection: Stonemasonry -> Paved road
 
 26 June 2026
 - Added connection: Burin -> Stamp seal
