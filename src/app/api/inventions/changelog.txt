@@ -9,6 +9,7 @@
 - Added connection: Stonemasonry -> Reservoir
 - Added connection: Reservoir -> Rock-cut stepwell
 - Added connection: Screw press -> Hydraulic press
+- Added connection: Cotton (New World) -> Cotton gin
 
 28 June 2026
 - Added tech: Asphalt road
