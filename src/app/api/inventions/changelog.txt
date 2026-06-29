@@ -1,4 +1,5 @@
 29 June 2026
+- Added tech: Star fort
 - Added tech: Suction pump
 - Added tech: Engineered roadbed
 - Added connection: Paved road -> Engineered roadbed
