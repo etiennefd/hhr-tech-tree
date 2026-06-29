@@ -11,6 +11,9 @@
 - Added connection: Reservoir -> Rock-cut stepwell
 - Added connection: Screw press -> Hydraulic press
 - Added connection: Cotton (New World) -> Cotton gin
+- Added connection: Force pump -> Suction pump
+- Added connection: Suction pump -> Vacuum pump
+- Added connection: Force pump -> Hydraulic press
 
 28 June 2026
 - Added tech: Asphalt road
