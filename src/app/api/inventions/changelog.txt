@@ -5,6 +5,9 @@
 - Added connection: Wheel -> Engineered roadbed
 - Added connection: Asphalt road -> Controlled-access highway
 - Added connection: Hoe -> Irrigation
+- Added connection: Irrigation -> Reservoir
+- Added connection: Stonemasonry -> Reservoir
+- Added connection: Reservoir -> Rock-cut stepwell
 
 28 June 2026
 - Added tech: Asphalt road
