@@ -14,6 +14,7 @@
 - Added connection: Force pump -> Suction pump
 - Added connection: Suction pump -> Vacuum pump
 - Added connection: Force pump -> Hydraulic press
+- Added connection: Measuring rod -> Metre
 
 28 June 2026
 - Added tech: Asphalt road
