@@ -3,6 +3,7 @@
 - Added connection: Paved road -> Engineered roadbed
 - Added connection: Engineered roadbed -> Macadam
 - Added connection: Wheel -> Engineered roadbed
+- Added connection: Asphalt road -> Controlled-access highway
 
 28 June 2026
 - Added tech: Asphalt road
