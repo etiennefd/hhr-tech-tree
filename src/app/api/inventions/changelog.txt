@@ -4,6 +4,7 @@
 - Added connection: Engineered roadbed -> Macadam
 - Added connection: Wheel -> Engineered roadbed
 - Added connection: Asphalt road -> Controlled-access highway
+- Added connection: Hoe -> Irrigation
 
 28 June 2026
 - Added tech: Asphalt road
