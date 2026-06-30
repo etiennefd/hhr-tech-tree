@@ -26,6 +26,10 @@
 - Added connection: Clothing -> Stitching awl
 - Added connection: Rawhide -> Tanned leather
 - Added connection: Rawhide -> Clothing
+- Added connection: Clothing -> Shoe
+- Added connection: Stitching awl -> Shoe
+- Added connection: Sandal -> Shoe
+- Added connection: Weaving and basketry -> Sandal
 
 29 June 2026
 - Added tech: Star fort
