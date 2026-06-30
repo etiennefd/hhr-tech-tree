@@ -30,6 +30,12 @@
 - Added connection: Stitching awl -> Shoe
 - Added connection: Sandal -> Shoe
 - Added connection: Weaving and basketry -> Sandal
+- Added connection: Rawhide -> Drum
+- Added connection: Rawhide -> Shield
+- Added connection: Rawhide -> Ox hide bellows
+- Added connection: Rawhide -> Parchment
+- Added connection: Tanned leather -> Saddle
+- Added connection: Rawhide -> Bagpipes
 
 29 June 2026
 - Added tech: Star fort
