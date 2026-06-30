@@ -3,6 +3,7 @@
 - Added tech: Long-recoil field gun
 - Added tech: Trench system
 - Added tech: Defensive wall
+- Added tech: Wattle and daub
 - Added tech: Rawhide
 - Added connection: Stonemasonry -> Defensive wall
 - Added connection: Defensive wall -> Castle
@@ -36,6 +37,8 @@
 - Added connection: Rawhide -> Parchment
 - Added connection: Tanned leather -> Saddle
 - Added connection: Rawhide -> Bagpipes
+- Added connection: Weaving and basketry -> Pottery
+- Added connection: Weaving and basketry -> Wattle and daub
 
 29 June 2026
 - Added tech: Star fort
