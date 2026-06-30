@@ -1,3 +1,6 @@
+30 June 2026
+- Added tech: Defensive wall
+
 29 June 2026
 - Added tech: Star fort
 - Added tech: Suction pump
