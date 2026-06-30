@@ -6,6 +6,14 @@
 - Added connection: Defensive wall -> Castle
 - Added connection: Castle -> Star fort
 - Added connection: Cannon -> Star fort
+- Added connection: Rifled musket -> Trench system
+- Added connection: Armstrong gun -> Trench system
+- Added connection: Trench system -> Tank
+- Added connection: Trench system -> Pillbox
+- Added connection: Reinforced concrete -> Pillbox
+- Added connection: Automatic machine gun -> Pillbox
+- Added connection: Automatic machine gun -> Tank
+- Added connection: Modern barbed wire -> Tank
 
 29 June 2026
 - Added tech: Star fort
