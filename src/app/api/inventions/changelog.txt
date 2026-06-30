@@ -14,6 +14,7 @@
 - Added connection: Automatic machine gun -> Pillbox
 - Added connection: Automatic machine gun -> Tank
 - Added connection: Modern barbed wire -> Tank
+- Added connection: Hand axe -> Throwing stick
 
 29 June 2026
 - Added tech: Star fort
