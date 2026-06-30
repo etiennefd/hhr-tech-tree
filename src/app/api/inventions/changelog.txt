@@ -1,5 +1,6 @@
 30 June 2026
 - Added tech: Pillbox
+- Added tech: Long-recoil field gun
 - Added tech: Trench system
 - Added tech: Defensive wall
 - Added connection: Stonemasonry -> Defensive wall
