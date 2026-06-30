@@ -1232,7 +1232,7 @@
 25 March 2026
 - Added tech: Ground loom
 - Added connection: Rope and twine -> Jute
-- Added connection: Weaving -> Ground loom
+- Added connection: Weaving and basketry -> Ground loom
 
 23 March 2026
 - Added tech: Jute
@@ -1530,9 +1530,9 @@
 
 2 February 2026
 - Added tech: Warp-weighted loom
-- Added connection: Rope and twine -> Weaving
-- Added connection: Weaving -> Warp-weighted loom
-- Added connection: Linen -> Weaving
+- Added connection: Rope and twine -> Weaving and basketry
+- Added connection: Weaving and basketry -> Warp-weighted loom
+- Added connection: Linen -> Weaving and basketry
 
 1 February 2026
 - Added tech: Lockstitch sewing machine
@@ -2171,8 +2171,8 @@
 - Added connection: Stamp seal -> Woodblock printing
 - Added connection: Writing (China) -> Woodblock printing
 - Added connection: Radial engine -> Turbocharger
-- Added connection: Weaving -> Cotton (New World)
-- Added connection: Weaving -> Cotton (Old World)
+- Added connection: Weaving and basketry -> Cotton (New World)
+- Added connection: Weaving and basketry -> Cotton (Old World)
 - Added connection: Modern oil well -> Firefighting foam
 - Added connection: Firefighting foam -> Foam extinguisher
 - Added connection: Sodium bicarbonate -> Firefighting foam
