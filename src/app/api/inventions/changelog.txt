@@ -36,9 +36,10 @@
 - Added connection: Rawhide -> Ox hide bellows
 - Added connection: Rawhide -> Parchment
 - Added connection: Tanned leather -> Saddle
-- Added connection: Rawhide -> Bagpipes
+- Added connection: Rawhide -> Bagpipe
 - Added connection: Weaving and basketry -> Pottery
 - Added connection: Weaving and basketry -> Wattle and daub
+- Added connection: Aulos -> Bagpipe
 
 29 June 2026
 - Added tech: Star fort
