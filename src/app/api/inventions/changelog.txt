@@ -1,5 +1,6 @@
 30 June 2026
 - Added tech: Pillbox
+- Added tech: Trench system
 - Added tech: Defensive wall
 - Added connection: Stonemasonry -> Defensive wall
 - Added connection: Defensive wall -> Castle
