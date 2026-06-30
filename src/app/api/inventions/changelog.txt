@@ -21,6 +21,9 @@
 - Added connection: Rope and twine -> Travois
 - Added connection: Hydraulic cylinder -> Long-recoil field gun
 - Added connection: Saw -> Electric chainsaw
+- Added connection: Percussion flake tool -> Clothing
+- Added connection: Clothing -> Stitching awl
+- Added connection: Clothing -> Tanned leather
 
 29 June 2026
 - Added tech: Star fort
