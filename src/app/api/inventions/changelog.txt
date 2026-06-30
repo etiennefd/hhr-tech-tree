@@ -1,6 +1,10 @@
 30 June 2026
 - Added tech: Pillbox
 - Added tech: Defensive wall
+- Added connection: Stonemasonry -> Defensive wall
+- Added connection: Defensive wall -> Castle
+- Added connection: Castle -> Star fort
+- Added connection: Cannon -> Star fort
 
 29 June 2026
 - Added tech: Star fort
