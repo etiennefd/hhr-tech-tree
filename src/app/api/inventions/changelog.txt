@@ -16,6 +16,8 @@
 - Added connection: Automatic machine gun -> Tank
 - Added connection: Modern barbed wire -> Tank
 - Added connection: Hand axe -> Throwing stick
+- Added connection: Armstrong gun -> Long-recoil field gun
+- Added connection: Smokeless powder cartridge -> Long-recoil field gun
 
 29 June 2026
 - Added tech: Star fort
