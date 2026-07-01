@@ -1,5 +1,6 @@
 1 July 2026
 - Added tech: Kayak
+- Added connection: Bone tool -> Snow goggles
 
 30 June 2026
 - Added tech: Pillbox
