@@ -1,3 +1,6 @@
+1 July 2026
+- Added tech: Kayak
+
 30 June 2026
 - Added tech: Pillbox
 - Added tech: Long-recoil field gun
