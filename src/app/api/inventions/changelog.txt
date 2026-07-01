@@ -1,4 +1,6 @@
 1 July 2026
+- Added tech: Innerspring mattress
+- Added tech: Upholstery coil spring
 - Added tech: Kayak
 - Added connection: Bone tool -> Snow goggles
 - Added connection: Boat -> Kayak
