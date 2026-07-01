@@ -9,6 +9,7 @@
 - Added connection: Upholstery coil spring -> Innerspring mattress
 - Added connection: Mainspring -> Upholstery coil spring
 - Added connection: Coach -> Upholstery coil spring
+- Added connection: Drawn wire and draw plate -> Upholstery coil spring
 
 30 June 2026
 - Added tech: Pillbox
