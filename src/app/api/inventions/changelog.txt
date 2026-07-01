@@ -6,6 +6,9 @@
 - Added connection: Boat -> Kayak
 - Added connection: Rawhide -> Kayak
 - Added connection: Rope and twine -> Kayak
+- Added connection: Upholstery coil spring -> Innerspring mattress
+- Added connection: Mainspring -> Upholstery coil spring
+- Added connection: Coach -> Upholstery coil spring
 
 30 June 2026
 - Added tech: Pillbox
