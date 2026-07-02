@@ -1,6 +1,7 @@
 2 July 2026
 - Added tech: Wire-cable suspension bridge
 - Added tech: Suspension bridge
+- Added tech: Truss
 - Added connection: Simple suspension bridge -> Suspension bridge
 - Added connection: Chain -> Suspension bridge
 - Added connection: Drawn wire and draw plate -> Wire-cable suspension bridge
