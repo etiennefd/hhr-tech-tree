@@ -1,3 +1,7 @@
+2 July 2026
+- Added tech: Wire-cable suspension bridge
+- Added tech: Suspension bridge
+
 1 July 2026
 - Added tech: Innerspring mattress
 - Added tech: Upholstery coil spring
