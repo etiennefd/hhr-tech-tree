@@ -5,6 +5,7 @@
 - Added connection: Chain -> Suspension bridge
 - Added connection: Drawn wire and draw plate -> Wire-cable suspension bridge
 - Added connection: Suspension bridge -> Wire-cable suspension bridge
+- Added connection: Rope and twine -> Simple suspension bridge
 
 1 July 2026
 - Added tech: Innerspring mattress
