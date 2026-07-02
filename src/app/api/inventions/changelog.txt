@@ -9,6 +9,8 @@
 - Added connection: Suspension bridge -> Wire-cable suspension bridge
 - Added connection: Rope and twine -> Simple suspension bridge
 - Added connection: Truss -> Truss bridge
+- Added connection: Truss bridge -> Cantilever bridge
+- Added connection: Truss bridge -> Suspension bridge
 
 1 July 2026
 - Added tech: Innerspring mattress
