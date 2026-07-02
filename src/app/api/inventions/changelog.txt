@@ -1,6 +1,10 @@
 2 July 2026
 - Added tech: Wire-cable suspension bridge
 - Added tech: Suspension bridge
+- Added connection: Simple suspension bridge -> Suspension bridge
+- Added connection: Chain -> Suspension bridge
+- Added connection: Drawn wire and draw plate -> Wire-cable suspension bridge
+- Added connection: Suspension bridge -> Wire-cable suspension bridge
 
 1 July 2026
 - Added tech: Innerspring mattress
