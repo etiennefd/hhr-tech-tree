@@ -2,6 +2,11 @@
 - Added tech: Qanat
 - Added tech: Water well
 - Added connection: Qanat -> Yakhchāl
+- Added connection: Water well -> Qanat
+- Added connection: Water well -> Rock-cut stepwell
+- Added connection: Water well -> Borehole drilling
+- Added connection: Percussion flake tool -> Mining
+- Added connection: Digging stick -> Water well
 
 2 July 2026
 - Added tech: Wire-cable suspension bridge
