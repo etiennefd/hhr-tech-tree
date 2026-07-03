@@ -1,5 +1,6 @@
 3 July 2026
 - Added tech: Qanat
+- Added tech: Water well
 - Added connection: Qanat -> Yakhchāl
 
 2 July 2026
