@@ -350,7 +350,6 @@
 - Added connection: Wire rope -> Transoceanic communication cable
 - Added connection: Copper smelting -> Electromagnet
 - Added connection: Iron smelting and wrought iron -> Electromagnet
-- Added connection: Plumbing -> Fountain
 
 10 June 2026
 - Added tech: Zinc oxide
@@ -361,7 +360,6 @@
 - Added connection: White lead -> Zinc white
 - Added connection: Copper smelting -> Brass
 - Added connection: Phoenician joint -> Standardized prefabricated ship building
-- Added connection: Aqueduct -> Fountain
 - Added connection: Trireme -> Standardized prefabricated ship building
 
 9 June 2026
