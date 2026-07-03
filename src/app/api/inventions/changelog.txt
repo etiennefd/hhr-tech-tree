@@ -1,5 +1,6 @@
 3 July 2026
 - Added tech: Qanat
+- Added connection: Qanat -> Yakhchāl
 
 2 July 2026
 - Added tech: Wire-cable suspension bridge
@@ -767,7 +768,6 @@
 - Added connection: Krypton -> Xenon
 - Added connection: Hampson–Linde air liquefaction -> Xenon
 - Added connection: Magnesium -> Argon
-- Added connection: Aqueduct -> Yakhchāl
 - Added connection: Uranium -> Radium
 - Added connection: Uranium -> Polonium
 - Added connection: Blown glass -> Pneumatic trough
