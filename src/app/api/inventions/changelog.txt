@@ -7,6 +7,7 @@
 - Added connection: Water well -> Borehole drilling
 - Added connection: Percussion flake tool -> Mining
 - Added connection: Digging stick -> Water well
+- Added connection: Concrete -> Roman concrete
 
 2 July 2026
 - Added tech: Wire-cable suspension bridge
@@ -2131,7 +2132,6 @@
 - Added connection: Lime -> Lime mortar and plaster
 - Added connection: Lime -> Synthetic ultramarine
 - Added connection: Construction mortar -> Lime mortar and plaster
-- Added connection: Concrete -> Waterproof concrete
 
 18 August 2025
 - Added tech: Kermes dye
