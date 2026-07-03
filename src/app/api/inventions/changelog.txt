@@ -11,6 +11,8 @@
 - Added connection: Truss -> Truss bridge
 - Added connection: Truss bridge -> Cantilever bridge
 - Added connection: Truss bridge -> Suspension bridge
+- Added connection: Stonemasonry -> Aqueduct
+- Added connection: Lime mortar and plaster -> Aqueduct
 
 1 July 2026
 - Added tech: Innerspring mattress
