@@ -3,6 +3,8 @@
 - Added tech: Coke smelting of iron (Europe)
 - Added tech: Coke (Europe)
 - Added tech: Pontoon bridge
+- Added tech: Beer
+- Added tech: Malting
 - Added connection: Coke (Europe) -> Silicon carbide
 - Added connection: Coke (Europe) -> Acheson process
 - Added connection: Coke (Europe) -> Calcium carbide production
