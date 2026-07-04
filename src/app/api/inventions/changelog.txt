@@ -29,6 +29,9 @@
 - Added connection: Malting -> Beer
 - Added connection: Alcohol fermentation -> Beer
 - Added connection: Malting -> Coke (Europe)
+- Added connection: Pottery -> Alcohol fermentation
+- Added connection: Domestication of rice -> Alcohol fermentation
+- Added connection: Beekeeping -> Alcohol fermentation
 
 3 July 2026
 - Added tech: Arched aqueduct bridge
