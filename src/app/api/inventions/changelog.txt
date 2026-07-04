@@ -12,6 +12,7 @@
 - Added connection: Corbel arch -> Aqueduct
 - Added connection: True arch bridge -> Arched aqueduct bridge
 - Added connection: Aqueduct -> Arched aqueduct bridge
+- Added connection: Roman concrete -> Arched aqueduct bridge
 
 2 July 2026
 - Added tech: Wire-cable suspension bridge
