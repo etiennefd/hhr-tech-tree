@@ -4,6 +4,9 @@
 - Added connection: Boat -> Pontoon bridge
 - Added connection: Rope and twine -> Pontoon bridge
 - Added connection: Percussion flake tool -> Raft
+- Added connection: Cast iron -> Cast-iron bridge
+- Added connection: True arch bridge -> Cast-iron bridge
+- Added connection: Cast-iron bridge -> Iron-framed building
 
 3 July 2026
 - Added tech: Arched aqueduct bridge
