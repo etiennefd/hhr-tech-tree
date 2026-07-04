@@ -1,5 +1,6 @@
 4 July 2026
 - Added tech: Cast-iron bridge
+- Added tech: Coke smelting of iron
 - Added tech: Pontoon bridge
 - Added connection: Boat -> Pontoon bridge
 - Added connection: Rope and twine -> Pontoon bridge
