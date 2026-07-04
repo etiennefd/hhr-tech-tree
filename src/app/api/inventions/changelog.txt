@@ -3,12 +3,26 @@
 - Added tech: Coke smelting of iron (Europe)
 - Added tech: Coke (Europe)
 - Added tech: Pontoon bridge
+- Added connection: Coke (Europe) -> Silicon carbide
+- Added connection: Coke (Europe) -> Acheson process
+- Added connection: Coke (Europe) -> Calcium carbide production
 - Added connection: Boat -> Pontoon bridge
 - Added connection: Rope and twine -> Pontoon bridge
 - Added connection: Percussion flake tool -> Raft
 - Added connection: Cast iron -> Cast-iron bridge
 - Added connection: True arch bridge -> Cast-iron bridge
 - Added connection: Cast-iron bridge -> Iron-framed building
+- Added connection: Coke and coke smelting of iron (China) -> Coke (Europe)
+- Added connection: Coke and coke smelting of iron (China) -> Coke smelting of iron (Europe)
+- Added connection: Coke (Europe) -> Coal tar
+- Added connection: Coal mining -> Coke (Europe)
+- Added connection: Coke (Europe) -> Coke smelting of iron (Europe)
+- Added connection: Charcoal -> Coke (Europe)
+- Added connection: Coke smelting of iron (Europe) -> Cast-iron bridge
+- Added connection: Coke smelting of iron (Europe) -> Iron-framed building
+- Added connection: Blast furnace -> Coke smelting of iron (Europe)
+- Added connection: Blast furnace -> Coke and coke smelting of iron (China)
+- Added connection: Coal mining -> Coke and coke smelting of iron (China)
 
 3 July 2026
 - Added tech: Arched aqueduct bridge
@@ -739,7 +753,7 @@
 
 16 May 2026
 - Added connection: Hydrogen -> Haber process
-- Added connection: Coke and coke smelting of iron (China) -> Haber process
+- Added connection: Coke (Europe) -> Haber process
 
 15 May 2026
 - Added tech: Liquefaction of gas
@@ -1225,7 +1239,6 @@
 - Added connection: Acetylene -> Carbide lamp
 - Added connection: Acetylene -> Calcium carbide production
 - Added connection: Lime -> Calcium carbide production
-- Added connection: Coke and coke smelting of iron (China) -> Calcium carbide production
 - Added connection: Acetylene -> Oxy-fuel welding and cutting
 - Added connection: Scuba set -> Wetsuit
 - Added connection: Gas mask -> Self-contained breathing apparatus
@@ -1998,7 +2011,6 @@
 - Added connection: Graphite -> Graphene
 - Added connection: Graphite -> Graphite pencil
 - Added connection: Graphite pencil -> Modern pencil
-- Added connection: Coke and coke smelting of iron (China) -> Acheson process
 - Added connection: Isotopes -> Carbon-14
 - Added connection: Graphite -> Nuclear reactor
 
@@ -2284,8 +2296,6 @@
 - Added tech: Coal tar
 - Added connection: DDT -> DDT insecticide
 - Added connection: Pine tar -> Coal tar
-- Added connection: Coal mining -> Coal tar
-- Added connection: Coke and coke smelting of iron (China) -> Silicon carbide
 - Added connection: Silicon -> Silicone
 
 31 July 2025
