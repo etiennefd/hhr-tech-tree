@@ -1,4 +1,5 @@
 3 July 2026
+- Added tech: Arched aqueduct bridge
 - Added tech: Qanat
 - Added tech: Water well
 - Added connection: Qanat -> Yakhchāl
@@ -8,6 +9,9 @@
 - Added connection: Percussion flake tool -> Mining
 - Added connection: Digging stick -> Water well
 - Added connection: Concrete -> Roman concrete
+- Added connection: Corbel arch -> Aqueduct
+- Added connection: True arch bridge -> Arched aqueduct bridge
+- Added connection: Aqueduct -> Arched aqueduct bridge
 
 2 July 2026
 - Added tech: Wire-cable suspension bridge
