@@ -25,6 +25,10 @@
 - Added connection: Blast furnace -> Coke smelting of iron (Europe)
 - Added connection: Blast furnace -> Coke and coke smelting of iron (China)
 - Added connection: Coal mining -> Coke and coke smelting of iron (China)
+- Added connection: Domestication of barley -> Malting
+- Added connection: Malting -> Beer
+- Added connection: Alcohol fermentation -> Beer
+- Added connection: Malting -> Coke (Europe)
 
 3 July 2026
 - Added tech: Arched aqueduct bridge
