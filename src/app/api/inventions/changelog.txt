@@ -1,6 +1,7 @@
 4 July 2026
 - Added tech: Cast-iron bridge
-- Added tech: Coke smelting of iron
+- Added tech: Coke smelting of iron (Europe)
+- Added tech: Coke (Europe)
 - Added tech: Pontoon bridge
 - Added connection: Boat -> Pontoon bridge
 - Added connection: Rope and twine -> Pontoon bridge
@@ -738,7 +739,7 @@
 
 16 May 2026
 - Added connection: Hydrogen -> Haber process
-- Added connection: Coke (fuel) -> Haber process
+- Added connection: Coke and coke smelting of iron (China) -> Haber process
 
 15 May 2026
 - Added tech: Liquefaction of gas
@@ -1224,7 +1225,7 @@
 - Added connection: Acetylene -> Carbide lamp
 - Added connection: Acetylene -> Calcium carbide production
 - Added connection: Lime -> Calcium carbide production
-- Added connection: Coke (fuel) -> Calcium carbide production
+- Added connection: Coke and coke smelting of iron (China) -> Calcium carbide production
 - Added connection: Acetylene -> Oxy-fuel welding and cutting
 - Added connection: Scuba set -> Wetsuit
 - Added connection: Gas mask -> Self-contained breathing apparatus
@@ -1997,7 +1998,7 @@
 - Added connection: Graphite -> Graphene
 - Added connection: Graphite -> Graphite pencil
 - Added connection: Graphite pencil -> Modern pencil
-- Added connection: Coke (fuel) -> Acheson process
+- Added connection: Coke and coke smelting of iron (China) -> Acheson process
 - Added connection: Isotopes -> Carbon-14
 - Added connection: Graphite -> Nuclear reactor
 
@@ -2284,7 +2285,7 @@
 - Added connection: DDT -> DDT insecticide
 - Added connection: Pine tar -> Coal tar
 - Added connection: Coal mining -> Coal tar
-- Added connection: Coke (fuel) -> Silicon carbide
+- Added connection: Coke and coke smelting of iron (China) -> Silicon carbide
 - Added connection: Silicon -> Silicone
 
 31 July 2025
