@@ -1974,7 +1974,6 @@
 - Added tech: Industrial porcelain enamel
 - Added tech: Water glass
 - Added tech: Ether
-- Added tech: Ethanol (isolation)
 - Added tech: Vitreous enamel
 - Added tech: Cloisonné
 - Added connection: Glass -> Vitreous enamel
