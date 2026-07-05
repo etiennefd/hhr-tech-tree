@@ -1,12 +1,12 @@
 5 July 2026
 - Added connection: Honey hunting -> Beekeeping
+- Added connection: Malting -> Alcohol
 
 4 July 2026
 - Added tech: Cast-iron bridge
 - Added tech: Coke smelting of iron (Europe)
 - Added tech: Coke (Europe)
 - Added tech: Pontoon bridge
-- Added tech: Beer
 - Added tech: Malting
 - Added connection: Coke (Europe) -> Silicon carbide
 - Added connection: Coke (Europe) -> Acheson process
@@ -28,11 +28,8 @@
 - Added connection: Blast furnace -> Coke smelting of iron (Europe)
 - Added connection: Blast furnace -> Coke and coke smelting of iron (China)
 - Added connection: Coal mining -> Coke and coke smelting of iron (China)
-- Added connection: Domestication of barley -> Malting
-- Added connection: Malting -> Beer
-- Added connection: Alcohol fermentation -> Beer
 - Added connection: Malting -> Coke (Europe)
-- Added connection: Pottery -> Alcohol fermentation
+- Added connection: Pottery -> Alcohol
 
 3 July 2026
 - Added tech: Arched aqueduct bridge
@@ -282,7 +279,7 @@
 - Added connection: Lead chamber process -> Contact process
 - Added connection: Enzyme -> Enzyme extraction
 - Added connection: Enzyme extraction -> Detergent enzyme
-- Added connection: Alcohol fermentation -> Enzyme
+- Added connection: Alcohol -> Enzyme
 - Added connection: Soybean paste and soy sauce -> Enzyme extraction
 - Added connection: Enzyme -> DNA polymerase
 - Added connection: Enzyme -> DNA ligase
@@ -734,7 +731,7 @@
 - Added connection: Germ theory -> Antiseptic surgery
 - Added connection: Compound microscope -> Germ theory
 - Added connection: Cell theory -> Germ theory
-- Added connection: Alcohol fermentation -> Germ theory
+- Added connection: Alcohol -> Germ theory
 - Added connection: Germ theory -> Pasteurization
 - Added connection: Germ theory -> Autoclave
 - Added connection: Germ theory -> Agar plate
@@ -1808,7 +1805,7 @@
 - Added connection: Propylene -> Polypropylene
 - Added connection: Diazomethane -> Polyethylene
 - Added connection: Sulfuric acid -> Ethylene
-- Added connection: Alcohol fermentation -> Ethylene
+- Added connection: Alcohol -> Ethylene
 - Added connection: Polyethylene -> Ziegler–Natta catalyst
 - Added connection: Ethylene -> Ziegler–Natta catalyst
 - Added connection: Ziegler–Natta catalyst -> Polypropylene
@@ -1981,7 +1978,7 @@
 - Added connection: Ether -> Artificial refrigeration
 - Added connection: Sulfuric acid -> Ether
 - Added connection: Fractional distillation -> Ethanol (isolation)
-- Added connection: Alcohol fermentation -> Ethanol (isolation)
+- Added connection: Alcohol -> Ethanol (isolation)
 - Added connection: Ethanol (isolation) -> Ether
 - Added connection: Salt mining -> Ethanol (isolation)
 
