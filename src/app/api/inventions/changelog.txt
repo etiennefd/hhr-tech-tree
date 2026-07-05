@@ -10,6 +10,7 @@
 - Added connection: Wine and viticulture -> Distilled spirit
 - Added connection: Alembic -> Distilled spirit
 - Added connection: Distilled spirit -> Alcohol thermometer
+- Added connection: Distilled spirit -> Ether
 
 4 July 2026
 - Added tech: Cast-iron bridge
@@ -1986,10 +1987,6 @@
 - Added connection: Vacuum pump -> Artificial refrigeration
 - Added connection: Ether -> Artificial refrigeration
 - Added connection: Sulfuric acid -> Ether
-- Added connection: Fractional distillation -> Ethanol (isolation)
-- Added connection: Alcohol -> Ethanol (isolation)
-- Added connection: Ethanol (isolation) -> Ether
-- Added connection: Salt mining -> Ethanol (isolation)
 
 8 September 2025
 - Added tech: Ketamine
