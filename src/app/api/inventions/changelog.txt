@@ -7,6 +7,9 @@
 - Added connection: Alcohol -> Vinegar
 - Added connection: Wine and viticulture -> Winepress
 - Added connection: Pottery -> Distillation
+- Added connection: Wine and viticulture -> Distilled spirit
+- Added connection: Alembic -> Distilled spirit
+- Added connection: Distilled spirit -> Alcohol thermometer
 
 4 July 2026
 - Added tech: Cast-iron bridge
