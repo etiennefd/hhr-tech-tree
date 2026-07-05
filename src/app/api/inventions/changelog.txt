@@ -3,6 +3,10 @@
 - Added tech: Wine and viticulture
 - Added connection: Honey hunting -> Beekeeping
 - Added connection: Malting -> Alcohol
+- Added connection: Alcohol -> Wine and viticulture
+- Added connection: Alcohol -> Vinegar
+- Added connection: Wine and viticulture -> Winepress
+- Added connection: Pottery -> Distillation
 
 4 July 2026
 - Added tech: Cast-iron bridge
