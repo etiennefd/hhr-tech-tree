@@ -1,3 +1,6 @@
+5 July 2026
+- Added connection: Honey hunting -> Beekeeping
+
 4 July 2026
 - Added tech: Cast-iron bridge
 - Added tech: Coke smelting of iron (Europe)
@@ -30,8 +33,6 @@
 - Added connection: Alcohol fermentation -> Beer
 - Added connection: Malting -> Coke (Europe)
 - Added connection: Pottery -> Alcohol fermentation
-- Added connection: Domestication of rice -> Alcohol fermentation
-- Added connection: Beekeeping -> Alcohol fermentation
 
 3 July 2026
 - Added tech: Arched aqueduct bridge
@@ -1005,7 +1006,7 @@
 23 April 2026
 - Added tech: Watercolor paint cake
 - Added tech: Gypsum plaster
-- Added connection: Domestication of bees -> Watercolor paint cake
+- Added connection: Beekeeping -> Watercolor paint cake
 - Added connection: Gum arabic -> Watercolor paint cake
 - Added connection: Ink -> Watercolor paint cake
 - Added connection: Paint -> Watercolor paint cake
@@ -1030,7 +1031,7 @@
 - Added connection: Lime mortar and plaster -> Fresco
 - Added connection: Paint -> Fresco
 - Added connection: Domestication of chickens -> Tempera
-- Added connection: Domestication of bees -> Encaustic painting
+- Added connection: Beekeeping -> Encaustic painting
 - Added connection: Paint -> Encaustic painting
 
 21 April 2026
