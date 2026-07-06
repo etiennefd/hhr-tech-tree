@@ -4,6 +4,7 @@
 - Added connection: Bessemer process -> Steel-cable suspension bridge
 - Added connection: Nitric acid -> Parkesine
 - Added connection: Wire rope -> Steel-cable suspension bridge
+- Added connection: Wire-cable suspension bridge -> Cable-stayed bridge
 
 5 July 2026
 - Added tech: Cable-stayed bridge
