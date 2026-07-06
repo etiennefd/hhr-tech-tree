@@ -1,5 +1,7 @@
 6 July 2026
 - Added tech: Steel bridge
+- Added connection: Cast-iron bridge -> Steel bridge
+- Added connection: Bessemer process -> Steel bridge
 
 5 July 2026
 - Added tech: Cable-stayed bridge
