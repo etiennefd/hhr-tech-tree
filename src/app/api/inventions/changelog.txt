@@ -2,6 +2,7 @@
 - Added tech: Steel bridge
 - Added connection: Cast-iron bridge -> Steel bridge
 - Added connection: Bessemer process -> Steel bridge
+- Added connection: Nitric acid -> Parkesine
 
 5 July 2026
 - Added tech: Cable-stayed bridge
