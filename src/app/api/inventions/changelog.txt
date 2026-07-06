@@ -1,3 +1,6 @@
+6 July 2026
+- Added tech: Steel bridge
+
 5 July 2026
 - Added tech: Cable-stayed bridge
 - Added tech: Distilled spirit
