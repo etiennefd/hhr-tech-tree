@@ -3,6 +3,9 @@
 - Added connection: Rail transport -> Iron girder bridge
 - Added connection: Iron bridge -> Iron girder bridge
 - Added connection: Puddling -> Iron girder bridge
+- Added connection: Copper smelting -> Coke smelting of iron (Europe)
+- Added connection: Iron smelting and wrought iron -> Coke and coke smelting of iron (China)
+- Added connection: Iron smelting and wrought iron -> Coke smelting of iron (Europe)
 
 6 July 2026
 - Added tech: Steel-cable suspension bridge
