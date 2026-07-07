@@ -1,7 +1,7 @@
 7 July 2026
 - Added tech: Iron girder bridge
 - Added connection: Rail transport -> Iron girder bridge
-- Added connection: Cast-iron bridge -> Iron girder bridge
+- Added connection: Iron bridge -> Iron girder bridge
 - Added connection: Puddling -> Iron girder bridge
 
 6 July 2026
@@ -28,7 +28,7 @@
 - Added connection: Distilled spirit -> Ether
 
 4 July 2026
-- Added tech: Cast-iron bridge
+- Added tech: Iron bridge
 - Added tech: Coke smelting of iron (Europe)
 - Added tech: Coke (Europe)
 - Added tech: Pontoon bridge
@@ -39,16 +39,16 @@
 - Added connection: Boat -> Pontoon bridge
 - Added connection: Rope and twine -> Pontoon bridge
 - Added connection: Percussion flake tool -> Raft
-- Added connection: Cast iron -> Cast-iron bridge
-- Added connection: True arch bridge -> Cast-iron bridge
-- Added connection: Cast-iron bridge -> Iron-framed building
+- Added connection: Cast iron -> Iron bridge
+- Added connection: True arch bridge -> Iron bridge
+- Added connection: Iron bridge -> Iron-framed building
 - Added connection: Coke and coke smelting of iron (China) -> Coke (Europe)
 - Added connection: Coke and coke smelting of iron (China) -> Coke smelting of iron (Europe)
 - Added connection: Coke (Europe) -> Coal tar
 - Added connection: Coal mining -> Coke (Europe)
 - Added connection: Coke (Europe) -> Coke smelting of iron (Europe)
 - Added connection: Charcoal -> Coke (Europe)
-- Added connection: Coke smelting of iron (Europe) -> Cast-iron bridge
+- Added connection: Coke smelting of iron (Europe) -> Iron bridge
 - Added connection: Coke smelting of iron (Europe) -> Iron-framed building
 - Added connection: Blast furnace -> Coke smelting of iron (Europe)
 - Added connection: Blast furnace -> Coke and coke smelting of iron (China)
