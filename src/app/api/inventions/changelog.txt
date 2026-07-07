@@ -1,5 +1,8 @@
 7 July 2026
 - Added tech: Iron girder bridge
+- Added connection: Rail transport -> Iron girder bridge
+- Added connection: Cast-iron bridge -> Iron girder bridge
+- Added connection: Puddling -> Iron girder bridge
 
 6 July 2026
 - Added tech: Steel-cable suspension bridge
