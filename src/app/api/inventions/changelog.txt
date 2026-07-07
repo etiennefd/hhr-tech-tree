@@ -1,3 +1,6 @@
+7 July 2026
+- Added tech: Iron girder bridge
+
 6 July 2026
 - Added tech: Steel-cable suspension bridge
 - Added connection: Wire-cable suspension bridge -> Steel-cable suspension bridge
