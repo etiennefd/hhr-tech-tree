@@ -1,3 +1,6 @@
+8 July 2026
+- Added tech: Magazine repeating rifle
+
 7 July 2026
 - Added tech: Iron girder bridge
 - Added connection: Rail transport -> Iron girder bridge
