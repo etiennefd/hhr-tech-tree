@@ -1,12 +1,12 @@
 9 July 2026
 - Added tech: Breech-loading swivel gun
 - Added connection: Cannon -> Breech-loading swivel gun
-- Added connection: Breech-loading swivel gun -> Breechloader
+- Added connection: Breech-loading swivel gun -> Breech-loading rifle
 
 8 July 2026
 - Added tech: Assault rifle
 - Added tech: Magazine repeating rifle
-- Added tech: Breechloader
+- Added tech: Breech-loading rifle
 
 7 July 2026
 - Added tech: Iron girder bridge
