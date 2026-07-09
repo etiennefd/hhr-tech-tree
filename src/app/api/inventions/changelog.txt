@@ -1,3 +1,6 @@
+9 July 2026
+- Added tech: Breech-loading swivel gun
+
 8 July 2026
 - Added tech: Assault rifle
 - Added tech: Magazine repeating rifle
