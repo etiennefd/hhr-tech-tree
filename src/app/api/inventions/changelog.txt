@@ -1,6 +1,7 @@
 10 July 2026
 - Added tech: Man-portable anti-tank weapon
 - Added tech: Shaped charge
+- Added tech: Self-loading rifle
 - Added connection: Shaped charge -> Man-portable anti-tank weapon
 - Added connection: TNT -> Shaped charge
 - Added connection: Tank -> Shaped charge
