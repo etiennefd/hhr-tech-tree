@@ -6,6 +6,9 @@
 - Added connection: Tank -> Shaped charge
 - Added connection: Congreve rocket -> Man-portable anti-tank weapon
 - Added connection: Smokeless gunpowder -> Man-portable anti-tank weapon
+- Added connection: Breech-loading rifle -> Bolt-action rifle
+- Added connection: Integrated cartridge -> Bolt-action rifle
+- Added connection: Percussion cap -> Bolt-action rifle
 
 9 July 2026
 - Added tech: Breech-loading swivel gun
