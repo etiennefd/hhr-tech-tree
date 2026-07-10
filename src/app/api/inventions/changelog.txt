@@ -4,6 +4,8 @@
 - Added connection: Shaped charge -> Man-portable anti-tank weapon
 - Added connection: TNT -> Shaped charge
 - Added connection: Tank -> Shaped charge
+- Added connection: Congreve rocket -> Man-portable anti-tank weapon
+- Added connection: Smokeless gunpowder -> Man-portable anti-tank weapon
 
 9 July 2026
 - Added tech: Breech-loading swivel gun
