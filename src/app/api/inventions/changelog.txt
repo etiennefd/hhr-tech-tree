@@ -1,3 +1,8 @@
+11 July 2026
+- Added connection: Trench system -> Submachine gun
+- Added connection: Automatic machine gun -> Submachine gun
+- Added connection: Semi-automatic pistol -> Submachine gun
+
 10 July 2026
 - Added tech: Man-portable anti-tank weapon
 - Added tech: Shaped charge
