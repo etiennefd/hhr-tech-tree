@@ -1,3 +1,9 @@
+12 July 2026
+- Added connection: Gas-operated firearm -> Self-loading rifle
+- Added connection: Bolt-action rifle -> Self-loading rifle
+- Added connection: Magazine repeating rifle -> Self-loading rifle
+- Added connection: Smokeless powder cartridge -> Self-loading rifle
+
 11 July 2026
 - Added connection: Trench system -> Submachine gun
 - Added connection: Automatic machine gun -> Submachine gun
