@@ -6,6 +6,8 @@
 - Added connection: Automatic machine gun -> Gas-operated firearm
 - Added connection: Rimfire ammunition -> Magazine repeating rifle
 - Added connection: Breech-loading rifle -> Magazine repeating rifle
+- Added connection: True flintlock -> Breech-loading rifle
+- Added connection: Rifling -> Breech-loading rifle
 
 11 July 2026
 - Added connection: Trench system -> Submachine gun
