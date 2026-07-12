@@ -8,6 +8,8 @@
 - Added connection: Breech-loading rifle -> Magazine repeating rifle
 - Added connection: True flintlock -> Breech-loading rifle
 - Added connection: Rifling -> Breech-loading rifle
+- Added connection: Self-loading rifle -> Assault rifle
+- Added connection: Submachine gun -> Assault rifle
 
 11 July 2026
 - Added connection: Trench system -> Submachine gun
