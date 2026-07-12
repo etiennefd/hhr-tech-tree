@@ -10,6 +10,7 @@
 - Added connection: Rifling -> Breech-loading rifle
 - Added connection: Self-loading rifle -> Assault rifle
 - Added connection: Submachine gun -> Assault rifle
+- Added connection: Percussion cap -> Rifled musket
 
 11 July 2026
 - Added connection: Trench system -> Submachine gun
