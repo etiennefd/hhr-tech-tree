@@ -1,6 +1,9 @@
 13 July 2026
 - Added tech: Silencer (gun)
 - Added tech: Muffler
+- Added connection: Muffler -> Silencer (gun)
+- Added connection: Motorcycle -> Muffler
+- Added connection: Bolt-action rifle -> Silencer (gun)
 
 12 July 2026
 - Added connection: Gas-operated firearm -> Self-loading rifle
