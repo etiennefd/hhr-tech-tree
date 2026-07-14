@@ -9,6 +9,11 @@
 - Added connection: Muffler -> Silencer (gun)
 - Added connection: Motorcycle -> Muffler
 - Added connection: Bolt-action rifle -> Silencer (gun)
+- Added connection: Volley gun -> Gatling gun
+- Added connection: Gatling gun -> Mitrailleuse
+- Added connection: Integrated cartridge -> Mitrailleuse
+- Added connection: Paper cartridge -> Gatling gun
+- Added connection: Percussion cap -> Gatling gun
 
 12 July 2026
 - Added connection: Gas-operated firearm -> Self-loading rifle
