@@ -1,5 +1,6 @@
 14 July 2026
 - Added tech: Armor-piercing ammunition
+- Added tech: Rifled artillery
 - Added connection: Ironclad -> Armor-piercing ammunition
 - Added connection: Cast iron -> Armor-piercing ammunition
 
