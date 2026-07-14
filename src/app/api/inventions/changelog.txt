@@ -3,6 +3,15 @@
 - Added tech: Rifled artillery
 - Added connection: Ironclad -> Armor-piercing ammunition
 - Added connection: Cast iron -> Armor-piercing ammunition
+- Added connection: Rifled artillery -> Armor-piercing ammunition
+- Added connection: Rifled artillery -> Built-up gun
+- Added connection: Breech-loading swivel gun -> Rifled artillery
+- Added connection: Rifling -> Rifled artillery
+- Added connection: Rifled artillery -> Trench system
+- Added connection: Rifled artillery -> Long-recoil field gun
+- Added connection: Iron smelting and wrought iron -> Built-up gun
+- Added connection: Slide-rest all-metal lathe -> Rifled artillery
+- Added connection: Cannon -> Rifled artillery
 
 13 July 2026
 - Added tech: Silencer (gun)
@@ -181,7 +190,6 @@
 - Added connection: Castle -> Star fort
 - Added connection: Cannon -> Star fort
 - Added connection: Rifled musket -> Trench system
-- Added connection: Armstrong gun -> Trench system
 - Added connection: Trench system -> Tank
 - Added connection: Trench system -> Pillbox
 - Added connection: Reinforced concrete -> Pillbox
@@ -189,7 +197,6 @@
 - Added connection: Automatic machine gun -> Tank
 - Added connection: Modern barbed wire -> Tank
 - Added connection: Hand axe -> Throwing stick
-- Added connection: Armstrong gun -> Long-recoil field gun
 - Added connection: Smokeless powder cartridge -> Long-recoil field gun
 - Added connection: Rope and twine -> Travois
 - Added connection: Hydraulic cylinder -> Long-recoil field gun
