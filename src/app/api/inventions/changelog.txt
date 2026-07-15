@@ -9,6 +9,7 @@
 - Added connection: Petroleum as fuel -> Greek fire
 - Added connection: Force pump -> Greek fire
 - Added connection: Distillation -> Greek fire
+- Added connection: Irrigation -> Archimedes' screw
 
 14 July 2026
 - Added tech: Composite rocket propellant
