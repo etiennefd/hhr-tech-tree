@@ -6,6 +6,9 @@
 - Added connection: Composite rocket propellant -> Ballistic missile submarine
 - Added connection: Composite rocket propellant -> Reusable spacecraft
 - Added connection: Composite rocket propellant -> Surface-to-air missile
+- Added connection: Petroleum as fuel -> Greek fire
+- Added connection: Force pump -> Greek fire
+- Added connection: Distillation -> Greek fire
 
 14 July 2026
 - Added tech: Composite rocket propellant
