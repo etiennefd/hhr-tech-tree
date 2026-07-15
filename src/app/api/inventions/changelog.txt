@@ -1,3 +1,9 @@
+15 July 2026
+- Added connection: Greek fire -> Composite rocket propellant
+- Added connection: Bitumen -> Composite rocket propellant
+- Added connection: Congreve rocket -> Composite rocket propellant
+- Added connection: Gunpowder -> Composite rocket propellant
+
 14 July 2026
 - Added tech: Composite rocket propellant
 - Added tech: Armor-piercing ammunition
