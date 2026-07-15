@@ -1,4 +1,5 @@
 15 July 2026
+- Added tech: Laparoscope
 - Added connection: Greek fire -> Composite rocket propellant
 - Added connection: Bitumen -> Composite rocket propellant
 - Added connection: Congreve rocket -> Composite rocket propellant
