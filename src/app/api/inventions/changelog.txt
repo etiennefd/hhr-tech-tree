@@ -11,6 +11,12 @@
 - Added connection: Force pump -> Greek fire
 - Added connection: Distillation -> Greek fire
 - Added connection: Irrigation -> Archimedes' screw
+- Added connection: Silver mirror -> Endoscope
+- Added connection: Argand lamp -> Endoscope
+- Added connection: Endoscope -> Laparoscope
+- Added connection: Endoscope -> Capsule endoscopy
+- Added connection: Laparoscope -> Surgical robot
+- Added connection: Light bulb -> Laparoscope
 
 14 July 2026
 - Added tech: Composite rocket propellant
