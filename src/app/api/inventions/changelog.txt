@@ -5,6 +5,10 @@
 - Added connection: Niobium -> Tantalum
 - Added connection: Drawn wire and draw plate -> Stapler
 - Added connection: Paper machine -> Stapler
+- Added connection: Manganese -> Solid electrolytic capacitor
+- Added connection: Tantalum -> Solid electrolytic capacitor
+- Added connection: Electrolytic capacitor -> Solid electrolytic capacitor
+- Added connection: Transistor -> Solid electrolytic capacitor
 
 15 July 2026
 - Added tech: Laparoscope
