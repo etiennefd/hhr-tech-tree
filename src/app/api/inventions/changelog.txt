@@ -1,5 +1,7 @@
 16 July 2026
 - Added tech: Stapler
+- Added tech: Tantalum
+- Added connection: Niobium -> Tantalum
 
 15 July 2026
 - Added tech: Laparoscope
