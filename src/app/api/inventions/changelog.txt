@@ -3,6 +3,7 @@
 - Added tech: Sintered technical ceramic
 - Added tech: Spark plug
 - Added tech: Stapler
+- Added tech: Powder metallurgy
 - Added tech: Tantalum
 - Added connection: Niobium -> Tantalum
 - Added connection: Drawn wire and draw plate -> Stapler
