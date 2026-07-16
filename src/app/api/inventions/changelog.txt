@@ -1,5 +1,7 @@
 16 July 2026
 - Added tech: Solid electrolytic capacitor
+- Added tech: Sintered technical ceramic
+- Added tech: Spark plug
 - Added tech: Stapler
 - Added tech: Tantalum
 - Added connection: Niobium -> Tantalum
