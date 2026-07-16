@@ -28,6 +28,7 @@
 - Added connection: Hall–Héroult process --> Bayer process
 - Added connection: Bayer process --> Synthetic gemstone
 - Added connection: Graphite --> Synthetic diamond
+- Added connection: Powder metallurgy --> Solid electrolytic capacitor
 
 15 July 2026
 - Added tech: Laparoscope
