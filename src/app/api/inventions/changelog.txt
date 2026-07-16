@@ -13,6 +13,19 @@
 - Added connection: Electrolytic capacitor -> Solid electrolytic capacitor
 - Added connection: Transistor -> Solid electrolytic capacitor
 - Added connection: Dispersive prism and color spectrum -> Camera lucida
+- Added connection: Platinum -> Powder metallurgy
+- Added connection: Powder metallurgy -> Tungsten filament
+- Added connection: Powder metallurgy -> Selective laser sintering
+- Added connection: Ignition magneto -> Spark plug
+- Added connection: Four-stroke engine -> Spark plug
+- Added connection: Platinum -> Spark plug
+- Added connection: Spark plug -> Sintered technical ceramic
+- Added connection: Bayer process -> Sintered technical ceramic
+- Added connection: Ceramic -> Sintered technical ceramic
+- Added connection: Sodium hydroxide -> Bayer process
+- Added connection: Hall–Héroult process -> Bayer process
+- Added connection: Bayer process -> Synthetic gemstone
+- Added connection: Graphite -> Synthetic diamond
 
 15 July 2026
 - Added tech: Laparoscope
