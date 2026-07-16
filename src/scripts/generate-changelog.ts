@@ -12,6 +12,7 @@ interface TechNode {
 interface TechLink {
   source: string;
   target: string;
+  type?: string;
   dateAdded?: string;
 }
 
@@ -73,7 +74,7 @@ async function generateChangelog() {
     // Create maps to store items by date
     const itemsByDate = new Map<string, { 
       techs: string[], 
-      connections: Array<{ from: string, to: string }>,
+      connections: Array<{ from: string, to: string, type?: string }>,
       milestones: Array<{ version: string, description: string }>
     }>();
 
@@ -116,7 +117,8 @@ async function generateChangelog() {
         if (sourceNode && targetNode) {
           itemsByDate.get(dateStr)?.connections.push({
             from: sourceNode.title,
-            to: targetNode.title
+            to: targetNode.title,
+            type: link.type
           });
         }
       }
@@ -130,6 +132,11 @@ async function generateChangelog() {
       const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
       return dateB.getTime() - dateA.getTime();
     });
+
+    const undirectedTypes = new Set([
+      "Independently invented",
+      "Concurrent development",
+    ]);
 
     // Generate changelog text
     let changelogText = '';
@@ -151,7 +158,8 @@ async function generateChangelog() {
         
         // Add connections
         items.connections.forEach(conn => {
-          changelogText += `- Added connection: ${conn.from} -> ${conn.to}\n`;
+          const arrow = conn.type && undirectedTypes.has(conn.type) ? '<-->' : '-->';
+          changelogText += `- Added connection: ${conn.from} ${arrow} ${conn.to}\n`;
         });
         
         changelogText += '\n';
