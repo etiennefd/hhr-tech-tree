@@ -2,6 +2,8 @@
 - Added tech: Stapler
 - Added tech: Tantalum
 - Added connection: Niobium -> Tantalum
+- Added connection: Drawn wire and draw plate -> Stapler
+- Added connection: Paper machine -> Stapler
 
 15 July 2026
 - Added tech: Laparoscope
