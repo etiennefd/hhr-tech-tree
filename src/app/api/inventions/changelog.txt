@@ -1,10 +1,12 @@
 16 July 2026
 - Added tech: Solid electrolytic capacitor
 - Added tech: Sintered technical ceramic
+- Added tech: Hafnium
 - Added tech: Spark plug
 - Added tech: Stapler
 - Added tech: Powder metallurgy
 - Added tech: Tantalum
+- Added tech: Palladium
 - Added connection: Niobium <--> Tantalum
 - Added connection: Drawn wire and draw plate --> Stapler
 - Added connection: Paper machine --> Stapler
