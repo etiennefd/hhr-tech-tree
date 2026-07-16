@@ -9,6 +9,7 @@
 - Added connection: Tantalum -> Solid electrolytic capacitor
 - Added connection: Electrolytic capacitor -> Solid electrolytic capacitor
 - Added connection: Transistor -> Solid electrolytic capacitor
+- Added connection: Dispersive prism and color spectrum -> Camera lucida
 
 15 July 2026
 - Added tech: Laparoscope
