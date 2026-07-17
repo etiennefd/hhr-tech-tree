@@ -1,3 +1,7 @@
+17 July 2026
+- Added connection: Platinum --> Palladium
+- Added connection: Aqua regia --> Palladium
+
 16 July 2026
 - Added tech: Solid electrolytic capacitor
 - Added tech: Sintered technical ceramic
