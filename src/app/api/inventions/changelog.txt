@@ -1,5 +1,7 @@
 17 July 2026
 - Added tech: Rhodium
+- Added tech: Iridium
+- Added tech: Osmium
 - Added tech: Fusible alloy
 - Added connection: Platinum --> Palladium
 - Added connection: Aqua regia --> Palladium
