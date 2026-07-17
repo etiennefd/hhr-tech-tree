@@ -6,6 +6,7 @@
 - Added connection: Aqua regia --> Rhodium
 - Added connection: Zirconium --> Hafnium
 - Added connection: Hafnium --> Nuclear submarine
+- Added connection: Zirconium --> Nuclear submarine
 
 16 July 2026
 - Added tech: Solid electrolytic capacitor
