@@ -9,6 +9,10 @@
 - Added connection: Hafnium --> Nuclear submarine
 - Added connection: Zirconium --> Nuclear submarine
 - Added connection: Writing (Egypt) --> Birch bark manuscript
+- Added connection: Bismuth --> Fusible alloy
+- Added connection: Fusible alloy --> Automatic fire sprinkler
+- Added connection: Lead smelting --> Fusible alloy
+- Added connection: Tin extraction --> Fusible alloy
 
 16 July 2026
 - Added tech: Solid electrolytic capacitor
