@@ -1,5 +1,8 @@
 18 July 2026
 - Added tech: Superalloy
+- Added connection: Nichrome heating element --> Superalloy
+- Added connection: Titanium --> Superalloy
+- Added connection: Aluminium --> Superalloy
 
 17 July 2026
 - Added tech: Rhodium
