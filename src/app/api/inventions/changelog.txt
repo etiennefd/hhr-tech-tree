@@ -18,6 +18,11 @@
 - Added connection: Fusible alloy --> Automatic fire sprinkler
 - Added connection: Lead smelting --> Fusible alloy
 - Added connection: Tin extraction --> Fusible alloy
+- Added connection: Iridium <--> Osmium
+- Added connection: Platinum --> Iridium
+- Added connection: Aqua regia --> Iridium
+- Added connection: Platinum --> Osmium
+- Added connection: Aqua regia --> Osmium
 
 16 July 2026
 - Added tech: Solid electrolytic capacitor
