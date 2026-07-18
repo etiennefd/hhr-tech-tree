@@ -1,3 +1,6 @@
+18 July 2026
+- Added tech: Superalloy
+
 17 July 2026
 - Added tech: Rhodium
 - Added tech: Iridium
