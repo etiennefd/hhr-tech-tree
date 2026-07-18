@@ -1,5 +1,6 @@
 18 July 2026
 - Added tech: Superalloy
+- Added tech: Age-hardening alloy
 - Added connection: Nichrome heating element --> Superalloy
 - Added connection: Titanium --> Superalloy
 - Added connection: Aluminium --> Superalloy
