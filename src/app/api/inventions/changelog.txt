@@ -1,3 +1,10 @@
+19 July 2026
+- Added connection: Aluminium --> Age-hardening alloy
+- Added connection: Age-hardening alloy --> Superalloy
+- Added connection: Copper smelting --> Age-hardening alloy
+- Added connection: Stainless steel --> Turbojet
+- Added connection: Age-hardening alloy --> Turbojet
+
 18 July 2026
 - Added tech: Superalloy
 - Added tech: Age-hardening alloy
