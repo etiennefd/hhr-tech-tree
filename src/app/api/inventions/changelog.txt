@@ -20,6 +20,9 @@
 - Added connection: Crucible steel <--> Crucible steel (modern)
 - Added connection: Mainspring --> Crucible steel (modern)
 - Added connection: Coke (Europe) --> Crucible steel (modern)
+- Added connection: Iron smelting and wrought iron --> Cementation steel
+- Added connection: Charcoal --> Cementation steel
+- Added connection: Cementation steel --> Crucible steel (modern)
 
 19 July 2026
 - Added connection: Aluminium --> Age-hardening alloy
