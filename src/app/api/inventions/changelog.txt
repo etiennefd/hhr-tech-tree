@@ -15,6 +15,10 @@
 - Added connection: Tungsten --> Tool steel and air-hardening steel
 - Added connection: Manganese --> Tool steel and air-hardening steel
 - Added connection: Crucible steel (modern) --> Tool steel and air-hardening steel
+- Added connection: Crucible --> Crucible steel (modern)
+- Added connection: Crucible steel <--> Crucible steel (modern)
+- Added connection: Mainspring --> Crucible steel (modern)
+- Added connection: Coke (Europe) --> Crucible steel (modern)
 
 19 July 2026
 - Added connection: Aluminium --> Age-hardening alloy
