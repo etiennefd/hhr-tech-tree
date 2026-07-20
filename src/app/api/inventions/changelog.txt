@@ -35,7 +35,7 @@
 - Added connection: Writing (Egypt) --> Birch bark manuscript
 - Added connection: Bismuth --> Fusible alloy
 - Added connection: Fusible alloy --> Automatic fire sprinkler
-- Added connection: Lead smelting --> Fusible alloy
+- Added connection: Lead --> Fusible alloy
 - Added connection: Tin --> Fusible alloy
 - Added connection: Iridium <--> Osmium
 - Added connection: Platinum --> Iridium
@@ -2297,7 +2297,7 @@
 - Added tech: Zinc white
 - Added connection: Titanium --> Titanium white
 - Added connection: Tin --> Printing press
-- Added connection: Lead smelting --> Printing press
+- Added connection: Lead --> Printing press
 - Added connection: Antimony --> Printing press
 - Added connection: Sulfuric acid --> Titanium white
 
@@ -2308,7 +2308,7 @@
 - Added connection: Offset printing --> Phototypesetting
 - Added connection: Crucible --> Crucible steel
 - Added connection: Pottery --> Crucible
-- Added connection: Control of fire --> Lead smelting
+- Added connection: Control of fire --> Lead
 - Added connection: Crucible --> Arsenical bronze
 - Added connection: Crucible --> Brass
 - Added connection: Pyrometer --> Disappearing-filament pyrometer
@@ -2459,7 +2459,7 @@
 - Added connection: Porcelain --> Blue and white pottery
 - Added connection: Blue and white pottery --> Cobalt
 - Added connection: Tin --> Pewter
-- Added connection: Lead smelting --> Pewter
+- Added connection: Lead --> Pewter
 
 7 August 2025
 - Added tech: Scanning electron microscope
@@ -2486,7 +2486,7 @@
 - Added connection: Vinegar --> White lead
 - Added connection: Vinegar --> Verdigris
 - Added connection: Copper --> Verdigris
-- Added connection: Lead smelting --> White lead
+- Added connection: Lead --> White lead
 - Added connection: Joule–Thomson effect --> Liquid oxygen
 
 1 August 2025
@@ -2642,7 +2642,7 @@
 4 July 2025
 - Added tech: Leaded gasoline
 - Added tech: Gasoline as fuel
-- Added connection: Lead smelting --> Rechargeable battery
+- Added connection: Lead --> Rechargeable battery
 - Added connection: Coal gas and gas lighting --> Four-stroke engine
 - Added connection: Kerosene --> Diesel engine
 - Added connection: Kerosene --> Gasoline as fuel
