@@ -1,5 +1,6 @@
 20 July 2026
 - Added tech: All-metal monoplane
+- Added tech: Crucible steel (modern)
 - Added connection: Puddling --> Bessemer process
 - Added connection: Airplane --> All-metal monoplane
 - Added connection: Electrical steel --> All-metal monoplane
@@ -13,6 +14,7 @@
 - Added connection: Iron smelting and wrought iron --> Slide-rest all-metal lathe
 - Added connection: Tungsten --> Tool steel and air-hardening steel
 - Added connection: Manganese --> Tool steel and air-hardening steel
+- Added connection: Crucible steel (modern) --> Tool steel and air-hardening steel
 
 19 July 2026
 - Added connection: Aluminium --> Age-hardening alloy
