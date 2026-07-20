@@ -1,3 +1,6 @@
+20 July 2026
+- Added tech: All-metal monoplane
+
 19 July 2026
 - Added connection: Aluminium --> Age-hardening alloy
 - Added connection: Age-hardening alloy --> Superalloy
