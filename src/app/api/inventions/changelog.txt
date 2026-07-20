@@ -36,7 +36,7 @@
 - Added connection: Bismuth --> Fusible alloy
 - Added connection: Fusible alloy --> Automatic fire sprinkler
 - Added connection: Lead smelting --> Fusible alloy
-- Added connection: Tin extraction --> Fusible alloy
+- Added connection: Tin --> Fusible alloy
 - Added connection: Iridium <--> Osmium
 - Added connection: Platinum --> Iridium
 - Added connection: Aqua regia --> Iridium
@@ -1266,7 +1266,7 @@
 - Added connection: Iron smelting and wrought iron --> Hot-dip zinc coating
 - Added connection: Opium poppy cultivation --> Oil paint
 - Added connection: Oil paint --> Paint tube
-- Added connection: Tin extraction --> Tinplate
+- Added connection: Tin --> Tinplate
 - Added connection: Iron smelting and wrought iron --> Tinplate
 - Added connection: Tinplate --> Tin can
 - Added connection: Tinplate --> Paint tube
@@ -1455,7 +1455,7 @@
 - Added connection: Fourcault drawn sheet glass --> Float glass
 - Added connection: Polished plate glass --> Float glass
 - Added connection: Broad sheet glass --> Fourcault drawn sheet glass
-- Added connection: Tin extraction --> Float glass
+- Added connection: Tin --> Float glass
 - Added connection: Polished plate glass --> Laminated glass
 - Added connection: Polished plate glass --> Silver mirror
 
@@ -2296,7 +2296,7 @@
 - Added tech: Titanium white
 - Added tech: Zinc white
 - Added connection: Titanium --> Titanium white
-- Added connection: Tin extraction --> Printing press
+- Added connection: Tin --> Printing press
 - Added connection: Lead smelting --> Printing press
 - Added connection: Antimony --> Printing press
 - Added connection: Sulfuric acid --> Titanium white
@@ -2354,7 +2354,7 @@
 - Added connection: Coal tar --> Aniline
 - Added connection: Aniline --> Spirit duplicator
 - Added connection: Aniline --> Hectograph
-- Added connection: Tin extraction --> Cerulean blue
+- Added connection: Tin --> Cerulean blue
 - Added connection: Cobalt --> Cobalt blue
 - Added connection: Blue and white pottery --> Cobalt blue
 - Added connection: Kelvin scale and absolute zero --> International system of units
@@ -2458,7 +2458,7 @@
 - Added connection: Cupronickel --> Nickel silver
 - Added connection: Porcelain --> Blue and white pottery
 - Added connection: Blue and white pottery --> Cobalt
-- Added connection: Tin extraction --> Pewter
+- Added connection: Tin --> Pewter
 - Added connection: Lead smelting --> Pewter
 
 7 August 2025
