@@ -3,6 +3,7 @@
 - Added tech: Crucible steel (modern)
 - Added tech: Cementation steel
 - Added connection: Puddling --> Bessemer process
+- Added connection: Crucible steel (modern) --> Siderography and steel engraving
 - Added connection: Airplane --> All-metal monoplane
 - Added connection: Electrical steel --> All-metal monoplane
 - Added connection: Age-hardening alloy --> All-metal monoplane
@@ -1322,7 +1323,6 @@
 - Added connection: Engraving --> Siderography and steel engraving
 - Added connection: Siderography and steel engraving --> Adhesive postage stamp
 - Added connection: Paper money --> Siderography and steel engraving
-- Added connection: Crucible steel --> Siderography and steel engraving
 - Added connection: Domestication of flax --> Oil paint
 
 16 April 2026
