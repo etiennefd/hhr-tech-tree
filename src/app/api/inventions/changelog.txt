@@ -10,6 +10,9 @@
 - Added connection: Siemens–Martin process --> Electrical steel
 - Added connection: Siemens–Martin process --> Mangalloy
 - Added connection: Electric arc steel furnace --> Stainless steel
+- Added connection: Iron smelting and wrought iron --> Slide-rest all-metal lathe
+- Added connection: Tungsten --> Tool steel and air-hardening steel
+- Added connection: Manganese --> Tool steel and air-hardening steel
 
 19 July 2026
 - Added connection: Aluminium --> Age-hardening alloy
