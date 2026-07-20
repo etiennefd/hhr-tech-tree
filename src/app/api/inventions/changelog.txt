@@ -1,10 +1,15 @@
 20 July 2026
 - Added tech: All-metal monoplane
+- Added connection: Puddling --> Bessemer process
 - Added connection: Airplane --> All-metal monoplane
 - Added connection: Electrical steel --> All-metal monoplane
 - Added connection: Age-hardening alloy --> All-metal monoplane
 - Added connection: All-metal monoplane --> Jet aircraft
 - Added connection: All-metal monoplane --> Pressurized aircraft cabin
+- Added connection: Silicon --> Electrical steel
+- Added connection: Siemens–Martin process --> Electrical steel
+- Added connection: Siemens–Martin process --> Mangalloy
+- Added connection: Electric arc steel furnace --> Stainless steel
 
 19 July 2026
 - Added connection: Aluminium --> Age-hardening alloy
