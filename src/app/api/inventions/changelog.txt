@@ -10,6 +10,7 @@
 - Added connection: Steam turbine --> Gas turbine
 - Added connection: Internal combustion engine --> Gas turbine
 - Added connection: Gas turbine --> Turbojet
+- Added connection: Superalloy --> Turbofan
 
 20 July 2026
 - Added tech: All-metal monoplane
