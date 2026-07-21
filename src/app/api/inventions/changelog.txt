@@ -1,6 +1,10 @@
 21 July 2026
 - Added connection: Wine and viticulture --> Germ theory
 - Added connection: Charcoal --> Crucible steel
+- Added connection: Electric generator --> Electric arc furnace
+- Added connection: White phosphorus match --> Electric arc furnace
+- Added connection: Reverberatory furnace --> Electric arc furnace
+- Added connection: Phosphorus --> Electric arc furnace
 
 20 July 2026
 - Added tech: All-metal monoplane
