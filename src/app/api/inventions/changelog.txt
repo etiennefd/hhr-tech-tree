@@ -1,3 +1,7 @@
+21 July 2026
+- Added connection: Wine and viticulture --> Germ theory
+- Added connection: Charcoal --> Crucible steel
+
 20 July 2026
 - Added tech: All-metal monoplane
 - Added tech: Crucible steel (modern)
@@ -948,7 +952,6 @@
 - Added connection: Germ theory --> Antiseptic surgery
 - Added connection: Compound microscope --> Germ theory
 - Added connection: Cell theory --> Germ theory
-- Added connection: Alcohol --> Germ theory
 - Added connection: Germ theory --> Pasteurization
 - Added connection: Germ theory --> Autoclave
 - Added connection: Germ theory --> Agar plate
