@@ -5,6 +5,9 @@
 - Added connection: White phosphorus match --> Electric arc furnace
 - Added connection: Reverberatory furnace --> Electric arc furnace
 - Added connection: Phosphorus --> Electric arc furnace
+- Added connection: Steam turbine --> Gas turbine
+- Added connection: Internal combustion engine --> Gas turbine
+- Added connection: Gas turbine --> Turbojet
 
 20 July 2026
 - Added tech: All-metal monoplane
