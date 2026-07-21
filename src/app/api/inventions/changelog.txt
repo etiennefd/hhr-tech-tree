@@ -1,5 +1,7 @@
 21 July 2026
+- Added connection: Wine and viticulture --> Siphon
 - Added connection: Wine and viticulture --> Germ theory
+- Added connection: Malting --> Enzyme
 - Added connection: Charcoal --> Crucible steel
 - Added connection: Electric generator --> Electric arc furnace
 - Added connection: White phosphorus match --> Electric arc furnace
@@ -507,7 +509,6 @@
 - Added connection: Lead chamber process --> Contact process
 - Added connection: Enzyme --> Enzyme extraction
 - Added connection: Enzyme extraction --> Detergent enzyme
-- Added connection: Alcohol --> Enzyme
 - Added connection: Soybean paste and soy sauce --> Enzyme extraction
 - Added connection: Enzyme --> DNA polymerase
 - Added connection: Enzyme --> DNA ligase
@@ -2031,7 +2032,7 @@
 - Added connection: Propylene --> Polypropylene
 - Added connection: Diazomethane --> Polyethylene
 - Added connection: Sulfuric acid --> Ethylene
-- Added connection: Alcohol --> Ethylene
+- Added connection: Distilled spirit --> Ethylene
 - Added connection: Polyethylene --> Ziegler–Natta catalyst
 - Added connection: Ethylene --> Ziegler–Natta catalyst
 - Added connection: Ziegler–Natta catalyst --> Polypropylene
