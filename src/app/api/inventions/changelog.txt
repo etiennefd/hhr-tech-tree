@@ -13,6 +13,12 @@
 - Added connection: Superalloy --> Turbofan
 - Added connection: Turbojet --> Turbofan
 - Added connection: Airplane --> Turbojet
+- Added connection: Water-powered blast furnace --> Air compressor
+- Added connection: Crank with connecting rod --> Air compressor
+- Added connection: Air compressor --> Pneumatic drill
+- Added connection: Air compressor --> Self-propelled torpedo
+- Added connection: Force pump --> Air compressor
+- Added connection: Air compressor --> Vapor-compression refrigeration system
 
 20 July 2026
 - Added tech: All-metal monoplane
