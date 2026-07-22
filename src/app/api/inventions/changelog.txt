@@ -19,6 +19,7 @@
 - Added connection: Air compressor --> Self-propelled torpedo
 - Added connection: Force pump --> Air compressor
 - Added connection: Air compressor --> Vapor-compression refrigeration system
+- Added connection: Air compressor --> Mechanized submarine
 
 20 July 2026
 - Added tech: All-metal monoplane
