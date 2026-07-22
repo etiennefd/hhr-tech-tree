@@ -1,5 +1,6 @@
 22 July 2026
 - Added tech: Electrical grid
+- Added tech: Polyphase electric power
 
 21 July 2026
 - Added connection: Wine and viticulture --> Siphon
