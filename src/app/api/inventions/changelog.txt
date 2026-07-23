@@ -1,9 +1,11 @@
 22 July 2026
 - Added tech: Electrical grid
 - Added tech: Polyphase electric power
+- Added connection: Electric generator --> Induction motor
 - Added connection: Closed-core transformer --> Electrical grid
 - Added connection: Coal power plant --> Electrical grid
 - Added connection: Polyphase electric power --> Electrical grid
+- Added connection: Induction motor --> Polyphase electric power
 
 21 July 2026
 - Added connection: Wine and viticulture --> Siphon
