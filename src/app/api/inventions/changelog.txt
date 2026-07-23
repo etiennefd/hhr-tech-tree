@@ -1,3 +1,6 @@
+23 July 2026
+- Added tech: High-voltage direct current transmission
+
 22 July 2026
 - Added tech: Electrical grid
 - Added tech: Polyphase electric power
