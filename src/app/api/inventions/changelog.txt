@@ -1,5 +1,7 @@
 23 July 2026
 - Added tech: High-voltage direct current transmission
+- Added connection: Electrical grid --> High-voltage direct current transmission
+- Added connection: Mercury-arc valve --> High-voltage direct current transmission
 
 22 July 2026
 - Added tech: Electrical grid
