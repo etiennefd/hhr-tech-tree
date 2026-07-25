@@ -8,6 +8,7 @@
 - Added connection: Beeswax --> Encaustic painting
 - Added connection: Percussion flake tool --> Honey
 - Added connection: Honey --> Watercolor paint cake
+- Added connection: Gold --> Lost-wax casting
 
 24 July 2026
 - Added tech: Gear hobbing
