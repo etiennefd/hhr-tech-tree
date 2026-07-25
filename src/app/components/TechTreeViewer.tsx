@@ -3566,6 +3566,12 @@ useEffect(() => {
                             <p className="text-xs mb-2">{node.details}</p>
                           )}
 
+                          {node.naturalOrigin && (
+                            <p className="text-xs mb-1">
+                              <strong>Natural origin:</strong> {node.naturalOrigin}
+                            </p>
+                          )}
+
                           {/* Updated connections section */}
                           {(() => {
                             const { ancestors, children, replaced, replacedBy, independentlyInvented, concurrentDevelopment } = getNodeConnections(

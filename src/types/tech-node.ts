@@ -9,6 +9,7 @@ export interface TechNode {
   subfields?: string[];
   description?: string;
   details?: string;
+  naturalOrigin?: string;
   inventors?: string[];
   organizations?: string[];
   wikipedia?: string;
