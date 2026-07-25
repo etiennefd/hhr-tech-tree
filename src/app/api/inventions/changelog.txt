@@ -10,6 +10,7 @@
 - Added connection: Honey --> Watercolor paint cake
 - Added connection: Gold --> Lost-wax casting
 - Added connection: Pottery --> Ceramic bell
+- Added connection: Beeswax --> Candle
 
 24 July 2026
 - Added tech: Gear hobbing
