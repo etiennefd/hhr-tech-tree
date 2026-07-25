@@ -2,6 +2,12 @@
 - v1.1.3: Natural origin in tooltips
 - Added tech: Cemented carbide
 - Added tech: Beeswax
+- Added connection: Honey --> Beeswax
+- Added connection: Beeswax --> Lost-wax casting
+- Added connection: Beeswax --> Wax tablet
+- Added connection: Beeswax --> Encaustic painting
+- Added connection: Percussion flake tool --> Honey
+- Added connection: Honey --> Watercolor paint cake
 
 24 July 2026
 - Added tech: Gear hobbing
@@ -1265,7 +1271,6 @@
 23 April 2026
 - Added tech: Watercolor paint cake
 - Added tech: Gypsum plaster
-- Added connection: Beekeeping --> Watercolor paint cake
 - Added connection: Gum arabic --> Watercolor paint cake
 - Added connection: Ink --> Watercolor paint cake
 - Added connection: Paint --> Watercolor paint cake
@@ -1290,7 +1295,6 @@
 - Added connection: Lime mortar and plaster --> Fresco
 - Added connection: Paint --> Fresco
 - Added connection: Domestication of chickens --> Tempera
-- Added connection: Beekeeping --> Encaustic painting
 - Added connection: Paint --> Encaustic painting
 
 21 April 2026
