@@ -3568,7 +3568,10 @@ useEffect(() => {
 
                           {node.naturalOrigin && (
                             <p className="text-xs mb-1">
-                              <strong>Natural origin:</strong> {node.naturalOrigin}
+                              <strong>Natural origin:</strong>{" "}
+                              <span style={{ color: "#2e7d32" }}>
+                                {node.naturalOrigin}
+                              </span>
                             </p>
                           )}
 
