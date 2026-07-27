@@ -4,6 +4,8 @@
 - Added connection: Fat rendering --> Margarine
 - Added connection: Fat rendering --> Proto-soap
 - Added connection: Fat rendering --> Soap
+- Added connection: Prepared-core tool --> Fat rendering
+- Added connection: Control of fire --> Fat rendering
 
 26 July 2026
 - Added connection: Beeswax --> Etching
