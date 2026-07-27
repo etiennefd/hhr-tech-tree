@@ -1,5 +1,9 @@
 27 July 2026
 - Added tech: Fat rendering
+- Added connection: Fat rendering --> Candle
+- Added connection: Fat rendering --> Margarine
+- Added connection: Fat rendering --> Proto-soap
+- Added connection: Fat rendering --> Soap
 
 26 July 2026
 - Added connection: Beeswax --> Etching
