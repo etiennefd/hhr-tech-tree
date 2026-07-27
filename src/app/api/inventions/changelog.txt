@@ -1,3 +1,6 @@
+27 July 2026
+- Added tech: Fat rendering
+
 26 July 2026
 - Added connection: Beeswax --> Etching
 - Added connection: Tungsten --> Cemented carbide
