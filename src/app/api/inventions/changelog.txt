@@ -1,5 +1,7 @@
 28 July 2026
 - Added tech: Fire making
+- Added connection: Control of fire --> Fire making
+- Added connection: Hand axe --> Fire making
 
 27 July 2026
 - Added tech: Fat rendering
