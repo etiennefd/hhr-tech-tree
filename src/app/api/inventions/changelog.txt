@@ -6,6 +6,7 @@
 - Added connection: Fat rendering --> Soap
 - Added connection: Prepared-core tool --> Fat rendering
 - Added connection: Control of fire --> Fat rendering
+- Added connection: Fat rendering --> Whale oil
 
 26 July 2026
 - Added connection: Beeswax --> Etching
