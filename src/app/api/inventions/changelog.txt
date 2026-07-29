@@ -6,6 +6,7 @@
 - Added connection: Fire making --> Sulfur match
 - Added connection: Fire making --> Fire striker
 - Added connection: Bloomery and wrought iron --> Carburized and quenched iron
+- Added connection: Bloomery and wrought iron --> Trompe and Catalan forge
 
 28 July 2026
 - Added tech: Fire making
