@@ -5,6 +5,7 @@
 - Added connection: Fire making --> Fire piston
 - Added connection: Fire making --> Sulfur match
 - Added connection: Fire making --> Fire striker
+- Added connection: Bloomery and wrought iron --> Carburized and quenched iron
 
 28 July 2026
 - Added tech: Fire making
@@ -100,7 +101,7 @@
 - Added connection: Siemens–Martin process --> Electrical steel
 - Added connection: Siemens–Martin process --> Mangalloy
 - Added connection: Electric arc steel furnace --> Stainless steel
-- Added connection: Iron smelting and wrought iron --> Slide-rest all-metal lathe
+- Added connection: Bloomery and wrought iron --> Slide-rest all-metal lathe
 - Added connection: Tungsten --> Tool steel and air-hardening steel
 - Added connection: Manganese --> Tool steel and air-hardening steel
 - Added connection: Crucible steel (modern) --> Tool steel and air-hardening steel
@@ -108,7 +109,7 @@
 - Added connection: Crucible steel <--> Crucible steel (modern)
 - Added connection: Mainspring --> Crucible steel (modern)
 - Added connection: Coke (Europe) --> Crucible steel (modern)
-- Added connection: Iron smelting and wrought iron --> Cementation steel
+- Added connection: Bloomery and wrought iron --> Cementation steel
 - Added connection: Charcoal --> Cementation steel
 - Added connection: Cementation steel --> Crucible steel (modern)
 
@@ -213,7 +214,7 @@
 - Added connection: Rifling --> Rifled artillery
 - Added connection: Rifled artillery --> Trench system
 - Added connection: Rifled artillery --> Long-recoil field gun
-- Added connection: Iron smelting and wrought iron --> Built-up gun
+- Added connection: Bloomery and wrought iron --> Built-up gun
 - Added connection: Slide-rest all-metal lathe --> Rifled artillery
 - Added connection: Cannon --> Rifled artillery
 
@@ -280,8 +281,8 @@
 - Added connection: Iron bridge --> Iron girder bridge
 - Added connection: Puddling --> Iron girder bridge
 - Added connection: Copper smelting --> Coke smelting of iron (Europe)
-- Added connection: Iron smelting and wrought iron --> Coke and coke smelting of iron (China)
-- Added connection: Iron smelting and wrought iron --> Coke smelting of iron (Europe)
+- Added connection: Bloomery and wrought iron --> Coke and coke smelting of iron (China)
+- Added connection: Bloomery and wrought iron --> Coke smelting of iron (Europe)
 - Added connection: Puddling --> Cantilever bridge
 - Added connection: Iron bridge --> Cantilever bridge
 
@@ -679,7 +680,7 @@
 - Added connection: Drawn wire and draw plate --> Barbed wire
 - Added connection: Drawn wire and draw plate --> Wire wheel
 - Added connection: Piano --> Wire recording
-- Added connection: Iron smelting and wrought iron --> Drawn wire and draw plate
+- Added connection: Bloomery and wrought iron --> Drawn wire and draw plate
 - Added connection: Drawn wire and draw plate --> Radial tire
 - Added connection: Bessemer process --> Radial tire
 - Added connection: Drawn wire and draw plate --> Psaltery
@@ -691,7 +692,7 @@
 - Added connection: Wire --> Chain mail
 - Added connection: Wire rope --> Transoceanic communication cable
 - Added connection: Copper smelting --> Electromagnet
-- Added connection: Iron smelting and wrought iron --> Electromagnet
+- Added connection: Bloomery and wrought iron --> Electromagnet
 
 10 June 2026
 - Added tech: Zinc oxide
@@ -1365,11 +1366,11 @@
 - Added tech: Hot-dip zinc coating
 - Added tech: Tinplate
 - Added connection: Zinc smelting --> Hot-dip zinc coating
-- Added connection: Iron smelting and wrought iron --> Hot-dip zinc coating
+- Added connection: Bloomery and wrought iron --> Hot-dip zinc coating
 - Added connection: Opium poppy cultivation --> Oil paint
 - Added connection: Oil paint --> Paint tube
 - Added connection: Tin --> Tinplate
-- Added connection: Iron smelting and wrought iron --> Tinplate
+- Added connection: Bloomery and wrought iron --> Tinplate
 - Added connection: Tinplate --> Tin can
 - Added connection: Tinplate --> Paint tube
 - Added connection: Tinplate --> Hot-dip zinc coating
@@ -1381,7 +1382,7 @@
 - Added connection: Copper sheathed ship --> Cathodic protection
 - Added connection: Frigate --> Copper sheathed ship
 - Added connection: Copper smelting --> Copper sheathed ship
-- Added connection: Iron smelting and wrought iron --> Cathodic protection
+- Added connection: Bloomery and wrought iron --> Cathodic protection
 - Added connection: Zinc smelting --> Cathodic protection
 - Added connection: Electrostatic generator --> Galvanism
 - Added connection: Leyden jar --> Galvanism
@@ -1465,7 +1466,7 @@
 - Added connection: Lathe --> Screw-cutting lathe
 - Added connection: Puddling <--> Grooved rolling mill
 - Added connection: Slitting mill --> Grooved rolling mill
-- Added connection: Iron smelting and wrought iron --> I-beam
+- Added connection: Bloomery and wrought iron --> I-beam
 - Added connection: Grooved rolling mill --> I-beam
 - Added connection: Grooved rolling mill --> Corrugated iron
 - Added connection: Blast furnace --> Puddling
@@ -1643,7 +1644,7 @@
 - Added tech: Caltrop
 - Added connection: Caltrop --> Land mine
 - Added connection: Snaphance --> Pressure-operated land mine
-- Added connection: Iron smelting and wrought iron --> Caltrop
+- Added connection: Bloomery and wrought iron --> Caltrop
 
 19 March 2026
 - Added connection: Gunpowder --> Fuse
@@ -1705,7 +1706,7 @@
 - Added connection: Hot water central heating --> Radiator
 - Added connection: Domestication of chickens --> Thermostat
 - Added connection: Protein sequencing --> AI protein structure prediction
-- Added connection: Iron smelting and wrought iron --> Hot water central heating
+- Added connection: Bloomery and wrought iron --> Hot water central heating
 - Added connection: Chimney --> Franklin stove
 - Added connection: Chimney --> Central heating
 - Added connection: Stonemasonry --> Chimney
@@ -2040,7 +2041,7 @@
 - Added connection: Dispersive prism and color spectrum --> Spectroscope
 
 14 January 2026
-- Added connection: Iron smelting and wrought iron --> Ice skates with sharp edge
+- Added connection: Bloomery and wrought iron --> Ice skates with sharp edge
 
 13 January 2026
 - Added tech: Disposable lighter
@@ -2061,7 +2062,7 @@
 - Added connection: Hydrogen --> Kipp's apparatus
 - Added connection: Cerium --> Ferrocerium
 - Added connection: Ferrocerium --> Ferrocerium lighter
-- Added connection: Iron smelting and wrought iron --> Ferrocerium
+- Added connection: Bloomery and wrought iron --> Ferrocerium
 - Added connection: Ytterbium --> Lutetium
 - Added connection: Petroleum as fuel --> Butane
 - Added connection: Ferrocerium lighter --> Disposable lighter
@@ -2174,7 +2175,7 @@
 2 October 2025
 - Added tech: Slitting mill
 - Added connection: Watermill --> Slitting mill
-- Added connection: Iron smelting and wrought iron --> Slitting mill
+- Added connection: Bloomery and wrought iron --> Slitting mill
 
 28 September 2025
 - Added tech: Head-mounted display
@@ -2269,7 +2270,7 @@
 - Added connection: Gold --> Cloisonné
 - Added connection: Vitreous enamel --> Industrial porcelain enamel
 - Added connection: Cast iron --> Industrial porcelain enamel
-- Added connection: Iron smelting and wrought iron --> Industrial porcelain enamel
+- Added connection: Bloomery and wrought iron --> Industrial porcelain enamel
 - Added connection: Gas mask --> Silica gel
 - Added connection: Water glass --> Silica gel
 - Added connection: Vacuum pump --> Artificial refrigeration
@@ -2443,7 +2444,7 @@
 - Added connection: Nickel --> Nickel–iron battery
 - Added connection: Cadmium --> Cadmium pigments
 - Added connection: Cadmium --> Nickel–cadmium battery
-- Added connection: Iron smelting and wrought iron --> Corrugated iron
+- Added connection: Bloomery and wrought iron --> Corrugated iron
 
 19 August 2025
 - Added tech: Spirit duplicator
