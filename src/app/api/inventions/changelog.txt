@@ -3,6 +3,7 @@
 - Added connection: Fire making --> Bow drill
 - Added connection: Fire making --> Fire piston
 - Added connection: Fire making --> Sulfur match
+- Added connection: Fire making --> Fire striker
 
 28 July 2026
 - Added tech: Fire making
