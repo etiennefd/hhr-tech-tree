@@ -7,6 +7,11 @@
 - Added connection: Fire making --> Fire striker
 - Added connection: Bloomery and wrought iron --> Carburized and quenched iron
 - Added connection: Bloomery and wrought iron --> Trompe and Catalan forge
+- Added connection: Carburized and quenched iron --> Cementation steel
+- Added connection: Carburized and quenched iron --> Fire striker
+- Added connection: Carburized and quenched iron --> Crucible steel
+- Added connection: Carburized and quenched iron --> Drawn wire and draw plate
+- Added connection: Carburized and quenched iron --> Slitting mill
 
 28 July 2026
 - Added tech: Fire making
@@ -110,7 +115,6 @@
 - Added connection: Crucible steel <--> Crucible steel (modern)
 - Added connection: Mainspring --> Crucible steel (modern)
 - Added connection: Coke (Europe) --> Crucible steel (modern)
-- Added connection: Bloomery and wrought iron --> Cementation steel
 - Added connection: Charcoal --> Cementation steel
 - Added connection: Cementation steel --> Crucible steel (modern)
 
