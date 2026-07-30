@@ -12,6 +12,8 @@
 - Added connection: Carburized and quenched iron --> Crucible steel
 - Added connection: Carburized and quenched iron --> Drawn wire and draw plate
 - Added connection: Carburized and quenched iron --> Slitting mill
+- Added connection: Charcoal --> Carburized and quenched iron
+- Added connection: Control of fire --> Cigar
 
 28 July 2026
 - Added tech: Fire making
