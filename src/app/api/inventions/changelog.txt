@@ -1,3 +1,8 @@
+31 July 2026
+- Added connection: Sulfur match --> Self-igniting match
+- Added connection: Sulfuric acid --> Self-igniting match
+- Added connection: Antimony --> Self-igniting match
+
 30 July 2026
 - Added tech: Self-igniting match
 
