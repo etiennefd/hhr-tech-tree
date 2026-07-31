@@ -1,4 +1,5 @@
 31 July 2026
+- Added tech: Potassium chlorate
 - Added connection: Sulfur match --> Self-igniting match
 - Added connection: Sulfuric acid --> Self-igniting match
 - Added connection: Antimony --> Self-igniting match
