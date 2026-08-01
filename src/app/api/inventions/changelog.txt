@@ -24,6 +24,9 @@
 - Added connection: Caustic potash --> Potassium
 - Added connection: Hand drill --> Bow drill
 - Added connection: Percussion flake tool --> Hand drill
+- Added connection: Piston bellows --> Finery forge
+- Added connection: Charcoal --> Finery forge
+- Added connection: Blast furnace --> Finery forge
 
 31 July 2026
 - Added tech: Potassium chlorate
