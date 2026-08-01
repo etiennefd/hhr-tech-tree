@@ -1105,7 +1105,7 @@
 - Added connection: Carbon dioxide --> Hydrogen
 - Added connection: Carbon dioxide --> Oxygen
 - Added connection: Sulfuric acid --> Carbon dioxide
-- Added connection: Soda ash from plants --> Sodium bicarbonate
+- Added connection: Plant ash alkali --> Sodium bicarbonate
 - Added connection: Carbon dioxide --> Sodium bicarbonate
 - Added connection: Carbon dioxide --> Solvay process
 - Added connection: Sodium bicarbonate --> Solvay process
@@ -1958,7 +1958,7 @@
 - Added connection: Tanned leather --> Sewing machine
 - Added connection: Sewing machine --> Lockstitch sewing machine
 - Added connection: Soap --> Sodium hydroxide
-- Added connection: Soda ash from plants --> Sodium hydroxide
+- Added connection: Plant ash alkali --> Sodium hydroxide
 - Added connection: Lime --> Sodium hydroxide
 - Added connection: Sewing needle --> Lockstitch sewing machine
 - Added connection: Sewing needle --> Nålebinding
@@ -1981,7 +1981,7 @@
 - Added tech: Limestone
 - Added connection: Leblanc process --> Solvay process
 - Added connection: Lime --> Nixtamalization
-- Added connection: Soda ash from plants --> Sodium hypochlorite bleach
+- Added connection: Plant ash alkali --> Sodium hypochlorite bleach
 - Added connection: Lime --> Bleaching powder
 - Added connection: Salt mining --> Leblanc process
 - Added connection: Sulfuric acid --> Leblanc process
@@ -2000,7 +2000,7 @@
 - Added tech: Leblanc process
 - Added tech: Bleach
 - Added tech: Sodium hydroxide
-- Added tech: Soda ash from plants
+- Added tech: Plant ash alkali
 - Added connection: Chlorine --> Bleach
 - Added connection: Bleach --> Sodium hypochlorite bleach
 - Added connection: Chlorine --> Water chlorination
@@ -2010,9 +2010,9 @@
 - Added connection: Sodium hypochlorite bleach --> Water chlorination
 - Added connection: Chlorine --> Bleaching powder
 - Added connection: Hydrochloric acid --> Chlorine
-- Added connection: Natron --> Soda ash from plants
-- Added connection: Glass --> Soda ash from plants
-- Added connection: Soda ash from plants --> Leblanc process
+- Added connection: Natron --> Plant ash alkali
+- Added connection: Glass --> Plant ash alkali
+- Added connection: Plant ash alkali --> Leblanc process
 - Added connection: Pottery --> Plumbing
 
 28 January 2026
