@@ -6,6 +6,10 @@
 - Added connection: Sulfur --> Gunpowder
 - Added connection: Charcoal --> Gunpowder
 - Added connection: Antimony --> Friction match
+- Added connection: Self-igniting match --> Friction match
+- Added connection: Gum arabic --> Self-igniting match
+- Added connection: Percussion cap --> Friction match
+- Added connection: Crystallized sugar --> Self-igniting match
 
 31 July 2026
 - Added tech: Potassium chlorate
