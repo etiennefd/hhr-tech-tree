@@ -36,6 +36,7 @@
 29 July 2026
 - Added tech: Fire striker
 - Added tech: Carburized and quenched iron
+- Added tech: Hand drill
 - Added connection: Fire making --> Bow drill
 - Added connection: Fire making --> Fire piston
 - Added connection: Fire making --> Sulfur match
