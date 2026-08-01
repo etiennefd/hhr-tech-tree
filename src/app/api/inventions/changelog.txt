@@ -1,4 +1,5 @@
 1 August 2026
+- Added tech: Caustic potash
 - Added connection: Potassium chlorate --> Fulminate-based firearm
 - Added connection: Mercury --> Fulminates
 - Added connection: Nitric acid --> Fulminates
@@ -210,7 +211,7 @@
 - Added connection: Spark plug --> Sintered technical ceramic
 - Added connection: Bayer process --> Sintered technical ceramic
 - Added connection: Ceramic --> Sintered technical ceramic
-- Added connection: Sodium hydroxide --> Bayer process
+- Added connection: Caustic soda --> Bayer process
 - Added connection: Hall–Héroult process --> Bayer process
 - Added connection: Bayer process --> Synthetic gemstone
 - Added connection: Graphite --> Synthetic diamond
@@ -815,7 +816,7 @@
 - Added connection: Neon lighting --> Low-pressure sodium-vapor lamp
 - Added connection: Spoked wheel --> Phenakistiscope
 - Added connection: Sodium --> Leaded gasoline
-- Added connection: Sodium hydroxide --> Sodium
+- Added connection: Caustic soda --> Sodium
 - Added connection: Fused quartz --> Metal-halide lamp
 - Added connection: Borosilicate glass --> Metal-halide lamp
 - Added connection: Oxyhydrogen blowpipe --> Fused quartz
@@ -1224,7 +1225,7 @@
 - Added connection: Domestication of the horse --> Bow and bowed instruments
 - Added connection: Bow and arrow --> Bow and bowed instruments
 - Added connection: Lute --> Bowed rebab
-- Added connection: Sodium hydroxide --> Uranium
+- Added connection: Caustic soda --> Uranium
 - Added connection: Nitric acid --> Uranium
 - Added connection: Bow and bowed instruments --> Byzantine lyra
 - Added connection: Lute --> Byzantine lyra
@@ -1961,9 +1962,9 @@
 - Added tech: Stitching awl
 - Added connection: Tanned leather --> Sewing machine
 - Added connection: Sewing machine --> Lockstitch sewing machine
-- Added connection: Soap --> Sodium hydroxide
-- Added connection: Plant ash alkali --> Sodium hydroxide
-- Added connection: Lime --> Sodium hydroxide
+- Added connection: Soap --> Caustic soda
+- Added connection: Plant ash alkali --> Caustic soda
+- Added connection: Lime --> Caustic soda
 - Added connection: Sewing needle --> Lockstitch sewing machine
 - Added connection: Sewing needle --> Nålebinding
 - Added connection: Stitching awl --> Sewing machine
@@ -2003,7 +2004,7 @@
 - Added tech: Bleaching powder
 - Added tech: Leblanc process
 - Added tech: Bleach
-- Added tech: Sodium hydroxide
+- Added tech: Caustic soda
 - Added tech: Plant ash alkali
 - Added connection: Chlorine --> Bleach
 - Added connection: Bleach --> Sodium hypochlorite bleach
