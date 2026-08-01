@@ -1,8 +1,16 @@
+1 August 2026
+- Added connection: Potassium chlorate --> Fulminate-based firearm
+- Added connection: Mercury --> Fulminates
+- Added connection: Nitric acid --> Fulminates
+- Added connection: Distilled spirit --> Fulminates
+- Added connection: Sulfur --> Gunpowder
+- Added connection: Charcoal --> Gunpowder
+- Added connection: Antimony --> Friction match
+
 31 July 2026
 - Added tech: Potassium chlorate
 - Added connection: Sulfur match --> Self-igniting match
 - Added connection: Sulfuric acid --> Self-igniting match
-- Added connection: Antimony --> Self-igniting match
 - Added connection: Potassium chlorate --> Self-igniting match
 - Added connection: Chlorine --> Potassium chlorate
 - Added connection: Potassium chlorate --> Friction match
