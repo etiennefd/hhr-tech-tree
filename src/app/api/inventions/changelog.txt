@@ -22,6 +22,8 @@
 - Added connection: Salt mining --> Mineral potash
 - Added connection: Superphosphate --> Mineral potash
 - Added connection: Caustic potash --> Potassium
+- Added connection: Hand drill --> Bow drill
+- Added connection: Percussion flake tool --> Hand drill
 
 31 July 2026
 - Added tech: Potassium chlorate
