@@ -8,7 +8,7 @@
 - Added connection: Antimony --> Friction match
 - Added connection: Self-igniting match --> Friction match
 - Added connection: Gum arabic --> Self-igniting match
-- Added connection: Percussion cap --> Friction match
+- Added connection: Fulminate-based firearm --> Friction match
 - Added connection: Crystallized sugar --> Self-igniting match
 
 31 July 2026
@@ -17,7 +17,6 @@
 - Added connection: Sulfuric acid --> Self-igniting match
 - Added connection: Potassium chlorate --> Self-igniting match
 - Added connection: Chlorine --> Potassium chlorate
-- Added connection: Potassium chlorate --> Friction match
 
 30 July 2026
 - Added tech: Self-igniting match
