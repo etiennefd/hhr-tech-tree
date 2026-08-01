@@ -10,6 +10,10 @@
 - Added connection: Gum arabic --> Self-igniting match
 - Added connection: Fulminate-based firearm --> Friction match
 - Added connection: Crystallized sugar --> Self-igniting match
+- Added connection: Control of fire --> Plant ash alkali
+- Added connection: Plant ash alkali --> Proto-soap
+- Added connection: Plant ash alkali --> Glass
+- Added connection: Plant ash alkali --> Potassium chlorate
 
 31 July 2026
 - Added tech: Potassium chlorate
@@ -2010,8 +2014,6 @@
 - Added connection: Sodium hypochlorite bleach --> Water chlorination
 - Added connection: Chlorine --> Bleaching powder
 - Added connection: Hydrochloric acid --> Chlorine
-- Added connection: Natron --> Plant ash alkali
-- Added connection: Glass --> Plant ash alkali
 - Added connection: Plant ash alkali --> Leblanc process
 - Added connection: Pottery --> Plumbing
 
