@@ -19,6 +19,9 @@
 - Added connection: Lime --> Caustic potash
 - Added connection: Plant ash alkali --> Caustic potash
 - Added connection: Plant ash alkali --> Mineral potash
+- Added connection: Salt mining --> Mineral potash
+- Added connection: Superphosphate --> Mineral potash
+- Added connection: Caustic potash --> Potassium
 
 31 July 2026
 - Added tech: Potassium chlorate
