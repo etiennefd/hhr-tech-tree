@@ -14,7 +14,9 @@
 - Added connection: Control of fire --> Plant ash alkali
 - Added connection: Plant ash alkali --> Proto-soap
 - Added connection: Plant ash alkali --> Glass
-- Added connection: Plant ash alkali --> Potassium chlorate
+- Added connection: Caustic potash --> Potassium chlorate
+- Added connection: Lime --> Caustic potash
+- Added connection: Plant ash alkali --> Caustic potash
 
 31 July 2026
 - Added tech: Potassium chlorate
