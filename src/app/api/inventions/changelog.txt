@@ -1,5 +1,7 @@
 2 August 2026
 - Added tech: Varnish
+- Added connection: Beeswax --> Varnish
+- Added connection: Tree resin --> Varnish
 
 1 August 2026
 - Added tech: Mineral potash
