@@ -1,3 +1,6 @@
+2 August 2026
+- Added tech: Varnish
+
 1 August 2026
 - Added tech: Mineral potash
 - Added tech: Caustic potash
