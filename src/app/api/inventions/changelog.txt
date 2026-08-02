@@ -1,6 +1,7 @@
 1 August 2026
 - Added tech: Mineral potash
 - Added tech: Caustic potash
+- Added connection: Control of fire --> Sulfur match
 - Added connection: Potassium chlorate --> Fulminate-based firearm
 - Added connection: Mercury --> Fulminates
 - Added connection: Nitric acid --> Fulminates
@@ -44,7 +45,6 @@
 - Added tech: Hand drill
 - Added connection: Fire making --> Bow drill
 - Added connection: Fire making --> Fire piston
-- Added connection: Fire making --> Sulfur match
 - Added connection: Fire making --> Fire striker
 - Added connection: Bloomery and wrought iron --> Carburized and quenched iron
 - Added connection: Bloomery and wrought iron --> Trompe and Catalan forge
