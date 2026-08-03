@@ -1,3 +1,6 @@
+3 August 2026
+- Added tech: Dry cleaning
+
 2 August 2026
 - Added tech: Varnish
 - Added connection: Beeswax --> Varnish
