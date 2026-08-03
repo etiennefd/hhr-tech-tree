@@ -1,5 +1,6 @@
 3 August 2026
 - Added tech: Dry cleaning
+- Added connection: Turpentine --> Dry cleaning
 
 2 August 2026
 - Added tech: Varnish
