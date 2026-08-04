@@ -11,6 +11,9 @@
 - Added connection: Amphora --> Barrel
 - Added connection: Barrel --> Drum (container)
 - Added connection: Washing machine --> Automatic washing machine
+- Added connection: Electric motor --> Automatic washing machine
+- Added connection: Centrifuge --> Automatic washing machine
+- Added connection: Cam --> Automatic washing machine
 
 3 August 2026
 - Added tech: Dry cleaning
