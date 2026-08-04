@@ -1,3 +1,8 @@
+4 August 2026
+- Added connection: Barrel --> Washing machine
+- Added connection: Soap --> Washing machine
+- Added connection: Crank --> Washing machine
+
 3 August 2026
 - Added tech: Dry cleaning
 - Added connection: Turpentine --> Dry cleaning
