@@ -1,6 +1,9 @@
 3 August 2026
 - Added tech: Dry cleaning
 - Added connection: Turpentine --> Dry cleaning
+- Added connection: Paraffin wax --> Smokeless gunpowder
+- Added connection: Ether --> Smokeless gunpowder
+- Added connection: Gunpowder --> Smokeless gunpowder
 
 2 August 2026
 - Added tech: Varnish
