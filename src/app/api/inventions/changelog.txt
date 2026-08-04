@@ -10,6 +10,7 @@
 - Added connection: Wooden tub --> Barrel
 - Added connection: Amphora --> Barrel
 - Added connection: Barrel --> Drum (container)
+- Added connection: Washing machine --> Automatic washing machine
 
 3 August 2026
 - Added tech: Dry cleaning
