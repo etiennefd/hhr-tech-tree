@@ -1,4 +1,5 @@
 4 August 2026
+- Added tech: Automatic washing machine
 - Added tech: Barrel
 - Added tech: Wooden tub
 - Added connection: Wooden tub --> Washing machine
