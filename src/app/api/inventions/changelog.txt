@@ -1,5 +1,7 @@
 4 August 2026
-- Added connection: Barrel --> Washing machine
+- Added tech: Barrel
+- Added tech: Wooden tub
+- Added connection: Wooden tub --> Washing machine
 - Added connection: Soap --> Washing machine
 - Added connection: Crank --> Washing machine
 
