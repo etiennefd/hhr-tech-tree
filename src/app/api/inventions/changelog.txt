@@ -4,6 +4,10 @@
 - Added connection: Wooden tub --> Washing machine
 - Added connection: Soap --> Washing machine
 - Added connection: Crank --> Washing machine
+- Added connection: Adze --> Wooden tub
+- Added connection: Saw --> Wooden tub
+- Added connection: Wooden tub --> Barrel
+- Added connection: Amphora --> Barrel
 
 3 August 2026
 - Added tech: Dry cleaning
