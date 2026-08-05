@@ -1,5 +1,6 @@
 5 August 2026
 - Added tech: Clothes tumble dryer
+- Added tech: Mangle
 
 4 August 2026
 - Added tech: Automatic washing machine
