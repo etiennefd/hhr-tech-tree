@@ -18,6 +18,7 @@
 - Added connection: Ground stone tool --> Oil lamp
 - Added connection: Drawn wire and draw plate --> Extrusion
 - Added connection: Extrusion --> Submarine communication cable
+- Added connection: Tin --> Tin-mercury amalgam mirror
 
 5 August 2026
 - Added tech: Clothes tumble dryer
