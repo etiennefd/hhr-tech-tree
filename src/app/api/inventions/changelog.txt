@@ -16,6 +16,8 @@
 - Added connection: Collodion --> Smokeless gunpowder
 - Added connection: Extrusion --> Fused filament fabrication
 - Added connection: Ground stone tool --> Oil lamp
+- Added connection: Drawn wire and draw plate --> Extrusion
+- Added connection: Extrusion --> Submarine communication cable
 
 5 August 2026
 - Added tech: Clothes tumble dryer
