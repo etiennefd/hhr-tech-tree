@@ -1,5 +1,7 @@
 6 August 2026
 - Added tech: Extrusion
+- Added connection: Hydraulic press --> Extrusion
+- Added connection: Lead pipes --> Extrusion
 
 5 August 2026
 - Added tech: Clothes tumble dryer
