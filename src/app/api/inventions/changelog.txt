@@ -14,6 +14,8 @@
 - Added connection: Extrusion --> Cordite
 - Added connection: Double-base propellant --> Man-portable anti-tank weapon
 - Added connection: Collodion --> Smokeless gunpowder
+- Added connection: Extrusion --> Fused filament fabrication
+- Added connection: Ground stone tool --> Oil lamp
 
 5 August 2026
 - Added tech: Clothes tumble dryer
