@@ -2,6 +2,18 @@
 - Added tech: Extrusion
 - Added connection: Hydraulic press --> Extrusion
 - Added connection: Lead pipes --> Extrusion
+- Added connection: Gelignite --> Double-base propellant
+- Added connection: Smokeless gunpowder --> Double-base propellant
+- Added connection: Nitroglycerin --> Double-base propellant
+- Added connection: Collodion --> Double-base propellant
+- Added connection: Camphor --> Double-base propellant
+- Added connection: Double-base propellant --> Cordite
+- Added connection: Guncotton --> Cordite
+- Added connection: Acetone --> Cordite
+- Added connection: Petroleum jelly --> Cordite
+- Added connection: Extrusion --> Cordite
+- Added connection: Double-base propellant --> Man-portable anti-tank weapon
+- Added connection: Collodion --> Smokeless gunpowder
 
 5 August 2026
 - Added tech: Clothes tumble dryer
@@ -348,7 +360,6 @@
 - Added connection: TNT --> Shaped charge
 - Added connection: Tank --> Shaped charge
 - Added connection: Congreve rocket --> Man-portable anti-tank weapon
-- Added connection: Smokeless gunpowder --> Man-portable anti-tank weapon
 - Added connection: Breech-loading rifle --> Bolt-action rifle
 - Added connection: Integrated cartridge --> Bolt-action rifle
 - Added connection: Percussion cap --> Bolt-action rifle
