@@ -18,6 +18,9 @@
 - Added connection: Lead --> Acetone
 - Added connection: Vinegar --> Acetone
 - Added connection: Distillation --> Acetone
+- Added connection: Domestication of chickens --> Eggbeater
+- Added connection: Crank --> Eggbeater
+- Added connection: Gears --> Eggbeater
 
 6 August 2026
 - Added tech: Insulated wire
