@@ -9,6 +9,11 @@
 - Added connection: Insulated wire --> Electric motor
 - Added connection: Electromagnet --> Electric motor
 - Added connection: Voltaic pile --> Electric motor
+- Added connection: Cordite --> Acetone–butanol–ethanol fermentation
+- Added connection: Acetone --> Acetone–butanol–ethanol fermentation
+- Added connection: Agar plate --> Acetone–butanol–ethanol fermentation
+- Added connection: Autoclave --> Acetone–butanol–ethanol fermentation
+- Added connection: Distilled spirit --> Acetone–butanol–ethanol fermentation
 
 6 August 2026
 - Added tech: Insulated wire
