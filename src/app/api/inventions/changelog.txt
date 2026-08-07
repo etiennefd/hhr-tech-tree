@@ -24,6 +24,7 @@
 - Added connection: Gears --> Eggbeater
 - Added connection: Fish hook --> Fishing rod
 - Added connection: Fishing rod --> Fishing reel
+- Added connection: Rope and twine --> Fish hook
 
 6 August 2026
 - Added tech: Insulated wire
