@@ -6,6 +6,8 @@
 - Added connection: Insulated wire --> Electromechanical relay
 - Added connection: Insulated wire --> Submarine communication cable
 - Added connection: Insulated wire --> Electric motor
+- Added connection: Electromagnet --> Electric motor
+- Added connection: Voltaic pile --> Electric motor
 
 6 August 2026
 - Added tech: Insulated wire
