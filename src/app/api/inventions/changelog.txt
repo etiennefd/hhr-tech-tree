@@ -22,6 +22,8 @@
 - Added connection: Domestication of chickens --> Eggbeater
 - Added connection: Crank --> Eggbeater
 - Added connection: Gears --> Eggbeater
+- Added connection: Fish hook --> Fishing rod
+- Added connection: Fishing rod --> Fishing reel
 
 6 August 2026
 - Added tech: Insulated wire
