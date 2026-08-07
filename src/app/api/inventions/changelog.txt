@@ -1,5 +1,6 @@
 7 August 2026
 - Added tech: Acetone–butanol–ethanol fermentation
+- Added tech: Eggbeater
 - Added connection: Drawn wire and draw plate --> Insulated wire
 - Added connection: Silk --> Insulated wire
 - Added connection: Electromagnet --> Insulated wire
