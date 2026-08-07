@@ -1,3 +1,12 @@
+7 August 2026
+- Added connection: Drawn wire and draw plate --> Insulated wire
+- Added connection: Silk --> Insulated wire
+- Added connection: Electromagnet --> Insulated wire
+- Added connection: Insulated wire --> Electromagnetic induction
+- Added connection: Insulated wire --> Electromechanical relay
+- Added connection: Insulated wire --> Submarine communication cable
+- Added connection: Insulated wire --> Electric motor
+
 6 August 2026
 - Added tech: Insulated wire
 - Added tech: Extrusion
