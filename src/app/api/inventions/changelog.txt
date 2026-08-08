@@ -25,6 +25,7 @@
 - Added connection: Fish hook --> Fishing rod
 - Added connection: Fishing rod --> Fishing reel
 - Added connection: Rope and twine --> Fish hook
+- Added connection: Crank --> Fishing reel
 
 6 August 2026
 - Added tech: Insulated wire
