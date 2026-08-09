@@ -11,12 +11,14 @@
 - Added connection: Sail (Mediterranean) --> Crane
 - Added connection: Bloomery and wrought iron --> Crane
 - Added connection: Winch <--> Wagonway
-- Added connection: Winch --> Ballista
 - Added connection: Winch --> Counterweight trebuchet
 - Added connection: Winch --> Cable car
 - Added connection: Rope and twine --> Shaduf
 - Added connection: Water well --> Shaduf
 - Added connection: Bloomery and wrought iron --> Ballista
+- Added connection: Crossbow (Greece) --> Oxybeles
+- Added connection: Oxybeles --> Ballista
+- Added connection: Winch --> Oxybeles
 
 7 August 2026
 - Added tech: Acetone–butanol–ethanol fermentation
@@ -2505,7 +2507,6 @@
 - Added connection: Pulley --> Compound bow
 - Added connection: Liquid crystals --> Liquid-crystal display
 - Added connection: Tin bronze --> Crossbow (China)
-- Added connection: Crossbow (Greece) --> Ballista
 - Added connection: Bow and arrow --> Crossbow (China)
 - Added connection: Composite bow --> Crossbow (Greece)
 - Added connection: Ballista --> Onager
