@@ -13,6 +13,8 @@
 - Added connection: Winch --> Ballista
 - Added connection: Winch --> Counterweight trebuchet
 - Added connection: Winch --> Cable car
+- Added connection: Rope and twine --> Shaduf
+- Added connection: Water well --> Shaduf
 
 7 August 2026
 - Added tech: Acetone–butanol–ethanol fermentation
