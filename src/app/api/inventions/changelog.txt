@@ -7,6 +7,7 @@
 - Added connection: Winch --> Crane
 - Added connection: Winch --> Elevator
 - Added connection: Pulley --> Elevator
+- Added connection: Sail (Mediterranean) --> Crane
 - Added connection: Bloomery and wrought iron --> Crane
 
 7 August 2026
