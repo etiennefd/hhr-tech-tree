@@ -10,6 +10,7 @@ from PIL import Image, ImageOps
 import io
 import hashlib
 import argparse
+import math
 
 # --- Configuration ---
 load_dotenv(dotenv_path='.env.local')
@@ -20,6 +21,7 @@ IMAGE_URL_FIELD = "Image URL"       # The field containing Wikimedia image URLs
 CREDITS_FIELD = "Image credits"     # The field to store the text credits
 CREDITS_URL_FIELD = "Image credits URL" # The field to store the credit source URL
 LOCAL_IMAGE_FIELD = "Local image"   # New field to store the local image path
+CROP_FIELD = "Image crop"           # Optional "x,y,w,h" percentage crop of the source image
 
 # Wikimedia API constants
 WIKIMEDIA_API_URL = "https://commons.wikimedia.org/w/api.php"
@@ -34,6 +36,18 @@ MIN_WIDTH = DISPLAY_WIDTH * 2  # Source width (2x for retina)
 MIN_HEIGHT = DISPLAY_HEIGHT * 2  # Source height (2x for retina)
 IMAGE_QUALITY = 85  # High quality for better results
 
+# Wikimedia only serves hotlinked thumbnails at these widths and 400s on anything else
+# https://www.mediawiki.org/wiki/Common_thumbnail_sizes
+ALLOWED_THUMB_WIDTHS = [20, 40, 60, 120, 250, 330, 500, 960, 1280, 1920, 3840]
+# Formats Pillow can open straight from the original upload, so we skip the thumbnail
+DIRECT_DOWNLOAD_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'}
+# e.g. /commons/thumb/c/cc/Name.jpg/2880px-Name.jpg
+#      /commons/thumb/a/ab/Name.tif/lossy-page1-1600px-Name.tif.jpg
+THUMB_URL_RE = re.compile(
+    r'/thumb/(?P<dir>[0-9a-f]/[0-9a-f]{2})/(?P<name>[^/]+)/'
+    r'(?P<prefix>(?:lossy-|lossless-)?(?:page\d+-)?)(?P<width>\d+)px-(?P<rest>[^/]+)$'
+)
+
 # Create a session with proper headers
 session = requests.Session()
 session.headers.update({
@@ -46,7 +60,86 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 
 # --- Helper Functions ---
 
-def download_and_optimize_image(url: str, title: str, rotation: int = 0) -> Union[str, None]:
+def parse_crop(value) -> Union[tuple, None]:
+    """Parses an 'x,y,w,h' crop string (percentages of the source image) into a tuple of floats.
+
+    Returns None for empty or malformed values, so a bad entry never blocks the image.
+    Use src/scripts/crop-picker.html to generate these values.
+    """
+    if not value:
+        return None
+    try:
+        parts = [float(p.strip().rstrip('%')) for p in str(value).split(',')]
+    except ValueError:
+        print(f"    Ignoring malformed crop value: {value!r}")
+        return None
+    if len(parts) != 4:
+        print(f"    Ignoring crop value with {len(parts)} components, expected 4: {value!r}")
+        return None
+    x, y, w, h = parts
+    # Allow a hair of slop so a box dragged flush to the edge isn't rejected by rounding
+    if w <= 0 or h <= 0 or x < 0 or y < 0 or x + w > 100.01 or y + h > 100.01:
+        print(f"    Ignoring out-of-bounds crop value: {value!r}")
+        return None
+    return x, y, w, h
+
+def escape_formula_string(value: str) -> str:
+    """Escapes a value for use inside a single-quoted Airtable formula string."""
+    return value.replace('\\', '\\\\').replace("'", "\\'")
+
+def apply_crop(img, crop: tuple):
+    """Crops img to the given (x, y, w, h) percentage box."""
+    x, y, w, h = crop
+    width, height = img.size
+    left = int(round(width * x / 100))
+    top = int(round(height * y / 100))
+    right = min(width, left + max(1, int(round(width * w / 100))))
+    bottom = min(height, top + max(1, int(round(height * h / 100))))
+    cropped = img.crop((left, top, right, bottom))
+    print(f"    Cropped to {cropped.size[0]}x{cropped.size[1]} from {width}x{height} ({x},{y},{w},{h})")
+    if cropped.size[0] < MIN_WIDTH or cropped.size[1] < MIN_HEIGHT:
+        print(f"    Warning: crop is smaller than {MIN_WIDTH}x{MIN_HEIGHT}, so it will be upscaled and may look soft")
+    return cropped
+
+def normalize_wikimedia_url(url: str, crop: Union[tuple, None] = None) -> str:
+    """Rewrites an upload.wikimedia.org thumbnail URL into one Wikimedia will actually serve.
+
+    Wikimedia now rejects hotlinked thumbnails at arbitrary widths (see
+    https://www.mediawiki.org/wiki/Common_thumbnail_sizes). For formats Pillow can
+    open directly we ask for the original file, which is both allowed and the best
+    source for cropping. For everything else (SVG, TIFF, PDF...) we keep the
+    rendered thumbnail but snap its width up to a permitted size, large enough that
+    the requested crop still has detail to spare.
+    """
+    match = THUMB_URL_RE.search(url)
+    if not match:
+        return url
+
+    name = match.group('name')
+    extension = name.rsplit('.', 1)[-1].lower() if '.' in name else ''
+
+    if extension in DIRECT_DOWNLOAD_EXTENSIONS:
+        original = url[:match.start()] + f"/{match.group('dir')}/{name}"
+        print(f"    Using original file instead of a thumbnail: {original}")
+        return original
+
+    requested = int(match.group('width'))
+    # A crop only keeps part of the width, so ask for enough pixels that the kept
+    # part still covers the display size
+    if crop:
+        requested = max(requested, int(math.ceil(MIN_WIDTH / (crop[2] / 100))))
+    allowed = next((w for w in ALLOWED_THUMB_WIDTHS if w >= requested), ALLOWED_THUMB_WIDTHS[-1])
+    if allowed == int(match.group('width')):
+        return url
+
+    rebuilt = (
+        url[:match.start()] +
+        f"/thumb/{match.group('dir')}/{name}/{match.group('prefix')}{allowed}px-{match.group('rest')}"
+    )
+    print(f"    Snapped thumbnail width {match.group('width')}px -> {allowed}px (Wikimedia only serves standard sizes)")
+    return rebuilt
+
+def download_and_optimize_image(url: str, title: str, rotation: int = 0, crop: Union[tuple, None] = None) -> Union[str, None]:
     """Downloads and optimizes an image, returns the local path."""
     try:
         # Generate a filename from the title
@@ -56,18 +149,31 @@ def download_and_optimize_image(url: str, title: str, rotation: int = 0) -> Unio
 
         # Always download and process the image, even if it exists
         # This ensures we get the latest version if the URL has changed
-        print(f"    Downloading image from: {url}")
+        download_url = normalize_wikimedia_url(url, crop)
+        print(f"    Downloading image from: {download_url}")
 
-        # Download the image
-        response = session.get(url, timeout=FETCH_TIMEOUT)
-        response.raise_for_status()
+        # Download the image, falling back to the URL exactly as stored in Airtable
+        try:
+            response = session.get(download_url, timeout=FETCH_TIMEOUT)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            if download_url == url:
+                raise
+            print(f"    Rewritten URL failed ({e}), retrying with the original URL")
+            response = session.get(url, timeout=FETCH_TIMEOUT)
+            response.raise_for_status()
 
         # Open and optimize the image
         img = Image.open(io.BytesIO(response.content))
         
         # Apply EXIF orientation if present
         img = ImageOps.exif_transpose(img)
-        
+
+        # Crop before rotating: crop values are expressed against the upright source image,
+        # which is what the crop picker shows
+        if crop:
+            img = apply_crop(img, crop)
+
         # Apply manual rotation if specified
         if rotation:
             print(f"    Rotating image by {rotation} degrees")
@@ -259,6 +365,8 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--all', action='store_true', help='Update all images, including those that already have a local image')
     group.add_argument('--new', action='store_true', help='Update only records that have no local image')
+    group.add_argument('--cropped', action='store_true', help=f"Update only records that have an '{CROP_FIELD}' value")
+    group.add_argument('--only', action='append', metavar='NAME', help='Update only the named record. Repeat for several names.')
     parser.add_argument('--credits-only', action='store_true', help='Only update credits, skip image downloads')
     
     args = parser.parse_args()
@@ -275,7 +383,7 @@ def main():
         print("Fetching records...")
         # First, try to get the fields to check if Local image exists
         try:
-            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name", "Image rotation"]
+            fields = [IMAGE_URL_FIELD, CREDITS_FIELD, CREDITS_URL_FIELD, LOCAL_IMAGE_FIELD, "Name", "Image rotation", CROP_FIELD]
             records = table.all(fields=fields, max_records=1)
             
             # Debug: Print available fields from first record
@@ -285,13 +393,32 @@ def main():
                     print(f"  - {field}")
         except Exception as e:
             if 'UNKNOWN_FIELD_NAME' in str(e):
-                print("Note: 'Local image' field not found in Airtable. Please add it first.")
+                print(f"Note: a required field is missing from Airtable. Expected: {', '.join(fields)}")
+                print(f"Airtable said: {e}")
                 return 1
             else:
                 raise e
 
         # Fetch records based on the selected mode and whether we're in credits-only mode
-        if args.credits_only:
+        if args.only:
+            # Targeted mode: just the named records, so a single re-crop doesn't
+            # re-download the whole table
+            names = ", ".join(f"{{Name}} = '{escape_formula_string(name)}'" for name in args.only)
+            records = table.all(
+                fields=fields,
+                formula=f"AND({{Image URL}} != '', OR({names}))"
+            )
+            print(f"Found {len(records)} of {len(args.only)} named record(s) with an image URL.")
+            found_names = {r.get('fields', {}).get('Name') for r in records}
+            for missing in [n for n in args.only if n not in found_names]:
+                print(f"  Warning: no record named '{missing}' with an image URL.")
+        elif args.cropped:
+            records = table.all(
+                fields=fields,
+                formula=f"AND({{Image URL}} != '', {{{CROP_FIELD}}} != '')"
+            )
+            print(f"Found {len(records)} records with a crop value.")
+        elif args.credits_only:
             if args.new:
                 # In credits-only mode, fetch records that have no credits
                 records = table.all(
@@ -341,10 +468,12 @@ def main():
         title = record.get('fields', {}).get('Name', '')
         current_local = record.get('fields', {}).get(LOCAL_IMAGE_FIELD)
         current_credits = record.get('fields', {}).get(CREDITS_FIELD)
+        current_crop = record.get('fields', {}).get(CROP_FIELD)
 
         print(f"\nProcessing record {processed_count}/{len(records)}: {record_id}")
         print(f"  Title: {title}")
         print(f"  Image URL: {image_url}")
+        print(f"  {CROP_FIELD}: {current_crop if current_crop else '(none set)'}")
         if current_local:
             print(f"  Current local image: {current_local}")
         if current_credits:
@@ -377,7 +506,8 @@ def main():
         local_image_path = None
         if not args.credits_only:
             rotation = record.get('fields', {}).get('Image rotation', 0)
-            local_image_path = download_and_optimize_image(image_url, title, rotation)
+            crop = parse_crop(current_crop)
+            local_image_path = download_and_optimize_image(image_url, title, rotation, crop)
             if not local_image_path:
                 image_errors.append({"title": title, "record_id": record_id, "url": image_url})
 
@@ -396,9 +526,9 @@ def main():
                     print(f"    -> Credits URL: {credits_data['url']}")
 
             if local_image_path and LOCAL_IMAGE_FIELD in fields:
-                # Always update the local image path in --all mode
+                # Always update the local image path when reprocessing existing images
                 # This ensures we get the latest image even if the path is the same
-                if args.all:
+                if args.all or args.cropped or args.only:
                     update_payload[LOCAL_IMAGE_FIELD] = local_image_path
                     needs_update = True
                     print(f"    -> Local image: {local_image_path}")

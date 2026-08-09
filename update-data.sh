@@ -46,6 +46,13 @@ if ! $VENV_PYTHON src/scripts/update_images.py --new; then
     IMAGE_ERRORS=1
 fi
 
+# Re-apply crops. --new only looks at records with no local image, so a crop added
+# after an image was already downloaded would never take effect otherwise.
+echo "Re-applying image crops..."
+if ! $VENV_PYTHON src/scripts/update_images.py --cropped; then
+    IMAGE_ERRORS=1
+fi
+
 # Run the update script
 echo "Updating tech tree data..."
 if ! NODE_OPTIONS="--no-deprecation" npx tsx src/scripts/fetch-and-save-inventions.ts; then

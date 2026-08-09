@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!--
+  Crop picker for tech tree node images.
+
+  Open this file directly in a browser (no server needed). Paste a Wikimedia Commons
+  file page URL (or a direct image URL, or load a local file), drag a box over the
+  detail you want, and copy the resulting "x,y,w,h" string into the "Image crop"
+  field in Airtable. Then re-run:
+
+      python src/scripts/update_images.py --all
+
+  Values are percentages of the source image, so they stay valid at any resolution.
+  The crop is applied to the upright source image, before any "Image rotation".
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tech tree image crop picker</title>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --ink: #1a1a1a;
+    --line: #1a1a1a;
+    --accent: #d4522a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { margin: 0 0 20px; opacity: 0.7; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  input[type="text"] {
+    flex: 1 1 420px;
+    min-width: 260px;
+    padding: 8px 10px;
+    border: 2px solid var(--line);
+    background: #fff;
+    font: inherit;
+  }
+  button, select {
+    padding: 8px 12px;
+    border: 2px solid var(--line);
+    background: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  button:hover { background: var(--ink); color: var(--bg); }
+  label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  .workspace { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .stage-wrap { flex: 1 1 560px; min-width: 320px; }
+  #stage {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border: 2px solid var(--line);
+    background: #fff repeating-conic-gradient(#e8e8e8 0 25%, #fff 0 50%) 0 0 / 20px 20px;
+    line-height: 0;
+    user-select: none;
+    touch-action: none;
+  }
+  #stage img { max-width: 100%; display: block; }
+  #shade {
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+    /* punched out over the selection via clip-path, set in JS */
+  }
+  #box {
+    position: absolute;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 0 1px #fff inset;
+    cursor: move;
+    display: none;
+  }
+  .handle {
+    position: absolute;
+    width: 14px; height: 14px;
+    background: #fff;
+    border: 2px solid var(--accent);
+  }
+  .handle.nw { left: -8px; top: -8px; cursor: nwse-resize; }
+  .handle.ne { right: -8px; top: -8px; cursor: nesw-resize; }
+  .handle.sw { left: -8px; bottom: -8px; cursor: nesw-resize; }
+  .handle.se { right: -8px; bottom: -8px; cursor: nwse-resize; }
+
+  .panel { flex: 0 0 300px; }
+  .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 8px; }
+  .preview-frame {
+    width: 160px; height: 80px;
+    border: 2px solid var(--line);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff;
+    margin-bottom: 6px;
+  }
+  .preview-inner { background-repeat: no-repeat; }
+  .preview-2x { transform: scale(2); transform-origin: top left; }
+  .preview-2x-wrap { width: 320px; height: 160px; overflow: hidden; }
+  #out {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--line);
+    background: #fff;
+    font: 16px/1.4 ui-monospace, monospace;
+    margin-bottom: 8px;
+  }
+  .note { font-size: 12px; opacity: 0.75; margin: 8px 0; }
+  .warn { color: var(--accent); font-weight: bold; }
+  .status { min-height: 20px; font-size: 12px; }
+  kbd { border: 1px solid var(--line); border-bottom-width: 2px; padding: 0 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>Image crop picker</h1>
+<p class="sub">Drag a box over the detail you want. Copy the value into the <b>Image crop</b> field in Airtable, then re-run <code>update_images.py</code>.</p>
+
+<div class="row">
+  <input id="url" type="text" placeholder="https://commons.wikimedia.org/wiki/File:… or a direct image URL" />
+  <button id="load">Load</button>
+  <button id="pick-file">Local file…</button>
+  <input id="file" type="file" accept="image/*" hidden />
+</div>
+
+<div class="row">
+  <label><input id="downscaled" type="checkbox" /> Downscaled preview (faster for huge files)</label>
+  <label>Image rotation:
+    <select id="rotation">
+      <option value="0">0°</option>
+      <option value="90">90°</option>
+      <option value="180">180°</option>
+      <option value="270">270°</option>
+    </select>
+  </label>
+  <label><input id="lock" type="checkbox" checked /> Lock to node aspect ratio (2:1)</label>
+</div>
+
+<div class="status" id="status"></div>
+
+<div class="workspace">
+  <div class="stage-wrap">
+    <div id="stage">
+      <img id="img" alt="" />
+      <div id="shade"></div>
+      <div id="box">
+        <div class="handle nw" data-corner="nw"></div>
+        <div class="handle ne" data-corner="ne"></div>
+        <div class="handle sw" data-corner="sw"></div>
+        <div class="handle se" data-corner="se"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Airtable value</h2>
+    <input id="out" type="text" placeholder="x,y,w,h" spellcheck="false" />
+    <div class="row">
+      <button id="copy">Copy</button>
+      <button id="apply">Apply typed value</button>
+      <button id="reset">Clear</button>
+    </div>
+
+    <h2>Node preview (160×80)</h2>
+    <div class="preview-frame"><div id="preview" class="preview-inner"></div></div>
+
+    <h2>At 2× (retina)</h2>
+    <div class="preview-2x-wrap">
+      <div class="preview-2x"><div class="preview-frame"><div id="preview2" class="preview-inner"></div></div></div>
+    </div>
+
+    <div class="note" id="pixels"></div>
+    <div class="note">
+      Drag on the image to draw a box, drag inside it to move, drag a corner to resize.
+      Hold <kbd>Shift</kbd> while drawing to ignore the aspect lock.
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var NODE_W = 160, NODE_H = 80;
+  var TARGET_W = NODE_W * 2, TARGET_H = NODE_H * 2; // matches MIN_WIDTH/MIN_HEIGHT in update_images.py
+
+  var els = {
+    url: document.getElementById("url"),
+    load: document.getElementById("load"),
+    pickFile: document.getElementById("pick-file"),
+    file: document.getElementById("file"),
+    downscaled: document.getElementById("downscaled"),
+    rotation: document.getElementById("rotation"),
+    lock: document.getElementById("lock"),
+    status: document.getElementById("status"),
+    stage: document.getElementById("stage"),
+    img: document.getElementById("img"),
+    shade: document.getElementById("shade"),
+    box: document.getElementById("box"),
+    out: document.getElementById("out"),
+    copy: document.getElementById("copy"),
+    apply: document.getElementById("apply"),
+    reset: document.getElementById("reset"),
+    preview: document.getElementById("preview"),
+    preview2: document.getElementById("preview2"),
+    pixels: document.getElementById("pixels")
+  };
+
+  // Selection in fractions of the displayed image (0..1)
+  var sel = null; // {x, y, w, h}
+  var loadedSrc = "";
+
+  // --- URL handling -------------------------------------------------------
+
+  function toImageUrl(input) {
+    var raw = input.trim();
+    if (!raw) return "";
+    var commons = raw.match(/\/wiki\/(?:File|Image):(.+)$/i);
+    if (commons) {
+      var name = commons[1].split("#")[0].split("?")[0];
+      var base = "https://commons.wikimedia.org/wiki/Special:FilePath/" + name;
+      return els.downscaled.checked ? base + "?width=2000" : base;
+    }
+    return raw;
+  }
+
+  function load(src, label) {
+    loadedSrc = src;
+    setStatus("Loading…");
+    els.img.src = src;
+    els.img.alt = label || src;
+  }
+
+  function setStatus(msg, isWarn) {
+    els.status.textContent = msg;
+    els.status.className = "status" + (isWarn ? " warn" : "");
+  }
+
+  els.load.addEventListener("click", function () {
+    var src = toImageUrl(els.url.value);
+    if (src) load(src);
+  });
+  els.url.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") els.load.click();
+  });
+  els.downscaled.addEventListener("change", function () {
+    if (els.url.value.trim()) els.load.click();
+  });
+  els.pickFile.addEventListener("click", function () { els.file.click(); });
+  els.file.addEventListener("change", function () {
+    var f = els.file.files && els.file.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () { load(reader.result, f.name); };
+    reader.readAsDataURL(f);
+  });
+
+  els.img.addEventListener("load", function () {
+    setStatus(
+      "Loaded " + els.img.naturalWidth + "×" + els.img.naturalHeight +
+      (els.downscaled.checked ? " (downscaled preview — the real crop will be sharper than the readout suggests)" : "")
+    );
+    if (sel) render(); else clearSelection();
+  });
+  els.img.addEventListener("error", function () {
+    if (loadedSrc) setStatus("Could not load that image. Check the URL, or download it and use “Local file…”.", true);
+  });
+
+  // --- Geometry -----------------------------------------------------------
+
+  function rotated() {
+    var r = parseInt(els.rotation.value, 10);
+    return r === 90 || r === 270;
+  }
+
+  // Aspect ratio the crop box must have, in *source* space.
+  // A 90°/270° rotation happens after cropping, so the source box is 1:2 instead of 2:1.
+  function targetAspect() {
+    var displayAspect = NODE_W / NODE_H;
+    var wPx = els.img.clientWidth, hPx = els.img.clientHeight;
+    if (!wPx || !hPx) return displayAspect;
+    if (rotated()) displayAspect = NODE_H / NODE_W;
+    // Convert the pixel-space aspect into fraction-space for the displayed image
+    return displayAspect * (hPx / wPx);
+  }
+
+  function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+  function applyAspect(s, anchorX, anchorY) {
+    if (!els.lock.checked) return s;
+    var a = targetAspect();
+    // Preserve area-ish: derive height from width
+    var w = s.w, h = w / a;
+    if (h > 1) { h = 1; w = h * a; }
+    var x = anchorX === "right" ? s.x + s.w - w : s.x;
+    var y = anchorY === "bottom" ? s.y + s.h - h : s.y;
+    // Nudge back inside the image rather than distorting the ratio
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x + w > 1) x = 1 - w;
+    if (y + h > 1) y = 1 - h;
+    return { x: x, y: y, w: w, h: h };
+  }
+
+  function stagePoint(e) {
+    var r = els.img.getBoundingClientRect();
+    return {
+      x: clamp01((e.clientX - r.left) / r.width),
+      y: clamp01((e.clientY - r.top) / r.height)
+    };
+  }
+
+  // --- Interaction --------------------------------------------------------
+
+  var drag = null;
+
+  els.stage.addEventListener("pointerdown", function (e) {
+    if (!els.img.naturalWidth) return;
+    var corner = e.target.getAttribute && e.target.getAttribute("data-corner");
+    var p = stagePoint(e);
+    try { els.stage.setPointerCapture(e.pointerId); } catch (err) { /* pointer already gone */ }
+    e.preventDefault();
+
+    if (corner) {
+      drag = { mode: "resize", corner: corner, start: p, orig: Object.assign({}, sel) };
+    } else if (sel && e.target === els.box) {
+      drag = { mode: "move", start: p, orig: Object.assign({}, sel) };
+    } else {
+      drag = { mode: "draw", start: p, free: e.shiftKey };
+      sel = { x: p.x, y: p.y, w: 0, h: 0 };
+      render();
+    }
+  });
+
+  els.stage.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    var p = stagePoint(e);
+
+    if (drag.mode === "draw") {
+      var x = Math.min(p.x, drag.start.x), y = Math.min(p.y, drag.start.y);
+      var w = Math.abs(p.x - drag.start.x), h = Math.abs(p.y - drag.start.y);
+      var next = { x: x, y: y, w: w, h: h };
+      if (els.lock.checked && !e.shiftKey) {
+        var a = targetAspect();
+        // Drive the box off whichever axis the pointer moved further along
+        if (w / a > h) h = w / a; else w = h * a;
+        next = {
+          x: p.x < drag.start.x ? drag.start.x - w : drag.start.x,
+          y: p.y < drag.start.y ? drag.start.y - h : drag.start.y,
+          w: w, h: h
+        };
+        next.x = Math.max(0, Math.min(next.x, 1 - w));
+        next.y = Math.max(0, Math.min(next.y, 1 - h));
+      }
+      sel = next;
+    } else if (drag.mode === "move") {
+      var dx = p.x - drag.start.x, dy = p.y - drag.start.y;
+      sel = {
+        x: Math.max(0, Math.min(drag.orig.x + dx, 1 - drag.orig.w)),
+        y: Math.max(0, Math.min(drag.orig.y + dy, 1 - drag.orig.h)),
+        w: drag.orig.w, h: drag.orig.h
+      };
+    } else if (drag.mode === "resize") {
+      var o = drag.orig, c = drag.corner;
+      var left = c.indexOf("w") !== -1 ? p.x : o.x;
+      var right = c.indexOf("e") !== -1 ? p.x : o.x + o.w;
+      var top = c.indexOf("n") !== -1 ? p.y : o.y;
+      var bottom = c.indexOf("s") !== -1 ? p.y : o.y + o.h;
+      var s = {
+        x: Math.min(left, right),
+        y: Math.min(top, bottom),
+        w: Math.abs(right - left),
+        h: Math.abs(bottom - top)
+      };
+      sel = applyAspect(s, c.indexOf("w") !== -1 ? "right" : "left", c.indexOf("n") !== -1 ? "bottom" : "top");
+    }
+    render();
+  });
+
+  function endDrag(e) {
+    if (!drag) return;
+    // A click with no movement clears the selection
+    if (drag.mode === "draw" && sel && sel.w < 0.005) clearSelection();
+    drag = null;
+    if (e && e.pointerId != null && els.stage.hasPointerCapture(e.pointerId)) {
+      els.stage.releasePointerCapture(e.pointerId);
+    }
+  }
+  els.stage.addEventListener("pointerup", endDrag);
+  els.stage.addEventListener("pointercancel", endDrag);
+
+  els.lock.addEventListener("change", function () {
+    if (sel && els.lock.checked) { sel = applyAspect(sel, "left", "top"); render(); }
+  });
+  els.rotation.addEventListener("change", function () {
+    if (sel && els.lock.checked) { sel = applyAspect(sel, "left", "top"); }
+    render();
+  });
+
+  // --- Rendering ----------------------------------------------------------
+
+  function clearSelection() {
+    sel = null;
+    els.box.style.display = "none";
+    els.shade.style.clipPath = "none";
+    els.shade.style.display = "none";
+    els.out.value = "";
+    els.preview.style.backgroundImage = "";
+    els.preview2.style.backgroundImage = "";
+    els.pixels.textContent = "";
+  }
+
+  function render() {
+    if (!sel || !els.img.naturalWidth) return;
+    var pct = function (v) { return (v * 100) + "%"; };
+
+    els.box.style.display = "block";
+    els.box.style.left = pct(sel.x);
+    els.box.style.top = pct(sel.y);
+    els.box.style.width = pct(sel.w);
+    els.box.style.height = pct(sel.h);
+
+    els.shade.style.display = "block";
+    els.shade.style.clipPath =
+      "polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0, " +
+      pct(sel.x) + " " + pct(sel.y) + ", " +
+      pct(sel.x) + " " + pct(sel.y + sel.h) + ", " +
+      pct(sel.x + sel.w) + " " + pct(sel.y + sel.h) + ", " +
+      pct(sel.x + sel.w) + " " + pct(sel.y) + ", " +
+      pct(sel.x) + " " + pct(sel.y) + ")";
+
+    var round = function (v) { return Math.round(v * 10000) / 100; };
+    els.out.value = [round(sel.x), round(sel.y), round(sel.w), round(sel.h)].join(",");
+
+    updatePreview();
+    updatePixels();
+  }
+
+  function updatePreview() {
+    // Rendered with CSS background sizing so nothing touches canvas pixels (no CORS issues)
+    var srcW = sel.w, srcH = sel.h;
+    [[els.preview, NODE_W, NODE_H], [els.preview2, NODE_W, NODE_H]].forEach(function (pair) {
+      var el = pair[0], w = pair[1], h = pair[2];
+      var outW = rotated() ? h : w;
+      var outH = rotated() ? w : h;
+      el.style.width = outW + "px";
+      el.style.height = outH + "px";
+      el.style.backgroundImage = 'url("' + els.img.src + '")';
+      el.style.backgroundSize = (outW / srcW) + "px " + (outH / srcH) + "px";
+      el.style.backgroundPosition = (-(sel.x * outW / srcW)) + "px " + (-(sel.y * outH / srcH)) + "px";
+      el.style.transform = rotated() ? "rotate(" + (-parseInt(els.rotation.value, 10)) + "deg)" : "none";
+    });
+  }
+
+  function updatePixels() {
+    var w = Math.round(sel.w * els.img.naturalWidth);
+    var h = Math.round(sel.h * els.img.naturalHeight);
+    var needW = rotated() ? TARGET_H : TARGET_W;
+    var needH = rotated() ? TARGET_W : TARGET_H;
+    var soft = w < needW || h < needH;
+    els.pixels.innerHTML =
+      "Crop is <b>" + w + "×" + h + "</b> source pixels (want at least " + needW + "×" + needH + "). " +
+      (soft ? '<span class="warn">It will be upscaled and may look soft.</span>' : "Plenty of detail.");
+  }
+
+  // --- Value round-trip ---------------------------------------------------
+
+  els.apply.addEventListener("click", function () {
+    var parts = els.out.value.split(",").map(function (p) { return parseFloat(p.trim().replace("%", "")); });
+    if (parts.length !== 4 || parts.some(isNaN)) { setStatus("Expected four numbers: x,y,w,h", true); return; }
+    sel = { x: parts[0] / 100, y: parts[1] / 100, w: parts[2] / 100, h: parts[3] / 100 };
+    setStatus("Applied.");
+    render();
+  });
+
+  els.copy.addEventListener("click", function () {
+    if (!els.out.value) return;
+    els.out.select();
+    navigator.clipboard.writeText(els.out.value).then(
+      function () { setStatus("Copied " + els.out.value); },
+      function () { setStatus("Press ⌘C to copy."); }
+    );
+  });
+
+  els.reset.addEventListener("click", clearSelection);
+  window.addEventListener("resize", function () { if (sel) render(); });
+})();
+</script>
+</body>
+</html>
