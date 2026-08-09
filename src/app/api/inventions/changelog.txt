@@ -1,4 +1,5 @@
 9 August 2026
+- Added tech: Steel crossbow
 - Added tech: Oxybeles
 - Added tech: Winch
 - Added connection: Wheel --> Winch
@@ -22,6 +23,10 @@
 - Added connection: Sling --> Onager
 - Added connection: Carburized and quenched iron --> Mainspring
 - Added connection: Drawn wire and draw plate --> Spring scale
+- Added connection: Crossbow (Greece) --> Steel crossbow
+- Added connection: Carburized and quenched iron --> Steel crossbow
+- Added connection: Winch --> Steel crossbow
+- Added connection: Steel crossbow --> Arquebus and matchlock
 
 7 August 2026
 - Added tech: Acetone–butanol–ethanol fermentation
