@@ -20,6 +20,8 @@
 - Added connection: Oxybeles --> Ballista
 - Added connection: Winch --> Oxybeles
 - Added connection: Sling --> Onager
+- Added connection: Carburized and quenched iron --> Mainspring
+- Added connection: Drawn wire and draw plate --> Spring scale
 
 7 August 2026
 - Added tech: Acetone–butanol–ethanol fermentation
