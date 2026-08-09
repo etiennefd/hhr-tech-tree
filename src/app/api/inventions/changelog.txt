@@ -9,6 +9,10 @@
 - Added connection: Pulley --> Elevator
 - Added connection: Sail (Mediterranean) --> Crane
 - Added connection: Bloomery and wrought iron --> Crane
+- Added connection: Winch <--> Wagonway
+- Added connection: Winch --> Ballista
+- Added connection: Winch --> Counterweight trebuchet
+- Added connection: Winch --> Cable car
 
 7 August 2026
 - Added tech: Acetone–butanol–ethanol fermentation
