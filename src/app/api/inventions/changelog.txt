@@ -1,6 +1,7 @@
 10 August 2026
 - Added tech: Hydraulic jigger and crane
 - Added tech: Exercise machine
+- Added tech: Hooke's law
 - Added tech: Paper mill
 - Added connection: Force pump --> Self-acting hydraulic ram
 - Added connection: Paper mill --> Self-acting hydraulic ram
