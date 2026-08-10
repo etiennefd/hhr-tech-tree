@@ -1,3 +1,6 @@
+10 August 2026
+- Added connection: Crane --> Hydraulic cylinder
+
 9 August 2026
 - Added tech: Steel crossbow
 - Added tech: Oxybeles
