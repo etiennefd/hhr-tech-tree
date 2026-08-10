@@ -3,11 +3,18 @@
 - Added tech: Exercise machine
 - Added tech: Paper mill
 - Added connection: Force pump --> Self-acting hydraulic ram
+- Added connection: Paper mill --> Self-acting hydraulic ram
 - Added connection: Hydraulic cylinder --> Hydraulic press
 - Added connection: Hydraulic cylinder --> Hydraulic jigger and crane
 - Added connection: Pulley --> Hydraulic jigger and crane
 - Added connection: Crane --> Hydraulic jigger and crane
 - Added connection: Hydraulic jigger and crane --> Hydraulic accumulator
+- Added connection: Paper mill --> Paper machine
+- Added connection: Papermaking --> Paper mill
+- Added connection: Fulling mill --> Paper mill
+- Added connection: Paper mill --> Mechanical wood pulping
+- Added connection: Trip hammer --> Fulling mill
+- Added connection: Watermill --> Paper mill
 
 9 August 2026
 - Added tech: Steel crossbow
