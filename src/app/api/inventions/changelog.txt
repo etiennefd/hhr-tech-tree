@@ -1,7 +1,12 @@
 10 August 2026
 - Added tech: Hydraulic jigger and crane
 - Added tech: Exercise machine
-- Added connection: Crane --> Hydraulic cylinder
+- Added connection: Force pump --> Self-acting hydraulic ram
+- Added connection: Hydraulic cylinder --> Hydraulic press
+- Added connection: Hydraulic cylinder --> Hydraulic jigger and crane
+- Added connection: Pulley --> Hydraulic jigger and crane
+- Added connection: Crane --> Hydraulic jigger and crane
+- Added connection: Hydraulic jigger and crane --> Hydraulic accumulator
 
 9 August 2026
 - Added tech: Steel crossbow
@@ -1506,7 +1511,6 @@
 - Added tech: Rose madder
 - Added connection: Hydraulic cylinder --> Hydraulic excavator
 - Added connection: Hydraulic cylinder --> Hydraulic accumulator
-- Added connection: Hydraulic press --> Hydraulic cylinder
 - Added connection: Hydraulic cylinder --> Industrial robot
 - Added connection: Hydraulic cylinder --> Injection molding
 - Added connection: Hydraulic cylinder --> Bulldozer
