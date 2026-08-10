@@ -1,6 +1,7 @@
 10 August 2026
 - Added tech: Hydraulic jigger and crane
 - Added tech: Exercise machine
+- Added tech: Paper mill
 - Added connection: Force pump --> Self-acting hydraulic ram
 - Added connection: Hydraulic cylinder --> Hydraulic press
 - Added connection: Hydraulic cylinder --> Hydraulic jigger and crane
