@@ -1,4 +1,5 @@
 10 August 2026
+- Added tech: Hydraulic jigger and crane
 - Added tech: Exercise machine
 - Added connection: Crane --> Hydraulic cylinder
 
