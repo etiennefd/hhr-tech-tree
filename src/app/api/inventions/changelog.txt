@@ -16,6 +16,9 @@
 - Added connection: Paper mill --> Mechanical wood pulping
 - Added connection: Trip hammer --> Fulling mill
 - Added connection: Watermill --> Paper mill
+- Added connection: Boring machine --> Hydraulic cylinder
+- Added connection: Cast iron --> Hydraulic cylinder
+- Added connection: Tanned leather --> Hydraulic cylinder
 
 9 August 2026
 - Added tech: Steel crossbow
