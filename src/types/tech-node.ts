@@ -1,3 +1,27 @@
+/**
+ * A technology independently invented again, later, somewhere else, in a case
+ * where the second invention does not merit a node of its own. Where both
+ * traditions merit nodes on independent grounds — a different species,
+ * mechanism, or system — the `Independently invented` connection type is used
+ * instead. This is the default; a split is the exception.
+ */
+export interface LaterIndependentInnovation {
+  id: string;
+  year: number;
+  city?: string;
+  countryHistorical?: string;
+  countryModern?: string;
+  formattedLocation?: string;
+  inventors?: string[];
+  organizations?: string[];
+  /** "Parallel", or "After loss" for a technology developed, lost, then redeveloped. */
+  type?: string;
+  /** Justification, which must name a source. Shown on hover. */
+  details?: string;
+  detailsSource?: string;
+  dateAdded?: string;
+}
+
 export interface TechNode {
   id: string;
   title: string;
@@ -23,4 +47,6 @@ export interface TechNode {
   countryModern?: string;      // Comma-separated string from Airtable
   city?: string;
   formattedLocation?: string;
+
+  laterIndependentInnovations?: LaterIndependentInnovation[];
 } 

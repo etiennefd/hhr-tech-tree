@@ -38,6 +38,14 @@ interface TechTreeData {
     formattedLocation?: string;
     wikipedia?: string;
     details?: string;
+    laterIndependentInnovations?: Array<{
+      id: string;
+      year: number;
+      formattedLocation?: string;
+      type?: string;
+      details?: string;
+      detailsSource?: string;
+    }>;
     // Add any other fields present in your detailed nodes
   }>;
   links: Array<{

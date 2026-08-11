@@ -23,7 +23,7 @@ import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import { SearchResult } from "./SearchBox";
-import { TechNode } from "@/types/tech-node";
+import { TechNode, LaterIndependentInnovation } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 import { SpatialIndex } from "@/utils/SpatialIndex";
@@ -3574,6 +3574,72 @@ useEffect(() => {
                               </span>
                             </p>
                           )}
+
+                          {/* Later independent inventions. A property of the node
+                              rather than a relationship, so it sits above the
+                              edge lists. Where both traditions merit their own
+                              node, an "Independently invented" connection is
+                              used instead and shows up below. */}
+                          {node.laterIndependentInnovations &&
+                            node.laterIndependentInnovations.length > 0 && (
+                              <div className="text-xs mb-1">
+                                <strong>
+                                  Later independent invention
+                                  {node.laterIndependentInnovations.length > 1
+                                    ? "s"
+                                    : ""}
+                                  :
+                                </strong>
+                                <div className="ml-2">
+                                  {node.laterIndependentInnovations.map(
+                                    (entry: LaterIndependentInnovation) => {
+                                      const place = cleanLocationForTooltip(
+                                        entry.formattedLocation
+                                      );
+                                      const suffix =
+                                        entry.type === "After loss"
+                                          ? " (after loss)"
+                                          : "";
+
+                                      return (
+                                        <div
+                                          key={`later-independent-${entry.id}`}
+                                          className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
+                                        >
+                                          <span className="flex-shrink-0">•</span>
+                                          <span className="break-words">
+                                            {place
+                                              ? `${place}, ${formatYear(entry.year)}`
+                                              : formatYear(entry.year)}
+                                            {suffix}
+                                          </span>
+                                          {entry.details &&
+                                            (entry.detailsSource ? (
+                                              <a
+                                                href={entry.detailsSource}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-gray-500 hover:text-gray-700 cursor-help"
+                                                title={`${entry.details} (click for source)`}
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </a>
+                                            ) : (
+                                              <span
+                                                className="text-gray-500 cursor-help"
+                                                title={entry.details}
+                                              >
+                                                <Info className="h-3 w-3" />
+                                              </span>
+                                            ))}
+                                        </div>
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              </div>
+                            )}
 
                           {/* Updated connections section */}
                           {(() => {
