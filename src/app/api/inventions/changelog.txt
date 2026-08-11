@@ -1,6 +1,7 @@
 11 August 2026
 - Added tech: Stationary bicycle
 - Added tech: Flywheel
+- Added tech: Spindle
 
 10 August 2026
 - Added tech: Hydraulic jigger and crane
