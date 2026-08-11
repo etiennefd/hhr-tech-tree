@@ -2,6 +2,11 @@
 - Added tech: Stationary bicycle
 - Added tech: Flywheel
 - Added tech: Spindle
+- Added connection: Rope and twine --> Linen
+- Added connection: Rope and twine --> Spindle
+- Added connection: Hand drill --> Spindle
+- Added connection: Spindle --> Wheel
+- Added connection: Spindle --> Fast potter's wheel
 
 10 August 2026
 - Added tech: Hydraulic jigger and crane
