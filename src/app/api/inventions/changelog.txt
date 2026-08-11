@@ -1,3 +1,6 @@
+11 August 2026
+- Added tech: Stationary bicycle
+
 10 August 2026
 - Added tech: Hydraulic jigger and crane
 - Added tech: Exercise machine
