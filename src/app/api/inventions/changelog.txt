@@ -8,6 +8,7 @@
 - Added connection: Hand drill --> Spindle
 - Added connection: Spindle --> Wheel
 - Added connection: Spindle --> Fast potter's wheel
+- Added connection: Domestication of rice --> Trip hammer
 
 10 August 2026
 - Added tech: Hydraulic jigger and crane
