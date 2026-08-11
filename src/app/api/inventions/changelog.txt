@@ -1,6 +1,7 @@
 11 August 2026
 - Added tech: Stationary bicycle
 - Added tech: Flywheel
+- Added tech: Stamp mill
 - Added tech: Spindle
 - Added connection: Rope and twine --> Linen
 - Added connection: Rope and twine --> Spindle
