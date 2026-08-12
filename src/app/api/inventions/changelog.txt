@@ -1,5 +1,25 @@
 12 August 2026
 - Added tech: Hollander beater
+- Added connection: Wheel --> Flywheel
+- Added connection: Spindle --> Flywheel
+- Added connection: Flywheel --> Watt steam engine
+- Added connection: Flywheel --> Stationary bicycle
+- Added connection: Flywheel --> Internal combustion engine
+- Added connection: Spindle --> Spinning wheel
+- Added connection: Drawn wire and draw plate --> Exercise machine
+- Added connection: Domestication of the horse --> Exercise machine
+- Added connection: Exercise machine --> Upholstery coil spring
+- Added connection: Exercise machine --> Stationary bicycle
+- Added connection: Crank --> Stationary bicycle
+- Added connection: Stamp mill --> Patio process
+- Added connection: Stamp mill --> Gold cyanidation
+- Added connection: Stamp mill --> Froth flotation
+- Added connection: Hooke's law --> Spring scale
+- Added connection: Mining --> Stamp mill
+- Added connection: Trip hammer --> Stamp mill
+- Added connection: Paper mill --> Hollander beater
+- Added connection: Post windmill --> Hollander beater
+
 11 August 2026
 - v1.1.4: Later independent inventions table
 - Added tech: Stationary bicycle
@@ -587,7 +607,6 @@
 - Added connection: Rawhide --> Kayak
 - Added connection: Rope and twine --> Kayak
 - Added connection: Upholstery coil spring --> Innerspring mattress
-- Added connection: Mainspring --> Upholstery coil spring
 - Added connection: Coach --> Upholstery coil spring
 - Added connection: Drawn wire and draw plate --> Upholstery coil spring
 
