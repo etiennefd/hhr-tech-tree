@@ -20,6 +20,9 @@
 - Added connection: Trip hammer --> Stamp mill
 - Added connection: Paper mill --> Hollander beater
 - Added connection: Post windmill --> Hollander beater
+- Added connection: Silver --> Cupellation
+- Added connection: Lead --> Cupellation
+- Added connection: Copper smelting --> Cupellation
 
 11 August 2026
 - v1.1.4: Later independent inventions table
