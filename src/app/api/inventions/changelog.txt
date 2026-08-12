@@ -1,3 +1,5 @@
+12 August 2026
+- Added tech: Hollander beater
 11 August 2026
 - v1.1.4: Later independent inventions table
 - Added tech: Stationary bicycle
