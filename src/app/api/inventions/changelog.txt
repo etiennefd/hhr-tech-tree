@@ -4,6 +4,18 @@
 - Added tech: Bamboo
 - Added connection: Salt mining --> Borehole drilling
 - Added connection: Borehole drilling --> Drilled oil well
+- Added connection: Percussion flake tool --> Bamboo
+- Added connection: Bamboo --> Borehole drilling
+- Added connection: Bamboo --> Bamboo and wooden slips
+- Added connection: Writing (China) <--> Bamboo and wooden slips
+- Added connection: Bamboo and wooden slips --> Paper
+- Added connection: Rope and twine --> Bamboo and wooden slips
+- Added connection: Bamboo --> Fire lance
+- Added connection: Bamboo --> Rocket
+- Added connection: Papermaking --> Fire arrow
+- Added connection: Rawhide --> Chinese top
+- Added connection: Bamboo --> Fireworks
+- Added connection: Tree resin --> Fire arrow
 
 12 August 2026
 - Added tech: Hollander beater
@@ -1219,7 +1231,7 @@
 21 May 2026
 - Added tech: Outboard motor
 - Added tech: Powered model aircraft
-- Added tech: Bamboo-copter
+- Added tech: Chinese top
 - Added connection: Archimedes' screw --> Screw propeller
 - Added connection: Paddle wheel boat --> Screw propeller
 - Added connection: Screw propeller --> Steam-powered battleship
@@ -1239,7 +1251,7 @@
 - Added connection: Glider --> Powered model aircraft
 - Added connection: Vulcanized rubber --> Powered model aircraft
 - Added connection: Powered model aircraft --> Airplane
-- Added connection: Bamboo-copter --> Powered model aircraft
+- Added connection: Chinese top --> Powered model aircraft
 - Added connection: Steamboat --> Motorboat
 - Added connection: Motorboat --> Outboard motor
 
