@@ -41,8 +41,7 @@ import {
   escapeRegExp,
   cleanLocationForTooltip,
   validateImageUrl,
-  fetchWithRetry,
-  throttle
+  fetchWithRetry
 } from './utils/helpers';
 import {
   performanceMarks,
@@ -499,15 +498,39 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions.width, containerDimensions.height, isSmallScreen, isClient]);
 
+  const minNodeYear = useMemo(() => {
+    if (!data.nodes.length) return null;
+    let min = Infinity;
+    for (const node of data.nodes) {
+      if (node.year < min) min = node.year;
+    }
+    return min;
+  }, [data.nodes]);
+
+  // calculateXPosition walks the timeline interval by interval (~550 iterations
+  // from the earliest year), and getXPosition is called once per node per
+  // render — including once per node for the minimap. Cache by year: there are
+  // only a few thousand distinct years, and the answer only moves when the
+  // earliest year does.
+  const xPositionCacheRef = useRef<Map<number, number>>(new Map());
+  const xPositionCacheKeyRef = useRef<number | null>(minNodeYear);
+  if (xPositionCacheKeyRef.current !== minNodeYear) {
+    xPositionCacheKeyRef.current = minNodeYear;
+    xPositionCacheRef.current = new Map();
+  }
+
   const getXPosition = useCallback(
     (year: number) => {
-      // Still calculate minYear from data for node positioning
       // Return 0 if data isn't loaded yet to avoid errors
-      if (!data.nodes.length) return 0;
-      const minYear = Math.min(...data.nodes.map((n) => n.year));
-      return calculateXPosition(year, minYear, PADDING, YEAR_WIDTH);
+      if (minNodeYear === null) return 0;
+      const cache = xPositionCacheRef.current;
+      const cached = cache.get(year);
+      if (cached !== undefined) return cached;
+      const x = calculateXPosition(year, minNodeYear, PADDING, YEAR_WIDTH);
+      cache.set(year, x);
+      return x;
     },
-    [data.nodes]
+    [minNodeYear]
   );
 
   const calculateNodePositions = useCallback(
@@ -1159,6 +1182,20 @@ export function TechTreeViewer() {
         : DEFAULT_TIMELINE_MAX_YEAR,
     [data.nodes]
   );
+  // Rebuilt only when the node set changes, not on every scroll — the minimap
+  // renders one element per node, so an unstable array prop meant re-rendering
+  // ~2,500 dots on every scroll frame.
+  const minimapNodes = useMemo<TechTreeMinimapNode[]>(
+    () =>
+      data.nodes.map((node) => ({
+        id: node.id,
+        x: getXPosition(node.year),
+        y: node.y || 0,
+        year: node.year,
+      })),
+    [data.nodes, getXPosition]
+  );
+
   const nodeById = useMemo(
     () => new Map(data.nodes.map((node) => [node.id, node])),
     [data.nodes]
@@ -2373,6 +2410,35 @@ export function TechTreeViewer() {
     };
   }, []);
 
+  // Scroll position drives the minimap viewport rect, so it has to stay in
+  // sync, but a wheel or trackpad can fire scroll events faster than the
+  // browser paints. Coalescing to one state update per animation frame bounds
+  // the work without ever lagging behind the real scroll position: the handler
+  // reads scrollLeft/scrollTop at frame time, not at event time.
+  const scrollFrameRef = useRef<number | null>(null);
+  const handleContainerScroll = useCallback(() => {
+    if (isPinchingRef.current) return;
+    if (scrollFrameRef.current !== null) return;
+
+    scrollFrameRef.current = requestAnimationFrame(() => {
+      scrollFrameRef.current = null;
+      const container = horizontalScrollContainerRef.current;
+      if (!container) return;
+      setScrollPosition({
+        left: container.scrollLeft,
+        top: container.scrollTop,
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (scrollFrameRef.current !== null) {
+        cancelAnimationFrame(scrollFrameRef.current);
+      }
+    };
+  }, []);
+
   // Update the scroll handler to find containers at the right time
   useEffect(() => {
     const container = horizontalScrollContainerRef.current;
@@ -3257,15 +3323,7 @@ useEffect(() => {
           zIndex: 20 // Higher than minimap's z-index of 10
         }}
         onMouseDown={handleMouseDown}
-        onScroll={throttle((e) => {
-          if (isPinchingRef.current) return;
-          const horizontalScroll = e.currentTarget.scrollLeft;
-          const verticalScroll = e.currentTarget.scrollTop;
-          setScrollPosition({
-            left: horizontalScroll,
-            top: verticalScroll,
-          });
-        }, 100)} // Throttle to max once every 100ms
+        onScroll={handleContainerScroll}
       >
         <div
           ref={treeShellRef}
@@ -4116,14 +4174,7 @@ useEffect(() => {
             }}
           >
             <TechTreeMinimap
-              nodes={data.nodes.map(
-                (node): TechTreeMinimapNode => ({
-                  id: node.id,
-                  x: getXPosition(node.year),
-                  y: node.y || 0,
-                  year: node.year,
-                })
-              )}
+              nodes={minimapNodes}
               containerWidth={containerWidth}
               parentContainerWidth={containerDimensions.width} // Pass the viewer's width
               totalHeight={totalHeight}

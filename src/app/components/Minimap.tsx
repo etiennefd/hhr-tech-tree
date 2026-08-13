@@ -106,16 +106,79 @@ const TechTreeMinimap = ({
     return `${year}`;
   }, [isSmallScreen]);
 
-  // Calculate x position for a year
-  const getXPosition = (year: number) => {
-    if (!nodes.length) return 0;
-    const nearestNode = nodes.reduce((prev, curr) => {
-      return Math.abs(curr.year - year) < Math.abs(prev.year - year)
-        ? curr
-        : prev;
+  // Each label scans every node for the nearest year, so resolve them together
+  // and only when the inputs actually change.
+  const keyYearPositions = useMemo(() => {
+    if (!nodes.length) return [];
+    return keyYears.map((year) => {
+      const nearestNode = nodes.reduce((prev, curr) =>
+        Math.abs(curr.year - year) < Math.abs(prev.year - year) ? curr : prev
+      );
+      return { year, left: nearestNode.x * scale };
     });
-    return nearestNode.x * scale;
-  };
+  }, [keyYears, nodes, scale]);
+
+  // One element per node, so this is the expensive part of the minimap. None of
+  // it depends on scroll position — only the viewport rectangle below does — so
+  // memoizing keeps scrolling from rebuilding every dot.
+  const nodeDots = useMemo(
+    () =>
+      nodes.map((node) => {
+        const hasActiveFilters = filteredNodeIds.size > 0;
+        const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
+        const isSelected =
+          node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);
+        const isAdjacent = adjacentNodeIds.has(node.id);
+        const isAncestor = highlightedAncestors.has(node.id);
+        const isDescendant = highlightedDescendants.has(node.id);
+        const isHovered = node.id === hoveredNodeId;
+        const isEmphasized =
+          isSelected || isFiltered || isAdjacent || isAncestor || isDescendant;
+
+        return (
+          <div
+            key={node.id}
+            className="absolute rounded-full"
+            style={{
+              width: isEmphasized ? "4px" : "2px",
+              height: isEmphasized ? "4px" : "2px",
+              backgroundColor: engineeringBlue,
+              opacity: hasActiveFilters
+                ? isFiltered
+                  ? 0.9
+                  : 0.2
+                : isSelected
+                ? 0.9
+                : isAncestor
+                ? 0.8
+                : isDescendant
+                ? 0.8
+                : isAdjacent
+                ? 0.7
+                : isHovered
+                ? 0.6
+                : 0.4,
+              left: node.x * scale,
+              top: node.y * scaleY,
+              transform: "translate(-50%, -50%)",
+              zIndex: isSelected ? 3 : isAncestor || isDescendant ? 2 : isAdjacent ? 1 : 0,
+            }}
+          />
+        );
+      }),
+    [
+      nodes,
+      scale,
+      scaleY,
+      filteredNodeIds,
+      selectedNodeId,
+      hoveredNodeId,
+      selectedConnectionNodeIds,
+      adjacentNodeIds,
+      highlightedAncestors,
+      highlightedDescendants,
+    ]
+  );
 
   const handleMinimapClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -175,12 +238,12 @@ const TechTreeMinimap = ({
         className="w-full"
         style={{ height: LABEL_HEIGHT, paddingTop: "2px" }}
       >
-        {keyYears.map((year) => (
+        {keyYearPositions.map(({ year, left }) => (
           <div
             key={year}
             className="absolute"
             style={{
-              left: getXPosition(year),
+              left,
               transform: "translateX(-50%)",
               fontSize: "7px",
               lineHeight: "1",
@@ -208,48 +271,7 @@ const TechTreeMinimap = ({
         onClick={handleMinimapClick}
       >
         {/* Node dots */}
-        {nodes.map((node) => {
-          const nodeX = node.x * scale;
-          const nodeY = node.y * scaleY;
-          const hasActiveFilters = filteredNodeIds.size > 0;
-          const isFiltered = hasActiveFilters && filteredNodeIds.has(node.id);
-          const isSelected = node.id === selectedNodeId || selectedConnectionNodeIds.has(node.id);
-          const isAdjacent = adjacentNodeIds.has(node.id);
-          const isAncestor = highlightedAncestors.has(node.id);
-          const isDescendant = highlightedDescendants.has(node.id);
-          const isHovered = node.id === hoveredNodeId;
-
-          return (
-            <div
-              key={node.id}
-              className="absolute rounded-full"
-              style={{
-                width: isSelected || isFiltered || isAdjacent || isAncestor || isDescendant ? "4px" : "2px",
-                height: isSelected || isFiltered || isAdjacent || isAncestor || isDescendant ? "4px" : "2px",
-                backgroundColor: engineeringBlue,
-                opacity: hasActiveFilters
-                  ? isFiltered
-                    ? 0.9
-                    : 0.2
-                  : isSelected
-                  ? 0.9
-                  : isAncestor
-                  ? 0.8
-                  : isDescendant
-                  ? 0.8
-                  : isAdjacent
-                  ? 0.7
-                  : isHovered
-                  ? 0.6
-                  : 0.4,
-                left: nodeX,
-                top: nodeY,
-                transform: "translate(-50%, -50%)",
-                zIndex: isSelected ? 3 : isAncestor || isDescendant ? 2 : isAdjacent ? 1 : 0,
-              }}
-            />
-          );
-        })}
+        {nodeDots}
 
         {/* Viewport rectangle */}
         <div
@@ -270,4 +292,6 @@ const TechTreeMinimap = ({
   );
 };
 
-export default TechTreeMinimap;
+// Every prop is either a primitive or memoized by the parent, so a shallow
+// compare keeps the minimap out of re-renders it has no stake in.
+export default React.memo(TechTreeMinimap);
