@@ -1,5 +1,6 @@
 13 August 2026
 - v1.1.5: Performance improvements
+- Added tech: Bamboo and wooden slips
 - Added tech: Bamboo
 - Added connection: Salt mining --> Borehole drilling
 - Added connection: Borehole drilling --> Drilled oil well
