@@ -781,9 +781,9 @@ export function TechTreeViewer() {
         // In production, check cache first
         const cachedData = await cacheManager.get();
         
-        if (cachedData?.detailData) {
+        if (cachedData?.data) {
           // If we have detailed data in cache, use it
-          const validatedNodes = cachedData.detailData.nodes?.map((node: TechNode) => ({
+          const validatedNodes = cachedData.data.nodes?.map((node: TechNode) => ({
             ...node,
             // Only validate image URLs if we're showing images
             image: showImages ? validateImageUrl(node.image) : undefined
@@ -793,7 +793,7 @@ export function TechTreeViewer() {
           
           setData({ 
             nodes: positionedDetailNodes, 
-            links: cachedData.detailData.links || [] 
+            links: cachedData.data.links || []
           });
           currentNodesRef.current = positionedDetailNodes;
 
@@ -834,8 +834,7 @@ export function TechTreeViewer() {
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
-          basicData: detailData,
-          detailData: detailData
+          data: detailData
         });
 
         // Update spatial index
@@ -1395,33 +1394,6 @@ export function TechTreeViewer() {
     },
     [data.links, data.nodes]
   );
-
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = `
-      .fast-smooth-scroll {
-        scroll-behavior: smooth;
-        scroll-timeline: none;
-        scroll-behavior-instant-stop: true;
-      }
-  
-      .scrolling .tech-node,
-      .scrolling path,
-      .scrolling .connection,
-      .scrolling g,
-      .scrolling line,
-      .scrolling circle,
-      .scrolling rect,
-      .scrolling text {
-        pointer-events: none !important;
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
 
   // Keyboard shortcut to left and right ends (cmd+arrows)
   useEffect(() => {

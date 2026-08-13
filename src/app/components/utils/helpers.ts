@@ -2,7 +2,10 @@
  * Helper function to escape regex special characters
  */
 export function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); // $& means the whole matched string
+  // The character class closes at the first unescaped `]`, so `]` must be
+  // written as `\]` — the previous version terminated early and escaped
+  // nothing, which made `new RegExp()` throw on queries like "c++".
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
 /**

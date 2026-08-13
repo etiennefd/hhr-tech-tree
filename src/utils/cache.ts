@@ -1,7 +1,9 @@
 import { TechNode } from "@/types/tech-node";
 import { ConnectionType } from "@/app/components/connections/CurvedConnections";
 
-export const CACHE_VERSION = "1.0";
+// Bumped when the cache shape changes so older entries are discarded rather
+// than misread.
+export const CACHE_VERSION = "2.0";
 const CACHE_KEY = "tech-tree-cache";
 
 // Environment-specific cache durations
@@ -21,11 +23,10 @@ interface Link {
 interface CacheData {
   version: string;
   timestamp: number;
-  basicData: {
-    nodes: TechNode[];
-    links: Link[];
-  };
-  detailData?: {
+  // Previously stored twice, as `basicData` and `detailData`, with only the
+  // latter ever read back. One copy halves what we take from the origin's
+  // storage quota, which matters most on Safari's ~5MB cap.
+  data: {
     nodes: TechNode[];
     links: Link[];
   };

@@ -17,15 +17,10 @@ const IntroBox = memo(() => {
       try {
         // First try to get cached data
         const cachedData = await cacheManager.get();
-        if (cachedData?.detailData) {
+        if (cachedData?.data) {
           setCounts({
-            nodes: cachedData.detailData.nodes?.length || 0,
-            links: cachedData.detailData.links?.length || 0
-          });
-        } else if (cachedData?.basicData) {
-          setCounts({
-            nodes: cachedData.basicData.nodes?.length || 0,
-            links: cachedData.basicData.links?.length || 0
+            nodes: cachedData.data.nodes?.length || 0,
+            links: cachedData.data.links?.length || 0
           });
         }
 
