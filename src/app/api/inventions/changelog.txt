@@ -16,6 +16,7 @@
 - Added connection: Rawhide --> Chinese top
 - Added connection: Bamboo --> Fireworks
 - Added connection: Tree resin --> Fire arrow
+- Added later independent invention: Gears, 330 BCE
 
 12 August 2026
 - Added tech: Hollander beater
