@@ -26,7 +26,6 @@ import { SearchResult } from "./SearchBox";
 import { TechNode, LaterIndependentInnovation } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
-import { SpatialIndex } from "@/utils/SpatialIndex";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
 import { DebugOverlay } from "@/app/components/utils/DebugOverlay";
@@ -45,8 +44,7 @@ import {
 } from './utils/helpers';
 import {
   performanceMarks,
-  memoEffectiveness,
-  logPerformance
+  memoEffectiveness
 } from './utils/performance';
 import { useRouter } from 'next/navigation';
 import { Info } from 'lucide-react';
@@ -324,7 +322,6 @@ export function TechTreeViewer() {
   }, [isClient, handleMouseMove, handleMouseUp]);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isError] = useState(false);
   const [showDebugOverlay, setShowDebugOverlay] = useState(true);
   const [hoveredNode, setHoveredNode] = useState<TechNode | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -354,8 +351,6 @@ export function TechTreeViewer() {
   const currentNodesRef = useRef<TechNode[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [isIPad, setIsIPad] = useState(false);
-  // Add state for connection visibility mode
-  const [showAllConnections, setShowAllConnections] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const treeShellRef = useRef<HTMLDivElement>(null);
   const scrollBoundsRef = useRef<HTMLDivElement>(null);
@@ -429,9 +424,6 @@ export function TechTreeViewer() {
     };
   }, []);
 
-  // Initialize spatial index with smaller cell size
-  const spatialIndexRef = useRef(new SpatialIndex(100)); // Reduced from 250 to 100
-  
   // Add refs for virtualization
   const nodesContainerRef = useRef<HTMLDivElement>(null);
   const connectionsContainerRef = useRef<SVGSVGElement>(null);
@@ -442,7 +434,6 @@ export function TechTreeViewer() {
 
   // Add ref for the jump button
   const jumpButtonRef = useRef<HTMLButtonElement>(null);
-  const prefetchedNodeDetails = useRef<Map<string, Partial<TechNode>>>(new Map());
 
   // Add state for visible viewport
   const [visibleViewport, setVisibleViewport] = useState({
@@ -459,10 +450,6 @@ export function TechTreeViewer() {
     bottom: 0,
   });
 
-  // Add viewport update tracking
-  const lastViewportUpdate = useRef(0);
-  const VIEWPORT_UPDATE_THROTTLE = 100; // ms
-
   // Add cache refs for ancestors and descendants
   const descendantsCache = useRef<Map<string, Set<string>>>(new Map());
   const ancestorsCache = useRef<Map<string, Set<string>>>(new Map());
@@ -470,21 +457,6 @@ export function TechTreeViewer() {
   // Add this near the other state variables
   const [cachedNodeIds, setCachedNodeIds] = useState<Set<string>>(new Set());
   const cachedNodesTimeoutRef = useRef<{[key: string]: NodeJS.Timeout}>({});
-  const CACHE_DURATION = 60000; // Keep nodes in cache for 1 minute after they leave viewport
-
-  // Add this near the other state variables
-  const [cachedConnectionIndices, setCachedConnectionIndices] = useState<Set<number>>(new Set());
-  const cachedConnectionsTimeoutRef = useRef<{[key: number]: NodeJS.Timeout}>({});
-
-  // Add scroll positions cache
-  const scrollPositionsCache = useRef<Map<string, { x: number; y: number }>>(new Map());
-
-  // Add cleanup for scroll positions cache
-  useEffect(() => {
-    return () => {
-      scrollPositionsCache.current.clear();
-    };
-  }, []);
 
   // Calculate if the screen is small based on width
   const isSmallScreen = useMemo(() => {
@@ -757,22 +729,6 @@ export function TechTreeViewer() {
           });
           currentNodesRef.current = positionedDetailNodes;
 
-          // Update spatial index
-          const minX = Math.min(...positionedDetailNodes.map(n => n.x || Infinity));
-          const maxX = Math.max(...positionedDetailNodes.map(n => n.x || -Infinity));
-          const minY = Math.min(...positionedDetailNodes.map(n => n.y || Infinity));
-          const maxY = Math.max(...positionedDetailNodes.map(n => n.y || -Infinity));
-          
-          const width = maxX - minX;
-          const height = maxY - minY;
-          const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
-          
-          spatialIndexRef.current = new SpatialIndex(cellSize);
-          positionedDetailNodes.forEach(node => {
-            if (node.x !== undefined && node.y !== undefined) {
-              spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
-            }
-          });
 
           setIsLoading(false);
           return;
@@ -797,13 +753,6 @@ export function TechTreeViewer() {
           });
           currentNodesRef.current = positionedDetailNodes;
 
-          // Reset and populate spatial index
-          spatialIndexRef.current = new SpatialIndex(100);
-          positionedDetailNodes.forEach((node: TechNode) => {
-            if (node.x !== undefined && node.y !== undefined) {
-              spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
-            }
-          });
           setIsLoading(false);
           return; // Exit early if we have detailed cached data
         }
@@ -837,22 +786,6 @@ export function TechTreeViewer() {
           data: detailData
         });
 
-        // Update spatial index
-        const minX = Math.min(...positionedDetailNodes.map(n => n.x || Infinity));
-        const maxX = Math.max(...positionedDetailNodes.map(n => n.x || -Infinity));
-        const minY = Math.min(...positionedDetailNodes.map(n => n.y || Infinity));
-        const maxY = Math.max(...positionedDetailNodes.map(n => n.y || -Infinity));
-        
-        const width = maxX - minX;
-        const height = maxY - minY;
-        const cellSize = Math.max(100, Math.min(250, Math.sqrt((width * height) / 150)));
-        
-        spatialIndexRef.current = new SpatialIndex(cellSize);
-        positionedDetailNodes.forEach(node => {
-          if (node.x !== undefined && node.y !== undefined) {
-            spatialIndexRef.current.addNode(node.id, { x: node.x, y: node.y });
-          }
-        });
 
       } catch (error: unknown) {
         if (error instanceof Error && error.name === 'AbortError') return;
@@ -959,21 +892,6 @@ export function TechTreeViewer() {
     },
     []
   );
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Track when first API request completes
-      const originalFetch = window.fetch;
-      window.fetch = function(...args) {
-        const result = originalFetch.apply(this, args);
-        return result;
-      };
-      
-      return () => {
-        window.fetch = originalFetch;
-      };
-    }
-  }, []);
 
   // Add handler for clicks outside nodes
   useEffect(() => {
@@ -1778,130 +1696,6 @@ export function TechTreeViewer() {
     );
   }, [selectedNodeId, data.links]);
 
-  // Add this near the top of the component
-  const prefetchedNodes = useRef(new Set<string>());
-  const prefetchQueue = useRef<string[]>([]);
-  const isPrefetching = useRef(false);
-
-  // Process the prefetch queue one by one to avoid overwhelming the network
-  const processPrefetchQueue = useCallback(async () => {
-    // No-op since we have all data
-  }, []);
-
-  // Update the prefetchNode function to use the queue
-  const prefetchNode = useCallback((nodeId: string, priority = false) => {
-    // No-op since we have all data
-  }, []);
-
-  // Function to prefetch important nodes proactively
-  const prefetchImportantNodes = useCallback(() => {
-    // No-op since we have all data
-  }, [selectedNodeId, selectedLinkKey, data.links, highlightedAncestors, highlightedDescendants]);
-
-  // Add this effect to prefetch data for connected nodes when a node is selected
-  useEffect(() => {
-    // No-op since we have all data
-  }, [prefetchImportantNodes]);
-
-  useEffect(() => {
-    // No-op since we have all data
-  }, [data.nodes, prefetchNode]);
-
-  // Add this effect to prefetch data for nodes connected by a selected link
-  useEffect(() => {
-    if (selectedLinkKey === null) return;
-    
-    // Get node IDs from the selectedLinkKey
-    const [source, target] = selectedLinkKey.split('-');
-    
-    // Prefetch both source and target nodes
-    prefetchNode(source);
-    prefetchNode(target);
-    
-  }, [selectedLinkKey, prefetchNode]);
-
-  // Add this effect to prefetch nodes when filters are applied
-  useEffect(() => {
-    // Skip if no filters are applied
-    const hasActiveFilters = filters.fields.size > 0 || filters.subfields.size > 0 || filters.countries.size > 0 || filters.cities.size > 0;
-    if (!hasActiveFilters) return;
-        
-    // Find nodes that match the current filters
-    const matchingNodes = data.nodes.filter(node => {
-      // Check if node matches field filters
-      const matchesFields = filters.fields.size === 0 || 
-        node.fields?.some(field => filters.fields.has(field));
-      
-      // Check if node matches subfield filters
-      const matchesSubfields = filters.subfields.size === 0 || 
-        node.subfields?.some(subfield => filters.subfields.has(subfield));
-      
-      // Check if node matches country filters
-      const matchesCountries = filters.countries.size === 0 || 
-        (node.formattedLocation && filters.countries.has(cleanLocationForTooltip(node.formattedLocation) || '')) ||
-        (node.countryModern && filters.countries.has(node.countryModern)) ||
-        (node.countryHistorical && filters.countries.has(node.countryHistorical));
-      
-      // Check if node matches city filters
-      const matchesCity = filters.cities.size === 0 || 
-        (node.city && filters.cities.has(node.city)) ||
-        (node.formattedLocation && filters.cities.has(cleanLocationForTooltip(node.formattedLocation) || ''));
-      
-      return matchesFields && matchesSubfields && matchesCountries && matchesCity;
-    });
-
-    // Limit the number of nodes to prefetch to avoid overwhelming the API
-    const nodesToPrefetch = matchingNodes.slice(0, 20);
-        
-    // Prefetch the matching nodes in parallel
-    const prefetchPromises = nodesToPrefetch
-      .filter(node => !prefetchedNodes.current.has(node.id))
-      .map(node => prefetchNode(node.id));
-        
-    // Execute all prefetch requests
-    Promise.all(prefetchPromises).then(() => {
-    }).catch(error => {
-      console.warn('Error prefetching filtered nodes:', error);
-    });
-    
-    // Also prefetch connections between these nodes
-    const filteredNodeIds = new Set(nodesToPrefetch.map(node => node.id));
-    
-    // Find all connections where both source and target are in the filtered nodes
-    // or where one node is in the filtered set and the other is a direct connection
-    const relevantConnections = data.links.filter(link => {
-      // Direct connections between filtered nodes
-      const isDirectConnection = filteredNodeIds.has(link.source) && filteredNodeIds.has(link.target);
-      
-      // One-hop connections (where only one end is in the filtered set)
-      const isOneHopConnection = 
-        (filteredNodeIds.has(link.source) || filteredNodeIds.has(link.target));
-      
-      return isDirectConnection || isOneHopConnection;
-    });
-    
-    // Update the cache to include these connections
-    setCachedConnectionIndices(prev => {
-      const updated = new Set(prev);
-      relevantConnections.forEach(link => {
-        const index = data.links.findIndex(l => l === link);
-        if (index !== -1) {
-          updated.add(index);
-          
-          // Also prefetch the nodes at both ends of the connection
-          if (!filteredNodeIds.has(link.source)) {
-            prefetchNode(link.source);
-          }
-          if (!filteredNodeIds.has(link.target)) {
-            prefetchNode(link.target);
-          }
-        }
-      });
-      return updated;
-    });
-    
-  }, [filters, data.nodes, data.links, prefetchNode, cleanLocationForTooltip]);
-
   // Effect to handle initial node selection from URL parameter
   const hasScrolledToInitialNode = useRef(false);
   useEffect(() => {
@@ -1922,7 +1716,7 @@ export function TechTreeViewer() {
     }
   }, [isLoading, data.nodes, searchParams, handleNodeClick]);
 
-  // Update handleNodeHover to limit prefetching and handle mobile devices differently
+  // On mobile we go straight to selection, so hover state is desktop-only
   const handleNodeHover = useCallback(
     (node: TechNode) => {
       // On mobile, don't update hover state as we'll go straight to selection
@@ -1930,39 +1724,9 @@ export function TechTreeViewer() {
         setHoveredNode(node);
         setHoveredNodeId(node.id);
       }
-
-      // Only prefetch if we're showing images
-      if (showImages) {
-        // Only prefetch immediate neighbors
-        const connectedNodeIds = data.links
-          .filter((link) => link.source === node.id || link.target === node.id)
-          .map((link) => (link.source === node.id ? link.target : link.source))
-          // Limit the number of simultaneous prefetch requests
-          .slice(0, 5);
-
-        let prefetchedOnHoverCount = 0;
-        // Use for...of instead of forEach to avoid TypeScript errors
-        for (const nodeId of connectedNodeIds) {
-          prefetchNode(nodeId);
-          prefetchedOnHoverCount++;
-        }
-      }
     },
-    [data.links, prefetchNode, isMobile, showImages]
+    [isMobile]
   );
-
-  // Add cleanup for prefetch cache
-  useEffect(() => {
-    const nodes = prefetchedNodes.current;
-    const cleanupInterval = setInterval(() => {
-      nodes.clear();
-    }, 60000);
-
-    return () => {
-      clearInterval(cleanupInterval);
-      nodes.clear();
-    };
-  }, []);
 
   // Add this helper function to get nodes connected by a selected link
   const getSelectedConnectionNodes = useCallback(() => {
@@ -2551,9 +2315,6 @@ export function TechTreeViewer() {
     [selectedNodeId, selectedLinkKey, filters, highlightedAncestors, highlightedDescendants, isLinkVisible, getLinkKey]
   );
 
-  // Add performance measurement refs
-  const memoRecalculationCount = useRef({ nodes: 0, connections: 0 });
-
   // Add these near other state/ref declarations
   const lastCalculationTime = useRef(0);
   const lastCalculationFrame = useRef(0);
@@ -2590,7 +2351,6 @@ export function TechTreeViewer() {
     highlightedDescendants: string;
     filteredNodeIds: string;
     viewport: { left: number; right: number; top: number; bottom: number };
-    showAllConnections: boolean; // Add to frame data for memo comparison
     connectionMode: 'all' | 'optimized' | 'minimal';
   } | null>(null);
 
@@ -2677,7 +2437,6 @@ export function TechTreeViewer() {
       highlightedDescendants: stableHighlightedDescendantsString,
       filteredNodeIds: stableFilteredNodeIdsString,
       viewport: stableViewport,
-      showAllConnections,
       connectionMode // Add connectionMode to frame data
     };
 
@@ -2691,7 +2450,6 @@ export function TechTreeViewer() {
         currentFrameData.viewport.right === lastFrameData.current.viewport.right &&
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
-        currentFrameData.showAllConnections === lastFrameData.current.showAllConnections &&
         currentFrameData.connectionMode === lastFrameData.current.connectionMode && // Add connectionMode check
         previousCalculation.current.visibleNodes.length > 0 &&
         previousCalculation.current.visibleConnections.length > 0) {
@@ -2848,28 +2606,9 @@ export function TechTreeViewer() {
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
     isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
     linkIndexByIdentity, nodeById, stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, filters, connectionMode, // Add showAllConnections and connectionMode to dependencies
+    stableFilteredNodeIdsString, filters, connectionMode,
     connectionResetToken // Bumped by resetVisibleConnections to drop sticky connections
   ]);
-
-  // Add effect to log general performance metrics
-  useEffect(() => {
-    const logInterval = setInterval(() => {
-      logPerformance('general_metrics', {
-        totalNodes: data.nodes.length,
-        totalConnections: data.links.length,
-        cachedNodes: cachedNodeIds.size,
-        cachedConnections: cachedConnectionIndices.size,
-        memoEffectiveness: {
-          hits: memoEffectiveness.hits,
-          misses: memoEffectiveness.misses,
-          rate: memoEffectiveness.hits / (memoEffectiveness.hits + memoEffectiveness.misses)
-        }
-      });
-    }, 10000); // Log every 10 seconds
-
-    return () => clearInterval(logInterval);
-  }, [data.nodes.length, data.links.length, cachedNodeIds.size, cachedConnectionIndices.size]);
 
   // Add cleanup for caches when data changes
   useEffect(() => {
@@ -2890,16 +2629,6 @@ export function TechTreeViewer() {
   // Remove the old memos
   // const visibleNodes = useMemo(...)
   // const visibleConnections = useMemo(...)
-
-  // Add an effect to reset performance counters periodically
-  useEffect(() => {
-    const interval = setInterval(() => {
-      memoRecalculationCount.current = { nodes: 0, connections: 0 };
-      const timestamp = new Date().toLocaleTimeString();
-    }, 5000); // Reset every 5 seconds
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Add viewport change detection for cache management
   const lastViewportForCacheRef = useRef<{
@@ -2940,7 +2669,6 @@ export function TechTreeViewer() {
     
     // Get nodes that should be cached
     const nodesToCache = new Set<string>();
-    const connectionsToCache = new Set<number>();
     
     // Add nodes in extended viewport
     data.nodes.forEach(node => {
@@ -2951,34 +2679,14 @@ export function TechTreeViewer() {
           node.y >= extendedViewport.top &&
           node.y <= extendedViewport.bottom) {
         nodesToCache.add(node.id);
-        
-        // Add connections for this node
-        const nodeConnections = getNodeConnectionIndices(node.id);
-        nodeConnections.forEach(index => {
-          const link = data.links[index];
-          const otherNodeId = link.source === node.id ? link.target : link.source;
-          const otherNode = data.nodes.find(n => n.id === otherNodeId);
-          
-          // Cache connection if other node is also in extended viewport
-          if (otherNode?.x !== undefined && 
-              otherNode?.y !== undefined &&
-              otherNode.x >= extendedViewport.left &&
-              otherNode.x <= extendedViewport.right &&
-              otherNode.y >= extendedViewport.top &&
-              otherNode.y <= extendedViewport.bottom) {
-            connectionsToCache.add(index);
-          }
-        });
       }
     });
     
     // Add selected node, its connections, and connected nodes
     if (selectedNodeId) {
       nodesToCache.add(selectedNodeId);
-      const connections = getNodeConnectionIndices(selectedNodeId);
-      connections.forEach(index => {
+      getNodeConnectionIndices(selectedNodeId).forEach(index => {
         const link = data.links[index];
-        connectionsToCache.add(index);
         nodesToCache.add(link.source);
         nodesToCache.add(link.target);
       });
@@ -2987,10 +2695,8 @@ export function TechTreeViewer() {
     // Add highlighted nodes and their connections
     const addHighlightedNode = (nodeId: string) => {
       nodesToCache.add(nodeId);
-      const connections = getNodeConnectionIndices(nodeId);
-      connections.forEach(index => {
+      getNodeConnectionIndices(nodeId).forEach(index => {
         const link = data.links[index];
-        connectionsToCache.add(index);
         nodesToCache.add(link.source);
         nodesToCache.add(link.target);
       });
@@ -3002,19 +2708,10 @@ export function TechTreeViewer() {
     // Check if we need to update the cache
     const hasNodeChanges = cachedNodeIds.size !== nodesToCache.size || 
       Array.from(nodesToCache).some(id => !cachedNodeIds.has(id));
-    const hasConnectionChanges = cachedConnectionIndices.size !== connectionsToCache.size ||
-      Array.from(connectionsToCache).some(index => !cachedConnectionIndices.has(index));
-    
     // Only update if there are actual changes
-    if (hasNodeChanges || hasConnectionChanges) {
-      // Batch the updates together
+    if (hasNodeChanges) {
       requestAnimationFrame(() => {
-        if (hasNodeChanges) {
-          setCachedNodeIds(new Set(nodesToCache));
-        }
-        if (hasConnectionChanges) {
-          setCachedConnectionIndices(new Set(connectionsToCache));
-        }
+        setCachedNodeIds(new Set(nodesToCache));
       });
     }
   }, [
@@ -3022,111 +2719,11 @@ export function TechTreeViewer() {
     data.nodes,
     data.links,
     cachedNodeIds,
-    cachedConnectionIndices,
     selectedNodeId,
     getNodeConnectionIndices,
     highlightedAncestors,
     highlightedDescendants
   ]);
-
-  // Add an effect to prefetch visible nodes when the viewport changes
-
-
-  // Add prefetch viewport tracking
-const lastPrefetchViewportRef = useRef<{
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-} | null>(null);
-const PREFETCH_VIEWPORT_THRESHOLD = 200; // Only prefetch if viewport changed by more than 200px
-
-const hasPrefetchViewportSignificantlyChanged = (newViewport: typeof visibleViewport): boolean => {
-  if (!lastPrefetchViewportRef.current) return true;
-  
-  const old = lastPrefetchViewportRef.current;
-  return Math.abs(newViewport.left - old.left) > PREFETCH_VIEWPORT_THRESHOLD ||
-         Math.abs(newViewport.right - old.right) > PREFETCH_VIEWPORT_THRESHOLD ||
-         Math.abs(newViewport.top - old.top) > PREFETCH_VIEWPORT_THRESHOLD ||
-         Math.abs(newViewport.bottom - old.bottom) > PREFETCH_VIEWPORT_THRESHOLD;
-};
-
-// Modify the prefetch effect to use the same viewport as the main viewport
-useEffect(() => {
-  if (!data.nodes.length) return;
-
-  // Skip if viewport hasn't significantly changed
-  if (!hasPrefetchViewportSignificantlyChanged(visibleViewport)) {
-    return;
-  }
-
-  // Update the last prefetch viewport reference
-  lastPrefetchViewportRef.current = { ...visibleViewport };
-
-  // Get nodes that are currently in the viewport
-  const visibleNodeIdsInEffect = data.nodes
-    .filter((node: TechNode) => isNodeInViewport(node))
-    .map((node: TechNode) => node.id);
-
-  // Only prefetch if we're showing images
-  if (showImages) {
-    // Prefetch these nodes (with normal priority)
-    let count = 0;
-    for (const nodeId of visibleNodeIdsInEffect) {
-      prefetchNode(nodeId);
-      count++;
-    }
-  }
-}, [data.nodes, isNodeInViewport, prefetchNode, visibleViewport, showImages]);
-
-  // Add an effect to manage the cache of connections
-  useEffect(() => {
-    // Get the indices of all currently visible connections
-    const currentlyVisibleConnectionIndices = new Set(
-      data.links
-        .map((link, index) => isConnectionInViewport(link, index) ? index : -1)
-        .filter(index => index !== -1)
-    );
-    
-    // Add newly visible connections to the cache
-    const newCachedConnectionIndices = new Set(cachedConnectionIndices);
-    currentlyVisibleConnectionIndices.forEach(index => {
-      newCachedConnectionIndices.add(index);
-      
-      // Clear any existing timeout for this connection
-      if (cachedConnectionsTimeoutRef.current[index]) {
-        clearTimeout(cachedConnectionsTimeoutRef.current[index]);
-        delete cachedConnectionsTimeoutRef.current[index];
-      }
-    });
-    
-    // Set timeouts for connections that are no longer visible
-    cachedConnectionIndices.forEach(index => {
-      if (!currentlyVisibleConnectionIndices.has(index) && !cachedConnectionsTimeoutRef.current[index]) {
-        // Set a timeout to remove this connection from the cache after CACHE_DURATION
-        cachedConnectionsTimeoutRef.current[index] = setTimeout(() => {
-          setCachedConnectionIndices(prev => {
-            const updated = new Set(prev);
-            updated.delete(index);
-            return updated;
-          });
-          delete cachedConnectionsTimeoutRef.current[index];
-        }, CACHE_DURATION);
-      }
-    });
-    
-    // Update the cache if it changed
-    if (newCachedConnectionIndices.size !== cachedConnectionIndices.size) {
-      setCachedConnectionIndices(newCachedConnectionIndices);
-    }
-    
-    // Cleanup timeouts on unmount
-    return () => {
-      Object.values(cachedConnectionsTimeoutRef.current).forEach(timeout => {
-        clearTimeout(timeout);
-      });
-    };
-  }, [visibleViewport, data.links, cachedConnectionIndices, isConnectionInViewport]);
 
   // Effect to manage wheel events on search and filter boxes
   useEffect(() => {
@@ -3200,28 +2797,6 @@ useEffect(() => {
       }
     };
   }, [isLoading, visibleNodes.length, data.nodes.length]); // Rerun when button visibility might change
-
-  // Function to handle node hover for prefetching
-  const handleNodeHoverForPrefetch = useCallback((title: string) => {
-    // Find the node by title
-    const node = data.nodes.find(n => n.title === title);
-    if (node) {
-      // Prefetch the node data
-      prefetchNode(node.id);
-    }
-  }, [data.nodes, prefetchNode]);
-
-  // Add loading state UI
-  if (isError) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">Error Loading Tech Tree</h2>
-          <p className="text-gray-600">Please try refreshing the page</p>
-        </div>
-      </div>
-    );
-  }
 
   // 4. Optimize initial render
   if (!isClient) {
@@ -3464,9 +3039,6 @@ useEffect(() => {
                         onNodeClick={(title) => {
                           handleNodeClick(title);
                         }}
-                        onNodeHover={(title) => {
-                          handleNodeHoverForPrefetch(title);
-                        }}
                       />
                     );
                   })}
@@ -3475,12 +3047,10 @@ useEffect(() => {
                 {/* Nodes */}
                 <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
                   {visibleNodes.map((node) => {
-                    const details = prefetchedNodeDetails.current.get(node.id);
-                    const displayNode = { ...node, ...(details || {}) };
                     return (
                       <BrutalistNode
                         key={node.id}
-                        node={displayNode}
+                        node={node}
                         isSelected={node.id === selectedNodeId}
                         isAdjacent={isAdjacentToSelected(node.id)}
                         onClick={() => handleNodeClick(node.title)}
@@ -3514,8 +3084,7 @@ useEffect(() => {
                   {visibleNodes.map((baseLoopNode) => {
                     if (activeTooltipNodeId !== baseLoopNode.id) return null;
 
-                    const prefetchedDetails = prefetchedNodeDetails.current.get(baseLoopNode.id);
-                    const node = { ...baseLoopNode, ...(prefetchedDetails || {}) };
+                    const node = baseLoopNode;
 
                     if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
                       return (

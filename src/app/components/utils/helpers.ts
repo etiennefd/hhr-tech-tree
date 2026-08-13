@@ -62,22 +62,6 @@ export const fetchWithRetry = async (url: string, retries = 3, delay = 1000) => 
   throw new Error('Max retries reached');
 };
 
-/**
- * Throttles a function to limit how often it can be called
- */
-export const throttle = <T extends (...args: any[]) => void>(func: T, limit: number): T => {
-  let inThrottle = false;
-  return ((...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => {
-        inThrottle = false;
-      }, limit);
-    }
-  }) as T;
-};
-
 export const seededRandom = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
