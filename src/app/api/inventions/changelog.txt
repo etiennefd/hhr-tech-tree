@@ -2267,7 +2267,7 @@
 - Added tech: Dispersive prism and color spectrum
 - Added connection: Petroleum naphtha --> Ferrocerium lighter
 - Added connection: Fractional distillation --> Petroleum naphtha
-- Added connection: Modern oil well --> Petroleum naphtha
+- Added connection: Drilled oil well --> Petroleum naphtha
 - Added connection: Petroleum as fuel --> Petroleum naphtha
 - Added connection: Dispersive prism and color spectrum --> Spectroscope
 
@@ -2467,7 +2467,7 @@
 - Added connection: Vulcanized rubber --> Napalm
 - Added connection: Gasoline as fuel --> Napalm
 - Added connection: Napalm --> Fracking
-- Added connection: Modern oil well --> Fracking
+- Added connection: Drilled oil well --> Fracking
 
 13 September 2025
 - Added tech: Herbicide-resistant GMO
@@ -2784,7 +2784,7 @@
 - Added connection: Radial engine --> Turbocharger
 - Added connection: Weaving and basketry --> Cotton (New World)
 - Added connection: Weaving and basketry --> Cotton (Old World)
-- Added connection: Modern oil well --> Firefighting foam
+- Added connection: Drilled oil well --> Firefighting foam
 - Added connection: Firefighting foam --> Foam extinguisher
 - Added connection: Sodium bicarbonate --> Firefighting foam
 - Added connection: Cupronickel --> Nickel silver
