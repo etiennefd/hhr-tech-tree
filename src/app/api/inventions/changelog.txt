@@ -1,6 +1,7 @@
 13 August 2026
 - v1.1.5: Performance improvements
 - Added connection: Salt mining --> Borehole drilling
+- Added connection: Borehole drilling --> Drilled oil well
 
 12 August 2026
 - Added tech: Hollander beater
