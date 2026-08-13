@@ -1,6 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { getFieldColor } from "@/constants/fieldColors";
+
+// Nodes unmount when they scroll out of the viewport, so without a module-level
+// memory of what already resolved, every scroll-back restarts the fade-in and
+// re-runs the retry for images we already know the outcome of.
+const loadedImageUrls = new Set<string>();
+const failedImageUrls = new Set<string>();
+
+// Nodes whose dedicated image is shipped with the app rather than coming from
+// the data set.
+const SPECIAL_NODE_IMAGES: { [key: string]: string } = {
+  "Stone tool": "/tool-in-situ-being-unearthed-at-excavation_3_edit.jpg",
+  "Oldowan stone tool": "/Pierre_taillée_Melka_Kunture_Éthiopie.jpg",
+  "Acheulean stone tool": "/Bifaz_cordiforme.jpg",
+};
+
+type ImageStatus = "loading" | "loaded" | "error";
 
 interface Node {
   year: number;
@@ -48,7 +64,7 @@ const formatTitle = (title: string) => {
 };
 
 // Helper function to validate image URLs
-const validateImage = (url?: string): string | undefined => {
+const validateImage = (url?: string | null): string | undefined => {
   if (!url) return undefined;
 
   // Basic URL validation
@@ -75,99 +91,53 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   style,
   showImages = true,
 }) => {
-  const nodeRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | undefined>(() =>
-    showImages ? validateImage(node.localImage || node.image) : undefined
-  );
-  const hasLoadedRef = useRef(false);
-  const initialLoadRef = useRef(true);
-  const retryCountRef = useRef(0);
-  const originalUrlRef = useRef(
-    showImages ? validateImage(node.localImage || node.image) : undefined
+  // Check if the current node has a special image
+  const specialImage = SPECIAL_NODE_IMAGES[node.title];
+
+  const imageUrl = useMemo(
+    () => (showImages ? validateImage(node.localImage || node.image) : undefined),
+    [showImages, node.localImage, node.image]
   );
 
-  // Map for special node titles and their dedicated images
-  const specialNodeImages: { [key: string]: string } = {
-    "Stone tool": "/tool-in-situ-being-unearthed-at-excavation_3_edit.jpg",
-    "Oldowan stone tool": "/Pierre_taillée_Melka_Kunture_Éthiopie.jpg",
-    "Acheulean stone tool": "/Bifaz_cordiforme.jpg",
+  // A node with no usable URL goes straight to the placeholder; a URL we've
+  // already resolved this session skips the skeleton and the fade entirely.
+  const initialStatus = (url: string | undefined): ImageStatus => {
+    if (!url) return "error";
+    if (loadedImageUrls.has(url)) return "loaded";
+    if (failedImageUrls.has(url)) return "error";
+    return "loading";
   };
 
-  // Check if the current node has a special image
-  const specialImage = specialNodeImages[node.title];
+  // `attempt` is part of the <Image> key: bumping it remounts the element,
+  // which is what actually re-issues the request on retry.
+  const [attempt, setAttempt] = useState(0);
+  const [status, setStatus] = useState<ImageStatus>(() => initialStatus(imageUrl));
 
-  // Reset loading state when image URL changes
-  useEffect(() => {
-    if (imageUrl) {
-      setImageLoaded(false);
-      setImageError(false);
-    }
-  }, [imageUrl]);
+  // Reset during render when the URL changes (including the images toggle),
+  // rather than in an effect that would paint a stale frame first.
+  const lastImageUrlRef = useRef(imageUrl);
+  if (lastImageUrlRef.current !== imageUrl) {
+    lastImageUrlRef.current = imageUrl;
+    setAttempt(0);
+    setStatus(initialStatus(imageUrl));
+  }
 
-  // Only set up intersection observer if we're showing images
-  useEffect(() => {
-    if (!showImages) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "200px",
-        threshold: 0.1,
-      }
-    );
-
-    if (nodeRef.current) {
-      observer.observe(nodeRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [showImages]);
-
-  // Only update image URL if we're showing images
-  useEffect(() => {
-    if (!showImages) {
-      setImageUrl(undefined);
-      setImageLoaded(false);
-      setImageError(false);
-      hasLoadedRef.current = false;
+  const handleImageError = useCallback(() => {
+    if (!imageUrl) return;
+    // One retry, then fall back to the placeholder for good.
+    if (attempt === 0) {
+      setAttempt(1);
       return;
     }
+    failedImageUrls.add(imageUrl);
+    setStatus("error");
+  }, [attempt, imageUrl]);
 
-    const newValidUrl = validateImage(node.localImage || node.image);
-    if (!hasLoadedRef.current && originalUrlRef.current !== newValidUrl) {
-      originalUrlRef.current = newValidUrl;
-      setImageUrl(newValidUrl);
-      retryCountRef.current = 0;
-    }
-  }, [node.image, node.localImage, showImages]);
-
-  // Reset loading state when showImages changes
-  useEffect(() => {
-    if (showImages) {
-      setImageLoaded(false);
-      setImageError(false);
-      hasLoadedRef.current = false;
-      retryCountRef.current = 0;
-      const newValidUrl = validateImage(node.localImage || node.image);
-      setImageUrl(newValidUrl);
-      originalUrlRef.current = newValidUrl;
-    }
-  }, [showImages, node.image, node.localImage]);
-
-  // Set initial load flag to false after the first render cycle
-  useEffect(() => {
-    initialLoadRef.current = false;
-  }, []);
+  const handleImageLoad = useCallback(() => {
+    if (!imageUrl) return;
+    loadedImageUrls.add(imageUrl);
+    setStatus("loaded");
+  }, [imageUrl]);
 
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;
@@ -205,39 +175,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
     [node.title]
   );
 
-  // Error handler for image loading
-  const handleImageError = () => {
-    if (retryCountRef.current < 1 && imageUrl !== undefined) {
-      // Try once more with the original source after a delay
-      retryCountRef.current++;
-      setTimeout(() => {
-        if (originalUrlRef.current !== undefined) {
-          setImageUrl(originalUrlRef.current);
-        }
-      }, 1000);
-    } else {
-      // Give up and use placeholder
-      if (imageUrl !== undefined) {
-        setImageUrl(undefined);
-      }
-      setImageError(true);
-    }
-  };
-
-  // Success handler for image loading
-  const handleImageLoad = () => {
-    if (imageUrl !== undefined) {
-      hasLoadedRef.current = true;
-      setImageLoaded(true);
-    }
-  };
-
   const imageSizes = `${Math.round(width)}px`;
   const isLocalImage = imageUrl?.startsWith("/") ?? false;
 
   return (
     <div
-      ref={nodeRef}
       className={`
         relative 
         cursor-pointer 
@@ -299,14 +241,15 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
             ) : (
               // Original logic for all other nodes
               <>
-                {imageUrl && (
+                {imageUrl && status !== "error" && (
                   <Image
+                    key={`${imageUrl}#${attempt}`}
                     src={imageUrl}
                     alt={node.title}
                     fill
                     sizes={imageSizes}
                     className={`object-cover transition-opacity duration-300 ${
-                      imageLoaded ? "opacity-100" : "opacity-0"
+                      status === "loaded" ? "opacity-100" : "opacity-0"
                     }`}
                     onError={handleImageError}
                     onLoad={handleImageLoad}
@@ -319,11 +262,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                   />
                 )}
                 {/* Show loading state while image is loading */}
-                {!imageLoaded && !imageError && (
+                {status === "loading" && (
                   <div className="absolute inset-0 bg-gray-100 animate-pulse" />
                 )}
                 {/* Only show placeholder if we've tried loading and failed */}
-                {imageError && (
+                {status === "error" && (
                   <Image
                     src="/placeholder-invention.jpg"
                     alt="Placeholder"
@@ -395,8 +338,12 @@ export default React.memo(BrutalistNode, (prevProps, nextProps) => {
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.isAdjacent === nextProps.isAdjacent &&
     prevProps.node.title === nextProps.node.title &&
+    prevProps.node.subtitle === nextProps.node.subtitle &&
     prevProps.node.year === nextProps.node.year &&
     prevProps.node.image === nextProps.node.image &&
+    // localImage is the primary source (localImage || image), so it has to be
+    // compared here or a changed local image would never repaint.
+    prevProps.node.localImage === nextProps.node.localImage &&
     prevProps.node.imagePosition === nextProps.node.imagePosition &&
     prevProps.width === nextProps.width &&
     prevProps.style?.opacity === nextProps.style?.opacity &&
