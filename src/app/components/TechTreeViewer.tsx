@@ -2013,102 +2013,96 @@ export function TechTreeViewer() {
     [data.links]
   );
 
-  // Add these helper functions near your other utility functions
-  const getAllAncestors = useCallback(
-    (nodeId: string, visited = new Set<string>()): Set<string> => {
-      performanceMarks.start('getAllAncestors');
-      
-      // Check cache first
-      if (ancestorsCache.current.has(nodeId)) {
-        const cached = ancestorsCache.current.get(nodeId)!;
-        performanceMarks.end('getAllAncestors');
-        performanceMarks.log('getAllAncestors');
-        return cached;
+  // Lineage follows "built upon" style edges only: sideways relationships say
+  // two things arose separately, not that one descends from the other.
+  const NON_LINEAGE_LINK_TYPES = useMemo(
+    () => new Set(["Independently invented", "Concurrent development"]),
+    []
+  );
+
+  // Adjacency built once per data set, so a traversal is a map lookup per step
+  // instead of a full scan of all ~3,900 links per node.
+  const { parentsByNode, childrenByNode } = useMemo(() => {
+    const parents = new Map<string, string[]>();
+    const children = new Map<string, string[]>();
+
+    for (const link of data.links) {
+      if (NON_LINEAGE_LINK_TYPES.has(link.type)) continue;
+
+      const existingParents = parents.get(link.target);
+      if (existingParents) existingParents.push(link.source);
+      else parents.set(link.target, [link.source]);
+
+      const existingChildren = children.get(link.source);
+      if (existingChildren) existingChildren.push(link.target);
+      else children.set(link.source, [link.target]);
+    }
+
+    return { parentsByNode: parents, childrenByNode: children };
+  }, [data.links, NON_LINEAGE_LINK_TYPES]);
+
+  // Everything reachable from startId, excluding startId itself. Each call
+  // builds its own result set: the previous version threaded one shared
+  // accumulator through the recursion and then cached that same set under
+  // every node it passed through, so asking about one node returned the
+  // lineage of whichever node had been asked about first.
+  const collectReachable = useCallback(
+    (startId: string, adjacency: Map<string, string[]>): Set<string> => {
+      const result = new Set<string>();
+      const stack = [startId];
+
+      while (stack.length > 0) {
+        const current = stack.pop()!;
+        const next = adjacency.get(current);
+        if (!next) continue;
+
+        for (const id of next) {
+          // Skipping startId also keeps cycles through it from looping.
+          if (id === startId || result.has(id)) continue;
+          result.add(id);
+          stack.push(id);
+        }
       }
-      
-      if (visited.has(nodeId)) {
-        performanceMarks.end('getAllAncestors');
-        performanceMarks.log('getAllAncestors');
-        return visited;
-      }
-      visited.add(nodeId);
 
-      // Find all direct ancestors
-      const directAncestors = data.links
-        .filter(
-          (link) =>
-            link.target === nodeId &&
-            !["Independently invented", "Concurrent development"].includes(
-              link.type
-            )
-        )
-        .map((link) => link.source);
-
-      // Recursively get ancestors of ancestors
-      directAncestors.forEach((ancestorId) => {
-        getAllAncestors(ancestorId, visited);
-      });
-
-      // Cache the result
-      ancestorsCache.current.set(nodeId, visited);
-      
-      performanceMarks.end('getAllAncestors');
-      performanceMarks.log('getAllAncestors');
-      return visited;
+      return result;
     },
-    [data.links]
+    []
+  );
+
+  // Caches are invalidated during render rather than in an effect, so a render
+  // that lands between new data and the effect can't serve stale lineage.
+  const lineageCacheKeyRef = useRef(data.links);
+  if (lineageCacheKeyRef.current !== data.links) {
+    lineageCacheKeyRef.current = data.links;
+    ancestorsCache.current.clear();
+    descendantsCache.current.clear();
+  }
+
+  // Callers must treat the result as read-only: it is the cached instance, and
+  // the minimap compares these sets by reference.
+  const getAllAncestors = useCallback(
+    (nodeId: string): Set<string> => {
+      const cached = ancestorsCache.current.get(nodeId);
+      if (cached) return cached;
+
+      const result = collectReachable(nodeId, parentsByNode);
+      ancestorsCache.current.set(nodeId, result);
+      return result;
+    },
+    [collectReachable, parentsByNode]
   );
 
   const getAllDescendants = useCallback(
-    (nodeId: string, visited = new Set<string>()): Set<string> => {
-      performanceMarks.start('getAllDescendants');
-      
-      // Check cache first
-      if (descendantsCache.current.has(nodeId)) {
-        const cached = descendantsCache.current.get(nodeId)!;
-        performanceMarks.end('getAllDescendants');
-        performanceMarks.log('getAllDescendants');
-        return cached;
-      }
-      
-      if (visited.has(nodeId)) {
-        performanceMarks.end('getAllDescendants');
-        performanceMarks.log('getAllDescendants');
-        return visited;
-      }
-      visited.add(nodeId);
+    (nodeId: string): Set<string> => {
+      const cached = descendantsCache.current.get(nodeId);
+      if (cached) return cached;
 
-      // Find all direct descendants
-      const directDescendants = data.links
-        .filter(
-          (link) =>
-            link.source === nodeId &&
-            !["Independently invented", "Concurrent development"].includes(
-              link.type
-            )
-        )
-        .map((link) => link.target);
-
-      // Recursively get descendants of descendants
-      directDescendants.forEach((descendantId) => {
-        getAllDescendants(descendantId, visited);
-      });
-
-      // Cache the result
-      descendantsCache.current.set(nodeId, visited);
-      
-      performanceMarks.end('getAllDescendants');
-      performanceMarks.log('getAllDescendants');
-      return visited;
+      const result = collectReachable(nodeId, childrenByNode);
+      descendantsCache.current.set(nodeId, result);
+      return result;
     },
-    [data.links]
+    [childrenByNode, collectReachable]
   );
-
-  // Add cleanup for caches when data changes
-  useEffect(() => {
-    descendantsCache.current.clear();
-    ancestorsCache.current.clear();
-  }, [data.links]);
 
   // Remove unused touch handlers
   useEffect(() => {
@@ -4066,7 +4060,6 @@ useEffect(() => {
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             const ancestors = getAllAncestors(nodeId);
-                                            ancestors.delete(nodeId);
                                             if (!selectedNodeId) {
                                               setSelectedNodeId(nodeId);
                                             }
@@ -4082,7 +4075,6 @@ useEffect(() => {
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             const descendants = getAllDescendants(nodeId);
-                                            descendants.delete(nodeId);
                                             if (!selectedNodeId) {
                                               setSelectedNodeId(nodeId);
                                             }
@@ -4101,7 +4093,6 @@ useEffect(() => {
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             const ancestors = getAllAncestors(nodeId);
-                                            ancestors.delete(nodeId);
                                             if (!selectedNodeId) {
                                               setSelectedNodeId(nodeId);
                                             }
@@ -4120,7 +4111,6 @@ useEffect(() => {
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             const descendants = getAllDescendants(nodeId);
-                                            descendants.delete(nodeId);
                                             if (!selectedNodeId) {
                                               setSelectedNodeId(nodeId);
                                             }
