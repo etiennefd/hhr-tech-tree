@@ -4,6 +4,11 @@
 - Added connection: Beet sugar factory --> Column still
 - Added connection: Oil refinery --> Shukhov cracking process
 - Added connection: Kerosene --> Shukhov cracking process
+- Added connection: Fractional distillation --> Neon
+- Added connection: Fractional distillation --> Krypton
+- Added connection: Fractional distillation --> Xenon
+- Added connection: Fractional distillation --> Deuterium
+- Added connection: Atomic emission spectroscopy --> Deuterium
 
 13 August 2026
 - v1.1.5: Performance improvements
@@ -3222,7 +3227,6 @@
 - Added connection: Nuclear fusion --> Tokamak
 - Added connection: Hampson–Linde air liquefaction --> Deuterium
 - Added connection: Isotopes --> Tritium
-- Added connection: Mass spectrometer --> Deuterium
 - Added connection: Quantum tunneling --> Quantum annealing
 - Added connection: Flux qubit --> Quantum annealing
 - Added connection: Josephson junction --> Flux qubit
