@@ -14,6 +14,10 @@
 - Added connection: Pendulum clock --> Hooke's law
 - Added connection: Fractional distillation --> Distilled spirit
 - Added connection: Ocean liner --> Aircraft carrier
+- Added connection: Torpedo bomber --> Aircraft carrier
+- Added connection: Self-propelled torpedo --> Torpedo bomber
+- Added connection: Seaplane --> Torpedo bomber
+- Added connection: Zeppelin --> Aircraft carrier
 
 13 August 2026
 - v1.1.5: Performance improvements
