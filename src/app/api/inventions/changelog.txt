@@ -16,6 +16,20 @@
 - Added connection: Rawhide --> Chinese top
 - Added connection: Bamboo --> Fireworks
 - Added connection: Tree resin --> Fire arrow
+- Added connection: Control of fire --> Lighthouse
+- Added connection: Oil refinery --> Petroleum naphtha
+- Added connection: Oil refinery --> Gasoline as fuel
+- Added connection: Oil refinery --> Diesel engine
+- Added connection: Kerosene lamp --> Petroleum jelly
+- Added connection: Whale oil --> Kerosene lamp
+- Added connection: Sperm oil and spermaceti candle --> Kerosene lamp
+- Added connection: Cast iron --> Borehole drilling
+- Added connection: Oil refinery --> Drilled oil well
+- Added connection: Petroleum as fuel --> Oil refinery
+- Added connection: Fractional distillation --> Oil refinery
+- Added connection: Drilled oil well --> Petroleum jelly
+- Added connection: Ammonium chloride --> Kerosene
+- Added later independent invention: Kerosene, 1846
 - Added later independent invention: Gears, 330 BCE
 
 12 August 2026
@@ -3094,7 +3108,6 @@
 - Added tech: Messenger RNA
 - Added tech: Petroleum jelly
 - Added connection: Photonic crystal --> Photonic-crystal fiber
-- Added connection: Kerosene --> Petroleum jelly
 - Added connection: Petroleum as fuel --> Petroleum jelly
 - Added connection: Messenger RNA --> mRNA vaccine
 - Added connection: DNA as the carrier of information --> Structure of DNA
