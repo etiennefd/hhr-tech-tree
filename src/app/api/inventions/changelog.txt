@@ -1,5 +1,7 @@
 14 August 2026
 - Added tech: Column still
+- Added connection: Fractional distillation --> Column still
+- Added connection: Beet sugar factory --> Column still
 
 13 August 2026
 - v1.1.5: Performance improvements
