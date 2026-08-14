@@ -176,7 +176,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   );
 
   const imageSizes = `${Math.round(width)}px`;
-  const isLocalImage = imageUrl?.startsWith("/") ?? false;
 
   return (
     <div
@@ -230,7 +229,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 alt={node.title}
                 fill
                 sizes={imageSizes}
-                unoptimized
                 className="object-cover"
                 style={{
                   filter: "grayscale(20%) contrast(110%)",
@@ -258,7 +256,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                       mixBlendMode: "multiply",
                       objectPosition: node.imagePosition || 'center',
                     }}
-                    unoptimized={isLocalImage}
                   />
                 )}
                 {/* Show loading state while image is loading */}
@@ -272,8 +269,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     alt="Placeholder"
                     fill
                     sizes={imageSizes}
-                    unoptimized
-                    className="object-cover"
+                        className="object-cover"
                     style={{
                       filter: "grayscale(20%) contrast(110%)",
                       mixBlendMode: "multiply",

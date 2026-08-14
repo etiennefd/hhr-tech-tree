@@ -2,31 +2,20 @@
 const nextConfig = {
   images: {
     // Serve images directly instead of routing them through Vercel's optimizer.
-    // This avoids optimized image request quotas for our mostly static catalog.
+    // This avoids optimized image request quotas for our mostly static catalog,
+    // whose images are already pre-sized WebP files in /public/tech-images.
+    //
+    // While this is true, next/image renders each `src` as-is, so the optimizer
+    // settings (remotePatterns, deviceSizes, imageSizes, formats,
+    // minimumCacheTTL, dangerouslyAllowSVG) have no effect. They were removed
+    // rather than left here looking active. Remote hosts are not validated
+    // either — checked by rendering an upload.wikimedia.org URL with no
+    // remotePatterns configured, which loaded without complaint.
+    //
+    // If this is ever set to false, remotePatterns needs to come back for the
+    // hosts the catalog draws on: upload.wikimedia.org (/wikipedia/**),
+    // wikimedia.org (/api/**), and patentimages.storage.googleapis.com.
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'upload.wikimedia.org',
-        pathname: '/wikipedia/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'wikimedia.org',
-        pathname: '/api/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'patentimages.storage.googleapis.com',
-        pathname: '/**',
-      }
-    ],
-    minimumCacheTTL: 60 * 60 * 24 * 31, // 31 days
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [16, 32, 48, 64, 96, 128, 160, 256, 320],
-    formats: ['image/webp'],
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   httpAgentOptions: {
     keepAlive: true,
