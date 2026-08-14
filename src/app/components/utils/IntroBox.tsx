@@ -1,46 +1,21 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { memo } from 'react';
 import Link from 'next/link';
-import { cacheManager } from '@/utils/cache';
 
-const IntroBox = memo(() => {
-  const [counts, setCounts] = useState({ nodes: 0, links: 0 });
+interface IntroBoxProps {
+  // Counts come from the data the viewer has already loaded. Fetching them
+  // here meant pulling the whole catalogue down a second time per page load
+  // just to render two numbers.
+  nodeCount: number;
+  linkCount: number;
+}
+
+const IntroBox = memo(({ nodeCount, linkCount }: IntroBoxProps) => {
   const darkerBlue = "#6B98AE";
   const linkStyle = { color: darkerBlue, textDecoration: "underline" };
-  const numberStyle = { 
-    color: darkerBlue, 
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" 
+  const numberStyle = {
+    color: darkerBlue,
+    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
   };
-
-  // Get counts from cache and data
-  useEffect(() => {
-    const getCounts = async () => {
-      try {
-        // First try to get cached data
-        const cachedData = await cacheManager.get();
-        if (cachedData?.data) {
-          setCounts({
-            nodes: cachedData.data.nodes?.length || 0,
-            links: cachedData.data.links?.length || 0
-          });
-        }
-
-        // Then fetch fresh data
-        const response = await fetch("/api/inventions");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const freshData = await response.json();
-        setCounts({
-          nodes: freshData.nodes?.length || 0,
-          links: freshData.links?.length || 0
-        });
-      } catch (error) {
-        console.warn("Failed to fetch counts:", error);
-        // Don't update counts if there's an error - keep using cached data
-      }
-    };
-    getCounts();
-  }, []);
 
   return (
     <div className="absolute left-4 top-12 p-6 w-[375px] z-50">
@@ -62,8 +37,8 @@ const IntroBox = memo(() => {
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
         The tech tree is an interactive visualization of technological history from 3
         million years ago to today. A work in progress, it currently contains{" "}
-        <span style={numberStyle}>{counts.nodes}</span> technologies and{" "}
-        <span style={numberStyle}>{counts.links}</span> connections
+        <span style={numberStyle}>{nodeCount}</span> technologies and{" "}
+        <span style={numberStyle}>{linkCount}</span> connections
         between them.
       </p>
 

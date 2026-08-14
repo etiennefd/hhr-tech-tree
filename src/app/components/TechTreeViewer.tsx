@@ -2953,7 +2953,10 @@ export function TechTreeViewer() {
               zIndex: 50,
             }}
           >
-            <IntroBox />
+            <IntroBox
+              nodeCount={data.nodes.length}
+              linkCount={data.links.length}
+            />
           </div>
 
           <div
