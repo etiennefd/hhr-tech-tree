@@ -42,6 +42,8 @@ interface TechTreeData {
       id: string;
       year: number;
       formattedLocation?: string;
+      inventors?: string[];
+      organizations?: string[];
       type?: string;
       details?: string;
       detailsSource?: string;

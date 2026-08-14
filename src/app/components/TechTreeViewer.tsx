@@ -3189,9 +3189,27 @@ export function TechTreeViewer() {
                                 <div className="ml-2">
                                   {node.laterIndependentInnovations.map(
                                     (entry: LaterIndependentInnovation) => {
-                                      const place = cleanLocationForTooltip(
-                                        entry.formattedLocation
+                                      // Same convention as the node's own inventor
+                                      // line: an "unknown" entry alongside a name
+                                      // means the attribution is uncertain.
+                                      const named = (entry.inventors ?? []).filter(
+                                        (inv) => inv !== "unknown"
                                       );
+                                      const people = named.length
+                                        ? (entry.inventors ?? []).includes("unknown")
+                                          ? `possibly ${named.join(", ")}`
+                                          : named.join(", ")
+                                        : "";
+
+                                      // City is folded into formattedLocation upstream.
+                                      const summary = [
+                                        people,
+                                        (entry.organizations ?? []).join(", "),
+                                        cleanLocationForTooltip(entry.formattedLocation),
+                                        formatYear(entry.year),
+                                      ]
+                                        .filter(Boolean)
+                                        .join(", ");
                                       const suffix =
                                         entry.type === "After loss"
                                           ? " (after loss)"
@@ -3204,9 +3222,7 @@ export function TechTreeViewer() {
                                         >
                                           <span className="flex-shrink-0">•</span>
                                           <span className="break-words">
-                                            {place
-                                              ? `${place}, ${formatYear(entry.year)}`
-                                              : formatYear(entry.year)}
+                                            {summary}
                                             {suffix}
                                           </span>
                                           {entry.details &&
