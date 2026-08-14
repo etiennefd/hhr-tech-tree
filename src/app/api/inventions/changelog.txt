@@ -11,6 +11,7 @@
 - Added connection: Atomic emission spectroscopy --> Deuterium
 - Added connection: Balance spring --> Hooke's law
 - Added connection: Pendulum clock --> Hooke's law
+- Added connection: Fractional distillation --> Distilled spirit
 
 13 August 2026
 - v1.1.5: Performance improvements
@@ -585,7 +586,6 @@
 - Added connection: Wine and viticulture --> Winepress
 - Added connection: Pottery --> Distillation
 - Added connection: Wine and viticulture --> Distilled spirit
-- Added connection: Alembic --> Distilled spirit
 - Added connection: Distilled spirit --> Alcohol thermometer
 - Added connection: Distilled spirit --> Ether
 
