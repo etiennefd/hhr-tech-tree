@@ -2,6 +2,8 @@
 - Added tech: Column still
 - Added connection: Fractional distillation --> Column still
 - Added connection: Beet sugar factory --> Column still
+- Added connection: Oil refinery --> Shukhov cracking process
+- Added connection: Kerosene --> Shukhov cracking process
 
 13 August 2026
 - v1.1.5: Performance improvements
@@ -3016,7 +3018,6 @@
 - Added connection: Kerosene --> Gasoline as fuel
 - Added connection: Gasoline as fuel --> Leaded gasoline
 - Added connection: Gasoline as fuel --> Automobile
-- Added connection: Gasoline as fuel --> Shukhov cracking process
 - Added connection: Four-stroke engine --> Gasoline as fuel
 - Added connection: Gasoline as fuel --> Liquid-propellant rocket
 
