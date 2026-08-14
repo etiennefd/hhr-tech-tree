@@ -12,6 +12,7 @@
 - Added connection: Balance spring --> Hooke's law
 - Added connection: Pendulum clock --> Hooke's law
 - Added connection: Fractional distillation --> Distilled spirit
+- Added connection: Ocean liner --> Aircraft carrier
 
 13 August 2026
 - v1.1.5: Performance improvements
