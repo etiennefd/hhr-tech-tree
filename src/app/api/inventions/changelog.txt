@@ -1,3 +1,9 @@
+15 August 2026
+- Added connection: Stonemasonry --> Dock
+- Added connection: Sewn boat building --> Dock
+- Added connection: Dock --> Dry dock
+- Added connection: Dock --> Lighthouse
+
 14 August 2026
 - Added tech: Torpedo bomber
 - Added tech: Column still
