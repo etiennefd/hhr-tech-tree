@@ -1,6 +1,9 @@
 16 August 2026
 - Added tech: Fresnel lens
-- Added independent invention: Fresnel lens, 1748
+- Added connection: Lighthouse --> Fresnel lens
+- Added connection: Argand lamp --> Fresnel lens
+- Added connection: Polished plate glass --> Fresnel lens
+- Added independent invention: Fresnel lens, 1780
 
 15 August 2026
 - Added connection: Stonemasonry --> Dock
