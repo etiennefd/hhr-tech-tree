@@ -1,5 +1,6 @@
 16 August 2026
 - Added tech: Fresnel lens
+- Added tech: Wet dock
 - Added tech: Navigation canal
 - Added connection: Lighthouse --> Fresnel lens
 - Added connection: Argand lamp --> Fresnel lens
