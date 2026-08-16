@@ -105,7 +105,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
     try {
       // 1. Fetch all records from Airtable (detailed)
       console.time("AirtableFetch");
-      const [innovationRecords, connectionRecords, laterIndependentRecords] =
+      const [innovationRecords, connectionRecords, independentRecords] =
         (await Promise.all([
         base("Innovations")
           .select({
@@ -118,7 +118,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
             view: "Used for deployment, do not edit directly", // Ensure this view contains ALL necessary fields
           })
           .all(),
-        base("Later independent innovations")
+        base("Independent innovations")
           .select({
             view: "Used for deployment, do not edit directly", // Ensure this view contains ALL necessary fields
           })
@@ -130,7 +130,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
       ];
       console.timeEnd("AirtableFetch");
       console.log(
-        `Fetched ${innovationRecords.length} innovations, ${connectionRecords.length} connections and ${laterIndependentRecords.length} later independent innovations from Airtable.`
+        `Fetched ${innovationRecords.length} innovations, ${connectionRecords.length} connections and ${independentRecords.length} independent innovations from Airtable.`
       );
 
       // 2. Filter and Process Innovation Records
@@ -214,32 +214,29 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
       const validNodes = processedNodes.filter(Boolean) as Array<NonNullable<typeof processedNodes[0]>>;
       console.log(`Successfully processed ${validNodes.length} valid nodes.`);
 
-      // 3. Process Later Independent Innovation Records
+      // 3. Process Independent Innovation Records
       //
-      // These record that a technology was independently invented again, later,
-      // somewhere else, in cases where the second invention does not merit a node
-      // of its own. They attach to their primary innovation rather than sitting in
-      // the graph, so they carry no connections.
+      // These record that a technology was independently invented somewhere else,
+      // in cases where the second invention does not merit a node of its own.
+      // Usually later than the primary innovation, but not necessarily: an
+      // earlier instance elsewhere is allowed too. They attach to their primary
+      // innovation rather than sitting in the graph, so they carry no connections.
       //
-      // Two rules are enforced here:
-      //   1. A specific year is required. No "antiquity", no "c. 12th century".
-      //      Dropped if missing, since there is nothing to display.
-      //   2. The year must be later than the primary innovation's own date — the
-      //      whole point is that this is a *later* invention. Warns but keeps the
-      //      record, because a violation usually means the primary innovation is
-      //      misdated, which is the more interesting problem.
+      // One rule is enforced here: a specific year is required. No "antiquity",
+      // no "c. 12th century". Dropped if missing, since there is nothing to
+      // display.
       // Deliberately not enforced: that the justification name a source. Nothing
       // else in the tree is held to that standard — 70% of innovations have no
       // "Date details" at all, and most connections with details carry no source
       // URL — so requiring it here would be an outlier rather than a floor.
-      console.log("Processing later independent innovation records...");
-      console.time("ProcessLaterIndependent");
+      console.log("Processing independent innovation records...");
+      console.time("ProcessIndependent");
       const nodesById = new Map(validNodes.map((node) => [node.id, node]));
-      const laterIndependentWarnings: string[] = [];
-      let droppedLaterIndependent = 0;
+      const independentWarnings: string[] = [];
+      let droppedIndependent = 0;
 
-      for (const record of laterIndependentRecords) {
-        const label = `Later independent innovation ${String(
+      for (const record of independentRecords) {
+        const label = `Independent innovation ${String(
           record.get("ID") ?? record.id
         )}`;
 
@@ -251,31 +248,25 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
         const node = primaryId ? nodesById.get(primaryId) : undefined;
 
         if (!node) {
-          laterIndependentWarnings.push(
+          independentWarnings.push(
             `${label}: "Primary innovation" is empty or does not point at a dated innovation. Dropped.`
           );
-          droppedLaterIndependent++;
+          droppedIndependent++;
           continue;
         }
 
         const dateValue = record.get("Date");
         const year = Number(dateValue);
         if (dateValue === undefined || dateValue === null || dateValue === "" || isNaN(year)) {
-          laterIndependentWarnings.push(
-            `${label} (${node.title}): no specific year in "Date". Dropped — rule 1 requires a year, not an era.`
+          independentWarnings.push(
+            `${label} (${node.title}): no specific year in "Date". Dropped — a year is required, not an era.`
           );
-          droppedLaterIndependent++;
+          droppedIndependent++;
           continue;
         }
 
         const justification = String(record.get("Date details") || "").trim();
         const source = String(record.get("Source") || "").trim();
-
-        if (year <= node.year) {
-          laterIndependentWarnings.push(
-            `${label} (${node.title}): year ${year} is not later than the innovation's own date of ${node.year}. Check whether "${node.title}" is misdated.`
-          );
-        }
 
         const city = String(record.get("City") || "");
         const countryHistorical = cleanCommaList(
@@ -311,10 +302,10 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
         };
 
         const target = node as typeof node & {
-          laterIndependentInnovations?: Array<typeof entry>;
+          independentInnovations?: Array<typeof entry>;
         };
-        target.laterIndependentInnovations = [
-          ...(target.laterIndependentInnovations ?? []),
+        target.independentInnovations = [
+          ...(target.independentInnovations ?? []),
           entry,
         ];
       }
@@ -322,21 +313,21 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
       // Oldest first, so multiple entries read as a sequence.
       for (const node of validNodes) {
         const target = node as typeof node & {
-          laterIndependentInnovations?: Array<{ year: number }>;
+          independentInnovations?: Array<{ year: number }>;
         };
-        target.laterIndependentInnovations?.sort((a, b) => a.year - b.year);
+        target.independentInnovations?.sort((a, b) => a.year - b.year);
       }
-      console.timeEnd("ProcessLaterIndependent");
+      console.timeEnd("ProcessIndependent");
       console.log(
         `Attached ${
-          laterIndependentRecords.length - droppedLaterIndependent
-        } later independent innovations (${droppedLaterIndependent} dropped).`
+          independentRecords.length - droppedIndependent
+        } independent innovations (${droppedIndependent} dropped).`
       );
-      if (laterIndependentWarnings.length > 0) {
+      if (independentWarnings.length > 0) {
         console.warn(
-          `\n⚠️  ${laterIndependentWarnings.length} problem(s) in the Later independent innovations table:`
+          `\n⚠️  ${independentWarnings.length} problem(s) in the Independent innovations table:`
         );
-        for (const warning of laterIndependentWarnings) {
+        for (const warning of independentWarnings) {
           console.warn(`  - ${warning}`);
         }
         console.warn("");

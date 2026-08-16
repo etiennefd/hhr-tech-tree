@@ -38,7 +38,7 @@ interface TechTreeData {
     formattedLocation?: string;
     wikipedia?: string;
     details?: string;
-    laterIndependentInnovations?: Array<{
+    independentInnovations?: Array<{
       id: string;
       year: number;
       formattedLocation?: string;

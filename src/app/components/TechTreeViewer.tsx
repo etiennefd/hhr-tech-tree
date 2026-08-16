@@ -23,7 +23,7 @@ import dynamic from "next/dynamic";
 import CurvedConnections from "../components/connections/CurvedConnections";
 import BrutalistNode from "../components/nodes/BrutalistNode";
 import { SearchResult } from "./SearchBox";
-import { TechNode, LaterIndependentInnovation } from "@/types/tech-node";
+import { TechNode, IndependentInnovation } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
 // Import useSearchParams
@@ -3140,24 +3140,24 @@ export function TechTreeViewer() {
                             </p>
                           )}
 
-                          {/* Later independent inventions. A property of the node
-                              rather than a relationship, so it sits above the
-                              edge lists. Where both traditions merit their own
-                              node, an "Independently invented" connection is
+                          {/* Independent inventions elsewhere. A property of the
+                              node rather than a relationship, so it sits above
+                              the edge lists. Where both traditions merit their
+                              own node, an "Independently invented" connection is
                               used instead and shows up below. */}
-                          {node.laterIndependentInnovations &&
-                            node.laterIndependentInnovations.length > 0 && (
+                          {node.independentInnovations &&
+                            node.independentInnovations.length > 0 && (
                               <div className="text-xs mb-1">
                                 <strong>
-                                  Later independent invention
-                                  {node.laterIndependentInnovations.length > 1
+                                  Independent invention
+                                  {node.independentInnovations.length > 1
                                     ? "s"
                                     : ""}
                                   :
                                 </strong>
                                 <div className="ml-2">
-                                  {node.laterIndependentInnovations.map(
-                                    (entry: LaterIndependentInnovation) => {
+                                  {node.independentInnovations.map(
+                                    (entry: IndependentInnovation) => {
                                       // Same convention as the node's own inventor
                                       // line: an "unknown" entry alongside a name
                                       // means the attribution is uncertain.
@@ -3186,7 +3186,7 @@ export function TechTreeViewer() {
 
                                       return (
                                         <div
-                                          key={`later-independent-${entry.id}`}
+                                          key={`independent-${entry.id}`}
                                           className="grid grid-cols-[auto_1fr_auto] items-start gap-1"
                                         >
                                           <span className="flex-shrink-0">•</span>

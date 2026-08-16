@@ -56,8 +56,8 @@
 - Added connection: Fractional distillation --> Oil refinery
 - Added connection: Drilled oil well --> Petroleum jelly
 - Added connection: Ammonium chloride --> Kerosene
-- Added later independent invention: Kerosene, 1846
-- Added later independent invention: Gears, 330 BCE
+- Added independent invention: Kerosene, 1846
+- Added independent invention: Gears, 330 BCE
 
 12 August 2026
 - Added tech: Hollander beater
@@ -97,13 +97,13 @@
 - Added connection: Spindle --> Wheel
 - Added connection: Spindle --> Fast potter's wheel
 - Added connection: Domestication of rice --> Trip hammer
-- Added later independent invention: Trip hammer, 77
-- Added later independent invention: Domestication of pigs, 6000 BCE
-- Added later independent invention: Pottery, 14750 BCE
-- Added later independent invention: Pottery, 14000 BCE
-- Added later independent invention: Pottery, 9400 BCE
-- Added later independent invention: Pottery, 9000 BCE
-- Added later independent invention: Pottery, 4800 BCE
+- Added independent invention: Trip hammer, 77
+- Added independent invention: Domestication of pigs, 6000 BCE
+- Added independent invention: Pottery, 14750 BCE
+- Added independent invention: Pottery, 14000 BCE
+- Added independent invention: Pottery, 9400 BCE
+- Added independent invention: Pottery, 9000 BCE
+- Added independent invention: Pottery, 4800 BCE
 
 10 August 2026
 - Added tech: Hydraulic jigger and crane

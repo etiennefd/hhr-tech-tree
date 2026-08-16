@@ -1,11 +1,12 @@
 /**
- * A technology independently invented again, later, somewhere else, in a case
- * where the second invention does not merit a node of its own. Where both
- * traditions merit nodes on independent grounds — a different species,
- * mechanism, or system — the `Independently invented` connection type is used
- * instead. This is the default; a split is the exception.
+ * A technology independently invented again somewhere else — usually later than
+ * the node's own date, but sometimes earlier — in a case where the second
+ * invention does not merit a node of its own. Where both traditions merit nodes
+ * on independent grounds — a different species, mechanism, or system — the
+ * `Independently invented` connection type is used instead. This is the default;
+ * a split is the exception.
  */
-export interface LaterIndependentInnovation {
+export interface IndependentInnovation {
   id: string;
   year: number;
   city?: string;
@@ -48,5 +49,5 @@ export interface TechNode {
   city?: string;
   formattedLocation?: string;
 
-  laterIndependentInnovations?: LaterIndependentInnovation[];
+  independentInnovations?: IndependentInnovation[];
 } 

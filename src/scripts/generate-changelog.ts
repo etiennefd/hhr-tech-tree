@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import Airtable from 'airtable';
 
-interface LaterIndependentInnovation {
+interface IndependentInnovation {
   year: number;
   dateAdded?: string;
 }
@@ -12,7 +12,7 @@ interface TechNode {
   title: string;
   dateAdded?: string;
   year: number;
-  laterIndependentInnovations?: LaterIndependentInnovation[];
+  independentInnovations?: IndependentInnovation[];
 }
 
 interface TechLink {
@@ -87,14 +87,14 @@ async function generateChangelog() {
       techs: string[],
       connections: Array<{ from: string, to: string, type?: string }>,
       milestones: Array<{ version: string, description: string }>,
-      laterIndependent: Array<{ tech: string, year: string }>
+      independent: Array<{ tech: string, year: string }>
     }>();
 
     // Process app development milestones
     milestones.forEach(milestone => {
       const dateStr = formatDate(milestone.date);
       if (!itemsByDate.has(dateStr)) {
-        itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], laterIndependent: [] });
+        itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], independent: [] });
       }
       itemsByDate.get(dateStr)?.milestones.push({
         version: milestone.version,
@@ -108,24 +108,24 @@ async function generateChangelog() {
         const dateStr = formatDate(node.dateAdded);
         
         if (!itemsByDate.has(dateStr)) {
-          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], laterIndependent: [] });
+          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], independent: [] });
         }
         itemsByDate.get(dateStr)?.techs.push(node.title);
       }
     });
 
-    // Process later independent inventions. These hang off their node rather than
+    // Process independent inventions. These hang off their node rather than
     // sitting in the graph, so they are dated separately from the node itself.
     data.nodes.forEach((node) => {
-      node.laterIndependentInnovations?.forEach((entry) => {
+      node.independentInnovations?.forEach((entry) => {
         if (!entry.dateAdded) return;
         const dateStr = formatDate(entry.dateAdded);
 
         if (!itemsByDate.has(dateStr)) {
-          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], laterIndependent: [] });
+          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], independent: [] });
         }
 
-        itemsByDate.get(dateStr)?.laterIndependent.push({
+        itemsByDate.get(dateStr)?.independent.push({
           tech: node.title,
           year: formatYear(entry.year)
         });
@@ -138,7 +138,7 @@ async function generateChangelog() {
         const dateStr = formatDate(link.dateAdded);
         
         if (!itemsByDate.has(dateStr)) {
-          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], laterIndependent: [] });
+          itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], independent: [] });
         }
 
         const sourceNode = data.nodes.find(n => n.id === link.source);
@@ -192,9 +192,9 @@ async function generateChangelog() {
           changelogText += `- Added connection: ${conn.from} ${arrow} ${conn.to}\n`;
         });
 
-        // Add later independent inventions
-        items.laterIndependent.forEach(entry => {
-          changelogText += `- Added later independent invention: ${entry.tech}, ${entry.year}\n`;
+        // Add independent inventions
+        items.independent.forEach(entry => {
+          changelogText += `- Added independent invention: ${entry.tech}, ${entry.year}\n`;
         });
 
         changelogText += '\n';
