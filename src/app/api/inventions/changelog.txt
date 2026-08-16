@@ -1,3 +1,7 @@
+16 August 2026
+- Added tech: Fresnel lens
+- Added independent invention: Fresnel lens, 1748
+
 15 August 2026
 - Added connection: Stonemasonry --> Dock
 - Added connection: Sewn boat building --> Dock
