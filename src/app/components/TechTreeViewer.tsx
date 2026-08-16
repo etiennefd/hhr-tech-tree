@@ -1313,37 +1313,6 @@ export function TechTreeViewer() {
     [data.links, data.nodes]
   );
 
-  // Keyboard shortcut to left and right ends (cmd+arrows)
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Check if Command (Mac) or Control (Windows) is pressed
-      const isModifierPressed = event.metaKey || event.ctrlKey;
-
-      if (!isModifierPressed || !horizontalScrollContainerRef.current) return;
-
-      switch (event.key) {
-        case "ArrowLeft":
-          event.preventDefault(); // Prevent default browser behavior
-          horizontalScrollContainerRef.current.scrollTo({
-            left: 0,
-            behavior: "smooth",
-          });
-          break;
-
-        case "ArrowRight":
-          event.preventDefault(); // Prevent default browser behavior
-          horizontalScrollContainerRef.current.scrollTo({
-            left: horizontalScrollContainerRef.current.scrollWidth,
-            behavior: "smooth",
-          });
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   useEffect(() => {
     // Add your existing style element content
     const style = document.createElement("style");
