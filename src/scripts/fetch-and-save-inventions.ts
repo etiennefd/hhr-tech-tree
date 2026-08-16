@@ -293,9 +293,6 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
             .split(",")
             .filter(Boolean)
             .map((org) => org.trim()),
-          // "Parallel" for two cultures arriving at something separately,
-          // "After loss" for a technology developed, lost, then redeveloped.
-          type: String(record.get("Independent invention type") || ""),
           details: justification,
           detailsSource: source,
           dateAdded: String(record.get("Date added") || ""),

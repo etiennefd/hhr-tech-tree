@@ -15,8 +15,6 @@ export interface IndependentInnovation {
   formattedLocation?: string;
   inventors?: string[];
   organizations?: string[];
-  /** "Parallel", or "After loss" for a technology developed, lost, then redeveloped. */
-  type?: string;
   /** Justification, which must name a source. Shown on hover. */
   details?: string;
   detailsSource?: string;

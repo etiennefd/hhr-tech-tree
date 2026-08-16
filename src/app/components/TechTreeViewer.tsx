@@ -3179,10 +3179,6 @@ export function TechTreeViewer() {
                                       ]
                                         .filter(Boolean)
                                         .join(", ");
-                                      const suffix =
-                                        entry.type === "After loss"
-                                          ? " (after loss)"
-                                          : "";
 
                                       return (
                                         <div
@@ -3192,7 +3188,6 @@ export function TechTreeViewer() {
                                           <span className="flex-shrink-0">•</span>
                                           <span className="break-words">
                                             {summary}
-                                            {suffix}
                                           </span>
                                           {entry.details &&
                                             (entry.detailsSource ? (
