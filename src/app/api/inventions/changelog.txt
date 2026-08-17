@@ -16,6 +16,15 @@
 - Added connection: Rope and twine --> Sail (Mediterranean)
 - Added connection: Rope and twine --> Tanja sail
 - Added connection: Rope and twine --> Crab claw sail
+- Added connection: Crab claw sail <--> Catamaran
+- Added connection: Boat --> Catamaran
+- Added connection: Boat --> Lashed-lug boat building
+- Added connection: Rope and twine --> Lashed-lug boat building
+- Added connection: Lashed-lug boat building --> Outrigger boat
+- Added connection: Lashed-lug boat building --> K'un-lun po
+- Added connection: Lashed-lug boat building <--> Catamaran
+- Added connection: Outrigger boat --> Tanja sail
+- Added connection: Rope and twine --> Catamaran
 
 16 August 2026
 - Added tech: Fresnel lens
