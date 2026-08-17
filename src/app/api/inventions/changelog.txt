@@ -8,6 +8,7 @@
 - Added connection: Bamboo --> Watertight bulkhead
 - Added connection: Watertight bulkhead --> Chinese treasure ship
 - Added connection: Watertight bulkhead --> Dry dock
+- Added connection: Bamboo --> Junk rig
 
 16 August 2026
 - Added tech: Fresnel lens
