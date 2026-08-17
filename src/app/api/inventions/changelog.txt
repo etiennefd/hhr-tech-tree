@@ -1,3 +1,6 @@
+17 August 2026
+- Added connection: Chain pump --> Dry dock
+
 16 August 2026
 - Added tech: Fresnel lens
 - Added tech: Wet dock
