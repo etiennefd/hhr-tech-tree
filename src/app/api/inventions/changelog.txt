@@ -1,13 +1,16 @@
 16 August 2026
 - Added tech: Fresnel lens
 - Added tech: Wet dock
-- Added tech: Flash lock
+- Added tech: Canal lock
 - Added tech: Navigation canal
 - Added connection: Lighthouse --> Fresnel lens
 - Added connection: Argand lamp --> Fresnel lens
 - Added connection: Polished plate glass --> Fresnel lens
 - Added connection: Irrigation --> Navigation canal
 - Added connection: Sewn boat building --> Navigation canal
+- Added connection: Navigation canal --> Canal lock
+- Added connection: Canal lock --> Pound lock
+- Added connection: Pound lock --> Wet dock
 - Added independent invention: Fresnel lens, 1780
 
 15 August 2026
