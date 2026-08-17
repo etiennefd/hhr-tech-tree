@@ -1,4 +1,5 @@
 17 August 2026
+- Added tech: AI image generation
 - Added tech: Aircraft catapult
 - Added tech: Watertight bulkhead
 - Added tech: Louchuan
