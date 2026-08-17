@@ -32,6 +32,7 @@
 - Added connection: Aircraft catapult --> Aircraft steam catapult
 - Added connection: Jet aircraft --> Aircraft steam catapult
 - Added connection: Cruise missile --> Aircraft steam catapult
+- Added connection: Induction motor --> Linear motor
 
 16 August 2026
 - Added tech: Fresnel lens
