@@ -2,6 +2,12 @@
 - Added tech: Watertight bulkhead
 - Added tech: Louchuan
 - Added connection: Chain pump --> Dry dock
+- Added connection: Boat --> Louchuan
+- Added connection: Louchuan --> Chinese treasure ship
+- Added connection: Louchuan --> Watertight bulkhead
+- Added connection: Bamboo --> Watertight bulkhead
+- Added connection: Watertight bulkhead --> Chinese treasure ship
+- Added connection: Watertight bulkhead --> Dry dock
 
 16 August 2026
 - Added tech: Fresnel lens
