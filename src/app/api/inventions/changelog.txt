@@ -9,6 +9,13 @@
 - Added connection: Watertight bulkhead --> Chinese treasure ship
 - Added connection: Watertight bulkhead --> Dry dock
 - Added connection: Bamboo --> Junk rig
+- Added connection: Weaving and basketry --> Sail (Mediterranean)
+- Added connection: Weaving and basketry --> Tanja sail
+- Added connection: Weaving and basketry --> Crab claw sail
+- Added connection: Boat --> Crab claw sail
+- Added connection: Rope and twine --> Sail (Mediterranean)
+- Added connection: Rope and twine --> Tanja sail
+- Added connection: Rope and twine --> Crab claw sail
 
 16 August 2026
 - Added tech: Fresnel lens
