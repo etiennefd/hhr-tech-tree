@@ -1,4 +1,6 @@
 17 August 2026
+- Added tech: Watertight bulkhead
+- Added tech: Louchuan
 - Added connection: Chain pump --> Dry dock
 
 16 August 2026
@@ -21,7 +23,6 @@
 15 August 2026
 - Added connection: Stonemasonry --> Dock
 - Added connection: Sewn boat building --> Dock
-- Added connection: Dock --> Dry dock
 - Added connection: Dock --> Lighthouse
 
 14 August 2026
