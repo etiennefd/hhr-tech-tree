@@ -12,6 +12,8 @@
 - Added connection: Canal lock --> Pound lock
 - Added connection: Pound lock --> Wet dock
 - Added independent invention: Fresnel lens, 1780
+- Added independent invention: Pound lock, 1373
+- Added independent invention: Canal lock, 50 BCE
 
 15 August 2026
 - Added connection: Stonemasonry --> Dock
