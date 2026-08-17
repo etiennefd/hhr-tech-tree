@@ -30,6 +30,7 @@
 - Added connection: Air compressor --> Aircraft catapult
 - Added connection: Aircraft catapult --> Aircraft steam catapult
 - Added connection: Jet aircraft --> Aircraft steam catapult
+- Added connection: Cruise missile --> Aircraft steam catapult
 
 16 August 2026
 - Added tech: Fresnel lens
