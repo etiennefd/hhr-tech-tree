@@ -26,6 +26,9 @@
 - Added connection: Lashed-lug boat building <--> Catamaran
 - Added connection: Outrigger boat --> Tanja sail
 - Added connection: Rope and twine --> Catamaran
+- Added connection: Seaplane --> Aircraft catapult
+- Added connection: Air compressor --> Aircraft catapult
+- Added connection: Aircraft catapult --> Aircraft steam catapult
 
 16 August 2026
 - Added tech: Fresnel lens
