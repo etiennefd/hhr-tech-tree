@@ -1,3 +1,6 @@
+18 August 2026
+- Added tech: AI video generation
+
 17 August 2026
 - Added tech: AI music generation
 - Added tech: AI image generation
