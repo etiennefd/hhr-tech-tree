@@ -11,6 +11,11 @@
 
   Values are percentages of the source image, so they stay valid at any resolution.
   The crop is applied to the upright source image, before any "Image rotation".
+
+  The second half of the page previews the "Image position" single-select field, which
+  is a CSS object-position applied in the browser when the node is drawn. It shifts
+  which part of the (already cropped and rotated) image survives the 2:1 node frame,
+  so it only does something when the image is not already 2:1.
 -->
 <html lang="en">
 <head>
@@ -111,6 +116,38 @@
     margin-bottom: 8px;
   }
   .note { font-size: 12px; opacity: 0.75; margin: 8px 0; }
+
+  .positions { margin-top: 32px; border-top: 2px solid var(--line); padding-top: 20px; }
+  .positions h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 8px; }
+  .pos-grid { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0 4px; }
+  button.pos-card {
+    padding: 4px;
+    border: 2px solid transparent;
+    background: none;
+    text-align: center;
+    line-height: 1;
+  }
+  button.pos-card:hover { background: none; color: var(--ink); border-color: rgba(26, 26, 26, 0.35); }
+  button.pos-card.selected { border-color: var(--accent); }
+  .pos-frame {
+    position: relative;
+    width: 160px; height: 80px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #fff repeating-conic-gradient(#e8e8e8 0 25%, #fff 0 50%) 0 0 / 20px 20px;
+  }
+  .pos-frame.big { width: 320px; height: 160px; border-width: 2px; }
+  .pos-img { position: absolute; background-repeat: no-repeat; }
+  .pos-label { font-size: 12px; margin-top: 5px; }
+  .pos-selected-row { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+  #pos-out {
+    width: 220px;
+    padding: 10px;
+    border: 2px solid var(--line);
+    background: #fff;
+    font: 16px/1.4 ui-monospace, monospace;
+    margin-bottom: 8px;
+  }
   .warn { color: var(--accent); font-weight: bold; }
   .status { min-height: 20px; font-size: 12px; }
   kbd { border: 1px solid var(--line); border-bottom-width: 2px; padding: 0 4px; border-radius: 3px; }
@@ -119,7 +156,7 @@
 <body>
 
 <h1>Image crop picker</h1>
-<p class="sub">Drag a box over the detail you want. Copy the value into the <b>Image crop</b> field in Airtable, then re-run <code>update_images.py</code>.</p>
+<p class="sub">Drag a box over the detail you want. Copy the value into the <b>Image crop</b> field in Airtable, then re-run <code>update_images.py</code>. To pick an <b>Image position</b> instead, load the image and <a href="#positions">jump to the position options</a>.</p>
 
 <div class="row">
   <input id="url" type="text" placeholder="https://commons.wikimedia.org/wiki/File:… or a direct image URL" />
@@ -182,6 +219,35 @@
   </div>
 </div>
 
+<section class="positions" id="positions">
+  <h2>Image position</h2>
+  <p class="note">
+    The <b>Image position</b> single-select in Airtable is applied in the browser, on top of the
+    finished image, to decide which part of it fills the 2:1 node frame. Every option below is a
+    real 160×80 node preview of the image loaded above (using the crop and rotation currently set).
+    Click one, then copy the label into Airtable — no re-run of <code>update_images.py</code> needed,
+    the value is picked up on the next data fetch.
+  </p>
+
+  <div class="pos-selected-row">
+    <div>
+      <h2>Selected value</h2>
+      <input id="pos-out" type="text" placeholder="center" spellcheck="false" />
+      <div class="row">
+        <button id="pos-copy">Copy</button>
+        <button id="pos-reset">Clear</button>
+      </div>
+      <div class="note" id="pos-status"></div>
+    </div>
+    <div>
+      <h2>Selected at 2× (320×160)</h2>
+      <div class="pos-frame big"><div id="pos-big" class="pos-img"></div></div>
+    </div>
+  </div>
+
+  <div class="pos-grid" id="pos-grid"></div>
+</section>
+
 <script>
 (function () {
   "use strict";
@@ -208,7 +274,13 @@
     reset: document.getElementById("reset"),
     preview: document.getElementById("preview"),
     preview2: document.getElementById("preview2"),
-    pixels: document.getElementById("pixels")
+    pixels: document.getElementById("pixels"),
+    posGrid: document.getElementById("pos-grid"),
+    posBig: document.getElementById("pos-big"),
+    posOut: document.getElementById("pos-out"),
+    posCopy: document.getElementById("pos-copy"),
+    posReset: document.getElementById("pos-reset"),
+    posStatus: document.getElementById("pos-status")
   };
 
   // Selection in fractions of the displayed image (0..1)
@@ -266,6 +338,7 @@
       (els.downscaled.checked ? " (downscaled preview — the real crop will be sharper than the readout suggests)" : "")
     );
     if (sel) render(); else clearSelection();
+    paintPositions();
   });
   els.img.addEventListener("error", function () {
     if (loadedSrc) setStatus("Could not load that image. Check the URL, or download it and use “Local file…”.", true);
@@ -400,6 +473,7 @@
   els.rotation.addEventListener("change", function () {
     if (sel && els.lock.checked) { sel = applyAspect(sel, "left", "top"); }
     render();
+    paintPositions();
   });
 
   // --- Rendering ----------------------------------------------------------
@@ -413,6 +487,7 @@
     els.preview.style.backgroundImage = "";
     els.preview2.style.backgroundImage = "";
     els.pixels.textContent = "";
+    paintPositions();
   }
 
   function render() {
@@ -439,6 +514,7 @@
 
     updatePreview();
     updatePixels();
+    paintPositions();
   }
 
   function updatePreview() {
@@ -488,6 +564,152 @@
   });
 
   els.reset.addEventListener("click", clearSelection);
+
+  // --- Image position picker ----------------------------------------------
+
+  // Exactly the options in the Airtable "Image position" single-select, in field order
+  var POSITIONS = [
+    "top", "50% 10%", "50% 15%", "50% 25%", "50% 35%", "center", "50% 65%", "50% 75%",
+    "50% 85%", "bottom", "left", "right", "top left", "top right", "bottom left", "bottom right"
+  ];
+
+  var KEYWORDS = {
+    "center": [0.5, 0.5],
+    "top": [0.5, 0], "bottom": [0.5, 1], "left": [0, 0.5], "right": [1, 0.5],
+    "top left": [0, 0], "left top": [0, 0], "top right": [1, 0], "right top": [1, 0],
+    "bottom left": [0, 1], "left bottom": [0, 1], "bottom right": [1, 1], "right bottom": [1, 1]
+  };
+
+  // An object-position value as {x, y} fractions of the leftover space, like CSS resolves it
+  function parsePosition(value) {
+    var v = String(value == null ? "" : value).trim().toLowerCase().replace(/\s+/g, " ");
+    if (!v) return KEYWORDS.center.slice();
+    if (KEYWORDS[v]) return KEYWORDS[v].slice();
+    var two = v.match(/^(-?[\d.]+)%\s+(-?[\d.]+)%$/);
+    if (two) return [parseFloat(two[1]) / 100, parseFloat(two[2]) / 100];
+    var one = v.match(/^(-?[\d.]+)%$/); // CSS centers the unspecified axis
+    if (one) return [parseFloat(one[1]) / 100, 0.5];
+    return null;
+  }
+
+  // Lays the finished image out inside a frame the way object-fit: cover does,
+  // then reports where the (pre-rotation) painted box has to sit.
+  function positionLayout(value, frameW, frameH) {
+    var xy = parsePosition(value);
+    if (!xy || !els.img.naturalWidth) return null;
+    var s = sel || { x: 0, y: 0, w: 1, h: 1 };
+    var cw = s.w * els.img.naturalWidth, ch = s.h * els.img.naturalHeight;
+    var dispW = rotated() ? ch : cw, dispH = rotated() ? cw : ch;
+    var scale = Math.max(frameW / dispW, frameH / dispH);
+    var sw = dispW * scale, sh = dispH * scale;
+    return {
+      frac: s,
+      sw: sw, sh: sh,
+      offX: (frameW - sw) * xy[0],
+      offY: (frameH - sh) * xy[1],
+      // The element is painted upright and then rotated, so it is sized pre-rotation
+      preW: rotated() ? sh : sw,
+      preH: rotated() ? sw : sh
+    };
+  }
+
+  function paintPosition(inner, value, frameW, frameH) {
+    var L = positionLayout(value, frameW, frameH);
+    if (!L) {
+      inner.style.backgroundImage = "";
+      return null;
+    }
+    var bgW = L.preW / L.frac.w, bgH = L.preH / L.frac.h;
+    inner.style.width = L.preW + "px";
+    inner.style.height = L.preH + "px";
+    // Rotation spins the element about its own centre, so centre the box on the target box
+    inner.style.left = (L.offX + L.sw / 2 - L.preW / 2) + "px";
+    inner.style.top = (L.offY + L.sh / 2 - L.preH / 2) + "px";
+    inner.style.backgroundImage = 'url("' + els.img.src + '")';
+    inner.style.backgroundSize = bgW + "px " + bgH + "px";
+    inner.style.backgroundPosition = (-(L.frac.x * bgW)) + "px " + (-(L.frac.y * bgH)) + "px";
+    var r = parseInt(els.rotation.value, 10);
+    inner.style.transform = r ? "rotate(" + (-r) + "deg)" : "none";
+    return L;
+  }
+
+  var posInners = {};
+
+  POSITIONS.forEach(function (value) {
+    var card = document.createElement("button");
+    card.className = "pos-card";
+    card.type = "button";
+    card.dataset.value = value;
+
+    var frame = document.createElement("div");
+    frame.className = "pos-frame";
+    var inner = document.createElement("div");
+    inner.className = "pos-img";
+    frame.appendChild(inner);
+
+    var label = document.createElement("div");
+    label.className = "pos-label";
+    label.textContent = value;
+
+    card.appendChild(frame);
+    card.appendChild(label);
+    card.addEventListener("click", function () { selectPosition(value); });
+    els.posGrid.appendChild(card);
+    posInners[value] = inner;
+  });
+
+  function selectPosition(value) {
+    els.posOut.value = value;
+    paintPositions();
+  }
+
+  function paintPositions() {
+    POSITIONS.forEach(function (value) {
+      paintPosition(posInners[value], value, NODE_W, NODE_H);
+    });
+
+    var current = els.posOut.value.trim();
+    var big = paintPosition(els.posBig, current || "center", NODE_W * 2, NODE_H * 2);
+
+    var normalize = function (v) { return v.trim().toLowerCase().replace(/\s+/g, " "); };
+    Array.prototype.forEach.call(els.posGrid.children, function (card) {
+      var match = current && normalize(card.dataset.value) === normalize(current);
+      card.classList.toggle("selected", !!match);
+    });
+
+    if (!els.img.naturalWidth) {
+      els.posStatus.textContent = "Load an image above to preview the options.";
+      return;
+    }
+    if (current && !parsePosition(current)) {
+      els.posStatus.innerHTML = '<span class="warn">Not a value this page can preview ' +
+        "(keywords and percentages only — px offsets are valid in Airtable but not previewed here).</span>";
+      return;
+    }
+    if (big && Math.abs(big.sw - NODE_W * 2) < 0.5 && Math.abs(big.sh - NODE_H * 2) < 0.5) {
+      els.posStatus.innerHTML = '<span class="warn">This image is already 2:1 in the node frame, ' +
+        "so every position looks the same. Position only matters when there is overflow to shift.</span>";
+      return;
+    }
+    els.posStatus.textContent = sel
+      ? "Previews include the crop box above."
+      : "No crop set, so these previews use the whole image.";
+  }
+
+  els.posOut.addEventListener("input", paintPositions);
+  els.posReset.addEventListener("click", function () { selectPosition(""); });
+  els.posCopy.addEventListener("click", function () {
+    var value = els.posOut.value.trim();
+    if (!value) return;
+    els.posOut.select();
+    navigator.clipboard.writeText(value).then(
+      function () { els.posStatus.textContent = "Copied " + value; },
+      function () { els.posStatus.textContent = "Press \u2318C to copy."; }
+    );
+  });
+
+  paintPositions();
+
   window.addEventListener("resize", function () { if (sel) render(); });
 })();
 </script>
