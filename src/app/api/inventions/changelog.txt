@@ -1,3 +1,8 @@
+20 August 2026
+- Added connection: Bagpipe --> Speaking machine
+- Added connection: Pipe organ --> Speaking machine
+- Added connection: Speaking machine --> Telephone
+
 19 August 2026
 - Added tech: Speaking machine
 
