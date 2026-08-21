@@ -1783,7 +1783,7 @@
 - Added connection: Bow drill --> Lathe
 - Added connection: Wheel --> Cam
 - Added connection: Barrel organ --> Player piano
-- Added connection: Pump organ --> Player piano
+- Added connection: Reed organ --> Player piano
 - Added connection: Limestone --> Lithography
 - Added connection: Gum arabic --> Lithography
 
