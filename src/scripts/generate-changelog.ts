@@ -84,7 +84,7 @@ async function generateChangelog() {
 
     // Create maps to store items by date
     const itemsByDate = new Map<string, {
-      techs: string[],
+      techs: Array<{ title: string, year: string }>,
       connections: Array<{ from: string, to: string, type?: string }>,
       milestones: Array<{ version: string, description: string }>,
       independent: Array<{ tech: string, year: string }>
@@ -110,7 +110,10 @@ async function generateChangelog() {
         if (!itemsByDate.has(dateStr)) {
           itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], independent: [] });
         }
-        itemsByDate.get(dateStr)?.techs.push(node.title);
+        itemsByDate.get(dateStr)?.techs.push({
+          title: node.title,
+          year: formatYear(node.year)
+        });
       }
     });
 
@@ -183,7 +186,7 @@ async function generateChangelog() {
         
         // Add techs
         items.techs.forEach(tech => {
-          changelogText += `- Added tech: ${tech}\n`;
+          changelogText += `- Added tech: ${tech.title}, ${tech.year}\n`;
         });
         
         // Add connections
