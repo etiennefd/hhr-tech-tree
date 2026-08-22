@@ -1,5 +1,5 @@
 22 August 2026
-- Added tech: Bellows
+- Added tech: Bellows, 4500 BCE
 - Added connection: Copper smelting --> Bellows
 - Added connection: Rawhide --> Bellows
 - Added connection: Pottery --> Bellows
@@ -13,17 +13,17 @@
 - Added connection: Speaking machine --> Telephone
 
 19 August 2026
-- Added tech: Speaking machine
+- Added tech: Speaking machine, 1791
 
 18 August 2026
-- Added tech: AI video generation
+- Added tech: AI video generation, 2023
 
 17 August 2026
-- Added tech: AI music generation
-- Added tech: AI image generation
-- Added tech: Aircraft catapult
-- Added tech: Watertight bulkhead
-- Added tech: Louchuan
+- Added tech: AI music generation, 2023
+- Added tech: AI image generation, 2022
+- Added tech: Aircraft catapult, 1915
+- Added tech: Watertight bulkhead, 410
+- Added tech: Louchuan, 111 BCE
 - Added connection: Chain pump --> Dry dock
 - Added connection: Boat --> Louchuan
 - Added connection: Louchuan --> Chinese treasure ship
@@ -56,10 +56,10 @@
 - Added connection: Induction motor --> Linear motor
 
 16 August 2026
-- Added tech: Fresnel lens
-- Added tech: Wet dock
-- Added tech: Canal lock
-- Added tech: Navigation canal
+- Added tech: Fresnel lens, 1823
+- Added tech: Wet dock, 1661
+- Added tech: Canal lock, 274 BCE
+- Added tech: Navigation canal, 2275 BCE
 - Added connection: Lighthouse --> Fresnel lens
 - Added connection: Argand lamp --> Fresnel lens
 - Added connection: Polished plate glass --> Fresnel lens
@@ -78,8 +78,8 @@
 - Added connection: Dock --> Lighthouse
 
 14 August 2026
-- Added tech: Torpedo bomber
-- Added tech: Column still
+- Added tech: Torpedo bomber, 1914
+- Added tech: Column still, 1813
 - Added connection: Fractional distillation --> Column still
 - Added connection: Beet sugar factory --> Column still
 - Added connection: Oil refinery --> Shukhov cracking process
@@ -100,8 +100,8 @@
 
 13 August 2026
 - v1.1.5: Performance improvements
-- Added tech: Bamboo and wooden slips
-- Added tech: Bamboo
+- Added tech: Bamboo and wooden slips, 1200 BCE
+- Added tech: Bamboo, 5000 BCE
 - Added connection: Salt mining --> Borehole drilling
 - Added connection: Borehole drilling --> Drilled oil well
 - Added connection: Percussion flake tool --> Bamboo
@@ -133,8 +133,8 @@
 - Added independent invention: Gears, 330 BCE
 
 12 August 2026
-- Added tech: Hollander beater
-- Added tech: Cupellation
+- Added tech: Hollander beater, 1670
+- Added tech: Cupellation, 3750 BCE
 - Added connection: Wheel --> Flywheel
 - Added connection: Spindle --> Flywheel
 - Added connection: Flywheel --> Watt steam engine
@@ -160,10 +160,10 @@
 
 11 August 2026
 - v1.1.4: Later independent inventions table
-- Added tech: Stationary bicycle
-- Added tech: Flywheel
-- Added tech: Stamp mill
-- Added tech: Spindle
+- Added tech: Stationary bicycle, 1796
+- Added tech: Flywheel, 1120
+- Added tech: Stamp mill, 100
+- Added tech: Spindle, 10000 BCE
 - Added connection: Rope and twine --> Linen
 - Added connection: Rope and twine --> Spindle
 - Added connection: Hand drill --> Spindle
@@ -179,10 +179,10 @@
 - Added independent invention: Pottery, 4800 BCE
 
 10 August 2026
-- Added tech: Hydraulic jigger and crane
-- Added tech: Exercise machine
-- Added tech: Hooke's law
-- Added tech: Paper mill
+- Added tech: Hydraulic jigger and crane, 1846
+- Added tech: Exercise machine, 1739
+- Added tech: Hooke's law, 1676
+- Added tech: Paper mill, 1282
 - Added connection: Force pump --> Self-acting hydraulic ram
 - Added connection: Paper mill --> Self-acting hydraulic ram
 - Added connection: Hydraulic cylinder --> Hydraulic press
@@ -201,9 +201,9 @@
 - Added connection: Tanned leather --> Hydraulic cylinder
 
 9 August 2026
-- Added tech: Steel crossbow
-- Added tech: Oxybeles
-- Added tech: Winch
+- Added tech: Steel crossbow, 1375
+- Added tech: Oxybeles, 421 BCE
+- Added tech: Winch, 600 BCE
 - Added connection: Wheel --> Winch
 - Added connection: Wheel --> Fishing reel
 - Added connection: Wheel --> Pulley
@@ -231,9 +231,9 @@
 - Added connection: Steel crossbow --> Arquebus and matchlock
 
 7 August 2026
-- Added tech: Acetone–butanol–ethanol fermentation
-- Added tech: Eggbeater
-- Added tech: Fishing rod
+- Added tech: Acetone–butanol–ethanol fermentation, 1915
+- Added tech: Eggbeater, 1859
+- Added tech: Fishing rod, 1900 BCE
 - Added connection: Drawn wire and draw plate --> Insulated wire
 - Added connection: Silk --> Insulated wire
 - Added connection: Electromagnet --> Insulated wire
@@ -260,8 +260,8 @@
 - Added connection: Crank --> Fishing reel
 
 6 August 2026
-- Added tech: Insulated wire
-- Added tech: Extrusion
+- Added tech: Insulated wire, 1828
+- Added tech: Extrusion, 1820
 - Added connection: Hydraulic press --> Extrusion
 - Added connection: Lead pipes --> Extrusion
 - Added connection: Gelignite --> Double-base propellant
@@ -283,15 +283,15 @@
 - Added connection: Tin --> Tin-mercury amalgam mirror
 
 5 August 2026
-- Added tech: Clothes tumble dryer
-- Added tech: Cordite
-- Added tech: Double-base propellant
-- Added tech: Mangle
+- Added tech: Clothes tumble dryer, 1938
+- Added tech: Cordite, 1889
+- Added tech: Double-base propellant, 1887
+- Added tech: Mangle, 1843
 
 4 August 2026
-- Added tech: Automatic washing machine
-- Added tech: Barrel
-- Added tech: Wooden tub
+- Added tech: Automatic washing machine, 1937
+- Added tech: Barrel, 100 BCE
+- Added tech: Wooden tub, 2600 BCE
 - Added connection: Wooden tub --> Washing machine
 - Added connection: Soap --> Washing machine
 - Added connection: Crank --> Washing machine
@@ -306,20 +306,20 @@
 - Added connection: Cam --> Automatic washing machine
 
 3 August 2026
-- Added tech: Dry cleaning
+- Added tech: Dry cleaning, 1825
 - Added connection: Turpentine --> Dry cleaning
 - Added connection: Paraffin wax --> Smokeless gunpowder
 - Added connection: Ether --> Smokeless gunpowder
 - Added connection: Gunpowder --> Smokeless gunpowder
 
 2 August 2026
-- Added tech: Varnish
+- Added tech: Varnish, 1480 BCE
 - Added connection: Beeswax --> Varnish
 - Added connection: Tree resin --> Varnish
 
 1 August 2026
-- Added tech: Mineral potash
-- Added tech: Caustic potash
+- Added tech: Mineral potash, 1861
+- Added tech: Caustic potash, 180
 - Added connection: Control of fire --> Sulfur match
 - Added connection: Potassium chlorate --> Fulminate-based firearm
 - Added connection: Mercury --> Fulminates
@@ -349,19 +349,19 @@
 - Added connection: Blast furnace --> Finery forge
 
 31 July 2026
-- Added tech: Potassium chlorate
+- Added tech: Potassium chlorate, 1786
 - Added connection: Sulfur match --> Self-igniting match
 - Added connection: Sulfuric acid --> Self-igniting match
 - Added connection: Potassium chlorate --> Self-igniting match
 - Added connection: Chlorine --> Potassium chlorate
 
 30 July 2026
-- Added tech: Self-igniting match
+- Added tech: Self-igniting match, 1805
 
 29 July 2026
-- Added tech: Fire striker
-- Added tech: Carburized and quenched iron
-- Added tech: Hand drill
+- Added tech: Fire striker, 400
+- Added tech: Carburized and quenched iron, 1050 BCE
+- Added tech: Hand drill, 28000 BCE
 - Added connection: Fire making --> Bow drill
 - Added connection: Fire making --> Fire piston
 - Added connection: Fire making --> Fire striker
@@ -376,12 +376,12 @@
 - Added connection: Control of fire --> Cigar
 
 28 July 2026
-- Added tech: Fire making
+- Added tech: Fire making, 400000 BCE
 - Added connection: Control of fire --> Fire making
 - Added connection: Hand axe --> Fire making
 
 27 July 2026
-- Added tech: Fat rendering
+- Added tech: Fat rendering, 125000 BCE
 - Added connection: Fat rendering --> Candle
 - Added connection: Fat rendering --> Margarine
 - Added connection: Fat rendering --> Proto-soap
@@ -400,8 +400,8 @@
 
 25 July 2026
 - v1.1.3: Natural origins in tooltip
-- Added tech: Cemented carbide
-- Added tech: Beeswax
+- Added tech: Cemented carbide, 1923
+- Added tech: Beeswax, 38000 BCE
 - Added connection: Honey --> Beeswax
 - Added connection: Beeswax --> Lost-wax casting
 - Added connection: Beeswax --> Wax tablet
@@ -413,18 +413,18 @@
 - Added connection: Beeswax --> Candle
 
 24 July 2026
-- Added tech: Gear hobbing
+- Added tech: Gear hobbing, 1856
 - Added connection: Milling machine --> Gear hobbing
 - Added connection: Gears --> Gear hobbing
 
 23 July 2026
-- Added tech: High-voltage direct current transmission
+- Added tech: High-voltage direct current transmission, 1954
 - Added connection: Electrical grid --> High-voltage direct current transmission
 - Added connection: Mercury-arc valve --> High-voltage direct current transmission
 
 22 July 2026
-- Added tech: Electrical grid
-- Added tech: Polyphase electric power
+- Added tech: Electrical grid, 1901
+- Added tech: Polyphase electric power, 1891
 - Added connection: Electric generator --> Induction motor
 - Added connection: Closed-core transformer --> Electrical grid
 - Added connection: Coal power plant --> Electrical grid
@@ -455,9 +455,9 @@
 - Added connection: Air compressor --> Mechanized submarine
 
 20 July 2026
-- Added tech: All-metal monoplane
-- Added tech: Crucible steel (modern)
-- Added tech: Cementation steel
+- Added tech: All-metal monoplane, 1915
+- Added tech: Crucible steel (modern), 1740
+- Added tech: Cementation steel, 1601
 - Added connection: Puddling --> Bessemer process
 - Added connection: Crucible steel (modern) --> Siderography and steel engraving
 - Added connection: Airplane --> All-metal monoplane
@@ -488,17 +488,17 @@
 - Added connection: Age-hardening alloy --> Turbojet
 
 18 July 2026
-- Added tech: Superalloy
-- Added tech: Age-hardening alloy
+- Added tech: Superalloy, 1929
+- Added tech: Age-hardening alloy, 1906
 - Added connection: Nichrome heating element --> Superalloy
 - Added connection: Titanium --> Superalloy
 - Added connection: Aluminium --> Superalloy
 
 17 July 2026
-- Added tech: Rhodium
-- Added tech: Iridium
-- Added tech: Osmium
-- Added tech: Fusible alloy
+- Added tech: Rhodium, 1804
+- Added tech: Iridium, 1803
+- Added tech: Osmium, 1803
+- Added tech: Fusible alloy, 1701
 - Added connection: Platinum --> Palladium
 - Added connection: Aqua regia --> Palladium
 - Added connection: Platinum --> Rhodium
@@ -518,14 +518,14 @@
 - Added connection: Aqua regia --> Osmium
 
 16 July 2026
-- Added tech: Solid electrolytic capacitor
-- Added tech: Sintered technical ceramic
-- Added tech: Hafnium
-- Added tech: Spark plug
-- Added tech: Stapler
-- Added tech: Powder metallurgy
-- Added tech: Tantalum
-- Added tech: Palladium
+- Added tech: Solid electrolytic capacitor, 1954
+- Added tech: Sintered technical ceramic, 1935
+- Added tech: Hafnium, 1922
+- Added tech: Spark plug, 1902
+- Added tech: Stapler, 1877
+- Added tech: Powder metallurgy, 1805
+- Added tech: Tantalum, 1802
+- Added tech: Palladium, 1802
 - Added connection: Niobium <--> Tantalum
 - Added connection: Drawn wire and draw plate --> Stapler
 - Added connection: Fourdrinier machine --> Stapler
@@ -550,7 +550,7 @@
 - Added connection: Powder metallurgy --> Solid electrolytic capacitor
 
 15 July 2026
-- Added tech: Laparoscope
+- Added tech: Laparoscope, 1910
 - Added connection: Greek fire --> Composite rocket propellant
 - Added connection: Bitumen --> Composite rocket propellant
 - Added connection: Congreve rocket --> Composite rocket propellant
@@ -570,9 +570,9 @@
 - Added connection: Light bulb --> Laparoscope
 
 14 July 2026
-- Added tech: Composite rocket propellant
-- Added tech: Armor-piercing ammunition
-- Added tech: Rifled artillery
+- Added tech: Composite rocket propellant, 1942
+- Added tech: Armor-piercing ammunition, 1867
+- Added tech: Rifled artillery, 1846
 - Added connection: Ironclad --> Armor-piercing ammunition
 - Added connection: Cast iron --> Armor-piercing ammunition
 - Added connection: Rifled artillery --> Armor-piercing ammunition
@@ -586,8 +586,8 @@
 - Added connection: Cannon --> Rifled artillery
 
 13 July 2026
-- Added tech: Silencer (gun)
-- Added tech: Muffler
+- Added tech: Silencer (gun), 1902
+- Added tech: Muffler, 1896
 - Added connection: Muffler <--> Silencer (gun)
 - Added connection: Motorcycle --> Muffler
 - Added connection: Bolt-action rifle --> Silencer (gun)
@@ -618,11 +618,11 @@
 - Added connection: Colt revolver --> Semi-automatic pistol
 
 10 July 2026
-- Added tech: Man-portable anti-tank weapon
-- Added tech: Shaped charge
-- Added tech: Submachine gun
-- Added tech: Self-loading rifle
-- Added tech: Gas-operated firearm
+- Added tech: Man-portable anti-tank weapon, 1942
+- Added tech: Shaped charge, 1940
+- Added tech: Submachine gun, 1918
+- Added tech: Self-loading rifle, 1908
+- Added tech: Gas-operated firearm, 1895
 - Added connection: Shaped charge --> Man-portable anti-tank weapon
 - Added connection: TNT --> Shaped charge
 - Added connection: Tank --> Shaped charge
@@ -632,17 +632,17 @@
 - Added connection: Percussion cap --> Bolt-action rifle
 
 9 July 2026
-- Added tech: Breech-loading swivel gun
+- Added tech: Breech-loading swivel gun, 1364
 - Added connection: Cannon --> Breech-loading swivel gun
 - Added connection: Breech-loading swivel gun --> Breech-loading rifle
 
 8 July 2026
-- Added tech: Assault rifle
-- Added tech: Magazine repeating rifle
-- Added tech: Breech-loading rifle
+- Added tech: Assault rifle, 1943
+- Added tech: Magazine repeating rifle, 1860
+- Added tech: Breech-loading rifle, 1776
 
 7 July 2026
-- Added tech: Iron girder bridge
+- Added tech: Iron girder bridge, 1849
 - Added connection: Rail transport --> Iron girder bridge
 - Added connection: Iron bridge --> Iron girder bridge
 - Added connection: Puddling --> Iron girder bridge
@@ -653,7 +653,7 @@
 - Added connection: Iron bridge --> Cantilever bridge
 
 6 July 2026
-- Added tech: Steel-cable suspension bridge
+- Added tech: Steel-cable suspension bridge, 1883
 - Added connection: Wire-cable suspension bridge --> Steel-cable suspension bridge
 - Added connection: Bessemer process --> Steel-cable suspension bridge
 - Added connection: Nitric acid --> Parkesine
@@ -661,9 +661,9 @@
 - Added connection: Steel-cable suspension bridge --> Cable-stayed bridge
 
 5 July 2026
-- Added tech: Cable-stayed bridge
-- Added tech: Distilled spirit
-- Added tech: Wine and viticulture
+- Added tech: Cable-stayed bridge, 1955
+- Added tech: Distilled spirit, 1150
+- Added tech: Wine and viticulture, 6000 BCE
 - Added connection: Honey --> Beekeeping
 - Added connection: Malting --> Alcohol
 - Added connection: Alcohol --> Wine and viticulture
@@ -675,11 +675,11 @@
 - Added connection: Distilled spirit --> Ether
 
 4 July 2026
-- Added tech: Iron bridge
-- Added tech: Coke smelting of iron (Europe)
-- Added tech: Coke (Europe)
-- Added tech: Pontoon bridge
-- Added tech: Malting
+- Added tech: Iron bridge, 1779
+- Added tech: Coke smelting of iron (Europe), 1709
+- Added tech: Coke (Europe), 1642
+- Added tech: Pontoon bridge, 800 BCE
+- Added tech: Malting, 11000 BCE
 - Added connection: Coke (Europe) --> Silicon carbide
 - Added connection: Coke (Europe) --> Acheson process
 - Added connection: Coke (Europe) --> Calcium carbide production
@@ -704,9 +704,9 @@
 - Added connection: Pottery --> Alcohol
 
 3 July 2026
-- Added tech: Arched aqueduct bridge
-- Added tech: Qanat
-- Added tech: Water well
+- Added tech: Arched aqueduct bridge, 140 BCE
+- Added tech: Qanat, 714 BCE
+- Added tech: Water well, 8400 BCE
 - Added connection: Qanat --> Yakhchāl
 - Added connection: Water well --> Qanat
 - Added connection: Water well --> Rock-cut stepwell
@@ -720,10 +720,10 @@
 - Added connection: Roman concrete --> Arched aqueduct bridge
 
 2 July 2026
-- Added tech: Wire-cable suspension bridge
-- Added tech: Suspension bridge
-- Added tech: Truss bridge
-- Added tech: Truss
+- Added tech: Wire-cable suspension bridge, 1823
+- Added tech: Suspension bridge, 1801
+- Added tech: Truss bridge, 1333
+- Added tech: Truss, 550 BCE
 - Added connection: Simple suspension bridge --> Suspension bridge
 - Added connection: Chain --> Suspension bridge
 - Added connection: Drawn wire and draw plate --> Wire-cable suspension bridge
@@ -736,9 +736,9 @@
 - Added connection: Lime mortar and plaster --> Aqueduct
 
 1 July 2026
-- Added tech: Innerspring mattress
-- Added tech: Upholstery coil spring
-- Added tech: Kayak
+- Added tech: Innerspring mattress, 1899
+- Added tech: Upholstery coil spring, 1822
+- Added tech: Kayak, 2400 BCE
 - Added connection: Bone tool --> Snow goggles
 - Added connection: Boat --> Kayak
 - Added connection: Rawhide --> Kayak
@@ -748,12 +748,12 @@
 - Added connection: Drawn wire and draw plate --> Upholstery coil spring
 
 30 June 2026
-- Added tech: Pillbox
-- Added tech: Long-recoil field gun
-- Added tech: Trench system
-- Added tech: Defensive wall
-- Added tech: Wattle and daub
-- Added tech: Rawhide
+- Added tech: Pillbox, 1916
+- Added tech: Long-recoil field gun, 1897
+- Added tech: Trench system, 1864
+- Added tech: Defensive wall, 8000 BCE
+- Added tech: Wattle and daub, 8000 BCE
+- Added tech: Rawhide, 400000 BCE
 - Added connection: Stonemasonry --> Defensive wall
 - Added connection: Defensive wall --> Castle
 - Added connection: Castle --> Star fort
@@ -788,9 +788,9 @@
 - Added connection: Aulos --> Bagpipe
 
 29 June 2026
-- Added tech: Star fort
-- Added tech: Suction pump
-- Added tech: Engineered roadbed
+- Added tech: Star fort, 1501
+- Added tech: Suction pump, 1433
+- Added tech: Engineered roadbed, 1600 BCE
 - Added connection: Paved road --> Engineered roadbed
 - Added connection: Engineered roadbed --> Macadam
 - Added connection: Wheel --> Engineered roadbed
@@ -807,8 +807,8 @@
 - Added connection: Measuring rod --> Metre
 
 28 June 2026
-- Added tech: Asphalt road
-- Added tech: Macadam
+- Added tech: Asphalt road, 1852
+- Added tech: Macadam, 1816
 - Added connection: Hafting --> Hoe
 - Added connection: Bone tool --> Hoe
 - Added connection: Macadam --> Asphalt road
@@ -837,9 +837,9 @@
 - Added connection: Adze --> Snowshoe
 
 24 June 2026
-- Added tech: Surveyor's wheel
-- Added tech: Carriage odometer
-- Added tech: Coach
+- Added tech: Surveyor's wheel, 1675
+- Added tech: Carriage odometer, 1575
+- Added tech: Coach, 1426
 - Added connection: Cam --> Odometer (China)
 - Added connection: Gears --> Mechanical calculator
 - Added connection: Mortise and tenon --> Wheel
@@ -853,7 +853,7 @@
 - Added connection: Carriage odometer --> Taximeter
 
 23 June 2026
-- Added tech: Rotary winnowing fan
+- Added tech: Rotary winnowing fan, 100 BCE
 - Added connection: Gears --> Post windmill
 - Added connection: Chisel --> Mortise and tenon
 - Added connection: Chariot --> Odometer (Western)
@@ -862,8 +862,8 @@
 - Added connection: Gears --> Odometer (China)
 
 22 June 2026
-- Added tech: Sawmill
-- Added tech: Saw
+- Added tech: Sawmill, 275
+- Added tech: Saw, 3000 BCE
 - Added connection: Watermill --> Panemone windmill
 - Added connection: Watermill --> Post windmill
 - Added connection: Copper smelting --> Saw
@@ -899,13 +899,13 @@
 
 19 June 2026
 - v.1.1.2: Refactor of prehistoric technologies
-- Added tech: Chisel
-- Added tech: Adze
-- Added tech: Geometric microlith
-- Added tech: Burin
-- Added tech: Microblade
-- Added tech: Blade
-- Added tech: Prepared-core tool
+- Added tech: Chisel, 7500 BCE
+- Added tech: Adze, 9500 BCE
+- Added tech: Geometric microlith, 15000 BCE
+- Added tech: Burin, 40000 BCE
+- Added tech: Microblade, 42000 BCE
+- Added tech: Blade, 50000 BCE
+- Added tech: Prepared-core tool, 400000 BCE
 - Added connection: Hand axe --> Prepared-core tool
 - Added connection: Prepared-core tool --> Blade
 - Added connection: Prepared-core tool --> Pressure flaking
@@ -914,16 +914,16 @@
 - Added connection: Microblade --> Geometric microlith
 
 18 June 2026
-- Added tech: Cambered skis
-- Added tech: Snowshoe
-- Added tech: Skis
-- Added tech: Pressure flaking
+- Added tech: Cambered skis, 1850
+- Added tech: Snowshoe, 3800 BCE
+- Added tech: Skis, 6000 BCE
+- Added tech: Pressure flaking, 73000 BCE
 - Added connection: Skis --> Cambered skis
 
 17 June 2026
-- Added tech: High-fructose corn syrup
-- Added tech: Soft contact lens
-- Added tech: Catalysis
+- Added tech: High-fructose corn syrup, 1967
+- Added tech: Soft contact lens, 1959
+- Added tech: Catalysis, 1794
 - Added connection: Glucose syrup --> High-fructose corn syrup
 - Added connection: Enzyme extraction --> High-fructose corn syrup
 - Added connection: Domestication of maize --> High-fructose corn syrup
@@ -936,14 +936,14 @@
 - Added connection: Acrylic glass --> Soft contact lens
 
 16 June 2026
-- Added tech: Synthetic detergent
-- Added tech: Detergent enzyme
-- Added tech: Shortening
-- Added tech: Fat hydrogenation
-- Added tech: Catalytic hydrogenation
-- Added tech: Enzyme extraction
-- Added tech: Enzyme
-- Added tech: Glucose syrup
+- Added tech: Synthetic detergent, 1932
+- Added tech: Detergent enzyme, 1913
+- Added tech: Shortening, 1911
+- Added tech: Fat hydrogenation, 1901
+- Added tech: Catalytic hydrogenation, 1897
+- Added tech: Enzyme extraction, 1894
+- Added tech: Enzyme, 1833
+- Added tech: Glucose syrup, 1811
 - Added connection: Lead chamber process --> Contact process
 - Added connection: Enzyme --> Enzyme extraction
 - Added connection: Enzyme extraction --> Detergent enzyme
@@ -974,8 +974,8 @@
 - Added connection: Gears --> Endless chain drive
 
 14 June 2026
-- Added tech: Derailleur
-- Added tech: Sun and planet gear
+- Added tech: Derailleur, 1899
+- Added tech: Sun and planet gear, 1781
 - Added connection: Safety bicycle --> Derailleur
 - Added connection: Bush roller chain --> Derailleur
 - Added connection: Tin bronze --> Gears
@@ -987,8 +987,8 @@
 - Added connection: Analog computer <--> Sun and planet gear
 
 13 June 2026
-- Added tech: Always-on packet-switched cellular data
-- Added tech: Mobile web
+- Added tech: Always-on packet-switched cellular data, 2000
+- Added tech: Mobile web, 1996
 - Added connection: Web browser --> Mobile web
 - Added connection: World Wide Web --> Mobile web
 - Added connection: Smartphone --> Mobile web
@@ -1000,9 +1000,9 @@
 - Added connection: Always-on packet-switched cellular data --> 3G cellular network
 
 12 June 2026
-- Added tech: Bush roller chain
-- Added tech: Electromagnetism
-- Added tech: Chain
+- Added tech: Bush roller chain, 1880
+- Added tech: Electromagnetism, 1820
+- Added tech: Chain, 2500 BCE
 - Added connection: Wire --> Chain
 - Added connection: Chain --> Endless chain drive
 - Added connection: Electromagnetic induction --> Induction coil
@@ -1029,9 +1029,9 @@
 - Added connection: Paul-Wyatt cotton mills --> Bush roller chain
 
 11 June 2026
-- Added tech: Wire rope
-- Added tech: Drawn wire and draw plate
-- Added tech: Wire
+- Added tech: Wire rope, 1834
+- Added tech: Drawn wire and draw plate, 700
+- Added tech: Wire, 2800 BCE
 - Added connection: Nylon --> Kevlar
 - Added connection: Radial tire --> Kevlar
 - Added connection: Liquid crystals --> Kevlar
@@ -1058,8 +1058,8 @@
 - Added connection: Bloomery and wrought iron --> Electromagnet
 
 10 June 2026
-- Added tech: Zinc oxide
-- Added tech: Standardized prefabricated ship building
+- Added tech: Zinc oxide, 77
+- Added tech: Standardized prefabricated ship building, 241 BCE
 - Added connection: Fluorescence --> Sunscreen
 - Added connection: Brass --> Zinc oxide
 - Added connection: Zinc oxide --> Zinc white
@@ -1069,8 +1069,8 @@
 - Added connection: Trireme --> Standardized prefabricated ship building
 
 9 June 2026
-- Added tech: Automatic lathe
-- Added tech: Turret lathe
+- Added tech: Automatic lathe, 1873
+- Added tech: Turret lathe, 1845
 - Added connection: Slide-rest all-metal lathe --> Milling machine
 - Added connection: Cannon --> Interchangeable parts
 - Added connection: Flintlock musket --> Interchangeable parts
@@ -1092,16 +1092,16 @@
 - Added connection: Quinine --> Sunscreen
 
 8 June 2026
-- Added tech: Moving assembly line
-- Added tech: Conveyor belt
-- Added tech: Interchangeable parts
+- Added tech: Moving assembly line, 1913
+- Added tech: Conveyor belt, 1892
+- Added tech: Interchangeable parts, 1778
 - Added connection: Glass --> Borosilicate glass
 - Added connection: Borax --> Borosilicate glass
 - Added connection: Continuous track vehicle --> Continuous track snow vehicle
 - Added connection: Continuous track vehicle --> Half-track
 
 7 June 2026
-- Added tech: Borax
+- Added tech: Borax, 750
 - Added connection: Electrolysis --> Sodium
 - Added connection: Electrolysis --> Potassium
 - Added connection: Potassium <--> Sodium
@@ -1116,12 +1116,12 @@
 - Added connection: Borax --> Boron
 
 6 June 2026
-- Added tech: Metal-halide lamp
-- Added tech: AC defibrillator
-- Added tech: Low-pressure sodium-vapor lamp
-- Added tech: Fused quartz
-- Added tech: Borosilicate glass
-- Added tech: Stoneware
+- Added tech: Metal-halide lamp, 1962
+- Added tech: AC defibrillator, 1947
+- Added tech: Low-pressure sodium-vapor lamp, 1932
+- Added tech: Fused quartz, 1899
+- Added tech: Borosilicate glass, 1893
+- Added tech: Stoneware, 1600 BCE
 - Added connection: External DC defibrillator --> Automated external defibrillator
 - Added connection: Leyden jar --> Condenser microphone
 - Added connection: Electrolytic capacitor --> MOS DRAM
@@ -1150,8 +1150,8 @@
 - Added connection: Oxyhydrogen blowpipe --> Fused quartz
 
 5 June 2026
-- Added tech: Xenon arc lamp
-- Added tech: Electrolytic capacitor
+- Added tech: Xenon arc lamp, 1950
+- Added tech: Electrolytic capacitor, 1896
 - Added connection: Mercury-vapor lamp --> Metal-halide lamp
 - Added connection: Arc lamp --> Xenon arc lamp
 - Added connection: Xenon --> Xenon arc lamp
@@ -1168,27 +1168,27 @@
 - Added connection: Blown glass --> Leyden jar
 
 4 June 2026
-- Added tech: Electronic flashtube
+- Added tech: Electronic flashtube, 1931
 - Added connection: Electronic flashtube --> Laser
 - Added connection: Xenon --> Laser
 
 3 June 2026
-- Added tech: Surgical mask
-- Added tech: Endoscope
-- Added tech: Camphor
+- Added tech: Surgical mask, 1897
+- Added tech: Endoscope, 1853
+- Added tech: Camphor, 300
 - Added connection: Antiseptic surgery --> Surgical mask
 - Added connection: Camphor --> Celluloid
 
 2 June 2026
-- Added tech: Barding and cataphract
+- Added tech: Barding and cataphract, 700 BCE
 - Added connection: Scale armor --> Barding and cataphract
 - Added connection: Domestication of the horse --> Barding and cataphract
 - Added connection: Lamellar armor --> Barding and cataphract
 
 1 June 2026
-- Added tech: Virtual machine
-- Added tech: War elephant
-- Added tech: Elephant taming
+- Added tech: Virtual machine, 1967
+- Added tech: War elephant, 600 BCE
+- Added tech: Elephant taming, 2500 BCE
 - Added connection: Virtual machine --> Cloud computing
 - Added connection: Time-sharing --> Cloud computing
 - Added connection: Time-sharing --> Virtual machine
@@ -1201,7 +1201,7 @@
 - Added connection: Internet protocol suite --> Cloud computing
 
 30 May 2026
-- Added tech: Dynamic website
+- Added tech: Dynamic website, 1993
 - Added connection: Relational database --> Dynamic website
 - Added connection: World Wide Web --> Dynamic website
 - Added connection: Dynamic website --> Wiki
@@ -1210,9 +1210,9 @@
 - Added connection: Hard disk drive --> Database
 
 29 May 2026
-- Added tech: Relational database
-- Added tech: Database
-- Added tech: Infrared spectroscopy
+- Added tech: Relational database, 1974
+- Added tech: Database, 1964
+- Added tech: Infrared spectroscopy, 1905
 - Added connection: Infrared --> Infrared spectroscopy
 - Added connection: Bolometer --> Infrared spectroscopy
 - Added connection: Spectroscope --> Infrared spectroscopy
@@ -1222,13 +1222,13 @@
 - Added connection: Database --> Relational database
 
 28 May 2026
-- Added tech: Slide-rest all-metal lathe
+- Added tech: Slide-rest all-metal lathe, 1751
 - Added connection: Lathe --> Slide-rest all-metal lathe
 - Added connection: Screw --> Slide-rest all-metal lathe
 - Added connection: Slide-rest all-metal lathe <--> Screw-cutting lathe
 
 27 May 2026
-- Added tech: Catheter
+- Added tech: Catheter, 270 BCE
 - Added connection: High-vacuum tube --> Pacemaker
 - Added connection: Electrocardiography machine --> Pacemaker
 - Added connection: Cellophane --> Hemodialysis machine
@@ -1237,12 +1237,12 @@
 - Added connection: Industrial robot --> Surgical robot
 
 26 May 2026
-- Added tech: Non-stick pan
-- Added tech: Heart-lung machine
-- Added tech: Hemodialysis machine
-- Added tech: Teflon
-- Added tech: ABO blood types
-- Added tech: Surgery under ether anesthesia
+- Added tech: Non-stick pan, 1954
+- Added tech: Heart-lung machine, 1953
+- Added tech: Hemodialysis machine, 1945
+- Added tech: Teflon, 1938
+- Added tech: ABO blood types, 1901
+- Added tech: Surgery under ether anesthesia, 1846
 - Added connection: Bolometer --> Thermographic camera
 - Added connection: Surgery under anesthesia <--> Surgery under ether anesthesia
 - Added connection: Ether --> Surgery under ether anesthesia
@@ -1262,8 +1262,8 @@
 - Added connection: Hemodialysis machine --> Artificial heart
 
 25 May 2026
-- Added tech: Thermographic camera
-- Added tech: Night-vision device
+- Added tech: Thermographic camera, 1965
+- Added tech: Night-vision device, 1929
 - Added connection: Galvanometer --> Wheatstone bridge
 - Added connection: Wheatstone bridge --> Transoceanic communication cable
 - Added connection: Infrared --> Infrared LED
@@ -1271,8 +1271,8 @@
 - Added connection: Video camera tube --> Night-vision device
 
 24 May 2026
-- Added tech: Bolometer
-- Added tech: Wheatstone bridge
+- Added tech: Bolometer, 1878
+- Added tech: Wheatstone bridge, 1843
 - Added connection: Opium poppy cultivation --> Morphine
 - Added connection: Infrared --> Bolometer
 - Added connection: Mirror galvanometer --> Bolometer
@@ -1280,11 +1280,11 @@
 - Added connection: Wheatstone bridge --> Bolometer
 
 23 May 2026
-- Added tech: Mars lander
-- Added tech: Lunar rover
-- Added tech: Radioisotope generator
-- Added tech: Fluorescence
-- Added tech: Chlorophyll
+- Added tech: Mars lander, 1976
+- Added tech: Lunar rover, 1970
+- Added tech: Radioisotope generator, 1961
+- Added tech: Fluorescence, 1852
+- Added tech: Chlorophyll, 1817
 - Added connection: Polonium --> Radioisotope generator
 - Added connection: Plutonium --> Radioisotope generator
 - Added connection: Artificial satellite --> Radioisotope generator
@@ -1306,14 +1306,14 @@
 - Added connection: Chlorophyll --> Fluorescence
 
 22 May 2026
-- Added tech: Traveling-wave tube
-- Added tech: Klystron
-- Added tech: Stimulated emission
-- Added tech: Sprayed concrete
-- Added tech: Millimeter waves
-- Added tech: Photoelectric effect
-- Added tech: Ultraviolet
-- Added tech: Infrared
+- Added tech: Traveling-wave tube, 1943
+- Added tech: Klystron, 1937
+- Added tech: Stimulated emission, 1917
+- Added tech: Sprayed concrete, 1907
+- Added tech: Millimeter waves, 1894
+- Added tech: Photoelectric effect, 1887
+- Added tech: Ultraviolet, 1801
+- Added tech: Infrared, 1800
 - Added connection: Photoelectric effect --> Photomultiplier tube
 - Added connection: Infrared --> Ultraviolet
 - Added connection: Dispersive prism and color spectrum --> Infrared
@@ -1342,9 +1342,9 @@
 - Added connection: Traveling-wave tube --> Interstellar probe
 
 21 May 2026
-- Added tech: Outboard motor
-- Added tech: Powered model aircraft
-- Added tech: Chinese top
+- Added tech: Outboard motor, 1906
+- Added tech: Powered model aircraft, 1870
+- Added tech: Chinese top, 320
 - Added connection: Archimedes' screw --> Screw propeller
 - Added connection: Paddle wheel boat --> Screw propeller
 - Added connection: Screw propeller --> Steam-powered battleship
@@ -1369,12 +1369,12 @@
 - Added connection: Motorboat --> Outboard motor
 
 20 May 2026
-- Added tech: Formaldehyde
-- Added tech: Screw propeller
-- Added tech: Phenol
-- Added tech: Methanol
-- Added tech: Silver halides
-- Added tech: Shellac
+- Added tech: Formaldehyde, 1859
+- Added tech: Screw propeller, 1836
+- Added tech: Phenol, 1834
+- Added tech: Methanol, 1661
+- Added tech: Silver halides, 1565
+- Added tech: Shellac, 1000 BCE
 - Added connection: Silver halides --> Cloud seeding
 - Added connection: Phenol --> Antiseptic surgery
 - Added connection: Coal tar --> Phenol
@@ -1389,9 +1389,9 @@
 - Added connection: Noria and water wheel --> Archimedes' screw
 
 19 May 2026
-- Added tech: Medical glove
-- Added tech: Antiseptic surgery
-- Added tech: Germ theory
+- Added tech: Medical glove, 1890
+- Added tech: Antiseptic surgery, 1867
+- Added tech: Germ theory, 1861
 - Added connection: Boyle's air pump --> Pneumatic trough
 - Added connection: Vulcanized rubber --> Medical glove
 - Added connection: Antiseptic surgery --> Medical glove
@@ -1407,7 +1407,7 @@
 - Added connection: Germ theory --> Activated sludge
 
 18 May 2026
-- Added tech: Glycerol
+- Added tech: Glycerol, 1779
 - Added connection: Glycerol --> Nitroglycerin
 - Added connection: Soap --> Glycerol
 - Added connection: Olive oil --> Glycerol
@@ -1429,8 +1429,8 @@
 - Added connection: Coke (Europe) --> Haber process
 
 15 May 2026
-- Added tech: Liquefaction of gas
-- Added tech: Ammonia
+- Added tech: Liquefaction of gas, 1823
+- Added tech: Ammonia, 1756
 - Added connection: Hampson–Linde air liquefaction --> Claude air liquefaction
 - Added connection: Limestone --> Carbon dioxide
 - Added connection: Carbon dioxide --> Carbonated water
@@ -1461,10 +1461,10 @@
 - Added connection: Ammonia --> Haber process
 
 14 May 2026
-- Added tech: Cloud seeding
-- Added tech: Dry ice
-- Added tech: Carbon dioxide
-- Added tech: Pneumatic trough
+- Added tech: Cloud seeding, 1946
+- Added tech: Dry ice, 1835
+- Added tech: Carbon dioxide, 1754
+- Added tech: Pneumatic trough, 1727
 - Added connection: Argon --> Helium (isolation)
 - Added connection: Hampson–Linde air liquefaction --> Neon
 - Added connection: Argon --> Neon
@@ -1498,7 +1498,7 @@
 - Added connection: Induction coil --> Argon
 
 12 May 2026
-- Added tech: Shadow-mask color TV set
+- Added tech: Shadow-mask color TV set, 1954
 - Added connection: Zinc sulfide phosphor --> Shadow-mask color TV set
 - Added connection: Sprengel pump --> Argon
 - Added connection: Mercury --> Sprengel pump
@@ -1508,7 +1508,7 @@
 - Added connection: Terrestrial television --> Shadow-mask color TV set
 
 11 May 2026
-- Added tech: Fully mechanical astronomical clock
+- Added tech: Fully mechanical astronomical clock, 1336
 - Added connection: Astrolabe --> Fully mechanical astronomical clock
 - Added connection: Magic lantern --> Autochrome
 - Added connection: Armillary sphere (Greece) --> Celestial globe
@@ -1523,13 +1523,13 @@
 - Added connection: Bakelite --> Slide projector
 
 10 May 2026
-- Added tech: Geodesic dome
-- Added tech: Planetarium projector
+- Added tech: Geodesic dome, 1926
+- Added tech: Planetarium projector, 1923
 - Added connection: Planetarium projector --> Geodesic dome
 - Added connection: True dome --> Geodesic dome
 
 9 May 2026
-- Added tech: Flying buttress
+- Added tech: Flying buttress, 1160
 
 8 May 2026
 - Added connection: True dome --> Pendentive dome
@@ -1538,14 +1538,14 @@
 - Added connection: Public bath --> True dome
 
 7 May 2026
-- Added tech: Protactinium
+- Added tech: Protactinium, 1913
 - Added connection: Uranium --> Protactinium
 - Added connection: Periodic table --> Protactinium
 - Added connection: Periodic table --> Technetium
 
 6 May 2026
-- Added tech: Bow and bowed instruments
-- Added tech: Rosin
+- Added tech: Bow and bowed instruments, 800
+- Added tech: Rosin, 600 BCE
 - Added connection: Tree resin --> Rosin
 - Added connection: Alembic --> Turpentine
 - Added connection: Rosin --> Bow and bowed instruments
@@ -1562,17 +1562,17 @@
 - Added connection: Bowed rebab --> Vielle
 
 5 May 2026
-- Added tech: Turpentine
-- Added tech: Tree resin
+- Added tech: Turpentine, 1300
+- Added tech: Tree resin, 50000 BCE
 - Added connection: Distillation --> Pine tar
 - Added connection: Tree resin --> Turpentine
 - Added connection: Hafting --> Tree resin
 - Added connection: Hafting --> Glue
 
 4 May 2026
-- Added tech: Spinthariscope
-- Added tech: Zinc sulfide phosphor
-- Added tech: Substitution cipher
+- Added tech: Spinthariscope, 1903
+- Added tech: Zinc sulfide phosphor, 1866
+- Added tech: Substitution cipher, 50 BCE
 - Added connection: Substitution cipher --> Cipher disk
 - Added connection: Substitution cipher --> Frequency analysis
 - Added connection: Alphabet with vowels --> Substitution cipher
@@ -1585,7 +1585,7 @@
 - Added connection: Spinthariscope --> Scintillation counter
 
 3 May 2026
-- Added tech: Chemical vapor deposition
+- Added tech: Chemical vapor deposition, 1880
 - Added connection: Carbon fibers --> Chemical vapor deposition
 - Added connection: Chemical vapor deposition --> Plasma-enhanced chemical vapor deposition
 - Added connection: Chemical vapor deposition --> Metalorganic vapour-phase epitaxy
@@ -1594,12 +1594,12 @@
 - Added connection: Vacuum pump --> Chemical vapor deposition
 
 2 May 2026
-- Added tech: Chromolithography
+- Added tech: Chromolithography, 1837
 - Added connection: Lithography --> Chromolithography
 - Added connection: Red-yellow-blue color printing --> Chromolithography
 
 1 May 2026
-- Added tech: Subtractive color photography
+- Added tech: Subtractive color photography, 1869
 - Added connection: Color theory --> Color photography
 - Added connection: Color photography --> Subtractive color photography
 - Added connection: Red-yellow-blue color printing --> Subtractive color photography
@@ -1609,8 +1609,8 @@
 - Added connection: Subtractive color photography --> Subtractive color film
 
 30 April 2026
-- Added tech: Red-yellow-blue color printing
-- Added tech: Color theory
+- Added tech: Red-yellow-blue color printing, 1710
+- Added tech: Color theory, 1704
 - Added connection: Mezzotint --> Red-yellow-blue color printing
 - Added connection: Engraving --> Photoengraving
 - Added connection: Etching --> Photoengraving
@@ -1622,10 +1622,10 @@
 - Added connection: Prussian blue --> Red-yellow-blue color printing
 
 29 April 2026
-- Added tech: Waterproof disposable diaper
-- Added tech: Halftone
-- Added tech: Chalumeau
-- Added tech: Recorder
+- Added tech: Waterproof disposable diaper, 1946
+- Added tech: Halftone, 1881
+- Added tech: Chalumeau, 1636
+- Added tech: Recorder, 1315
 - Added connection: Nylon --> Waterproof disposable diaper
 - Added connection: Chalumeau --> Clarinet
 - Added connection: Collodion wet-plate photography --> Halftone
@@ -1633,8 +1633,8 @@
 - Added connection: Flute --> Chalumeau
 
 28 April 2026
-- Added tech: Aquatint
-- Added tech: Mezzotint
+- Added tech: Aquatint, 1768
+- Added tech: Mezzotint, 1642
 - Added connection: Nitric acid --> Etching
 - Added connection: Copper smelting --> Etching
 - Added connection: Etching --> Aquatint
@@ -1646,29 +1646,29 @@
 - Added connection: Difference engine --> Analytical engine
 
 26 April 2026
-- Added tech: Etching
+- Added tech: Etching, 1510
 - Added connection: Ink --> Woodblock printing
 - Added connection: Engraving --> Etching
 - Added connection: Full plate armor --> Etching
 
 25 April 2026
-- Added tech: Printing ink
+- Added tech: Printing ink, 1439
 - Added connection: Ink --> Printing ink
 - Added connection: Oil paint --> Printing ink
 - Added connection: Printing ink <--> Printing press
 - Added connection: Printing ink --> Lithography
 
 24 April 2026
-- Added tech: Iron gall ink
-- Added tech: Vitriol
+- Added tech: Iron gall ink, 350
+- Added tech: Vitriol, 600 BCE
 - Added connection: Tricycle and quadricycle --> Electric car
 - Added connection: Ink --> Iron gall ink
 - Added connection: Vitriol --> Iron gall ink
 - Added connection: Vitriol --> Sulfuric acid
 
 23 April 2026
-- Added tech: Watercolor paint cake
-- Added tech: Gypsum plaster
+- Added tech: Watercolor paint cake, 1781
+- Added tech: Gypsum plaster, 7500 BCE
 - Added connection: Gum arabic --> Watercolor paint cake
 - Added connection: Ink --> Watercolor paint cake
 - Added connection: Paint --> Watercolor paint cake
@@ -1681,10 +1681,10 @@
 - Added connection: Gypsum plaster --> Tempera
 
 22 April 2026
-- Added tech: Encaustic painting
-- Added tech: Fresco
-- Added tech: Tempera
-- Added tech: Paint
+- Added tech: Encaustic painting, 400 BCE
+- Added tech: Fresco, 1650 BCE
+- Added tech: Tempera, 1750 BCE
+- Added tech: Paint, 100000 BCE
 - Added connection: Pigments --> Paint
 - Added connection: Paint --> Cave painting
 - Added connection: Control of fire --> Paint
@@ -1696,8 +1696,8 @@
 - Added connection: Paint --> Encaustic painting
 
 21 April 2026
-- Added tech: Surgical robot
-- Added tech: Rose madder
+- Added tech: Surgical robot, 2000
+- Added tech: Rose madder, 1500 BCE
 - Added connection: Hydraulic cylinder --> Hydraulic excavator
 - Added connection: Hydraulic cylinder --> Hydraulic accumulator
 - Added connection: Hydraulic cylinder --> Industrial robot
@@ -1705,8 +1705,8 @@
 - Added connection: Hydraulic cylinder --> Bulldozer
 
 20 April 2026
-- Added tech: Industrial robot
-- Added tech: Hydraulic cylinder
+- Added tech: Industrial robot, 1961
+- Added tech: Hydraulic cylinder, 1795
 - Added connection: Drum memory --> Industrial robot
 - Added connection: Servomechanism --> Industrial robot
 
@@ -1722,11 +1722,11 @@
 - Added connection: Numerical control --> Fused filament fabrication
 
 18 April 2026
-- Added tech: Paint tube
-- Added tech: Cathodic protection
-- Added tech: Copper sheathed ship
-- Added tech: Hot-dip zinc coating
-- Added tech: Tinplate
+- Added tech: Paint tube, 1841
+- Added tech: Cathodic protection, 1824
+- Added tech: Copper sheathed ship, 1761
+- Added tech: Hot-dip zinc coating, 1742
+- Added tech: Tinplate, 1620
 - Added connection: Zinc smelting --> Hot-dip zinc coating
 - Added connection: Bloomery and wrought iron --> Hot-dip zinc coating
 - Added connection: Opium poppy cultivation --> Oil paint
@@ -1751,10 +1751,10 @@
 - Added connection: Kite experiment --> Galvanism
 
 17 April 2026
-- Added tech: Siderography and steel engraving
-- Added tech: Engraving
-- Added tech: Oil paint
-- Added tech: Niello
+- Added tech: Siderography and steel engraving, 1805
+- Added tech: Engraving, 1430
+- Added tech: Oil paint, 650
+- Added tech: Niello, 1550 BCE
 - Added connection: Gum arabic --> Ink
 - Added connection: Gum arabic --> Adhesive postage stamp
 - Added connection: Tin bronze --> Niello
@@ -1772,9 +1772,9 @@
 - Added connection: Domestication of flax --> Oil paint
 
 16 April 2026
-- Added tech: Carillon
-- Added tech: Barrel organ
-- Added tech: Gum arabic
+- Added tech: Carillon, 1510
+- Added tech: Barrel organ, 1450
+- Added tech: Gum arabic, 2650 BCE
 - Added connection: Barrel organ --> Loom with punched tape
 - Added connection: Pipe organ --> Barrel organ
 - Added connection: Barrel organ --> Music box
@@ -1793,8 +1793,8 @@
 - Added connection: Gum arabic --> Lithography
 
 15 April 2026
-- Added tech: Electronic analog computer
-- Added tech: Music box
+- Added tech: Electronic analog computer, 1941
+- Added tech: Music box, 1796
 - Added connection: Tabulating machine --> Numerical control
 - Added connection: Fire-control system --> Numerical control
 - Added connection: Servomechanism --> Ballistic missile
@@ -1809,9 +1809,9 @@
 - Added connection: Dumaresq --> Fire-control system
 
 14 April 2026
-- Added tech: Numerical control
-- Added tech: Servomechanism
-- Added tech: Milling machine
+- Added tech: Numerical control, 1952
+- Added tech: Servomechanism, 1866
+- Added tech: Milling machine, 1818
 - Added connection: Flintlock musket --> Milling machine
 - Added connection: Milling machine --> Numerical control
 - Added connection: Centrifugal governor --> Servomechanism
@@ -1821,8 +1821,8 @@
 - Added connection: Punched card --> Player piano
 
 13 April 2026
-- Added tech: Grooved rolling mill
-- Added tech: Reverberatory furnace
+- Added tech: Grooved rolling mill, 1783
+- Added tech: Reverberatory furnace, 1540
 - Added connection: Polished plate glass --> Aquarium
 - Added connection: Screw-cutting lathe --> Planer
 - Added connection: Lathe --> Screw-cutting lathe
@@ -1841,16 +1841,16 @@
 
 12 April 2026
 - v1.1.1: Desktop zoom
-- Added tech: Home video security system
-- Added tech: Security alarm
+- Added tech: Home video security system, 1966
+- Added tech: Security alarm, 1853
 
 11 April 2026
 - Added connection: Selenium photocell --> Nipkow disk
 - Added connection: Mechanical television --> Electronic television
 
 10 April 2026
-- Added tech: Electronic CCTV and security camera
-- Added tech: Closed-circuit television
+- Added tech: Electronic CCTV and security camera, 1942
+- Added tech: Closed-circuit television, 1927
 - Added connection: Videotelephone --> Video compression
 - Added connection: Video compression --> DVD
 - Added connection: Video compression --> Media streaming
@@ -1861,8 +1861,8 @@
 - Added connection: Video camera tube --> Electronic CCTV and security camera
 
 9 April 2026
-- Added tech: Video compression
-- Added tech: Videotelephone
+- Added tech: Video compression, 1988
+- Added tech: Videotelephone, 1936
 - Added connection: Mechanical television --> Videotelephone
 - Added connection: Telephone --> Videotelephone
 - Added connection: Cathode-ray tube --> Videotelephone
@@ -1870,13 +1870,13 @@
 
 8 April 2026
 - v1.1: Mobile zoom
-- Added tech: Modern autopen
-- Added tech: Spray-dried instant coffee
-- Added tech: Instant coffee
-- Added tech: Spray dryer
-- Added tech: Polygraph autopen
-- Added tech: Pantograph
-- Added tech: Clothes iron
+- Added tech: Modern autopen, 1942
+- Added tech: Spray-dried instant coffee, 1938
+- Added tech: Instant coffee, 1890
+- Added tech: Spray dryer, 1872
+- Added tech: Polygraph autopen, 1803
+- Added tech: Pantograph, 1603
+- Added tech: Clothes iron, 1600
 - Added connection: Clothes iron --> Electric flatiron
 - Added connection: Cast iron --> Clothes iron
 - Added connection: Joule heating --> Electric flatiron
@@ -1893,11 +1893,11 @@
 - Added connection: Vacuum pump --> Pneumatic tube mail
 
 6 April 2026
-- Added tech: Wetsuit
-- Added tech: Self-contained breathing apparatus
-- Added tech: Neoprene
-- Added tech: Machine drawn cylinder sheet glass
-- Added tech: Acetylene
+- Added tech: Wetsuit, 1952
+- Added tech: Self-contained breathing apparatus, 1945
+- Added tech: Neoprene, 1931
+- Added tech: Machine drawn cylinder sheet glass, 1903
+- Added tech: Acetylene, 1836
 - Added connection: Machine drawn cylinder sheet glass --> Float glass
 - Added connection: Potassium --> Acetylene
 - Added connection: Acetylene --> Neoprene
@@ -1915,7 +1915,7 @@
 - Added connection: Scuba set <--> Self-contained breathing apparatus
 
 5 April 2026
-- Added tech: Fourcault drawn sheet glass
+- Added tech: Fourcault drawn sheet glass, 1912
 - Added connection: Fourcault drawn sheet glass --> Float glass
 - Added connection: Polished plate glass --> Float glass
 - Added connection: Broad sheet glass --> Fourcault drawn sheet glass
@@ -1924,14 +1924,14 @@
 - Added connection: Polished plate glass --> Silver mirror
 
 4 April 2026
-- Added tech: Polished plate glass
+- Added tech: Polished plate glass, 1688
 - Added connection: Glass --> Polished plate glass
 - Added connection: Tin-mercury amalgam mirror --> Polished plate glass
 
 3 April 2026
-- Added tech: Crown glass
-- Added tech: Broad sheet glass
-- Added tech: Lapis specularis window
+- Added tech: Crown glass, 1330
+- Added tech: Broad sheet glass, 1100
+- Added tech: Lapis specularis window, 1
 - Added connection: Glass window --> Broad sheet glass
 - Added connection: Blown glass --> Broad sheet glass
 - Added connection: Blown glass --> Crown glass
@@ -1943,56 +1943,56 @@
 - Added connection: Lapis specularis window --> Glass window
 
 2 April 2026
-- Added tech: Automatic bottle-blowing machine
+- Added tech: Automatic bottle-blowing machine, 1903
 - Added connection: Blown glass --> Automatic bottle-blowing machine
 - Added connection: Light bulb --> Automatic bottle-blowing machine
 - Added connection: Automatic bottle-blowing machine --> Glass wool
 
 1 April 2026
-- Added tech: Glass wool
-- Added tech: Mineral wool
+- Added tech: Glass wool, 1933
+- Added tech: Mineral wool, 1871
 - Added connection: Glass wool --> Fiberglass
 - Added connection: Blast furnace --> Mineral wool
 - Added connection: Mineral wool --> Glass wool
 
 31 March 2026
-- Added tech: Stable aquarium
-- Added tech: Aquarium
+- Added tech: Stable aquarium, 1850
+- Added tech: Aquarium, 1832
 - Added connection: Glasshouse --> Terrarium
 - Added connection: Terrarium --> Stable aquarium
 - Added connection: Aquarium --> Stable aquarium
 
 30 March 2026
-- Added tech: Terrarium
+- Added tech: Terrarium, 1833
 
 29 March 2026
-- Added tech: Magnetic stripe card
-- Added tech: Electric flatiron
+- Added tech: Magnetic stripe card, 1969
+- Added tech: Electric flatiron, 1882
 - Added connection: Magnetic tape --> Magnetic stripe card
 - Added connection: Electric flatiron --> Magnetic stripe card
 - Added connection: Credit card --> Magnetic stripe card
 
 26 March 2026
-- Added tech: Cork
+- Added tech: Cork, 500 BCE
 - Added connection: Cork --> Cell
 - Added connection: Treadle loom --> Drawloom
 - Added connection: Ground loom --> Treadle loom
 - Added connection: Treadle loom --> Flying shuttle
 
 25 March 2026
-- Added tech: Ground loom
+- Added tech: Ground loom, 4400 BCE
 - Added connection: Rope and twine --> Jute
 - Added connection: Weaving and basketry --> Ground loom
 
 23 March 2026
-- Added tech: Jute
+- Added tech: Jute, 2200 BCE
 - Added connection: Rope and twine --> Safety fuse
 - Added connection: Jute --> Safety fuse
 - Added connection: Coal tar --> Safety fuse
 
 21 March 2026
-- Added tech: Modern land mine
-- Added tech: Mortar and artillery shell
+- Added tech: Modern land mine, 1862
+- Added tech: Mortar and artillery shell, 1407
 - Added connection: Explosive shell gun --> Induction balance metal detector
 - Added connection: Modern land mine --> Polish mine detector
 - Added connection: Pressure-operated land mine --> Modern land mine
@@ -2002,8 +2002,8 @@
 - Added connection: Cannon --> Mortar and artillery shell
 
 20 March 2026
-- Added tech: Contact fuze
-- Added tech: Caltrop
+- Added tech: Contact fuze, 1916
+- Added tech: Caltrop, 331 BCE
 - Added connection: Caltrop --> Land mine
 - Added connection: Snaphance --> Pressure-operated land mine
 - Added connection: Bloomery and wrought iron --> Caltrop
@@ -2016,12 +2016,12 @@
 - Added connection: Fuse --> Land mine
 
 17 March 2026
-- Added tech: Fuse
+- Added tech: Fuse, 1000
 
 16 March 2026
-- Added tech: Safety fuse
-- Added tech: Explosive shell gun
-- Added tech: Pressure-operated land mine
+- Added tech: Safety fuse, 1831
+- Added tech: Explosive shell gun, 1823
+- Added tech: Pressure-operated land mine, 1573
 - Added connection: Explosive shell gun --> Ironclad
 
 15 March 2026
@@ -2029,40 +2029,40 @@
 - Added connection: High-vacuum tube --> Radio-frequency metal detector
 
 14 March 2026
-- Added tech: Polish mine detector
-- Added tech: Radio-frequency metal detector
-- Added tech: Induction balance metal detector
+- Added tech: Polish mine detector, 1941
+- Added tech: Radio-frequency metal detector, 1931
+- Added tech: Induction balance metal detector, 1915
 - Added connection: Radio direction finding --> Radio-frequency metal detector
 - Added connection: Induction balance metal detector <--> Radio-frequency metal detector
 - Added connection: Radio-frequency metal detector --> Polish mine detector
 
 13 March 2026
-- Added tech: Full body scanner
+- Added tech: Full body scanner, 1992
 - Added connection: Full body scanner --> Millimeter wave scanner
 - Added connection: X-ray --> Compton scattering
 - Added connection: Compton scattering --> Full body scanner
 
 11 March 2026
-- Added tech: Millimeter wave scanner
+- Added tech: Millimeter wave scanner, 2006
 
 10 March 2026
 - Added connection: Optical fiber --> Quantum cryptography
 - Added connection: Laser --> Quantum cryptography
 
 9 March 2026
-- Added tech: Protein
+- Added tech: Protein, 1838
 - Added connection: Protein --> Protein sequencing
 
 8 March 2026
-- Added tech: Multiple sequence alignment
+- Added tech: Multiple sequence alignment, 1988
 - Added connection: Mirror galvanometer <--> Transoceanic communication cable
 - Added connection: DNA sequencing --> Multiple sequence alignment
 - Added connection: Multiple sequence alignment --> AI protein structure prediction
 - Added connection: X-ray crystallography --> AI protein structure prediction
 
 7 March 2026
-- Added tech: Hot water central heating
-- Added tech: Chimney
+- Added tech: Hot water central heating, 1832
+- Added tech: Chimney, 1185
 - Added connection: Transoceanic communication cable --> Syphon recorder
 - Added connection: Transoceanic communication cable --> Kelvite sounding machine
 - Added connection: Hot water central heating --> Radiator
@@ -2077,23 +2077,23 @@
 - Added connection: Ocean liner --> Transoceanic communication cable
 
 6 March 2026
-- Added tech: Radiator
-- Added tech: Central heating
+- Added tech: Radiator, 1855
+- Added tech: Central heating, 1793
 - Added connection: Central heating --> Hot water central heating
 
 5 March 2026
-- Added tech: AI protein structure prediction
-- Added tech: Quantum cryptography
+- Added tech: AI protein structure prediction, 2020
+- Added tech: Quantum cryptography, 1984
 - Added connection: Public-key cryptography --> Quantum cryptography
 - Added connection: Submarine communication cable --> Transoceanic communication cable
 - Added connection: Transformer (machine learning) --> AI protein structure prediction
 
 4 March 2026
-- Added tech: Transoceanic communication cable
+- Added tech: Transoceanic communication cable, 1866
 
 2 March 2026
-- Added tech: Drum memory
-- Added tech: Differential analyzer
+- Added tech: Drum memory, 1932
+- Added tech: Differential analyzer, 1931
 - Added connection: Wire recording --> Drum memory
 - Added connection: Electromagnet --> Wire recording
 - Added connection: Telephone --> Wire recording
@@ -2102,10 +2102,10 @@
 - Added connection: Tabulating machine --> Drum memory
 
 1 March 2026
-- Added tech: Graphics software
-- Added tech: Framebuffer
-- Added tech: Magnetic-core memory
-- Added tech: Digital image
+- Added tech: Graphics software, 1973
+- Added tech: Framebuffer, 1969
+- Added tech: Magnetic-core memory, 1953
+- Added tech: Digital image, 1920
 - Added connection: Wirephoto --> Digital image
 - Added connection: Digital image --> Computer digital image
 - Added connection: Computer digital image --> Digital camera
@@ -2120,11 +2120,11 @@
 - Added connection: Ball-and-disk integrator --> Differential analyzer
 
 28 February 2026
-- Added tech: Omni-font optical character recognition
-- Added tech: Flatbed image scanner
-- Added tech: Computer digital image
-- Added tech: Synthetic-aperture radar
-- Added tech: Optophone
+- Added tech: Omni-font optical character recognition, 1977
+- Added tech: Flatbed image scanner, 1975
+- Added tech: Computer digital image, 1957
+- Added tech: Synthetic-aperture radar, 1951
+- Added tech: Optophone, 1913
 - Added connection: Radar --> Synthetic-aperture radar
 - Added connection: Stored-program computer --> Computer digital image
 - Added connection: Wirephoto --> Computer digital image
@@ -2139,15 +2139,15 @@
 - v1.0.5: Rename Finance to Commerce
 
 25 February 2026
-- Added tech: Universal Product Code
-- Added tech: Barcode
+- Added tech: Universal Product Code, 1974
+- Added tech: Barcode, 1952
 - Added connection: Morse code --> Barcode
 - Added connection: Photomultiplier tube --> Barcode
 - Added connection: Barcode --> Universal Product Code
 - Added connection: Laser --> Universal Product Code
 
 24 February 2026
-- Added tech: Virtual reality headset
+- Added tech: Virtual reality headset, 1987
 - Added connection: Head-mounted display --> Virtual reality headset
 - Added connection: Stereoscope --> Head-mounted display
 - Added connection: Tin-mercury amalgam mirror --> Stereoscope
@@ -2158,8 +2158,8 @@
 - Added connection: Weather forecasting --> Weather radar
 
 22 February 2026
-- Added tech: Weather radar
-- Added tech: Radar network
+- Added tech: Weather radar, 1947
+- Added tech: Radar network, 1938
 - Added connection: Radar network --> Computer network
 - Added connection: Fighter aircraft --> Radar network
 - Added connection: Radar --> Radar network
@@ -2167,9 +2167,9 @@
 - Added connection: Radar --> Weather radar
 
 21 February 2026
-- Added tech: Massively parallel sequencing
-- Added tech: Computer-aided design
-- Added tech: Light pen
+- Added tech: Massively parallel sequencing, 2005
+- Added tech: Computer-aided design, 1963
+- Added tech: Light pen, 1952
 - Added connection: High-level programming language --> Spreadsheet
 - Added connection: High-level programming language --> Word processor software
 - Added connection: High-level programming language --> Graphical user interface
@@ -2184,8 +2184,8 @@
 - Added connection: DNA sequencing --> Massively parallel sequencing
 
 19 February 2026
-- Added tech: AI coding agent
-- Added tech: AI code completion
+- Added tech: AI coding agent, 2025
+- Added tech: AI code completion, 2021
 - Added connection: Reasoning model --> AI coding agent
 - Added connection: LLM chatbot --> AI coding agent
 - Added connection: AI code completion --> AI coding agent
@@ -2198,7 +2198,7 @@
 - Added connection: Galvanometer --> Radio detector
 
 17 February 2026
-- Added tech: Ocean liner
+- Added tech: Ocean liner, 1838
 - Added connection: Steamboat transport --> Ocean liner
 - Added connection: Ocean liner --> Fessenden oscillator
 
@@ -2206,14 +2206,14 @@
 - Added connection: Rail transport --> Nomogram
 
 14 February 2026
-- Added tech: VHF omnidirectional range
-- Added tech: High-frequency direction finder
-- Added tech: Low-frequency radio range
-- Added tech: Adcock antenna
-- Added tech: Bellini–Tosi direction finder
-- Added tech: Radio navigation system
-- Added tech: Radio direction finding
-- Added tech: Submarine signal bell
+- Added tech: VHF omnidirectional range, 1949
+- Added tech: High-frequency direction finder, 1926
+- Added tech: Low-frequency radio range, 1926
+- Added tech: Adcock antenna, 1919
+- Added tech: Bellini–Tosi direction finder, 1909
+- Added tech: Radio navigation system, 1907
+- Added tech: Radio direction finding, 1902
+- Added tech: Submarine signal bell, 1901
 - Added connection: Radio direction finding --> Bellini–Tosi direction finder
 - Added connection: Radio waves and spark-gap transmitter --> Radio direction finding
 - Added connection: Bellini–Tosi direction finder --> Adcock antenna
@@ -2244,12 +2244,12 @@
 - Added connection: Titanium --> Kroll process
 
 10 February 2026
-- Added tech: Medical ultrasound
-- Added tech: Ultrasonic testing
-- Added tech: Sonar
-- Added tech: Piezoelectric transducer
-- Added tech: Fessenden oscillator
-- Added tech: Treadle loom
+- Added tech: Medical ultrasound, 1958
+- Added tech: Ultrasonic testing, 1940
+- Added tech: Sonar, 1920
+- Added tech: Piezoelectric transducer, 1917
+- Added tech: Fessenden oscillator, 1912
+- Added tech: Treadle loom, 200 BCE
 - Added connection: Fessenden oscillator --> Sonar
 
 7 February 2026
@@ -2261,8 +2261,8 @@
 - Added connection: Sulfur --> Claus process
 
 4 February 2026
-- Added tech: Saqiyah
-- Added tech: Noria and water wheel
+- Added tech: Saqiyah, 250 BCE
+- Added tech: Noria and water wheel, 350 BCE
 - Added connection: Noria and water wheel --> Saqiyah
 - Added connection: Animal-driven rotary mill --> Saqiyah
 - Added connection: Spoked wheel --> Noria and water wheel
@@ -2272,21 +2272,21 @@
 - Added connection: Irrigation --> Chain pump
 
 3 February 2026
-- Added tech: Spoked wheel
+- Added tech: Spoked wheel, 2000 BCE
 - Added connection: Wheel --> Spoked wheel
 - Added connection: Spoked wheel --> Chariot
 - Added connection: Spoked wheel --> Dandy horse
 - Added connection: Spoked wheel --> Wire wheel
 
 2 February 2026
-- Added tech: Warp-weighted loom
+- Added tech: Warp-weighted loom, 6000 BCE
 - Added connection: Rope and twine --> Weaving and basketry
 - Added connection: Weaving and basketry --> Warp-weighted loom
 - Added connection: Linen --> Weaving and basketry
 
 1 February 2026
-- Added tech: Lockstitch sewing machine
-- Added tech: Stitching awl
+- Added tech: Lockstitch sewing machine, 1845
+- Added tech: Stitching awl, 73000 BCE
 - Added connection: Tanned leather --> Sewing machine
 - Added connection: Sewing machine --> Lockstitch sewing machine
 - Added connection: Soap --> Caustic soda
@@ -2308,9 +2308,9 @@
 - Added connection: Lime --> Autoclaved aerated concrete
 
 30 January 2026
-- Added tech: Chloralkali process
-- Added tech: Solvay process
-- Added tech: Limestone
+- Added tech: Chloralkali process, 1885
+- Added tech: Solvay process, 1861
+- Added tech: Limestone, 790000 BCE
 - Added connection: Leblanc process --> Solvay process
 - Added connection: Lime --> Nixtamalization
 - Added connection: Plant ash alkali --> Sodium hypochlorite bleach
@@ -2325,14 +2325,14 @@
 - Added connection: Control of fire --> Lime
 
 29 January 2026
-- Added tech: Water chlorination
-- Added tech: Waterproof raincoat
-- Added tech: Sodium hypochlorite bleach
-- Added tech: Bleaching powder
-- Added tech: Leblanc process
-- Added tech: Bleach
-- Added tech: Caustic soda
-- Added tech: Plant ash alkali
+- Added tech: Water chlorination, 1894
+- Added tech: Waterproof raincoat, 1824
+- Added tech: Sodium hypochlorite bleach, 1820
+- Added tech: Bleaching powder, 1799
+- Added tech: Leblanc process, 1791
+- Added tech: Bleach, 1789
+- Added tech: Caustic soda, 900
+- Added tech: Plant ash alkali, 2800 BCE
 - Added connection: Chlorine --> Bleach
 - Added connection: Bleach --> Sodium hypochlorite bleach
 - Added connection: Chlorine --> Water chlorination
@@ -2346,21 +2346,21 @@
 - Added connection: Pottery --> Plumbing
 
 28 January 2026
-- Added tech: Activated sludge
-- Added tech: Water purification by sand filter
-- Added tech: Centrifugal governor
+- Added tech: Activated sludge, 1913
+- Added tech: Water purification by sand filter, 1804
+- Added tech: Centrifugal governor, 1788
 - Added connection: Post windmill --> Centrifugal governor
 - Added connection: Watt steam engine --> Centrifugal governor
 - Added connection: Sword --> Guillotine
 - Added connection: Hafted axe --> Guillotine
 
 27 January 2026
-- Added tech: Guillotine
+- Added tech: Guillotine, 1500
 
 26 January 2026
-- Added tech: Marker degradation
-- Added tech: Bunsen cell
-- Added tech: Grove cell
+- Added tech: Marker degradation, 1939
+- Added tech: Bunsen cell, 1841
+- Added tech: Grove cell, 1839
 - Added connection: Marker degradation --> Combined oral contraceptive pill
 - Added connection: Linen --> Condom
 - Added connection: Bunsen cell --> Fluorine (isolation)
@@ -2370,13 +2370,13 @@
 - Added connection: Platinum --> Grove cell
 
 24 January 2026
-- Added tech: Aerosol spray can
-- Added tech: Intrauterine device
-- Added tech: Condom
-- Added tech: Rib vault
-- Added tech: Glass window
-- Added tech: Groin vault
-- Added tech: Barrel vault
+- Added tech: Aerosol spray can, 1927
+- Added tech: Intrauterine device, 1909
+- Added tech: Condom, 1560
+- Added tech: Rib vault, 150
+- Added tech: Glass window, 50
+- Added tech: Groin vault, 223 BCE
+- Added tech: Barrel vault, 4000 BCE
 - Added connection: Flute --> Aulos
 - Added connection: Construction mortar --> Barrel vault
 - Added connection: Fired bricks --> Barrel vault
@@ -2392,8 +2392,8 @@
 - Added connection: Spectroscope --> X-ray crystallography
 
 15 January 2026
-- Added tech: Petroleum naphtha
-- Added tech: Dispersive prism and color spectrum
+- Added tech: Petroleum naphtha, 1860
+- Added tech: Dispersive prism and color spectrum, 1672
 - Added connection: Petroleum naphtha --> Ferrocerium lighter
 - Added connection: Fractional distillation --> Petroleum naphtha
 - Added connection: Drilled oil well --> Petroleum naphtha
@@ -2404,16 +2404,16 @@
 - Added connection: Bloomery and wrought iron --> Ice skates with sharp edge
 
 13 January 2026
-- Added tech: Disposable lighter
-- Added tech: Ferrocerium lighter
-- Added tech: Lutetium
-- Added tech: Ferrocerium
-- Added tech: Ytterbium
-- Added tech: Butane
-- Added tech: Kipp's apparatus
-- Added tech: Cerium
-- Added tech: Ice skates with sharp edge
-- Added tech: Ice skates
+- Added tech: Disposable lighter, 1973
+- Added tech: Ferrocerium lighter, 1910
+- Added tech: Lutetium, 1907
+- Added tech: Ferrocerium, 1903
+- Added tech: Ytterbium, 1878
+- Added tech: Butane, 1864
+- Added tech: Kipp's apparatus, 1844
+- Added tech: Cerium, 1803
+- Added tech: Ice skates with sharp edge, 1225
+- Added tech: Ice skates, 3000 BCE
 - Added connection: Zinc smelting --> Döbereiner's lamp and platinum catalysis
 - Added connection: Sulfuric acid --> Döbereiner's lamp and platinum catalysis
 - Added connection: Platinum --> Döbereiner's lamp and platinum catalysis
@@ -2433,16 +2433,16 @@
 - Added connection: Ice skates with sharp edge --> Roller skates
 
 7 January 2026
-- Added tech: Butter
-- Added tech: Cheese
+- Added tech: Butter, 2500 BCE
+- Added tech: Cheese, 5500 BCE
 - Added connection: Butter --> Margarine
 - Added connection: Domestication of sheep --> Cheese
 - Added connection: Domestication of goats --> Butter
 - Added connection: Domestication of sheep --> Butter
 
 6 January 2026
-- Added tech: Atomic emission spectroscopy
-- Added tech: Spectroscope
+- Added tech: Atomic emission spectroscopy, 1859
+- Added tech: Spectroscope, 1814
 - Added connection: Atomic emission spectroscopy --> Atomic absorption spectroscopy
 - Added connection: Spectroscope --> Atomic emission spectroscopy
 
@@ -2450,17 +2450,17 @@
 - Added connection: Chromatography --> Gas chromatography
 
 4 January 2026
-- Added tech: Atomic absorption spectroscopy
-- Added tech: Gas chromatography
+- Added tech: Atomic absorption spectroscopy, 1955
+- Added tech: Gas chromatography, 1951
 
 3 January 2026
-- Added tech: Polymer banknote
-- Added tech: Polypropylene
-- Added tech: Ziegler–Natta catalyst
-- Added tech: Diazomethane
-- Added tech: Propylene
-- Added tech: Bromine
-- Added tech: Ethylene
+- Added tech: Polymer banknote, 1988
+- Added tech: Polypropylene, 1954
+- Added tech: Ziegler–Natta catalyst, 1953
+- Added tech: Diazomethane, 1894
+- Added tech: Propylene, 1850
+- Added tech: Bromine, 1825
+- Added tech: Ethylene, 1669
 - Added connection: Aniline --> Synthetic dye
 - Added connection: Propylene --> Polypropylene
 - Added connection: Diazomethane --> Polyethylene
@@ -2477,24 +2477,24 @@
 - Added connection: Paper money --> Polymer banknote
 
 30 December 2025
-- Added tech: Oral irrigator
-- Added tech: Dental floss
+- Added tech: Oral irrigator, 1955
+- Added tech: Dental floss, 1819
 - Added connection: Silk --> Dental floss
 - Added connection: Syringe --> Oral irrigator
 
 24 December 2025
-- Added tech: Exoskeleton
-- Added tech: Airbag
-- Added tech: Eraser
+- Added tech: Exoskeleton, 2008
+- Added tech: Airbag, 1973
+- Added tech: Eraser, 1770
 - Added connection: Rubber --> Eraser
 - Added connection: Leavened bread --> Eraser
 - Added connection: Charcoal --> Eraser
 - Added connection: Automobile --> Airbag
 
 22 December 2025
-- Added tech: Nuclear-powered surface ship
-- Added tech: Pencil sharpener
-- Added tech: Noodles
+- Added tech: Nuclear-powered surface ship, 1957
+- Added tech: Pencil sharpener, 1828
+- Added tech: Noodles, 2000 BCE
 - Added connection: Nuclear-powered surface ship --> Small modular reactor
 - Added connection: Nuclear submarine --> Nuclear-powered surface ship
 - Added connection: Modern pencil --> Pencil sharpener
@@ -2502,94 +2502,94 @@
 - Added connection: Noodles --> Instant noodles
 
 20 December 2025
-- Added tech: Airless tire
+- Added tech: Airless tire, 2005
 - Added connection: Pneumatic tire --> Airless tire
 - Added connection: Polyurethane --> Airless tire
 - Added connection: Radial tire --> Airless tire
 
 6 December 2025
-- Added tech: Rotor ship
+- Added tech: Rotor ship, 1924
 
 5 December 2025
-- Added tech: Instant noodles
+- Added tech: Instant noodles, 1958
 
 4 December 2025
-- Added tech: Quartz wristwatch
+- Added tech: Quartz wristwatch, 1969
 - Added connection: Quartz clock --> Quartz wristwatch
 - Added connection: Wristwatch --> Quartz wristwatch
 
 20 November 2025
-- Added tech: Cooling tower
-- Added tech: Condenser
+- Added tech: Cooling tower, 1918
+- Added tech: Condenser, 1771
 - Added connection: Condenser --> Cooling tower
 - Added connection: Condenser --> Air conditioner
 - Added connection: Coal power plant --> Cooling tower
 
 5 October 2025
-- Added tech: Small modular reactor
+- Added tech: Small modular reactor, 2020
 - Added connection: Nuclear reactor --> Small modular reactor
 
 4 October 2025
-- Added tech: Rammed earth
+- Added tech: Rammed earth, 8000 BCE
 
 2 October 2025
-- Added tech: Slitting mill
+- Added tech: Slitting mill, 1590
 - Added connection: Watermill --> Slitting mill
 - Added connection: Bloomery and wrought iron --> Slitting mill
 
 28 September 2025
-- Added tech: Head-mounted display
-- Added tech: Two-stroke engine and supercharger
+- Added tech: Head-mounted display, 1968
+- Added tech: Two-stroke engine and supercharger, 1878
 - Added connection: Two-stroke engine and supercharger --> Turbocharger
 - Added connection: Four-stroke engine --> Two-stroke engine and supercharger
 - Added connection: Integrated circuit computer --> Head-mounted display
 
 27 September 2025
-- Added tech: Tea
-- Added tech: Umbrella
+- Added tech: Tea, 141 BCE
+- Added tech: Umbrella, 2450 BCE
 
 24 September 2025
-- Added tech: Goniometer
+- Added tech: Goniometer, 1780
 - Added connection: Sector --> Goniometer
 
 22 September 2025
-- Added tech: TALEN genome editing
+- Added tech: TALEN genome editing, 2010
 - Added connection: Zinc-finger nuclease genome editing --> TALEN genome editing
 - Added connection: Zinc-finger nuclease genome editing --> CRISPR gene editing
 
 21 September 2025
-- Added tech: Polarizing filter
-- Added tech: Polarizing prism
-- Added tech: Iceland spar
+- Added tech: Polarizing filter, 1932
+- Added tech: Polarizing prism, 1828
+- Added tech: Iceland spar, 1300
 - Added connection: Iceland spar --> Polarizing prism
 - Added connection: Nitrocellulose film --> Polarizing filter
 - Added connection: Polarizing prism --> Polarizing filter
 
 19 September 2025
-- Added tech: Instant film
+- Added tech: Instant film, 1947
 
 18 September 2025
-- Added tech: Zinc-finger nuclease genome editing
-- Added tech: Zinc finger
+- Added tech: Zinc-finger nuclease genome editing, 1996
+- Added tech: Zinc finger, 1985
 - Added connection: Zinc finger --> Zinc-finger nuclease genome editing
 - Added connection: Cellulose acetate film --> Instant film
 
 17 September 2025
-- Added tech: Candle clock
+- Added tech: Candle clock, 520
 - Added connection: Candle --> Candle clock
 
 16 September 2025
-- Added tech: Automatic fire sprinkler
+- Added tech: Automatic fire sprinkler, 1874
 - Added connection: Fire extinguisher --> Automatic fire sprinkler
 
 15 September 2025
-- Added tech: Fire extinguisher
+- Added tech: Fire extinguisher, 1723
 - Added connection: Pewter --> Fire extinguisher
 - Added connection: Gunpowder --> Fire extinguisher
 
 14 September 2025
-- Added tech: Napalm
-- Added tech: Hydraulic mining
+- Added tech: Napalm, 1942
+- Added tech: Hydraulic mining, 50
 - Added connection: Aqueduct --> Hydraulic mining
 - Added connection: Reservoir --> Hydraulic mining
 - Added connection: Mining --> Hydraulic mining
@@ -2599,10 +2599,10 @@
 - Added connection: Drilled oil well --> Fracking
 
 13 September 2025
-- Added tech: Herbicide-resistant GMO
-- Added tech: Glyphosate
-- Added tech: Electric drip coffee maker
-- Added tech: Agent Orange
+- Added tech: Herbicide-resistant GMO, 1996
+- Added tech: Glyphosate, 1970
+- Added tech: Electric drip coffee maker, 1954
+- Added tech: Agent Orange, 1945
 - Added connection: Glyphosate --> Herbicide-resistant GMO
 - Added connection: Domestication of soybeans --> Herbicide-resistant GMO
 - Added connection: Genetically modified food --> Herbicide-resistant GMO
@@ -2610,21 +2610,21 @@
 - Added connection: Coffee percolator --> Electric drip coffee maker
 
 12 September 2025
-- Added tech: Electric hearing aid
+- Added tech: Electric hearing aid, 1898
 - Added connection: Ear trumpet --> Electric hearing aid
 - Added connection: Carbon microphone --> Electric hearing aid
 
 11 September 2025
-- Added tech: Ear trumpet
+- Added tech: Ear trumpet, 1634
 - Added connection: Ear trumpet --> Stethoscope
 
 10 September 2025
-- Added tech: Silica gel
-- Added tech: Industrial porcelain enamel
-- Added tech: Water glass
-- Added tech: Ether
-- Added tech: Vitreous enamel
-- Added tech: Cloisonné
+- Added tech: Silica gel, 1919
+- Added tech: Industrial porcelain enamel, 1840
+- Added tech: Water glass, 1818
+- Added tech: Ether, 1540
+- Added tech: Vitreous enamel, 1300 BCE
+- Added tech: Cloisonné, 2500 BCE
 - Added connection: Glass --> Vitreous enamel
 - Added connection: Cloisonné --> Vitreous enamel
 - Added connection: Gold --> Cloisonné
@@ -2638,19 +2638,19 @@
 - Added connection: Sulfuric acid --> Ether
 
 8 September 2025
-- Added tech: Ketamine
-- Added tech: Geothermal power plant
-- Added tech: Geothermal power
+- Added tech: Ketamine, 1962
+- Added tech: Geothermal power plant, 1911
+- Added tech: Geothermal power, 1904
 - Added connection: Geothermal power --> Geothermal power plant
 
 7 September 2025
 - Added connection: Kaplan turbine --> Tidal power station
 
 6 September 2025
-- Added tech: Tidal power station
-- Added tech: Chemotherapy
-- Added tech: Tjasker
-- Added tech: Tide mill
+- Added tech: Tidal power station, 1966
+- Added tech: Chemotherapy, 1943
+- Added tech: Tjasker, 1589
+- Added tech: Tide mill, 619
 - Added connection: Archimedes' screw --> Tjasker
 - Added connection: Post windmill --> Tjasker
 - Added connection: Mustard gas --> Chemotherapy
@@ -2659,13 +2659,13 @@
 - Added connection: Tide mill --> Tidal power station
 
 5 September 2025
-- Added tech: Offshore wind farm
+- Added tech: Offshore wind farm, 1991
 
 4 September 2025
-- Added tech: Carbon-14
-- Added tech: Modern pencil
-- Added tech: Graphite pencil
-- Added tech: Graphite
+- Added tech: Carbon-14, 1940
+- Added tech: Modern pencil, 1795
+- Added tech: Graphite pencil, 1565
+- Added tech: Graphite, 4100 BCE
 - Added connection: Carbon-14 --> Automatic teller machine
 - Added connection: Cyclotron --> Carbon-14
 - Added connection: Carbon-14 --> Radiocarbon dating
@@ -2677,11 +2677,11 @@
 - Added connection: Graphite --> Nuclear reactor
 
 3 September 2025
-- Added tech: Geographic information system
-- Added tech: Photogrammetry
-- Added tech: Pedal harp
-- Added tech: Zither
-- Added tech: Harp
+- Added tech: Geographic information system, 1963
+- Added tech: Photogrammetry, 1849
+- Added tech: Pedal harp, 1697
+- Added tech: Zither, 1800 BCE
+- Added tech: Harp, 3200 BCE
 - Added connection: Musical bow --> Harp
 - Added connection: Harp --> Pedal harp
 - Added connection: Harp --> Lyre
@@ -2696,12 +2696,12 @@
 - Added connection: Domestication of the horse --> Hipposandal
 
 1 September 2025
-- Added tech: Compound bow
-- Added tech: Liquid crystals
-- Added tech: Onager
-- Added tech: Ballista
-- Added tech: Composite bow
-- Added tech: Sling
+- Added tech: Compound bow, 1966
+- Added tech: Liquid crystals, 1888
+- Added tech: Onager, 363
+- Added tech: Ballista, 340 BCE
+- Added tech: Composite bow, 2000 BCE
+- Added tech: Sling, 4500 BCE
 - Added connection: Sword --> Shield
 - Added connection: Hafted spear --> Shield
 - Added connection: Bow and arrow --> Shield
@@ -2719,7 +2719,7 @@
 - Added connection: Sling --> Traction trebuchet
 
 30 August 2025
-- Added tech: Mustard gas
+- Added tech: Mustard gas, 1886
 - Added connection: Radium --> Smoke detector
 - Added connection: Vapor-compression refrigeration system --> Hampson–Linde air liquefaction
 - Added connection: Triode --> Smoke detector
@@ -2727,9 +2727,9 @@
 - Added connection: Mustard gas --> Smoke detector
 
 29 August 2025
-- Added tech: Smoke detector
-- Added tech: Alkaline fuel cell
-- Added tech: Dishwasher
+- Added tech: Smoke detector, 1940
+- Added tech: Alkaline fuel cell, 1932
+- Added tech: Dishwasher, 1886
 - Added connection: Hydrogen --> Fuel cell
 - Added connection: Oxygen --> Fuel cell
 - Added connection: Sulfuric acid --> Fuel cell
@@ -2739,7 +2739,7 @@
 - Added connection: Porcelain --> Dishwasher
 
 28 August 2025
-- Added tech: Chromic acid cell
+- Added tech: Chromic acid cell, 1842
 - Added connection: Daniell cell --> Rechargeable battery
 - Added connection: Sulfuric acid --> Rechargeable battery
 - Added connection: Linen --> Rechargeable battery
@@ -2754,8 +2754,8 @@
 - Added connection: Sulfur --> Sulfur match
 
 25 August 2025
-- Added tech: Titanium white
-- Added tech: Zinc white
+- Added tech: Titanium white, 1910
+- Added tech: Zinc white, 1780
 - Added connection: Titanium --> Titanium white
 - Added connection: Tin --> Printing press
 - Added connection: Lead --> Printing press
@@ -2763,9 +2763,9 @@
 - Added connection: Sulfuric acid --> Titanium white
 
 24 August 2025
-- Added tech: Disappearing-filament pyrometer
-- Added tech: Pyrometer
-- Added tech: Crucible
+- Added tech: Disappearing-filament pyrometer, 1901
+- Added tech: Pyrometer, 1752
+- Added tech: Crucible, 5000 BCE
 - Added connection: Offset printing --> Phototypesetting
 - Added connection: Crucible --> Crucible steel
 - Added connection: Pottery --> Crucible
@@ -2775,17 +2775,17 @@
 - Added connection: Pyrometer --> Disappearing-filament pyrometer
 
 23 August 2025
-- Added tech: Phototypesetting
-- Added tech: Hot metal typesetting
+- Added tech: Phototypesetting, 1949
+- Added tech: Hot metal typesetting, 1886
 - Added connection: Hot metal typesetting --> Phototypesetting
 - Added connection: Movable type --> Hot metal typesetting
 
 22 August 2025
-- Added tech: Nomogram
+- Added tech: Nomogram, 1884
 - Added connection: Watermill --> Fulling mill
 
 21 August 2025
-- Added tech: Video display controller
+- Added tech: Video display controller, 1981
 - Added connection: Arcade video game --> Video display controller
 - Added connection: Keplerian refracting telescope --> Achromatic lens and achromatic telescope
 - Added connection: Video display controller --> GPU
@@ -2794,10 +2794,10 @@
 - Added connection: CMOS --> GPU
 
 20 August 2025
-- Added tech: Acrylic paint
-- Added tech: Cadmium pigments
-- Added tech: Hot-dip galvanization
-- Added tech: Cadmium
+- Added tech: Acrylic paint, 1947
+- Added tech: Cadmium pigments, 1840
+- Added tech: Hot-dip galvanization, 1837
+- Added tech: Cadmium, 1817
 - Added connection: Nickel --> Nickel–cadmium battery
 - Added connection: Nickel–cadmium battery --> Nickel–iron battery
 - Added connection: Nickel --> Nickel–iron battery
@@ -2806,12 +2806,12 @@
 - Added connection: Bloomery and wrought iron --> Corrugated iron
 
 19 August 2025
-- Added tech: Spirit duplicator
-- Added tech: Hectograph
-- Added tech: Hydrogen peroxide
-- Added tech: Cobalt blue
-- Added tech: Lime mortar and plaster
-- Added tech: Lime
+- Added tech: Spirit duplicator, 1923
+- Added tech: Hectograph, 1869
+- Added tech: Hydrogen peroxide, 1818
+- Added tech: Cobalt blue, 1799
+- Added tech: Lime mortar and plaster, 6000 BCE
+- Added tech: Lime, 7500 BCE
 - Added connection: Coal tar --> Aniline
 - Added connection: Aniline --> Spirit duplicator
 - Added connection: Aniline --> Hectograph
@@ -2824,8 +2824,8 @@
 - Added connection: Construction mortar --> Lime mortar and plaster
 
 18 August 2025
-- Added tech: Kermes dye
-- Added tech: Vermilion
+- Added tech: Kermes dye, 4000 BCE
+- Added tech: Vermilion, 8000 BCE
 - Added connection: Vermilion --> Mercury
 - Added connection: Pigments --> Vermilion
 - Added connection: Pigments --> Indigo dye
@@ -2836,10 +2836,10 @@
 - Added connection: Pigments --> Cochineal dye
 
 17 August 2025
-- Added tech: Cerulean blue
-- Added tech: Smalt
-- Added tech: Natron
-- Added tech: Egyptian faience
+- Added tech: Cerulean blue, 1789
+- Added tech: Smalt, 1500 BCE
+- Added tech: Natron, 4000 BCE
+- Added tech: Egyptian faience, 4000 BCE
 - Added connection: Copper smelting --> Egyptian blue
 - Added connection: Natron --> Egyptian blue
 - Added connection: Natron --> Proto-soap
@@ -2853,14 +2853,14 @@
 - Added connection: Copper smelting --> Egyptian faience
 
 16 August 2025
-- Added tech: YInMn blue
-- Added tech: Maya blue
+- Added tech: YInMn blue, 2009
+- Added tech: Maya blue, 800
 - Added connection: Cotton (New World) --> Indigo dye
 - Added connection: Indigo dye --> Maya blue
 
 15 August 2025
-- Added tech: Smartwatch
-- Added tech: Digital electronic watch
+- Added tech: Smartwatch, 1984
+- Added tech: Digital electronic watch, 1972
 - Added connection: Telephone --> Moving-coil loudspeaker
 - Added connection: Digital electronic watch --> Smartwatch
 - Added connection: Wristwatch --> Digital electronic watch
@@ -2869,8 +2869,8 @@
 - Added connection: Home computer --> Smartwatch
 
 14 August 2025
-- Added tech: Decaffeinated coffee
-- Added tech: Tofu
+- Added tech: Decaffeinated coffee, 1903
+- Added tech: Tofu, 965
 - Added connection: Coffee --> Decaffeinated coffee
 - Added connection: Benzene --> Decaffeinated coffee
 - Added connection: Caffeine --> Decaffeinated coffee
@@ -2882,29 +2882,29 @@
 - Added connection: Moving-coil loudspeaker --> Noise-cancelling headphones
 
 12 August 2025
-- Added tech: Facial recognition system
-- Added tech: Moving-coil loudspeaker
-- Added tech: Cultured pearl
+- Added tech: Facial recognition system, 1993
+- Added tech: Moving-coil loudspeaker, 1925
+- Added tech: Cultured pearl, 1916
 - Added connection: Oyster farming --> Cultured pearl
 
 11 August 2025
-- Added tech: General-purpose computing on GPU
-- Added tech: GPU
+- Added tech: General-purpose computing on GPU, 2007
+- Added tech: GPU, 1999
 - Added connection: GPU --> General-purpose computing on GPU
 - Added connection: General-purpose computing on GPU --> AlexNet
 - Added connection: General-purpose computing on GPU --> Transformer (machine learning)
 - Added connection: General-purpose computing on GPU --> Generative adversarial network
 
 9 August 2025
-- Added tech: Turbocharger
-- Added tech: Foam extinguisher
-- Added tech: Firefighting foam
-- Added tech: Vanadium
-- Added tech: Galvanism
-- Added tech: Methane
-- Added tech: Nickel silver
-- Added tech: Blue and white pottery
-- Added tech: Pewter
+- Added tech: Turbocharger, 1924
+- Added tech: Foam extinguisher, 1904
+- Added tech: Firefighting foam, 1902
+- Added tech: Vanadium, 1801
+- Added tech: Galvanism, 1780
+- Added tech: Methane, 1778
+- Added tech: Nickel silver, 1770
+- Added tech: Blue and white pottery, 800
+- Added tech: Pewter, 1450 BCE
 - Added connection: Copper smelting --> Voltaic pile
 - Added connection: Zinc smelting --> Voltaic pile
 - Added connection: Galvanism --> Voltaic pile
@@ -2923,27 +2923,27 @@
 - Added connection: Lead --> Pewter
 
 7 August 2025
-- Added tech: Scanning electron microscope
+- Added tech: Scanning electron microscope, 1937
 - Added connection: Electron microscope --> Scanning electron microscope
 
 5 August 2025
-- Added tech: K'un-lun po
+- Added tech: K'un-lun po, 150
 - Added connection: Tanja sail --> K'un-lun po
 
 4 August 2025
-- Added tech: Quinine
-- Added tech: Strychnine
-- Added tech: Jesuit's bark
+- Added tech: Quinine, 1820
+- Added tech: Strychnine, 1818
+- Added tech: Jesuit's bark, 1650
 - Added connection: Quinine --> Synthetic dye
 - Added connection: Jesuit's bark --> Quinine
 - Added connection: Seaweed farming --> Agar
 
 2 August 2025
-- Added tech: Banjo
-- Added tech: Acetone
-- Added tech: White lead
-- Added tech: Verdigris
-- Added tech: Vinegar
+- Added tech: Banjo, 1621
+- Added tech: Acetone, 1606
+- Added tech: White lead, 300 BCE
+- Added tech: Verdigris, 300 BCE
+- Added tech: Vinegar, 3000 BCE
 - Added connection: Vinegar --> White lead
 - Added connection: Vinegar --> Verdigris
 - Added connection: Copper --> Verdigris
@@ -2951,10 +2951,10 @@
 - Added connection: Joule–Thomson effect --> Liquid oxygen
 
 1 August 2025
-- Added tech: Malaria vaccine
-- Added tech: DDT insecticide
-- Added tech: DDT
-- Added tech: Coal tar
+- Added tech: Malaria vaccine, 2015
+- Added tech: DDT insecticide, 1939
+- Added tech: DDT, 1874
+- Added tech: Coal tar, 1682
 - Added connection: DDT --> DDT insecticide
 - Added connection: Pine tar --> Coal tar
 - Added connection: Silicon --> Silicone
@@ -2965,15 +2965,15 @@
 - Added connection: Alternating current --> Resonant transformer
 
 27 July 2025
-- Added tech: Oriented strand board
-- Added tech: Particle board
-- Added tech: Harpoon cannon
-- Added tech: Sperm oil and spermaceti candle
-- Added tech: Sperm whaling
-- Added tech: Whale oil
-- Added tech: Keel
-- Added tech: Shield
-- Added tech: Whaling
+- Added tech: Oriented strand board, 1963
+- Added tech: Particle board, 1932
+- Added tech: Harpoon cannon, 1870
+- Added tech: Sperm oil and spermaceti candle, 1740
+- Added tech: Sperm whaling, 1712
+- Added tech: Whale oil, 670
+- Added tech: Keel, 315 BCE
+- Added tech: Shield, 3100 BCE
+- Added tech: Whaling, 6000 BCE
 - Added connection: Sperm oil and spermaceti candle --> Petroleum jelly
 - Added connection: Harpoon --> Whaling
 - Added connection: Boat --> Whaling
@@ -2995,9 +2995,9 @@
 - v1.0.3: Info icons for connection details
 
 21 July 2025
-- Added tech: Alexanderson alternator
-- Added tech: Arc converter
-- Added tech: Singing arc
+- Added tech: Alexanderson alternator, 1904
+- Added tech: Arc converter, 1903
+- Added tech: Singing arc, 1900
 - Added connection: Leyden jar --> Radio waves and spark-gap transmitter
 - Added connection: Arc lamp --> Singing arc
 - Added connection: Singing arc --> Arc converter
@@ -3008,26 +3008,26 @@
 - Added connection: Amplitude modulation --> Arc converter
 
 19 July 2025
-- Added tech: Combination lock
-- Added tech: Padlock
+- Added tech: Combination lock, 1
+- Added tech: Padlock, 200 BCE
 - Added connection: Egyptian wooden pin tumbler lock --> Combination lock
 - Added connection: Egyptian wooden pin tumbler lock --> Padlock
 
 17 July 2025
-- Added tech: Fuel pump
+- Added tech: Fuel pump, 1885
 - Added connection: Kerosene lamp --> Fuel pump
 
 16 July 2025
-- Added tech: Bread
+- Added tech: Bread, 12500 BCE
 - Added connection: Bread --> Leavened bread
 - Added connection: Control of fire --> Bread
 - Added connection: Mortar and pestle --> Bread
 
 15 July 2025
-- Added tech: Gyro gunsight
-- Added tech: Reflector sight
-- Added tech: Artificial horizon
-- Added tech: Telescopic sight
+- Added tech: Gyro gunsight, 1941
+- Added tech: Reflector sight, 1900
+- Added tech: Artificial horizon, 1785
+- Added tech: Telescopic sight, 1630
 - Added connection: Slide rule --> Vector bombsight
 - Added connection: Geiger counter --> Radiocarbon dating
 - Added connection: Keplerian refracting telescope --> Telescopic sight
@@ -3040,12 +3040,12 @@
 - Added connection: Fire-control system --> Automated anti-aircraft fire-control system
 
 12 July 2025
-- Added tech: Interstellar probe
-- Added tech: Tachometric bombsight
-- Added tech: Vector bombsight
-- Added tech: Kelvite sounding machine
-- Added tech: Sounding machine
-- Added tech: Depth sounding
+- Added tech: Interstellar probe, 1977
+- Added tech: Tachometric bombsight, 1931
+- Added tech: Vector bombsight, 1917
+- Added tech: Kelvite sounding machine, 1872
+- Added tech: Sounding machine, 1802
+- Added tech: Depth sounding, 1800 BCE
 - Added connection: Airplane --> Bombsight
 - Added connection: Bombsight --> Vector bombsight
 - Added connection: Vector bombsight --> Tachometric bombsight
@@ -3056,16 +3056,16 @@
 - Added connection: Sounding machine --> Kelvite sounding machine
 
 10 July 2025
-- Added tech: Bombsight
+- Added tech: Bombsight, 1911
 
 9 July 2025
-- Added tech: Fire-control system
-- Added tech: Dumaresq
-- Added tech: Ball-and-disk integrator
-- Added tech: Tide-predicting machine
-- Added tech: Hydrochloric acid
-- Added tech: Aqua regia
-- Added tech: Ammonium chloride
+- Added tech: Fire-control system, 1916
+- Added tech: Dumaresq, 1902
+- Added tech: Ball-and-disk integrator, 1876
+- Added tech: Tide-predicting machine, 1872
+- Added tech: Hydrochloric acid, 1558
+- Added tech: Aqua regia, 1300
+- Added tech: Ammonium chloride, 554
 - Added connection: Ammonium chloride --> Aqua regia
 - Added connection: Nitric acid --> Aqua regia
 - Added connection: Ammonium chloride --> Hydrochloric acid
@@ -3073,10 +3073,10 @@
 - Added connection: Ball-and-disk integrator --> Fire-control system
 
 6 July 2025
-- Added tech: Automated anti-aircraft fire-control system
-- Added tech: Box kite
-- Added tech: Kite experiment
-- Added tech: Kite
+- Added tech: Automated anti-aircraft fire-control system, 1940
+- Added tech: Box kite, 1893
+- Added tech: Kite experiment, 1752
+- Added tech: Kite, 549
 - Added connection: Kite --> Box kite
 - Added connection: Kite --> Kite experiment
 - Added connection: Kite experiment --> Lightning rod
@@ -3087,10 +3087,10 @@
 - Added connection: Automated anti-aircraft fire-control system --> Computer-generated imagery
 
 5 July 2025
-- Added tech: Proportional counter
-- Added tech: Geiger counter
-- Added tech: Radial engine
-- Added tech: Rotary engine
+- Added tech: Proportional counter, 1948
+- Added tech: Geiger counter, 1928
+- Added tech: Radial engine, 1901
+- Added tech: Rotary engine, 1889
 - Added connection: Radioactivity --> Geiger counter
 - Added connection: Geiger counter --> Proportional counter
 - Added connection: Tin can --> Hovercraft
@@ -3101,8 +3101,8 @@
 - Added connection: Gasoline as fuel --> Airplane
 
 4 July 2025
-- Added tech: Leaded gasoline
-- Added tech: Gasoline as fuel
+- Added tech: Leaded gasoline, 1921
+- Added tech: Gasoline as fuel, 1879
 - Added connection: Lead --> Rechargeable battery
 - Added connection: Coal gas and gas lighting --> Four-stroke engine
 - Added connection: Kerosene --> Diesel engine
@@ -3113,16 +3113,16 @@
 - Added connection: Gasoline as fuel --> Liquid-propellant rocket
 
 1 July 2025
-- Added tech: Alum
+- Added tech: Alum, 430 BCE
 - Added connection: Alum --> Aluminium
 
 29 June 2025
-- Added tech: Measles vaccine
+- Added tech: Measles vaccine, 1963
 - Added connection: Polio vaccine --> Measles vaccine
 
 27 June 2025
-- Added tech: Virtual assistant
-- Added tech: Stealth aircraft
+- Added tech: Virtual assistant, 2010
+- Added tech: Stealth aircraft, 1983
 - Added connection: Multi-touch smartphone --> Virtual assistant
 - Added connection: Speech recognition software --> Virtual assistant
 - Added connection: Long short-term memory --> Virtual assistant
@@ -3135,24 +3135,24 @@
 - Added connection: Statistical language model --> Speech recognition software
 
 25 June 2025
-- Added tech: Portable operating system
+- Added tech: Portable operating system, 1969
 - Added connection: Integrated circuit computer --> Computer mouse
 - Added connection: Operating system --> Portable operating system
 - Added connection: Time-sharing --> Portable operating system
 - Added connection: Lidar --> Robotaxi
 
 24 June 2025
-- Added tech: Computer mouse
-- Added tech: Baking powder
-- Added tech: Sodium bicarbonate
-- Added tech: Cream of tartar
+- Added tech: Computer mouse, 1968
+- Added tech: Baking powder, 1843
+- Added tech: Sodium bicarbonate, 1801
+- Added tech: Cream of tartar, 1769
 - Added connection: Cream of tartar --> Baking powder
 - Added connection: Sodium bicarbonate --> Baking powder
 
 20 June 2025
-- Added tech: Phage therapy
-- Added tech: Bacteriophages
-- Added tech: Benzene
+- Added tech: Phage therapy, 1919
+- Added tech: Bacteriophages, 1915
+- Added tech: Benzene, 1825
 - Added connection: Discovery of viruses --> Bacteriophages
 - Added connection: Bacteriophages --> Phage display
 - Added connection: Bacteriophages --> Phage therapy
@@ -3162,35 +3162,35 @@
 - Added connection: Public gas lighting --> Benzene
 
 18 June 2025
-- Added tech: Operating system
+- Added tech: Operating system, 1956
 - Added connection: Stored-program computer --> Operating system
 
 16 June 2025
-- Added tech: Electroconvulsive therapy
-- Added tech: Convulsive therapy
-- Added tech: Tuberculosis vaccine
+- Added tech: Electroconvulsive therapy, 1938
+- Added tech: Convulsive therapy, 1934
+- Added tech: Tuberculosis vaccine, 1921
 - Added connection: Smallpox vaccine --> Tuberculosis vaccine
 - Added connection: Convulsive therapy --> Electroconvulsive therapy
 
 14 June 2025
-- Added tech: Timpani
+- Added tech: Timpani, 600
 - Added connection: Drum --> Timpani
 
 13 June 2025
-- Added tech: Palm-leaf manuscript
-- Added tech: Birch bark manuscript
+- Added tech: Palm-leaf manuscript, 450
+- Added tech: Birch bark manuscript, 50
 
 12 June 2025
-- Added tech: Antivirus software
-- Added tech: Philo's thermoscope
+- Added tech: Antivirus software, 1987
+- Added tech: Philo's thermoscope, 250 BCE
 - Added connection: Home computer --> Antivirus software
 - Added connection: Philo's thermoscope --> Thermoscope
 
 11 June 2025
-- Added tech: Autoclaved aerated concrete
-- Added tech: Discovery of viruses
-- Added tech: Chamberland water filter
-- Added tech: Autoclave
+- Added tech: Autoclaved aerated concrete, 1929
+- Added tech: Discovery of viruses, 1898
+- Added tech: Chamberland water filter, 1884
+- Added tech: Autoclave, 1879
 - Added connection: Flute --> Western concert flute
 - Added connection: Modern Portland cement --> Autoclaved aerated concrete
 - Added connection: Pressure cooker --> Autoclave
@@ -3200,10 +3200,10 @@
 - Added connection: Tobacco --> Discovery of viruses
 
 10 June 2025
-- Added tech: Photonic crystal
-- Added tech: Genetic code
-- Added tech: Messenger RNA
-- Added tech: Petroleum jelly
+- Added tech: Photonic crystal, 1991
+- Added tech: Genetic code, 1965
+- Added tech: Messenger RNA, 1961
+- Added tech: Petroleum jelly, 1870
 - Added connection: Photonic crystal --> Photonic-crystal fiber
 - Added connection: Petroleum as fuel --> Petroleum jelly
 - Added connection: Messenger RNA --> mRNA vaccine
@@ -3214,10 +3214,10 @@
 
 9 June 2025
 - v1.0.2: Display settings
-- Added tech: Bass guitar
-- Added tech: Lap steel guitar
-- Added tech: Double bass
-- Added tech: Marimba
+- Added tech: Bass guitar, 1935
+- Added tech: Lap steel guitar, 1889
+- Added tech: Double bass, 1560
+- Added tech: Marimba, 1545
 - Added connection: Marimba --> Marimbaphone
 - Added connection: Xylophone --> Marimba
 - Added connection: Double bass --> Bass guitar
@@ -3226,23 +3226,23 @@
 - Added connection: Lap steel guitar --> Bass guitar
 
 8 June 2025
-- Added tech: Cyanoacrylate
-- Added tech: Zoom lens
-- Added tech: Vibraphone
-- Added tech: Marimbaphone
-- Added tech: Corrugated fiberboard
-- Added tech: Trumpet with pistons
-- Added tech: Tuba
-- Added tech: Repeating circle
-- Added tech: Reflecting circle
-- Added tech: Cardboard
-- Added tech: Oboe
-- Added tech: Bassoon
-- Added tech: Dulcian
-- Added tech: Trombone
-- Added tech: Clavichord
-- Added tech: Shawm
-- Added tech: Buisine
+- Added tech: Cyanoacrylate, 1958
+- Added tech: Zoom lens, 1932
+- Added tech: Vibraphone, 1921
+- Added tech: Marimbaphone, 1910
+- Added tech: Corrugated fiberboard, 1871
+- Added tech: Trumpet with pistons, 1838
+- Added tech: Tuba, 1835
+- Added tech: Repeating circle, 1784
+- Added tech: Reflecting circle, 1752
+- Added tech: Cardboard, 1751
+- Added tech: Oboe, 1650
+- Added tech: Bassoon, 1650
+- Added tech: Dulcian, 1550
+- Added tech: Trombone, 1488
+- Added tech: Clavichord, 1404
+- Added tech: Shawm, 1150
+- Added tech: Buisine, 1100
 - Added connection: Papermaking --> Cardboard
 - Added connection: Cardboard --> Corrugated fiberboard
 - Added connection: Corrugated fiberboard --> Pre-cut cardboard box
@@ -3264,27 +3264,27 @@
 - Added connection: Viola da gamba --> Double bass
 
 7 June 2025
-- Added tech: Quantum annealing
-- Added tech: Transmon
-- Added tech: Charge qubit
-- Added tech: Flux qubit
-- Added tech: Mammal cloning
-- Added tech: Artificial heart
-- Added tech: SQUID
-- Added tech: Dilution refrigerator
-- Added tech: Josephson junction
-- Added tech: Animal cloning from adult cells
-- Added tech: Animal cloning
-- Added tech: Kroll process
-- Added tech: Helium-3
-- Added tech: Tritium
-- Added tech: Nuclear fusion
-- Added tech: Deuterium
-- Added tech: Electric chainsaw
-- Added tech: Somatic cell nuclear transfer
-- Added tech: Hunter process
-- Added tech: Indium
-- Added tech: Bayonet
+- Added tech: Quantum annealing, 2011
+- Added tech: Transmon, 2007
+- Added tech: Charge qubit, 1999
+- Added tech: Flux qubit, 1999
+- Added tech: Mammal cloning, 1996
+- Added tech: Artificial heart, 1982
+- Added tech: SQUID, 1964
+- Added tech: Dilution refrigerator, 1964
+- Added tech: Josephson junction, 1963
+- Added tech: Animal cloning from adult cells, 1958
+- Added tech: Animal cloning, 1952
+- Added tech: Kroll process, 1940
+- Added tech: Helium-3, 1939
+- Added tech: Tritium, 1939
+- Added tech: Nuclear fusion, 1934
+- Added tech: Deuterium, 1931
+- Added tech: Electric chainsaw, 1926
+- Added tech: Somatic cell nuclear transfer, 1923
+- Added tech: Hunter process, 1910
+- Added tech: Indium, 1863
+- Added tech: Bayonet, 1606
 - Added connection: Mammal cloning --> Induced pluripotent stem cell
 - Added connection: Titanium --> Hunter process
 - Added connection: Magnesium --> Kroll process
@@ -3321,28 +3321,28 @@
 - Added connection: Chromatography --> DNA ligase
 
 6 June 2025
-- Added tech: Domestication of millet
+- Added tech: Domestication of millet, 10000 BCE
 - Added connection: Irrigation --> Shaduf
 
 5 June 2025
 - v1.0.1: Changelog start
-- Added tech: Ostwald nitric acid process
-- Added tech: Leavened bread
-- Added tech: Domestication of potatoes
+- Added tech: Ostwald nitric acid process, 1902
+- Added tech: Leavened bread, 6000 BCE
+- Added tech: Domestication of potatoes, 8000 BCE
 - Added connection: Restriction enzymes --> DNA profiling
 - Added connection: Domestication of wheat --> Leavened bread
 - Added connection: Leavened bread --> Electric toaster
 - Added connection: Nitric acid --> Ostwald nitric acid process
 
 4 June 2025
-- Added tech: Advanced Encryption Standard
-- Added tech: Data Encryption Standard
-- Added tech: Hardware security module
-- Added tech: Modern cryptography
-- Added tech: One-time pad
-- Added tech: Frequency analysis
-- Added tech: Dhow
-- Added tech: Domestication of coconuts
+- Added tech: Advanced Encryption Standard, 1998
+- Added tech: Data Encryption Standard, 1975
+- Added tech: Hardware security module, 1973
+- Added tech: Modern cryptography, 1949
+- Added tech: One-time pad, 1917
+- Added tech: Frequency analysis, 850
+- Added tech: Dhow, 830
+- Added tech: Domestication of coconuts, 1500 BCE
 - Added connection: One-time pad --> Modern cryptography
 - Added connection: Information theory --> Modern cryptography
 - Added connection: Modern cryptography --> Public-key cryptography
@@ -3358,17 +3358,17 @@
 - Added connection: Lateen and settee sail --> Dhow
 
 3 June 2025
-- Added tech: Paper clip
-- Added tech: Aniline
-- Added tech: Paddy field
+- Added tech: Paper clip, 1883
+- Added tech: Aniline, 1826
+- Added tech: Paddy field, 4330 BCE
 - Added connection: Domestication of rice --> Paddy field
 - Added connection: Indigo dye --> Aniline
 - Added connection: Aniline --> Paracetamol
 
 2 June 2025
-- Added tech: Laser cutting
-- Added tech: Carbon-dioxide laser
-- Added tech: Nd:YAG laser
+- Added tech: Laser cutting, 1965
+- Added tech: Carbon-dioxide laser, 1964
+- Added tech: Nd:YAG laser, 1964
 - Added connection: Eyeglasses --> Telescope
 - Added connection: Hafting --> Sickle
 - Added connection: Laser --> Carbon-dioxide laser
