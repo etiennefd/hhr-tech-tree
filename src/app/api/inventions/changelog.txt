@@ -11,6 +11,8 @@
 - Added connection: Bellows --> Accordion
 - Added connection: Bellows --> Bloomery and wrought iron
 - Added connection: Noria and water wheel --> Water organ
+- Added connection: Sheng --> Accordion
+- Added connection: Sheng --> Harmonica
 
 21 August 2026
 - Added connection: Oboe --> Speaking machine
