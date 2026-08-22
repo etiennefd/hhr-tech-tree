@@ -3,12 +3,13 @@
 - Added connection: Copper smelting --> Bellows
 - Added connection: Rawhide --> Bellows
 - Added connection: Pottery --> Bellows
-- Added connection: Bellows --> Water-powered blast furnace
-- Added connection: Bellows --> Fire piston
 - Added connection: Bellows --> Speaking machine
 - Added connection: Bellows --> Pipe organ
 - Added connection: Bellows --> Finery forge
 - Added connection: Bellows --> Blast furnace
+- Added connection: Bellows --> Air compressor
+- Added connection: Bellows --> Accordion
+- Added connection: Bellows --> Bloomery and wrought iron
 
 21 August 2026
 - Added connection: Oboe --> Speaking machine
