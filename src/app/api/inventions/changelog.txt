@@ -3,6 +3,12 @@
 - Added connection: Copper smelting --> Bellows
 - Added connection: Rawhide --> Bellows
 - Added connection: Pottery --> Bellows
+- Added connection: Bellows --> Water-powered blast furnace
+- Added connection: Bellows --> Fire piston
+- Added connection: Bellows --> Speaking machine
+- Added connection: Bellows --> Pipe organ
+- Added connection: Bellows --> Finery forge
+- Added connection: Bellows --> Blast furnace
 
 21 August 2026
 - Added connection: Oboe --> Speaking machine
@@ -344,7 +350,6 @@
 - Added connection: Caustic potash --> Potassium
 - Added connection: Hand drill --> Bow drill
 - Added connection: Percussion flake tool --> Hand drill
-- Added connection: Piston bellows --> Finery forge
 - Added connection: Charcoal --> Finery forge
 - Added connection: Blast furnace --> Finery forge
 
