@@ -1,3 +1,9 @@
+22 August 2026
+- Added tech: Bellows
+- Added connection: Copper smelting --> Bellows
+- Added connection: Rawhide --> Bellows
+- Added connection: Pottery --> Bellows
+
 21 August 2026
 - Added connection: Oboe --> Speaking machine
 
@@ -774,7 +780,6 @@
 - Added connection: Weaving and basketry --> Sandal
 - Added connection: Rawhide --> Drum
 - Added connection: Rawhide --> Shield
-- Added connection: Rawhide --> Ox hide bellows
 - Added connection: Rawhide --> Parchment
 - Added connection: Tanned leather --> Saddle
 - Added connection: Rawhide --> Bagpipe
