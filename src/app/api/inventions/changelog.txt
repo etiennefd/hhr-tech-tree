@@ -1,4 +1,5 @@
 22 August 2026
+- Added tech: Fire piston, 1804
 - Added tech: Bellows, 4500 BCE
 - Added connection: Copper smelting --> Bellows
 - Added connection: Rawhide --> Bellows
