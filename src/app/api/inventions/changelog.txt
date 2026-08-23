@@ -1,6 +1,5 @@
 23 August 2026
 - Added connection: Air gun --> Fire piston
-- Added connection: Fire making --> Fire piston
 
 22 August 2026
 - Added tech: Fire piston, 1804
