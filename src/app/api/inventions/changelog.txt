@@ -1,3 +1,10 @@
+25 August 2026
+- Added connection: Text-to-image model --> AI image generation
+- Added connection: Transformer (machine learning) --> AI image generation
+- Added connection: Generative adversarial network --> AI image generation
+- Added connection: AI image generation --> AI video generation
+- Added connection: Transformer (machine learning) --> AI music generation
+
 24 August 2026
 - Added connection: Watt steam engine --> Carnot cycle
 - Added connection: Carnot cycle --> Steam turbine
