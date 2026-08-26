@@ -1,4 +1,5 @@
 26 August 2026
+- Added tech: Deep learning speech synthesis, 2016
 - Added connection: Vocoder --> Text-to-speech
 - Added connection: Integrated circuit computer --> Text-to-speech
 - Added connection: Text-to-speech --> Virtual assistant
