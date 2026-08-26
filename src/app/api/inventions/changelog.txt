@@ -1,3 +1,8 @@
+26 August 2026
+- Added connection: Vocoder --> Text-to-speech
+- Added connection: Integrated circuit computer --> Text-to-speech
+- Added connection: Text-to-speech --> Virtual assistant
+
 25 August 2026
 - Added tech: Text-to-speech, 1968
 - Added connection: Text-to-image model --> AI image generation
