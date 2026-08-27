@@ -1,3 +1,8 @@
+27 August 2026
+- Added connection: Text-to-speech --> Deep learning speech synthesis
+- Added connection: Convolutional neural network --> Deep learning speech synthesis
+- Added connection: Deep learning speech synthesis --> AI music generation
+
 26 August 2026
 - Added tech: Deep learning speech synthesis, 2016
 - Added connection: Vocoder --> Text-to-speech
