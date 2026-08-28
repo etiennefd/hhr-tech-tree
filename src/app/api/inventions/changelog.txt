@@ -1,6 +1,6 @@
 27 August 2026
 - Added connection: Text-to-speech --> Deep learning speech synthesis
-- Added connection: AlexNet --> Deep learning speech synthesis
+- Added connection: Deep learning --> Deep learning speech synthesis
 - Added connection: Deep learning speech synthesis --> AI music generation
 
 26 August 2026
@@ -2928,7 +2928,7 @@
 - Added tech: General-purpose computing on GPU, 2007
 - Added tech: GPU, 1999
 - Added connection: GPU --> General-purpose computing on GPU
-- Added connection: General-purpose computing on GPU --> AlexNet
+- Added connection: General-purpose computing on GPU --> Deep learning
 - Added connection: General-purpose computing on GPU --> Transformer (machine learning)
 - Added connection: General-purpose computing on GPU --> Generative adversarial network
 
