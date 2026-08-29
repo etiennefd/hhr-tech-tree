@@ -1,3 +1,8 @@
+28 August 2026
+- Added connection: Telephone --> Vocoder
+- Added connection: Amplifier --> Vocoder
+- Added connection: Moving-coil loudspeaker --> Vocoder
+
 27 August 2026
 - Added connection: Text-to-speech --> Deep learning speech synthesis
 - Added connection: Deep learning --> Deep learning speech synthesis
