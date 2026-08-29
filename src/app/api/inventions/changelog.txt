@@ -1,4 +1,5 @@
 28 August 2026
+- Added tech: Pulse-code modulation, 1943
 - Added connection: Telephone --> Vocoder
 - Added connection: Amplifier --> Vocoder
 - Added connection: Moving-coil loudspeaker --> Vocoder
