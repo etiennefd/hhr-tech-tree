@@ -1,4 +1,5 @@
 30 August 2026
+- Added tech: Vigenère cipher, 1553
 - Added connection: Vocoder --> Pulse-code modulation
 - Added connection: One-time pad --> Pulse-code modulation
 - Added connection: Amplifier --> Pulse-code modulation
