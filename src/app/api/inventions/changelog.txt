@@ -1,3 +1,11 @@
+30 August 2026
+- Added connection: Vocoder --> Pulse-code modulation
+- Added connection: One-time pad --> Pulse-code modulation
+- Added connection: Amplifier --> Pulse-code modulation
+- Added connection: Pulse-code modulation --> Digital cellular network
+- Added connection: Pulse-code modulation --> MP3 audio compression
+- Added connection: Pulse-code modulation --> Modern cryptography
+
 28 August 2026
 - Added tech: Pulse-code modulation, 1943
 - Added connection: Telephone --> Vocoder
