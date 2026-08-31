@@ -1,3 +1,6 @@
+31 August 2026
+- Added tech: Printing telegraph, 1846
+
 30 August 2026
 - Added tech: Vigenère cipher, 1553
 - Added connection: Vocoder --> Pulse-code modulation
