@@ -13,6 +13,9 @@
 - Added connection: Baudot code --> ASCII
 - Added connection: ASCII --> Unicode
 - Added connection: ASCII --> Wide-area computer network
+- Added connection: Word processor --> Word processor software
+- Added connection: Typewriter with QWERTY keyboard --> Word processor
+- Added connection: Magnetic tape --> Word processor
 
 30 August 2026
 - Added tech: Vigenère cipher, 1553
