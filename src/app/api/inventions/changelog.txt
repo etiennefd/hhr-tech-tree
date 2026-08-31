@@ -1,4 +1,5 @@
 31 August 2026
+- Added tech: Emoji, 1997
 - Added tech: Unicode, 1991
 - Added tech: Word processor, 1964
 - Added tech: ASCII, 1963
