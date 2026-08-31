@@ -9,6 +9,9 @@
 - Added connection: Morse code --> Baudot code
 - Added connection: Printing telegraph --> Baudot code
 - Added connection: Baudot code --> Pulse-code modulation
+- Added connection: Baudot code --> ASCII
+- Added connection: ASCII --> Unicode
+- Added connection: ASCII --> Wide-area computer network
 
 30 August 2026
 - Added tech: Vigenère cipher, 1553
