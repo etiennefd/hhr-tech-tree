@@ -1,8 +1,12 @@
 31 August 2026
+- Added tech: Baudot code, 1874
 - Added tech: Printing telegraph, 1846
-- Added tech: Baudot code, 1870
 - Added connection: Commercial telegraphy --> Printing telegraph
 - Added connection: Printing telegraph --> Ticker tape
+- Added connection: Baudot code --> One-time pad
+- Added connection: Morse code --> Baudot code
+- Added connection: Printing telegraph --> Baudot code
+- Added connection: Baudot code --> Pulse-code modulation
 
 30 August 2026
 - Added tech: Vigenère cipher, 1553
