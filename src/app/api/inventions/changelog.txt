@@ -17,6 +17,7 @@
 - Added connection: Word processor --> Word processor software
 - Added connection: Typewriter with QWERTY keyboard --> Word processor
 - Added connection: Magnetic tape --> Word processor
+- Added connection: SMS --> Emoji
 
 30 August 2026
 - Added tech: Vigenère cipher, 1553
