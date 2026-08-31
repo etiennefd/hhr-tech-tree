@@ -6,6 +6,8 @@
 - Added connection: Pulse-code modulation --> Digital cellular network
 - Added connection: Pulse-code modulation --> MP3 audio compression
 - Added connection: Pulse-code modulation --> Modern cryptography
+- Added connection: Cipher disk --> Vigenère cipher
+- Added connection: Vigenère cipher --> One-time pad
 
 28 August 2026
 - Added tech: Pulse-code modulation, 1943
