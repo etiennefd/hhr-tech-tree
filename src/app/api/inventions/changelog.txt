@@ -1,5 +1,8 @@
 1 September 2026
 - Added tech: Machine translation, 1970
+- Added connection: Integrated circuit computer --> Machine translation
+- Added connection: Information theory --> Machine translation
+- Added connection: Modern cryptography --> Machine translation
 
 31 August 2026
 - Added tech: Emoji, 1997
