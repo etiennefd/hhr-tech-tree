@@ -1,3 +1,6 @@
+1 September 2026
+- Added tech: Machine translation, 1970
+
 31 August 2026
 - Added tech: Emoji, 1997
 - Added tech: Unicode, 1991
