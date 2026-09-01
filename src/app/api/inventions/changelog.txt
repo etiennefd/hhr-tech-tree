@@ -7,6 +7,9 @@
 - Added connection: Modern cryptography --> Machine translation
 - Added connection: Statistical machine translation --> Attention mechanism
 - Added connection: Machine translation --> Statistical machine translation
+- Added connection: Von Neumann architecture --> Assembly language
+- Added connection: Computer program --> Assembly language
+- Added connection: Assembly language --> High-level programming language
 
 31 August 2026
 - Added tech: Emoji, 1997
