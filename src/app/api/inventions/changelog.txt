@@ -1,6 +1,14 @@
 2 September 2026
 - Added tech: Lane centering, 2013
 - Added tech: Adaptive cruise control, 1995
+- Added connection: Cruise control --> Adaptive cruise control
+- Added connection: Lidar --> Adaptive cruise control
+- Added connection: Deep learning --> Robotaxi
+- Added connection: Lane centering --> Robotaxi
+- Added connection: Adaptive cruise control --> Lane centering
+- Added connection: Active-pixel sensor --> Lane centering
+- Added connection: Radar --> Lane centering
+- Added connection: Millimeter waves --> Lane centering
 
 1 September 2026
 - Added tech: Statistical machine translation, 1990
