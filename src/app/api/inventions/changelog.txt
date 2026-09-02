@@ -2231,7 +2231,7 @@
 - Added connection: Computer digital image --> Flatbed image scanner
 - Added connection: Laser --> Flatbed image scanner
 - Added connection: Flatbed image scanner --> Omni-font optical character recognition
-- Added connection: Charged-coupled device --> Omni-font optical character recognition
+- Added connection: Charge-coupled device --> Omni-font optical character recognition
 - Added connection: Microcomputer --> Omni-font optical character recognition
 - Added connection: Selenium photocell --> Optophone
 
