@@ -13,6 +13,9 @@
 - Added connection: Automobile --> Cruise control
 - Added connection: Deep learning --> Seq2seq
 - Added connection: Deep learning --> Generative adversarial network
+- Added connection: Carriage odometer --> Speedometer
+- Added connection: Electromagnetic induction --> Speedometer
+- Added connection: Speedometer --> Cruise control
 
 1 September 2026
 - Added tech: Statistical machine translation, 1990
