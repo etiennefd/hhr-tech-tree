@@ -11,6 +11,8 @@
 - Added connection: Radar --> Lane centering
 - Added connection: Millimeter waves --> Lane centering
 - Added connection: Automobile --> Cruise control
+- Added connection: Deep learning --> Seq2seq
+- Added connection: Deep learning --> Generative adversarial network
 
 1 September 2026
 - Added tech: Statistical machine translation, 1990
@@ -2994,7 +2996,6 @@
 - Added tech: GPU, 1999
 - Added connection: GPU --> General-purpose computing on GPU
 - Added connection: General-purpose computing on GPU --> Deep learning
-- Added connection: General-purpose computing on GPU --> Transformer (machine learning)
 - Added connection: General-purpose computing on GPU --> Generative adversarial network
 
 9 August 2025
