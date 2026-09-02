@@ -1,6 +1,7 @@
 2 September 2026
 - Added tech: Lane centering, 2013
 - Added tech: Adaptive cruise control, 1995
+- Added tech: Speedometer, 1888
 - Added connection: Cruise control --> Adaptive cruise control
 - Added connection: Lidar --> Adaptive cruise control
 - Added connection: Deep learning --> Robotaxi
