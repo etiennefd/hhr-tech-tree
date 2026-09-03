@@ -4,6 +4,12 @@
 - Added connection: Voltaic pile --> Photovoltaic effect
 - Added connection: Platinum --> Photovoltaic effect
 - Added connection: Silver halides --> Photovoltaic effect
+- Added connection: Coins --> Sheet metal stamping
+- Added connection: Slitting mill --> Sheet metal stamping
+- Added connection: Brass --> Sheet metal stamping
+- Added connection: Screw press --> Sheet metal stamping
+- Added connection: Sheet metal stamping --> Eggbeater
+- Added connection: Sheet metal stamping --> Double-edge safety razor
 
 2 September 2026
 - Added tech: Lane centering, 2013
