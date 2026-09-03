@@ -286,7 +286,7 @@
 - Added connection: Copper smelting --> Cupellation
 
 11 August 2026
-- v1.1.4: Later independent inventions table
+- v1.1.4: Independent inventions table
 - Added tech: Stationary bicycle, 1796
 - Added tech: Flywheel, 1120
 - Added tech: Stamp mill, 100
