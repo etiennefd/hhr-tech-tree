@@ -1,3 +1,6 @@
+3 September 2026
+- Added connection: Neural language model --> Seq2seq
+
 2 September 2026
 - Added tech: Lane centering, 2013
 - Added tech: Adaptive cruise control, 1995
