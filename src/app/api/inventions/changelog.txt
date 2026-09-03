@@ -11,6 +11,11 @@
 - Added connection: Screw press --> Sheet metal stamping
 - Added connection: Sheet metal stamping --> Eggbeater
 - Added connection: Sheet metal stamping --> Double-edge safety razor
+- Added connection: Carbonated water --> Crown cork
+- Added connection: Sheet metal stamping --> Crown cork
+- Added connection: Tinplate --> Crown cork
+- Added connection: Cork --> Crown cork
+- Added connection: Crown cork --> Double-edge safety razor
 
 2 September 2026
 - Added tech: Lane centering, 2013
