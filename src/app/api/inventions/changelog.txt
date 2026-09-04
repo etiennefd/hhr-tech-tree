@@ -1,5 +1,8 @@
 4 September 2026
 - Added tech: Wire whisk, 1840
+- Added connection: Electric motor --> Blender
+- Added connection: Electrical grid --> Blender
+- Added connection: Drawn wire and draw plate --> Wire whisk
 
 3 September 2026
 - Added tech: Blender, 1922
