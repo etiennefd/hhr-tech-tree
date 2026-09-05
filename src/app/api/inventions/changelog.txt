@@ -1,3 +1,82 @@
+4 September 2026
+- Added tech: Wire whisk, 1840
+- Added connection: Electric motor --> Blender
+- Added connection: Electrical grid --> Blender
+- Added connection: Drawn wire and draw plate --> Wire whisk
+
+3 September 2026
+- Added tech: Blender, 1922
+- Added tech: Crown cork, 1892
+- Added tech: Sheet metal stamping, 1769
+- Added connection: Neural language model --> Seq2seq
+- Added connection: Voltaic pile --> Photovoltaic effect
+- Added connection: Platinum --> Photovoltaic effect
+- Added connection: Silver halides --> Photovoltaic effect
+- Added connection: Coins --> Sheet metal stamping
+- Added connection: Slitting mill --> Sheet metal stamping
+- Added connection: Brass --> Sheet metal stamping
+- Added connection: Screw press --> Sheet metal stamping
+- Added connection: Sheet metal stamping --> Eggbeater
+- Added connection: Sheet metal stamping --> Double-edge safety razor
+- Added connection: Carbonated water --> Crown cork
+- Added connection: Sheet metal stamping --> Crown cork
+- Added connection: Tinplate --> Crown cork
+- Added connection: Cork --> Crown cork
+- Added connection: Crown cork --> Double-edge safety razor
+
+2 September 2026
+- Added tech: Lane centering, 2013
+- Added tech: Adaptive cruise control, 1995
+- Added tech: Speedometer, 1888
+- Added connection: Cruise control --> Adaptive cruise control
+- Added connection: Lidar --> Adaptive cruise control
+- Added connection: Deep learning --> Robotaxi
+- Added connection: Lane centering --> Robotaxi
+- Added connection: Adaptive cruise control --> Lane centering
+- Added connection: Active-pixel sensor --> Lane centering
+- Added connection: Radar --> Lane centering
+- Added connection: Millimeter waves --> Lane centering
+- Added connection: Automobile --> Cruise control
+- Added connection: Deep learning --> Seq2seq
+- Added connection: Deep learning --> Generative adversarial network
+- Added connection: Carriage odometer --> Speedometer
+- Added connection: Electromagnetic induction --> Speedometer
+- Added connection: Speedometer --> Cruise control
+
+1 September 2026
+- Added tech: Statistical machine translation, 1990
+- Added tech: Machine translation, 1970
+- Added tech: Assembly language, 1947
+- Added connection: Integrated circuit computer --> Machine translation
+- Added connection: Information theory --> Machine translation
+- Added connection: Modern cryptography --> Machine translation
+- Added connection: Statistical machine translation --> Attention mechanism
+- Added connection: Machine translation --> Statistical machine translation
+- Added connection: Von Neumann architecture --> Assembly language
+- Added connection: Computer program --> Assembly language
+- Added connection: Assembly language --> High-level programming language
+
+31 August 2026
+- Added tech: Emoji, 1997
+- Added tech: Unicode, 1991
+- Added tech: Word processor, 1964
+- Added tech: ASCII, 1963
+- Added tech: Baudot code, 1874
+- Added tech: Printing telegraph, 1846
+- Added connection: Commercial telegraphy --> Printing telegraph
+- Added connection: Printing telegraph --> Ticker tape
+- Added connection: Baudot code --> One-time pad
+- Added connection: Morse code --> Baudot code
+- Added connection: Printing telegraph --> Baudot code
+- Added connection: Baudot code --> Pulse-code modulation
+- Added connection: Baudot code --> ASCII
+- Added connection: ASCII --> Unicode
+- Added connection: ASCII --> Wide-area computer network
+- Added connection: Word processor --> Word processor software
+- Added connection: Typewriter with QWERTY keyboard --> Word processor
+- Added connection: Magnetic tape --> Word processor
+- Added connection: SMS --> Emoji
+
 30 August 2026
 - Added tech: Vigenère cipher, 1553
 - Added connection: Vocoder --> Pulse-code modulation
@@ -214,7 +293,7 @@
 - Added connection: Copper smelting --> Cupellation
 
 11 August 2026
-- v1.1.4: Later independent inventions table
+- v1.1.4: Independent inventions table
 - Added tech: Stationary bicycle, 1796
 - Added tech: Flywheel, 1120
 - Added tech: Stamp mill, 100
@@ -2185,7 +2264,7 @@
 - Added connection: Computer digital image --> Flatbed image scanner
 - Added connection: Laser --> Flatbed image scanner
 - Added connection: Flatbed image scanner --> Omni-font optical character recognition
-- Added connection: Charged-coupled device --> Omni-font optical character recognition
+- Added connection: Charge-coupled device --> Omni-font optical character recognition
 - Added connection: Microcomputer --> Omni-font optical character recognition
 - Added connection: Selenium photocell --> Optophone
 
@@ -2946,7 +3025,6 @@
 - Added tech: GPU, 1999
 - Added connection: GPU --> General-purpose computing on GPU
 - Added connection: General-purpose computing on GPU --> Deep learning
-- Added connection: General-purpose computing on GPU --> Transformer (machine learning)
 - Added connection: General-purpose computing on GPU --> Generative adversarial network
 
 9 August 2025
