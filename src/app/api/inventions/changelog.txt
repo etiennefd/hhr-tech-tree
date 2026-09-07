@@ -1,3 +1,6 @@
+7 September 2026
+- Added tech: Electroplating, 1805
+
 4 September 2026
 - Added tech: Wire whisk, 1840
 - Added connection: Electric motor --> Blender
