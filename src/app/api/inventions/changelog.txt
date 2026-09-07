@@ -1,5 +1,14 @@
 7 September 2026
 - Added tech: Electroplating, 1805
+- Added connection: Electrolysis --> Electroplating
+- Added connection: Electrolysis --> Electrotyping
+- Added connection: Electroplating <--> Electrotyping
+- Added connection: Ammonia --> Electroplating
+- Added connection: Gold --> Electroplating
+- Added connection: Silver --> Electroplating
+- Added connection: Vitriol --> Daniell cell
+- Added connection: Copper smelting --> Electrotyping
+- Added independent invention: Electroplating, 1838
 
 4 September 2026
 - Added tech: Wire whisk, 1840
