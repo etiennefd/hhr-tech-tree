@@ -1,8 +1,3 @@
-8 September 2026
-- Added connection: Sun and planet gear --> Stand mixer
-- Added connection: Hydraulic cylinder --> Stand mixer
-- Added connection: Electric motor --> Stand mixer
-
 7 September 2026
 - Added tech: Stand mixer, 1914
 - Added tech: Electroplating, 1805
@@ -14,6 +9,9 @@
 - Added connection: Silver --> Electroplating
 - Added connection: Vitriol --> Daniell cell
 - Added connection: Copper smelting --> Electrotyping
+- Added connection: Sun and planet gear --> Stand mixer
+- Added connection: Hydraulic cylinder --> Stand mixer
+- Added connection: Electric motor --> Stand mixer
 - Added independent invention: Electroplating, 1838
 
 4 September 2026
