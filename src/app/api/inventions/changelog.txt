@@ -12,6 +12,11 @@
 - Added connection: Sun and planet gear --> Stand mixer
 - Added connection: Hydraulic cylinder --> Stand mixer
 - Added connection: Electric motor --> Stand mixer
+- Added connection: Crank --> Mangle
+- Added connection: Mangle --> Clothes tumble dryer
+- Added connection: Mangle --> Automatic washing machine
+- Added connection: Electric motor --> Clothes tumble dryer
+- Added connection: Nichrome heating element --> Clothes tumble dryer
 - Added independent invention: Electroplating, 1838
 
 4 September 2026
