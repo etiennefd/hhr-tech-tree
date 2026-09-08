@@ -1,4 +1,5 @@
 7 September 2026
+- Added tech: Stand mixer, 1914
 - Added tech: Electroplating, 1805
 - Added connection: Electrolysis --> Electroplating
 - Added connection: Electrolysis --> Electrotyping
