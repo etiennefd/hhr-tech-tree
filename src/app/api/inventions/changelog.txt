@@ -17,6 +17,7 @@
 - Added connection: Mangle --> Automatic washing machine
 - Added connection: Electric motor --> Clothes tumble dryer
 - Added connection: Nichrome heating element --> Clothes tumble dryer
+- Added connection: Percussion flake tool --> Obsidian tool
 - Added independent invention: Electroplating, 1838
 
 4 September 2026
