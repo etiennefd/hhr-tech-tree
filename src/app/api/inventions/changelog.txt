@@ -1,3 +1,8 @@
+8 September 2026
+- Added connection: Sun and planet gear --> Stand mixer
+- Added connection: Hydraulic cylinder --> Stand mixer
+- Added connection: Electric motor --> Stand mixer
+
 7 September 2026
 - Added tech: Stand mixer, 1914
 - Added tech: Electroplating, 1805
