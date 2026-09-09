@@ -1,3 +1,8 @@
+9 September 2026
+- Added connection: Spear --> Spear-thrower
+- Added connection: Spear --> Shield
+- Added connection: Spear --> Pike
+
 7 September 2026
 - Added tech: Stand mixer, 1914
 - Added tech: Electroplating, 1805
@@ -1041,7 +1046,6 @@
 - Added connection: Hafting --> Adze
 - Added connection: Geometric microlith --> Sickle
 - Added connection: Burin --> Sewing needle
-- Added connection: Prepared-core tool --> Hafted spear
 - Added connection: Ground stone tool --> Stonemasonry
 - Added connection: Ground stone tool --> Adze
 - Added connection: Ground stone tool --> Chisel
@@ -2858,7 +2862,6 @@
 - Added tech: Composite bow, 2000 BCE
 - Added tech: Sling, 4500 BCE
 - Added connection: Sword --> Shield
-- Added connection: Hafted spear --> Shield
 - Added connection: Bow and arrow --> Shield
 - Added connection: Hafted axe --> Shield
 - Added connection: Sling --> Shield
