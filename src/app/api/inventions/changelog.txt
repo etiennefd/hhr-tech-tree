@@ -1,4 +1,5 @@
 10 September 2026
+- Added tech: Vibrating structure gyroscope, 1953
 - Added tech: Accelerometer, 1923
 - Added tech: Tuning fork, 1711
 - Added connection: Wheatstone bridge --> Accelerometer
