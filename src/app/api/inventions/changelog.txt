@@ -1,5 +1,6 @@
 10 September 2026
 - Added tech: Accelerometer, 1923
+- Added tech: Tuning fork, 1711
 - Added connection: Wheatstone bridge --> Accelerometer
 - Added connection: Carbon microphone --> Accelerometer
 
