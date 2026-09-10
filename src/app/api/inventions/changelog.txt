@@ -3,6 +3,9 @@
 - Added tech: Tuning fork, 1711
 - Added connection: Wheatstone bridge --> Accelerometer
 - Added connection: Carbon microphone --> Accelerometer
+- Added connection: Cementation steel --> Tuning fork
+- Added connection: Lute --> Tuning fork
+- Added connection: Tuning fork --> Quartz clock
 
 9 September 2026
 - Added connection: Spear --> Spear-thrower
