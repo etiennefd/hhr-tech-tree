@@ -1,5 +1,7 @@
 10 September 2026
 - Added tech: Accelerometer, 1923
+- Added connection: Wheatstone bridge --> Accelerometer
+- Added connection: Carbon microphone --> Accelerometer
 
 9 September 2026
 - Added connection: Spear --> Spear-thrower
