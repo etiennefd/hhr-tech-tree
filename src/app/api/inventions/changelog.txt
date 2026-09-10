@@ -7,6 +7,11 @@
 - Added connection: Cementation steel --> Tuning fork
 - Added connection: Lute --> Tuning fork
 - Added connection: Tuning fork --> Quartz clock
+- Added connection: Gyroscope --> Vibrating structure gyroscope
+- Added connection: Tuning fork --> Vibrating structure gyroscope
+- Added connection: Amplifier --> Vibrating structure gyroscope
+- Added connection: Electromagnet --> Vibrating structure gyroscope
+- Added connection: Vibrating structure gyroscope --> Quadcopter drone
 
 9 September 2026
 - Added connection: Spear --> Spear-thrower
