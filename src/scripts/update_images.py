@@ -41,6 +41,11 @@ IMAGE_QUALITY = 85  # High quality for better results
 ALLOWED_THUMB_WIDTHS = [20, 40, 60, 120, 250, 330, 500, 960, 1280, 1920, 3840]
 # Formats Pillow can open straight from the original upload, so we skip the thumbnail
 DIRECT_DOWNLOAD_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'}
+# thumb.wikimedia.org serves rendered thumbnails but 301s any other path to the
+# Commons main page, so originals are unreachable there. Commons description pages
+# now hand out this host when you copy an image URL, and upload.wikimedia.org serves
+# the same thumbnails plus the originals, so we rewrite onto it before downloading.
+THUMB_HOST_RE = re.compile(r'^(?P<scheme>https?://)thumb\.wikimedia\.org/')
 # e.g. /commons/thumb/c/cc/Name.jpg/2880px-Name.jpg
 #      /commons/thumb/a/ab/Name.tif/lossy-page1-1600px-Name.tif.jpg
 THUMB_URL_RE = re.compile(
@@ -102,15 +107,23 @@ def apply_crop(img, crop: tuple):
     return cropped
 
 def normalize_wikimedia_url(url: str, crop: Union[tuple, None] = None) -> str:
-    """Rewrites an upload.wikimedia.org thumbnail URL into one Wikimedia will actually serve.
+    """Rewrites a Wikimedia image URL into one Wikimedia will actually serve.
 
-    Wikimedia now rejects hotlinked thumbnails at arbitrary widths (see
+    URLs on thumb.wikimedia.org are moved to upload.wikimedia.org, which serves both
+    thumbnails and originals.
+
+    Wikimedia also rejects hotlinked thumbnails at arbitrary widths (see
     https://www.mediawiki.org/wiki/Common_thumbnail_sizes). For formats Pillow can
     open directly we ask for the original file, which is both allowed and the best
     source for cropping. For everything else (SVG, TIFF, PDF...) we keep the
     rendered thumbnail but snap its width up to a permitted size, large enough that
     the requested crop still has detail to spare.
     """
+    rehosted = THUMB_HOST_RE.sub(r'\g<scheme>upload.wikimedia.org/', url)
+    if rehosted != url:
+        print(f"    Moved off thumb.wikimedia.org, which only serves thumbnails: {rehosted}")
+        url = rehosted
+
     match = THUMB_URL_RE.search(url)
     if not match:
         return url
@@ -139,6 +152,23 @@ def normalize_wikimedia_url(url: str, crop: Union[tuple, None] = None) -> str:
     print(f"    Snapped thumbnail width {match.group('width')}px -> {allowed}px (Wikimedia only serves standard sizes)")
     return rebuilt
 
+def fetch_image_bytes(url: str) -> bytes:
+    """Fetches url and returns the body, raising unless it actually looks like a file.
+
+    A 200 is not enough of a check on its own: Wikimedia answers paths it can't serve
+    with a redirect to a wiki page, so the response is a successful HTML document.
+    Rejecting that here lets the caller fall back to another URL instead of handing
+    a web page to Pillow.
+    """
+    response = session.get(url, timeout=FETCH_TIMEOUT)
+    response.raise_for_status()
+    content_type = response.headers.get('Content-Type', '')
+    if content_type.startswith('text/'):
+        raise requests.exceptions.RequestException(
+            f"expected an image but got {content_type} from {response.url}"
+        )
+    return response.content
+
 def download_and_optimize_image(url: str, title: str, rotation: int = 0, crop: Union[tuple, None] = None) -> Union[str, None]:
     """Downloads and optimizes an image, returns the local path."""
     try:
@@ -154,17 +184,15 @@ def download_and_optimize_image(url: str, title: str, rotation: int = 0, crop: U
 
         # Download the image, falling back to the URL exactly as stored in Airtable
         try:
-            response = session.get(download_url, timeout=FETCH_TIMEOUT)
-            response.raise_for_status()
+            content = fetch_image_bytes(download_url)
         except requests.exceptions.RequestException as e:
             if download_url == url:
                 raise
             print(f"    Rewritten URL failed ({e}), retrying with the original URL")
-            response = session.get(url, timeout=FETCH_TIMEOUT)
-            response.raise_for_status()
+            content = fetch_image_bytes(url)
 
         # Open and optimize the image
-        img = Image.open(io.BytesIO(response.content))
+        img = Image.open(io.BytesIO(content))
         
         # Apply EXIF orientation if present
         img = ImageOps.exif_transpose(img)
