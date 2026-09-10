@@ -12,6 +12,8 @@
 - Added connection: Amplifier --> Vibrating structure gyroscope
 - Added connection: Electromagnet --> Vibrating structure gyroscope
 - Added connection: Vibrating structure gyroscope --> Quadcopter drone
+- Added connection: Tin bronze --> Seismometer
+- Added connection: Pendulum physics --> Horizontal pendulum seismograph
 
 9 September 2026
 - Added connection: Spear --> Spear-thrower
