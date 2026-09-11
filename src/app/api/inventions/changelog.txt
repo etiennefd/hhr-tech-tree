@@ -1,3 +1,6 @@
+11 September 2026
+- Added tech: Kymograph, 1847
+
 10 September 2026
 - Added tech: Vibrating structure gyroscope, 1953
 - Added tech: Accelerometer, 1923
