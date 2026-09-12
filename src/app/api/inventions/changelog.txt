@@ -21,6 +21,7 @@
 - Added connection: Nerve action potential --> Electroencephalography
 - Added connection: Electrocardiography machine --> Electroencephalography
 - Added connection: Mercury --> Barometer
+- Added connection: Barometer --> Watt steam engine
 
 11 September 2026
 - Added tech: Kymograph, 1847
