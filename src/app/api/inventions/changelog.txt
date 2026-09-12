@@ -25,6 +25,11 @@
 - Added connection: Barometer --> Watt steam engine
 - Added connection: Watt steam engine --> Steam engine indicator
 - Added connection: Graphite pencil --> Steam engine indicator
+- Added connection: Grinding stone --> Mortar and pestle
+- Added connection: Grinding stone --> Quern-stone
+- Added connection: Grinding stone --> Ground stone tool
+- Added connection: Stone tool --> Grinding stone
+- Added connection: Pigments --> Grinding stone
 
 11 September 2026
 - Added tech: Kymograph, 1847
@@ -1097,8 +1102,6 @@
 - Added connection: Ground stone tool --> Stonemasonry
 - Added connection: Ground stone tool --> Adze
 - Added connection: Ground stone tool --> Chisel
-- Added connection: Stone tool --> Ground stone tool
-- Added connection: Ground stone tool --> Quern-stone
 - Added connection: Domestication of barley --> Quern-stone
 - Added connection: Domestication of wheat --> Quern-stone
 - Added connection: Rotary quern --> Animal-driven rotary mill
