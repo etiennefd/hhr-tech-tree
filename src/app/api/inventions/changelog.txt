@@ -8,6 +8,7 @@
 - Added connection: Kymograph --> Sphygmograph
 - Added connection: Sphygmograph --> Sphygmomanometer
 - Added connection: Kymograph --> Horizontal pendulum seismograph
+- Added connection: Vulcanized rubber --> Sphygmomanometer
 
 11 September 2026
 - Added tech: Kymograph, 1847
