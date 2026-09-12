@@ -10,6 +10,9 @@
 - Added connection: Sphygmograph --> Sphygmomanometer
 - Added connection: Kymograph --> Horizontal pendulum seismograph
 - Added connection: Vulcanized rubber --> Sphygmomanometer
+- Added connection: Galvanism --> Nerve action potential
+- Added connection: Galvanometer --> Nerve action potential
+- Added connection: Nerve action potential --> Electrocardiography machine
 
 11 September 2026
 - Added tech: Kymograph, 1847
