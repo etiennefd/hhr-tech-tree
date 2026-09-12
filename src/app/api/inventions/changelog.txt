@@ -3,6 +3,7 @@
 - Added tech: Sphygmograph, 1863
 - Added tech: Nerve action potential, 1843
 - Added tech: Hemodynamometer, 1828
+- Added tech: Grinding stone, 270000 BCE
 - Added connection: Barometer --> Hemodynamometer
 - Added connection: Hemodynamometer --> Kymograph
 - Added connection: Hemodynamometer --> Sphygmomanometer
