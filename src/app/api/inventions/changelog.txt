@@ -1,6 +1,7 @@
 12 September 2026
 - Added tech: Sphygmomanometer, 1896
 - Added tech: Sphygmograph, 1863
+- Added tech: Nerve action potential, 1843
 - Added tech: Hemodynamometer, 1828
 - Added connection: Barometer --> Hemodynamometer
 - Added connection: Hemodynamometer --> Kymograph
