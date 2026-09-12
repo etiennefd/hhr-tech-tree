@@ -1,3 +1,6 @@
+12 September 2026
+- Added tech: Hemodynamometer, 1828
+
 11 September 2026
 - Added tech: Kymograph, 1847
 
