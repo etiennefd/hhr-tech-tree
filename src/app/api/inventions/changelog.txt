@@ -23,6 +23,8 @@
 - Added connection: Electrocardiography machine --> Electroencephalography
 - Added connection: Mercury --> Barometer
 - Added connection: Barometer --> Watt steam engine
+- Added connection: Watt steam engine --> Steam engine indicator
+- Added connection: Graphite pencil --> Steam engine indicator
 
 11 September 2026
 - Added tech: Kymograph, 1847
