@@ -9,6 +9,10 @@
 
       python src/scripts/update_images.py --all
 
+  For a host that blocks server-side downloads, such as ResearchGate, the original
+  lives in image-sources/<record-name>.<ext> — use "Local file…" to load it from there,
+  so you crop the same pixels update_images.py will process.
+
   Values are percentages of the source image, so they stay valid at any resolution.
   The crop is applied to the upright source image, before any "Image rotation".
 
