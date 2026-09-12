@@ -13,6 +13,12 @@
 - Added connection: Galvanism --> Nerve action potential
 - Added connection: Galvanometer --> Nerve action potential
 - Added connection: Nerve action potential --> Electrocardiography machine
+- Added connection: Galvanism --> Electrotherapy
+- Added connection: Induction coil --> Electrotherapy
+- Added connection: Electrotherapy --> Pacemaker
+- Added connection: Electrotherapy --> Electroencephalography
+- Added connection: Nerve action potential --> Electroencephalography
+- Added connection: Electrocardiography machine --> Electroencephalography
 
 11 September 2026
 - Added tech: Kymograph, 1847
