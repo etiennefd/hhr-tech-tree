@@ -2,6 +2,12 @@
 - Added tech: Sphygmomanometer, 1896
 - Added tech: Sphygmograph, 1863
 - Added tech: Hemodynamometer, 1828
+- Added connection: Barometer --> Hemodynamometer
+- Added connection: Hemodynamometer --> Kymograph
+- Added connection: Hemodynamometer --> Sphygmomanometer
+- Added connection: Kymograph --> Sphygmograph
+- Added connection: Sphygmograph --> Sphygmomanometer
+- Added connection: Kymograph --> Horizontal pendulum seismograph
 
 11 September 2026
 - Added tech: Kymograph, 1847
