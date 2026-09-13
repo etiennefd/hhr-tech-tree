@@ -1,3 +1,6 @@
+13 September 2026
+- Added tech: Electromagnetic seismograph, 1906
+
 12 September 2026
 - Added tech: Sphygmomanometer, 1896
 - Added tech: Sphygmograph, 1863
