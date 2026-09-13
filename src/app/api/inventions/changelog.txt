@@ -1,5 +1,7 @@
 13 September 2026
 - Added tech: Electromagnetic seismograph, 1906
+- Added connection: Horizontal pendulum seismograph --> Electromagnetic seismograph
+- Added connection: Moving-coil galvanometer --> Electromagnetic seismograph
 
 12 September 2026
 - Added tech: Sphygmomanometer, 1896
