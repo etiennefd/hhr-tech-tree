@@ -1,10 +1,14 @@
 13 September 2026
 - Added tech: Strong-motion accelerograph, 1932
+- Added tech: Reflection seismology, 1921
 - Added tech: Electromagnetic seismograph, 1906
 - Added connection: Horizontal pendulum seismograph --> Electromagnetic seismograph
 - Added connection: Moving-coil galvanometer --> Electromagnetic seismograph
 - Added connection: Horizontal pendulum seismograph --> Strong-motion accelerograph
 - Added connection: Accelerometer --> Strong-motion accelerograph
+- Added connection: Dynamite --> Reflection seismology
+- Added connection: Electromagnetic seismograph --> Reflection seismology
+- Added connection: Amplifier --> Reflection seismology
 
 12 September 2026
 - Added tech: Sphygmomanometer, 1896
