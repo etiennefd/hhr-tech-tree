@@ -1,4 +1,5 @@
 13 September 2026
+- Added tech: Strong-motion accelerograph, 1932
 - Added tech: Electromagnetic seismograph, 1906
 - Added connection: Horizontal pendulum seismograph --> Electromagnetic seismograph
 - Added connection: Moving-coil galvanometer --> Electromagnetic seismograph
