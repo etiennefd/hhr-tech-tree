@@ -1,13 +1,10 @@
 13 September 2026
 - Added tech: Strong-motion accelerograph, 1932
 - Added tech: Reflection seismology, 1921
-- Added tech: Electromagnetic seismograph, 1906
-- Added connection: Horizontal pendulum seismograph --> Electromagnetic seismograph
-- Added connection: Moving-coil galvanometer --> Electromagnetic seismograph
-- Added connection: Horizontal pendulum seismograph --> Strong-motion accelerograph
+- Added connection: Seismograph --> Strong-motion accelerograph
 - Added connection: Accelerometer --> Strong-motion accelerograph
 - Added connection: Dynamite --> Reflection seismology
-- Added connection: Electromagnetic seismograph --> Reflection seismology
+- Added connection: Seismograph --> Reflection seismology
 - Added connection: Amplifier --> Reflection seismology
 
 12 September 2026
@@ -22,7 +19,7 @@
 - Added connection: Hemodynamometer --> Sphygmomanometer
 - Added connection: Kymograph --> Sphygmograph
 - Added connection: Sphygmograph --> Sphygmomanometer
-- Added connection: Kymograph --> Horizontal pendulum seismograph
+- Added connection: Kymograph --> Seismograph
 - Added connection: Vulcanized rubber --> Sphygmomanometer
 - Added connection: Galvanism --> Nerve action potential
 - Added connection: Galvanometer --> Nerve action potential
@@ -61,7 +58,7 @@
 - Added connection: Electromagnet --> Vibrating structure gyroscope
 - Added connection: Vibrating structure gyroscope --> Quadcopter drone
 - Added connection: Tin bronze --> Seismoscope
-- Added connection: Pendulum physics --> Horizontal pendulum seismograph
+- Added connection: Pendulum physics --> Seismograph
 
 9 September 2026
 - Added connection: Spear --> Spear-thrower
