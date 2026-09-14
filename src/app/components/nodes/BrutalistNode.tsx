@@ -49,6 +49,7 @@ const formatTitle = (title: string) => {
     'Technetium-99m': 'TECHNETIUM-99m',
     'pH': 'pH',
     'YInMn': 'YInMn',
+    'siRNA': 'siRNA',
     // Add more special cases as needed
   };
 
