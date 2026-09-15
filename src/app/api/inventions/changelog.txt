@@ -7,6 +7,9 @@
 - Added connection: Artificial horizon --> Attitude indicator
 - Added connection: Backstaff --> Artificial horizon
 - Added connection: Spirit level --> Artificial horizon
+- Added connection: Gyrocompass --> Autopilot
+- Added connection: Servomechanism --> Autopilot
+- Added connection: Airplane --> Autopilot
 
 14 September 2026
 - Added tech: siRNA medication, 2018
