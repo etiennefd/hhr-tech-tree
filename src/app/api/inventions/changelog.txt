@@ -13,7 +13,6 @@
 - Added connection: Airplane --> Autopilot
 - Added connection: Autopilot --> Cruise missile
 - Added connection: Autopilot --> Ballistic missile
-- Added connection: Servomechanism --> Drone
 
 14 September 2026
 - Added tech: siRNA medication, 2018
