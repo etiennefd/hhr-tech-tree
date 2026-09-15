@@ -4,6 +4,8 @@
 - Added connection: Gyrocompass --> Attitude indicator
 - Added connection: Airplane --> Attitude indicator
 - Added connection: Artificial horizon --> Attitude indicator
+- Added connection: Backstaff --> Artificial horizon
+- Added connection: Spirit level --> Artificial horizon
 
 14 September 2026
 - Added tech: siRNA medication, 2018
@@ -3253,7 +3255,7 @@
 15 July 2025
 - Added tech: Gyro gunsight, 1941
 - Added tech: Reflector sight, 1900
-- Added tech: Artificial horizon, 1785
+- Added tech: Artificial horizon, 1728
 - Added tech: Telescopic sight, 1630
 - Added connection: Slide rule --> Vector bombsight
 - Added connection: Geiger counter --> Radiocarbon dating
