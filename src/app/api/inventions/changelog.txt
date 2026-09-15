@@ -1,5 +1,6 @@
 15 September 2026
 - Added tech: Attitude indicator, 1929
+- Added tech: Autopilot, 1914
 - Added connection: Gyroscope --> Attitude indicator
 - Added connection: Gyrocompass --> Attitude indicator
 - Added connection: Airplane --> Attitude indicator
