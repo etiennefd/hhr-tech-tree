@@ -1,5 +1,9 @@
 15 September 2026
 - Added tech: Attitude indicator, 1929
+- Added connection: Gyroscope --> Attitude indicator
+- Added connection: Gyrocompass --> Attitude indicator
+- Added connection: Airplane --> Attitude indicator
+- Added connection: Artificial horizon --> Attitude indicator
 
 14 September 2026
 - Added tech: siRNA medication, 2018
