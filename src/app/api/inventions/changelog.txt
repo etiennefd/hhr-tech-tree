@@ -1,4 +1,5 @@
 15 September 2026
+- Added tech: RNA interference, 1998
 - Added tech: Attitude indicator, 1929
 - Added tech: Autopilot, 1914
 - Added connection: Gyroscope --> Attitude indicator
