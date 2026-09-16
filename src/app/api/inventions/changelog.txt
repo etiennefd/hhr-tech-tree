@@ -12,6 +12,8 @@
 - Added connection: Portapak --> Camcorder
 - Added connection: Video camera tube --> Iconoscope
 - Added connection: Atomic emission spectroscopy --> Caesium
+- Added connection: Caesium --> Atomic clock
+- Added connection: Caesium --> Video camera tube
 
 15 September 2026
 - Added tech: RNA interference, 1998
