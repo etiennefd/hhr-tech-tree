@@ -3,6 +3,11 @@
 - Added tech: Portapak, 1967
 - Added connection: Video camera tube --> Camcorder
 - Added connection: Videocassette and videocassette recorder --> Camcorder
+- Added connection: Nickel–cadmium battery --> Portapak
+- Added connection: Helical scan --> Portapak
+- Added connection: Video camera tube --> Portapak
+- Added connection: Video tape recorder --> Portapak
+- Added connection: Portapak --> Camcorder
 
 15 September 2026
 - Added tech: RNA interference, 1998
