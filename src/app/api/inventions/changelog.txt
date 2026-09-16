@@ -1,5 +1,7 @@
 16 September 2026
 - Added tech: Camcorder, 1982
+- Added connection: Video camera tube --> Camcorder
+- Added connection: Videocassette and videocassette recorder --> Camcorder
 
 15 September 2026
 - Added tech: RNA interference, 1998
