@@ -2,13 +2,14 @@
 - Added tech: Camcorder, 1982
 - Added tech: Portapak, 1967
 - Added tech: Iconoscope, 1931
-- Added connection: Video camera tube --> Camcorder
+- Added connection: Iconoscope --> Camcorder
 - Added connection: Videocassette and videocassette recorder --> Camcorder
 - Added connection: Nickel–cadmium battery --> Portapak
 - Added connection: Helical scan --> Portapak
-- Added connection: Video camera tube --> Portapak
+- Added connection: Iconoscope --> Portapak
 - Added connection: Video tape recorder --> Portapak
 - Added connection: Portapak --> Camcorder
+- Added connection: Video camera tube --> Iconoscope
 
 15 September 2026
 - Added tech: RNA interference, 1998
