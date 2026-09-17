@@ -14,6 +14,7 @@
 - Added connection: Atomic emission spectroscopy --> Caesium
 - Added connection: Caesium --> Atomic clock
 - Added connection: Caesium --> Video camera tube
+- Added connection: Quartz clock --> Atomic clock
 
 15 September 2026
 - Added tech: RNA interference, 1998
