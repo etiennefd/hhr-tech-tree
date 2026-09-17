@@ -1,3 +1,6 @@
+17 September 2026
+- Added tech: Autofocus camera, 1977
+
 16 September 2026
 - Added tech: Camcorder, 1982
 - Added tech: Portapak, 1967
