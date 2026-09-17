@@ -1,16 +1,16 @@
 16 September 2026
 - Added tech: Camcorder, 1982
 - Added tech: Portapak, 1967
-- Added tech: Iconoscope, 1931
+- Added tech: Charge-storage camera tube, 1931
 - Added tech: Caesium, 1860
-- Added connection: Iconoscope --> Camcorder
+- Added connection: Charge-storage camera tube --> Camcorder
 - Added connection: Videocassette and videocassette recorder --> Camcorder
 - Added connection: Nickel–cadmium battery --> Portapak
 - Added connection: Helical scan --> Portapak
-- Added connection: Iconoscope --> Portapak
+- Added connection: Charge-storage camera tube --> Portapak
 - Added connection: Video tape recorder --> Portapak
 - Added connection: Portapak --> Camcorder
-- Added connection: Video camera tube --> Iconoscope
+- Added connection: Video camera tube --> Charge-storage camera tube
 - Added connection: Atomic emission spectroscopy --> Caesium
 - Added connection: Caesium --> Atomic clock
 - Added connection: Caesium --> Video camera tube
