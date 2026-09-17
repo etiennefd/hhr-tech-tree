@@ -1,5 +1,6 @@
 17 September 2026
 - Added tech: Autofocus camera, 1977
+- Added tech: Rangefinder, 1769
 
 16 September 2026
 - Added tech: Camcorder, 1982
