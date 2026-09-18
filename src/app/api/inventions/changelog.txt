@@ -3,6 +3,7 @@
 - Added connection: Photographic camera --> Autofocus camera
 - Added connection: Charge-coupled device --> Autofocus camera
 - Added connection: Microprocessor --> Autofocus camera
+- Added connection: Telescope --> Rangefinder
 
 17 September 2026
 - Added tech: Autofocus camera, 1977
