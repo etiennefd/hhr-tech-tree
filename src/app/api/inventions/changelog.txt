@@ -6,6 +6,7 @@
 - Added connection: Ballistic missile --> Inertial navigation system
 - Added connection: Inertial navigation system --> Intercontinental ballistic missile
 - Added connection: Accelerometer --> Ballistic missile
+- Added connection: Inertial navigation system --> Lunar lander
 
 18 September 2026
 - Added connection: Rangefinder --> Autofocus camera
