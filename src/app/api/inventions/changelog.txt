@@ -1,5 +1,11 @@
 19 September 2026
 - Added tech: Inertial navigation system, 1953
+- Added connection: Accelerometer --> Inertial navigation system
+- Added connection: Gyroscope --> Inertial navigation system
+- Added connection: Autopilot --> Inertial navigation system
+- Added connection: Ballistic missile --> Inertial navigation system
+- Added connection: Inertial navigation system --> Intercontinental ballistic missile
+- Added connection: Accelerometer --> Ballistic missile
 
 18 September 2026
 - Added connection: Rangefinder --> Autofocus camera
