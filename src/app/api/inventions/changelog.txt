@@ -1,3 +1,6 @@
+19 September 2026
+- Added tech: Inertial navigation system, 1953
+
 18 September 2026
 - Added connection: Rangefinder --> Autofocus camera
 - Added connection: Photographic camera --> Autofocus camera
