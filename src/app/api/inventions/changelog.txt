@@ -1,5 +1,8 @@
 20 September 2026
 - Added tech: MEMS, 1965
+- Added connection: MOSFET --> MEMS
+- Added connection: Photolithography --> MEMS
+- Added connection: Silicon --> MEMS
 
 19 September 2026
 - Added tech: Inertial navigation system, 1953
