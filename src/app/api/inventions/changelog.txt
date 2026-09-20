@@ -1,3 +1,6 @@
+20 September 2026
+- Added tech: MEMS, 1965
+
 19 September 2026
 - Added tech: Inertial navigation system, 1953
 - Added connection: Accelerometer --> Inertial navigation system
