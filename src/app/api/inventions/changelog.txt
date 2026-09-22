@@ -1,5 +1,6 @@
 22 September 2026
 - Added tech: Digital micromirror device, 1987
+- Added tech: Organic semiconductor, 1954
 - Added connection: MEMS --> Digital micromirror device
 - Added connection: CMOS --> Digital micromirror device
 - Added connection: MOS SRAM --> Digital micromirror device
