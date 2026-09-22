@@ -4,6 +4,7 @@
 - Added connection: CMOS --> Digital micromirror device
 - Added connection: MOS SRAM --> Digital micromirror device
 - Added connection: Lumière cinematograph --> Digital micromirror device
+- Added connection: MEMS --> Multi-touch smartphone
 
 20 September 2026
 - Added tech: MEMS, 1965
