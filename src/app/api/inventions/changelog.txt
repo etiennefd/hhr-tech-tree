@@ -32,6 +32,8 @@
 - Added connection: Gas laser --> Universal Product Code
 - Added connection: Gas laser --> Stereolithography
 - Added connection: Gas laser --> Flatbed image scanner
+- Added connection: Infrared LED --> Laser diode
+- Added connection: Laser --> Laser diode
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
