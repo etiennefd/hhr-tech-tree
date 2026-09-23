@@ -1,6 +1,7 @@
 23 September 2026
 - Added tech: Optical image stabilization, 1988
 - Added tech: Ring laser gyroscope, 1963
+- Added tech: Laser diode, 1962
 - Added tech: Gas laser, 1960
 - Added tech: Cooke triplet, 1893
 - Added connection: Semiconductors --> Organic semiconductor
