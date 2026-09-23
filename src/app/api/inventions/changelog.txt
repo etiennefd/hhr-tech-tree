@@ -10,6 +10,7 @@
 - Added connection: Organic semiconductor --> OLED
 - Added connection: Xerography --> OLED
 - Added connection: Ziegler–Natta catalyst --> Conductive polymer
+- Added connection: Photographic camera --> Video camera tube
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
