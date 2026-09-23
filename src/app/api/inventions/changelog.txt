@@ -11,6 +11,8 @@
 - Added connection: Xerography --> OLED
 - Added connection: Ziegler–Natta catalyst --> Conductive polymer
 - Added connection: Photographic camera --> Video camera tube
+- Added connection: Vibrating structure gyroscope --> Optical image stabilization
+- Added connection: Camcorder --> Optical image stabilization
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
