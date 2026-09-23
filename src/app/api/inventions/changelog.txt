@@ -1,5 +1,6 @@
 23 September 2026
 - Added tech: Optical image stabilization, 1988
+- Added tech: Ring laser gyroscope, 1963
 - Added tech: Cooke triplet, 1893
 - Added connection: Semiconductors --> Organic semiconductor
 - Added connection: Benzene --> Organic semiconductor
