@@ -17,6 +17,8 @@
 - Added connection: Camcorder --> Optical image stabilization
 - Added connection: Photographic camera --> Cooke triplet
 - Added connection: Achromatic lens and achromatic telescope --> Cooke triplet
+- Added connection: Gas laser --> Ring laser gyroscope
+- Added connection: Gyroscope --> Ring laser gyroscope
 - Added connection: Laser --> Gas laser
 - Added connection: Neon lighting --> Gas laser
 - Added connection: Helium (isolation) --> Gas laser
