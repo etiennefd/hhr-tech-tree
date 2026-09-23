@@ -1,3 +1,14 @@
+23 September 2026
+- Added connection: Semiconductors --> Organic semiconductor
+- Added connection: Benzene --> Organic semiconductor
+- Added connection: Iodine --> Organic semiconductor
+- Added connection: Organic semiconductor --> Conductive polymer
+- Added connection: Acetylene --> Conductive polymer
+- Added connection: Iodine --> Conductive polymer
+- Added connection: Organic semiconductor --> OLED
+- Added connection: Xerography --> OLED
+- Added connection: Ziegler–Natta catalyst --> Conductive polymer
+
 22 September 2026
 - Added tech: Digital micromirror device, 1987
 - Added tech: Conductive polymer, 1977
