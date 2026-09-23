@@ -20,6 +20,8 @@
 - Added connection: Laser --> Gas laser
 - Added connection: Neon lighting --> Gas laser
 - Added connection: Helium (isolation) --> Gas laser
+- Added connection: Silver mirror --> Laser
+- Added connection: Synthetic gemstone --> Laser
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
