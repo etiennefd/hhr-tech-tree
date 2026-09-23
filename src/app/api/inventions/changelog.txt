@@ -24,6 +24,13 @@
 - Added connection: Helium (isolation) --> Gas laser
 - Added connection: Silver mirror --> Laser
 - Added connection: Synthetic gemstone --> Laser
+- Added connection: Gas laser --> Carbon-dioxide laser
+- Added connection: Gas laser --> Excimer laser
+- Added connection: Gas laser --> Laser printer
+- Added connection: Gas laser --> LaserDisc
+- Added connection: Gas laser --> Universal Product Code
+- Added connection: Gas laser --> Stereolithography
+- Added connection: Gas laser --> Flatbed image scanner
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
@@ -2041,7 +2048,6 @@
 - Added connection: Numerical control --> Stereolithography
 - Added connection: Stereolithography --> Selective laser sintering
 - Added connection: Selective laser sintering --> Selective laser melting
-- Added connection: Laser --> Stereolithography
 - Added connection: Numerical control --> Selective laser sintering
 - Added connection: Stereolithography --> Fused filament fabrication
 - Added connection: Numerical control --> Fused filament fabrication
@@ -2454,7 +2460,6 @@
 - Added connection: Stored-program computer --> Computer digital image
 - Added connection: Wirephoto --> Computer digital image
 - Added connection: Computer digital image --> Flatbed image scanner
-- Added connection: Laser --> Flatbed image scanner
 - Added connection: Flatbed image scanner --> Omni-font optical character recognition
 - Added connection: Charge-coupled device --> Omni-font optical character recognition
 - Added connection: Microcomputer --> Omni-font optical character recognition
@@ -2469,7 +2474,6 @@
 - Added connection: Morse code --> Barcode
 - Added connection: Photomultiplier tube --> Barcode
 - Added connection: Barcode --> Universal Product Code
-- Added connection: Laser --> Universal Product Code
 
 24 February 2026
 - Added tech: Virtual reality headset, 1987
@@ -3694,7 +3698,6 @@
 - Added tech: Nd:YAG laser, 1964
 - Added connection: Eyeglasses --> Telescope
 - Added connection: Hafting --> Sickle
-- Added connection: Laser --> Carbon-dioxide laser
 - Added connection: Laser --> Nd:YAG laser
 - Added connection: Neodymium --> Nd:YAG laser
 - Added connection: Nd:YAG laser --> Laser cutting
