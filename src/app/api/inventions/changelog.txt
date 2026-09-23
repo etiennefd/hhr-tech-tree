@@ -1,4 +1,5 @@
 23 September 2026
+- Added tech: Optical image stabilization, 1988
 - Added connection: Semiconductors --> Organic semiconductor
 - Added connection: Benzene --> Organic semiconductor
 - Added connection: Iodine --> Organic semiconductor
