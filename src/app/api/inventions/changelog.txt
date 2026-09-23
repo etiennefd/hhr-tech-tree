@@ -34,6 +34,8 @@
 - Added connection: Gas laser --> Flatbed image scanner
 - Added connection: Infrared LED --> Laser diode
 - Added connection: Laser --> Laser diode
+- Added connection: Laser diode --> Compact disc
+- Added connection: Laser diode --> Blue laser
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
