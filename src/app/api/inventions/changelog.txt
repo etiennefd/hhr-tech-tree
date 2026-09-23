@@ -14,6 +14,8 @@
 - Added connection: Photographic camera --> Video camera tube
 - Added connection: Vibrating structure gyroscope --> Optical image stabilization
 - Added connection: Camcorder --> Optical image stabilization
+- Added connection: Photographic camera --> Cooke triplet
+- Added connection: Achromatic lens and achromatic telescope --> Cooke triplet
 
 22 September 2026
 - Added tech: Digital micromirror device, 1987
