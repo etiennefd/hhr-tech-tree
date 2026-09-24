@@ -1,4 +1,5 @@
 24 September 2026
+- Added tech: Stirling cryocooler, 1954
 - Added connection: High-pressure steam engine --> Stirling engine
 - Added connection: Stirling engine --> Open hearth furnace
 
