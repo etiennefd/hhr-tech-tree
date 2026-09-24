@@ -1,5 +1,6 @@
 24 September 2026
 - Added tech: Stirling cryocooler, 1954
+- Added tech: Liquid helium, 1908
 - Added connection: High-pressure steam engine --> Stirling engine
 - Added connection: Stirling engine --> Open hearth furnace
 - Added connection: Stirling engine --> Stirling cryocooler
