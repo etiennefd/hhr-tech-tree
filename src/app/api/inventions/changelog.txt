@@ -1,3 +1,7 @@
+24 September 2026
+- Added connection: High-pressure steam engine --> Hot air engine
+- Added connection: Hot air engine --> Open hearth furnace
+
 23 September 2026
 - Added tech: Optical image stabilization, 1988
 - Added tech: Ring laser gyroscope, 1963
