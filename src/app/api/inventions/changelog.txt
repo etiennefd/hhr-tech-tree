@@ -1,12 +1,12 @@
 24 September 2026
-- Added tech: Stirling cryocooler, 1954
+- Added tech: Cryocooler, 1954
 - Added tech: Liquid helium, 1908
 - Added connection: High-pressure steam engine --> Stirling engine
 - Added connection: Stirling engine --> Open hearth furnace
-- Added connection: Stirling engine --> Stirling cryocooler
-- Added connection: Electric motor --> Stirling cryocooler
-- Added connection: Helium (isolation) --> Stirling cryocooler
-- Added connection: Hampson–Linde air liquefaction --> Stirling cryocooler
+- Added connection: Stirling engine --> Cryocooler
+- Added connection: Electric motor --> Cryocooler
+- Added connection: Helium (isolation) --> Cryocooler
+- Added connection: Hampson–Linde air liquefaction --> Cryocooler
 
 23 September 2026
 - Added tech: Optical image stabilization, 1988
