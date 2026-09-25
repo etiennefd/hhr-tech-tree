@@ -14,6 +14,7 @@ export const FIELD_COLORS: Record<string, string> = {
   // Physical Sciences
   Physics: "#6b3ba1", // Purple
   Chemistry: "#8E4BC9", // Bright purple
+  Cooling: "#5AA9E6", // Icy blue
   Astronomy: "#371c91", // Deep purple
   Meteorology: "#3c9cbf", // Teal
   Optics: "#5C6BC0", // Bright indigo
