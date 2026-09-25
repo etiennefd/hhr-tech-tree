@@ -1,3 +1,9 @@
+25 September 2026
+- Added connection: Helium (isolation) --> Liquid helium
+- Added connection: Hampson–Linde air liquefaction --> Liquid helium
+- Added connection: Liquid helium --> Superconductors
+- Added connection: Liquid helium --> Dilution refrigerator
+
 24 September 2026
 - Added tech: Cryocooler, 1954
 - Added tech: Liquid helium, 1908
