@@ -4,6 +4,10 @@
 - Added connection: Liquid helium --> Superconductors
 - Added connection: Liquid helium --> Dilution refrigerator
 - Added connection: Cryocooler --> Quantum computer
+- Added connection: Nuclear fusion --> Tritium
+- Added connection: Helium (discovery) --> Helium-3
+- Added connection: Hydrogen --> Tritium
+- Added connection: Hydrogen --> Deuterium
 
 24 September 2026
 - Added tech: Cryocooler, 1954
@@ -3625,9 +3629,9 @@
 - Added tech: Animal cloning from adult cells, 1958
 - Added tech: Animal cloning, 1952
 - Added tech: Kroll process, 1940
-- Added tech: Helium-3, 1939
-- Added tech: Tritium, 1939
+- Added tech: Helium-3, 1934
 - Added tech: Nuclear fusion, 1934
+- Added tech: Tritium, 1934
 - Added tech: Deuterium, 1931
 - Added tech: Electric chainsaw, 1926
 - Added tech: Somatic cell nuclear transfer, 1923
