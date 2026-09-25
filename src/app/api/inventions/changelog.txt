@@ -3,6 +3,7 @@
 - Added connection: Hampson–Linde air liquefaction --> Liquid helium
 - Added connection: Liquid helium --> Superconductors
 - Added connection: Liquid helium --> Dilution refrigerator
+- Added connection: Cryocooler --> Quantum computer
 
 24 September 2026
 - Added tech: Cryocooler, 1954
