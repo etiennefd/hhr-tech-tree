@@ -1,5 +1,7 @@
 26 September 2026
 - Added tech: Symbolic AI, 1956
+- Added connection: Stored-program computer --> Symbolic AI
+- Added connection: Assembly language --> Symbolic AI
 
 25 September 2026
 - Added tech: Friction stir welding, 1991
