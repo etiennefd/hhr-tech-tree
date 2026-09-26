@@ -1,3 +1,6 @@
+26 September 2026
+- Added tech: Symbolic AI, 1956
+
 25 September 2026
 - Added tech: Friction stir welding, 1991
 - Added connection: Helium (isolation) --> Liquid helium
