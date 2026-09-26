@@ -1,5 +1,6 @@
 26 September 2026
 - Added tech: Symbolic AI, 1956
+- Added tech: Forge welding, 1000 BCE
 - Added connection: Stored-program computer --> Symbolic AI
 - Added connection: Assembly language --> Symbolic AI
 
