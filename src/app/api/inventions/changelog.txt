@@ -2,6 +2,9 @@
 - Added tech: Expert system, 1965
 - Added connection: Symbolic AI --> Functional programming language
 - Added connection: Symbolic AI --> Chatbot
+- Added connection: Functional programming language --> Expert system
+- Added connection: Symbolic AI --> Expert system
+- Added connection: Mass spectrometer --> Expert system
 
 26 September 2026
 - Added tech: Symbolic AI, 1956
