@@ -1,3 +1,7 @@
+27 September 2026
+- Added connection: Symbolic AI --> Functional programming language
+- Added connection: Symbolic AI --> Chatbot
+
 26 September 2026
 - Added tech: Symbolic AI, 1956
 - Added tech: Forge welding, 1000 BCE
