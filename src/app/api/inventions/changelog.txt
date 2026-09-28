@@ -1,3 +1,6 @@
+28 September 2026
+- Added tech: Boolean algebra, 1847
+
 27 September 2026
 - Added tech: Expert system, 1965
 - Added connection: Symbolic AI --> Functional programming language
