@@ -1,6 +1,7 @@
 28 September 2026
 - Added tech: Predicate logic, 1879
 - Added tech: Boolean algebra, 1847
+- Added tech: Algebra, 820
 - Added connection: Boolean algebra --> Predicate logic
 - Added connection: Predicate logic --> Symbolic AI
 
