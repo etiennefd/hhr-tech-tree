@@ -1,4 +1,5 @@
 28 September 2026
+- Added tech: Predicate logic, 1879
 - Added tech: Boolean algebra, 1847
 
 27 September 2026
