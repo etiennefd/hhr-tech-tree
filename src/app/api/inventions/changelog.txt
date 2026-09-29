@@ -1,5 +1,6 @@
 29 September 2026
 - Added tech: Descriptive geometry, 1766
+- Added tech: Euclidean geometry, 300 BCE
 
 28 September 2026
 - Added tech: Predicate logic, 1879
