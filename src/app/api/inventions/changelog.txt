@@ -1,5 +1,6 @@
 29 September 2026
 - Added tech: Descriptive geometry, 1766
+- Added tech: Trigonometric table, 140 BCE
 - Added tech: Euclidean geometry, 300 BCE
 - Added connection: Euclidean geometry --> Descriptive geometry
 - Added connection: Star fort --> Descriptive geometry
