@@ -1,3 +1,6 @@
+29 September 2026
+- Added tech: Descriptive geometry, 1766
+
 28 September 2026
 - Added tech: Predicate logic, 1879
 - Added tech: Boolean algebra, 1847
