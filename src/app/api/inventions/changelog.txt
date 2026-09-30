@@ -14,6 +14,7 @@
 - Added connection: Brazing and soldering --> Tin can
 - Added connection: Force pump --> Hydraulis
 - Added connection: Tin bronze --> Force pump
+- Added connection: Tungsten filament --> Cemented carbide
 
 29 September 2026
 - Added tech: Descriptive geometry, 1766
