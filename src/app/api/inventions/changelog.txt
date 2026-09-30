@@ -9,6 +9,9 @@
 - Added connection: Gold --> Brazing and soldering
 - Added connection: Silver --> Brazing and soldering
 - Added connection: Copper --> Brazing and soldering
+- Added connection: Brazing and soldering --> Cloisonné
+- Added connection: Brazing and soldering --> Lead pipes
+- Added connection: Brazing and soldering --> Tin can
 
 29 September 2026
 - Added tech: Descriptive geometry, 1766
