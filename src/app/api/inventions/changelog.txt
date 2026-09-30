@@ -12,7 +12,7 @@
 - Added connection: Brazing and soldering --> Cloisonné
 - Added connection: Brazing and soldering --> Lead pipes
 - Added connection: Brazing and soldering --> Tin can
-- Added connection: Force pump --> Water organ
+- Added connection: Force pump --> Hydraulis
 - Added connection: Tin bronze --> Force pump
 
 29 September 2026
@@ -421,7 +421,7 @@
 - Added connection: Bellows --> Air compressor
 - Added connection: Bellows --> Accordion
 - Added connection: Bellows --> Bloomery and wrought iron
-- Added connection: Noria and water wheel --> Water organ
+- Added connection: Noria and water wheel --> Hydraulis
 - Added connection: Sheng --> Accordion
 - Added connection: Sheng --> Harmonica
 
