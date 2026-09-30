@@ -3,6 +3,8 @@
 - Added tech: Statistical graphics, 1786
 - Added connection: Cartesian coordinate system --> Nomogram
 - Added connection: Cartesian coordinate system --> Statistical graphics
+- Added connection: Machine translation --> Logic programming
+- Added connection: Predicate logic --> Logic programming
 
 29 September 2026
 - Added tech: Descriptive geometry, 1766
