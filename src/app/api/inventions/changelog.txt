@@ -1,4 +1,5 @@
 30 September 2026
+- Added tech: Logic programming, 1972
 - Added tech: Statistical graphics, 1786
 - Added connection: Cartesian coordinate system --> Nomogram
 - Added connection: Cartesian coordinate system --> Statistical graphics
