@@ -12,6 +12,8 @@
 - Added connection: Brazing and soldering --> Cloisonné
 - Added connection: Brazing and soldering --> Lead pipes
 - Added connection: Brazing and soldering --> Tin can
+- Added connection: Force pump --> Water organ
+- Added connection: Tin bronze --> Force pump
 
 29 September 2026
 - Added tech: Descriptive geometry, 1766
