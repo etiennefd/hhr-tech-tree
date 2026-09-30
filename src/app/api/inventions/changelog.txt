@@ -6,6 +6,16 @@
 - Added connection: Euclidean geometry --> Descriptive geometry
 - Added connection: Star fort --> Descriptive geometry
 - Added connection: Descriptive geometry --> Computer-aided design
+- Added connection: Algebra --> Symbolic algebra
+- Added connection: Method of exhaustion --> Euclidean geometry
+- Added connection: Euclidean geometry --> Trigonometric table
+- Added connection: Euclidean geometry --> Algebra
+- Added connection: Euclidean geometry --> Cartesian coordinate system
+- Added connection: Positional numeral system --> Trigonometric table
+- Added connection: Trigonometric table --> Sine quadrant
+- Added connection: Trigonometric table --> Logarithm
+- Added connection: Symbolic algebra --> Cartesian coordinate system
+- Added connection: Symbolic algebra --> Boolean algebra
 
 28 September 2026
 - Added tech: Predicate logic, 1879
