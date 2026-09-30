@@ -1,11 +1,14 @@
 30 September 2026
 - Added tech: Logic programming, 1972
 - Added tech: Statistical graphics, 1786
-- Added tech: Brazing and soldering, 2600 BCE
+- Added tech: Brazing and soldering, 2500 BCE
 - Added connection: Cartesian coordinate system --> Nomogram
 - Added connection: Cartesian coordinate system --> Statistical graphics
 - Added connection: Machine translation --> Logic programming
 - Added connection: Predicate logic --> Logic programming
+- Added connection: Gold --> Brazing and soldering
+- Added connection: Silver --> Brazing and soldering
+- Added connection: Copper --> Brazing and soldering
 
 29 September 2026
 - Added tech: Descriptive geometry, 1766
