@@ -1,3 +1,6 @@
+30 September 2026
+- Added connection: Cartesian coordinate system --> Nomogram
+
 29 September 2026
 - Added tech: Descriptive geometry, 1766
 - Added tech: Symbolic algebra, 1591
