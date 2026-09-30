@@ -1,5 +1,6 @@
 30 September 2026
 - Added tech: Logic programming, 1972
+- Added tech: Hip replacement, 1962
 - Added tech: Statistical graphics, 1786
 - Added tech: Brazing and soldering, 2500 BCE
 - Added connection: Cartesian coordinate system --> Nomogram
