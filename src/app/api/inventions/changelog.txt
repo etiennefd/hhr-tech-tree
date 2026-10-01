@@ -1,4 +1,5 @@
 1 October 2026
+- Added tech: Printed thick-film ceramic circuit, 1942
 - Added tech: Printed circuit board, 1936
 - Added connection: Antiseptic surgery --> Hip replacement
 - Added connection: Polyethylene --> Hip replacement
