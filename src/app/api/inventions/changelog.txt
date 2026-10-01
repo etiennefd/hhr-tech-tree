@@ -1,4 +1,5 @@
 1 October 2026
+- Added tech: Printed circuit board, 1936
 - Added connection: Antiseptic surgery --> Hip replacement
 - Added connection: Polyethylene --> Hip replacement
 - Added connection: Stainless steel --> Hip replacement
