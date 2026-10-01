@@ -5,6 +5,7 @@
 - Added connection: Polyethylene --> Hip replacement
 - Added connection: Stainless steel --> Hip replacement
 - Added connection: Acrylic glass --> Hip replacement
+- Added connection: Printed circuit board <--> Printed thick-film ceramic circuit
 
 30 September 2026
 - Added tech: Logic programming, 1972
