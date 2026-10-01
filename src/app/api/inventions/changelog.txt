@@ -7,7 +7,7 @@
 - Added connection: Acrylic glass --> Hip replacement
 - Added connection: Printed circuit board <--> Printed thick-film ceramic circuit
 - Added connection: Offset printing --> Printed circuit board
-- Added connection: Bakelite --> Printed circuit board
+- Added connection: Synthetic plastic --> Printed circuit board
 - Added connection: Superheterodyne radio receiver --> Printed circuit board
 - Added connection: Insulated wire --> Printed circuit board
 - Added connection: Copper smelting --> Printed circuit board
@@ -1815,9 +1815,9 @@
 - Added connection: Silver halides --> Cloud seeding
 - Added connection: Phenol --> Antiseptic surgery
 - Added connection: Coal tar --> Phenol
-- Added connection: Phenol --> Bakelite
-- Added connection: Formaldehyde --> Bakelite
-- Added connection: Shellac --> Bakelite
+- Added connection: Phenol --> Synthetic plastic
+- Added connection: Formaldehyde --> Synthetic plastic
+- Added connection: Shellac --> Synthetic plastic
 - Added connection: Phenol --> Particle board
 - Added connection: Formaldehyde --> Particle board
 - Added connection: Fractional distillation --> Methanol
@@ -1957,7 +1957,7 @@
 - Added connection: Subtractive color film --> Slide projector
 - Added connection: Magic lantern --> Planetarium projector
 - Added connection: Light bulb --> Slide projector
-- Added connection: Bakelite --> Slide projector
+- Added connection: Synthetic plastic --> Slide projector
 
 10 May 2026
 - Added tech: Geodesic dome, 1926
