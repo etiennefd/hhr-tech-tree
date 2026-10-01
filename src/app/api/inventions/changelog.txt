@@ -6,6 +6,12 @@
 - Added connection: Stainless steel --> Hip replacement
 - Added connection: Acrylic glass --> Hip replacement
 - Added connection: Printed circuit board <--> Printed thick-film ceramic circuit
+- Added connection: Offset printing --> Printed circuit board
+- Added connection: Bakelite --> Printed circuit board
+- Added connection: Superheterodyne radio receiver --> Printed circuit board
+- Added connection: Insulated wire --> Printed circuit board
+- Added connection: Copper smelting --> Printed circuit board
+- Added connection: Brazing and soldering --> Printed circuit board
 
 30 September 2026
 - Added tech: Logic programming, 1972
@@ -18,7 +24,7 @@
 - Added connection: Predicate logic --> Logic programming
 - Added connection: Gold --> Brazing and soldering
 - Added connection: Silver --> Brazing and soldering
-- Added connection: Copper --> Brazing and soldering
+- Added connection: Copper smelting --> Brazing and soldering
 - Added connection: Brazing and soldering --> Cloisonné
 - Added connection: Brazing and soldering --> Lead pipes
 - Added connection: Brazing and soldering --> Tin can
