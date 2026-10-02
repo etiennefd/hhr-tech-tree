@@ -3,6 +3,8 @@
 - Added connection: Silk --> Screen printing
 - Added connection: Woodblock printing --> Screen printing
 - Added connection: Screen printing --> Printed thick-film ceramic circuit
+- Added connection: Predicate logic --> Lambda calculus
+- Added connection: Predicate logic --> Turing machine
 
 1 October 2026
 - Added tech: Printed thick-film ceramic circuit, 1942
