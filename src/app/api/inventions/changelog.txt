@@ -16,6 +16,9 @@
 - Added connection: Silver --> Printed thick-film ceramic circuit
 - Added connection: Proximity fuze <--> Printed thick-film ceramic circuit
 - Added connection: Brazing and soldering --> Printed thick-film ceramic circuit
+- Added connection: Printed circuit board --> Transistor radio
+- Added connection: Printed thick-film ceramic circuit --> Hybrid integrated circuit
+- Added connection: Printed circuit board --> Monolithic integrated circuit
 
 30 September 2026
 - Added tech: Logic programming, 1972
