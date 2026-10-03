@@ -1,4 +1,5 @@
 3 October 2026
+- Added tech: Salt evaporation, 6050 BCE
 - Added connection: Salt mining --> Heat pump
 - Added connection: Vapor-compression refrigeration system --> Heat pump
 - Added connection: Watermill --> Heat pump
