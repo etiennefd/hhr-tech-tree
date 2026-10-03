@@ -8,6 +8,7 @@
 - Added connection: Control of fire --> Salt evaporation
 - Added connection: Salt evaporation --> Borehole drilling
 - Added connection: Salt evaporation --> Leblanc process
+- Added connection: Electromagnet --> Chronophotography
 
 2 October 2026
 - Added tech: Screen printing, 1907
