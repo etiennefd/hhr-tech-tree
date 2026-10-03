@@ -2,6 +2,7 @@
 - Added connection: Salt mining --> Heat pump
 - Added connection: Vapor-compression refrigeration system --> Heat pump
 - Added connection: Watermill --> Heat pump
+- Added connection: Vacuum pump --> Dilution refrigerator
 
 2 October 2026
 - Added tech: Screen printing, 1907
