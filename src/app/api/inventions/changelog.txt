@@ -1,3 +1,8 @@
+3 October 2026
+- Added connection: Salt mining --> Heat pump
+- Added connection: Vapor-compression refrigeration system --> Heat pump
+- Added connection: Watermill --> Heat pump
+
 2 October 2026
 - Added tech: Screen printing, 1907
 - Added connection: Silk --> Screen printing
