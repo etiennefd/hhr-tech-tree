@@ -11,6 +11,7 @@
 - Added connection: Salt evaporation --> Leblanc process
 - Added connection: Electromagnet --> Chronophotography
 - Added connection: Cerium --> White LED
+- Added connection: Fluorescent lamp --> White LED
 
 2 October 2026
 - Added tech: Screen printing, 1907
