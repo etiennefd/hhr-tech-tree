@@ -367,6 +367,19 @@ export function TechTreeViewer() {
   });
   // Bumped by "Reset visible connections" to force a recalculation that drops sticky connections
   const [connectionResetToken, setConnectionResetToken] = useState(0);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('techTreeDarkMode');
+      return saved === 'true';
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+    localStorage.setItem('techTreeDarkMode', darkMode.toString());
+  }, [darkMode]);
+
   const [showImages, setShowImages] = useState(() => {
     // Initialize from localStorage if available, otherwise default to true
     if (typeof window !== 'undefined') {
@@ -3805,6 +3818,17 @@ export function TechTreeViewer() {
               {/* Connections Mode */}
               <div>
                 <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Display options</div>
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-sm">Dark Mode</span>
+                  <button
+                    type="button"
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="border border-[#91B4C5] px-3 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
+                    >
+                      {darkMode ? 'On' : 'Off'}
+                  </button>
+                </div>
+
                 <div className="space-y-4">
                   {!isTouchDevice && (
                     <div>
