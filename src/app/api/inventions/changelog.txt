@@ -1,9 +1,13 @@
 3 October 2026
 - Added tech: Salt evaporation, 6050 BCE
-- Added connection: Salt mining --> Heat pump
+- Added connection: Salt evaporation --> Heat pump
 - Added connection: Vapor-compression refrigeration system --> Heat pump
 - Added connection: Watermill --> Heat pump
 - Added connection: Vacuum pump --> Dilution refrigerator
+- Added connection: Pottery --> Salt evaporation
+- Added connection: Control of fire --> Salt evaporation
+- Added connection: Salt evaporation --> Borehole drilling
+- Added connection: Salt evaporation --> Leblanc process
 
 2 October 2026
 - Added tech: Screen printing, 1907
@@ -562,7 +566,6 @@
 - v1.1.5: Performance improvements
 - Added tech: Bamboo and wooden slips, 1200 BCE
 - Added tech: Bamboo, 5000 BCE
-- Added connection: Salt mining --> Borehole drilling
 - Added connection: Borehole drilling --> Drilled oil well
 - Added connection: Percussion flake tool --> Bamboo
 - Added connection: Bamboo --> Borehole drilling
