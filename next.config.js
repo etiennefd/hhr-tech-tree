@@ -17,6 +17,21 @@ const nextConfig = {
     // wikimedia.org (/api/**), and patentimages.storage.googleapis.com.
     unoptimized: true,
   },
+  // Next serves /public with `max-age=0, must-revalidate`, so browsers re-ask
+  // for every image on each visit, and each 304 still counts as a Vercel edge
+  // request. Let browsers keep them for a day. Not `immutable`: images in
+  // /public/tech-images are regularly replaced under the same filename, so a
+  // replaced image may show stale for up to a day (up to a week during
+  // background revalidation) for returning visitors.
+  async headers() {
+    const cacheControl = 'public, max-age=86400, stale-while-revalidate=604800'
+    return [
+      {
+        source: '/:all*(jpg|jpeg|png|webp|gif|svg|ico|webmanifest)',
+        headers: [{ key: 'Cache-Control', value: cacheControl }],
+      },
+    ]
+  },
   httpAgentOptions: {
     keepAlive: true,
   },
