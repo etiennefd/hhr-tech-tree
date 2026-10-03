@@ -12,6 +12,11 @@
 - Added connection: Electromagnet --> Chronophotography
 - Added connection: Cerium --> White LED
 - Added connection: Fluorescent lamp --> White LED
+- Added connection: X-ray crystallography --> Yttrium aluminium garnet
+- Added connection: Aluminium --> Yttrium aluminium garnet
+- Added connection: Yttrium --> Yttrium aluminium garnet
+- Added connection: Yttrium aluminium garnet --> Nd:YAG laser
+- Added connection: Yttrium aluminium garnet --> White LED
 
 2 October 2026
 - Added tech: Screen printing, 1907
