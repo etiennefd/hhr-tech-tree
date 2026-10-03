@@ -9,6 +9,7 @@
 - Added connection: Salt evaporation --> Borehole drilling
 - Added connection: Salt evaporation --> Leblanc process
 - Added connection: Electromagnet --> Chronophotography
+- Added connection: Cerium --> White LED
 
 2 October 2026
 - Added tech: Screen printing, 1907
