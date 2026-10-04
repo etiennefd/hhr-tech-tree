@@ -1,3 +1,6 @@
+4 October 2026
+- Added tech: Magnetic refrigeration, 1933
+
 3 October 2026
 - Added tech: Yttrium aluminium garnet, 1951
 - Added tech: Salt evaporation, 6050 BCE
