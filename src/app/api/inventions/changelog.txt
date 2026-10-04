@@ -2,6 +2,7 @@
 - Added tech: Magnetic refrigeration, 1933
 - Added connection: Liquid helium --> Magnetic refrigeration
 - Added connection: Electromagnet --> Magnetic refrigeration
+- Added connection: Magnetic refrigeration --> Dilution refrigerator
 
 3 October 2026
 - Added tech: Yttrium aluminium garnet, 1951
