@@ -7,6 +7,14 @@
 - Added connection: Atomic emission spectroscopy --> Lutetium
 - Added connection: Gold --> Hybrid integrated circuit
 - Added connection: Transistor --> Hybrid integrated circuit
+- Added connection: Transistor --> Monolithic integrated circuit
+- Added connection: p–n junction --> Planar process
+- Added connection: Bipolar junction transistor --> Planar process
+- Added connection: Photolithography --> Planar process
+- Added connection: Semiconductors --> p–n junction
+- Added connection: Crystal detector --> p–n junction
+- Added connection: Radar --> p–n junction
+- Added independent invention: p–n junction isolation, 1959
 
 4 October 2026
 - Added tech: Magnetic refrigeration, 1933
