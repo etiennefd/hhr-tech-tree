@@ -1,3 +1,7 @@
+5 October 2026
+- Added connection: Gadolinium --> Magnetic refrigeration
+- Added connection: Atomic emission spectroscopy --> Gadolinium
+
 4 October 2026
 - Added tech: Magnetic refrigeration, 1933
 - Added tech: Gadolinium, 1880
