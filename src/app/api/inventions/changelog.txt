@@ -1,4 +1,5 @@
 5 October 2026
+- Added tech: Gas tungsten arc welding, 1941
 - Added tech: Shielded metal arc welding, 1907
 - Added tech: Resistance welding, 1886
 - Added connection: Gadolinium --> Magnetic refrigeration
