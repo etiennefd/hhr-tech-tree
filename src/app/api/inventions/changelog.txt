@@ -1,6 +1,11 @@
 5 October 2026
 - Added connection: Gadolinium --> Magnetic refrigeration
 - Added connection: Atomic emission spectroscopy --> Gadolinium
+- Added connection: Atomic emission spectroscopy --> Ytterbium
+- Added connection: Atomic emission spectroscopy --> Samarium
+- Added connection: Atomic emission spectroscopy --> Praseodymium
+- Added connection: Atomic emission spectroscopy --> Neodymium
+- Added connection: Atomic emission spectroscopy --> Lutetium
 
 4 October 2026
 - Added tech: Magnetic refrigeration, 1933
