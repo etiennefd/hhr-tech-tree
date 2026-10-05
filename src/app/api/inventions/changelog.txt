@@ -1,4 +1,5 @@
 5 October 2026
+- Added tech: Resistance welding, 1886
 - Added connection: Gadolinium --> Magnetic refrigeration
 - Added connection: Atomic emission spectroscopy --> Gadolinium
 - Added connection: Atomic emission spectroscopy --> Samarium
