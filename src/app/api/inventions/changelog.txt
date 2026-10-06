@@ -1,5 +1,10 @@
 6 October 2026
 - Added connection: Bloomery and wrought iron --> Forge welding
+- Added connection: Forge welding --> Carbon arc welding
+- Added connection: Electric generator --> Carbon arc welding
+- Added connection: Rechargeable battery --> Carbon arc welding
+- Added connection: Carbon arc welding --> Shielded metal arc welding
+- Added connection: Carbon arc welding --> Gas tungsten arc welding
 
 5 October 2026
 - Added tech: Gas tungsten arc welding, 1941
