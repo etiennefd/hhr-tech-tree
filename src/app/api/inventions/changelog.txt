@@ -1,3 +1,6 @@
+6 October 2026
+- Added connection: Bloomery and wrought iron --> Forge welding
+
 5 October 2026
 - Added tech: Gas tungsten arc welding, 1941
 - Added tech: Shielded metal arc welding, 1907
