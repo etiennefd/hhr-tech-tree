@@ -6,6 +6,11 @@
 - Added connection: Carbon arc welding --> Shielded metal arc welding
 - Added connection: Carbon arc welding --> Gas tungsten arc welding
 - Added connection: Finery forge --> Co-fusion steelmaking
+- Added connection: Oxy-fuel welding and cutting --> Shielded metal arc welding
+- Added connection: Forge welding --> Shielded metal arc welding
+- Added connection: Shielded metal arc welding --> Gas tungsten arc welding
+- Added connection: Joule heating --> Resistance welding
+- Added connection: Electric generator --> Resistance welding
 
 5 October 2026
 - Added tech: Gas tungsten arc welding, 1941
