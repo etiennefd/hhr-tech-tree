@@ -14,6 +14,9 @@
 - Added connection: Electric motor --> Friction welding
 - Added connection: Friction welding --> Friction stir welding
 - Added connection: Forge welding --> Resistance welding
+- Added connection: Milling machine --> Friction stir welding
+- Added connection: Tool steel and air-hardening steel --> Friction stir welding
+- Added connection: Aluminium --> Friction stir welding
 
 6 October 2026
 - Added connection: Bloomery and wrought iron --> Forge welding
