@@ -1,3 +1,9 @@
+7 October 2026
+- Added connection: Tungsten --> Gas tungsten arc welding
+- Added connection: Helium (isolation) --> Gas tungsten arc welding
+- Added connection: Argon --> Gas tungsten arc welding
+- Added connection: Fighter aircraft --> Gas tungsten arc welding
+
 6 October 2026
 - Added connection: Bloomery and wrought iron --> Forge welding
 - Added connection: Forge welding --> Carbon arc welding
