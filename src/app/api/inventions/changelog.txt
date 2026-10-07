@@ -4,6 +4,10 @@
 - Added connection: Helium (isolation) --> Gas tungsten arc welding
 - Added connection: Argon --> Gas tungsten arc welding
 - Added connection: Fighter aircraft --> Gas tungsten arc welding
+- Added connection: Gas tungsten arc welding --> Gas metal arc welding
+- Added connection: Aluminium --> Gas metal arc welding
+- Added connection: Magnesium --> Gas metal arc welding
+- Added connection: Gas metal arc welding --> Industrial robot
 
 6 October 2026
 - Added connection: Bloomery and wrought iron --> Forge welding
