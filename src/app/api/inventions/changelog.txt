@@ -9,6 +9,10 @@
 - Added connection: Aluminium --> Gas metal arc welding
 - Added connection: Magnesium --> Gas metal arc welding
 - Added connection: Gas metal arc welding --> Industrial robot
+- Added connection: Slide-rest all-metal lathe --> Friction welding
+- Added connection: Forge welding --> Friction welding
+- Added connection: Electric motor --> Friction welding
+- Added connection: Friction welding --> Friction stir welding
 
 6 October 2026
 - Added connection: Bloomery and wrought iron --> Forge welding
