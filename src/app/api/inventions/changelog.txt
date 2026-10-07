@@ -1,4 +1,5 @@
 7 October 2026
+- Added tech: Friction welding, 1957
 - Added tech: Gas metal arc welding, 1948
 - Added connection: Tungsten --> Gas tungsten arc welding
 - Added connection: Helium (isolation) --> Gas tungsten arc welding
