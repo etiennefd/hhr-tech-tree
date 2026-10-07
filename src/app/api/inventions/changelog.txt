@@ -5,6 +5,7 @@
 - Added connection: Rechargeable battery --> Carbon arc welding
 - Added connection: Carbon arc welding --> Shielded metal arc welding
 - Added connection: Carbon arc welding --> Gas tungsten arc welding
+- Added connection: Finery forge --> Co-fusion steelmaking
 
 5 October 2026
 - Added tech: Gas tungsten arc welding, 1941
