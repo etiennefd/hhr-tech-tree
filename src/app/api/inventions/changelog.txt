@@ -13,6 +13,7 @@
 - Added connection: Forge welding --> Friction welding
 - Added connection: Electric motor --> Friction welding
 - Added connection: Friction welding --> Friction stir welding
+- Added connection: Forge welding --> Resistance welding
 
 6 October 2026
 - Added connection: Bloomery and wrought iron --> Forge welding
