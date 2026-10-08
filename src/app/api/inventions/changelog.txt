@@ -1,5 +1,6 @@
 8 October 2026
 - Added connection: Morphine --> Hypodermic needle
+- Added connection: Crucible steel (modern) --> Hypodermic needle
 
 7 October 2026
 - Added tech: Friction welding, 1957
