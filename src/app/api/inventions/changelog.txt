@@ -1,3 +1,6 @@
+8 October 2026
+- Added connection: Morphine --> Hypodermic needle
+
 7 October 2026
 - Added tech: Friction welding, 1957
 - Added tech: Gas metal arc welding, 1948
