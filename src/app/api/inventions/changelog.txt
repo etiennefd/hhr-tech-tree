@@ -3322,7 +3322,7 @@
 - Added tech: Phototypesetting, 1949
 - Added tech: Hot metal typesetting, 1886
 - Added connection: Hot metal typesetting --> Phototypesetting
-- Added connection: Movable type --> Hot metal typesetting
+- Added connection: Movable type (China) --> Hot metal typesetting
 
 22 August 2025
 - Added tech: Nomogram, 1884
