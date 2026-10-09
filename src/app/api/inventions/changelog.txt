@@ -7,6 +7,9 @@
 - Added connection: Trigonometric table --> Difference engine
 - Added connection: Mechanical calculator --> Difference engine
 - Added connection: Screw-cutting lathe --> Difference engine
+- Added connection: Stereotype printing --> Difference engine
+- Added connection: Printing press --> Stereotype printing
+- Added connection: Ceramic --> Movable type (China)
 
 8 October 2026
 - Added tech: Trocar, 1620
