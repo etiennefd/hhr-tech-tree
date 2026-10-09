@@ -1,4 +1,5 @@
 8 October 2026
+- Added tech: Trocar, 1620
 - Added connection: Morphine --> Hypodermic needle
 - Added connection: Crucible steel (modern) --> Hypodermic needle
 
