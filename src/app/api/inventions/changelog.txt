@@ -1,4 +1,5 @@
 9 October 2026
+- Added tech: Stereotype printing, 1739
 - Added connection: Catheter --> Trocar
 - Added connection: Trocar --> Hypodermic needle
 - Added connection: Trocar --> Laparoscope
