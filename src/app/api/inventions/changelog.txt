@@ -1,3 +1,8 @@
+9 October 2026
+- Added connection: Catheter --> Trocar
+- Added connection: Trocar --> Hypodermic needle
+- Added connection: Trocar --> Laparoscope
+
 8 October 2026
 - Added tech: Trocar, 1620
 - Added connection: Morphine --> Hypodermic needle
