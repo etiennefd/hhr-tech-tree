@@ -2,6 +2,10 @@
 - Added connection: Catheter --> Trocar
 - Added connection: Trocar --> Hypodermic needle
 - Added connection: Trocar --> Laparoscope
+- Added connection: Logarithm --> Difference engine
+- Added connection: Trigonometric table --> Difference engine
+- Added connection: Mechanical calculator --> Difference engine
+- Added connection: Screw-cutting lathe --> Difference engine
 
 8 October 2026
 - Added tech: Trocar, 1620
