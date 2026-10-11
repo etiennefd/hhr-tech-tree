@@ -3305,9 +3305,6 @@
 - Added tech: Titanium white, 1910
 - Added tech: Zinc white, 1780
 - Added connection: Titanium --> Titanium white
-- Added connection: Tin --> Printing press
-- Added connection: Lead --> Printing press
-- Added connection: Antimony --> Printing press
 - Added connection: Sulfuric acid --> Titanium white
 
 24 August 2025
@@ -3326,7 +3323,6 @@
 - Added tech: Phototypesetting, 1949
 - Added tech: Hot metal typesetting, 1886
 - Added connection: Hot metal typesetting --> Phototypesetting
-- Added connection: Movable type (China) --> Hot metal typesetting
 
 22 August 2025
 - Added tech: Nomogram, 1884
