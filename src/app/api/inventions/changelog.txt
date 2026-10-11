@@ -12,7 +12,7 @@
 - Added connection: Antimony --> Movable type (Europe)
 - Added connection: Alphabet with vowels --> Movable type (Europe)
 - Added connection: Coins --> Movable type (Europe)
-- Added connection: Movable type (Europe) --> Printing press
+- Added connection: Movable type (Europe) <--> Printing press
 - Added connection: Movable type (Europe) --> Hot metal typesetting
 - Added connection: Movable type (Europe) --> Stereotype printing
 - Added connection: Linen --> Egyptian mummification
