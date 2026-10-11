@@ -15,6 +15,9 @@
 - Added connection: Movable type (Europe) --> Printing press
 - Added connection: Movable type (Europe) --> Hot metal typesetting
 - Added connection: Movable type (Europe) --> Stereotype printing
+- Added connection: Linen --> Egyptian mummification
+- Added connection: Natron --> Egyptian mummification
+- Added connection: Tree resin --> Egyptian mummification
 
 9 October 2026
 - Added tech: Stereotype printing, 1739
