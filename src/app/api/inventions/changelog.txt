@@ -18,6 +18,11 @@
 - Added connection: Linen --> Egyptian mummification
 - Added connection: Natron --> Egyptian mummification
 - Added connection: Tree resin --> Egyptian mummification
+- Added connection: X-ray --> Cloud chamber
+- Added connection: Radium --> Cloud chamber
+- Added connection: Spinthariscope --> Cloud chamber
+- Added connection: Vacuum pump --> Cloud chamber
+- Added connection: Dry photographic plate --> Cloud chamber
 
 9 October 2026
 - Added tech: Stereotype printing, 1739
