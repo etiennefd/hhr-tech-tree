@@ -1,5 +1,5 @@
 11 October 2026
-- Added tech: Moveable type (Europe), 1439
+- Added tech: Movable type (Europe), 1439
 - Added tech: Metal movable type, 1239
 - Added connection: Movable type (China) --> Metal movable type
 - Added connection: Tin bronze --> Metal movable type
