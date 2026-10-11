@@ -5,6 +5,13 @@
 - Added connection: Tin bronze --> Metal movable type
 - Added connection: Coins --> Metal movable type
 - Added connection: Banknote seal --> Metal movable type
+- Added connection: Metal movable type --> Movable type (Europe)
+- Added connection: Movable type (China) --> Movable type (Europe)
+- Added connection: Lead --> Movable type (Europe)
+- Added connection: Tin --> Movable type (Europe)
+- Added connection: Antimony --> Movable type (Europe)
+- Added connection: Alphabet with vowels --> Movable type (Europe)
+- Added connection: Coins --> Movable type (Europe)
 
 9 October 2026
 - Added tech: Stereotype printing, 1739
