@@ -11,6 +11,10 @@
 - Added connection: Microform --> Hypertext
 - Added connection: Hypertext --> Hypertext Transfer Protocol
 - Added connection: Hypermedia --> Virtual reality headset
+- Added connection: LaserDisc --> Hypermedia
+- Added connection: Touchscreen --> Hypermedia
+- Added connection: Framebuffer --> Hypermedia
+- Added connection: Computer-generated imagery --> Hypermedia
 
 11 October 2026
 - Added tech: Movable type (Europe), 1439
