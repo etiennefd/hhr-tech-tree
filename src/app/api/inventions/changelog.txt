@@ -1,5 +1,8 @@
 12 October 2026
 - Added tech: Microform, 1870
+- Added connection: Collodion wet-plate photography --> Microform
+- Added connection: Pigeon post --> Microform
+- Added connection: Magic lantern --> Microform
 
 11 October 2026
 - Added tech: Movable type (Europe), 1439
