@@ -1,6 +1,7 @@
 12 October 2026
 - Added tech: Hypertext, 1967
 - Added tech: Microform, 1870
+- Added tech: Ball bearing, 1869
 - Added connection: Collodion wet-plate photography --> Microform
 - Added connection: Pigeon post --> Microform
 - Added connection: Magic lantern --> Microform
