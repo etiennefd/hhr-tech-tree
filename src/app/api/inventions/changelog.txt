@@ -1,6 +1,7 @@
 11 October 2026
 - Added tech: Movable type (Europe), 1439
 - Added tech: Metal movable type, 1239
+- Added tech: Opium, 1350 BCE
 - Added connection: Movable type (China) --> Metal movable type
 - Added connection: Tin bronze --> Metal movable type
 - Added connection: Coins --> Metal movable type
@@ -1847,7 +1848,7 @@
 24 May 2026
 - Added tech: Bolometer, 1878
 - Added tech: Wheatstone bridge, 1843
-- Added connection: Opium poppy cultivation --> Morphine
+- Added connection: Domestication of opium poppy --> Morphine
 - Added connection: Infrared --> Bolometer
 - Added connection: Mirror galvanometer --> Bolometer
 - Added connection: Platinum --> Bolometer
@@ -2302,7 +2303,7 @@
 - Added tech: Tinplate, 1620
 - Added connection: Zinc smelting --> Hot-dip zinc coating
 - Added connection: Bloomery and wrought iron --> Hot-dip zinc coating
-- Added connection: Opium poppy cultivation --> Oil paint
+- Added connection: Domestication of opium poppy --> Oil paint
 - Added connection: Oil paint --> Paint tube
 - Added connection: Tin --> Tinplate
 - Added connection: Bloomery and wrought iron --> Tinplate
