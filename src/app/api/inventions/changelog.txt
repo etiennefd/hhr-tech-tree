@@ -16,6 +16,13 @@
 - Added connection: Touchscreen --> Hypermedia
 - Added connection: Framebuffer --> Hypermedia
 - Added connection: Computer-generated imagery --> Hypermedia
+- Added connection: Pedal bicycle --> Ball bearing
+- Added connection: Ball bearing --> Penny-farthing
+- Added connection: Ball bearing --> Ball screw
+- Added connection: Wheel --> Ball bearing
+- Added connection: Crucible steel (modern) --> Ball bearing
+- Added connection: Ball bearing --> Turbojet
+- Added connection: Ball bearing --> Hard disk drive
 
 11 October 2026
 - Added tech: Movable type (Europe), 1439
