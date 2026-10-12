@@ -1,8 +1,3 @@
-12 October 2026
-- Added connection: Domestication of opium poppy --> Opium
-- Added connection: Opium --> Laudanum
-- Added connection: Opium --> Morphine
-
 11 October 2026
 - Added tech: Movable type (Europe), 1439
 - Added tech: Metal movable type, 1239
@@ -29,6 +24,9 @@
 - Added connection: Spinthariscope --> Cloud chamber
 - Added connection: Vacuum pump --> Cloud chamber
 - Added connection: Dry photographic plate --> Cloud chamber
+- Added connection: Domestication of opium poppy --> Opium
+- Added connection: Opium --> Laudanum
+- Added connection: Opium --> Morphine
 
 9 October 2026
 - Added tech: Stereotype printing, 1739
