@@ -1,3 +1,8 @@
+12 October 2026
+- Added connection: Domestication of opium poppy --> Opium
+- Added connection: Opium --> Laudanum
+- Added connection: Opium --> Morphine
+
 11 October 2026
 - Added tech: Movable type (Europe), 1439
 - Added tech: Metal movable type, 1239
@@ -1848,7 +1853,6 @@
 24 May 2026
 - Added tech: Bolometer, 1878
 - Added tech: Wheatstone bridge, 1843
-- Added connection: Domestication of opium poppy --> Morphine
 - Added connection: Infrared --> Bolometer
 - Added connection: Mirror galvanometer --> Bolometer
 - Added connection: Platinum --> Bolometer
