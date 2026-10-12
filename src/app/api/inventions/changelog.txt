@@ -1,3 +1,6 @@
+12 October 2026
+- Added tech: Microform, 1870
+
 11 October 2026
 - Added tech: Movable type (Europe), 1439
 - Added tech: Metal movable type, 1239
