@@ -4,6 +4,11 @@
 - Added connection: Collodion wet-plate photography --> Microform
 - Added connection: Pigeon post --> Microform
 - Added connection: Magic lantern --> Microform
+- Added connection: Light pen --> Hypertext
+- Added connection: Hypertext --> Hypermedia
+- Added connection: Hypertext --> World Wide Web
+- Added connection: Microform --> Hypertext
+- Added connection: Hypertext --> Hypertext Transfer Protocol
 
 11 October 2026
 - Added tech: Movable type (Europe), 1439
