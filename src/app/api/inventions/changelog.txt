@@ -23,6 +23,10 @@
 - Added connection: Crucible steel (modern) --> Ball bearing
 - Added connection: Ball bearing --> Turbojet
 - Added connection: Ball bearing --> Hard disk drive
+- Added connection: Screw-cutting lathe --> Ball screw
+- Added connection: Automobile --> Ball screw
+- Added connection: Ball screw --> Numerical control
+- Added connection: Screw --> Ball screw
 
 11 October 2026
 - Added tech: Movable type (Europe), 1439
