@@ -1,4 +1,5 @@
 12 October 2026
+- Added tech: Hypertext, 1967
 - Added tech: Microform, 1870
 - Added connection: Collodion wet-plate photography --> Microform
 - Added connection: Pigeon post --> Microform
