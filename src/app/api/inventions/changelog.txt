@@ -1,4 +1,5 @@
 13 October 2026
+- Added tech: Lipid nanoparticle, 2001
 - Added tech: Oligonucleotide synthesis, 1981
 - Added tech: Antisense oligonucleotide, 1978
 - Added connection: Structure of DNA --> Oligonucleotide synthesis
