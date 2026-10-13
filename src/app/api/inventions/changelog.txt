@@ -17,6 +17,9 @@
 - Added connection: Messenger RNA --> Antisense oligonucleotide
 - Added connection: Antisense oligonucleotide --> RNA interference
 - Added connection: Antisense oligonucleotide --> siRNA medication
+- Added connection: Synthetic dye --> Salvarsan
+- Added connection: Germ theory --> Salvarsan
+- Added connection: Arsenic --> Salvarsan
 
 12 October 2026
 - Added tech: Hypertext, 1967
