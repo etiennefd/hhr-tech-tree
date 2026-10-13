@@ -10,6 +10,9 @@
 - Added connection: Recombinant DNA --> Oligonucleotide synthesis
 - Added connection: Bellows --> Air gun
 - Added connection: Wheellock --> Air gun
+- Added connection: Antisense oligonucleotide --> Lipid nanoparticle
+- Added connection: Lipid nanoparticle --> siRNA medication
+- Added connection: Lipid nanoparticle --> mRNA vaccine
 
 12 October 2026
 - Added tech: Hypertext, 1967
