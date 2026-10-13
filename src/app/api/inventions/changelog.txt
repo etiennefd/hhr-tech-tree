@@ -13,6 +13,9 @@
 - Added connection: Antisense oligonucleotide --> Lipid nanoparticle
 - Added connection: Lipid nanoparticle --> siRNA medication
 - Added connection: Lipid nanoparticle --> mRNA vaccine
+- Added connection: Messenger RNA --> Antisense oligonucleotide
+- Added connection: Antisense oligonucleotide --> RNA interference
+- Added connection: Antisense oligonucleotide --> siRNA medication
 
 12 October 2026
 - Added tech: Hypertext, 1967
