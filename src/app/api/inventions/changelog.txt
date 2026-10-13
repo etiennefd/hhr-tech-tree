@@ -1,5 +1,9 @@
 13 October 2026
 - Added tech: Oligonucleotide synthesis, 1981
+- Added connection: Structure of DNA --> Oligonucleotide synthesis
+- Added connection: Oligonucleotide synthesis --> Polymerase chain reaction
+- Added connection: Oligonucleotide synthesis --> DNA sequencer
+- Added connection: Oligonucleotide synthesis --> siRNA medication
 
 12 October 2026
 - Added tech: Hypertext, 1967
