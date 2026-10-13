@@ -1,3 +1,6 @@
+13 October 2026
+- Added tech: Oligonucleotide synthesis, 1981
+
 12 October 2026
 - Added tech: Hypertext, 1967
 - Added tech: Ball screw, 1940
