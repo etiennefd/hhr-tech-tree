@@ -2936,7 +2936,7 @@
 - Added connection: Control of fire --> Lime
 
 29 January 2026
-- Added tech: Water chlorination, 1894
+- Added tech: Water chlorination, 1897
 - Added tech: Waterproof raincoat, 1824
 - Added tech: Sodium hypochlorite bleach, 1820
 - Added tech: Bleaching powder, 1799
