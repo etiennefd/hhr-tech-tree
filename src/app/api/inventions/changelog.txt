@@ -3778,7 +3778,7 @@
 - Added connection: Convulsive therapy --> Electroconvulsive therapy
 
 14 June 2025
-- Added tech: Timpani, 600
+- Added tech: Timpani, 1500
 - Added connection: Drum --> Timpani
 
 13 June 2025
