@@ -4,6 +4,8 @@
 - Added connection: Oligonucleotide synthesis --> Polymerase chain reaction
 - Added connection: Oligonucleotide synthesis --> DNA sequencer
 - Added connection: Oligonucleotide synthesis --> siRNA medication
+- Added connection: Chromatography --> Oligonucleotide synthesis
+- Added connection: Recombinant DNA --> Oligonucleotide synthesis
 
 12 October 2026
 - Added tech: Hypertext, 1967
