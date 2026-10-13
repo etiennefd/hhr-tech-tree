@@ -6,6 +6,8 @@
 - Added connection: Oligonucleotide synthesis --> siRNA medication
 - Added connection: Chromatography --> Oligonucleotide synthesis
 - Added connection: Recombinant DNA --> Oligonucleotide synthesis
+- Added connection: Bellows --> Air gun
+- Added connection: Wheellock --> Air gun
 
 12 October 2026
 - Added tech: Hypertext, 1967
