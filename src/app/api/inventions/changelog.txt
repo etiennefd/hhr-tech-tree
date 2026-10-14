@@ -8,6 +8,9 @@
 - Added connection: Cell culture --> Oral polio vaccine
 - Added connection: Cell culture --> Measles vaccine
 - Added connection: Cell culture --> Cultured meat
+- Added connection: Cell culture --> Mammal cloning
+- Added connection: Cell culture --> Gene therapy
+- Added connection: Cell culture --> Human in vitro fertilisation
 
 13 October 2026
 - Added tech: Lipid nanoparticle, 2001
