@@ -1,5 +1,13 @@
 14 October 2026
 - Added tech: Cell culture, 1907
+- Added connection: Neuron doctrine --> Cell culture
+- Added connection: Cell theory --> Cell culture
+- Added connection: Compound microscope --> Cell culture
+- Added connection: Cell culture --> Induced pluripotent stem cell
+- Added connection: Cell culture --> Polio vaccine
+- Added connection: Cell culture --> Oral polio vaccine
+- Added connection: Cell culture --> Measles vaccine
+- Added connection: Cell culture --> Cultured meat
 
 13 October 2026
 - Added tech: Lipid nanoparticle, 2001
