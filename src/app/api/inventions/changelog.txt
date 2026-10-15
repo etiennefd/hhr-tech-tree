@@ -4,6 +4,7 @@
 - Added connection: Recombinant subunit vaccine --> Malaria vaccine
 - Added connection: Inactivated vaccine --> Recombinant subunit vaccine
 - Added connection: DNA sequencing --> Recombinant subunit vaccine
+- Added connection: Anthrax vaccine --> Rabies vaccine
 
 14 October 2026
 - Added tech: Cell culture, 1907
