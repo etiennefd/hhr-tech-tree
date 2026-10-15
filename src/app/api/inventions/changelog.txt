@@ -3754,7 +3754,6 @@
 
 29 June 2025
 - Added tech: Measles vaccine, 1963
-- Added connection: Polio vaccine --> Measles vaccine
 
 27 June 2025
 - Added tech: Virtual assistant, 2010
