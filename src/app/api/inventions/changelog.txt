@@ -1,5 +1,9 @@
 15 October 2026
 - Added tech: Recombinant subunit vaccine, 1986
+- Added connection: Genetically modified organism --> Recombinant subunit vaccine
+- Added connection: Recombinant subunit vaccine --> Malaria vaccine
+- Added connection: Inactivated vaccine --> Recombinant subunit vaccine
+- Added connection: DNA sequencing --> Recombinant subunit vaccine
 
 14 October 2026
 - Added tech: Cell culture, 1907
