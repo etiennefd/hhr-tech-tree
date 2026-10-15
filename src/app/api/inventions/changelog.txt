@@ -1,3 +1,6 @@
+15 October 2026
+- Added tech: Recombinant subunit vaccine, 1986
+
 14 October 2026
 - Added tech: Cell culture, 1907
 - Added connection: Neuron doctrine --> Cell culture
