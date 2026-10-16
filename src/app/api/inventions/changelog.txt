@@ -1,10 +1,13 @@
+16 October 2026
+- Added tech: Attenuated vaccine, 1881
+
 15 October 2026
 - Added tech: Recombinant subunit vaccine, 1986
 - Added connection: Genetically modified organism --> Recombinant subunit vaccine
 - Added connection: Recombinant subunit vaccine --> Malaria vaccine
 - Added connection: Inactivated vaccine --> Recombinant subunit vaccine
 - Added connection: DNA sequencing --> Recombinant subunit vaccine
-- Added connection: Anthrax vaccine --> Rabies vaccine
+- Added connection: Attenuated vaccine --> Rabies vaccine
 
 14 October 2026
 - Added tech: Cell culture, 1907
@@ -2054,7 +2057,7 @@
 - Added connection: Germ theory --> Pasteurization
 - Added connection: Germ theory --> Autoclave
 - Added connection: Germ theory --> Agar plate
-- Added connection: Germ theory --> Anthrax vaccine
+- Added connection: Germ theory --> Attenuated vaccine
 - Added connection: Germ theory --> Chamberland water filter
 - Added connection: Germ theory --> Rabies vaccine
 - Added connection: Germ theory --> Activated sludge
