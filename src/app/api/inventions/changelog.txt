@@ -8,6 +8,7 @@
 - Added connection: Antiserum --> Home pregnancy test
 - Added connection: Antiserum --> Toxoid vaccine
 - Added connection: Formaldehyde --> Toxoid vaccine
+- Added connection: Alum --> Recombinant subunit vaccine
 
 16 October 2026
 - Added tech: Attenuated vaccine, 1881
