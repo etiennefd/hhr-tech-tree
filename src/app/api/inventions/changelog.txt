@@ -1,3 +1,6 @@
+18 October 2026
+- Added tech: Influenza vaccine, 1943
+
 17 October 2026
 - Added tech: Toxoid vaccine, 1923
 - Added tech: Antiserum, 1894
