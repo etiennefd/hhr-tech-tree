@@ -1,6 +1,7 @@
 18 October 2026
 - Added tech: Monoclonal antibody, 1975
 - Added tech: Influenza vaccine, 1943
+- Added tech: Clipper, 1780
 - Added connection: Inactivated vaccine --> Influenza vaccine
 - Added connection: Discovery of viruses --> Influenza vaccine
 - Added connection: Influenza vaccine --> Polio vaccine
