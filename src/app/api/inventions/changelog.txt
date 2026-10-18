@@ -2,6 +2,7 @@
 - Added tech: Monoclonal antibody, 1975
 - Added tech: Influenza vaccine, 1943
 - Added tech: Clipper, 1780
+- Added tech: Schooner, 1600
 - Added connection: Inactivated vaccine --> Influenza vaccine
 - Added connection: Discovery of viruses --> Influenza vaccine
 - Added connection: Influenza vaccine --> Polio vaccine
