@@ -7,6 +7,9 @@
 - Added connection: Formaldehyde --> Influenza vaccine
 - Added connection: Domestication of chickens --> Influenza vaccine
 - Added connection: Domestication of chickens --> Measles vaccine
+- Added connection: Cell culture --> Monoclonal antibody
+- Added connection: Antiserum --> Monoclonal antibody
+- Added connection: Protein sequencing --> Monoclonal antibody
 
 17 October 2026
 - Added tech: Toxoid vaccine, 1923
