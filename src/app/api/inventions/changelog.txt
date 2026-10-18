@@ -1,5 +1,11 @@
 18 October 2026
 - Added tech: Influenza vaccine, 1943
+- Added connection: Inactivated vaccine --> Influenza vaccine
+- Added connection: Discovery of viruses --> Influenza vaccine
+- Added connection: Influenza vaccine --> Polio vaccine
+- Added connection: Formaldehyde --> Influenza vaccine
+- Added connection: Domestication of chickens --> Influenza vaccine
+- Added connection: Domestication of chickens --> Measles vaccine
 
 17 October 2026
 - Added tech: Toxoid vaccine, 1923
@@ -60,7 +66,6 @@
 - Added connection: Synthetic dye --> Salvarsan
 - Added connection: Germ theory --> Salvarsan
 - Added connection: Arsenic --> Salvarsan
-- Added connection: Inactivated vaccine --> Polio vaccine
 
 12 October 2026
 - Added tech: Hypertext, 1967
