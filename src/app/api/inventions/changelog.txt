@@ -16,6 +16,8 @@
 - Added connection: Cell culture --> Monoclonal antibody
 - Added connection: Antiserum --> Monoclonal antibody
 - Added connection: Protein sequencing --> Monoclonal antibody
+- Added connection: Synthetic dye --> Sulfa drug
+- Added connection: Salvarsan --> Sulfa drug
 
 17 October 2026
 - Added tech: Toxoid vaccine, 1923
