@@ -4,6 +4,7 @@
 - Added connection: Smallpox vaccine --> Viral vector vaccine
 - Added connection: Genetically modified organism --> Viral vector vaccine
 - Added connection: Rabies vaccine --> Viral vector vaccine
+- Added independent invention: Steamboat, 1787
 
 18 October 2026
 - Added tech: Monoclonal antibody, 1975
