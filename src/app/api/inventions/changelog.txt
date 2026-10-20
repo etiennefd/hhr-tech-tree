@@ -20,6 +20,13 @@
 - Added connection: Ship of the line --> Ocean liner
 - Added connection: Steamboat transport --> Refrigerated ship
 - Added connection: Iron-hulled ship --> Refrigerated ship
+- Added connection: Iron-hulled ship --> Mechanized submarine
+- Added connection: Iron-hulled ship --> Torpedo boat
+- Added connection: Iron-hulled ship --> Aircraft carrier
+- Added connection: Iron-hulled ship --> Rotor ship
+- Added connection: Iron-hulled ship --> Container ship
+- Added connection: Iron-hulled ship --> Nuclear-powered surface ship
+- Added connection: Iron-hulled ship --> Destroyer
 
 19 October 2026
 - Added tech: Viral vector vaccine, 1987
