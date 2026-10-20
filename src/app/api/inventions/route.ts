@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readFile, stat } from "fs/promises";
+import { readFile } from "fs/promises";
 import path from "path";
 // Removed Airtable and related imports as we are reading from a local file
 // import Airtable from "airtable";
@@ -83,29 +83,11 @@ async function getTechTreeData(): Promise<TechTreeData> {
   }
 }
 
-// Add function to check if data needs updating
-async function shouldUpdateData(lastUpdate: number): Promise<boolean> {
+// The response doesn't depend on the request (including query params), and
+// the data file only changes at build time, so the in-memory copy is never
+// invalidated in production.
+export async function GET() {
   try {
-    const stats = await stat(DATA_FILE_PATH);
-    return stats.mtimeMs > lastUpdate;
-  } catch (error) {
-    console.error("Failed to check data file stats:", error);
-    return false;
-  }
-}
-
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const detail = searchParams.get('detail') === 'true';
-    const lastUpdate = Number(searchParams.get('t')) || 0;
-
-    // Check if data needs updating
-    if (lastUpdate > 0 && await shouldUpdateData(lastUpdate)) {
-      // Clear the cache to force a fresh load
-      loadedData = null;
-    }
-
     const data = await getTechTreeData();
     return NextResponse.json(data, {
       headers: {

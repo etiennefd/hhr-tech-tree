@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TechNode } from "@/types/tech-node";
@@ -29,9 +29,14 @@ export function SearchBox({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const listboxId = useId();
+  const getOptionId = (index: number) => `${listboxId}-option-${index}`;
   
   // Add debounce timer ref
   const debounceTimerRef = useRef<NodeJS.Timeout>();
+  // Set when Enter is pressed before the debounced search has run, so the
+  // first result of the fresh query is selected once it arrives
+  const selectFirstOnResultsRef = useRef(false);
 
   // Optimized input change handler
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,9 +60,28 @@ export function SearchBox({
 
     // Debounce search for non-empty queries
     debounceTimerRef.current = setTimeout(() => {
+      debounceTimerRef.current = undefined;
       onSearch(newQuery);
     }, 150); // 150ms delay
   };
+
+  // Results for a flushed search arrive on the next render (parent state)
+  useEffect(() => {
+    if (!selectFirstOnResultsRef.current) return;
+    selectFirstOnResultsRef.current = false;
+    if (results[0]) {
+      onSelectResult(results[0]);
+      setIsOpen(false);
+    }
+  }, [results, onSelectResult]);
+
+  // Keep the keyboard-highlighted row visible in the scrollable list
+  useEffect(() => {
+    if (!isOpen) return;
+    document
+      .getElementById(`${listboxId}-option-${selectedIndex}`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [selectedIndex, isOpen, listboxId]);
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -92,6 +116,19 @@ export function SearchBox({
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen) return;
+
+    // Enter before the debounce fires: current results belong to the
+    // previous query, so flush the search and select once results update
+    if (e.key === "Enter" && debounceTimerRef.current) {
+      e.preventDefault();
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = undefined;
+      selectFirstOnResultsRef.current = true;
+      onSearch(query);
+      return;
+    }
+
     if (!results.length) return;
 
     switch (e.key) {
@@ -146,12 +183,15 @@ export function SearchBox({
     }
   };
 
+  const showResults = isOpen && results.length > 0;
+
   return (
     <div ref={containerRef} className="relative">
       {/* Collapsed state */}
       {!isExpanded && (
         <button
           onClick={toggleExpand}
+          aria-label="Open search"
           className="md:hidden flex items-center justify-center w-10 h-10 bg-white/80 backdrop-blur border border-black rounded-none shadow-md"
         >
           <Search className="h-4 w-4" />
@@ -170,12 +210,21 @@ export function SearchBox({
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
             placeholder="Search techs/years/people"
+            aria-label="Search technologies, years, and people"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={showResults}
+            aria-controls={listboxId}
+            aria-activedescendant={
+              showResults ? getOptionId(selectedIndex) : undefined
+            }
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />
           {/* Add close button on mobile */}
           {isExpanded && (
             <button
               onClick={toggleExpand}
+              aria-label="Close search"
               className="md:hidden absolute right-2 top-1/2 -translate-y-1/2"
             >
               <X className="h-4 w-4" />
@@ -183,11 +232,19 @@ export function SearchBox({
           )}
         </div>
 
-        {isOpen && results.length > 0 && (
-          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list">
+        {showResults && (
+          <div
+            id={listboxId}
+            role="listbox"
+            aria-label="Search results"
+            className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list"
+          >
             {results.map((result, index) => (
               <div
                 key={`${result.type}-${result.text}-${index}`}
+                id={getOptionId(index)}
+                role="option"
+                aria-selected={index === selectedIndex}
                 className={`p-2 cursor-pointer ${
                   index === selectedIndex
                     ? "bg-yellow-100"

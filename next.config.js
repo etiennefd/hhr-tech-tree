@@ -32,12 +32,6 @@ const nextConfig = {
       },
     ]
   },
-  httpAgentOptions: {
-    keepAlive: true,
-  },
-  experimental: {
-    largePageDataBytes: 128 * 100000, // Increase the limit for large pages
-  }
 }
 
 module.exports = nextConfig

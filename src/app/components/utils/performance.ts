@@ -10,39 +10,24 @@ export const performanceMarks = {
   end: (name: string) => {
     if (process.env.NODE_ENV === 'development') {
       performance.mark(`${name}-end`);
-      performance.measure(name, `${name}-start`, `${name}-end`);
-    }
-  },
-  log: (name: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      const entries = performance.getEntriesByName(name);
-      if (entries.length > 0) {
-        const lastEntry = entries[entries.length - 1];
+      try {
+        performance.measure(name, `${name}-start`, `${name}-end`);
+      } catch {
+        // No matching start mark; nothing to measure
       }
+      // The measure still shows in the DevTools Performance timeline; clear
+      // the entries so they don't accumulate in the buffer on every call
+      performanceMarks.clear(name);
     }
   },
+  // Kept as a call-site hook for reporting; measures are cleared in end()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  log: (name: string) => {},
   clear: (name: string) => {
     if (process.env.NODE_ENV === 'development') {
       performance.clearMarks(`${name}-start`);
       performance.clearMarks(`${name}-end`);
       performance.clearMeasures(name);
-    }
-  }
-};
-
-/**
- * Render counter for tracking component re-renders
- */
-export const renderCounter = {
-  count: 0,
-  increment: () => {
-    if (process.env.NODE_ENV === 'development') {
-      renderCounter.count++;
-    }
-  },
-  reset: () => {
-    if (process.env.NODE_ENV === 'development') {
-      renderCounter.count = 0;
     }
   }
 };
@@ -70,12 +55,3 @@ export const memoEffectiveness = {
     memoEffectiveness.misses = 0;
   }
 };
-
-/**
- * Logs performance metrics with additional data
- */
-export function logPerformance(operation: string, data: Record<string, any>) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Performance] ${operation}:`, data);
-  }
-} 

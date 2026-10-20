@@ -28,7 +28,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
   const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
   const positionRef = useRef<{ left: number; top: number } | null>(null);
   const firstPositionForSelectedRef = useRef<{ left: number; top: number } | null>(null);
-  const hasLoggedInitialPosition = useRef(false);
   
   // Update position when coordinates change
   useEffect(() => {
@@ -56,17 +55,10 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
       return;
     }
     
-    // Convert SVG coordinates to screen coordinates if needed
-    let screenX = x;
-    let screenY = y;
-    
-    if (isSelected) {
-      // For selected tooltips, coordinates are already in screen space
-      // so no conversion needed
-    } else {
-      // For hover tooltips, coordinates are already in screen space
-      // from the mouse event in CurvedConnections
-    }
+    // Coordinates are already in screen space for both selected and hover
+    // tooltips (the latter from the mouse event in CurvedConnections)
+    const screenX = x;
+    const screenY = y;
     
     // Check if near screen edges
     const isNearRightEdge = screenX > window.innerWidth - 300;
@@ -76,10 +68,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
       left: isNearRightEdge ? screenX - 274 : screenX + 10,
       top: isNearBottomEdge ? screenY - 100 : screenY + 10
     };
-    
-    if (!hasLoggedInitialPosition.current) {
-      hasLoggedInitialPosition.current = true;
-    }
     
     setPosition(newPosition);
     positionRef.current = newPosition;
@@ -95,7 +83,6 @@ const ConnectionTooltip: React.FC<ConnectionTooltipProps> = ({
     if (!isSelected) {
       // Clear the saved position when deselected
       firstPositionForSelectedRef.current = null;
-      hasLoggedInitialPosition.current = false;
     } else if (position && !firstPositionForSelectedRef.current) {
       // If becoming selected and we have a position, save it
       firstPositionForSelectedRef.current = position;

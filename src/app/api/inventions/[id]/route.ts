@@ -20,15 +20,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch the specific record from Airtable
+    // Fetch the specific record from Airtable. find() throws (rather than
+    // returning nothing) for unknown IDs; that case is handled in the catch.
     const record = await base("Innovations").find(id);
-
-    if (!record) {
-      return NextResponse.json(
-        { error: "Invention not found" },
-        { status: 404 }
-      );
-    }
 
     // Process the record
     const year = Number(record.get("Date"));
@@ -80,6 +74,17 @@ export async function GET(request: Request) {
 
     return response;
   } catch (error) {
+    const { statusCode, error: errorType } = (error ?? {}) as {
+      statusCode?: number;
+      error?: string;
+    };
+    if (statusCode === 404 || errorType === "NOT_FOUND") {
+      return NextResponse.json(
+        { error: "Invention not found" },
+        { status: 404 }
+      );
+    }
+
     console.error(`Error fetching invention with ID ${id}:`, error);
     return NextResponse.json(
       { error: "Failed to fetch invention" },

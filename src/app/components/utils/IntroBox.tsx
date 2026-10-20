@@ -18,8 +18,8 @@ const IntroBox = memo(({ nodeCount, linkCount }: IntroBoxProps) => {
   };
 
   return (
-    <div className="absolute left-4 top-12 p-6 w-[375px] z-50">
-      <h1 className="text-2xl font-bold mb-2" style={{ color: darkerBlue }}>
+    <div className="absolute left-4 top-12 p-6 w-[375px] max-w-[calc(100vw-2rem)] z-50">
+      <h1 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: darkerBlue }}>
         HISTORICAL TECH TREE
       </h1>
       <p className="text-sm mb-4" style={{ color: darkerBlue }}>
@@ -42,7 +42,7 @@ const IntroBox = memo(({ nodeCount, linkCount }: IntroBoxProps) => {
         between them.
       </p>
 
-      <div className="text-sm space-x-4">
+      <div className="text-sm flex flex-wrap gap-x-4 gap-y-1">
         <Link href="/about" style={linkStyle}>
           Read more
         </Link>

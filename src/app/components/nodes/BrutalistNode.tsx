@@ -19,6 +19,7 @@ const SPECIAL_NODE_IMAGES: { [key: string]: string } = {
 type ImageStatus = "loading" | "loaded" | "error";
 
 interface Node {
+  id: string;
   year: number;
   title: string;
   subtitle?: string;
@@ -33,9 +34,11 @@ interface BrutalistNodeProps {
   node: Node;
   isSelected: boolean;
   isAdjacent: boolean;
-  onClick: () => void;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
+  // Called with the node's id, so the parent can pass one stable function to
+  // every node and the memo comparator below can safely ignore these.
+  onClick: (nodeId: string) => void;
+  onMouseEnter: (nodeId: string) => void;
+  onMouseLeave: (nodeId: string) => void;
   width: number;
   style?: React.CSSProperties;
   showImages?: boolean;
@@ -62,6 +65,32 @@ const formatTitle = (title: string) => {
   return title.split(' ').map(word => {
     return specialCases[word] || word.toUpperCase();
   }).join(' ');
+};
+
+// White text is the house style for field tags, but on the palest colors
+// (Lighting's yellow, Geography's sky blue, ...) it is barely readable. Switch
+// those to black, judged by WCAG relative luminance.
+const tagTextColorCache = new Map<string, string>();
+const getTagTextColor = (background: string): string => {
+  const cached = tagTextColorCache.get(background);
+  if (cached) return cached;
+
+  let color = "#ffffff";
+  const match = /^#?([0-9a-f]{6})$/i.exec(background);
+  if (match) {
+    const value = parseInt(match[1], 16);
+    const [r, g, b] = [value >> 16, (value >> 8) & 0xff, value & 0xff].map((channel) => {
+      const c = channel / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    // Contrast against white is 1.05 / (L + 0.05). Below 2:1 is unreadable at
+    // this size; anything above keeps the white the other tags use.
+    if (1.05 / (luminance + 0.05) < 2) color = "#000000";
+  }
+
+  tagTextColorCache.set(background, color);
+  return color;
 };
 
 // Helper function to validate image URLs
@@ -184,9 +213,13 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         relative 
         cursor-pointer 
         tech-node
-        ${isSelected ? "z-20" : isAdjacent ? "z-15" : "z-10"}
+        ${isSelected ? "z-20" : isAdjacent ? "z-[15]" : "z-10"}
       `}
       lang="en"
+      role="button"
+      tabIndex={0}
+      aria-pressed={isSelected}
+      aria-label={`${node.title}, ${yearDisplay}`}
       style={{
         ...style,
         width: `${width}px`,
@@ -194,10 +227,17 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         opacity: style?.opacity,
       }}
       onClick={() => {
-        onClick();
+        onClick(node.id);
       }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick(node.id);
+        }
+      }}
+      onMouseEnter={() => onMouseEnter(node.id)}
+      onMouseLeave={() => onMouseLeave(node.id)}
     >
       <div
         className={`
@@ -212,7 +252,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
           <button
             onClick={(e) => {
               e.stopPropagation(); // Prevent triggering node click
-              onClick(); // Use the same onClick handler which will deselect when already selected
+              onClick(node.id); // Use the same onClick handler which will deselect when already selected
             }}
             className="absolute -top-2 -right-2 w-5 h-5 bg-white border border-black z-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
             aria-label="Deselect node"
@@ -267,10 +307,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                 {status === "error" && (
                   <Image
                     src="/placeholder-invention.jpg"
-                    alt="Placeholder"
+                    alt=""
                     fill
                     sizes={imageSizes}
-                        className="object-cover"
+                    className="object-cover"
                     style={{
                       filter: "grayscale(20%) contrast(110%)",
                       mixBlendMode: "multiply",
@@ -314,9 +354,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
             {node.fields.map((field: string) => (
               <span
                 key={field}
-                className="text-[10px] px-1.5 py-0.5 uppercase font-bold text-white"
+                className="text-[10px] px-1.5 py-0.5 uppercase font-bold"
                 style={{
                   backgroundColor: getFieldColor(field),
+                  color: getTagTextColor(getFieldColor(field)),
                 }}
               >
                 {field}
@@ -334,6 +375,7 @@ export default React.memo(BrutalistNode, (prevProps, nextProps) => {
   return (
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.isAdjacent === nextProps.isAdjacent &&
+    prevProps.node.id === nextProps.node.id &&
     prevProps.node.title === nextProps.node.title &&
     prevProps.node.subtitle === nextProps.node.subtitle &&
     prevProps.node.year === nextProps.node.year &&

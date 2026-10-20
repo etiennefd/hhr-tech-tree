@@ -184,8 +184,14 @@ export default function MiniTreePage() {
   // Load data
   useEffect(() => {
     fetch("/api/inventions")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((data) => {
+        if (!Array.isArray(data?.nodes) || !Array.isArray(data?.links)) {
+          throw new Error("Unexpected response shape");
+        }
         setData(data);
         setLoading(false);
       })

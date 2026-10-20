@@ -19,10 +19,6 @@ export default function AboutPage() {
   const linkStyle = { 
     color: darkerBlue, 
     textDecoration: "underline",
-    transition: "opacity 0.2s",
-    "&:hover": {
-      opacity: 0.8
-    }
   };
 
   const lastUpdated = getLastUpdatedDate()
@@ -94,7 +90,7 @@ export default function AboutPage() {
               </p>
 
               <p>
-                This historical tech tree presented here is not a game tree.
+                The historical tech tree presented here is not a game tree.
                 It is also constrained by assumptions, but different ones.
               </p>
             </div>

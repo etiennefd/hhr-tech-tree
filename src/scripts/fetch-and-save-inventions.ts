@@ -348,8 +348,8 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
           return (
             fromIdStr &&
             toIdStr &&
-            validNodes.some((node) => node.id === fromIdStr) &&
-            validNodes.some((node) => node.id === toIdStr)
+            nodesById.has(fromIdStr) &&
+            nodesById.has(toIdStr)
           );
         })
         .map((record) => {
@@ -383,7 +383,7 @@ type CustomAirtableRecord = AirtableRecord<FieldSet>;
       // 6. Write to JSON file
       console.log(`Writing data to ${OUTPUT_FILE_PATH}...`);
       console.time("WriteFile");
-      await writeFile(OUTPUT_FILE_PATH, JSON.stringify(finalData, null, 2));
+      await writeFile(OUTPUT_FILE_PATH, JSON.stringify(finalData));
       console.timeEnd("WriteFile");
       console.log("Successfully fetched and saved data!");
 

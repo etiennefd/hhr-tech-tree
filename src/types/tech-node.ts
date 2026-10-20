@@ -37,6 +37,7 @@ export interface TechNode {
   organizations?: string[];
   wikipedia?: string;
   image?: string;
+  localImage?: string;         // Preferred over `image` when present
   imagePosition?: string;
   x?: number;
   y?: number;
