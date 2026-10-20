@@ -25,6 +25,7 @@ import { SearchResult } from "./SearchBox";
 import { TechNode, IndependentInnovation } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
+import { TechTreeDetails, linkDetailsKey } from "@/utils/techTreeData";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
 import { DebugOverlay } from "@/app/components/utils/DebugOverlay";
@@ -697,6 +698,10 @@ export function TechTreeViewer() {
   // place, so a deep link to a node the cached copy predates can wait for it.
   const [hasFreshData, setHasFreshData] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  // Tooltip-only fields (dates' fine print, locations, sources, link notes),
+  // loaded after first paint from /api/inventions/details. Kept apart from
+  // `data` so their arrival doesn't invalidate everything derived from it.
+  const [techDetails, setTechDetails] = useState<TechTreeDetails | null>(null);
 
   // 3. Optimize initial data fetching
   useEffect(() => {
@@ -719,19 +724,26 @@ export function TechTreeViewer() {
       currentNodesRef.current = positionedNodes;
     };
 
-    const fetchFresh = async () => {
-      const response = await fetchWithRetry("/api/inventions", 3, 1000);
+    const fetchJson = async (url: string) => {
+      const response = await fetchWithRetry(url, 3, 1000);
       return response.json();
     };
 
+    // The slim payload (~150KB compressed) is everything the tree needs to
+    // draw; the details (~240KB) are only read by tooltips, so they're
+    // requested once the tree is up rather than holding up first paint.
     const loadData = async () => {
       try {
         // In development, always fetch fresh data
         if (process.env.NODE_ENV === 'development') {
-          const freshData = await fetchFresh();
+          const freshData = await fetchJson("/api/inventions/slim");
           if (!isMounted) return;
           applyData(freshData);
           setHasFreshData(true);
+          setIsLoading(false);
+
+          const freshDetails = await fetchJson("/api/inventions/details");
+          if (isMounted) setTechDetails(freshDetails);
           return;
         }
 
@@ -739,23 +751,34 @@ export function TechTreeViewer() {
         // it: the cache lives for a day, and without this returning visitors
         // didn't see techs added since their last visit.
         const cachedData = await cacheManager.get();
-        if (cachedData?.data && isMounted) {
-          applyData(cachedData.data);
+        const cached = cachedData?.data;
+        if (cached && isMounted) {
+          applyData(cached);
+          if (cached.details) setTechDetails(cached.details);
           setIsLoading(false);
         }
 
-        const freshData = await fetchFresh();
+        const freshData = await fetchJson("/api/inventions/slim");
         if (!isMounted) return;
 
-        if (!cachedData?.data || JSON.stringify(cachedData.data) !== JSON.stringify(freshData)) {
+        const cachedSlim = cached && { nodes: cached.nodes, links: cached.links };
+        if (!cachedSlim || JSON.stringify(cachedSlim) !== JSON.stringify(freshData)) {
           applyData(freshData);
-          await cacheManager.set({
-            version: CACHE_VERSION,
-            timestamp: Date.now(),
-            data: freshData
-          });
         }
         setHasFreshData(true);
+        setIsLoading(false);
+
+        const freshDetails = await fetchJson("/api/inventions/details");
+        if (!isMounted) return;
+
+        if (!cached?.details || JSON.stringify(cached.details) !== JSON.stringify(freshDetails)) {
+          setTechDetails(freshDetails);
+        }
+        await cacheManager.set({
+          version: CACHE_VERSION,
+          timestamp: Date.now(),
+          data: { ...freshData, details: freshDetails }
+        });
       } catch (error: unknown) {
         console.error('Error loading data:', error);
         // A stale copy on screen beats an error; only report when there's
@@ -1180,12 +1203,18 @@ export function TechTreeViewer() {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
+      // The tooltip's info icons read details/detailsSource off each link
+      const withLinkDetails = (link: TechTreeLink): TechTreeLink => {
+        const linkDetails = techDetails?.links[linkDetailsKey(link)];
+        return linkDetails ? { ...link, ...linkDetails } : link;
+      };
+
       // First get all special connections
       const replaced = data.links
         .filter((link) => link.target === nodeId && link.type === "Obsolescence")
         .map((link) => ({
           node: nodeById.get(link.source),
-          link
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         .sort((a, b) => a.node.year - b.node.year);
@@ -1194,7 +1223,7 @@ export function TechTreeViewer() {
         .filter((link) => link.source === nodeId && link.type === "Obsolescence")
         .map((link) => ({
           node: nodeById.get(link.target),
-          link
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         .sort((a, b) => b.node.year - a.node.year);
@@ -1208,7 +1237,7 @@ export function TechTreeViewer() {
           const otherNodeId = link.source === nodeId ? link.target : link.source;
           return {
             node: nodeById.get(otherNodeId),
-            link
+            link: withLinkDetails(link)
           };
         })
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
@@ -1223,7 +1252,7 @@ export function TechTreeViewer() {
           const otherNodeId = link.source === nodeId ? link.target : link.source;
           return {
             node: nodeById.get(otherNodeId),
-            link
+            link: withLinkDetails(link)
           };
         })
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
@@ -1246,7 +1275,7 @@ export function TechTreeViewer() {
         )
         .map((link) => ({
           node: nodeById.get(link.source),
-          link
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         // Sort ancestors by year (most recent first)
@@ -1260,7 +1289,7 @@ export function TechTreeViewer() {
         )
         .map((link) => ({
           node: nodeById.get(link.target),
-          link
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         // Sort children by year (earliest first)
@@ -1275,7 +1304,7 @@ export function TechTreeViewer() {
         concurrentDevelopment
       };
     },
-    [data.links, nodeById]
+    [data.links, nodeById, techDetails]
   );
 
   useEffect(() => {
@@ -1328,7 +1357,8 @@ export function TechTreeViewer() {
         node.organizations?.join(" "),
         node.fields.join(" "),
         node.subfields?.join(" "),
-        node.details,
+        // Searchable once the details payload has arrived
+        techDetails?.nodes[node.id]?.details,
       ]
         .filter(Boolean)
         .join(" ")
@@ -1338,7 +1368,7 @@ export function TechTreeViewer() {
     });
 
     return index;
-  }, [data.nodes]);
+  }, [data.nodes, techDetails]);
 
   // Replace the existing handleSearch with this optimized version
   const handleSearch = useCallback(
@@ -2842,7 +2872,7 @@ export function TechTreeViewer() {
                         onHoverChange={handleConnectionHover}
                         sourceTitle={sourceNode.title}
                         targetTitle={targetNode.title}
-                        details={link.details}
+                        details={techDetails?.links[linkDetailsKey(link)]?.details}
                         isSelected={selectedLinkKey === getLinkKey(link)}
                         onSelect={handleConnectionSelect}
                         onDeselect={handleConnectionDeselect}
@@ -2883,7 +2913,8 @@ export function TechTreeViewer() {
                   {visibleNodes.map((baseLoopNode) => {
                     if (activeTooltipNodeId !== baseLoopNode.id) return null;
 
-                    const node = baseLoopNode;
+                    const nodeDetails = techDetails?.nodes[baseLoopNode.id];
+                    const node = nodeDetails ? { ...baseLoopNode, ...nodeDetails } : baseLoopNode;
 
                     if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
                       return (
