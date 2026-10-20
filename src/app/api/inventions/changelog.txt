@@ -5,6 +5,9 @@
 - Added connection: Caravel --> Galleon
 - Added connection: Carvel boat building --> Schooner
 - Added connection: Spritsail --> Schooner
+- Added connection: Keel --> Carvel boat building
+- Added connection: Sternpost-mounted rudder --> Schooner
+- Added connection: Sternpost-mounted rudder --> Cog
 
 19 October 2026
 - Added tech: Viral vector vaccine, 1987
