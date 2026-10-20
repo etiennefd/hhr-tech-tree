@@ -7,6 +7,11 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID ?? ""
 );
 
+// The page is prerendered at build time. Regenerate it daily so a transient
+// Airtable failure at build doesn't leave the error message up until the next
+// deploy.
+export const revalidate = 86400;
+
 // Define the structure of the fetched data we need
 type CreditData = {
   id: string;

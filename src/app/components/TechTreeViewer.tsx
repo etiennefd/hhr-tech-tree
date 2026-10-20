@@ -5,7 +5,6 @@ declare global {
   interface Window {
     mouseX: number;
     mouseY: number;
-    lastNodeVisibilityLog?: number;
   }
 }
 
@@ -26,13 +25,13 @@ import { SearchResult } from "./SearchBox";
 import { TechNode, IndependentInnovation } from "@/types/tech-node";
 import { FilterState } from "@/types/filters";
 import { cacheManager, CACHE_VERSION } from "@/utils/cache";
+import { TechTreeDetails, linkDetailsKey } from "@/utils/techTreeData";
 // Import useSearchParams
 import { useSearchParams } from 'next/navigation';
 import { DebugOverlay } from "@/app/components/utils/DebugOverlay";
 import IntroBox from "@/app/components/utils/IntroBox";
 import { 
   TechTreeLink, 
-  TechTreeNodePosition, 
   TechTreeMinimapNode, 
   TechTreeVisibleElements 
 } from "@/types/techTreeTypes";
@@ -88,13 +87,16 @@ const TIMELINE_HEIGHT = 48;
 const MIN_TREE_ZOOM = 0.1;
 const MAX_TREE_ZOOM = 1;
 const DESKTOP_ZOOM_STEP = 0.1;
-export const CACHE_VIEWPORT_BUFFER_FOR_NODES = 700;
 const MAX_NODE_VIEWPORT_BUFFER = 500;
 const MAX_STRICT_VIEWPORT_BUFFER = 40;
 const MAX_CONNECTION_VIEWPORT_BUFFER = 700;
 
 // Search result limits
 const MAX_SEARCH_RESULTS = 30;
+
+// Pointer travel (px) before a press on the canvas counts as a drag rather
+// than a click.
+const DRAG_THRESHOLD_PX = 4;
 
 // 2. Lazy load non-critical components
 const TechTreeMinimap = dynamic(() => import("./Minimap"), {
@@ -229,16 +231,19 @@ export function TechTreeViewer() {
   // Client-side initialization
   const [isClient, setIsClient] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  // Touchscreen laptops report touch points too, but their trackpad pinch
+  // arrives as Ctrl+wheel and they still want the desktop zoom controls.
+  const [hasFinePointer, setHasFinePointer] = useState(false);
   useEffect(() => {
     setIsClient(true);
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    setHasFinePointer(window.matchMedia("(any-pointer: fine)").matches);
   }, []);
 
   // Add state for drag navigation
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragStartScroll, setDragStartScroll] = useState({ left: 0, top: 0 });
-  const dragStartedFromNode = useRef(false);
   const wasDragging = useRef(false);
   const isPinchingRef = useRef(false);
   const zoomLevelRef = useRef(1);
@@ -253,8 +258,6 @@ export function TechTreeViewer() {
     const target = e.target as HTMLElement;
     if (target.closest('.node-tooltip')) return;
 
-    // Check if the click started on a node
-    dragStartedFromNode.current = target.closest('[data-node-id]') !== null;
     wasDragging.current = false;
 
     // Prevent text selection and node interaction
@@ -273,24 +276,34 @@ export function TechTreeViewer() {
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging || !horizontalScrollContainerRef.current) return;
 
-    // Mark that we've started dragging
+    const dx = dragStart.x - e.clientX;
+    const dy = dragStart.y - e.clientY;
+
+    // A pixel or two of jitter during a click isn't a drag; counting it as one
+    // made the click handler below swallow clicks on nodes.
+    if (!wasDragging.current && Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) return;
     wasDragging.current = true;
 
     // Prevent any interactions while dragging
     e.preventDefault();
-    
-    const dx = dragStart.x - e.clientX;
-    const dy = dragStart.y - e.clientY;
 
     horizontalScrollContainerRef.current.scrollLeft = dragStartScroll.left + dx;
     horizontalScrollContainerRef.current.scrollTop = dragStartScroll.top + dy;
   }, [isDragging, dragStart, dragStartScroll]);
 
-  const handleMouseUp = useCallback((e: MouseEvent) => {
+  const handleMouseUp = useCallback(() => {
     // Restore normal selection and cursor
     document.body.style.userSelect = '';
     document.body.style.cursor = '';
     setIsDragging(false);
+    // The click that follows this mouseup is swallowed below. If the drag ended
+    // outside the window no click follows, so clear the flag once this event
+    // has finished dispatching or it would swallow the next real click.
+    if (wasDragging.current) {
+      setTimeout(() => {
+        wasDragging.current = false;
+      }, 0);
+    }
   }, []);
 
   // Add effect to handle mouse events
@@ -350,7 +363,6 @@ export function TechTreeViewer() {
   const [highlightedDescendants, setHighlightedDescendants] = useState<Set<string>>(new Set());
   const currentNodesRef = useRef<TechNode[]>([]);
   const [isMobile, setIsMobile] = useState(false);
-  const [isIPad, setIsIPad] = useState(false);
   const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const treeShellRef = useRef<HTMLDivElement>(null);
   const scrollBoundsRef = useRef<HTMLDivElement>(null);
@@ -377,7 +389,11 @@ export function TechTreeViewer() {
   });
   const settingsControlsRef = useRef<HTMLDivElement>(null);
   const settingsMenuRef = useRef<HTMLDivElement>(null);
+  // Only navigates when there is a node param to drop: every router.replace is
+  // a soft navigation that hands out a new searchParams object.
   const clearSelectedNodeUrl = useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('node') && !params.has('initialNodeId')) return;
     router.replace('/', { scroll: false });
   }, [router]);
 
@@ -424,10 +440,6 @@ export function TechTreeViewer() {
     };
   }, []);
 
-  // Add refs for virtualization
-  const nodesContainerRef = useRef<HTMLDivElement>(null);
-  const connectionsContainerRef = useRef<SVGSVGElement>(null);
-  
   // Refs for search and filter box containers to manage wheel events
   const searchBoxContainerRef = useRef<HTMLDivElement>(null);
   const filterBoxContainerRef = useRef<HTMLDivElement>(null);
@@ -453,22 +465,6 @@ export function TechTreeViewer() {
   // Add cache refs for ancestors and descendants
   const descendantsCache = useRef<Map<string, Set<string>>>(new Map());
   const ancestorsCache = useRef<Map<string, Set<string>>>(new Map());
-
-  // Add this near the other state variables
-  const [cachedNodeIds, setCachedNodeIds] = useState<Set<string>>(new Set());
-  const cachedNodesTimeoutRef = useRef<{[key: string]: NodeJS.Timeout}>({});
-
-  // Calculate if the screen is small based on width
-  const isSmallScreen = useMemo(() => {
-    // Ensure width is positive before checking
-    return containerDimensions.width > 0 && containerDimensions.width < SMALL_SCREEN_WIDTH_THRESHOLD;
-  }, [containerDimensions.width]);
-
-  // Log the detected dimensions and screen size category for debugging
-  useEffect(() => {
-    if (isClient) { // Only log on the client
-    }
-  }, [containerDimensions.width, containerDimensions.height, isSmallScreen, isClient]);
 
   const minNodeYear = useMemo(() => {
     if (!data.nodes.length) return null;
@@ -698,118 +694,114 @@ export function TechTreeViewer() {
 
   // EFFECTS
 
+  // Set once data straight from the API (not the localStorage copy) is in
+  // place, so a deep link to a node the cached copy predates can wait for it.
+  const [hasFreshData, setHasFreshData] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  // Tooltip-only fields (dates' fine print, locations, sources, link notes),
+  // loaded after first paint from /api/inventions/details. Kept apart from
+  // `data` so their arrival doesn't invalidate everything derived from it.
+  const [techDetails, setTechDetails] = useState<TechTreeDetails | null>(null);
+
   // 3. Optimize initial data fetching
   useEffect(() => {
     let isMounted = true;
-    const controller = new AbortController();
 
+    const applyData = (payload: { nodes?: TechNode[]; links?: TechTreeLink[] }) => {
+      const validatedNodes = payload.nodes?.map((node: TechNode) => ({
+        ...node,
+        // Always kept: BrutalistNode decides whether to show it, so turning
+        // images on after loading with them off still finds the URL.
+        image: validateImageUrl(node.image)
+      })) || [];
+
+      const positionedNodes = calculateNodePositions(validatedNodes);
+
+      setData({
+        nodes: positionedNodes,
+        links: payload.links || []
+      });
+      currentNodesRef.current = positionedNodes;
+    };
+
+    const fetchJson = async (url: string) => {
+      const response = await fetchWithRetry(url, 3, 1000);
+      return response.json();
+    };
+
+    // The slim payload (~150KB compressed) is everything the tree needs to
+    // draw; the details (~240KB) are only read by tooltips, so they're
+    // requested once the tree is up rather than holding up first paint.
     const loadData = async () => {
-      let isMounted = true;
-      const controller = new AbortController();
-
       try {
         // In development, always fetch fresh data
         if (process.env.NODE_ENV === 'development') {
-          setIsLoading(true);
-          const detailResponse = await fetchWithRetry("/api/inventions?detail=true", 3, 1000);
-          const detailData = await detailResponse.json();
-
+          const freshData = await fetchJson("/api/inventions/slim");
           if (!isMounted) return;
-
-          const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
-            ...node,
-            // Only validate image URLs if we're showing images
-            image: showImages ? validateImageUrl(node.image) : undefined
-          })) || [];
-
-          const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
-
-          setData({ 
-            nodes: positionedDetailNodes, 
-            links: detailData.links || [] 
-          });
-          currentNodesRef.current = positionedDetailNodes;
-
-
+          applyData(freshData);
+          setHasFreshData(true);
           setIsLoading(false);
+
+          const freshDetails = await fetchJson("/api/inventions/details");
+          if (isMounted) setTechDetails(freshDetails);
           return;
         }
 
-        // In production, check cache first
+        // In production, render the cached copy straight away, then revalidate
+        // it: the cache lives for a day, and without this returning visitors
+        // didn't see techs added since their last visit.
         const cachedData = await cacheManager.get();
-        
-        if (cachedData?.data) {
-          // If we have detailed data in cache, use it
-          const validatedNodes = cachedData.data.nodes?.map((node: TechNode) => ({
-            ...node,
-            // Only validate image URLs if we're showing images
-            image: showImages ? validateImageUrl(node.image) : undefined
-          })) || [];
-          
-          const positionedDetailNodes = calculateNodePositions(validatedNodes);
-          
-          setData({ 
-            nodes: positionedDetailNodes, 
-            links: cachedData.data.links || []
-          });
-          currentNodesRef.current = positionedDetailNodes;
-
+        const cached = cachedData?.data;
+        if (cached && isMounted) {
+          applyData(cached);
+          if (cached.details) setTechDetails(cached.details);
           setIsLoading(false);
-          return; // Exit early if we have detailed cached data
         }
 
-        setIsLoading(true);
-
-        // If we don't have detailed cached data, fetch fresh data
-        const detailResponse = await fetchWithRetry("/api/inventions?detail=true", 3, 1000);
-        const detailData = await detailResponse.json();
-
+        const freshData = await fetchJson("/api/inventions/slim");
         if (!isMounted) return;
 
-        const validatedDetailNodes = detailData.nodes?.map((node: TechNode) => ({
-          ...node,
-          // Only validate image URLs if we're showing images
-          image: showImages ? validateImageUrl(node.image) : undefined
-        })) || [];
+        const cachedSlim = cached && { nodes: cached.nodes, links: cached.links };
+        if (!cachedSlim || JSON.stringify(cachedSlim) !== JSON.stringify(freshData)) {
+          applyData(freshData);
+        }
+        setHasFreshData(true);
+        setIsLoading(false);
 
-        const positionedDetailNodes = calculateNodePositions(validatedDetailNodes);
+        const freshDetails = await fetchJson("/api/inventions/details");
+        if (!isMounted) return;
 
-        setData({ 
-          nodes: positionedDetailNodes, 
-          links: detailData.links || [] 
-        });
-        currentNodesRef.current = positionedDetailNodes;
-
-        // Cache the detailed data
+        if (!cached?.details || JSON.stringify(cached.details) !== JSON.stringify(freshDetails)) {
+          setTechDetails(freshDetails);
+        }
         await cacheManager.set({
           version: CACHE_VERSION,
           timestamp: Date.now(),
-          data: detailData
+          data: { ...freshData, details: freshDetails }
         });
-
-
       } catch (error: unknown) {
-        if (error instanceof Error && error.name === 'AbortError') return;
         console.error('Error loading data:', error);
+        // A stale copy on screen beats an error; only report when there's
+        // nothing to show.
+        if (isMounted && currentNodesRef.current.length === 0) {
+          setLoadError(true);
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false);
         }
       }
-
-      return () => {
-        isMounted = false;
-        controller.abort();
-      };
     };
 
     loadData();
 
     return () => {
       isMounted = false;
-      controller.abort();
     };
-  }, []); // Changed from [calculateNodePositions]
+    // Runs once: calculateNodePositions is stable, and refetching on any
+    // other change would re-lay out the whole tree.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Make sure containerDimensions are initialized with window size
   useEffect(() => {
@@ -913,7 +905,6 @@ export function TechTreeViewer() {
         !!target.closest(".minimap") ||
         isTooltip;
       
-      // Only log on actual clicks that change selection state
       if (!isInteractive) {
         setSelectedNodeId(null);
         setSelectedLinkIndex(null);
@@ -921,14 +912,19 @@ export function TechTreeViewer() {
         setHoveredNode(null);
         setHoveredNodeId(null);
         setHoveredLinkIndex(null);
-        setHighlightedAncestors(new Set());
-        setHighlightedDescendants(new Set());
+        // Keep the same Set when already empty so a background click with
+        // nothing selected doesn't re-render the tree.
+        setHighlightedAncestors((prev) => (prev.size ? new Set() : prev));
+        setHighlightedDescendants((prev) => (prev.size ? new Set() : prev));
         clearSelectedNodeUrl();
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    // On click rather than mousedown, so pressing the background to start a
+    // drag-pan keeps the selection; clicks that end a drag are swallowed by
+    // the capture-phase handler above and never reach this one.
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [clearSelectedNodeUrl]);
 
   const handleNodeClick = useCallback(
@@ -993,6 +989,10 @@ export function TechTreeViewer() {
     },
     [clearSelectedNodeUrl, data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
   );
+  // For callbacks handed to memoized children, which must stay stable but
+  // still act on the current selection.
+  const handleNodeClickRef = useRef(handleNodeClick);
+  handleNodeClickRef.current = handleNodeClick;
 
   const handleJumpToNearest = useCallback(() => {
     if (!data.nodes.length || !horizontalScrollContainerRef.current || !containerDimensions.width || !containerDimensions.height) return;
@@ -1028,19 +1028,6 @@ export function TechTreeViewer() {
       });
     }
   }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition]);
-
-  // Helper function to check if a node is adjacent to selected node
-  const isAdjacentToSelected = useCallback(
-    (nodeId: string) => {
-      if (!selectedNodeId) return false;
-      return data.links.some(
-        (link) =>
-          (link.source === selectedNodeId && link.target === nodeId) ||
-          (link.target === selectedNodeId && link.source === nodeId)
-      );
-    },
-    [selectedNodeId, data.links]
-  );
 
   // Memoized helper functions
 
@@ -1133,7 +1120,7 @@ export function TechTreeViewer() {
     [data.links]
   );
 
-  const { zoomLevel: treeZoomLevel, isPinching, zoomRef, setZoomAtPoint } = usePinchZoom(
+  const { zoomLevel: treeZoomLevel, zoomRef, setZoomAtPoint } = usePinchZoom(
     horizontalScrollContainerRef,
     {
       enabled: isTouchDevice,
@@ -1184,12 +1171,12 @@ export function TechTreeViewer() {
       const targetZoom = Number(
         Math.min(
           MAX_TREE_ZOOM,
-          Math.max(MIN_TREE_ZOOM, treeZoomLevel + direction * DESKTOP_ZOOM_STEP)
+          Math.max(MIN_TREE_ZOOM, (zoomRef.current ?? 1) + direction * DESKTOP_ZOOM_STEP)
         ).toFixed(2)
       );
       updateZoom(targetZoom, anchor);
     },
-    [treeZoomLevel, updateZoom]
+    [updateZoom, zoomRef]
   );
 
   useLayoutEffect(() => {
@@ -1216,12 +1203,18 @@ export function TechTreeViewer() {
 
   const getNodeConnections = useCallback(
     (nodeId: string) => {
+      // The tooltip's info icons read details/detailsSource off each link
+      const withLinkDetails = (link: TechTreeLink): TechTreeLink => {
+        const linkDetails = techDetails?.links[linkDetailsKey(link)];
+        return linkDetails ? { ...link, ...linkDetails } : link;
+      };
+
       // First get all special connections
       const replaced = data.links
         .filter((link) => link.target === nodeId && link.type === "Obsolescence")
         .map((link) => ({
-          node: data.nodes.find((n) => n.id === link.source),
-          link
+          node: nodeById.get(link.source),
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         .sort((a, b) => a.node.year - b.node.year);
@@ -1229,8 +1222,8 @@ export function TechTreeViewer() {
       const replacedBy = data.links
         .filter((link) => link.source === nodeId && link.type === "Obsolescence")
         .map((link) => ({
-          node: data.nodes.find((n) => n.id === link.target),
-          link
+          node: nodeById.get(link.target),
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         .sort((a, b) => b.node.year - a.node.year);
@@ -1243,8 +1236,8 @@ export function TechTreeViewer() {
         .map((link) => {
           const otherNodeId = link.source === nodeId ? link.target : link.source;
           return {
-            node: data.nodes.find((n) => n.id === otherNodeId),
-            link
+            node: nodeById.get(otherNodeId),
+            link: withLinkDetails(link)
           };
         })
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
@@ -1258,8 +1251,8 @@ export function TechTreeViewer() {
         .map((link) => {
           const otherNodeId = link.source === nodeId ? link.target : link.source;
           return {
-            node: data.nodes.find((n) => n.id === otherNodeId),
-            link
+            node: nodeById.get(otherNodeId),
+            link: withLinkDetails(link)
           };
         })
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
@@ -1281,8 +1274,8 @@ export function TechTreeViewer() {
           !["Obsolescence", "Independently invented", "Concurrent development"].includes(link.type)
         )
         .map((link) => ({
-          node: data.nodes.find((n) => n.id === link.source),
-          link
+          node: nodeById.get(link.source),
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         // Sort ancestors by year (most recent first)
@@ -1295,8 +1288,8 @@ export function TechTreeViewer() {
           !["Obsolescence", "Independently invented", "Concurrent development"].includes(link.type)
         )
         .map((link) => ({
-          node: data.nodes.find((n) => n.id === link.target),
-          link
+          node: nodeById.get(link.target),
+          link: withLinkDetails(link)
         }))
         .filter((item): item is { node: TechNode; link: TechTreeLink } => item.node !== undefined)
         // Sort children by year (earliest first)
@@ -1311,7 +1304,7 @@ export function TechTreeViewer() {
         concurrentDevelopment
       };
     },
-    [data.links, data.nodes]
+    [data.links, nodeById, techDetails]
   );
 
   useEffect(() => {
@@ -1352,7 +1345,6 @@ export function TechTreeViewer() {
       {
         node: TechNode;
         searchableText: string;
-        fields: Set<string>;
       }
     >();
 
@@ -1365,30 +1357,18 @@ export function TechTreeViewer() {
         node.organizations?.join(" "),
         node.fields.join(" "),
         node.subfields?.join(" "),
-        node.details,
+        // Searchable once the details payload has arrived
+        techDetails?.nodes[node.id]?.details,
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
 
-      index.set(node.id, {
-        node,
-        searchableText,
-        fields: new Set([
-          "title:" + node.title.toLowerCase(),
-          ...(node.subtitle ? ["subtitle:" + node.subtitle.toLowerCase()] : []),
-          ...(node.inventors?.filter(inv => inv.toLowerCase() !== 'unknown').map((inv) => "inventor:" + inv.toLowerCase()) ||
-            []),
-          ...(node.organizations?.map((org) => "org:" + org.toLowerCase()) ||
-            []),
-          ...node.fields.map((field) => "field:" + field.toLowerCase()),
-          ...(node.subfields?.map((subfield) => "subfield:" + subfield.toLowerCase()) || []),
-        ]),
-      });
+      index.set(node.id, { node, searchableText });
     });
 
     return index;
-  }, [data.nodes]);
+  }, [data.nodes, techDetails]);
 
   // Replace the existing handleSearch with this optimized version
   const handleSearch = useCallback(
@@ -1426,26 +1406,26 @@ export function TechTreeViewer() {
         }
       }
 
-      // Continue with text search
-      for (const [nodeId, { node, searchableText, fields }] of searchIndex) {
-        if (results.length >= MAX_SEARCH_RESULTS) break;
+      const lowerTrimmedQuery = query.toLowerCase().trim();
+      const fullWordRegex = new RegExp(`\\b${escapeRegExp(lowerTrimmedQuery)}\\b`);
+
+      // Continue with text search. Every match is collected before ranking:
+      // the index is in chronological order, so stopping at the first
+      // MAX_SEARCH_RESULTS hits dropped strong matches from later centuries.
+      for (const [nodeId, { node, searchableText }] of searchIndex) {
         if (addedNodes.has(nodeId)) continue;
 
-        const matchesAllTerms = searchTerms.every(
-          (term) =>
-            searchableText.includes(term) ||
-            Array.from(fields).some((field) => field.includes(term))
+        const matchesAllTerms = searchTerms.every((term) =>
+          searchableText.includes(term)
         );
 
         if (matchesAllTerms) {
           let score = 0;
           const lowerTitle = node.title.toLowerCase();
           const lowerSubtitle = node.subtitle?.toLowerCase() || "";
-          const lowerTrimmedQuery = query.toLowerCase().trim();
 
           // Prioritize matches in title/subtitle with new scoring
-          const titleFullWordRegex = new RegExp(`\\b${escapeRegExp(lowerTrimmedQuery)}\\b`);
-          if (titleFullWordRegex.test(lowerTitle)) {
+          if (fullWordRegex.test(lowerTitle)) {
             score += 15; // Highest score for full word match
           } else if (lowerTitle.startsWith(lowerTrimmedQuery)) {
             score += 10; // Medium score for startsWith
@@ -1453,8 +1433,7 @@ export function TechTreeViewer() {
             score += 5; // Base score for includes
           }
 
-          const subtitleFullWordRegex = new RegExp(`\\b${escapeRegExp(lowerTrimmedQuery)}\\b`);
-          if (subtitleFullWordRegex.test(lowerSubtitle)) {
+          if (fullWordRegex.test(lowerSubtitle)) {
             score += 8; // Highest score for subtitle full word match
           } else if (lowerSubtitle.startsWith(lowerTrimmedQuery)) {
             score += 5; // Medium score for subtitle startsWith
@@ -1509,8 +1488,24 @@ export function TechTreeViewer() {
                 matchScore: 3,
               });
               addedNodes.add(nodeId);
+              continue;
             }
           }
+
+          // Every term matched somewhere, just not as one phrase in the title
+          // or a name: "engine steam", or a word only in the description.
+          // Still a hit, ranked below direct matches.
+          const allTermsInTitle = searchTerms.every((term) => lowerTitle.includes(term));
+          results.push({
+            type: "node",
+            node,
+            text: node.title,
+            subtext: `${formatYear(node.year)} ${
+              node.subtitle ? ` – ${node.subtitle}` : ""
+            }`,
+            matchScore: allTermsInTitle ? 4 : 1,
+          });
+          addedNodes.add(nodeId);
         }
       }
 
@@ -1587,18 +1582,6 @@ export function TechTreeViewer() {
     [filters.fields, filters.subfields, filters.countries, filters.cities]
   );
 
-  const isLinkVisible = useCallback(
-    (link: TechTreeLink): boolean => {
-      const sourceNode = data.nodes.find((n) => n.id === link.source);
-      const targetNode = data.nodes.find((n) => n.id === link.target);
-
-      if (!sourceNode || !targetNode) return false;
-
-      return isNodeFiltered(sourceNode) || isNodeFiltered(targetNode);
-    },
-    [data.nodes, isNodeFiltered]
-  );
-
   const getAvailableFilters = useMemo(
     () => ({
       fields: Array.from(new Set(data.nodes.flatMap((n) => n.fields))).sort(),
@@ -1668,23 +1651,32 @@ export function TechTreeViewer() {
 
   // Effect to handle initial node selection from URL parameter
   const hasScrolledToInitialNode = useRef(false);
+  const initialNodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     // Only run once after data is loaded and if we haven't scrolled yet
-    if (!isLoading && data.nodes.length > 0 && !hasScrolledToInitialNode.current) {
-      hasScrolledToInitialNode.current = true; // Mark as done immediately to prevent re-runs
-      // Support both ?node= (new) and ?initialNodeId= (legacy) params
-      const nodeId = searchParams.get('node') || searchParams.get('initialNodeId');
-      if (nodeId) {
-        const nodeToSelect = data.nodes.find(node => node.id === nodeId);
-        if (nodeToSelect) {
-          // Use a slight delay to ensure the layout is stable before scrolling
-          setTimeout(() => {
-             handleNodeClick(nodeToSelect.title);
-          }, 100); // 100ms delay, adjust if needed
-        }
-      }
-    }
-  }, [isLoading, data.nodes, searchParams, handleNodeClick]);
+    if (isLoading || data.nodes.length === 0 || hasScrolledToInitialNode.current) return;
+
+    // Support both ?node= (new) and ?initialNodeId= (legacy) params
+    const nodeId = searchParams.get('node') || searchParams.get('initialNodeId');
+    const nodeToSelect = nodeId ? nodeById.get(nodeId) : undefined;
+
+    // A shared link can point at a tech newer than the cached copy on screen;
+    // wait for the fresh data before giving up on it.
+    if (nodeId && !nodeToSelect && !hasFreshData) return;
+    hasScrolledToInitialNode.current = true; // Mark as done to prevent re-runs
+    if (!nodeToSelect) return;
+
+    // Use a slight delay to ensure the layout is stable before scrolling
+    initialNodeTimerRef.current = setTimeout(() => {
+      handleNodeClickRef.current(nodeToSelect.title);
+    }, 100);
+  }, [isLoading, data.nodes, nodeById, searchParams, hasFreshData]);
+
+  useEffect(() => {
+    return () => {
+      if (initialNodeTimerRef.current) clearTimeout(initialNodeTimerRef.current);
+    };
+  }, []);
 
   // On mobile we go straight to selection, so hover state is desktop-only
   const handleNodeHover = useCallback(
@@ -1696,27 +1688,6 @@ export function TechTreeViewer() {
       }
     },
     [isMobile]
-  );
-
-  // Add this helper function to get nodes connected by a selected link
-  const getSelectedConnectionNodes = useCallback(() => {
-    if (selectedLinkKey === null) return new Set<string>();
-    const [source, target] = selectedLinkKey.split('-');
-    return new Set([source, target]);
-  }, [selectedLinkKey]);
-
-  // Add this helper function near your other helper functions
-  const getAdjacentNodeIds = useCallback(
-    (nodeId: string | null) => {
-      if (!nodeId) return new Set<string>();
-
-      return new Set(
-        data.links
-          .filter((link) => link.source === nodeId || link.target === nodeId)
-          .map((link) => (link.source === nodeId ? link.target : link.source))
-      );
-    },
-    [data.links]
   );
 
   // Lineage follows "built upon" style edges only: sideways relationships say
@@ -1810,7 +1781,8 @@ export function TechTreeViewer() {
     [childrenByNode, collectReachable]
   );
 
-  // Remove unused touch handlers
+  // Keep arrow keys from scrolling the page while the pointer is over the
+  // timeline or minimap
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Get the element under the mouse pointer
@@ -1848,12 +1820,7 @@ export function TechTreeViewer() {
   // Add this effect to detect mobile devices
   useEffect(() => {
     const checkMobile = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const isMobileDevice = width <= SMALL_SCREEN_WIDTH_THRESHOLD;
-      const isIPadDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      setIsMobile(isMobileDevice);
-      setIsIPad(isIPadDevice);
+      setIsMobile(window.innerWidth <= SMALL_SCREEN_WIDTH_THRESHOLD);
     };
     
     checkMobile();
@@ -1864,6 +1831,7 @@ export function TechTreeViewer() {
   // Handle Escape key to deselect and clear URL
   const handleEscapeKey = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
+      setShowSettingsMenu(false);
       // Clear all selections and highlights
       setSelectedNodeId(null);
       setSelectedLinkIndex(null);
@@ -1871,8 +1839,8 @@ export function TechTreeViewer() {
       setHoveredNode(null);
       setHoveredNodeId(null);
       setHoveredLinkIndex(null);
-      setHighlightedAncestors(new Set());
-      setHighlightedDescendants(new Set());
+      setHighlightedAncestors((prev) => (prev.size ? new Set() : prev));
+      setHighlightedDescendants((prev) => (prev.size ? new Set() : prev));
       // Clear URL param
       clearSelectedNodeUrl();
     }
@@ -1901,6 +1869,12 @@ export function TechTreeViewer() {
     }
   }, [containerDimensions.width, containerDimensions.height, treeZoomLevel]);
 
+  // How far past the screen edge nodes are still rendered, in tree px
+  const nodeViewportBuffer = Math.min(
+    Math.min(containerDimensions.width / 3, 350) / treeZoomLevel,
+    MAX_NODE_VIEWPORT_BUFFER
+  );
+
   // Simplified isNodeInViewport function
   const isNodeInViewport = useCallback(
     (node: TechNode) => {
@@ -1909,16 +1883,11 @@ export function TechTreeViewer() {
         return false;
       }
 
-      // Use a reasonable buffer for better user experience
-      const buffer = Math.min(
-        Math.min(window.innerWidth / 3, 350) / treeZoomLevel,
-        MAX_NODE_VIEWPORT_BUFFER
-      );
       const bufferedViewport = {
-        left: deferredViewportState.left - buffer,
-        right: deferredViewportState.right + buffer,
-        top: deferredViewportState.top - buffer,
-        bottom: deferredViewportState.bottom + buffer,
+        left: deferredViewportState.left - nodeViewportBuffer,
+        right: deferredViewportState.right + nodeViewportBuffer,
+        top: deferredViewportState.top - nodeViewportBuffer,
+        bottom: deferredViewportState.bottom + nodeViewportBuffer,
       };
 
       // Simple bounds check
@@ -1931,7 +1900,7 @@ export function TechTreeViewer() {
       
       return isVisible;
     },
-    [deferredViewportState, scrollPosition, treeZoomLevel]
+    [deferredViewportState, nodeViewportBuffer]
   );
 
   // Add strict visibility check with minimal buffer
@@ -2073,20 +2042,25 @@ export function TechTreeViewer() {
     [deferredViewportState, nodeById, treeZoomLevel]
   );
 
-  // Add debounced viewport update
+  // Throttled rather than debounced: a debounce restarted on every scroll
+  // event never fired during a continuous pan or momentum scroll, so newly
+  // revealed areas stayed blank until scrolling stopped.
   const viewportUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const VIEWPORT_UPDATE_DEBOUNCE = 50; // ms
+  const pendingViewportRef = useRef<typeof visibleViewport | null>(null);
+  const VIEWPORT_UPDATE_INTERVAL = 80; // ms
 
-  const debouncedViewportUpdate = useCallback((newViewport: typeof visibleViewport) => {
-    if (viewportUpdateTimeoutRef.current) {
-      clearTimeout(viewportUpdateTimeoutRef.current);
-    }
+  const throttledViewportUpdate = useCallback((newViewport: typeof visibleViewport) => {
+    pendingViewportRef.current = newViewport;
+    if (viewportUpdateTimeoutRef.current) return;
 
     viewportUpdateTimeoutRef.current = setTimeout(() => {
-      setVisibleViewport(newViewport);
+      viewportUpdateTimeoutRef.current = null;
+      const latest = pendingViewportRef.current;
+      if (!latest) return;
+      setVisibleViewport(latest);
       // Also update the deferred viewport state for visibility calculations
-      setDeferredViewport(newViewport);
-    }, VIEWPORT_UPDATE_DEBOUNCE);
+      setDeferredViewport(latest);
+    }, VIEWPORT_UPDATE_INTERVAL);
   }, []);
 
   // Modify the viewport update handler
@@ -2098,8 +2072,8 @@ export function TechTreeViewer() {
       bottom: scrollTop / treeZoomLevel + containerDimensions.height / treeZoomLevel
     };
 
-    debouncedViewportUpdate(newViewport);
-  }, [containerDimensions.width, containerDimensions.height, debouncedViewportUpdate, treeZoomLevel]);
+    throttledViewportUpdate(newViewport);
+  }, [containerDimensions.width, containerDimensions.height, throttledViewportUpdate, treeZoomLevel]);
 
   // Add cleanup for the debounce timeout
   useEffect(() => {
@@ -2160,7 +2134,7 @@ export function TechTreeViewer() {
   }, [containerDimensions, updateViewportState]);
 
   useEffect(() => {
-    if (isTouchDevice) return;
+    if (!hasFinePointer) return;
 
     const container = horizontalScrollContainerRef.current;
     if (!container) return;
@@ -2168,10 +2142,12 @@ export function TechTreeViewer() {
     const handleWheelZoom = (event: WheelEvent) => {
       if (isPinchingRef.current || !(event.ctrlKey || event.metaKey)) return;
 
+      // Stop the browser zooming the whole page either way; it breaks the
+      // full-screen layout.
+      event.preventDefault();
+
       const target = event.target as HTMLElement | null;
       if (target?.closest("[data-no-tree-zoom='true']")) return;
-
-      event.preventDefault();
 
       const rect = container.getBoundingClientRect();
       const anchor = {
@@ -2181,7 +2157,9 @@ export function TechTreeViewer() {
       const nextZoom = Number(
         Math.min(
           MAX_TREE_ZOOM,
-          Math.max(MIN_TREE_ZOOM, treeZoomLevel * Math.exp(-event.deltaY * 0.0025))
+          // zoomRef, not state: a trackpad pinch sends many wheel events per
+          // render, and compounding from stale state dropped zoom steps.
+          Math.max(MIN_TREE_ZOOM, (zoomRef.current ?? 1) * Math.exp(-event.deltaY * 0.0025))
         ).toFixed(3)
       );
 
@@ -2193,10 +2171,10 @@ export function TechTreeViewer() {
     return () => {
       container.removeEventListener("wheel", handleWheelZoom);
     };
-  }, [isTouchDevice, treeZoomLevel, updateZoom]);
+  }, [hasFinePointer, updateZoom, zoomRef]);
 
   useEffect(() => {
-    if (isTouchDevice) return;
+    if (!hasFinePointer) return;
 
     const handleKeyboardZoom = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -2225,7 +2203,7 @@ export function TechTreeViewer() {
     return () => {
       window.removeEventListener("keydown", handleKeyboardZoom);
     };
-  }, [getViewportAnchor, isTouchDevice, stepZoom, updateZoom]);
+  }, [getViewportAnchor, hasFinePointer, stepZoom, updateZoom]);
 
   // Add this memoized function for calculating node opacity
   const getNodeOpacity = useCallback(
@@ -2233,28 +2211,28 @@ export function TechTreeViewer() {
       // If a node is selected
       if (selectedNodeId) {
         if (node.id === selectedNodeId) return 1;
-        if (isAdjacentToSelected(node.id)) return 1;
+        if (adjacentNodeIds.has(node.id)) return 1;
         if (highlightedAncestors.has(node.id)) return 1;
         if (highlightedDescendants.has(node.id)) return 1;
         return 0.2;
       }
       // If a link is selected
-      if (selectedLinkIndex !== null) {
+      if (selectedLinkKey !== null) {
         return isNodeConnectedToSelectedLink(node.id) ? 1 : 0.2;
       }
-      // If filters are applied
-      if (filters.fields.size || filters.subfields.size || filters.countries.size || filters.cities.size) {
-        return isNodeFiltered(node) ? 1 : 0.2;
+      // If filters are applied (filteredNodeIds is empty when none are)
+      if (filteredNodeIds.size > 0) {
+        return filteredNodeIds.has(node.id) ? 1 : 0.2;
       }
       // Default state - fully visible
       return 1;
     },
-    [selectedNodeId, selectedLinkIndex, filters, isAdjacentToSelected, isNodeConnectedToSelectedLink, isNodeFiltered, highlightedAncestors, highlightedDescendants]
+    [selectedNodeId, selectedLinkKey, filteredNodeIds, adjacentNodeIds, isNodeConnectedToSelectedLink, highlightedAncestors, highlightedDescendants]
   );
 
   // Add this memoized function for calculating link opacity
   const getLinkOpacity = useCallback(
-    (link: TechTreeLink, index: number) => {
+    (link: TechTreeLink) => {
       // If a node is selected
       if (selectedNodeId) {
         // If this is a connection between highlighted nodes
@@ -2276,19 +2254,15 @@ export function TechTreeViewer() {
       if (selectedLinkKey !== null) {
         return getLinkKey(link) === selectedLinkKey ? 1 : 0.2;
       }
-      // If filters are applied
-      if (filters.fields.size || filters.subfields.size || filters.countries.size || filters.cities.size) {
-        return isLinkVisible(link) ? 1 : 0.2;
+      // If filters are applied (filteredNodeIds is empty when none are)
+      if (filteredNodeIds.size > 0) {
+        return filteredNodeIds.has(link.source) || filteredNodeIds.has(link.target) ? 1 : 0.2;
       }
       return 1;
     },
-    [selectedNodeId, selectedLinkKey, filters, highlightedAncestors, highlightedDescendants, isLinkVisible, getLinkKey]
+    [selectedNodeId, selectedLinkKey, filteredNodeIds, highlightedAncestors, highlightedDescendants, getLinkKey]
   );
 
-  // Add these near other state/ref declarations
-  const lastCalculationTime = useRef(0);
-  const lastCalculationFrame = useRef(0);
-  const calculationTrigger = useRef<'selection' | 'highlight' | 'filter' | 'viewport' | 'cache' | 'initial' | 'unknown'>('initial');
   const previousCalculation = useRef<TechTreeVisibleElements>({
     visibleNodes: [],
     visibleConnections: [],
@@ -2296,25 +2270,11 @@ export function TechTreeViewer() {
     stickyVisibleConnections: 0,
     invisibleViewportConnections: 0
   });
-  const lastSelectionState = useRef({ nodeId: null as string | null, linkIndex: null as number | null });
-
-  // Update selection trigger to be more precise
-  useEffect(() => {
-    // Only trigger if selection actually changed
-    if (selectedNodeId !== lastSelectionState.current.nodeId || 
-        selectedLinkIndex !== lastSelectionState.current.linkIndex) {
-      calculationTrigger.current = 'selection';
-      lastSelectionState.current = { nodeId: selectedNodeId, linkIndex: selectedLinkIndex };
-      
-      // Force a new frame for selection changes
-      lastCalculationFrame.current = -1;
-    }
-  }, [selectedNodeId, selectedLinkIndex]);
-
   // Add these near the top of the component with other refs
   const connectionLookupCache = useRef<Map<string, Set<number>>>(new Map());
-  const nodeConnectionCache = useRef<Map<string, Set<string>>>(new Map());
   const lastFrameData = useRef<{
+    nodes: TechNode[];
+    links: TechTreeLink[];
     selectedNodeId: string | null;
     selectedLinkIndex: number | null;
     highlightedAncestors: string;
@@ -2353,25 +2313,6 @@ export function TechTreeViewer() {
     return connections;
   }, [data.links]);
 
-  // Add this helper function to get connected nodes
-  const getConnectedNodes = useCallback((nodeId: string): Set<string> => {
-    if (nodeConnectionCache.current.has(nodeId)) {
-      return nodeConnectionCache.current.get(nodeId)!;
-    }
-    
-    const connectedNodes = new Set<string>();
-    data.links.forEach(link => {
-      if (link.source === nodeId) {
-        connectedNodes.add(link.target);
-      } else if (link.target === nodeId) {
-        connectedNodes.add(link.source);
-      }
-    });
-    
-    nodeConnectionCache.current.set(nodeId, connectedNodes);
-    return connectedNodes;
-  }, [data.links]);
-
   // Create stable dependency values for set comparisons
   const stableHighlightedAncestorsString = useMemo(
     () => Array.from(highlightedAncestors).sort().join(','),
@@ -2390,7 +2331,6 @@ export function TechTreeViewer() {
 
   // Update visibleElements memo with performance logging
   const visibleElements = useMemo<TechTreeVisibleElements>(() => {
-    const startTime = performance.now();
     performanceMarks.start('visibleElements');
 
     const stableViewport = {
@@ -2401,6 +2341,8 @@ export function TechTreeViewer() {
     };
 
     const currentFrameData = {
+      nodes: data.nodes,
+      links: data.links,
       selectedNodeId,
       selectedLinkIndex,
       highlightedAncestors: stableHighlightedAncestorsString,
@@ -2410,7 +2352,12 @@ export function TechTreeViewer() {
       connectionMode // Add connectionMode to frame data
     };
 
+    // Same inputs as last time: hand back the previous result rather than
+    // re-scanning every node and link. This memo re-runs on each viewport
+    // update, but the rounded viewport only changes every 100px.
     if (lastFrameData.current &&
+        currentFrameData.nodes === lastFrameData.current.nodes &&
+        currentFrameData.links === lastFrameData.current.links &&
         currentFrameData.selectedNodeId === lastFrameData.current.selectedNodeId &&
         currentFrameData.selectedLinkIndex === lastFrameData.current.selectedLinkIndex &&
         currentFrameData.highlightedAncestors === lastFrameData.current.highlightedAncestors &&
@@ -2420,16 +2367,13 @@ export function TechTreeViewer() {
         currentFrameData.viewport.right === lastFrameData.current.viewport.right &&
         currentFrameData.viewport.top === lastFrameData.current.viewport.top &&
         currentFrameData.viewport.bottom === lastFrameData.current.viewport.bottom &&
-        currentFrameData.connectionMode === lastFrameData.current.connectionMode && // Add connectionMode check
-        previousCalculation.current.visibleNodes.length > 0 &&
-        previousCalculation.current.visibleConnections.length > 0) {
+        currentFrameData.connectionMode === lastFrameData.current.connectionMode) {
       memoEffectiveness.track(true);
       performanceMarks.end('visibleElements');
       return previousCalculation.current;
     }
 
     memoEffectiveness.track(false);
-    lastCalculationTime.current = startTime;
     lastFrameData.current = currentFrameData;
 
     // --- Phase 1: Determine baseVisibleNodeIds (common start for mobile/desktop) ---
@@ -2462,33 +2406,10 @@ export function TechTreeViewer() {
     highlightedAncestors.forEach(nodeId => addRequiredNodeToSet(nodeId, baseVisibleNodeIds));
     highlightedDescendants.forEach(nodeId => addRequiredNodeToSet(nodeId, baseVisibleNodeIds));
 
-    if (filteredNodeIds.size > 0) {
-      data.nodes.forEach(node => {
-        if (filteredNodeIds.has(node.id) && isNodeInViewport(node)) {
-          if (!baseVisibleNodeIds.has(node.id)) baseVisibleNodeIds.add(node.id);
-        }
-      });
-    }
-
     data.nodes.forEach(node => {
       if (isNodeInViewport(node)) {
-        if (!baseVisibleNodeIds.has(node.id)) baseVisibleNodeIds.add(node.id);
+        baseVisibleNodeIds.add(node.id);
       }
-    });
-
-    const extendedNodeViewport = {
-      left: stableViewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      right: stableViewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      top: stableViewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-      bottom: stableViewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
-    };
-    cachedNodeIds.forEach(nodeId => {
-        const node = nodeById.get(nodeId);
-        if (node && node.x !== undefined && node.y !== undefined &&
-            node.x >= extendedNodeViewport.left && node.x <= extendedNodeViewport.right &&
-            node.y >= extendedNodeViewport.top && node.y <= extendedNodeViewport.bottom) {
-            if (!baseVisibleNodeIds.has(node.id)) baseVisibleNodeIds.add(node.id);
-        }
     });
 
     const finalVisibleNodeIds = new Set<string>(baseVisibleNodeIds);
@@ -2549,12 +2470,15 @@ export function TechTreeViewer() {
           }
       });
 
-      // Third pass: Count invisible connections in viewport
-      data.links.forEach((link, index) => {
-          if (!currentFrameDrivenConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
-              invisibleViewportConnections++;
-          }
-      });
+      // Third pass: Count invisible connections in viewport. Only the dev
+      // debug overlay reads this, and it's a bezier check per link.
+      if (process.env.NODE_ENV === 'development') {
+        data.links.forEach((link, index) => {
+            if (!currentFrameDrivenConnectionIndices.has(index) && isConnectionInViewport(link, index)) {
+                invisibleViewportConnections++;
+            }
+        });
+      }
     }
     
     const newVisibleNodes = data.nodes.filter(node => finalVisibleNodeIds.has(node.id));
@@ -2572,18 +2496,21 @@ export function TechTreeViewer() {
     previousCalculation.current = result;
 
     return result;
+    // connectionResetToken isn't read in the body; bumping it is how
+    // resetVisibleConnections forces a recalculation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     data.nodes, data.links, selectedNodeId, selectedLinkIndex, deferredViewportState,
-    isNodeInViewport, isConnectionInViewport, cachedNodeIds, getNodeConnectionIndices,
-    linkIndexByIdentity, nodeById, stableHighlightedAncestorsString, stableHighlightedDescendantsString,
-    stableFilteredNodeIdsString, filters, connectionMode,
+    isNodeInViewport, isConnectionInViewport, getNodeConnectionIndices,
+    linkIndexByIdentity, stableHighlightedAncestorsString, stableHighlightedDescendantsString,
+    stableFilteredNodeIdsString, connectionMode, selectedLinkKey, getLinkKey,
+    filteredNodeIds, highlightedAncestors, highlightedDescendants,
     connectionResetToken // Bumped by resetVisibleConnections to drop sticky connections
   ]);
 
   // Add cleanup for caches when data changes
   useEffect(() => {
     connectionLookupCache.current.clear();
-    nodeConnectionCache.current.clear();
     lastFrameData.current = null;
   }, [data.links]);
 
@@ -2596,115 +2523,14 @@ export function TechTreeViewer() {
     invisibleViewportConnections
   } = visibleElements;
 
-  // Remove the old memos
-  // const visibleNodes = useMemo(...)
-  // const visibleConnections = useMemo(...)
-
-  // Add viewport change detection for cache management
-  const lastViewportForCacheRef = useRef<{
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-  } | null>(null);
-  const VIEWPORT_CHANGE_THRESHOLD = 100; // Only update cache if viewport changed by more than 100px
-
-  const hasViewportSignificantlyChanged = (newViewport: typeof visibleViewport): boolean => {
-    if (!lastViewportForCacheRef.current) return true;
-    
-    const old = lastViewportForCacheRef.current;
-    return Math.abs(newViewport.left - old.left) > VIEWPORT_CHANGE_THRESHOLD ||
-           Math.abs(newViewport.right - old.right) > VIEWPORT_CHANGE_THRESHOLD ||
-           Math.abs(newViewport.top - old.top) > VIEWPORT_CHANGE_THRESHOLD ||
-           Math.abs(newViewport.bottom - old.bottom) > VIEWPORT_CHANGE_THRESHOLD;
-  };
-
-  // Add effect to manage the cache of nodes and connections
-  useEffect(() => {
-    // Skip if viewport hasn't significantly changed
-    if (!hasViewportSignificantlyChanged(visibleViewport)) {
-      return;
-    }
-
-    const CACHE_VIEWPORT_BUFFER = 2000; // Larger buffer for cache than for visibility
-    const extendedViewport = {
-      left: visibleViewport.left - CACHE_VIEWPORT_BUFFER,
-      right: visibleViewport.right + CACHE_VIEWPORT_BUFFER,
-      top: visibleViewport.top - CACHE_VIEWPORT_BUFFER,
-      bottom: visibleViewport.bottom + CACHE_VIEWPORT_BUFFER
-    };
-    
-    // Update the last viewport reference
-    lastViewportForCacheRef.current = { ...visibleViewport };
-    
-    // Get nodes that should be cached
-    const nodesToCache = new Set<string>();
-    
-    // Add nodes in extended viewport
-    data.nodes.forEach(node => {
-      if (node.x !== undefined && 
-          node.y !== undefined &&
-          node.x >= extendedViewport.left &&
-          node.x <= extendedViewport.right &&
-          node.y >= extendedViewport.top &&
-          node.y <= extendedViewport.bottom) {
-        nodesToCache.add(node.id);
-      }
-    });
-    
-    // Add selected node, its connections, and connected nodes
-    if (selectedNodeId) {
-      nodesToCache.add(selectedNodeId);
-      getNodeConnectionIndices(selectedNodeId).forEach(index => {
-        const link = data.links[index];
-        nodesToCache.add(link.source);
-        nodesToCache.add(link.target);
-      });
-    }
-    
-    // Add highlighted nodes and their connections
-    const addHighlightedNode = (nodeId: string) => {
-      nodesToCache.add(nodeId);
-      getNodeConnectionIndices(nodeId).forEach(index => {
-        const link = data.links[index];
-        nodesToCache.add(link.source);
-        nodesToCache.add(link.target);
-      });
-    };
-    
-    highlightedAncestors.forEach(addHighlightedNode);
-    highlightedDescendants.forEach(addHighlightedNode);
-    
-    // Check if we need to update the cache
-    const hasNodeChanges = cachedNodeIds.size !== nodesToCache.size || 
-      Array.from(nodesToCache).some(id => !cachedNodeIds.has(id));
-    // Only update if there are actual changes
-    if (hasNodeChanges) {
-      requestAnimationFrame(() => {
-        setCachedNodeIds(new Set(nodesToCache));
-      });
-    }
-  }, [
-    visibleViewport,
-    data.nodes,
-    data.links,
-    cachedNodeIds,
-    selectedNodeId,
-    getNodeConnectionIndices,
-    highlightedAncestors,
-    highlightedDescendants
-  ]);
-
   // Effect to manage wheel events on search and filter boxes
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       const targetElement = e.target as HTMLElement;
       const isScrollingList = targetElement.closest('.scrollable-results-list');
 
-
       if (!isScrollingList) {
-        e.preventDefault(); 
-      } else {
+        e.preventDefault();
       }
     };
 
@@ -2712,16 +2538,13 @@ export function TechTreeViewer() {
       const targetElement = e.target as HTMLElement;
       const isTouchingScrollableList = targetElement.closest('.scrollable-results-list');
 
-
       if (!isTouchingScrollableList) {
         e.preventDefault();
-      } else {
       }
     };
 
     const searchBoxEl = searchBoxContainerRef.current;
     const filterBoxEl = filterBoxContainerRef.current;
-
 
     if (isClient && !isLoading) {
       if (searchBoxEl) {
@@ -2746,7 +2569,9 @@ export function TechTreeViewer() {
     };
   }, [isClient, isLoading]); // Updated dependency array
 
-  // Effect to disable scrolling on the jump button
+  // Effect to disable scrolling on the jump button. It is shown exactly when
+  // no node is strictly in view, so re-attach whenever that flips.
+  const isJumpButtonShown = !isLoading && strictlyVisibleNodes.length === 0 && data.nodes.length > 0;
   useEffect(() => {
     const jumpButtonElement = jumpButtonRef.current;
 
@@ -2766,7 +2591,120 @@ export function TechTreeViewer() {
         jumpButtonElement.removeEventListener('touchmove', preventScroll);
       }
     };
-  }, [isLoading, visibleNodes.length, data.nodes.length]); // Rerun when button visibility might change
+  }, [isJumpButtonShown]);
+
+  // Connection handlers take the link's index into data.links, so one stable
+  // function serves every connection and the memoized CurvedConnections only
+  // re-render when their own props change. (Indexes into the visible list
+  // were wrong as soon as that list was recomputed.)
+  const handleConnectionHover = useCallback((linkIndex: number | null) => {
+    setHoveredLinkIndex(linkIndex);
+  }, []);
+
+  const handleConnectionSelect = useCallback(
+    (linkIndex: number) => {
+      const link = data.links[linkIndex];
+      if (!link) return;
+      setSelectedLinkKey(getLinkKey(link));
+      setSelectedLinkIndex(linkIndex);
+      setSelectedNodeId(null);
+      // A lineage highlight belongs to the node selection being replaced
+      setHighlightedAncestors((prev) => (prev.size ? new Set() : prev));
+      setHighlightedDescendants((prev) => (prev.size ? new Set() : prev));
+      clearSelectedNodeUrl();
+    },
+    [data.links, getLinkKey, clearSelectedNodeUrl]
+  );
+
+  const handleConnectionDeselect = useCallback(() => {
+    setSelectedLinkKey(null);
+    setSelectedLinkIndex(null);
+    setHoveredLinkIndex(null);
+  }, []);
+
+  const handleConnectionNodeClick = useCallback((title: string) => {
+    handleNodeClickRef.current(title);
+  }, []);
+
+  // Same for nodes: handlers keyed by node, read through refs, so a resize or
+  // selection change doesn't leave memoized nodes holding stale closures.
+  const handleNodeHoverRef = useRef(handleNodeHover);
+  handleNodeHoverRef.current = handleNodeHover;
+  const isMobileRef = useRef(isMobile);
+  isMobileRef.current = isMobile;
+  const selectedNodeIdRef = useRef(selectedNodeId);
+  selectedNodeIdRef.current = selectedNodeId;
+
+  const nodeByIdRef = useRef(nodeById);
+  nodeByIdRef.current = nodeById;
+
+  const handleNodeElementClick = useCallback((nodeId: string) => {
+    const node = nodeByIdRef.current.get(nodeId);
+    if (node) handleNodeClickRef.current(node.title);
+  }, []);
+
+  const handleNodeElementEnter = useCallback((nodeId: string) => {
+    const node = nodeByIdRef.current.get(nodeId);
+    if (node && nodeId !== selectedNodeIdRef.current) {
+      handleNodeHoverRef.current(node);
+    }
+  }, []);
+
+  const handleNodeElementLeave = useCallback((nodeId: string) => {
+    if (!isMobileRef.current && nodeId !== selectedNodeIdRef.current) {
+      setHoveredNode(null);
+      setHoveredNodeId(null);
+    }
+  }, []);
+
+  // ~565 labels, each positioned by walking the timeline intervals; only the
+  // zoom level and the year range change them, not scrolling.
+  const timelineLabels = useMemo(
+    () =>
+      getTimelineYears(TIMELINE_MIN_YEAR, timelineMaxYear).map((year) => (
+        <div
+          key={year}
+          className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
+          style={{
+            left: `calc(${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px * var(--tree-zoom))`,
+            transform: "translateX(-50%)",
+            top: "16px",
+            fontSize:
+              treeZoomLevel <= 0.12
+                ? "9px"
+                : treeZoomLevel <= 0.4
+                  ? "11px"
+                  : undefined,
+            textDecorationLine: "none",
+            WebkitTextDecorationLine: "none",
+            textDecoration: "none",
+            WebkitUserSelect: "none",
+            userSelect: "none",
+            WebkitTouchCallout: "none",
+          }}
+        >
+          <span style={{ pointerEvents: "none", display: "inline-block" }}>
+            {year < 0 && treeZoomLevel <= 0.4 ? (
+              <>
+                <span style={{ display: "block" }}>{Math.abs(year)}</span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: treeZoomLevel <= 0.12 ? "8px" : "9px",
+                    lineHeight: 1,
+                  }}
+                >
+                  BCE
+                </span>
+              </>
+            ) : (
+              formatYear(year)
+            )}
+          </span>
+        </div>
+      )),
+    [timelineMaxYear, treeZoomLevel, formatYear]
+  );
 
   // 4. Optimize initial render
   if (!isClient) {
@@ -2786,36 +2724,28 @@ export function TechTreeViewer() {
           style={{ zIndex: 1000 }}
         >
           <Suspense fallback={null}>
-            <Suspense fallback={null}>
-              {isClient && (
-                <div 
-                  ref={searchBoxContainerRef}
-                  className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30"
-                  style={{ overscrollBehavior: 'contain' }} // Removed overflow: 'hidden'
-                >
-                  <DynamicSearchBox
-                    onSearch={handleSearch}
-                    results={searchResults}
-                    onSelectResult={handleSelectResult}
-                  />
-                </div>
-              )}
-            </Suspense>
-            <Suspense fallback={null}>
-              {isClient && (
-                <div 
-                  ref={filterBoxContainerRef}
-                  className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20"
-                  style={{ overscrollBehavior: 'contain' }} // Removed overflow: 'hidden'
-                >
-                  <DynamicFilterBox
-                    filters={filters}
-                    onFilterChange={setFilters}
-                    availableFilters={getAvailableFilters}
-                  />
-                </div>
-              )}
-            </Suspense>
+            <div
+              ref={searchBoxContainerRef}
+              className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-30"
+              style={{ overscrollBehavior: 'contain' }}
+            >
+              <DynamicSearchBox
+                onSearch={handleSearch}
+                results={searchResults}
+                onSelectResult={handleSelectResult}
+              />
+            </div>
+            <div
+              ref={filterBoxContainerRef}
+              className="bg-transparent md:bg-white/80 md:backdrop-blur md:border md:border-black md:rounded-none md:shadow-md md:p-4 relative z-20"
+              style={{ overscrollBehavior: 'contain' }}
+            >
+              <DynamicFilterBox
+                filters={filters}
+                onFilterChange={setFilters}
+                availableFilters={getAvailableFilters}
+              />
+            </div>
           </Suspense>
         </div>
       )}
@@ -2859,58 +2789,9 @@ export function TechTreeViewer() {
               touchAction: "none",
             }}
           >
-            {(() => {
-              const timelineYears = getTimelineYears(TIMELINE_MIN_YEAR, timelineMaxYear);
-
-              return (
-                <div className="relative" style={{ width: "100%", height: "100%" }}>
-                  {timelineYears.map((year) => {
-                    return (
-                      <div
-                        key={year}
-                        className="absolute text-sm text-gray-600 font-mono whitespace-nowrap"
-                        style={{
-                          left: `calc(${calculateXPosition(year, TIMELINE_MIN_YEAR, PADDING, YEAR_WIDTH)}px * var(--tree-zoom))`,
-                          transform: "translateX(-50%)",
-                          top: isMobile ? "16px" : "16px",
-                          fontSize:
-                            treeZoomLevel <= 0.12
-                              ? "9px"
-                              : treeZoomLevel <= 0.4
-                                ? "11px"
-                                : undefined,
-                          textDecorationLine: "none",
-                          WebkitTextDecorationLine: "none",
-                          textDecoration: "none",
-                          WebkitUserSelect: "none",
-                          userSelect: "none",
-                          WebkitTouchCallout: "none",
-                        }}
-                      >
-                        <span style={{ pointerEvents: "none", display: "inline-block" }}>
-                          {year < 0 && treeZoomLevel <= 0.4 ? (
-                            <>
-                              <span style={{ display: "block" }}>{Math.abs(year)}</span>
-                              <span
-                                style={{
-                                  display: "block",
-                                  fontSize: treeZoomLevel <= 0.12 ? "8px" : "9px",
-                                  lineHeight: 1,
-                                }}
-                              >
-                                BCE
-                              </span>
-                            </>
-                          ) : (
-                            formatYear(year)
-                          )}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })()}
+            <div className="relative" style={{ width: "100%", height: "100%" }}>
+              {timelineLabels}
+            </div>
           </div>
 
           <div
@@ -2960,84 +2841,59 @@ export function TechTreeViewer() {
               >
                 {/* SVG connections */}
                 <svg
-                  ref={connectionsContainerRef}
                   className="absolute inset-0 w-full h-full"
                   style={{
                     zIndex: 1,
                   }}
                 >
-                  {visibleConnections.map((link, visibleIndex) => {
+                  {visibleConnections.map((link) => {
                     const sourceNode = nodeById.get(link.source);
                     const targetNode = nodeById.get(link.target);
 
                     if (!sourceNode || !targetNode) return null;
-                    
-                    const connectionKey = `connection-${link.source}-${link.target}-${visibleIndex}`;
-                    
+
+                    const linkIndex =
+                      linkIndexByIdentity.get(`${link.source}|${link.target}|${link.type}`) ?? -1;
+
                     return (
                       <CurvedConnections
-                        key={connectionKey}
-                        sourceNode={{
-                          x: getXPosition(sourceNode.year),
-                          y: sourceNode.y || 150,
-                        }}
-                        targetNode={{
-                          x: getXPosition(targetNode.year),
-                          y: targetNode.y || 150,
-                        }}
-                        sourceIndex={nodeIndexById.get(sourceNode.id) ?? -1}
-                        targetIndex={nodeIndexById.get(targetNode.id) ?? -1}
+                        // Keyed by identity, not position in the visible list:
+                        // a positional key remounted every later connection
+                        // whenever one scrolled into view.
+                        key={`connection-${link.source}-${link.target}-${link.type}`}
+                        linkIndex={linkIndex}
+                        sourceX={getXPosition(sourceNode.year)}
+                        sourceY={sourceNode.y || 150}
+                        targetX={getXPosition(targetNode.year)}
+                        targetY={targetNode.y || 150}
                         connectionType={link.type}
-                        isHighlighted={shouldHighlightLink(link, visibleIndex)}
-                        opacity={getLinkOpacity(link, visibleIndex)}
-                        onMouseEnter={() => {
-                          setHoveredLinkIndex(visibleIndex);
-                        }}
-                        onMouseLeave={() => setHoveredLinkIndex(null)}
+                        isHighlighted={shouldHighlightLink(link, linkIndex)}
+                        opacity={getLinkOpacity(link)}
+                        onHoverChange={handleConnectionHover}
                         sourceTitle={sourceNode.title}
                         targetTitle={targetNode.title}
-                        details={link.details}
+                        details={techDetails?.links[linkDetailsKey(link)]?.details}
                         isSelected={selectedLinkKey === getLinkKey(link)}
-                        onSelect={() => {
-                          setSelectedLinkKey(getLinkKey(link));
-                          setSelectedLinkIndex(visibleIndex);
-                          setSelectedNodeId(null);
-                          clearSelectedNodeUrl();
-                        }}
-                        onDeselect={() => {
-                          setSelectedLinkKey(null);
-                          setSelectedLinkIndex(null);
-                          setHoveredLinkIndex(null);
-                        }}
-                        onNodeClick={(title) => {
-                          handleNodeClick(title);
-                        }}
+                        onSelect={handleConnectionSelect}
+                        onDeselect={handleConnectionDeselect}
+                        onNodeClick={handleConnectionNodeClick}
                       />
                     );
                   })}
                 </svg>
 
                 {/* Nodes */}
-                <div ref={nodesContainerRef} className="relative" style={{ zIndex: 10 }}>
+                <div className="relative" style={{ zIndex: 10 }}>
                   {visibleNodes.map((node) => {
                     return (
                       <BrutalistNode
                         key={node.id}
                         node={node}
                         isSelected={node.id === selectedNodeId}
-                        isAdjacent={isAdjacentToSelected(node.id)}
-                        onClick={() => handleNodeClick(node.title)}
-                        onMouseEnter={() => {
-                          if (node.id !== selectedNodeId) {
-                            handleNodeHover(node);
-                          }
-                        }}
-                        onMouseLeave={() => {
-                          if (!isMobile && node.id !== selectedNodeId) {
-                            setHoveredNode(null);
-                            setHoveredNodeId(null);
-                          }
-                        }}
+                        isAdjacent={adjacentNodeIds.has(node.id)}
+                        onClick={handleNodeElementClick}
+                        onMouseEnter={handleNodeElementEnter}
+                        onMouseLeave={handleNodeElementLeave}
                         width={NODE_WIDTH}
                         style={{
                           position: "absolute",
@@ -3057,7 +2913,8 @@ export function TechTreeViewer() {
                   {visibleNodes.map((baseLoopNode) => {
                     if (activeTooltipNodeId !== baseLoopNode.id) return null;
 
-                    const node = baseLoopNode;
+                    const nodeDetails = techDetails?.nodes[baseLoopNode.id];
+                    const node = nodeDetails ? { ...baseLoopNode, ...nodeDetails } : baseLoopNode;
 
                     if (hoveredNode?.id === baseLoopNode.id || selectedNodeId === baseLoopNode.id) {
                       return (
@@ -3088,29 +2945,29 @@ export function TechTreeViewer() {
                             <strong>Date:</strong> {formatYear(node.year)}
                             {node.dateDetails && ` – ${node.dateDetails}`}
                           </p>
-                          {node.inventors &&
-                            node.inventors.length > 0 &&
-                            node.inventors.filter((inv: string) => inv !== "unknown")
-                              .length > 0 && (
+                          {(() => {
+                            // "unknown" alongside names marks an uncertain
+                            // attribution; it isn't a person, so it doesn't
+                            // count toward the plural.
+                            const named = (node.inventors ?? []).filter(
+                              (inv: string) => inv !== "unknown"
+                            );
+                            if (named.length === 0) return null;
+                            const plural = named.length > 1 ? "s" : "";
+                            return (
                               <p className="text-xs mb-1">
                                 <strong>
                                   {node.type === "Discovery"
-                                    ? `Discoverer${
-                                        node.inventors.length > 1 ? "s" : ""
-                                      }`
-                                    : `Inventor${
-                                        node.inventors.length > 1 ? "s" : ""
-                                      }`}
+                                    ? `Discoverer${plural}`
+                                    : `Inventor${plural}`}
                                   :
                                 </strong>{" "}
-                                {node.inventors.includes("unknown")
-                                  ? "possibly " +
-                                    node.inventors
-                                      .filter((inv: string) => inv !== "unknown")
-                                      .join(", ")
-                                  : node.inventors.join(", ")}
+                                {node.inventors?.includes("unknown")
+                                  ? `possibly ${named.join(", ")}`
+                                  : named.join(", ")}
                               </p>
-                            )}
+                            );
+                          })()}
                           {node.organizations &&
                             node.organizations.length > 0 && (
                               <p className="text-xs mb-1">
@@ -3722,11 +3579,26 @@ export function TechTreeViewer() {
           nodeVisibleConnections={visibleElements.nodeVisibleConnections}
           stickyVisibleConnections={visibleElements.stickyVisibleConnections}
           invisibleViewportConnections={visibleElements.invisibleViewportConnections}
+          nodeBuffer={nodeViewportBuffer}
           onClose={() => setShowDebugOverlay(false)}
         />
       )}
+      {loadError && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none">
+          <div className="pointer-events-auto bg-white border border-black p-4 text-sm font-mono text-center shadow-md">
+            <p className="mb-2">Couldn&apos;t load the tech tree.</p>
+            <button
+              type="button"
+              className="underline"
+              onClick={() => window.location.reload()}
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      )}
       {/* Jump to Nearest Tech Button - Update the condition */}
-      {!isLoading && strictlyVisibleNodes.length === 0 && data.nodes.length > 0 && (
+      {isJumpButtonShown && (
         <button
           ref={jumpButtonRef}
           onClick={handleJumpToNearest}
@@ -3742,7 +3614,7 @@ export function TechTreeViewer() {
         </button>
       )}
       {/* Desktop zoom controls */}
-      {!isTouchDevice && !isLoading && (
+      {hasFinePointer && !isLoading && (
         <div className="fixed bottom-20 right-16 z-30 -translate-y-1 font-mono">
           <div className="flex items-center overflow-hidden border border-[#91B4C5] bg-white/80 backdrop-blur">
             <button
@@ -3750,6 +3622,7 @@ export function TechTreeViewer() {
               className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
               disabled={treeZoomLevel <= MIN_TREE_ZOOM}
               onClick={() => stepZoom(-1)}
+              aria-label="Zoom out"
             >
               -
             </button>
@@ -3758,6 +3631,7 @@ export function TechTreeViewer() {
               className="min-w-[3.75rem] border-l border-r border-[#91B4C5] px-2 py-1 text-[11px] text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
               onClick={() => updateZoom(1, getViewportAnchor())}
               title="Reset zoom"
+              aria-label={`Zoom ${zoomPercent}%, reset to 100%`}
             >
               {zoomPercent}%
             </button>
@@ -3766,6 +3640,7 @@ export function TechTreeViewer() {
               className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
               disabled={treeZoomLevel >= MAX_TREE_ZOOM}
               onClick={() => stepZoom(1)}
+              aria-label="Zoom in"
             >
               +
             </button>
@@ -3779,6 +3654,8 @@ export function TechTreeViewer() {
           className="settings-button p-2 text-[#91B4C5] hover:text-[#6B98AE] transition-colors"
           onClick={() => setShowSettingsMenu((prev) => !prev)}
           style={{ overscrollBehavior: 'contain' }}
+          aria-label="Display settings"
+          aria-expanded={showSettingsMenu}
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -3806,7 +3683,7 @@ export function TechTreeViewer() {
               <div>
                 <div className="text-xs uppercase tracking-wider text-[#91B4C5] mb-3">Display options</div>
                 <div className="space-y-4">
-                  {!isTouchDevice && (
+                  {hasFinePointer && (
                     <div>
                       <div className="flex items-center justify-between gap-4">
                         <span className="text-sm">Zoom</span>
@@ -3816,6 +3693,7 @@ export function TechTreeViewer() {
                             className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
                             disabled={treeZoomLevel <= MIN_TREE_ZOOM}
                             onClick={() => stepZoom(-1)}
+                            aria-label="Zoom out"
                           >
                             -
                           </button>
@@ -3823,6 +3701,8 @@ export function TechTreeViewer() {
                             type="button"
                             className="border-l border-r border-[#91B4C5] px-3 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10"
                             onClick={() => updateZoom(1, getViewportAnchor())}
+                            title="Reset zoom"
+                            aria-label={`Zoom ${zoomPercent}%, reset to 100%`}
                           >
                             {zoomPercent}%
                           </button>
@@ -3831,6 +3711,7 @@ export function TechTreeViewer() {
                             className="px-2 py-1 text-xs text-[#91B4C5] transition-colors hover:bg-[#91B4C5]/10 disabled:cursor-not-allowed disabled:opacity-40"
                             disabled={treeZoomLevel >= MAX_TREE_ZOOM}
                             onClick={() => stepZoom(1)}
+                            aria-label="Zoom in"
                           >
                             +
                           </button>
@@ -3853,6 +3734,7 @@ export function TechTreeViewer() {
                           : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
                       }`}
                       onClick={() => setConnectionMode('all')}
+                      aria-pressed={connectionMode === 'all'}
                     >
                       All
                     </button>
@@ -3863,6 +3745,7 @@ export function TechTreeViewer() {
                           : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
                       }`}
                       onClick={() => setConnectionMode('optimized')}
+                      aria-pressed={connectionMode === 'optimized'}
                     >
                       Optimized
                     </button>
@@ -3873,6 +3756,7 @@ export function TechTreeViewer() {
                           : 'bg-transparent text-[#91B4C5] hover:bg-[#91B4C5]/10'
                       }`}
                       onClick={() => setConnectionMode('minimal')}
+                      aria-pressed={connectionMode === 'minimal'}
                     >
                       Minimal
                     </button>
@@ -3904,6 +3788,9 @@ export function TechTreeViewer() {
                         showImages ? 'bg-[#91B4C5]' : 'bg-[#91B4C5]/20'
                       }`}
                       onClick={() => setShowImages(!showImages)}
+                      role="switch"
+                      aria-checked={showImages}
+                      aria-label="Show images"
                     >
                       <div className={`absolute w-3 h-3 top-0.5 transition-transform ${
                         showImages ? 'left-4' : 'left-0.5'

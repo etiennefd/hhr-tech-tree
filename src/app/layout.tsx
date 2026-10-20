@@ -1,18 +1,6 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from '@vercel/analytics/next';
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Historical Tech Tree",
@@ -45,7 +33,8 @@ export const metadata: Metadata = {
     description: "Interactive visualization of technological history",
     images: ["/og-image.png"],
   },
-  metadataBase: new URL("https://historicaltechtree.com"),
+  // The apex domain 308-redirects to www, so use www for absolute URLs.
+  metadataBase: new URL("https://www.historicaltechtree.com"),
 };
 
 export default function RootLayout({
@@ -59,9 +48,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="format-detection" content="telephone=no" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         {children}
         <Analytics />
       </body>

@@ -1,9 +1,10 @@
 import { TechNode } from "@/types/tech-node";
 import { ConnectionType } from "@/app/components/connections/CurvedConnections";
+import type { TechTreeDetails } from "@/utils/techTreeData";
 
 // Bumped when the cache shape changes so older entries are discarded rather
 // than misread.
-export const CACHE_VERSION = "2.0";
+export const CACHE_VERSION = "3.0";
 const CACHE_KEY = "tech-tree-cache";
 
 // Environment-specific cache durations
@@ -12,12 +13,11 @@ const CACHE_EXPIRY = isDevelopment
   ? 5 * 60 * 1000        // 5 minutes for development
   : 24 * 60 * 60 * 1000; // 24 hours for production
 
+// Link notes live in `details` since 3.0
 interface Link {
   source: string;
   target: string;
   type: ConnectionType;
-  details?: string;
-  detailsSource?: string;
 }
 
 interface CacheData {
@@ -26,9 +26,11 @@ interface CacheData {
   // Previously stored twice, as `basicData` and `detailData`, with only the
   // latter ever read back. One copy halves what we take from the origin's
   // storage quota, which matters most on Safari's ~5MB cap.
+  // The slim payload, plus the tooltip details once they've loaded
   data: {
     nodes: TechNode[];
     links: Link[];
+    details?: TechTreeDetails;
   };
 }
 

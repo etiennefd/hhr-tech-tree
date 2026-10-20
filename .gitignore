@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Data files
 src/app/api/inventions/techtree-data.json
+
+# Python bytecode
+__pycache__/

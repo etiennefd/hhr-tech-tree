@@ -3,6 +3,20 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from "react"
 // Define the threshold here as well
 const SMALL_SCREEN_WIDTH_THRESHOLD = 640;
 
+// Key years to display (original list)
+const ORIGINAL_KEY_YEARS = [
+  -100000, -10000, -1000, 0, 500, 1000, 1500,
+  1750, 1800, 1850, 1900, 1950, 2000,
+];
+
+// Base opacity of an unemphasized dot and the opacity a hovered one should
+// show. The hover highlight is drawn as an overlay on top of the base dot, so
+// its own opacity is chosen to composite to the target: 1 - (1 - base)(1 - a).
+const BASE_DOT_OPACITY = 0.4;
+const HOVERED_DOT_OPACITY = 0.6;
+const HOVER_OVERLAY_OPACITY =
+  1 - (1 - HOVERED_DOT_OPACITY) / (1 - BASE_DOT_OPACITY);
+
 interface TechTreeMinimapProps {
   nodes: Array<{
     id: string;
@@ -56,20 +70,20 @@ const TechTreeMinimap = ({
   const engineeringBlue = "#91B4C5";
   const minimapRef = useRef(null);
   const isDragging = useRef(false);
+  // Document listeners of an in-progress drag, so unmounting mid-drag can
+  // remove them
+  const dragListenersRef = useRef<{
+    move: (e: MouseEvent) => void;
+    up: () => void;
+  } | null>(null);
   const [scale, setScale] = useState(1);
-
-  // Key years to display (original list)
-  const originalKeyYears = [
-    -100000, -10000, -1000, 0, 500, 1000, 1500,
-    1750, 1800, 1850, 1900, 1950, 2000,
-  ];
 
   // Filter key years based on screen size
   const keyYears = useMemo(() => {
     if (isSmallScreen) {
-      return originalKeyYears.filter(year => year !== 1000);
+      return ORIGINAL_KEY_YEARS.filter(year => year !== 1000);
     }
-    return originalKeyYears;
+    return ORIGINAL_KEY_YEARS;
   }, [isSmallScreen]);
 
   // Calculate scaling factors for the minimap layout
@@ -120,7 +134,8 @@ const TechTreeMinimap = ({
 
   // One element per node, so this is the expensive part of the minimap. None of
   // it depends on scroll position — only the viewport rectangle below does — so
-  // memoizing keeps scrolling from rebuilding every dot.
+  // memoizing keeps scrolling from rebuilding every dot. Hover is drawn as a
+  // separate overlay below so hovering doesn't rebuild them either.
   const nodeDots = useMemo(
     () =>
       nodes.map((node) => {
@@ -131,7 +146,6 @@ const TechTreeMinimap = ({
         const isAdjacent = adjacentNodeIds.has(node.id);
         const isAncestor = highlightedAncestors.has(node.id);
         const isDescendant = highlightedDescendants.has(node.id);
-        const isHovered = node.id === hoveredNodeId;
         const isEmphasized =
           isSelected || isFiltered || isAdjacent || isAncestor || isDescendant;
 
@@ -155,9 +169,7 @@ const TechTreeMinimap = ({
                 ? 0.8
                 : isAdjacent
                 ? 0.7
-                : isHovered
-                ? 0.6
-                : 0.4,
+                : BASE_DOT_OPACITY,
               left: node.x * scale,
               top: node.y * scaleY,
               transform: "translate(-50%, -50%)",
@@ -172,13 +184,37 @@ const TechTreeMinimap = ({
       scaleY,
       filteredNodeIds,
       selectedNodeId,
-      hoveredNodeId,
       selectedConnectionNodeIds,
       adjacentNodeIds,
       highlightedAncestors,
       highlightedDescendants,
     ]
   );
+
+  // Hover only changed the opacity of an otherwise plain dot, so the overlay is
+  // only shown in that case.
+  const hoveredNode = useMemo(() => {
+    if (!hoveredNodeId || filteredNodeIds.size > 0) return null;
+    if (
+      hoveredNodeId === selectedNodeId ||
+      selectedConnectionNodeIds.has(hoveredNodeId) ||
+      adjacentNodeIds.has(hoveredNodeId) ||
+      highlightedAncestors.has(hoveredNodeId) ||
+      highlightedDescendants.has(hoveredNodeId)
+    ) {
+      return null;
+    }
+    return nodes.find((node) => node.id === hoveredNodeId) ?? null;
+  }, [
+    nodes,
+    hoveredNodeId,
+    filteredNodeIds,
+    selectedNodeId,
+    selectedConnectionNodeIds,
+    adjacentNodeIds,
+    highlightedAncestors,
+    highlightedDescendants,
+  ]);
 
   const handleMinimapClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -201,7 +237,8 @@ const TechTreeMinimap = ({
     e.preventDefault();
     e.stopPropagation();
     isDragging.current = true;
-    document.addEventListener("mousemove", handleMouseMove as EventListener);
+    dragListenersRef.current = { move: handleMouseMove, up: handleMouseUp };
+    document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
@@ -221,7 +258,19 @@ const TechTreeMinimap = ({
     isDragging.current = false;
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
+    dragListenersRef.current = null;
   };
+
+  // Remove drag listeners if unmounted mid-drag
+  useEffect(() => {
+    return () => {
+      const listeners = dragListenersRef.current;
+      if (!listeners) return;
+      document.removeEventListener("mousemove", listeners.move);
+      document.removeEventListener("mouseup", listeners.up);
+      dragListenersRef.current = null;
+    };
+  }, []);
 
   return (
     <div
@@ -272,6 +321,22 @@ const TechTreeMinimap = ({
       >
         {/* Node dots */}
         {nodeDots}
+
+        {/* Hovered node highlight */}
+        {hoveredNode && (
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: "2px",
+              height: "2px",
+              backgroundColor: engineeringBlue,
+              opacity: HOVER_OVERLAY_OPACITY,
+              left: hoveredNode.x * scale,
+              top: hoveredNode.y * scaleY,
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        )}
 
         {/* Viewport rectangle */}
         <div

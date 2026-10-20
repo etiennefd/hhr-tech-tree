@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import { Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { FilterState } from "@/types/filters";
@@ -30,6 +30,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const listboxId = useId();
+  const getOptionId = (index: number) => `${listboxId}-option-${index}`;
 
   // Get suggestions based on query
   const getSuggestions = (searchQuery: string): FilterSuggestion[] => {
@@ -68,7 +70,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!suggestions.length) return;
+    if (!isOpen || !suggestions.length) return;
 
     switch (e.key) {
       case "ArrowDown":
@@ -94,6 +96,14 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
         break;
     }
   };
+
+  // Keep the keyboard-highlighted row visible in the scrollable list
+  useEffect(() => {
+    if (!isOpen) return;
+    document
+      .getElementById(`${listboxId}-option-${selectedIndex}`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [selectedIndex, isOpen, listboxId]);
 
   // Add filter
   const addFilter = (type: keyof FilterState, value: string) => {
@@ -182,12 +192,19 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
     0
   );
 
+  const showSuggestions = isOpen && suggestions.length > 0;
+
   return (
     <div ref={containerRef} className="relative">
       {/* Collapsed state */}
       {!isExpanded && (
         <button
           onClick={toggleExpand}
+          aria-label={
+            activeFilterCount > 0
+              ? `Open filters (${activeFilterCount} active)`
+              : "Open filters"
+          }
           className="md:hidden flex items-center justify-center w-10 h-10 bg-white/80 backdrop-blur border border-black rounded-none shadow-md"
         >
           <Filter className="h-4 w-4" />
@@ -211,12 +228,21 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
             onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
             placeholder="Filter by field/location"
+            aria-label="Filter by field or location"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={showSuggestions}
+            aria-controls={listboxId}
+            aria-activedescendant={
+              showSuggestions ? getOptionId(selectedIndex) : undefined
+            }
             className="pl-8 pr-4 w-full border-black rounded-none font-mono"
           />
           {/* Add close button on mobile */}
           {isExpanded && (
             <button
               onClick={toggleExpand}
+              aria-label="Close filters"
               className="md:hidden absolute right-2 top-1/2 -translate-y-1/2"
             >
               <X className="h-4 w-4" />
@@ -235,6 +261,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
               <span className="mr-1">{value}</span>
               <button
                 onClick={() => removeFilter(type as keyof FilterState, value)}
+                aria-label={`Remove filter ${value}`}
                 className="hover:text-gray-700"
               >
                 <X className="h-3 w-3" />
@@ -244,11 +271,19 @@ export const FilterBox: React.FC<FilterBoxProps> = ({
         })}
 
         {/* Suggestions Dropdown */}
-        {isOpen && suggestions.length > 0 && (
-          <div className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list">
+        {showSuggestions && (
+          <div
+            id={listboxId}
+            role="listbox"
+            aria-label="Filter suggestions"
+            className="absolute mt-1 w-full bg-white border border-black rounded-none shadow-lg max-h-96 overflow-y-auto z-50 scrollable-results-list"
+          >
             {suggestions.map((suggestion, index) => (
               <div
                 key={`${suggestion.type}-${suggestion.value}`}
+                id={getOptionId(index)}
+                role="option"
+                aria-selected={index === selectedIndex}
                 className={`p-2 cursor-pointer ${
                   index === selectedIndex
                     ? "bg-yellow-100"

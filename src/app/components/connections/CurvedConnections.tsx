@@ -1,25 +1,11 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import ReactDOM from "react-dom";
 import ConnectionTooltip from "./ConnectionTooltip";
 
-// Add type declaration for window property
-declare global {
-  interface Window {
-    lastConnectionClickPos?: { x: number; y: number };
-  }
-}
-
 // Create a static map to store positions by connection
 const connectionPositions = new Map<string, { x: number; y: number }>();
-// Track the last tooltip display state to prevent flickering during selection
-let lastTooltipVisible = false;
 // Track the last selected connection key to manage position clearing
 let lastSelectedConnectionKey: string | null = null;
-
-interface NodePosition {
-  x: number;
-  y: number;
-}
 
 export type ConnectionType =
   | "Prerequisite"
@@ -33,33 +19,39 @@ export type ConnectionType =
   | "Obsolescence"
   | "default";
 
+// Every prop is a primitive or a callback that is stable across renders (the
+// callbacks receive linkIndex rather than closing over the link), so the
+// default shallow memo comparison skips the hundreds of on-screen connections
+// whose props didn't change, e.g. on every scroll frame.
 interface CurvedConnectionsProps {
-  sourceNode: NodePosition;
-  targetNode: NodePosition;
+  // Index of this link in the full link list, passed back to the callbacks
+  linkIndex: number;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
   connectionType?: ConnectionType;
   isHighlighted?: boolean;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
+  onHoverChange?: (linkIndex: number | null) => void;
   sourceTitle: string;
   targetTitle: string;
   details?: string;
   opacity?: number;
-  onSelect?: () => void;
+  onSelect?: (linkIndex: number) => void;
   onDeselect?: () => void;
   isSelected?: boolean;
   onNodeClick: (title: string) => void;
-  onNodeHover?: (title: string) => void;
-  sourceIndex: number;
-  targetIndex: number;
 }
 
 const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
-  sourceNode,
-  targetNode,
+  linkIndex,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
   connectionType = "default",
   isHighlighted = false,
-  onMouseEnter,
-  onMouseLeave,
+  onHoverChange,
   sourceTitle,
   targetTitle,
   details,
@@ -68,9 +60,6 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
   onDeselect,
   isSelected = false,
   onNodeClick,
-  onNodeHover,
-  sourceIndex,
-  targetIndex,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -100,15 +89,13 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     
     // Update last selected connection
     lastSelectedConnectionKey = connectionKey;
-    
-    // Also store in window for absolute persistence
-    window.lastConnectionClickPos = newPos;
-    
-    // Set transition state to prevent flickering
-    setIsTransitioningToSelected(true);
-    
+
     if (!isSelected) {
-      onSelect?.();
+      // Set transition state to prevent flickering. Only on the way in: the
+      // effect that clears it waits for isSelected to change, which a click
+      // on an already-selected connection never does.
+      setIsTransitioningToSelected(true);
+      onSelect?.(linkIndex);
     }
   };
 
@@ -236,8 +223,10 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     }
   };
 
-  const { x: x1, y: y1 } = sourceNode;
-  const { x: x2, y: y2 } = targetNode;
+  const x1 = sourceX;
+  const y1 = sourceY;
+  const x2 = targetX;
+  const y2 = targetY;
   const isSameYear = Math.abs(x1 - x2) < 160; // Using NODE_WIDTH
 
   const sourcePoint = getAdjustedEndpoint(x1, y1, x2, y2, true);
@@ -304,18 +293,36 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
     }
   }, [isSelected, connectionKey]);
 
+  // The parent can clear the selection without going through this component
+  // (Escape, a background click, selecting another connection or a node).
+  // Hover state is frozen while selected, so drop it here or the tooltip stays
+  // up with no close button.
+  const wasSelectedRef = useRef(isSelected);
+  useEffect(() => {
+    if (wasSelectedRef.current && !isSelected) {
+      setIsHovered(false);
+      setMousePos(null);
+      setIsTransitioningToSelected(false);
+      connectionPositions.delete(connectionKey);
+      if (lastSelectedConnectionKey === connectionKey) {
+        lastSelectedConnectionKey = null;
+      }
+    }
+    wasSelectedRef.current = isSelected;
+  }, [isSelected, connectionKey]);
+
   return (
     <>
       <g
         className="connection"
         onMouseEnter={() => {
           setIsHovered(true);
-          onMouseEnter?.();
+          onHoverChange?.(linkIndex);
         }}
         onMouseLeave={() => {
           if (!isSelected) {
             setIsHovered(false);
-            onMouseLeave?.();
+            onHoverChange?.(null);
             // Only clear mouse position if we're not transitioning to selected
             if (!isTransitioningToSelected) {
               setMousePos(null);
@@ -389,12 +396,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
       {(() => {
         // Show tooltip if hovered, selected, or transitioning between states
         const shouldShowTooltip = isHovered || isSelected || isTransitioningToSelected;
-        
-        // Track visibility to help with debugging
-        if (shouldShowTooltip !== lastTooltipVisible) {
-          lastTooltipVisible = shouldShowTooltip;
-        }
-        
+
         if (!shouldShowTooltip) {
           return null;
         }
@@ -412,16 +414,7 @@ const CurvedConnections: React.FC<CurvedConnectionsProps> = ({
               details={details}
               isSelected={isSelected}
               onClose={handleTooltipClose}
-              onNodeClick={(title) => {
-                if (onNodeClick) {
-                  onNodeClick(title);
-                }
-              }}
-              onNodeHover={(title) => {
-                if (onNodeHover) {
-                  onNodeHover(title);
-                }
-              }}
+              onNodeClick={onNodeClick}
             />
           </Portal>
         );
@@ -454,4 +447,4 @@ const Portal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return ReactDOM.createPortal(children, portalRoot.current);
 };
 
-export default CurvedConnections;
+export default memo(CurvedConnections);

@@ -1,5 +1,4 @@
 import React from 'react';
-import { CACHE_VIEWPORT_BUFFER_FOR_NODES } from '../TechTreeViewer';
 
 interface DebugOverlayProps {
   viewport: {
@@ -20,6 +19,9 @@ interface DebugOverlayProps {
   nodeVisibleConnections: number;
   stickyVisibleConnections: number;
   invisibleViewportConnections: number;
+  // How far past the viewport nodes are rendered, in tree px. Passed in rather
+  // than imported, which made this file and TechTreeViewer import each other.
+  nodeBuffer: number;
   onClose: () => void;
 }
 
@@ -34,13 +36,14 @@ export function DebugOverlay({
   nodeVisibleConnections,
   stickyVisibleConnections,
   invisibleViewportConnections,
+  nodeBuffer,
   onClose
 }: DebugOverlayProps) {
   const bufferedViewport = {
-    left: viewport.left - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-    right: viewport.right + CACHE_VIEWPORT_BUFFER_FOR_NODES,
-    top: viewport.top - CACHE_VIEWPORT_BUFFER_FOR_NODES,
-    bottom: viewport.bottom + CACHE_VIEWPORT_BUFFER_FOR_NODES
+    left: viewport.left - nodeBuffer,
+    right: viewport.right + nodeBuffer,
+    top: viewport.top - nodeBuffer,
+    bottom: viewport.bottom + nodeBuffer
   };
 
   // Only render in development mode

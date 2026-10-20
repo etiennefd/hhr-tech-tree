@@ -136,6 +136,7 @@ async function generateChangelog() {
     });
 
     // Process connections
+    const nodesById = new Map(data.nodes.map((node) => [node.id, node]));
     data.links.forEach((link) => {
       if (link.dateAdded) {
         const dateStr = formatDate(link.dateAdded);
@@ -144,8 +145,8 @@ async function generateChangelog() {
           itemsByDate.set(dateStr, { techs: [], connections: [], milestones: [], independent: [] });
         }
 
-        const sourceNode = data.nodes.find(n => n.id === link.source);
-        const targetNode = data.nodes.find(n => n.id === link.target);
+        const sourceNode = nodesById.get(link.source);
+        const targetNode = nodesById.get(link.target);
         
         if (sourceNode && targetNode) {
           itemsByDate.get(dateStr)?.connections.push({
@@ -203,10 +204,6 @@ async function generateChangelog() {
         changelogText += '\n';
       }
     });
-
-    // Count techs and connections that existed before June 1st, 2025
-    const legacyTechs = data.nodes.filter(node => !node.dateAdded).length;
-    const legacyConnections = data.links.filter(link => !link.dateAdded).length;
 
     // Write changelog to file
     const changelogPath = path.join(process.cwd(), 'src', 'app', 'api', 'inventions', 'changelog.txt');

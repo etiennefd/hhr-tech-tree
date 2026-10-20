@@ -65,9 +65,6 @@ export const FIELD_COLORS: Record<string, string> = {
 // Default color for unknown fields
 export const DEFAULT_FIELD_COLOR = "#2D2D2D";
 
-// Type for valid field names
-export type FieldName = keyof typeof FIELD_COLORS;
-
 // Helper to get field color with fallback
 export function getFieldColor(field: string): string {
   return FIELD_COLORS[field] ?? DEFAULT_FIELD_COLOR;
