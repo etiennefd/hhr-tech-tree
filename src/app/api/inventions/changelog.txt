@@ -14,6 +14,7 @@
 - Added connection: Watt steam engine --> Steamboat transport
 - Added connection: Puddling --> Iron-hulled ship
 - Added connection: Carvel boat building --> Iron-hulled ship
+- Added connection: Iron-hulled ship --> Ironclad
 
 19 October 2026
 - Added tech: Viral vector vaccine, 1987
