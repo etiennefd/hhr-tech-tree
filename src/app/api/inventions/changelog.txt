@@ -16,6 +16,8 @@
 - Added connection: Carvel boat building --> Iron-hulled ship
 - Added connection: Iron-hulled ship --> Ironclad
 - Added connection: Copper sheathed ship --> Ocean liner
+- Added connection: Truss --> Ocean liner
+- Added connection: Ship of the line --> Ocean liner
 
 19 October 2026
 - Added tech: Viral vector vaccine, 1987
