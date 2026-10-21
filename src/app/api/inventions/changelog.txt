@@ -1,3 +1,7 @@
+21 October 2026
+- Added connection: Electric motor --> Rotor ship
+- Added connection: Diesel engine --> Rotor ship
+
 20 October 2026
 - Added connection: Copper sheathed ship --> Clipper
 - Added connection: Schooner --> Clipper
