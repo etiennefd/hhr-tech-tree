@@ -1,3 +1,8 @@
+22 October 2026
+- Added connection: High-pressure steam engine --> Torpedo boat
+- Added connection: Steam locomotive --> Torpedo boat
+- Added connection: Screw propeller --> Torpedo boat
+
 21 October 2026
 - Added connection: Electric motor --> Rotor ship
 - Added connection: Diesel engine --> Rotor ship
