@@ -1,3 +1,6 @@
+23 October 2026
+- Added tech: Wind tunnel, 1871
+
 22 October 2026
 - Added connection: High-pressure steam engine --> Torpedo boat
 - Added connection: Steam locomotive --> Torpedo boat
