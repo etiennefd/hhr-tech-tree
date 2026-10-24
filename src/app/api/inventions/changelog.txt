@@ -1,3 +1,11 @@
+24 October 2026
+- Added connection: Balance scale --> Wind tunnel
+- Added connection: Rotary winnowing fan --> Wind tunnel
+- Added connection: Glider --> Wind tunnel
+- Added connection: High-pressure steam engine --> Wind tunnel
+- Added connection: Wind tunnel --> Airplane
+- Added connection: Wind tunnel --> Rotor ship
+
 23 October 2026
 - Added tech: Wind tunnel, 1871
 
