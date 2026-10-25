@@ -1,5 +1,6 @@
 25 October 2026
 - Added tech: Electric fan, 1886
+- Added tech: Centrifugal pump, 1689
 - Added connection: Electric motor --> Electric fan
 - Added connection: Coal power plant --> Electric fan
 - Added connection: Screw propeller --> Electric fan
