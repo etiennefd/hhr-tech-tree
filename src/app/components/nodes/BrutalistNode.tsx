@@ -67,32 +67,6 @@ const formatTitle = (title: string) => {
   }).join(' ');
 };
 
-// White text is the house style for field tags, but on the palest colors
-// (Lighting's yellow, Geography's sky blue, ...) it is barely readable. Switch
-// those to black, judged by WCAG relative luminance.
-const tagTextColorCache = new Map<string, string>();
-const getTagTextColor = (background: string): string => {
-  const cached = tagTextColorCache.get(background);
-  if (cached) return cached;
-
-  let color = "#ffffff";
-  const match = /^#?([0-9a-f]{6})$/i.exec(background);
-  if (match) {
-    const value = parseInt(match[1], 16);
-    const [r, g, b] = [value >> 16, (value >> 8) & 0xff, value & 0xff].map((channel) => {
-      const c = channel / 255;
-      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    });
-    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    // Contrast against white is 1.05 / (L + 0.05). Below 2:1 is unreadable at
-    // this size; anything above keeps the white the other tags use.
-    if (1.05 / (luminance + 0.05) < 2) color = "#000000";
-  }
-
-  tagTextColorCache.set(background, color);
-  return color;
-};
-
 // Helper function to validate image URLs
 const validateImage = (url?: string | null): string | undefined => {
   if (!url) return undefined;
@@ -354,10 +328,9 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
             {node.fields.map((field: string) => (
               <span
                 key={field}
-                className="text-[10px] px-1.5 py-0.5 uppercase font-bold"
+                className="text-[10px] px-1.5 py-0.5 uppercase font-bold text-white"
                 style={{
                   backgroundColor: getFieldColor(field),
-                  color: getTagTextColor(getFieldColor(field)),
                 }}
               >
                 {field}
