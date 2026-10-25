@@ -1,3 +1,6 @@
+25 October 2026
+- Added tech: Electric fan, 1886
+
 24 October 2026
 - Added connection: Balance scale --> Wind tunnel
 - Added connection: Rotary winnowing fan --> Wind tunnel
