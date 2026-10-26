@@ -1,3 +1,8 @@
+26 October 2026
+- Added connection: Centrifugal pump --> Turbojet
+- Added connection: Centrifugal pump --> Gas turbine
+- Added connection: Force pump --> Centrifugal pump
+
 25 October 2026
 - Added tech: Electric fan, 1886
 - Added tech: Centrifugal pump, 1689
