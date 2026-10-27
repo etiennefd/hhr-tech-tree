@@ -2,6 +2,11 @@
 - Added tech: Lateral flow test, 1988
 - Added tech: Conjugate vaccine, 1987
 - Added connection: Toxoid vaccine --> Conjugate vaccine
+- Added connection: Monoclonal antibody --> Lateral flow test
+- Added connection: Home pregnancy test --> Lateral flow test
+- Added connection: Chromatography --> Lateral flow test
+- Added connection: Guncotton --> Lateral flow test
+- Added connection: Capillary action --> Lateral flow test
 
 26 October 2026
 - Added connection: Centrifugal pump --> Turbojet
