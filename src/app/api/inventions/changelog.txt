@@ -7,6 +7,8 @@
 - Added connection: Chromatography --> Lateral flow test
 - Added connection: Guncotton --> Lateral flow test
 - Added connection: Capillary action --> Lateral flow test
+- Added connection: Capillary action --> Chromatography
+- Added connection: Chlorophyll --> Chromatography
 
 26 October 2026
 - Added connection: Centrifugal pump --> Turbojet
