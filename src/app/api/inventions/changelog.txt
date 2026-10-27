@@ -1,4 +1,5 @@
 27 October 2026
+- Added tech: CAR T cell therapy, 2010
 - Added tech: Lateral flow test, 1988
 - Added tech: Conjugate vaccine, 1987
 - Added connection: Toxoid vaccine --> Conjugate vaccine
