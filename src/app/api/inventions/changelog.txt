@@ -1,5 +1,6 @@
 27 October 2026
 - Added tech: Conjugate vaccine, 1987
+- Added connection: Toxoid vaccine --> Conjugate vaccine
 
 26 October 2026
 - Added connection: Centrifugal pump --> Turbojet
