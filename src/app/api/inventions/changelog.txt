@@ -3670,7 +3670,7 @@
 - Added tech: Foam extinguisher, 1904
 - Added tech: Firefighting foam, 1902
 - Added tech: Vanadium, 1801
-- Added tech: Galvanism, 1780
+- Added tech: Galvanism, 1786
 - Added tech: Methane, 1778
 - Added tech: Nickel silver, 1770
 - Added tech: Blue and white pottery, 800
