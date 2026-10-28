@@ -1,3 +1,6 @@
+28 October 2026
+- Added tech: Checkpoint inhibitor, 2003
+
 27 October 2026
 - Added tech: CAR T cell therapy, 2010
 - Added tech: Lateral flow test, 1988
