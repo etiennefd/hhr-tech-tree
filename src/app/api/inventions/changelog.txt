@@ -1,5 +1,8 @@
 29 October 2026
 - Added tech: Cryo-electron microscope, 1984
+- Added connection: Cryo-electron microscope --> mRNA vaccine
+- Added connection: Massively parallel sequencing --> mRNA vaccine
+
 28 October 2026
 - Added tech: Checkpoint inhibitor, 2003
 - Added connection: Monoclonal antibody --> Checkpoint inhibitor
