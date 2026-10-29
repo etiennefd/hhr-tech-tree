@@ -10,6 +10,7 @@
 - Added connection: Writing (Egypt) --> Ink
 - Added connection: Tin bronze --> Metallic nib
 - Added connection: Ink --> Birch bark manuscript
+- Added connection: Kymograph --> Chronophotography
 
 28 October 2026
 - Added tech: Checkpoint inhibitor, 2003
