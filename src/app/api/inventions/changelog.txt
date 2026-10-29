@@ -11,6 +11,8 @@
 - Added connection: Tin bronze --> Metallic nib
 - Added connection: Ink --> Birch bark manuscript
 - Added connection: Kymograph --> Chronophotography
+- Added connection: Dry photographic plate --> Chronophotographic gun
+- Added connection: Dry photographic plate --> Electrotachyscope
 
 28 October 2026
 - Added tech: Checkpoint inhibitor, 2003
