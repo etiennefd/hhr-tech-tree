@@ -13,6 +13,8 @@
 - Added connection: Kymograph --> Chronophotography
 - Added connection: Dry photographic plate --> Chronophotographic gun
 - Added connection: Dry photographic plate --> Electrotachyscope
+- Added connection: Drum memory --> Hard disk drive
+- Added connection: Magnetic tape --> Hard disk drive
 
 28 October 2026
 - Added tech: Checkpoint inhibitor, 2003
