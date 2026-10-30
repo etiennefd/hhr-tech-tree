@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from '@vercel/analytics/next';
+import { IMAGE_BASE_URL } from "@/utils/imageUrl";
 
 export const metadata: Metadata = {
   title: "Historical Tech Tree",
@@ -47,6 +48,11 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="format-detection" content="telephone=no" />
+        {/* Node images come from a separate host (see src/utils/imageUrl.ts).
+            Opening that connection while the data loads, rather than when the
+            first node renders, saves a DNS + TLS round trip on the first
+            images. No crossOrigin: <img> requests use the anonymous pool. */}
+        {IMAGE_BASE_URL && <link rel="preconnect" href={IMAGE_BASE_URL} />}
       </head>
       <body className="antialiased">
         {children}
