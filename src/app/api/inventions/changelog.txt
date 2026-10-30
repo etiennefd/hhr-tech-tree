@@ -2,6 +2,10 @@
 - Added connection: Electron microscope --> Cryo-electron microscope
 - Added connection: Liquid nitrogen --> Cryo-electron microscope
 - Added connection: Cryo-electron microscope --> mRNA vaccine
+- Added connection: Restriction enzymes --> Zinc-finger nuclease genome editing
+- Added connection: Genetically modified organism --> Zinc-finger nuclease genome editing
+- Added connection: RNA interference --> CRISPR gene editing
+- Added connection: Bacteriophages --> CRISPR gene editing
 
 29 October 2026
 - Added tech: Cryo-electron microscope, 1984
@@ -9,7 +13,6 @@
 - Added connection: Cryo-electron microscope --> mRNA vaccine
 - Added connection: Massively parallel sequencing --> mRNA vaccine
 - Added connection: Genetically modified organism --> mRNA vaccine
-- Added connection: Genetically modified organism --> CRISPR gene editing
 - Added connection: Weaving and basketry --> Papyrus
 - Added connection: Ink --> Reed pen
 - Added connection: Writing (Egypt) --> Ink
