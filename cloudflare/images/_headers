@@ -1,0 +1,5 @@
+# Cloudflare Pages headers for the node image host (see src/scripts/deploy-images.sh).
+# Same policy as next.config.js uses for images served by Vercel: not
+# `immutable`, because images are regularly replaced under the same filename.
+/tech-images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
