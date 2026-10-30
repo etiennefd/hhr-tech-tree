@@ -5,7 +5,8 @@
 #
 # Runs from .github/workflows/deploy-images.yml on pushes to main that touch
 # the images. To run it by hand, log in once with `npx wrangler login`, or set
-# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID.
+# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID. Wrangler needs Node 22+; with
+# fnm: `fnm exec --using=22 src/scripts/deploy-images.sh`.
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."
