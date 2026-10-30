@@ -15,6 +15,8 @@
 - Added connection: Dry photographic plate --> Electrotachyscope
 - Added connection: Drum memory --> Hard disk drive
 - Added connection: Magnetic tape --> Hard disk drive
+- Added connection: DNA sequencing --> Zinc finger
+- Added connection: Atomic absorption spectroscopy --> Zinc finger
 
 28 October 2026
 - Added tech: Checkpoint inhibitor, 2003
