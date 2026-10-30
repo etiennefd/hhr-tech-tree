@@ -21,3 +21,7 @@ To update the images (automatically part of the update script above for new tech
 - Then commit the updated images
 - This script automatically updates the image credits as well (which will appear once the fetch-and-save script is re-run)
 - You can only update the credits, not the images, by adding the argument `--credits-only`
+
+In production, node images are served from a Cloudflare Pages project rather than by Vercel, so that image requests don't count towards Vercel's CDN request tier. The app requests `$NEXT_PUBLIC_IMAGE_BASE_URL/tech-images/<name>.webp` first and falls back to the copy in `public/tech-images` if that fails; with the variable unset (local dev, preview deployments) it uses the local copy only.
+- Pushing image changes to `main` uploads them through `.github/workflows/deploy-images.yml`, which needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets
+- To upload by hand, run `src/scripts/deploy-images.sh` (after `npx wrangler login` once)

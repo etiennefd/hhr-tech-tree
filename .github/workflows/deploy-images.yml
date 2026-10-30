@@ -1,0 +1,30 @@
+name: Deploy images
+
+# Keeps the external image host in sync with public/tech-images. Vercel may
+# finish deploying first; until this run completes, nodes whose image is new
+# or missing there fall back to the copy deployed with the app.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "public/tech-images/**"
+      - "cloudflare/images/**"
+      - "src/scripts/deploy-images.sh"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-images
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: src/scripts/deploy-images.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

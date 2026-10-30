@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { getFieldColor } from "@/constants/fieldColors";
+import { externalImageUrl } from "@/utils/imageUrl";
 
 // Nodes unmount when they scroll out of the viewport, so without a module-level
 // memory of what already resolved, every scroll-back restarts the fade-in and
@@ -113,8 +114,11 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   };
 
   // `attempt` is part of the <Image> key: bumping it remounts the element,
-  // which is what actually re-issues the request on retry.
+  // which is what actually re-issues the request on retry. The first attempt
+  // goes to the external image host; the retry goes to the copy deployed with
+  // the app, so an image the host doesn't have yet still shows.
   const [attempt, setAttempt] = useState(0);
+  const imageSrc = imageUrl && (attempt === 0 ? externalImageUrl(imageUrl) : imageUrl);
   const [status, setStatus] = useState<ImageStatus>(() => initialStatus(imageUrl));
 
   // Reset during render when the URL changes (including the images toggle),
@@ -254,10 +258,10 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
             ) : (
               // Original logic for all other nodes
               <>
-                {imageUrl && status !== "error" && (
+                {imageSrc && status !== "error" && (
                   <Image
                     key={`${imageUrl}#${attempt}`}
-                    src={imageUrl}
+                    src={imageSrc}
                     alt={node.title}
                     fill
                     sizes={imageSizes}

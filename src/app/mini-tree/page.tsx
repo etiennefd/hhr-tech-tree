@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import Image from "next/image";
 import { getFieldColor } from "@/constants/fieldColors";
+import { externalImageUrl } from "@/utils/imageUrl";
 
 // Types
 interface TechNode {
@@ -39,8 +40,14 @@ const MiniNode: React.FC<{
   const year = Math.abs(node.year);
   const yearDisplay = node.year < 0 ? `${year} BCE` : `${year}`;
   const width = 160;
-  const imageSrc = node.localImage || node.image;
-  const isLocalImage = imageSrc?.startsWith("/") ?? false;
+  const imagePath = node.localImage || node.image;
+  const isLocalImage = imagePath?.startsWith("/") ?? false;
+  // Fall back to the copy deployed with the app if the external host fails.
+  // Tracked per path because nodes are keyed by position, so this component
+  // is reused for a different tech when the selection changes.
+  const [externalFailedFor, setExternalFailedFor] = useState<string>();
+  const imageSrc =
+    imagePath && (externalFailedFor === imagePath ? imagePath : externalImageUrl(imagePath));
 
   return (
     <div
@@ -69,6 +76,7 @@ const MiniNode: React.FC<{
               sizes={`${width}px`}
               className="w-full h-full object-cover"
               unoptimized={isLocalImage}
+              onError={() => setExternalFailedFor(imagePath)}
               style={{
                 filter: "grayscale(20%) contrast(110%)",
                 mixBlendMode: "multiply",
