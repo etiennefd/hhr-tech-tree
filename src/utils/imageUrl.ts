@@ -6,7 +6,7 @@
 //
 // Unset (local dev, preview deployments), every image is served by Next as
 // before.
-const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL?.replace(/\/+$/, "");
+export const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL?.replace(/\/+$/, "");
 
 const EXTERNALLY_HOSTED_PREFIX = "/tech-images/";
 
