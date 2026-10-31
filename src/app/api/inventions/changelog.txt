@@ -21,6 +21,7 @@
 - Added connection: EPROM --> Personal digital assistant
 - Added connection: Pocket calculator --> Personal digital assistant
 - Added connection: Personal digital assistant --> Smartphone
+- Added independent invention: Three-field crop rotation, 763
 
 30 October 2026
 - Added connection: Electron microscope --> Cryo-electron microscope
