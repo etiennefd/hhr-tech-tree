@@ -22,6 +22,7 @@
 - Added connection: Pocket calculator --> Personal digital assistant
 - Added connection: Personal digital assistant --> Smartphone
 - Added connection: Domestication of millet --> Three-field crop rotation
+- Added connection: Threshing machine --> Portable engine
 - Added independent invention: Three-field crop rotation, 763
 
 30 October 2026
