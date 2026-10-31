@@ -23,6 +23,8 @@
 - Added connection: Personal digital assistant --> Smartphone
 - Added connection: Domestication of millet --> Three-field crop rotation
 - Added connection: Threshing machine --> Portable engine
+- Added connection: Blown glass --> Aquarium
+- Added connection: Oxygen --> Aquarium
 - Added independent invention: Three-field crop rotation, 763
 
 30 October 2026
@@ -2656,7 +2658,6 @@
 13 April 2026
 - Added tech: Grooved rolling mill, 1783
 - Added tech: Reverberatory furnace, 1540
-- Added connection: Polished plate glass --> Aquarium
 - Added connection: Screw-cutting lathe --> Planer
 - Added connection: Lathe --> Screw-cutting lathe
 - Added connection: Puddling <--> Grooved rolling mill
@@ -2789,11 +2790,9 @@
 - Added connection: Mineral wool --> Glass wool
 
 31 March 2026
-- Added tech: Stable aquarium, 1850
-- Added tech: Aquarium, 1832
+- Added tech: Aquarium, 1850
 - Added connection: Glasshouse --> Terrarium
-- Added connection: Terrarium --> Stable aquarium
-- Added connection: Aquarium --> Stable aquarium
+- Added connection: Terrarium --> Aquarium
 
 30 March 2026
 - Added tech: Terrarium, 1833
