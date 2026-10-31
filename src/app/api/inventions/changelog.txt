@@ -1,5 +1,6 @@
 31 October 2026
 - Added tech: Antipsychotic, 1952
+- Added tech: Antihistamine, 1942
 - Added connection: Synthetic dye --> Antipsychotic
 - Added connection: Surgery under ether anesthesia --> Antipsychotic
 
