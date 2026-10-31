@@ -9,6 +9,10 @@
 - Added connection: Synthetic dye --> Antihistamine
 - Added connection: Penicillin --> Streptomycin
 - Added connection: Agar plate --> Streptomycin
+- Added connection: Tablet computer --> Multi-touch smartphone
+- Added connection: Laptop computer --> Tablet computer
+- Added connection: Liquid-crystal display --> Tablet computer
+- Added connection: Touchscreen --> Tablet computer
 
 30 October 2026
 - Added connection: Electron microscope --> Cryo-electron microscope
