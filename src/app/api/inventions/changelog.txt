@@ -16,6 +16,11 @@
 - Added connection: Touchscreen --> Tablet computer
 - Added connection: Stored-program computer --> Handwriting recognition
 - Added connection: Handwriting recognition --> Tablet computer
+- Added connection: Microprocessor --> Personal digital assistant
+- Added connection: Liquid-crystal display --> Personal digital assistant
+- Added connection: EPROM --> Personal digital assistant
+- Added connection: Pocket calculator --> Personal digital assistant
+- Added connection: Personal digital assistant --> Smartphone
 
 30 October 2026
 - Added connection: Electron microscope --> Cryo-electron microscope
