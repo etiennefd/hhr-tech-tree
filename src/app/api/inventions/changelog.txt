@@ -3,6 +3,8 @@
 - Added tech: Antihistamine, 1942
 - Added connection: Synthetic dye --> Antipsychotic
 - Added connection: Surgery under ether anesthesia --> Antipsychotic
+- Added connection: Antihistamine --> Antipsychotic
+- Added connection: Synthetic dye --> Antihistamine
 
 30 October 2026
 - Added connection: Electron microscope --> Cryo-electron microscope
