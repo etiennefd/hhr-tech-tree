@@ -1,5 +1,6 @@
 31 October 2026
 - Added tech: Personal digital assistant, 1984
+- Added tech: Handwriting recognition, 1964
 - Added tech: Antipsychotic, 1952
 - Added tech: Streptomycin, 1943
 - Added tech: Antihistamine, 1942
