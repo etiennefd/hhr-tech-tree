@@ -1,3 +1,8 @@
+31 October 2026
+- Added tech: Antipsychotic, 1952
+- Added connection: Synthetic dye --> Antipsychotic
+- Added connection: Surgery under ether anesthesia --> Antipsychotic
+
 30 October 2026
 - Added connection: Electron microscope --> Cryo-electron microscope
 - Added connection: Liquid nitrogen --> Cryo-electron microscope
