@@ -1,3 +1,6 @@
+1 November 2026
+- Added connection: Steam velocipede <--> Motorcycle
+
 31 October 2026
 - Added tech: Personal digital assistant, 1984
 - Added tech: Handwriting recognition, 1964
