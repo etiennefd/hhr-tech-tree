@@ -1,3 +1,6 @@
+2 November 2026
+- Added tech: Chemical weapon, 1915
+
 1 November 2026
 - Added connection: Steam velocipede <--> Motorcycle
 
