@@ -1,5 +1,11 @@
 2 November 2026
 - Added tech: Chemical weapon, 1915
+- Added connection: Chlorine --> Chemical weapon
+- Added connection: Chloralkali process --> Chemical weapon
+- Added connection: Liquefaction of gas --> Chemical weapon
+- Added connection: Chemical weapon --> Smoke detector
+- Added connection: Chemical weapon --> Gas mask
+- Added connection: Chemical weapon --> White phosphorus munition
 
 1 November 2026
 - Added connection: Steam velocipede <--> Motorcycle
