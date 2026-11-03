@@ -1,6 +1,7 @@
 3 November 2026
 - Added connection: Cotton (Old World) --> Knitting
 - Added connection: Spindle --> Knitting
+- Added connection: Musical bow --> Zither
 - Added independent invention: Speculum metal mirror, 1
 
 2 November 2026
@@ -3526,13 +3527,12 @@
 - Added tech: Geographic information system, 1963
 - Added tech: Photogrammetry, 1849
 - Added tech: Pedal harp, 1697
-- Added tech: Zither, 1800 BCE
+- Added tech: Zither, 700 BCE
 - Added tech: Harp, 3200 BCE
 - Added connection: Musical bow --> Harp
 - Added connection: Harp --> Pedal harp
 - Added connection: Harp --> Lyre
 - Added connection: Zither --> Psaltery
-- Added connection: Lyre --> Zither
 - Added connection: Transistor computer --> Geographic information system
 - Added connection: Photographic camera --> Photogrammetry
 - Added connection: Photogrammetry --> Geographic information system
