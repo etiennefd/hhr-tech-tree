@@ -1,4 +1,6 @@
 3 November 2026
+- Added connection: Cotton (Old World) --> Knitting
+- Added connection: Spindle --> Knitting
 - Added independent invention: Speculum metal mirror, 1
 
 2 November 2026
