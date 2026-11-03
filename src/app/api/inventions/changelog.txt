@@ -1,3 +1,6 @@
+3 November 2026
+- Added independent invention: Speculum metal mirror, 1
+
 2 November 2026
 - Added tech: Chemical weapon, 1915
 - Added connection: Chlorine --> Chemical weapon
