@@ -6,6 +6,7 @@
 - Added connection: Chemical weapon --> Smoke detector
 - Added connection: Chemical weapon --> Gas mask
 - Added connection: Chemical weapon --> White phosphorus munition
+- Added connection: Burin --> Engraving
 
 1 November 2026
 - Added connection: Steam velocipede <--> Motorcycle
@@ -2609,7 +2610,6 @@
 - Added connection: Sulfur --> Niello
 - Added connection: Copper smelting --> Niello
 - Added connection: Crucible --> Niello
-- Added connection: Niello --> Engraving
 - Added connection: Copper smelting --> Engraving
 - Added connection: Papermaking --> Engraving
 - Added connection: Woodblock printing --> Engraving
