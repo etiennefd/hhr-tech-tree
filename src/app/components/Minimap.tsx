@@ -29,8 +29,13 @@ interface TechTreeMinimapProps {
   totalHeight: number;
   viewportWidth: number;
   viewportHeight: number;
-  scrollLeft: number;
-  scrollTop: number;
+  // The tree's scroll container and its zoom. The minimap follows scrolling
+  // itself, so the tree viewer doesn't re-render on every scroll frame just to
+  // move the viewport rectangle.
+  scrollContainerRef: React.RefObject<HTMLDivElement | null>;
+  zoom: number;
+  // While set, scroll positions are mid-pinch and don't match `zoom` yet
+  pinchingRef?: React.RefObject<boolean>;
   onViewportChange: (x: number, y: number) => void;
   filteredNodeIds: Set<string>;
   selectedNodeId: string | null;
@@ -48,8 +53,9 @@ const TechTreeMinimap = ({
   totalHeight,
   viewportWidth,
   viewportHeight,
-  scrollLeft,
-  scrollTop,
+  scrollContainerRef,
+  zoom,
+  pinchingRef,
   onViewportChange,
   filteredNodeIds,
   selectedNodeId,
@@ -102,6 +108,33 @@ const TechTreeMinimap = ({
   // height, so every node row fits regardless of screen width (otherwise the
   // bottom rows get clipped on wide monitors).
   const scaleY = totalHeight > 0 ? MINIMAP_CONTENT_HEIGHT / totalHeight : 0;
+
+  // Scroll position in tree coordinates. A wheel or trackpad can fire scroll
+  // events faster than the browser paints, so reads are coalesced to one per
+  // animation frame, taken at frame time so they never lag the real position.
+  const [{ scrollLeft, scrollTop }, setTreeScroll] = useState({ scrollLeft: 0, scrollTop: 0 });
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    let frame: number | null = null;
+    const read = () => {
+      frame = null;
+      if (pinchingRef?.current) return;
+      setTreeScroll({
+        scrollLeft: container.scrollLeft / zoom,
+        scrollTop: container.scrollTop / zoom,
+      });
+    };
+    const handleScroll = () => {
+      if (frame === null) frame = requestAnimationFrame(read);
+    };
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    read();
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
+  }, [scrollContainerRef, zoom, pinchingRef]);
 
   const minimapViewport = {
     width: Math.min(viewportWidth * scale, containerWidth * scale),
@@ -344,8 +377,13 @@ const TechTreeMinimap = ({
           style={{
             width: minimapViewport.width,
             height: minimapViewport.height,
-            left: minimapViewport.x,
-            top: minimapViewport.y,
+            // Moved with a transform rather than left/top: it moves on every
+            // scroll frame, and a transform doesn't make the browser lay out
+            // the page again.
+            left: 0,
+            top: 0,
+            // Whole pixels, as left/top snapped to, so the border stays crisp
+            transform: `translate(${Math.round(minimapViewport.x)}px, ${Math.round(minimapViewport.y)}px)`,
             border: `1px solid ${engineeringBlue}`,
             backgroundColor: `${engineeringBlue}20`,
             boxShadow: `0 0 0 1px ${engineeringBlue}40`,
