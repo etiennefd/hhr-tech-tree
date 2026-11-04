@@ -1,3 +1,6 @@
+4 November 2026
+- Added tech: Monochord, 300 BCE
+
 3 November 2026
 - Added connection: Cotton (Old World) --> Knitting
 - Added connection: Spindle --> Knitting
