@@ -1,5 +1,8 @@
 4 November 2026
 - Added tech: Monochord, 300 BCE
+- Added connection: Kithara --> Monochord
+- Added connection: Monochord --> Psaltery
+- Added connection: Monochord --> Clavichord
 
 3 November 2026
 - Added connection: Cotton (Old World) --> Knitting
@@ -3535,7 +3538,6 @@
 - Added connection: Musical bow --> Harp
 - Added connection: Harp --> Pedal harp
 - Added connection: Harp --> Lyre
-- Added connection: Zither --> Psaltery
 - Added connection: Transistor computer --> Geographic information system
 - Added connection: Photographic camera --> Photogrammetry
 - Added connection: Photogrammetry --> Geographic information system
