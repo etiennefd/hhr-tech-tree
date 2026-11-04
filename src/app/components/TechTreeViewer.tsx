@@ -351,7 +351,6 @@ export function TechTreeViewer() {
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(null);
   const [selectedLinkKey, setSelectedLinkKey] = useState<string | null>(null);
   const [totalHeight, setTotalHeight] = useState(1000);
-  const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [filters, setFilters] = useState<FilterState>({
     fields: new Set(),
@@ -875,12 +874,6 @@ export function TechTreeViewer() {
           top: newScrollTop * zoom,
           behavior: "instant",
         });
-        
-        // Force update the scroll position state to ensure minimap sync
-        setScrollPosition({
-          left: newScrollLeft * zoom,
-          top: newScrollTop * zoom
-        });
       }
     },
     []
@@ -998,8 +991,9 @@ export function TechTreeViewer() {
     if (!data.nodes.length || !horizontalScrollContainerRef.current || !containerDimensions.width || !containerDimensions.height) return;
 
     const zoom = zoomLevelRef.current;
-    const viewportCenterX = scrollPosition.left / zoom + containerDimensions.width / (2 * zoom);
-    const viewportCenterY = scrollPosition.top / zoom + containerDimensions.height / (2 * zoom);
+    const { scrollLeft, scrollTop } = horizontalScrollContainerRef.current;
+    const viewportCenterX = scrollLeft / zoom + containerDimensions.width / (2 * zoom);
+    const viewportCenterY = scrollTop / zoom + containerDimensions.height / (2 * zoom);
 
     let nearestNode: TechNode | null = null;
     let minDistanceSq = Infinity;
@@ -1027,7 +1021,7 @@ export function TechTreeViewer() {
         behavior: 'smooth',
       });
     }
-  }, [data.nodes, scrollPosition, containerDimensions, horizontalScrollContainerRef, getXPosition]);
+  }, [data.nodes, containerDimensions, horizontalScrollContainerRef, getXPosition]);
 
   // Memoized helper functions
 
@@ -1133,8 +1127,10 @@ export function TechTreeViewer() {
       zoomHostRef: treeShellRef,
       scrollBoundsRef,
       scaleWrapperRef,
-      onPinchEnd: (scrollLeft, scrollTop) => {
-        setScrollPosition({ left: scrollLeft, top: scrollTop });
+      // Scroll events are ignored mid-pinch, so listeners (the minimap, the
+      // viewport culling) catch up on the final position here.
+      onPinchEnd: () => {
+        horizontalScrollContainerRef.current?.dispatchEvent(new Event("scroll"));
       },
     }
   );
@@ -2084,35 +2080,6 @@ export function TechTreeViewer() {
     };
   }, []);
 
-  // Scroll position drives the minimap viewport rect, so it has to stay in
-  // sync, but a wheel or trackpad can fire scroll events faster than the
-  // browser paints. Coalescing to one state update per animation frame bounds
-  // the work without ever lagging behind the real scroll position: the handler
-  // reads scrollLeft/scrollTop at frame time, not at event time.
-  const scrollFrameRef = useRef<number | null>(null);
-  const handleContainerScroll = useCallback(() => {
-    if (isPinchingRef.current) return;
-    if (scrollFrameRef.current !== null) return;
-
-    scrollFrameRef.current = requestAnimationFrame(() => {
-      scrollFrameRef.current = null;
-      const container = horizontalScrollContainerRef.current;
-      if (!container) return;
-      setScrollPosition({
-        left: container.scrollLeft,
-        top: container.scrollTop,
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (scrollFrameRef.current !== null) {
-        cancelAnimationFrame(scrollFrameRef.current);
-      }
-    };
-  }, []);
-
   // Update the scroll handler to find containers at the right time
   useEffect(() => {
     const container = horizontalScrollContainerRef.current;
@@ -2312,6 +2279,49 @@ export function TechTreeViewer() {
     connectionLookupCache.current.set(nodeId, connections);
     return connections;
   }, [data.links]);
+
+  // The connections SVG only spans the area around the viewport, in tree
+  // coordinates, with a matching viewBox so paths keep their tree
+  // coordinates. Sized to the whole tree (over 130,000px wide) it made the
+  // browser composite and repaint one enormous surface on every scroll update.
+  // Paths reaching past the box are clipped, which is fine since that part is
+  // off screen. The margin is a full screen in each direction so a fast pan
+  // doesn't outrun the throttled viewport updates; edges snap to a coarse grid
+  // so the box doesn't change size on every update.
+  const connectionsSvgBox = useMemo(() => {
+    const SNAP = 500;
+    const marginX = Math.max(
+      MAX_CONNECTION_VIEWPORT_BUFFER,
+      containerDimensions.width / treeZoomLevel
+    );
+    const marginY = Math.max(
+      MAX_CONNECTION_VIEWPORT_BUFFER,
+      containerDimensions.height / treeZoomLevel
+    );
+    const left = Math.max(0, Math.floor((deferredViewportState.left - marginX) / SNAP) * SNAP);
+    const top = Math.max(0, Math.floor((deferredViewportState.top - marginY) / SNAP) * SNAP);
+    const right = Math.min(
+      containerWidth,
+      Math.ceil((deferredViewportState.right + marginX) / SNAP) * SNAP
+    );
+    const bottom = Math.min(
+      totalHeight,
+      Math.ceil((deferredViewportState.bottom + marginY) / SNAP) * SNAP
+    );
+    return {
+      left,
+      top,
+      width: Math.max(0, right - left),
+      height: Math.max(0, bottom - top),
+    };
+  }, [
+    deferredViewportState,
+    containerDimensions.width,
+    containerDimensions.height,
+    treeZoomLevel,
+    containerWidth,
+    totalHeight,
+  ]);
 
   // Create stable dependency values for set comparisons
   const stableHighlightedAncestorsString = useMemo(
@@ -2764,7 +2774,6 @@ export function TechTreeViewer() {
           zIndex: 20 // Higher than minimap's z-index of 10
         }}
         onMouseDown={handleMouseDown}
-        onScroll={handleContainerScroll}
       >
         <div
           ref={treeShellRef}
@@ -2841,8 +2850,13 @@ export function TechTreeViewer() {
               >
                 {/* SVG connections */}
                 <svg
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute"
+                  viewBox={`${connectionsSvgBox.left} ${connectionsSvgBox.top} ${connectionsSvgBox.width} ${connectionsSvgBox.height}`}
                   style={{
+                    left: connectionsSvgBox.left,
+                    top: connectionsSvgBox.top,
+                    width: connectionsSvgBox.width,
+                    height: connectionsSvgBox.height,
                     zIndex: 1,
                   }}
                 >
@@ -3552,8 +3566,9 @@ export function TechTreeViewer() {
               totalHeight={totalHeight}
               viewportWidth={containerDimensions.width / treeZoomLevel}
               viewportHeight={containerDimensions.height / treeZoomLevel}
-              scrollLeft={scrollPosition.left / treeZoomLevel}
-              scrollTop={scrollPosition.top / treeZoomLevel}
+              scrollContainerRef={horizontalScrollContainerRef}
+              zoom={treeZoomLevel}
+              pinchingRef={isPinchingRef}
               onViewportChange={handleViewportChange}
               filteredNodeIds={filteredNodeIds}
               selectedNodeId={selectedNodeId}
@@ -3570,7 +3585,10 @@ export function TechTreeViewer() {
       {process.env.NODE_ENV === 'development' && showDebugOverlay && (
         <DebugOverlay
           viewport={visibleViewport}
-          scrollPosition={scrollPosition}
+          scrollPosition={{
+            left: horizontalScrollContainerRef.current?.scrollLeft ?? 0,
+            top: horizontalScrollContainerRef.current?.scrollTop ?? 0,
+          }}
           totalNodes={data.nodes.length}
           visibleNodes={visibleElements.visibleNodes.length}
           strictlyVisibleNodes={strictlyVisibleNodes.length}
