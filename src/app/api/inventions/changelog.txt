@@ -4,6 +4,7 @@
 - Added connection: Monochord --> Psaltery
 - Added connection: Monochord --> Clavichord
 - Added connection: Chinese zither <--> Monochord
+- Added connection: Bloomery and wrought iron --> Padlock
 
 3 November 2026
 - Added connection: Cotton (Old World) --> Knitting
