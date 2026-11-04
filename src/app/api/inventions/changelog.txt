@@ -3853,7 +3853,7 @@
 
 19 July 2025
 - Added tech: Combination lock, 1
-- Added tech: Padlock, 200 BCE
+- Added tech: Padlock, 210 BCE
 - Added connection: Egyptian wooden pin tumbler lock --> Combination lock
 
 17 July 2025
