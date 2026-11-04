@@ -3575,7 +3575,6 @@
 - Added connection: Vapor-compression refrigeration system --> Hampson–Linde air liquefaction
 - Added connection: Triode --> Smoke detector
 - Added connection: Cigarette --> Smoke detector
-- Added connection: Mustard gas --> Smoke detector
 
 29 August 2025
 - Added tech: Smoke detector, 1940
@@ -3856,7 +3855,6 @@
 - Added tech: Combination lock, 1
 - Added tech: Padlock, 200 BCE
 - Added connection: Egyptian wooden pin tumbler lock --> Combination lock
-- Added connection: Egyptian wooden pin tumbler lock --> Padlock
 
 17 July 2025
 - Added tech: Fuel pump, 1885
