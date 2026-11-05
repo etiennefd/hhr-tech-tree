@@ -1,3 +1,6 @@
+5 November 2026
+- Added connection: Lime --> Parchment
+
 4 November 2026
 - Added tech: Monochord, 300 BCE
 - Added connection: Kithara --> Monochord
