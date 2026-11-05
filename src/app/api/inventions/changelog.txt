@@ -4024,7 +4024,7 @@
 
 13 June 2025
 - Added tech: Palm-leaf manuscript, 450
-- Added tech: Birch bark manuscript, 50
+- Added tech: Birch bark manuscript, 1
 
 12 June 2025
 - Added tech: Antivirus software, 1987
