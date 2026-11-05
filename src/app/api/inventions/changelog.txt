@@ -3,6 +3,11 @@
 - Added connection: Lime --> Parchment
 - Added connection: Silver mirror --> Solar furnace
 - Added connection: Cockcroft–Walton generator --> Nuclear fusion
+- Added connection: Stored-program computer --> Graphics tablet
+- Added connection: Light pen --> Graphics tablet
+- Added connection: Printed circuit board --> Graphics tablet
+- Added connection: Graphics tablet --> Handwriting recognition
+- Added connection: Graphics tablet --> Graphics software
 
 4 November 2026
 - Added tech: Monochord, 300 BCE
