@@ -1,5 +1,6 @@
 5 November 2026
 - Added connection: Lime --> Parchment
+- Added connection: Silver mirror --> Solar furnace
 
 4 November 2026
 - Added tech: Monochord, 300 BCE
