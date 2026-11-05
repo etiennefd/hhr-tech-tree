@@ -378,6 +378,15 @@ export function TechTreeViewer() {
   });
   // Bumped by "Reset visible connections" to force a recalculation that drops sticky connections
   const [connectionResetToken, setConnectionResetToken] = useState(0);
+  // True while the tree is animating a scroll we started (jumping to a node,
+  // a year, the start). Sticky connections are skipped meanwhile, since the
+  // user never saw the areas the animation sweeps through, and dropped once it
+  // settles, so the destination looks as it would after an instant jump.
+  const programmaticScrollRef = useRef(false);
+  const programmaticScrollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const programmaticScrollMovedRef = useRef(false);
+  const programmaticScrollTargetRef = useRef<{ left: number; top: number } | null>(null);
+  const resetVisibleConnectionsRef = useRef<() => void>(() => {});
   const [showImages, setShowImages] = useState(() => {
     // Initialize from localStorage if available, otherwise default to true
     if (typeof window !== 'undefined') {
@@ -677,19 +686,64 @@ export function TechTreeViewer() {
       return positionedNodes;
     }, []);
 
+  // The animation counts as over once the container reaches the target (or
+  // the browser reports scrollend), plus a beat for the throttled viewport
+  // update to land, so the destination is computed without sticky
+  // connections. If the target is never reached (another scroll interrupted
+  // it), it ends after a longer lull in scroll events. A plain "no scroll
+  // event for a moment" check isn't enough: one slow render mid-animation can
+  // outlast it.
+  const PROGRAMMATIC_SCROLL_SETTLE_MS = 150;
+  const PROGRAMMATIC_SCROLL_STALL_MS = 1000;
+  const finishProgrammaticScroll = useCallback(() => {
+    if (programmaticScrollTimerRef.current) {
+      clearTimeout(programmaticScrollTimerRef.current);
+      programmaticScrollTimerRef.current = null;
+    }
+    if (!programmaticScrollRef.current) return;
+    programmaticScrollRef.current = false;
+    programmaticScrollTargetRef.current = null;
+    // If the target was already in view nothing moved, and the connections
+    // on screen are ones the user has seen; leave them be.
+    if (programmaticScrollMovedRef.current) resetVisibleConnectionsRef.current();
+  }, []);
+
+  const armProgrammaticScrollSettle = useCallback(
+    (delay: number) => {
+      if (programmaticScrollTimerRef.current) {
+        clearTimeout(programmaticScrollTimerRef.current);
+      }
+      programmaticScrollTimerRef.current = setTimeout(finishProgrammaticScroll, delay);
+    },
+    [finishProgrammaticScroll]
+  );
+
+  // Smooth-scroll the tree to a position of our choosing (as opposed to the
+  // user panning there). See programmaticScrollRef.
+  const smoothScrollTree = useCallback(
+    (options: { left?: number; top?: number }) => {
+      const container = horizontalScrollContainerRef.current;
+      if (!container) return;
+      const clamp = (value: number, max: number) => Math.min(Math.max(0, value), Math.max(0, max));
+      programmaticScrollTargetRef.current = {
+        left: clamp(options.left ?? container.scrollLeft, container.scrollWidth - container.clientWidth),
+        top: clamp(options.top ?? container.scrollTop, container.scrollHeight - container.clientHeight),
+      };
+      programmaticScrollRef.current = true;
+      programmaticScrollMovedRef.current = false;
+      armProgrammaticScrollSettle(PROGRAMMATIC_SCROLL_STALL_MS);
+      container.scrollTo({ ...options, behavior: 'smooth' });
+    },
+    [armProgrammaticScrollSettle]
+  );
+
   // Add resetView function
   const resetView = useCallback(() => {
-    if (horizontalScrollContainerRef.current) {
-      horizontalScrollContainerRef.current.scrollTo({
-        left: 0,
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
+    smoothScrollTree({ left: 0, top: 0 });
     if (searchParams.get('node') || searchParams.get('initialNodeId')) {
       router.replace('/', { scroll: false });
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, smoothScrollTree]);
 
   // EFFECTS
 
@@ -968,19 +1022,15 @@ export function TechTreeViewer() {
       const verticalPosition = yPosition - containerDimensions.height / 2 + 150;
 
       // Start scrolling AFTER selection state is updated
-      const container = horizontalScrollContainerRef.current;
-      if (container) {
-        container.scrollTo({
-          left: Math.max(0, horizontalPosition),
-          top: Math.max(0, verticalPosition),
-          behavior: "smooth",
-        });
-      }
+      smoothScrollTree({
+        left: Math.max(0, horizontalPosition),
+        top: Math.max(0, verticalPosition),
+      });
 
       performanceMarks.end('nodeClick');
       performanceMarks.log('nodeClick');
     },
-    [clearSelectedNodeUrl, data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router]
+    [clearSelectedNodeUrl, data.nodes, selectedNodeId, getXPosition, containerDimensions.height, isMobile, router, smoothScrollTree]
   );
   // For callbacks handed to memoized children, which must stay stable but
   // still act on the current selection.
@@ -1015,13 +1065,12 @@ export function TechTreeViewer() {
       const targetScrollLeft = getXPosition(nn.year) * zoom - containerDimensions.width / 2;
       const targetScrollTop = nn.y! * zoom - containerDimensions.height / 2;
 
-      horizontalScrollContainerRef.current.scrollTo({
+      smoothScrollTree({
         left: Math.max(0, targetScrollLeft),
         top: Math.max(0, targetScrollTop),
-        behavior: 'smooth',
       });
     }
-  }, [data.nodes, containerDimensions, horizontalScrollContainerRef, getXPosition]);
+  }, [data.nodes, containerDimensions, horizontalScrollContainerRef, getXPosition, smoothScrollTree]);
 
   // Memoized helper functions
 
@@ -1516,20 +1565,14 @@ export function TechTreeViewer() {
   const handleSelectResult = useCallback(
     (result: SearchResult) => {
       if (result.type === "year" && result.year) {
-        if (horizontalScrollContainerRef.current) {
-          const xPosition = getXPosition(result.year) * treeZoomLevel;
-          const horizontalPosition = xPosition - (window.innerWidth / 2);
-
-          horizontalScrollContainerRef.current.scrollTo({
-            left: Math.max(0, horizontalPosition),
-            behavior: "smooth",
-          });
-        }
+        const xPosition = getXPosition(result.year) * treeZoomLevel;
+        const horizontalPosition = xPosition - (window.innerWidth / 2);
+        smoothScrollTree({ left: Math.max(0, horizontalPosition) });
       } else if (result.node) {
         handleNodeClick(result.node.title);
       }
     },
-    [getXPosition, handleNodeClick, treeZoomLevel]
+    [getXPosition, handleNodeClick, treeZoomLevel, smoothScrollTree]
   );
 
   const isNodeFiltered = useCallback(
@@ -2087,18 +2130,58 @@ export function TechTreeViewer() {
 
     const handleScroll = () => {
       if (isPinchingRef.current) return;
+      if (programmaticScrollRef.current) {
+        programmaticScrollMovedRef.current = true;
+        const target = programmaticScrollTargetRef.current;
+        const reachedTarget = !!target &&
+          Math.abs(container.scrollLeft - target.left) <= 1 &&
+          Math.abs(container.scrollTop - target.top) <= 1;
+        armProgrammaticScrollSettle(
+          reachedTarget ? PROGRAMMATIC_SCROLL_SETTLE_MS : PROGRAMMATIC_SCROLL_STALL_MS
+        );
+      }
       updateViewportState(container.scrollLeft, container.scrollTop);
     };
 
+    // The user grabbing the tree mid-animation takes over: from then on it's
+    // their scroll, so sticky connections apply again.
+    const handleUserTakeover = () => {
+      if (!programmaticScrollRef.current) return;
+      programmaticScrollRef.current = false;
+      programmaticScrollTargetRef.current = null;
+      if (programmaticScrollTimerRef.current) {
+        clearTimeout(programmaticScrollTimerRef.current);
+        programmaticScrollTimerRef.current = null;
+      }
+    };
+
+    const handleScrollEnd = () => {
+      if (programmaticScrollRef.current) armProgrammaticScrollSettle(PROGRAMMATIC_SCROLL_SETTLE_MS);
+    };
+
     container.addEventListener('scroll', handleScroll, { passive: true });
+    container.addEventListener('scrollend', handleScrollEnd);
+    container.addEventListener('wheel', handleUserTakeover, { passive: true });
+    container.addEventListener('touchstart', handleUserTakeover, { passive: true });
+    container.addEventListener('pointerdown', handleUserTakeover, { passive: true });
     window.addEventListener('resize', handleScroll);
     handleScroll();
 
     return () => {
       container.removeEventListener('scroll', handleScroll);
+      container.removeEventListener('scrollend', handleScrollEnd);
+      container.removeEventListener('wheel', handleUserTakeover);
+      container.removeEventListener('touchstart', handleUserTakeover);
+      container.removeEventListener('pointerdown', handleUserTakeover);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [containerDimensions, updateViewportState]);
+  }, [containerDimensions, updateViewportState, armProgrammaticScrollSettle]);
+
+  useEffect(() => () => {
+    if (programmaticScrollTimerRef.current) {
+      clearTimeout(programmaticScrollTimerRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     if (!hasFinePointer) return;
@@ -2262,6 +2345,7 @@ export function TechTreeViewer() {
     lastFrameData.current = null;
     setConnectionResetToken(token => token + 1);
   }, []);
+  resetVisibleConnectionsRef.current = resetVisibleConnections;
 
   // Add this helper function to get connections for a node
   const getNodeConnectionIndices = useCallback((nodeId: string): Set<number> => {
@@ -2469,8 +2553,9 @@ export function TechTreeViewer() {
           }
       });
 
-      // Second pass: Find connections that were previously visible and are still in viewport
-      previousVisibleConnections.forEach(index => {
+      // Second pass: Find connections that were previously visible and are still in viewport.
+      // Skipped during a programmatic scroll (see programmaticScrollRef).
+      if (!programmaticScrollRef.current) previousVisibleConnections.forEach(index => {
           if (!currentFrameDrivenConnectionIndices.has(index)) {
               const link = data.links[index];
               if (link && isConnectionInViewport(link, index)) {
