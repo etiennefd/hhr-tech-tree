@@ -1,4 +1,5 @@
 5 November 2026
+- Added tech: Graphics tablet, 1963
 - Added connection: Lime --> Parchment
 - Added connection: Silver mirror --> Solar furnace
 - Added connection: Cockcroft–Walton generator --> Nuclear fusion
