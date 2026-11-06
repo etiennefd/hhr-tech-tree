@@ -1,11 +1,14 @@
 6 November 2026
-- Added tech: Resistive touchscreen, 1974
+- Added tech: Resistive touchscreen, 1976
 - Added connection: Capacitive touchscreen <--> Resistive touchscreen
 - Added connection: Rope and twine --> Bow and arrow
 - Added connection: Graphics tablet --> Resistive touchscreen
 - Added connection: Leyden jar --> Capacitive touchscreen
 - Added connection: Leyden jar --> MOS DRAM
 - Added connection: Leyden jar --> Electronic flashtube
+- Added connection: Graphics tablet --> Multi-touch
+- Added connection: Resistive touchscreen --> Smartphone
+- Added connection: Resistive touchscreen --> Tablet computer
 - Added independent invention: Capacitive touchscreen, 1973
 
 5 November 2026
@@ -61,7 +64,6 @@
 - Added connection: Tablet computer --> Multi-touch smartphone
 - Added connection: Laptop computer --> Tablet computer
 - Added connection: Liquid-crystal display --> Tablet computer
-- Added connection: Capacitive touchscreen --> Tablet computer
 - Added connection: Stored-program computer --> Handwriting recognition
 - Added connection: Handwriting recognition --> Tablet computer
 - Added connection: Microprocessor --> Personal digital assistant
@@ -292,7 +294,6 @@
 - Added connection: Hypertext --> Hypertext Transfer Protocol
 - Added connection: Hypermedia --> Virtual reality headset
 - Added connection: LaserDisc --> Hypermedia
-- Added connection: Capacitive touchscreen --> Hypermedia
 - Added connection: Framebuffer --> Hypermedia
 - Added connection: Computer-generated imagery --> Hypermedia
 - Added connection: Pedal bicycle --> Ball bearing
