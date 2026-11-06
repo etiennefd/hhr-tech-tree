@@ -18,6 +18,9 @@
 - Added connection: Leyden jar --> Dynamic random-access memory
 - Added connection: Mica capacitor --> Ceramic capacitor
 - Added connection: Leyden jar --> Mica capacitor
+- Added connection: Titanium white --> Ceramic capacitor
+- Added connection: Leyden jar --> Ceramic capacitor
+- Added connection: Porcelain --> Ceramic capacitor
 - Added independent invention: Capacitive touchscreen, 1973
 
 5 November 2026
