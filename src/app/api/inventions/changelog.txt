@@ -5,7 +5,6 @@
 - Added connection: Rope and twine --> Bow and arrow
 - Added connection: Graphics tablet --> Resistive touchscreen
 - Added connection: Leyden jar --> Capacitive touchscreen
-- Added connection: Leyden jar --> MOS DRAM
 - Added connection: Paper capacitor --> Electronic flashtube
 - Added connection: Graphics tablet --> Multi-touch
 - Added connection: Resistive touchscreen --> Smartphone
@@ -14,6 +13,7 @@
 - Added connection: Leyden jar --> Paper capacitor
 - Added connection: Papermaking --> Paper capacitor
 - Added connection: Paraffin wax --> Paper capacitor
+- Added connection: Leyden jar --> Dynamic random-access memory
 - Added independent invention: Capacitive touchscreen, 1973
 
 5 November 2026
