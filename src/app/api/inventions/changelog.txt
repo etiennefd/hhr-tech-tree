@@ -11,6 +11,9 @@
 - Added connection: Resistive touchscreen --> Smartphone
 - Added connection: Resistive touchscreen --> Tablet computer
 - Added connection: Paper capacitor --> External DC defibrillator
+- Added connection: Leyden jar --> Paper capacitor
+- Added connection: Papermaking --> Paper capacitor
+- Added connection: Paraffin wax --> Paper capacitor
 - Added independent invention: Capacitive touchscreen, 1973
 
 5 November 2026
