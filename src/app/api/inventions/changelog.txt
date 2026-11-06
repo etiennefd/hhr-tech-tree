@@ -1,3 +1,7 @@
+6 November 2026
+- Added tech: Resistive touchscreen, 1974
+- Added connection: Capacitive touchscreen <--> Resistive touchscreen
+
 5 November 2026
 - Added tech: Graphics tablet, 1963
 - Added connection: Lime --> Parchment
@@ -51,7 +55,7 @@
 - Added connection: Tablet computer --> Multi-touch smartphone
 - Added connection: Laptop computer --> Tablet computer
 - Added connection: Liquid-crystal display --> Tablet computer
-- Added connection: Touchscreen --> Tablet computer
+- Added connection: Capacitive touchscreen --> Tablet computer
 - Added connection: Stored-program computer --> Handwriting recognition
 - Added connection: Handwriting recognition --> Tablet computer
 - Added connection: Microprocessor --> Personal digital assistant
@@ -282,7 +286,7 @@
 - Added connection: Hypertext --> Hypertext Transfer Protocol
 - Added connection: Hypermedia --> Virtual reality headset
 - Added connection: LaserDisc --> Hypermedia
-- Added connection: Touchscreen --> Hypermedia
+- Added connection: Capacitive touchscreen --> Hypermedia
 - Added connection: Framebuffer --> Hypermedia
 - Added connection: Computer-generated imagery --> Hypermedia
 - Added connection: Pedal bicycle --> Ball bearing
@@ -2002,7 +2006,7 @@
 - Added connection: Leyden jar --> Condenser microphone
 - Added connection: Electrolytic capacitor --> MOS DRAM
 - Added connection: Electrolytic capacitor --> Electronic flashtube
-- Added connection: Electrolytic capacitor --> Touchscreen
+- Added connection: Electrolytic capacitor --> Capacitive touchscreen
 - Added connection: Pottery --> Stoneware
 - Added connection: Kiln --> Stoneware
 - Added connection: Stoneware --> Porcelain
@@ -3042,7 +3046,7 @@
 - Added connection: High-level programming language --> Portable operating system
 - Added connection: Light pen --> Computer-aided design
 - Added connection: Stored-program computer --> Light pen
-- Added connection: Light pen --> Touchscreen
+- Added connection: Light pen --> Capacitive touchscreen
 - Added connection: Cathode-ray tube --> Light pen
 - Added connection: Stored-program computer --> Computer-aided design
 - Added connection: Human genome sequencing --> Massively parallel sequencing
