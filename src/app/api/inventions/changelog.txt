@@ -2,6 +2,7 @@
 - Added tech: Resistive touchscreen, 1974
 - Added connection: Capacitive touchscreen <--> Resistive touchscreen
 - Added connection: Rope and twine --> Bow and arrow
+- Added connection: Graphics tablet --> Resistive touchscreen
 - Added connection: Leyden jar --> Capacitive touchscreen
 - Added connection: Leyden jar --> MOS DRAM
 - Added connection: Leyden jar --> Electronic flashtube
