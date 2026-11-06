@@ -3593,7 +3593,7 @@
 - Added connection: Cigarette --> Smoke detector
 
 29 August 2025
-- Added tech: Smoke detector, 1940
+- Added tech: Smoke detector, 1941
 - Added tech: Alkaline fuel cell, 1932
 - Added tech: Dishwasher, 1886
 - Added connection: Hydrogen --> Fuel cell
