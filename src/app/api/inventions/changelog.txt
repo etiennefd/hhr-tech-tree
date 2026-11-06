@@ -16,6 +16,8 @@
 - Added connection: Paper --> Paper capacitor
 - Added connection: Paraffin wax --> Paper capacitor
 - Added connection: Leyden jar --> Dynamic random-access memory
+- Added connection: Mica capacitor --> Ceramic capacitor
+- Added connection: Leyden jar --> Mica capacitor
 - Added independent invention: Capacitive touchscreen, 1973
 
 5 November 2026
