@@ -1,6 +1,7 @@
 6 November 2026
 - Added tech: Resistive touchscreen, 1974
 - Added connection: Capacitive touchscreen <--> Resistive touchscreen
+- Added connection: Rope and twine --> Bow and arrow
 
 5 November 2026
 - Added tech: Graphics tablet, 1963
