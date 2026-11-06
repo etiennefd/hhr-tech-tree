@@ -11,7 +11,7 @@
 - Added connection: Resistive touchscreen --> Tablet computer
 - Added connection: Paper capacitor --> External DC defibrillator
 - Added connection: Leyden jar --> Paper capacitor
-- Added connection: Papermaking --> Paper capacitor
+- Added connection: Paper --> Paper capacitor
 - Added connection: Paraffin wax --> Paper capacitor
 - Added connection: Leyden jar --> Dynamic random-access memory
 - Added independent invention: Capacitive touchscreen, 1973
@@ -1010,7 +1010,7 @@
 - Added connection: Rope and twine --> Bamboo and wooden slips
 - Added connection: Bamboo --> Fire lance
 - Added connection: Bamboo --> Rocket
-- Added connection: Papermaking --> Fire arrow
+- Added connection: Paper --> Fire arrow
 - Added connection: Rawhide --> Chinese top
 - Added connection: Bamboo --> Fireworks
 - Added connection: Tree resin --> Fire arrow
@@ -1089,7 +1089,7 @@
 - Added connection: Crane --> Hydraulic jigger and crane
 - Added connection: Hydraulic jigger and crane --> Hydraulic accumulator
 - Added connection: Paper mill --> Paper machine
-- Added connection: Papermaking --> Paper mill
+- Added connection: Paper --> Paper mill
 - Added connection: Fulling mill --> Paper mill
 - Added connection: Paper mill --> Mechanical wood pulping
 - Added connection: Trip hammer --> Fulling mill
@@ -2559,7 +2559,7 @@
 - Added connection: Gum arabic --> Watercolor paint cake
 - Added connection: Ink --> Watercolor paint cake
 - Added connection: Paint --> Watercolor paint cake
-- Added connection: Papermaking --> Watercolor paint cake
+- Added connection: Paper --> Watercolor paint cake
 - Added connection: Numerical control --> Laser cutting
 - Added connection: Acrylic glass --> Acrylic paint
 - Added connection: Oil paint --> Acrylic paint
@@ -2648,7 +2648,7 @@
 - Added connection: Copper smelting --> Niello
 - Added connection: Crucible --> Niello
 - Added connection: Copper smelting --> Engraving
-- Added connection: Papermaking --> Engraving
+- Added connection: Paper --> Engraving
 - Added connection: Woodblock printing --> Engraving
 - Added connection: Engraving --> Siderography and steel engraving
 - Added connection: Siderography and steel engraving --> Adhesive postage stamp
@@ -3949,7 +3949,7 @@
 - Added connection: Kite experiment --> Lightning rod
 - Added connection: Leyden jar --> Kite experiment
 - Added connection: Box kite --> Airplane
-- Added connection: Papermaking --> Kite
+- Added connection: Paper --> Kite
 - Added connection: Motorcycle --> Rotary engine
 - Added connection: Automated anti-aircraft fire-control system --> Computer-generated imagery
 
@@ -4109,7 +4109,7 @@
 - Added tech: Clavichord, 1404
 - Added tech: Shawm, 1150
 - Added tech: Buisine, 1100
-- Added connection: Papermaking --> Cardboard
+- Added connection: Paper --> Cardboard
 - Added connection: Cardboard --> Corrugated fiberboard
 - Added connection: Corrugated fiberboard --> Pre-cut cardboard box
 - Added connection: Movie camera --> Zoom lens
