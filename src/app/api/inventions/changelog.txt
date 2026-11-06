@@ -6,10 +6,11 @@
 - Added connection: Graphics tablet --> Resistive touchscreen
 - Added connection: Leyden jar --> Capacitive touchscreen
 - Added connection: Leyden jar --> MOS DRAM
-- Added connection: Leyden jar --> Electronic flashtube
+- Added connection: Paper capacitor --> Electronic flashtube
 - Added connection: Graphics tablet --> Multi-touch
 - Added connection: Resistive touchscreen --> Smartphone
 - Added connection: Resistive touchscreen --> Tablet computer
+- Added connection: Paper capacitor --> External DC defibrillator
 - Added independent invention: Capacitive touchscreen, 1973
 
 5 November 2026
@@ -2018,7 +2019,6 @@
 - Added connection: Stoneware --> Coade stone
 - Added connection: Closed-core transformer --> AC defibrillator
 - Added connection: Electrotherapy --> AC defibrillator
-- Added connection: Electrolytic capacitor --> External DC defibrillator
 - Added connection: Electrocardiography machine --> Automated external defibrillator
 - Added connection: Photographic camera --> Flash powder
 - Added connection: Portland cement --> Cast stone
