@@ -16,6 +16,7 @@
 - Added connection: Activated carbon --> Supercapacitor
 - Added connection: Carbon dioxide --> Activated carbon
 - Added connection: Beet sugar factory --> Activated carbon
+- Added connection: Air-purifying respirator --> Gas mask
 
 6 November 2026
 - Added tech: Resistive touchscreen, 1976
