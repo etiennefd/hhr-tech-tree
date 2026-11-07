@@ -3498,6 +3498,15 @@ export function TechTreeViewer() {
                             );
                           })()}
 
+                          {node.subfields && node.subfields.length > 0 && (
+                            <p className="text-xs mb-1">
+                              <strong>
+                                {node.subfields.length > 1 ? "Subfields" : "Subfield"}:
+                              </strong>{" "}
+                              {node.subfields.join(", ")}
+                            </p>
+                          )}
+
                           {(() => {
                             const nodeId = selectedNodeId || hoveredNode?.id;
                             if (!nodeId) return null;
