@@ -2,6 +2,7 @@
 - Added tech: Supercapacitor, 1962
 - Added tech: Solid oxide fuel cell, 1937
 - Added tech: Activated carbon, 1900
+- Added tech: Air-purifying respirator, 1849
 - Added connection: Radio waves and spark-gap transmitter --> Mica capacitor
 - Added connection: Ceramic capacitor --> Printed thick-film ceramic circuit
 - Added connection: Zirconium --> Nernst lamp
