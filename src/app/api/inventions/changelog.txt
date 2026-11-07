@@ -2,6 +2,10 @@
 - Added tech: Solid oxide fuel cell, 1937
 - Added connection: Radio waves and spark-gap transmitter --> Mica capacitor
 - Added connection: Ceramic capacitor --> Printed thick-film ceramic circuit
+- Added connection: Zirconium --> Nernst lamp
+- Added connection: Yttrium --> Nernst lamp
+- Added connection: Nernst lamp --> Solid oxide fuel cell
+- Added connection: Fuel cell --> Solid oxide fuel cell
 
 6 November 2026
 - Added tech: Resistive touchscreen, 1976
