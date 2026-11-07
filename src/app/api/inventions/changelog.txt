@@ -7,6 +7,8 @@
 - Added connection: Yttrium --> Nernst lamp
 - Added connection: Nernst lamp --> Solid oxide fuel cell
 - Added connection: Fuel cell --> Solid oxide fuel cell
+- Added connection: Fuel cell --> Supercapacitor
+- Added connection: Electrolytic capacitor --> Supercapacitor
 
 6 November 2026
 - Added tech: Resistive touchscreen, 1976
