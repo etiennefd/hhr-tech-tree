@@ -10,6 +10,11 @@
 - Added connection: Fuel cell --> Solid oxide fuel cell
 - Added connection: Fuel cell --> Supercapacitor
 - Added connection: Electrolytic capacitor --> Supercapacitor
+- Added connection: Charcoal --> Activated carbon
+- Added connection: Activated carbon --> Gas mask
+- Added connection: Activated carbon --> Supercapacitor
+- Added connection: Carbon dioxide --> Activated carbon
+- Added connection: Beet sugar factory --> Activated carbon
 
 6 November 2026
 - Added tech: Resistive touchscreen, 1976
