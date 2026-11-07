@@ -1,3 +1,7 @@
+7 November 2026
+- Added connection: Radio waves and spark-gap transmitter --> Mica capacitor
+- Added connection: Ceramic capacitor --> Printed thick-film ceramic circuit
+
 6 November 2026
 - Added tech: Resistive touchscreen, 1976
 - Added tech: Ceramic capacitor, 1926
