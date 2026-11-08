@@ -2,6 +2,7 @@
 - Added tech: Supercapacitor, 1962
 - Added tech: Solid oxide fuel cell, 1937
 - Added tech: Activated carbon, 1900
+- Added tech: Synthetic gemstone, 1885
 - Added tech: Air-purifying respirator, 1849
 - Added connection: Radio waves and spark-gap transmitter --> Mica capacitor
 - Added connection: Ceramic capacitor --> Printed thick-film ceramic circuit
@@ -608,7 +609,7 @@
 - Added connection: Neon lighting --> Gas laser
 - Added connection: Helium (isolation) --> Gas laser
 - Added connection: Silver mirror --> Laser
-- Added connection: Synthetic gemstone --> Laser
+- Added connection: Verneuil flame fusion process --> Laser
 - Added connection: Gas laser --> Carbon-dioxide laser
 - Added connection: Gas laser --> Excimer laser
 - Added connection: Gas laser --> Laser printer
@@ -1468,7 +1469,7 @@
 - Added connection: Ceramic --> Sintered technical ceramic
 - Added connection: Caustic soda --> Bayer process
 - Added connection: Hall–Héroult process --> Bayer process
-- Added connection: Bayer process --> Synthetic gemstone
+- Added connection: Bayer process --> Verneuil flame fusion process
 - Added connection: Graphite --> Synthetic diamond
 - Added connection: Powder metallurgy --> Solid electrolytic capacitor
 
