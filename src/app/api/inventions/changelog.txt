@@ -5,6 +5,7 @@
 - Added connection: Synthetic gemstone --> Verneuil flame fusion process
 - Added connection: Oxyhydrogen blowpipe --> Synthetic gemstone
 - Added connection: Chromium --> Synthetic gemstone
+- Added connection: Mining --> Air-purifying respirator
 
 7 November 2026
 - Added tech: Supercapacitor, 1962
