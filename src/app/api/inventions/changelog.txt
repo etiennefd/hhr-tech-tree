@@ -1,4 +1,5 @@
 8 November 2026
+- Added tech: Wool, 3500 BCE
 - Added connection: Alum --> Verneuil flame fusion process
 - Added connection: Chromium --> Verneuil flame fusion process
 - Added connection: Oxyhydrogen blowpipe --> Verneuil flame fusion process
