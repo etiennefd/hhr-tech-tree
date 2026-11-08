@@ -7,6 +7,9 @@
 - Added connection: Oxyhydrogen blowpipe --> Synthetic gemstone
 - Added connection: Chromium --> Synthetic gemstone
 - Added connection: Mining --> Air-purifying respirator
+- Added connection: Domestication of sheep --> Wool
+- Added connection: Wool --> Air-purifying respirator
+- Added connection: Wool --> Fulling mill
 
 7 November 2026
 - Added tech: Supercapacitor, 1962
