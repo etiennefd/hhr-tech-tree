@@ -10,6 +10,9 @@
 - Added connection: Domestication of sheep --> Wool
 - Added connection: Wool --> Air-purifying respirator
 - Added connection: Wool --> Fulling mill
+- Added connection: Cotton (Old World) --> Carding bow
+- Added connection: Carding bow --> Spinning wheel
+- Added connection: Bow and arrow --> Carding bow
 
 7 November 2026
 - Added tech: Supercapacitor, 1962
