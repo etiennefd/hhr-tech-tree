@@ -1,6 +1,10 @@
 8 November 2026
 - Added connection: Alum --> Verneuil flame fusion process
 - Added connection: Chromium --> Verneuil flame fusion process
+- Added connection: Oxyhydrogen blowpipe --> Verneuil flame fusion process
+- Added connection: Synthetic gemstone --> Verneuil flame fusion process
+- Added connection: Oxyhydrogen blowpipe --> Synthetic gemstone
+- Added connection: Chromium --> Synthetic gemstone
 
 7 November 2026
 - Added tech: Supercapacitor, 1962
@@ -1473,7 +1477,6 @@
 - Added connection: Ceramic --> Sintered technical ceramic
 - Added connection: Caustic soda --> Bayer process
 - Added connection: Hall–Héroult process --> Bayer process
-- Added connection: Bayer process --> Verneuil flame fusion process
 - Added connection: Graphite --> Synthetic diamond
 - Added connection: Powder metallurgy --> Solid electrolytic capacitor
 
