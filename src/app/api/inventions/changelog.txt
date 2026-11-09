@@ -1,5 +1,6 @@
 9 November 2026
 - Added tech: Igloo, 1000
+- Added connection: Oil lamp --> Igloo
 
 8 November 2026
 - Added tech: Wool, 3500 BCE
