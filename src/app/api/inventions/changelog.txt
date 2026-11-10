@@ -1,7 +1,7 @@
 10 November 2026
 - Added tech: Carding machine, 1748
 - Added connection: Paul-Wyatt cotton mills --> Carding machine
-- Added connection: Carding bow --> Carding machine
+- Added connection: Carding --> Carding machine
 
 9 November 2026
 - Added tech: Igloo, 1000
@@ -19,9 +19,9 @@
 - Added connection: Domestication of sheep --> Wool
 - Added connection: Wool --> Air-purifying respirator
 - Added connection: Wool --> Fulling mill
-- Added connection: Cotton (Old World) --> Carding bow
-- Added connection: Carding bow --> Spinning wheel
-- Added connection: Bow and arrow --> Carding bow
+- Added connection: Cotton (Old World) --> Carding
+- Added connection: Carding --> Spinning wheel
+- Added connection: Bow and arrow --> Carding
 
 7 November 2026
 - Added tech: Supercapacitor, 1962
