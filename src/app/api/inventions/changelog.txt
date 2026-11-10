@@ -1,5 +1,6 @@
 10 November 2026
 - Added tech: Carding machine, 1748
+- Added tech: Felt, 1800 BCE
 - Added connection: Paul-Wyatt cotton mills --> Carding machine
 - Added connection: Carding --> Carding machine
 
