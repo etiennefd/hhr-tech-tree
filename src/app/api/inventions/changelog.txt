@@ -3,6 +3,7 @@
 - Added tech: Felt, 1800 BCE
 - Added connection: Paul-Wyatt cotton mills --> Carding machine
 - Added connection: Carding --> Carding machine
+- Added connection: Wool --> Felt
 
 9 November 2026
 - Added tech: Igloo, 1000
