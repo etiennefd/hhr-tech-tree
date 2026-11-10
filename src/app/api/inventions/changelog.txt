@@ -1,5 +1,7 @@
 10 November 2026
 - Added tech: Carding machine, 1748
+- Added connection: Paul-Wyatt cotton mills --> Carding machine
+- Added connection: Carding bow --> Carding machine
 
 9 November 2026
 - Added tech: Igloo, 1000
