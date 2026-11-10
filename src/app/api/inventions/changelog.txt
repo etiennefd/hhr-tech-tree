@@ -1,3 +1,6 @@
+10 November 2026
+- Added tech: Carding machine, 1748
+
 9 November 2026
 - Added tech: Igloo, 1000
 - Added connection: Oil lamp --> Igloo
