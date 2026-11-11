@@ -2,6 +2,7 @@
 - Added tech: Yurt, 600 BCE
 - Added connection: Felt --> Yurt
 - Added connection: Domestication of the horse --> Yurt
+- Added connection: Adze --> Yurt
 
 10 November 2026
 - Added tech: Carding machine, 1748
