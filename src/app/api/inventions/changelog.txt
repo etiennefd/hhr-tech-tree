@@ -1,5 +1,9 @@
 12 November 2026
 - Added tech: Inertial confinement fusion, 1974
+- Added connection: Tritium --> Inertial confinement fusion
+- Added connection: Nuclear fusion --> Inertial confinement fusion
+- Added connection: Laser --> Inertial confinement fusion
+- Added connection: Hydrogen bomb --> Inertial confinement fusion
 
 11 November 2026
 - Added tech: Yurt, 600 BCE
