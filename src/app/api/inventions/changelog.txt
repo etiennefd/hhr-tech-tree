@@ -1,6 +1,8 @@
 13 November 2026
 - Added tech: Gyrotron, 1964
 - Added tech: Stellarator, 1953
+- Added connection: Ceramic capacitor --> Transistor radio
+- Added connection: Electrolytic capacitor --> Transistor radio
 
 12 November 2026
 - Added tech: Inertial confinement fusion, 1974
