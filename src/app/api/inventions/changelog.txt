@@ -9,6 +9,9 @@
 - Added connection: Cavity magnetron --> Gyrotron
 - Added connection: Maser --> Gyrotron
 - Added connection: Electromagnet --> Gyrotron
+- Added connection: Closed-core transformer --> Tokamak
+- Added connection: Electromagnet --> Tokamak
+- Added connection: Stainless steel --> Tokamak
 
 12 November 2026
 - Added tech: Inertial confinement fusion, 1974
