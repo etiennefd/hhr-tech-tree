@@ -6,6 +6,9 @@
 - Added connection: Nuclear fusion --> Stellarator
 - Added connection: Borosilicate glass --> Stellarator
 - Added connection: Electromagnet --> Stellarator
+- Added connection: Cavity magnetron --> Gyrotron
+- Added connection: Maser --> Gyrotron
+- Added connection: Electromagnet --> Gyrotron
 
 12 November 2026
 - Added tech: Inertial confinement fusion, 1974
