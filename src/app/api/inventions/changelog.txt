@@ -8,6 +8,9 @@
 - Added connection: Iodine --> Food fortification
 - Added connection: Salt mining --> Food fortification
 - Added connection: Cortisone --> Combined oral contraceptive pill
+- Added connection: Chromatography --> Cortisone
+- Added connection: Synthetic dye --> Cortisone
+- Added connection: Domestication of cattle --> Cortisone
 
 13 November 2026
 - Added tech: Gyrotron, 1964
