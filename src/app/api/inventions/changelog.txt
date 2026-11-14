@@ -41,6 +41,13 @@
 - Added connection: Beeswax --> Graphophone
 - Added connection: Paraffin wax --> Graphophone
 - Added connection: Tin --> Phonograph
+- Added connection: Physical vapor deposition --> Thin-film transistor
+- Added connection: Physical vapor deposition --> Planar process
+- Added connection: Physical vapor deposition --> LaserDisc
+- Added connection: Aluminium --> LaserDisc
+- Added connection: Aluminium --> Planar process
+- Added connection: Aluminium --> Space blanket
+- Added connection: Physical vapor deposition --> Space blanket
 
 13 November 2026
 - Added tech: Gyrotron, 1964
