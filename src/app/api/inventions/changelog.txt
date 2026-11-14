@@ -16,6 +16,8 @@
 - Added connection: Automatic flour mill --> Vitamin
 - Added connection: Domestication of rice --> Vitamin
 - Added connection: Vitamin --> Golden rice
+- Added connection: Penicillin --> Statin
+- Added connection: Enzyme extraction --> Statin
 
 13 November 2026
 - Added tech: Gyrotron, 1964
