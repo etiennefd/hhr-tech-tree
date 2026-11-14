@@ -48,6 +48,8 @@
 - Added connection: Aluminium --> Planar process
 - Added connection: Aluminium --> Space blanket
 - Added connection: Physical vapor deposition --> Space blanket
+- Added connection: Cadmium --> Thin-film transistor
+- Added connection: Gold --> Thin-film transistor
 
 13 November 2026
 - Added tech: Gyrotron, 1964
