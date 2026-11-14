@@ -11,6 +11,9 @@
 - Added connection: Chromatography --> Cortisone
 - Added connection: Synthetic dye --> Cortisone
 - Added connection: Domestication of cattle --> Cortisone
+- Added connection: Automatic flour mill --> Vitamin
+- Added connection: Domestication of rice --> Vitamin
+- Added connection: Vitamin --> Golden rice
 
 13 November 2026
 - Added tech: Gyrotron, 1964
