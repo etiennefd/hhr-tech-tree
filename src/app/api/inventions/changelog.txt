@@ -1,4 +1,5 @@
 14 November 2026
+- Added tech: Statin, 1973
 - Added tech: Cortisone, 1948
 - Added tech: Neutron generator, 1937
 - Added tech: Food fortification, 1922
