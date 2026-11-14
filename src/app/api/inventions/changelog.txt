@@ -27,6 +27,9 @@
 - Added connection: Blood transfusion --> Heart-lung machine
 - Added connection: DNA sequencing --> HIV protease inhibitor
 - Added connection: Recombinant DNA --> HIV protease inhibitor
+- Added connection: Force pump --> Syringe
+- Added connection: Syringe --> Blood transfusion
+- Added connection: Syringe --> Injection molding
 
 13 November 2026
 - Added tech: Gyrotron, 1964
