@@ -38,6 +38,8 @@
 - Added connection: Phonograph cylinder --> Physical vapor deposition
 - Added connection: Electrotyping --> Physical vapor deposition
 - Added connection: Gold --> Physical vapor deposition
+- Added connection: Beeswax --> Graphophone
+- Added connection: Paraffin wax --> Graphophone
 
 13 November 2026
 - Added tech: Gyrotron, 1964
