@@ -18,6 +18,7 @@
 - Added connection: Vitamin --> Golden rice
 - Added connection: Penicillin --> Statin
 - Added connection: Enzyme extraction --> Statin
+- Added connection: Scalpel --> Bloodletting
 
 13 November 2026
 - Added tech: Gyrotron, 1964
