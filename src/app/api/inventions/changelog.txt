@@ -1,5 +1,7 @@
 14 November 2026
 - Added tech: Neutron generator, 1937
+- Added connection: Nuclear fusion --> Neutron generator
+- Added connection: Neutron --> Neutron generator
 
 13 November 2026
 - Added tech: Gyrotron, 1964
