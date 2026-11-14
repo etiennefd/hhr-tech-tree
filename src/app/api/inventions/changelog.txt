@@ -31,6 +31,7 @@
 - Added connection: Syringe --> Blood transfusion
 - Added connection: Syringe --> Extrusion
 - Added connection: Extrusion --> Injection molding
+- Added connection: Synthetic dye --> Marker degradation
 
 13 November 2026
 - Added tech: Gyrotron, 1964
@@ -3351,7 +3352,7 @@
 - Added tech: Guillotine, 1500
 
 26 January 2026
-- Added tech: Marker degradation, 1939
+- Added tech: Marker degradation, 1943
 - Added tech: Bunsen cell, 1841
 - Added tech: Grove cell, 1839
 - Added connection: Marker degradation --> Combined oral contraceptive pill
