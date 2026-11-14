@@ -51,6 +51,7 @@
 - Added connection: Cadmium --> Thin-film transistor
 - Added connection: Gold --> Thin-film transistor
 - Added connection: Acrylic glass --> LaserDisc
+- Added connection: Polyester --> Space blanket
 
 13 November 2026
 - Added tech: Gyrotron, 1964
