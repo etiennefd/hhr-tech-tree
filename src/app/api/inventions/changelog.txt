@@ -5,6 +5,7 @@
 - Added tech: Neutron generator, 1937
 - Added tech: Food fortification, 1922
 - Added tech: Vitamin, 1912
+- Added tech: Blood transfusion, 1818
 - Added tech: Bloodletting, 475 BCE
 - Added connection: Nuclear fusion --> Neutron generator
 - Added connection: Neutron --> Neutron generator
