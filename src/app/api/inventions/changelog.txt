@@ -33,6 +33,11 @@
 - Added connection: Syringe --> Extrusion
 - Added connection: Extrusion --> Injection molding
 - Added connection: Synthetic dye --> Marker degradation
+- Added connection: Vacuum pump --> Physical vapor deposition
+- Added connection: Induction coil --> Physical vapor deposition
+- Added connection: Phonograph cylinder --> Physical vapor deposition
+- Added connection: Electrotyping --> Physical vapor deposition
+- Added connection: Gold --> Physical vapor deposition
 
 13 November 2026
 - Added tech: Gyrotron, 1964
