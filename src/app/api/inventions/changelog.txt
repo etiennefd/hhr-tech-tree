@@ -2,6 +2,7 @@
 - Added tech: Cortisone, 1948
 - Added tech: Neutron generator, 1937
 - Added tech: Food fortification, 1922
+- Added tech: Vitamin, 1912
 - Added connection: Nuclear fusion --> Neutron generator
 - Added connection: Neutron --> Neutron generator
 - Added connection: Iodine --> Food fortification
