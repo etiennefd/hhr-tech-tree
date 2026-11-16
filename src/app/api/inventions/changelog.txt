@@ -1,6 +1,7 @@
 16 November 2026
 - Added tech: Logic synthesis, 1984
 - Added tech: Molecular-beam epitaxy, 1968
+- Added tech: Fish farming, 6000 BCE
 - Added connection: Liquid-propellant rocket --> Lunar lander
 - Added connection: Radar --> Lunar lander
 - Added connection: Gyroscope --> Lunar lander
