@@ -1,3 +1,11 @@
+16 November 2026
+- Added connection: Liquid-propellant rocket --> Lunar lander
+- Added connection: Radar --> Lunar lander
+- Added connection: Gyroscope --> Lunar lander
+- Added connection: Intercontinental ballistic missile --> Lunar lander
+- Added connection: Space blanket --> Crewed Moon landing
+- Added connection: Integrated circuit computer --> Crewed Moon landing
+
 15 November 2026
 - Added connection: Space suit --> Crewed Moon landing
 - Added connection: Alkaline fuel cell --> Crewed Moon landing
@@ -762,7 +770,6 @@
 - Added connection: Ballistic missile --> Inertial navigation system
 - Added connection: Inertial navigation system --> Intercontinental ballistic missile
 - Added connection: Accelerometer --> Ballistic missile
-- Added connection: Inertial navigation system --> Lunar lander
 
 18 September 2026
 - Added connection: Rangefinder --> Autofocus camera
