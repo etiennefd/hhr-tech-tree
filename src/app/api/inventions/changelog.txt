@@ -12,6 +12,7 @@
 - Added connection: Gallium arsenide --> Molecular-beam epitaxy
 - Added connection: Molecular-beam epitaxy --> High-electron-mobility transistor
 - Added connection: Mass spectrometer --> Molecular-beam epitaxy
+- Added connection: Domestication of rice --> Fish farming
 
 15 November 2026
 - Added connection: Space suit --> Crewed Moon landing
