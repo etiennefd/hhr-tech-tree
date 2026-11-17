@@ -1,4 +1,5 @@
 17 November 2026
+- Added tech: SAT solver, 1996
 - Added connection: Boolean algebra --> Logic synthesis
 - Added connection: Computer-aided design --> Logic synthesis
 - Added connection: Predicate logic --> Relational database
