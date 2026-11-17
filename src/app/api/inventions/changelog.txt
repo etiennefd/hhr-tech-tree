@@ -1,3 +1,7 @@
+17 November 2026
+- Added connection: Boolean algebra --> Logic synthesis
+- Added connection: Computer-aided design --> Logic synthesis
+
 16 November 2026
 - Added tech: Logic synthesis, 1984
 - Added tech: Molecular-beam epitaxy, 1968
