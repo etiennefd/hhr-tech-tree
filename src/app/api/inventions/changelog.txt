@@ -1,15 +1,16 @@
 17 November 2026
 - Added tech: SAT solver, 1996
-- Added tech: Induction cooking, 1973
+- Added tech: Induction cooktop, 1973
 - Added connection: Boolean algebra --> Logic synthesis
 - Added connection: Computer-aided design --> Logic synthesis
 - Added connection: Predicate logic --> Relational database
 - Added connection: Monolithic integrated circuit --> Logic synthesis
 - Added connection: Boolean algebra --> SAT solver
 - Added connection: Monolithic integrated circuit --> SAT solver
-- Added connection: Glass-ceramic --> Induction cooking
-- Added connection: Electromagnetic induction --> Induction cooking
-- Added connection: Bipolar junction transistor --> Induction cooking
+- Added connection: Glass-ceramic --> Induction cooktop
+- Added connection: Electromagnetic induction --> Induction cooktop
+- Added connection: Bipolar junction transistor --> Induction cooktop
+- Added connection: Electric stove --> Induction cooktop
 
 16 November 2026
 - Added tech: Logic synthesis, 1984
