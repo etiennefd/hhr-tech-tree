@@ -14,6 +14,8 @@
 - Added connection: Mass spectrometer --> Molecular-beam epitaxy
 - Added connection: Domestication of rice --> Fish farming
 - Added connection: Fish farming --> Salmon farming
+- Added independent invention: Fish farming, 1500 BCE
+- Added independent invention: Fish farming, 1500
 
 15 November 2026
 - Added connection: Space suit --> Crewed Moon landing
