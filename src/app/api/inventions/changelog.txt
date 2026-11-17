@@ -13,6 +13,11 @@
 - Added connection: Bipolar junction transistor --> Induction cooktop
 - Added connection: Electric stove --> Induction cooktop
 - Added connection: Artificial satellite --> Lunar lander
+- Added connection: Automobile --> Electric starter
+- Added connection: Electric motor --> Electric starter
+- Added connection: Rechargeable battery --> Electric starter
+- Added connection: Internal combustion engine --> Electric starter
+- Added connection: Cash register --> Electric starter
 
 16 November 2026
 - Added tech: Logic synthesis, 1984
