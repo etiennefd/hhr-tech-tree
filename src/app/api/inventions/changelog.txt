@@ -4,6 +4,8 @@
 - Added connection: Computer-aided design --> Logic synthesis
 - Added connection: Predicate logic --> Relational database
 - Added connection: Monolithic integrated circuit --> Logic synthesis
+- Added connection: Boolean algebra --> SAT solver
+- Added connection: Monolithic integrated circuit --> SAT solver
 
 16 November 2026
 - Added tech: Logic synthesis, 1984
