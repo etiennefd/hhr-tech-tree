@@ -2,6 +2,7 @@
 - Added connection: Boolean algebra --> Logic synthesis
 - Added connection: Computer-aided design --> Logic synthesis
 - Added connection: Predicate logic --> Relational database
+- Added connection: Monolithic integrated circuit --> Logic synthesis
 
 16 November 2026
 - Added tech: Logic synthesis, 1984
