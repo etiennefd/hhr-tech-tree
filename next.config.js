@@ -23,7 +23,11 @@ const nextConfig = {
   // /public/tech-images are regularly replaced under the same filename, so a
   // replaced image may show stale for up to a day (up to a week during
   // background revalidation) for returning visitors.
+  //
+  // Production only: in `next dev` the same header made replaced images stick
+  // in the browser cache, hiding local edits.
   async headers() {
+    if (process.env.NODE_ENV !== 'production') return []
     const cacheControl = 'public, max-age=86400, stale-while-revalidate=604800'
     return [
       {
