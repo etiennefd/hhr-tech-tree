@@ -7,6 +7,9 @@
 - Added connection: Monolithic integrated circuit --> Logic synthesis
 - Added connection: Boolean algebra --> SAT solver
 - Added connection: Monolithic integrated circuit --> SAT solver
+- Added connection: Glass-ceramic --> Induction cooking
+- Added connection: Electromagnetic induction --> Induction cooking
+- Added connection: Bipolar junction transistor --> Induction cooking
 
 16 November 2026
 - Added tech: Logic synthesis, 1984
