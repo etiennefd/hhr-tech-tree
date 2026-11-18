@@ -1,5 +1,6 @@
 18 November 2026
 - Added tech: Photovoltaic power station, 1982
+- Added tech: Wind farm, 1980
 - Added connection: Solar cell --> Photovoltaic power station
 - Added connection: Electrical grid --> Photovoltaic power station
 
