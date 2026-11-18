@@ -1,3 +1,6 @@
+18 November 2026
+- Added tech: Photovoltaic power station, 1982
+
 17 November 2026
 - Added tech: SAT solver, 1996
 - Added tech: Induction cooktop, 1973
