@@ -3,6 +3,9 @@
 - Added tech: Wind farm, 1980
 - Added connection: Solar cell --> Photovoltaic power station
 - Added connection: Electrical grid --> Photovoltaic power station
+- Added connection: Wind turbine --> Wind farm
+- Added connection: Electrical grid --> Wind farm
+- Added connection: Wind farm --> Offshore wind farm
 
 17 November 2026
 - Added tech: SAT solver, 1996
@@ -3717,7 +3720,6 @@
 - Added connection: Archimedes' screw --> Tjasker
 - Added connection: Post windmill --> Tjasker
 - Added connection: Mustard gas --> Chemotherapy
-- Added connection: Wind turbine --> Offshore wind farm
 - Added connection: Watermill --> Tide mill
 - Added connection: Tide mill --> Tidal power station
 
