@@ -22,6 +22,11 @@ To update the images (automatically part of the update script above for new tech
 - This script automatically updates the image credits as well (which will appear once the fetch-and-save script is re-run)
 - You can only update the credits, not the images, by adding the argument `--credits-only`
 
+To use an image that doesn't come from a URL (a diagram you made, your own photo...):
+- Put the full-size original in `manual-images/`, named after the tech the way the script names images: lowercase, with every character other than a-z and 0-9 replaced by `-` (e.g. `manual-images/sat-solver.png` for "SAT solver"). Any format Pillow reads works (png, jpg, webp, tif...)
+- Run the image update script as usual (`--new` picks up originals that are new or newer than their processed copy; `--only "Name"` does just one). It crops/rotates/resizes the original into `public/tech-images/` like a downloaded image, using the "Image crop" and "Image rotation" fields, and fills in the "Local image" field in Airtable
+- Commit both the original and the processed image. A manual original takes precedence over the Image URL, so the URL download never overwrites it. Image credits are left alone, so fill them in by hand if needed
+
 In production, node images are served from a Cloudflare Pages project rather than by Vercel, so that image requests don't count towards Vercel's CDN request tier. The app requests `$NEXT_PUBLIC_IMAGE_BASE_URL/tech-images/<name>.webp` first and falls back to the copy in `public/tech-images` if that fails; with the variable unset (local dev, preview deployments) it uses the local copy only.
 - Pushing image changes to `main` uploads them through `.github/workflows/deploy-images.yml`, which needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets
 - To upload by hand, run `src/scripts/deploy-images.sh` (after `npx wrangler login` once). Wrangler needs Node 22+; with fnm, prefix both commands with `fnm exec --using=22`

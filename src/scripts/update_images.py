@@ -29,7 +29,13 @@ FETCH_TIMEOUT = 10 # seconds
 REQUEST_DELAY = 0.5 # seconds between API calls to be polite
 
 # Image processing constants
-IMAGES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'public', 'tech-images')
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+IMAGES_DIR = os.path.join(REPO_ROOT, 'public', 'tech-images')
+# Full-size originals for images that don't come from a URL (diagrams we made, photos
+# we took...). Each file is named after its record, e.g. neocognitron.png for
+# "Neocognitron", and gets processed into IMAGES_DIR like a downloaded image.
+MANUAL_IMAGES_DIR = os.path.join(REPO_ROOT, 'manual-images')
+MANUAL_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tif', '.tiff'}
 DISPLAY_WIDTH = 160  # Display width
 DISPLAY_HEIGHT = 80  # Display height
 MIN_WIDTH = DISPLAY_WIDTH * 2  # Source width (2x for retina)
@@ -169,14 +175,13 @@ def fetch_image_bytes(url: str) -> bytes:
         )
     return response.content
 
+def slugify(title: str) -> str:
+    """The file name stem used for a record's image, e.g. 'SAT solver' -> 'sat-solver'."""
+    return re.sub(r'[^a-z0-9]', '-', title.lower())
+
 def download_and_optimize_image(url: str, title: str, rotation: int = 0, crop: Union[tuple, None] = None) -> Union[str, None]:
     """Downloads and optimizes an image, returns the local path."""
     try:
-        # Generate a filename from the title
-        safe_title = re.sub(r'[^a-z0-9]', '-', title.lower())
-        filename = f"{safe_title}.webp"
-        local_path = os.path.join(IMAGES_DIR, filename)
-
         # Always download and process the image, even if it exists
         # This ensures we get the latest version if the URL has changed
         download_url = normalize_wikimedia_url(url, crop)
@@ -191,63 +196,70 @@ def download_and_optimize_image(url: str, title: str, rotation: int = 0, crop: U
             print(f"    Rewritten URL failed ({e}), retrying with the original URL")
             content = fetch_image_bytes(url)
 
-        # Open and optimize the image
-        img = Image.open(io.BytesIO(content))
-        
-        # Apply EXIF orientation if present
-        img = ImageOps.exif_transpose(img)
-
-        # Crop before rotating: crop values are expressed against the upright source image,
-        # which is what the crop picker shows
-        if crop:
-            img = apply_crop(img, crop)
-
-        # Apply manual rotation if specified
-        if rotation:
-            print(f"    Rotating image by {rotation} degrees")
-            img = img.rotate(rotation, expand=True, resample=Image.Resampling.BICUBIC)
-        
-        # Convert to RGB if necessary (for PNG with transparency)
-        if img.mode in ('RGBA', 'LA'):
-            background = Image.new('RGB', img.size, (255, 255, 255))
-            background.paste(img, mask=img.split()[-1])
-            img = background
-        elif img.mode != 'RGB':
-            img = img.convert('RGB')
-
-        # Calculate new size maintaining aspect ratio
-        width, height = img.size
-        print(f"    Original size: {width}x{height}")
-        
-        # Calculate scaling factors for both width and height
-        width_scale = MIN_WIDTH / width
-        height_scale = MIN_HEIGHT / height
-        
-        # Use the larger scale to ensure both minimum dimensions are met
-        scale = max(width_scale, height_scale)
-        
-        # Calculate new dimensions
-        new_width = int(width * scale)
-        new_height = int(height * scale)
-        
-        # Resize image with high-quality settings
-        img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-        
-        # Apply subtle sharpening to enhance details
-        from PIL import ImageEnhance
-        enhancer = ImageEnhance.Sharpness(img)
-        img = enhancer.enhance(1.2)  # Slight sharpening
-        
-        # Save as WebP with high quality
-        img.save(local_path, 'WEBP', quality=IMAGE_QUALITY, method=6)  # method=6 for best compression
-
-        print(f"    Downloaded and optimized: {filename}")
-        print(f"    New size: {new_width}x{new_height} (min: {MIN_WIDTH}x{MIN_HEIGHT}, display: {DISPLAY_WIDTH}x{DISPLAY_HEIGHT})")
-        return f"/tech-images/{filename}"
+        return optimize_and_save(content, title, rotation, crop)
 
     except Exception as e:
         print(f"    Error processing image: {e}")
         return None
+
+def optimize_and_save(content: bytes, title: str, rotation: int = 0, crop: Union[tuple, None] = None) -> str:
+    """Crops, rotates, resizes and saves image bytes as the record's webp. Returns the local path."""
+    filename = f"{slugify(title)}.webp"
+    local_path = os.path.join(IMAGES_DIR, filename)
+
+    # Open and optimize the image
+    img = Image.open(io.BytesIO(content))
+
+    # Apply EXIF orientation if present
+    img = ImageOps.exif_transpose(img)
+
+    # Crop before rotating: crop values are expressed against the upright source image,
+    # which is what the crop picker shows
+    if crop:
+        img = apply_crop(img, crop)
+
+    # Apply manual rotation if specified
+    if rotation:
+        print(f"    Rotating image by {rotation} degrees")
+        img = img.rotate(rotation, expand=True, resample=Image.Resampling.BICUBIC)
+    
+    # Convert to RGB if necessary (for PNG with transparency)
+    if img.mode in ('RGBA', 'LA'):
+        background = Image.new('RGB', img.size, (255, 255, 255))
+        background.paste(img, mask=img.split()[-1])
+        img = background
+    elif img.mode != 'RGB':
+        img = img.convert('RGB')
+
+    # Calculate new size maintaining aspect ratio
+    width, height = img.size
+    print(f"    Original size: {width}x{height}")
+    
+    # Calculate scaling factors for both width and height
+    width_scale = MIN_WIDTH / width
+    height_scale = MIN_HEIGHT / height
+    
+    # Use the larger scale to ensure both minimum dimensions are met
+    scale = max(width_scale, height_scale)
+    
+    # Calculate new dimensions
+    new_width = int(width * scale)
+    new_height = int(height * scale)
+    
+    # Resize image with high-quality settings
+    img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    
+    # Apply subtle sharpening to enhance details
+    from PIL import ImageEnhance
+    enhancer = ImageEnhance.Sharpness(img)
+    img = enhancer.enhance(1.2)  # Slight sharpening
+    
+    # Save as WebP with high quality
+    img.save(local_path, 'WEBP', quality=IMAGE_QUALITY, method=6)  # method=6 for best compression
+
+    print(f"    Optimized: {filename}")
+    print(f"    New size: {new_width}x{new_height} (min: {MIN_WIDTH}x{MIN_HEIGHT}, display: {DISPLAY_WIDTH}x{DISPLAY_HEIGHT})")
+    return f"/tech-images/{filename}"
 
 def extract_filename_from_url(url: str) -> Union[str, None]:
     """Extracts the filename from various URL formats."""
@@ -385,6 +397,88 @@ def get_image_credits(filename: str, url: str) -> Union[dict, None]:
         }
     return None
 
+def find_manual_images() -> dict:
+    """Maps each slug to its original in MANUAL_IMAGES_DIR, e.g. 'neocognitron' -> '.../neocognitron.png'."""
+    sources = {}
+    if not os.path.isdir(MANUAL_IMAGES_DIR):
+        return sources
+    for name in sorted(os.listdir(MANUAL_IMAGES_DIR)):
+        stem, ext = os.path.splitext(name)
+        if ext.lower() not in MANUAL_IMAGE_EXTENSIONS:
+            continue
+        if stem in sources:
+            print(f"  Warning: several manual images for '{stem}', using {os.path.basename(sources[stem])} and ignoring {name}")
+            continue
+        sources[stem] = os.path.join(MANUAL_IMAGES_DIR, name)
+    return sources
+
+def process_manual_images(table, args, sources: dict) -> tuple:
+    """Processes the originals in MANUAL_IMAGES_DIR into IMAGES_DIR and points each
+    record's Local image at the result. Returns (updated_count, errors).
+
+    --new only reprocesses originals that are newer than their output (or have none),
+    --all reprocesses every one, --cropped and --only narrow it down like they do for
+    URL images. The Local image field is filled in whenever it doesn't match.
+    """
+    if not sources or args.credits_only:
+        return 0, []
+
+    print(f"\n--- Manual images ({len(sources)} in {os.path.relpath(MANUAL_IMAGES_DIR, REPO_ROOT)}/) ---")
+    fields = ["Name", LOCAL_IMAGE_FIELD, "Image rotation", CROP_FIELD, IMAGE_URL_FIELD]
+    records_by_slug = {}
+    for record in table.all(fields=fields):
+        name = record.get('fields', {}).get('Name')
+        if name:
+            records_by_slug.setdefault(slugify(name), record)
+
+    updates = []
+    errors = []
+    for slug, source_path in sources.items():
+        source_name = os.path.basename(source_path)
+        record = records_by_slug.get(slug)
+        if not record:
+            print(f"  {source_name}: no record whose name gives the file name '{slug}'")
+            errors.append({"title": source_name, "record_id": "-", "url": source_path})
+            continue
+
+        record_fields = record.get('fields', {})
+        title = record_fields.get('Name', '')
+        crop = parse_crop(record_fields.get(CROP_FIELD))
+        expected_path = f"/tech-images/{slug}.webp"
+        output_path = os.path.join(IMAGES_DIR, f"{slug}.webp")
+
+        if args.only:
+            wanted = title in args.only
+        elif args.cropped:
+            wanted = crop is not None
+        elif args.all:
+            wanted = True
+        else:  # --new
+            wanted = (not os.path.exists(output_path)
+                      or os.path.getmtime(output_path) < os.path.getmtime(source_path))
+
+        if record_fields.get(IMAGE_URL_FIELD):
+            print(f"  {title}: has an Image URL too, the manual image takes precedence")
+
+        if wanted:
+            print(f"  {title}: processing {source_name}")
+            try:
+                with open(source_path, 'rb') as f:
+                    optimize_and_save(f.read(), title, record_fields.get('Image rotation', 0), crop)
+            except Exception as e:
+                print(f"    Error processing image: {e}")
+                errors.append({"title": title, "record_id": record['id'], "url": source_path})
+                continue
+
+        if record_fields.get(LOCAL_IMAGE_FIELD) != expected_path:
+            print(f"    -> Local image: {expected_path}")
+            updates.append({"id": record['id'], "fields": {LOCAL_IMAGE_FIELD: expected_path}})
+
+    if updates:
+        table.batch_update(updates)
+        print(f"--- Set Local image on {len(updates)} record(s) ---")
+    return len(updates), errors
+
 # --- Main Script ---
 
 def main():
@@ -438,7 +532,8 @@ def main():
             )
             print(f"Found {len(records)} of {len(args.only)} named record(s) with an image URL.")
             found_names = {r.get('fields', {}).get('Name') for r in records}
-            for missing in [n for n in args.only if n not in found_names]:
+            manual_slugs = find_manual_images().keys()
+            for missing in [n for n in args.only if n not in found_names and slugify(n) not in manual_slugs]:
                 print(f"  Warning: no record named '{missing}' with an image URL.")
         elif args.cropped:
             records = table.all(
@@ -481,6 +576,8 @@ def main():
         print(f"Error connecting to or fetching from Airtable: {e}")
         return 1
 
+    manual_sources = find_manual_images()
+
     updates = []
     processed_count = 0
     updated_count = 0
@@ -516,6 +613,12 @@ def main():
         # Skip if no title
         if not title:
             print("  Skipping: No title found for the record.")
+            skipped_count += 1
+            continue
+
+        # A manual original wins over the URL, so downloading must not overwrite it
+        if slugify(title) in manual_sources:
+            print(f"  Skipping: uses manual image {os.path.basename(manual_sources[slugify(title)])}.")
             skipped_count += 1
             continue
 
@@ -605,6 +708,14 @@ def main():
         except Exception as e:
             print(f"--- Final batch update failed: {e} ---")
             error_count += len(updates)
+
+    try:
+        manual_updated, manual_errors = process_manual_images(table, args, manual_sources)
+        updated_count += manual_updated
+        image_errors.extend(manual_errors)
+    except Exception as e:
+        print(f"--- Manual images failed: {e} ---")
+        error_count += 1
 
     print("\n--- Script Finished ---")
     print(f"Total Records Processed: {processed_count}")

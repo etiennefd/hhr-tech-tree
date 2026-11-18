@@ -9,14 +9,6 @@ import { externalImageUrl } from "@/utils/imageUrl";
 const loadedImageUrls = new Set<string>();
 const failedImageUrls = new Set<string>();
 
-// Nodes whose dedicated image is shipped with the app rather than coming from
-// the data set.
-const SPECIAL_NODE_IMAGES: { [key: string]: string } = {
-  "Stone tool": "/tool-in-situ-being-unearthed-at-excavation_3_edit.jpg",
-  "Oldowan stone tool": "/Pierre_taillée_Melka_Kunture_Éthiopie.jpg",
-  "Acheulean stone tool": "/Bifaz_cordiforme.jpg",
-};
-
 type ImageStatus = "loading" | "loaded" | "error";
 
 interface Node {
@@ -96,9 +88,6 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
   style,
   showImages = true,
 }) => {
-  // Check if the current node has a special image
-  const specialImage = SPECIAL_NODE_IMAGES[node.title];
-
   const imageUrl = useMemo(
     () => (showImages ? validateImage(node.localImage || node.image) : undefined),
     [showImages, node.localImage, node.image]
@@ -241,23 +230,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
         {/* Image section with improved loading states */}
         {showImages && (
           <div className="border-b border-black p-0 relative h-20">
-            {specialImage ? (
-              // Special case: render the dedicated image directly
-              <Image
-                src={specialImage}
-                alt={node.title}
-                fill
-                sizes={imageSizes}
-                className="object-cover"
-                style={{
-                  filter: "grayscale(20%) contrast(110%)",
-                  mixBlendMode: "multiply",
-                  objectPosition: node.imagePosition || 'center',
-                }}
-              />
-            ) : (
-              // Original logic for all other nodes
-              <>
+            <>
                 {imageSrc && status !== "error" && (
                   <Image
                     key={`${imageUrl}#${attempt}`}
@@ -296,8 +269,7 @@ const BrutalistNode: React.FC<BrutalistNodeProps> = ({
                     }}
                   />
                 )}
-              </>
-            )}
+            </>
           </div>
         )}
 

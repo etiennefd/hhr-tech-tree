@@ -11,8 +11,8 @@ export const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL?.replace(/\
 const EXTERNALLY_HOSTED_PREFIX = "/tech-images/";
 
 // The URL to request first for a node image path such as
-// "/tech-images/abacus.webp". Anything else (remote URLs, the placeholder, the
-// special stone tool images) is returned unchanged.
+// "/tech-images/abacus.webp". Anything else (remote URLs, the placeholder) is
+// returned unchanged.
 export function externalImageUrl(path: string): string {
   if (!IMAGE_BASE_URL || !path.startsWith(EXTERNALLY_HOSTED_PREFIX)) return path;
   return IMAGE_BASE_URL + path;
