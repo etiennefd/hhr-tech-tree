@@ -5,6 +5,8 @@
 - Added connection: Rotary printing press --> Rotogravure
 - Added connection: Photoengraving --> Rotogravure
 - Added connection: Textile roller printing --> Rotogravure
+- Added connection: Calico --> Textile roller printing
+- Added connection: Engraving --> Textile roller printing
 
 18 November 2026
 - Added tech: Photovoltaic power station, 1982
