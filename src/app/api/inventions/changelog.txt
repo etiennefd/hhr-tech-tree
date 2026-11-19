@@ -1,4 +1,5 @@
 19 November 2026
+- Added tech: Rotogravure, 1895
 - Added connection: Thyristor --> Photovoltaic power station
 
 18 November 2026
