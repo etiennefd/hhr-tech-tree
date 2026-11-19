@@ -425,14 +425,19 @@ def process_manual_images(table, args, sources: dict) -> tuple:
 
     print(f"\n--- Manual images ({len(sources)} in {os.path.relpath(MANUAL_IMAGES_DIR, REPO_ROOT)}/) ---")
     fields = ["Name", LOCAL_IMAGE_FIELD, "Image rotation", CROP_FIELD, IMAGE_URL_FIELD]
+    # Fetch only the records these files are named after, computing slugify() in the
+    # formula, rather than paging through the whole table on every run
+    slug_formula = "REGEX_REPLACE(LOWER({Name}), '[^a-z0-9]', '-')"
+    matches = ", ".join(f"{slug_formula} = '{escape_formula_string(slug)}'" for slug in sources)
     records_by_slug = {}
-    for record in table.all(fields=fields):
+    for record in table.all(fields=fields, formula=f"OR({matches})"):
         name = record.get('fields', {}).get('Name')
         if name:
             records_by_slug.setdefault(slugify(name), record)
 
     updates = []
     errors = []
+    processed = 0
     for slug, source_path in sources.items():
         source_name = os.path.basename(source_path)
         record = records_by_slug.get(slug)
@@ -462,6 +467,7 @@ def process_manual_images(table, args, sources: dict) -> tuple:
 
         if wanted:
             print(f"  {title}: processing {source_name}")
+            processed += 1
             try:
                 with open(source_path, 'rb') as f:
                     optimize_and_save(f.read(), title, record_fields.get('Image rotation', 0), crop)
@@ -477,6 +483,8 @@ def process_manual_images(table, args, sources: dict) -> tuple:
     if updates:
         table.batch_update(updates)
         print(f"--- Set Local image on {len(updates)} record(s) ---")
+    elif not processed and not errors:
+        print("  All up to date, nothing to process.")
     return len(updates), errors
 
 # --- Main Script ---
