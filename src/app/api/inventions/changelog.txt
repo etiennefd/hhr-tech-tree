@@ -1,3 +1,6 @@
+19 November 2026
+- Added connection: Thyristor --> Photovoltaic power station
+
 18 November 2026
 - Added tech: Photovoltaic power station, 1982
 - Added tech: Wind farm, 1980
