@@ -2,6 +2,9 @@
 - Added tech: Rotogravure, 1895
 - Added tech: Textile roller printing, 1785
 - Added connection: Thyristor --> Photovoltaic power station
+- Added connection: Rotary printing press --> Rotogravure
+- Added connection: Photoengraving --> Rotogravure
+- Added connection: Textile roller printing --> Rotogravure
 
 18 November 2026
 - Added tech: Photovoltaic power station, 1982
