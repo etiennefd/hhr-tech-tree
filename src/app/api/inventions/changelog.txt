@@ -1,5 +1,6 @@
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
+- Added connection: Mirror galvanometer --> Semiconductors
 
 19 November 2026
 - Added tech: Rotogravure, 1895
