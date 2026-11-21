@@ -8,6 +8,11 @@
 - Added connection: Radioactive tracer --> Technetium-99m radioactive tracing
 - Added connection: Scintillation counter --> Positron emission tomography
 - Added connection: Nuclear reactor --> Technetium-99m radioactive tracing
+- Added connection: Gold-leaf electroscope --> Radioactivity
+- Added connection: Gold-leaf electroscope --> Radioactive tracer
+- Added connection: Lightning rod --> Pith-ball electroscope
+- Added connection: Pith-ball electroscope --> Gold-leaf electroscope
+- Added connection: Gold --> Gold-leaf electroscope
 
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
