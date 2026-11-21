@@ -1,5 +1,6 @@
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
+- Added tech: Radioactive tracer, 1913
 - Added connection: Galvanometer --> Semiconductors
 - Added connection: Silver mirror --> Mirror galvanometer
 - Added connection: Syphon recorder --> Moving-coil galvanometer
