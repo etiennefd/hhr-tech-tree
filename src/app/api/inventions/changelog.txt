@@ -5,6 +5,7 @@
 - Added connection: Radioactive tracer --> Radioimmunoassay
 - Added connection: Radioactive tracer --> Technetium-99m radioactive tracing
 - Added connection: Scintillation counter --> Positron emission tomography
+- Added connection: Nuclear reactor --> Technetium-99m radioactive tracing
 
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
