@@ -1,4 +1,5 @@
 21 November 2026
+- Added tech: Ion exchange, 1905
 - Added tech: Gold-leaf electroscope, 1787
 - Added tech: Pith-ball electroscope, 1754
 - Added connection: Radon --> Radioactive tracer
