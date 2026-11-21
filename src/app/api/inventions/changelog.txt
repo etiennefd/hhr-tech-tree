@@ -17,6 +17,7 @@
 - Added connection: Lightning rod --> Galvanism
 - Added connection: Slitting mill --> Lightning rod
 - Added connection: Brass --> Lightning rod
+- Added connection: Cork --> Pith-ball electroscope
 
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
