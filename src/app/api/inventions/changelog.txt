@@ -6,6 +6,7 @@
 - Added connection: Syphon recorder --> Moving-coil galvanometer
 - Added connection: Dry compass --> Galvanometer
 - Added connection: Silk --> Galvanometer
+- Added connection: Titanium white --> Dye-sensitized solar cell
 
 19 November 2026
 - Added tech: Rotogravure, 1895
