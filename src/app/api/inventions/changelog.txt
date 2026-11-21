@@ -1,3 +1,11 @@
+21 November 2026
+- Added connection: Radon --> Radioactive tracer
+- Added connection: Radioactive tracer --> Carbon-14
+- Added connection: Radioactive tracer --> Positron emission tomography
+- Added connection: Radioactive tracer --> Radioimmunoassay
+- Added connection: Radioactive tracer --> Technetium-99m radioactive tracing
+- Added connection: Scintillation counter --> Positron emission tomography
+
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
 - Added tech: Radioactive tracer, 1913
