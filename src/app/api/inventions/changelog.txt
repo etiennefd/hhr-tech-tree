@@ -13,6 +13,8 @@
 - Added connection: Lightning rod --> Pith-ball electroscope
 - Added connection: Pith-ball electroscope --> Gold-leaf electroscope
 - Added connection: Gold --> Gold-leaf electroscope
+- Added connection: Leyden jar --> Lightning rod
+- Added connection: Lightning rod --> Galvanism
 
 20 November 2026
 - Added tech: Polycrystalline silicon, 1943
@@ -2858,7 +2860,6 @@
 - Added connection: Zinc smelting --> Cathodic protection
 - Added connection: Electrostatic generator --> Galvanism
 - Added connection: Leyden jar --> Galvanism
-- Added connection: Kite experiment --> Galvanism
 
 17 April 2026
 - Added tech: Siderography and steel engraving, 1805
@@ -4168,9 +4169,6 @@
 - Added tech: Kite experiment, 1752
 - Added tech: Kite, 549
 - Added connection: Kite --> Box kite
-- Added connection: Kite --> Kite experiment
-- Added connection: Kite experiment --> Lightning rod
-- Added connection: Leyden jar --> Kite experiment
 - Added connection: Box kite --> Airplane
 - Added connection: Paper --> Kite
 - Added connection: Motorcycle --> Rotary engine
