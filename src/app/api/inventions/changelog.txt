@@ -1,4 +1,5 @@
 21 November 2026
+- Added tech: Electroscope, 1754
 - Added connection: Radon --> Radioactive tracer
 - Added connection: Radioactive tracer --> Carbon-14
 - Added connection: Radioactive tracer --> Positron emission tomography
