@@ -1,3 +1,10 @@
+22 November 2026
+- Added connection: Beet sugar factory --> Ion exchange
+- Added connection: Water purification by sand filter --> Ion exchange
+- Added connection: Solvay process --> Ion exchange
+- Added connection: Ion exchange --> Chemically strengthened glass
+- Added connection: Ion exchange --> Technetium-99m radioactive tracing
+
 21 November 2026
 - Added tech: Ion exchange, 1905
 - Added tech: Gold-leaf electroscope, 1787
