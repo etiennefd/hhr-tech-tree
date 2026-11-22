@@ -1,4 +1,5 @@
 22 November 2026
+- Added tech: Multi-junction solar cell, 1978
 - Added connection: Beet sugar factory --> Ion exchange
 - Added connection: Water purification by sand filter --> Ion exchange
 - Added connection: Solvay process --> Ion exchange
