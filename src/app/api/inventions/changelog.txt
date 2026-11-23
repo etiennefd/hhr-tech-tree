@@ -1,5 +1,6 @@
 23 November 2026
 - Added tech: Perovskite solar cell, 2006
+- Added tech: PERC solar cell, 1989
 - Added tech: Delay-line memory, 1949
 - Added connection: Solar cell --> Multi-junction solar cell
 - Added connection: Tunnel diode --> Multi-junction solar cell
