@@ -1,3 +1,9 @@
+23 November 2026
+- Added connection: Solar cell --> Multi-junction solar cell
+- Added connection: Tunnel diode --> Multi-junction solar cell
+- Added connection: Aluminium --> Multi-junction solar cell
+- Added connection: Gallium arsenide --> Multi-junction solar cell
+
 22 November 2026
 - Added tech: Multi-junction solar cell, 1978
 - Added connection: Beet sugar factory --> Ion exchange
