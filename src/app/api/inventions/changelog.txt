@@ -17,6 +17,7 @@
 - Added connection: Delay-line memory --> Programmable calculator
 - Added connection: Delay-line memory --> Magnetic-core memory
 - Added connection: Turing machine --> Von Neumann architecture
+- Added connection: Delay-line memory --> Stored-program computer and CPU
 
 22 November 2026
 - Added tech: Multi-junction solar cell, 1978
