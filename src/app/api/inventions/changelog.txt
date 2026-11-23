@@ -7,6 +7,9 @@
 - Added connection: Dye-sensitized solar cell --> Perovskite solar cell
 - Added connection: Lead --> Perovskite solar cell
 - Added connection: Bromine --> Perovskite solar cell
+- Added connection: Stored-program computer and CPU --> Microcode
+- Added connection: Drum memory --> Stored-program computer and CPU
+- Added connection: Stored-program computer and CPU --> Microprocessor
 
 22 November 2026
 - Added tech: Multi-junction solar cell, 1978
@@ -272,7 +275,7 @@
 - Added connection: Lime --> Parchment
 - Added connection: Silver mirror --> Solar furnace
 - Added connection: Cockcroft–Walton generator --> Nuclear fusion
-- Added connection: Stored-program computer --> Graphics tablet
+- Added connection: Stored-program computer and CPU --> Graphics tablet
 - Added connection: Light pen --> Graphics tablet
 - Added connection: Printed circuit board --> Graphics tablet
 - Added connection: Graphics tablet --> Handwriting recognition
@@ -320,7 +323,7 @@
 - Added connection: Tablet computer --> Multi-touch smartphone
 - Added connection: Laptop computer --> Tablet computer
 - Added connection: Liquid-crystal display --> Tablet computer
-- Added connection: Stored-program computer --> Handwriting recognition
+- Added connection: Stored-program computer and CPU --> Handwriting recognition
 - Added connection: Handwriting recognition --> Tablet computer
 - Added connection: Microprocessor --> Personal digital assistant
 - Added connection: Liquid-crystal display --> Personal digital assistant
@@ -781,7 +784,7 @@
 26 September 2026
 - Added tech: Symbolic AI, 1956
 - Added tech: Forge welding, 1000 BCE
-- Added connection: Stored-program computer --> Symbolic AI
+- Added connection: Stored-program computer and CPU --> Symbolic AI
 - Added connection: Assembly language --> Symbolic AI
 
 25 September 2026
@@ -2329,7 +2332,6 @@
 - Added connection: Virtual machine --> Cloud computing
 - Added connection: Time-sharing --> Cloud computing
 - Added connection: Time-sharing --> Virtual machine
-- Added connection: Stored-program computer --> Cloud computing
 - Added connection: Elephant taming --> War elephant
 - Added connection: Scythed chariot --> Caltrop
 
@@ -3241,7 +3243,7 @@
 - Added connection: Magnetic-core memory --> Framebuffer
 - Added connection: Electromagnet --> Magnetic-core memory
 - Added connection: Framebuffer --> Graphics software
-- Added connection: Stored-program computer --> Magnetic-core memory
+- Added connection: Stored-program computer and CPU --> Magnetic-core memory
 - Added connection: MOS DRAM --> Graphics software
 - Added connection: Computer-aided design --> Graphics software
 - Added connection: Ball-and-disk integrator --> Differential analyzer
@@ -3253,7 +3255,7 @@
 - Added tech: Synthetic-aperture radar, 1951
 - Added tech: Optophone, 1913
 - Added connection: Radar --> Synthetic-aperture radar
-- Added connection: Stored-program computer --> Computer digital image
+- Added connection: Stored-program computer and CPU --> Computer digital image
 - Added connection: Wirephoto --> Computer digital image
 - Added connection: Computer digital image --> Flatbed image scanner
 - Added connection: Flatbed image scanner --> Omni-font optical character recognition
@@ -3300,10 +3302,10 @@
 - Added connection: High-level programming language --> Graphical user interface
 - Added connection: High-level programming language --> Portable operating system
 - Added connection: Light pen --> Computer-aided design
-- Added connection: Stored-program computer --> Light pen
+- Added connection: Stored-program computer and CPU --> Light pen
 - Added connection: Light pen --> Capacitive touchscreen
 - Added connection: Cathode-ray tube --> Light pen
-- Added connection: Stored-program computer --> Computer-aided design
+- Added connection: Stored-program computer and CPU --> Computer-aided design
 - Added connection: Human genome sequencing --> Massively parallel sequencing
 - Added connection: Optical fiber --> Massively parallel sequencing
 - Added connection: DNA sequencing --> Massively parallel sequencing
@@ -4272,7 +4274,7 @@
 
 18 June 2025
 - Added tech: Operating system, 1956
-- Added connection: Stored-program computer --> Operating system
+- Added connection: Stored-program computer and CPU --> Operating system
 
 16 June 2025
 - Added tech: Electroconvulsive therapy, 1938
