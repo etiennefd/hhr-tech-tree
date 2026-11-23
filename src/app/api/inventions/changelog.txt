@@ -11,6 +11,11 @@
 - Added connection: Stored-program computer and CPU --> Microcode
 - Added connection: Drum memory --> Stored-program computer and CPU
 - Added connection: Stored-program computer and CPU --> Microprocessor
+- Added connection: Radar --> Delay-line memory
+- Added connection: Mercury --> Delay-line memory
+- Added connection: Piezoelectric transducer --> Delay-line memory
+- Added connection: Delay-line memory --> Programmable calculator
+- Added connection: Delay-line memory --> Magnetic-core memory
 
 22 November 2026
 - Added tech: Multi-junction solar cell, 1978
