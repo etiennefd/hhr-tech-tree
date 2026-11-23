@@ -19,6 +19,9 @@
 - Added connection: Delay-line memory --> Magnetic-core memory
 - Added connection: Turing machine --> Von Neumann architecture
 - Added connection: Delay-line memory --> Stored-program computer and CPU
+- Added connection: Solar cell --> PERC solar cell
+- Added connection: Planar process --> PERC solar cell
+- Added connection: Photolithography --> PERC solar cell
 
 22 November 2026
 - Added tech: Multi-junction solar cell, 1978
