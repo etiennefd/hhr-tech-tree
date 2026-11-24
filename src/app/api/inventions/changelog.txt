@@ -1432,8 +1432,8 @@
 - Added connection: Crank --> Fishing reel
 
 6 August 2026
-- Added tech: Insulated wire, 1828
 - Added tech: Extrusion, 1820
+- Added tech: Insulated wire, 1795
 - Added connection: Hydraulic press --> Extrusion
 - Added connection: Lead pipes --> Extrusion
 - Added connection: Gelignite --> Double-base propellant
