@@ -8,6 +8,13 @@
 - Added connection: Zinc smelting --> Polycrystalline silicon
 - Added connection: Polycrystalline silicon --> MEMS
 - Added connection: Polycrystalline silicon --> Planar process
+- Added connection: Paper --> Insulated wire
+- Added connection: Leyden jar --> Insulated wire
+- Added connection: Insulated wire --> Galvanometer
+- Added connection: Linen --> Insulated wire
+- Added connection: Oil paint --> Insulated wire
+- Added connection: Pine tar --> Insulated wire
+- Added connection: Copper smelting --> Insulated wire
 
 23 November 2026
 - Added tech: Perovskite solar cell, 2006
@@ -1407,8 +1414,6 @@
 - Added tech: Eggbeater, 1859
 - Added tech: Fishing rod, 1900 BCE
 - Added connection: Drawn wire and draw plate --> Insulated wire
-- Added connection: Silk --> Insulated wire
-- Added connection: Electromagnet --> Insulated wire
 - Added connection: Insulated wire --> Electromagnetic induction
 - Added connection: Insulated wire --> Electromechanical relay
 - Added connection: Insulated wire --> Submarine communication cable
