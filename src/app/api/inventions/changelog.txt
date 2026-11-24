@@ -1,3 +1,10 @@
+24 November 2026
+- Added connection: Silicon --> Polycrystalline silicon
+- Added connection: Crystal detector --> Polycrystalline silicon
+- Added connection: Radar --> Polycrystalline silicon
+- Added connection: Chlorine --> Polycrystalline silicon
+- Added connection: Zinc smelting --> Polycrystalline silicon
+
 23 November 2026
 - Added tech: Perovskite solar cell, 2006
 - Added tech: PERC solar cell, 1989
