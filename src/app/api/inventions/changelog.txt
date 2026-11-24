@@ -3,7 +3,11 @@
 - Added connection: Crystal detector --> Polycrystalline silicon
 - Added connection: Radar --> Polycrystalline silicon
 - Added connection: Chlorine --> Polycrystalline silicon
+- Added connection: Polycrystalline silicon --> Solar cell
+- Added connection: Polycrystalline silicon --> MOSFET
 - Added connection: Zinc smelting --> Polycrystalline silicon
+- Added connection: Polycrystalline silicon --> MEMS
+- Added connection: Polycrystalline silicon --> Planar process
 
 23 November 2026
 - Added tech: Perovskite solar cell, 2006
@@ -686,7 +690,6 @@
 - Added connection: Semiconductors --> p–n junction
 - Added connection: Crystal detector --> p–n junction
 - Added connection: Radar --> p–n junction
-- Added connection: Silicon --> Planar process
 - Added connection: Compound microscope --> Photolithography
 - Added independent invention: p–n junction isolation, 1959
 
@@ -883,7 +886,6 @@
 - Added tech: MEMS, 1965
 - Added connection: MOSFET --> MEMS
 - Added connection: Photolithography --> MEMS
-- Added connection: Silicon --> MEMS
 
 19 September 2026
 - Added tech: Inertial navigation system, 1953
