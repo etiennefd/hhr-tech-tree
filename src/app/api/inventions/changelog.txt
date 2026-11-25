@@ -1,4 +1,5 @@
 25 November 2026
+- Added tech: Tear gas, 1913
 - Added connection: Printing telegraph --> Inkjet printer
 - Added connection: Magnetic-core memory --> Inkjet printer
 - Added connection: Piano --> Printing telegraph
