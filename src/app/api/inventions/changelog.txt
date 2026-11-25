@@ -1,3 +1,7 @@
+25 November 2026
+- Added connection: Printing telegraph --> Inkjet printer
+- Added connection: Magnetic-core memory --> Inkjet printer
+
 24 November 2026
 - Added connection: Silicon --> Polycrystalline silicon
 - Added connection: Crystal detector --> Polycrystalline silicon
