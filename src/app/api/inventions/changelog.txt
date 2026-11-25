@@ -4,6 +4,9 @@
 - Added connection: Magnetic-core memory --> Inkjet printer
 - Added connection: Piano --> Printing telegraph
 - Added connection: Movable type (Europe) --> Printing telegraph
+- Added connection: Bromine --> Tear gas
+- Added connection: Tear gas --> Chemical weapon
+- Added connection: Grenade --> Tear gas
 
 24 November 2026
 - Added connection: Silicon --> Polycrystalline silicon
