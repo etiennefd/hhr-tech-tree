@@ -1,6 +1,8 @@
 25 November 2026
 - Added connection: Printing telegraph --> Inkjet printer
 - Added connection: Magnetic-core memory --> Inkjet printer
+- Added connection: Piano --> Printing telegraph
+- Added connection: Movable type (Europe) --> Printing telegraph
 
 24 November 2026
 - Added connection: Silicon --> Polycrystalline silicon
