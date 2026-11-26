@@ -1,4 +1,5 @@
 26 November 2026
+- Added tech: Door, 3700 BCE
 - Added connection: Semaphore telegraph --> Electric telegraph
 - Added connection: Electrolysis --> Electric telegraph
 - Added connection: Voltaic pile --> Electric telegraph
