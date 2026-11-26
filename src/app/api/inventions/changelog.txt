@@ -7,6 +7,8 @@
 - Added connection: Rail transport --> Telegraph network
 - Added connection: Porcelain --> Telegraph network
 - Added connection: Telephone --> Wirephoto
+- Added connection: Adze --> Door
+- Added connection: Door --> Egyptian wooden pin tumbler lock
 
 25 November 2026
 - Added tech: Tear gas, 1913
