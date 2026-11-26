@@ -3,6 +3,7 @@
 - Added connection: Semaphore telegraph --> Electric telegraph
 - Added connection: Electrolysis --> Electric telegraph
 - Added connection: Voltaic pile --> Electric telegraph
+- Added connection: Galvanometer --> Commercial telegraphy
 
 25 November 2026
 - Added tech: Tear gas, 1913
