@@ -10,6 +10,8 @@
 - Added connection: Wind tunnel --> Evolutionary algorithm
 - Added connection: Mendelian inheritance --> Hybrid seed
 - Added connection: Domestication of maize --> Hybrid seed
+- Added connection: Dynamic programming --> Multiple sequence alignment
+- Added connection: Dynamic programming --> Speech recognition software
 
 26 November 2026
 - Added tech: Door, 3700 BCE
