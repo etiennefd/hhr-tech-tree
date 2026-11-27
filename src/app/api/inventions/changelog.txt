@@ -12,6 +12,7 @@
 - Added connection: Domestication of maize --> Hybrid seed
 - Added connection: Dynamic programming --> Multiple sequence alignment
 - Added connection: Dynamic programming --> Speech recognition software
+- Added connection: Markov chain --> Dynamic programming
 
 26 November 2026
 - Added tech: Door, 3700 BCE
