@@ -1,3 +1,6 @@
+27 November 2026
+- Added connection: Electromagnet --> Morse code
+
 26 November 2026
 - Added tech: Door, 3700 BCE
 - Added connection: Semaphore telegraph --> Electric telegraph
