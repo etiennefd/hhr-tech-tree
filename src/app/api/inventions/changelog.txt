@@ -1,5 +1,6 @@
 27 November 2026
 - Added connection: Electromagnet --> Morse code
+- Added connection: Domestication of pigeons --> Natural selection
 
 26 November 2026
 - Added tech: Door, 3700 BCE
