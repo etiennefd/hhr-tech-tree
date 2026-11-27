@@ -5,6 +5,8 @@
 - Added connection: Electromagnet --> Morse code
 - Added connection: Domestication of pigeons --> Natural selection
 - Added connection: Stored-program computer and CPU --> Reinforcement learning
+- Added connection: Natural selection --> Evolutionary algorithm
+- Added connection: Wind tunnel --> Evolutionary algorithm
 
 26 November 2026
 - Added tech: Door, 3700 BCE
