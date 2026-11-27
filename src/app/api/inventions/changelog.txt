@@ -1,4 +1,5 @@
 27 November 2026
+- Added tech: Evolutionary algorithm, 1964
 - Added tech: Reinforcement learning, 1959
 - Added tech: Dynamic programming, 1953
 - Added connection: Electromagnet --> Morse code
