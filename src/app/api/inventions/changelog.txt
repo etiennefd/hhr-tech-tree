@@ -2,6 +2,7 @@
 - Added tech: Evolutionary algorithm, 1964
 - Added tech: Reinforcement learning, 1959
 - Added tech: Dynamic programming, 1953
+- Added tech: Hybrid corn, 1921
 - Added connection: Electromagnet --> Morse code
 - Added connection: Domestication of pigeons --> Natural selection
 - Added connection: Stored-program computer and CPU --> Reinforcement learning
