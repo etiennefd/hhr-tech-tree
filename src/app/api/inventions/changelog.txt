@@ -14,6 +14,12 @@
 - Added connection: Dynamic programming --> Multiple sequence alignment
 - Added connection: Dynamic programming --> Speech recognition software
 - Added connection: Markov chain --> Dynamic programming
+- Added connection: Reinforcement learning --> Deep reinforcement learning
+- Added connection: Deep learning --> Deep reinforcement learning
+- Added connection: Convolutional neural network --> Deep reinforcement learning
+- Added connection: Dynamic programming --> Deep reinforcement learning
+- Added connection: Deep reinforcement learning --> LLM chatbot
+- Added connection: Deep reinforcement learning --> Reasoning model
 
 26 November 2026
 - Added tech: Door, 3700 BCE
