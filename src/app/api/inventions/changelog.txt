@@ -4241,7 +4241,6 @@
 6 July 2025
 - Added tech: Automated anti-aircraft fire-control system, 1940
 - Added tech: Box kite, 1893
-- Added tech: Kite experiment, 1752
 - Added tech: Kite, 549
 - Added connection: Kite --> Box kite
 - Added connection: Box kite --> Airplane
