@@ -1,3 +1,6 @@
+28 November 2026
+- Added tech: Flash freezing, 1924
+
 27 November 2026
 - Added tech: Deep reinforcement learning, 2013
 - Added tech: Evolutionary algorithm, 1964
